@@ -1,0 +1,10 @@
+.DS_Store
+build/
+.vscode
+node_modules/
+dist/
+npm-debug.log
+.idea
+test*
+todo
+cmd*
