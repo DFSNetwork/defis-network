@@ -88,24 +88,9 @@ ACTION swap::withdraw(name user, uint64_t mid, uint64_t amount)
     utils::inline_transfer(m_itr->contract1, get_self(), user, asset(amount1, m_itr->sym1), std::string("withdraw token1 liquidity"));
     update(mid, reserve0 - amount0, reserve1 - amount1, reserve0, reserve1);
     // event log
-    action(permission_level{get_self(), "active"_n}, get_self(), name("withdrawlog"),
+    action(permission_level{get_self(), "active"_n}, LOG_ACCOUNT, name("withdrawlog"),
            std::make_tuple(user, mid, amount, asset(amount0, m_itr->sym0), asset(amount1, m_itr->sym1)))
         .send();
-}
-
-ACTION swap::swaplog(name user, uint64_t mid, asset amountIn, asset amountOut)
-{
-    require_auth(get_self());
-}
-
-ACTION swap::depositlog(name user, uint64_t mid, asset quantity0, asset quantity1)
-{
-    require_auth(get_self());
-}
-
-ACTION swap::withdrawlog(name user, uint64_t mid, uint64_t amount, asset quantity0, asset quantity1)
-{
-    require_auth(get_self());
 }
 
 void swap::handle_transfer(name from, name to, asset quantity, std::string memo, name code)
@@ -124,14 +109,11 @@ void swap::handle_transfer(name from, name to, asset quantity, std::string memo,
     {
         std::vector<std::string> paths = utils::split(strs[1], "-");
         uint64_t min_out = atoi(strs[2].c_str());
-        std::string ref = strs[3];
-        print("minout:", min_out, " ref=", ref);
-
         extended_asset quantity_out_ex = extended_asset(quantity, code);
         for (int i = 0; i < paths.size(); i++)
         {
             uint64_t mid = atoi(paths[i].c_str());
-            quantity_out_ex = do_swap(mid, from, quantity_out_ex.quantity, quantity_out_ex.contract);
+            quantity_out_ex = do_swap(mid, from, quantity_out_ex.quantity, quantity_out_ex.contract, memo);
         }
         check(quantity_out_ex.quantity.amount >= min_out, "INSUFFICIENT_OUTPUT_AMOUNT");
         utils::inline_transfer(quantity_out_ex.contract, get_self(), from, quantity_out_ex.quantity, std::string("swap success"));
@@ -213,8 +195,6 @@ void swap::add_liquidity(name user)
     }
     else
     {
-        auto x = amount0 * total_liquidity_token / reserve0;
-        auto y = amount1 * total_liquidity_token / reserve1;
         token_mint = std::min(amount0 * total_liquidity_token / reserve0, amount1 * total_liquidity_token / reserve1);
     }
     check(token_mint > 0, "INSUFFICIENT_LIQUIDITY_MINTED");
@@ -226,7 +206,7 @@ void swap::add_liquidity(name user)
     _orders.erase(itr);
 
     // event log
-    action(permission_level{get_self(), "active"_n}, get_self(), name("depositlog"),
+    action(permission_level{get_self(), "active"_n}, LOG_ACCOUNT, name("depositlog"),
            std::make_tuple(user, m_itr->mid, asset(amount0, m_itr->sym0), asset(amount1, m_itr->sym1)))
         .send();
 }
@@ -273,20 +253,17 @@ void swap::burn_liquidity_token(uint64_t mid, name to, uint64_t amount)
     });
 }
 
-extended_asset swap::do_swap(uint64_t mid, name from, asset quantity, name code)
+extended_asset swap::do_swap(uint64_t mid, name from, asset quantity, name code, std::string memo)
 {
     auto m_itr = _markets.require_find(mid, "Market does not exist.");
     check((code == m_itr->contract0 || code == m_itr->contract1), "contract error");
     check((quantity.symbol == m_itr->sym0 || quantity.symbol == m_itr->sym1), "symbol error");
     uint64_t amount_in = quantity.amount;
-    if (PROTOCOL_FEE_ON)
+    uint64_t protocol_fee = amount_in * PROTOCOL_FEE / 10000;
+    if (protocol_fee > 0)
     {
-        uint64_t protocol_fee = amount_in * PROTOCOL_FEE / 10000;
-        if (protocol_fee > 0)
-        {
-            amount_in -= protocol_fee;
-            utils::inline_transfer(code, get_self(), PROTOCOL_FEE_ACCOUNT, asset(protocol_fee, quantity.symbol), std::string("swap protocol fee"));
-        }
+        amount_in -= protocol_fee;
+        utils::inline_transfer(code, get_self(), PROTOCOL_FEE_ACCOUNT, asset(protocol_fee, quantity.symbol), std::string("swap protocol fee"));
     }
     uint64_t reserve0 = m_itr->reserve0.amount;
     uint64_t reserve1 = m_itr->reserve1.amount;
@@ -296,6 +273,7 @@ extended_asset swap::do_swap(uint64_t mid, name from, asset quantity, name code)
     if (code == m_itr->contract0 && quantity.symbol == m_itr->sym0)
     {
         amount_out = get_amount_out(amount_in, reserve0, reserve1);
+        check(amount_out < reserve1, "invalid amount_out1");
         quantity_out = asset(amount_out, m_itr->sym1);
         quantity_out_ex = extended_asset(quantity_out, m_itr->contract1);
         update(mid, reserve0 + amount_in, reserve1 - amount_out, reserve0, reserve1);
@@ -303,6 +281,7 @@ extended_asset swap::do_swap(uint64_t mid, name from, asset quantity, name code)
     else
     {
         amount_out = get_amount_out(amount_in, reserve1, reserve0);
+        check(amount_out < reserve0, "invalid amount_out0");
         quantity_out = asset(amount_out, m_itr->sym0);
         quantity_out_ex = extended_asset(quantity_out, m_itr->contract0);
         update(mid, reserve0 - amount_out, reserve1 + amount_in, reserve0, reserve1);
@@ -324,8 +303,8 @@ extended_asset swap::do_swap(uint64_t mid, name from, asset quantity, name code)
     }
 
     // event log
-    action(permission_level{get_self(), "active"_n}, get_self(), name("swaplog"),
-           std::make_tuple(from, mid, quantity, quantity_out))
+    action(permission_level{get_self(), "active"_n}, LOG_ACCOUNT, name("swaplog"),
+           std::make_tuple(from, mid, quantity, quantity_out, memo))
         .send();
 
     return quantity_out_ex;
@@ -333,6 +312,8 @@ extended_asset swap::do_swap(uint64_t mid, name from, asset quantity, name code)
 
 void swap::update(uint64_t mid, uint64_t balance0, uint64_t balance1, uint64_t reserve0, uint64_t reserve1)
 {
+    check(balance0 > 0, "Update balance0 error");
+    check(balance1 > 0, "Update balance1 error");
     auto m_itr = _markets.require_find(mid, "Market does not exist.");
     auto last_sec = m_itr->last_update.sec_since_epoch();
     uint64_t time_elapsed = 1;
@@ -391,7 +372,7 @@ extern "C"
         {
             switch (action)
             {
-                EOSIO_DISPATCH_HELPER(swap, (newmarket)(rmmarket)(deposit)(cancle)(withdraw)(swaplog)(depositlog)(withdrawlog))
+                EOSIO_DISPATCH_HELPER(swap, (newmarket)(rmmarket)(deposit)(cancle)(withdraw))
             }
         }
         else

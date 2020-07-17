@@ -10,9 +10,9 @@ public:
    static constexpr uint64_t MINIMUM_LIQUIDITY = 10000;
    static constexpr uint64_t PRICE_BASE = 10000;
 
-   static constexpr bool PROTOCOL_FEE_ON = true;
    static constexpr uint64_t PROTOCOL_FEE = 10; // 0.1%
    static constexpr name PROTOCOL_FEE_ACCOUNT{"defidividend"_n};
+   static constexpr name LOG_ACCOUNT{"defislogsone"_n};
 
    swap(name receiver, name code, datastream<const char *> ds)
        : contract(receiver, code, ds),
@@ -45,11 +45,6 @@ public:
    ACTION withdraw(name user, uint64_t mid, uint64_t amount);
 
    void handle_transfer(name from, name to, asset quantity, std::string memo, name code);
-
-   // logs 
-   ACTION swaplog(name user, uint64_t mid, asset amountIn, asset amountOut);
-   ACTION depositlog(name user, uint64_t mid, asset quantity0, asset quantity1);
-   ACTION withdrawlog(name user, uint64_t mid, uint64_t amount, asset quantity0, asset quantity1);
 
 private:
    TABLE market
@@ -111,7 +106,7 @@ private:
    void add_liquidity(name user);
    void mint_liquidity_token(uint64_t mid, name to, uint64_t amount);
    void burn_liquidity_token(uint64_t mid, name to, uint64_t amount);
-   extended_asset do_swap(uint64_t mid, name from, asset quantity, name code);
+   extended_asset do_swap(uint64_t mid, name from, asset quantity, name code, std::string memo);
    void update(uint64_t mid, uint64_t balance0, uint64_t balance1, uint64_t reserve0, uint64_t reserve1);
    uint64_t get_mid();
    uint64_t quote(uint64_t amount0, uint64_t reserve0, uint64_t reserve1);
