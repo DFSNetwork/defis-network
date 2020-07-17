@@ -63,40 +63,11 @@ As a DFS holder you can join the DeFis Network community and participate in its 
 
 ## Token distribution 
 
-The maximum issuance of tokens is one billion. The current circulation is 10 million.
-
-**Locked section: 89% :**
-Angel Investment: $100 million
-Investment institutions: 300 million
-Development team: 100 million
-Ecological fund: 300 million
-Operating incentives: 90 million
-
-**Circulation: 1% :**
-Operation cooperation in start-up period: 10 million
-
-**Mining linear release part: 10% :**
-Swap mining release: $100 million
-
-On July 21 at 3:00 PM, after the mining transaction, one DFS per second will be released until the release of 100 million DFS. Stop trading mining incentives.
+Coming soon..
 
 ## Swap mining rules
 
-July 21, after trading starts at 3pm, anyone can trade through the DeFis Swap contract.
-
-Mining contract: release one new DFS per second, and accumulatively deposit the mining contract for mining award. After releasing 100 million, stop releasing.
-
-As long as the transaction amount is greater than or equal to 1 EOS, you can participate in a mining. The bigger the deal, the more mines will be dug.
-
-The DFS token formula obtained from the mining transaction is: pool_balance - Pool_balance * POW (0.9999, n)
-
-Where POOL_balance is the accumulated unallocated DFS in the mining contract, and n is a multiple of the transaction amount divided by 1EOS.
-
-## Foundation Instructions
-
-DeFis Network uses a decentralized approach to cold start, and there is no private placement or pre-mining in token distribution. Instead, it utilizes the same fair competitive mining method as the original Bitcoin.
-To ensure the sustainable development of DeFis Network, 10% of the block rewards will be reserved and supervised via a foundation.
-The foundation's token reserve is only used for: setting up insurance funds, maintaining research and development expenses, auditing expenses, operating cooperation, etc., and these tokens do not participate in the staking rewards.
+Coming soon..
 
 ## Staking Rewards
 
