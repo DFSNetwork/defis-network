@@ -187,9 +187,9 @@ export default {
         if (!arr.length) {
           return;
         }
-        const market0 = arr.find(v => v.mid === this.thisMarket0.mid) || arr[0]
+        const market0 = arr.find(v => v.contract === this.thisMarket0.contract && v.symbol === this.thisMarket0.symbol) || arr[0]
         this.thisMarket0 = market0;
-        const market1 = arr.find(v => v.mid === this.thisMarket1.mid) || arr[1]
+        const market1 = arr.find(v => v.contract === this.thisMarket1.contract && v.symbol === this.thisMarket1.symbol) || arr[1]
         this.thisMarket1 = market1;
         this.handleInBy(this.tradeInfo.type, 'first')
       },
