@@ -53,9 +53,9 @@ const sys = {
       node: {
         area: 'production',
         protocol: 'https',
-        host: 'eos.greymass.com',
+        host: 'ospush.tokenpocket.pro',
         port: '443',
-        url: 'https://eos.greymass.com',
+        url: 'https://eospush.tokenpocket.pro',
         chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
       },
       toAccountSwap: 'defisswapcnt', // 主交易 swap 合约

@@ -55,8 +55,8 @@
       <div class="infoDetail">
         <div class="tradeRate">
           <span>{{ $t('dex.rate') }}</span>
-          <span v-if="direction">1 {{ thisMarket0.symbol }} = {{ tradeInfo.aboutPrice | numberTofixed }} {{ thisMarket1.symbol }}</span>
-          <span v-else>1 {{ thisMarket1.symbol }} = {{ tradeInfo.aboutPrice | numberTofixed }} {{ thisMarket0.symbol }}</span>
+          <span v-if="direction">1 {{ thisMarket0.symbol }} = {{ tradeInfo.aboutPrice }} {{ thisMarket1.symbol }}</span>
+          <span v-else>1 {{ thisMarket1.symbol }} = {{ tradeInfo.aboutPrice }} {{ thisMarket0.symbol }}</span>
         </div>
         <div class="slipPointDiv" v-if="showDetail">
           <div class="tradeRateTitle">
@@ -142,7 +142,7 @@ export default {
         symbol: "EOS",
       }, // 当前选中的做市池子
       thisMarket1: {
-        mid: 1,
+        mid: 7,
         last_update: "2020-05-14T06:49:27",
         liquidity_token: 2509980,
         price_cumulative_last: 1513579653,
@@ -182,13 +182,16 @@ export default {
           return
         }
         SwapRouter.init(newVal)
-        const arr = this.handleDealSymArr()
+        const arr = this.handleDealSymArr(newVal)
         this.coinList = arr;
-        if (!this.coinList.lebgth) {
+        if (!arr.length) {
           return;
         }
-        this.thisMarket0 = arr[0]
-        this.thisMarket1 = arr[1]
+        const market0 = arr.find(v => v.mid === this.thisMarket0.mid) || arr[0]
+        this.thisMarket0 = market0;
+        const market1 = arr.find(v => v.mid === this.thisMarket1.mid) || arr[1]
+        this.thisMarket1 = market1;
+        this.handleInBy(this.tradeInfo.type, 'first')
       },
       immediate: true,
       deep: true
@@ -202,13 +205,16 @@ export default {
       deep: true,
       immediate: true,
     },
-    thisMarket0() {
-      this.handleBalanTimer();
-      this.handleInBy(this.tradeInfo.type)
+    thisMarket0: {
+      handler: function market0() {
+        this.handleBalanTimer();
+        this.handleInBy(this.tradeInfo.type, 'first')
+      },
+      deep: true
     },
     thisMarket1() {
       this.handleBalanTimer();
-      this.handleInBy(this.tradeInfo.type)
+      this.handleInBy(this.tradeInfo.type, 'first')
     },
     payNum(val) {
       if (val === toFixed(0, this.thisMarket0.decimal)) {
@@ -238,7 +244,7 @@ export default {
     handleDealSymArr(lists = []) {
       const resArr = [];
       lists.forEach((v) => {
-        resArr.push(v.sym0, v.sym1)
+        resArr.push(v.sym0Data, v.sym1Data)
       })
       // 删除重复项
       const newArr = resArr.filter((item, index, self) => {
@@ -337,8 +343,8 @@ export default {
         params.decimal = this.thisMarket1.decimal;
       }
       await EosModel.getCurrencyBalance(params, res => {
-        let balance = '0.0000';
-        (!res || res.length === 0) ? balance = '0.0000' : balance = res.split(' ')[0];
+        let balance = toFixed('0.000000001', params.decimal);
+        (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
         if (next) {
           this.balanceSym1 = balance;
           return;
@@ -356,12 +362,14 @@ export default {
       } else {
         this.thisMarket1 = item;
       }
+      this.payNum = '';
+      this.getNum = '';
       this.drawer = false;
     },
     handleLogin() {
       this.$emit('listenLogin', true)
     },
-    handleInBy(type = 'pay') {
+    handleInBy(type = 'pay', status) {
       const inData = {
         direction: this.direction,
         poolSym0: this.thisMarket0.reserve.split(' ')[0],
@@ -371,16 +379,32 @@ export default {
         slipPointUser: this.slipPointUser / 100, // 滑点保护
       }
       if (type === 'pay') {
-        inData.payNum = this.payNum;
+        inData.payNum = this.payNum || `${toFixed(1, this.thisMarket0.decimal)}`;
       } else {
-        inData.getNum = this.getNum;
+        inData.getNum = this.getNum || `${toFixed(1, this.thisMarket1.decimal)}`;
       }
       // console.log(inData)
       // const outData = dealTrade(inData);
-      const outData = this.handleDealAmountOut(inData);
-      // console.log(outData)
-      this.tradeInfo = outData;
-      type === 'pay' ? this.getNum = toFixed(outData.getNum, 4) : this.payNum = toFixed(outData.payNum, 4);
+      try {
+        const outData = this.handleDealAmountOut(inData);
+        // console.log(outData)
+        this.tradeInfo = outData;
+        if (status === 'first') {
+          return;
+        }
+        if ((type === 'pay' && !Number(this.payNum)) || (type === 'get' && !Number(this.getNum))) {
+          this.payNum = '';
+          this.getNum = '';
+          return;
+        }
+        type === 'pay' ? this.getNum = toFixed(outData.getNum, this.thisMarket1.decimal) :
+                                      this.payNum = toFixed(outData.payNum, this.thisMarket0.decimal);
+      } catch (error) {
+        console.log(error)
+        this.tradeInfo = {}
+        this.tradeInfo.aboutPrice = toFixed(0, this.thisMarket0.decimal)
+        // console.log(error)
+      }
     },
     // 计算得到多少 - 正序 - 输入支付
     handleDealAmountOut(inData) {
@@ -417,13 +441,17 @@ export default {
       } else {
         minOut = payNum * (1 + Number(inData.slipPointUser));
       }
+      let aboutPrice = payNum / getNum;
+          aboutPrice = toFixed(aboutPrice, this.thisMarket0.decimal)
+      // console.log(inData)
       const obj = {
         payNum,
         getNum,
-        aboutPrice: inData.payNum / getNum,
+        aboutPrice,
         type: inData.type,
         minOut
       }
+      // console.log(obj)
       return obj
     },
     handleExchange() {

@@ -163,7 +163,11 @@ class swapRouter {
       
 
       token_out = tokenA;
-      quantity_out = (amount_out / (10 ** market.sym0.split(",")[0])).toFixed(market.sym0.split(",")[0]) + " " + market.reserve0.split(" ")[1];
+      if (!type) {
+        quantity_out = (amount_out / (10 ** market.sym0.split(",")[0])).toFixed(market.sym0.split(",")[0]) + " " + market.reserve0.split(" ")[1];
+      } else {
+        quantity_out = (amount_out / (10 ** market.sym1.split(",")[0])).toFixed(market.sym1.split(",")[0]) + " " + market.reserve1.split(" ")[1];
+      }
       // console.log("quantity_out:", quantity_out);
     }
 

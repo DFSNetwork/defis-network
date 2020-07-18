@@ -9,6 +9,8 @@
       <div class="navList">
         <div class="list" @click="handleToTutorial">{{ $t('public.tutorial') }}</div>
         <div class="list" @click="handleShowBonus">{{ $t('hyk.stock') }}</div>
+        <div class="list" v-if="false" @click="handleToPoolRules">挖矿规则</div>
+        <div class="list" v-if="false" @click="handleToPoolRules">审计</div>
         <div class="list">
           <span v-if="language !== 'en'" @click="handleChangeLang('en')">EN</span>
           <span v-else @click="handleChangeLang('zh-CN')">CN</span>
@@ -36,6 +38,12 @@ export default {
     })
   },
   methods: {
+    handleToPoolRules() {
+      this.showNav = false;
+      this.$router.push({
+        name: 'tutorial'
+      })
+    },
     handleChangeLang(type) {
       this.showNav = false;
       this.$i18n.locale = type;
