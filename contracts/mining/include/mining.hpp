@@ -18,7 +18,7 @@ public:
    static constexpr name MINING_CONTRACT{"defisswapcnt"_n};
 
    static constexpr uint64_t MAX_SUPPLY = 100000 * 100000000ll; // 1 billion  
-   static constexpr uint64_t GENESIS_BLOCK = 1595314800;       // UTC: 2020-07-21T07:00:00 
+   static constexpr uint64_t GENESIS_BLOCK = 1595228400;       // UTC: 2020-07-20T07:00:00 
 
    /**
     * Create action.

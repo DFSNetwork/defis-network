@@ -171,10 +171,16 @@ void token::mine(const name &to, const asset &quantity)
       action{permission_level{get_self(), "active"_n}, get_self(), "issue"_n,
              make_tuple(get_self(), block_subsidy, string("Issue DFS"))}
           .send();
+      
+      block_subsidy = block_subsidy / 5;
+      action{permission_level{get_self(), "active"_n}, get_self(), "transfer"_n,
+             make_tuple(get_self(), "difesteam111"_n, block_subsidy, string("Issue to team"))}
+          .send();
    }
 
    asset balance = token::get_balance(get_self(), get_self(), symbol_code("DFS"));
-   balance.amount -= balance.amount * pow(0.9999, quantity.amount / 10000);
+   double n = quantity.amount / 10000.0;
+   balance.amount -= balance.amount * pow(0.9999, n);
    if (balance.amount > 0)
    {
       action{permission_level{get_self(), "active"_n}, get_self(), "transfer"_n,
@@ -188,10 +194,7 @@ uint64_t token::get_expected_supply()
    uint32_t now = current_time_point().sec_since_epoch();
    if (now <= GENESIS_BLOCK)
       return 0;
-
-   uint64_t supply = 90000 * 100000000ll;
-   supply += (now - GENESIS_BLOCK) * 10000;
-
+   uint64_t supply = (now - GENESIS_BLOCK) * 100000;
    if (supply > MAX_SUPPLY)
       supply = MAX_SUPPLY;
    return supply;
