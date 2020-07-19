@@ -306,6 +306,13 @@ export default {
       if (!Number(this.stakeNum)) {
         return false
       }
+      if (Number(this.stakeNum) < 1) {
+        this.$message({
+          type: 'error',
+          message: this.$t('bank.mininum')
+        })
+        return false
+      }
       if (Number(this.stakeNum) > Number(this.balanceEos)) {
         this.$message({
           type: 'error',

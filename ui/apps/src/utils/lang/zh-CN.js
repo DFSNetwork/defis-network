@@ -35,6 +35,7 @@ export default {
     record: '生成记录',
     stakeInMining: '抵押中',
     canRedeem: '后可进行赎回。',
+    mininum: '最少1.0000 EOS',
   },
   dex: {
     pay: '支付',

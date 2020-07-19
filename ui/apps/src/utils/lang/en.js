@@ -35,6 +35,7 @@ export default {
     record: 'Mint record',
     stakeInMining: 'Staking',
     canRedeem: ' can be redeemed.',
+    mininum: 'Minimum 1.0000 EOS',
   },
   dex: {
     pay: 'Pay',
