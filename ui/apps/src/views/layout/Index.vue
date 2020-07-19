@@ -7,7 +7,7 @@
       <router-view class="content" @listenLogin="handleLogin" @listenShowBonus="handleShowBonus"
         :marketLists="marketLists"/>
     </transition>
-    <!-- <warm-tip /> -->
+    <warm-tip />
     <nav-list ref="nav" @listenLoginOut="handleLoginOut" @listenShowBonus="handleShowBonus"/>
     <bonus ref="bonus"/>
   </div>
@@ -17,7 +17,7 @@
 import { login } from '@/utils/public';
 import { mapState } from 'vuex'
 import { EosModel } from '@/utils/eos';
-// import WarmTip from '@/components/WarmTip';
+import WarmTip from '@/components/WarmTip';
 import HeaderNav from '@/components/HeaderNav';
 import NavList from '@/components/Nav';
 import Bonus from '@/components/Bonus';
@@ -25,7 +25,7 @@ import Bonus from '@/components/Bonus';
 export default {
   name: 'layout',
   components: {
-    // WarmTip,
+    WarmTip,
     HeaderNav,
     NavList,
     Bonus
