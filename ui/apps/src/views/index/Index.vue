@@ -77,6 +77,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
+import moment from 'moment';
 import { toFixed, toLocalTime, getPrice } from '@/utils/public';
 import Mining from './components/Mining';
 
@@ -219,8 +220,8 @@ export default {
           v.ctime = toLocalTime(`${v.create_time}.000+0000`);
           v.staked = !!Number(v.rex_received.split(' ')[0]);
           v.ableRedeemDate = toLocalTime(`${v.rex_maturity}.000+0000`);
-          const redeemTime = new Date(v.ableRedeemDate).getTime(); // 解锁时间
-          const nowTime = new Date().getTime(); // 当前时间
+          const redeemTime = moment(v.ableRedeemDate).valueOf(); // 解锁时间
+          const nowTime = moment().valueOf(); // 当前时间
           v.ableRedeem = redeemTime <= nowTime;
         });
         this.tableData = list.reverse();
