@@ -1,6 +1,8 @@
 #include <dividend.hpp>
 ACTION dividend::exec(symbol_code sym)
 {
+   require_auth(get_self());
+
    auto itr_divds = _divds.find(sym.raw());
 
    if (itr_divds->next_dividend <= current_time_point())
@@ -19,7 +21,15 @@ ACTION dividend::exec(symbol_code sym)
       }
 
       double reward_per_dfs = reward_balance.amount;
-      reward_per_dfs /= dfs_balance.amount;
+      if (dfs_balance.amount == 0)
+      {
+         reward_per_dfs = 0;
+      }
+      else
+      {
+         reward_per_dfs /= dfs_balance.amount;
+      }
+
       time_point_sec next{current_time_point().sec_since_epoch() + DIVIDEND_GAP};
       _divds.modify(itr_divds, same_payer, [&](auto &s) {
          s.next_dividend = next;
@@ -30,6 +40,20 @@ ACTION dividend::exec(symbol_code sym)
    {
       print("It's not dividend time");
    }
+}
+
+ACTION dividend::upgrade()
+{
+   require_auth(get_self());
+
+   auto itr_divds = _divds.begin();
+
+   time_point_sec next{1595228400 + DIVIDEND_GAP};
+
+   _divds.modify(itr_divds, same_payer, [&](auto &s) {
+      s.next_dividend = next;
+      s.reward_per_dfs = 0;
+   });
 }
 
 ACTION dividend::claim(name user, symbol_code sym)
