@@ -173,7 +173,7 @@ export default {
     },
     handleToLocalEndTime(time) {
       const env = sessionStorage.getItem('ENV')
-      let secAll = (env === 'production') ? 24 * 3600 * 1000 * 15 : 15000;
+      let secAll = (env === 'production') ? 24 * 3600 * 1000 * 3 : 15000;
       const rqTime = Date.parse(`${time}.000+0000`)
       const endTime = accAdd(rqTime, secAll)
       return toLocalTime(endTime)
