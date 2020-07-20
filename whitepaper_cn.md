@@ -92,7 +92,7 @@ DFS是 DeFis Network 的平台币，与MakerDAO的MKR、Compound的COMP类似，
 ```
 pool_balance 为挖矿池子中积累的DFS数量，n 为挖矿金额对1EOS的倍数，pool_mining_weight为交易对的挖矿权重。
 
-目前 EOS/USDD 交易对的挖矿权重为1，其他交易对的挖矿权重为 0.3。后续系数调整将由社区投票决定。
+目前 EOS/USDD、EOS/USDT 交易对的挖矿权重为1，其他交易对的挖矿权重为 0.3。后续系数调整将由社区投票决定。
 
 挖矿示例: pool_balance 为 1000 DFS， 交易金额为 5 EOS，n = 5,
 如果是交易 USDD，pool_mining_weight 为1， 此次挖矿获得：

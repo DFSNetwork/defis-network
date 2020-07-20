@@ -88,7 +88,7 @@ Right now, the mining weight of  EOS/USDD pair is 1, other pairs are 0.3. Weight
 Mining Example: 
 
 pool_balance is 1000 DFS， trading amount is 5 EOS，n = 5,
-if the trading pair is EOS/USDD，then pool_mining_weight is 1，so the amount of DFS gained from mining is：
+if the trading pair is EOS/USDD or EOS/USDT，then pool_mining_weight is 1，so the amount of DFS gained from mining is：
 
 1000 - 1000 * pow(0.9999,5*1) = 0.4999 DFS 
 
