@@ -55,8 +55,8 @@
             <div>
               <div class="subTitle">
                 <span>{{ $t('bank.stakeNum') }}</span>
-                <span class="stake" v-if="!item.staked" @click="handleStake(item)">{{ $t('bank.mineStake') }}</span>
-                <span class="stakeing" v-else>{{ $t('bank.mining') }}</span>
+                <!-- <span class="stake" v-if="!item.staked" @click="handleStake(item)">{{ $t('bank.mineStake') }}</span>
+                <span class="stakeing" v-else>{{ $t('bank.mining') }}</span> -->
               </div>
               <div class="num">{{ item.pledge }}</div>
             </div>
