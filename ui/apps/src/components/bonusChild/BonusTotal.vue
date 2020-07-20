@@ -12,7 +12,7 @@
     </div>
     <div class="item mt12">
       <span>{{ $t('bonus.dfsSupply') }}</span>
-      <span>{{ supply }} DFS</span>
+      <span>{{ outTeamSupply }} DFS</span>
     </div>
     <div class="item">
       <span>{{ $t('bonus.dfsStaked') }}</span>
@@ -24,7 +24,7 @@
     </div>
     <div class="item">
       <span>{{ $t('hyk.perBonus') }}</span>
-      <span class="green">{{ wDfs }} EOS</span>
+      <span class="green">{{ dealWDfs }} EOS</span>
     </div>
   </div>
 </template>
@@ -33,7 +33,7 @@
 import axios from 'axios';
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accMul, accDiv, countdown, toLocalTime } from "@/utils/public";
+import { toFixed, accMul, accDiv, countdown, toLocalTime, accSub } from "@/utils/public";
 
 export default {
   name: 'BonusTotal',
@@ -44,6 +44,7 @@ export default {
       wDfs: '0.0000',
       balanceDfs: '0.0000',
       balanceEos: '0.0000',
+      balanceTeam: '0.0000',
       timeJson: {
         days: 0,
         hours: '00',
@@ -52,6 +53,7 @@ export default {
         total: 0,
       },
       supply: '0.0000',
+      outTeamSupply: '0.0000',
       timer: null,
       balanTimer: null,
     }
@@ -63,12 +65,19 @@ export default {
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
     }),
     percent() {
-      if (!Number(this.supply) || !Number(this.balanceDfs)) {
+      if (!Number(this.outTeamSupply) || !Number(this.balanceDfs)) {
         return '0.00'
       }
-      let p = accDiv(this.balanceDfs, this.supply)
+      let p = accDiv(this.balanceDfs, this.outTeamSupply)
       p = accMul(p, 100);
       return toFixed(p, 4)
+    },
+    dealWDfs() {
+      if (!Number(this.outTeamSupply)) {
+        return '0.0000'
+      }
+      const perDfs = accDiv(this.balanceEos, this.outTeamSupply)
+      return toFixed(accMul(perDfs, 10000), 4);
     }
   },
   mounted() {
@@ -104,7 +113,7 @@ export default {
         this.nextTime = toLocalTime(res.rows[0].next_dividend + '.000+0000');
         // this.nextTime = toLocalTime('2020-07-16T09:28:45.000+0000');
         this.perDfs = res.rows[0].reward_per_dfs;
-        this.wDfs = toFixed(accMul(this.perDfs, 10000), 4);
+        // this.wDfs = toFixed(accMul(this.perDfs, 10000), 4);
         this.timeJson = countdown(this.nextTime)
         clearInterval(this.timer)
         this.timer = setInterval(() => {
@@ -131,6 +140,14 @@ export default {
           account: 'defistakedfs',
         }
       }
+      if (type === 'team') {
+        params = { // 质押合约余额
+          code: 'minedfstoken',
+          coin: 'DFS',
+          decimal: 4,
+          account: 'difesteam111',
+        }
+      }
       await EosModel.getCurrencyBalance(params, res => {
         let balance = '0.0000'
         if (!res || res.length === 0) {
@@ -141,6 +158,12 @@ export default {
         if (type === 'staked') {
           this.balanceDfs = balance;
           return;
+        }
+        if (type === 'team') {
+          this.balanceTeam = balance;
+          let outTeamSupply = accSub(this.supply, this.balanceTeam)
+          this.outTeamSupply = toFixed(outTeamSupply, 4)
+          return
         }
         this.balanceEos = toFixed(accMul(balance, 0.5), 4);
       })
@@ -158,8 +181,8 @@ export default {
       }
       const res = result.data['DFS'];
       this.supply = res.supply.split(' ')[0];
+      await this.handleGetBalance('team')
     },
-
   }
 }
 </script>

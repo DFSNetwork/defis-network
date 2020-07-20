@@ -157,9 +157,9 @@ export default {
       balanceSym1: '0.0000',
       timer: null,
       tradeInfo: {}, // 交易详情
-      slipPointUser: '5', // 默认 5%
+      slipPointUser: '1', // 默认 5%
       isUserSetSlip: '', // 用户自定义滑点保护
-      showDetail: false,
+      showDetail: true,
       isUserSet: false,
       ani: false,
       aniTimer: null,

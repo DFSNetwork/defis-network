@@ -181,3 +181,11 @@ export function countdown(endtime) {
   }
   return { total: t, days, hours, minutes, seconds };
 }
+
+export function getUrlParams(url) {
+  const params = {};
+  url.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(str, key, value) {
+    params[key] = value;
+  });
+  return params;
+}

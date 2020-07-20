@@ -9,7 +9,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { GetUrlPara, login } from '@/utils/public';
+import { GetUrlPara, login, getUrlParams } from '@/utils/public';
 // import { EosModel } from '@/utils/eos';
 import Tabbar from '@/components/Tabbar';
 
@@ -35,6 +35,7 @@ export default {
   created() {
     this.handleEnvReLoad()
     this.handleEnvSet();
+    this.handleSetLang();
     this.handleGetPhoneLanguage();
   },
   mounted() {
@@ -44,6 +45,15 @@ export default {
     // })
   },
   methods: {
+    handleSetLang() {
+      const urlParams = getUrlParams(window.location.href) || {};
+      // set Language
+      const lang = urlParams.lang;
+      if (lang) {
+        this.$i18n.locale = lang;
+        this.$store.dispatch('setLanguage', lang);
+      }
+    },
     // 登录
     handleLogin() {
       login(this, () => {})
