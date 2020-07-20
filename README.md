@@ -69,7 +69,7 @@ Initial Circulation Number: 0.
 
 Features: 100% tokens will be released through“Mining by Trade".
 
-Mining Starting Time: 2020-07-20.
+Mining Starting Time: UTC 2020-07-20T07:00:00 ,timestamp 595228400
 
 Releasing Principle: 10 tokens will be released in one second. Among them, two will be distributed to the DeFis team to support the project development; eight will be allocated to the bonus pool. All tokens will be mined in three years.
 
@@ -129,6 +129,10 @@ Therefore, we can say that all users who participate in mining or hold project t
 
 All codes under the DeFis Network adopt the GPL open source protocol.
 Allow any individual or organization ("licensee") to research, review and analyze the software in private. The licensee may quote and modify this software under the constraints of the GPL open source agreement. In any case, the copyright owner is not responsible for any damage or other liability arising from or related to the software due to incorrect use, modification, or contract, infringement or other aspects.
+
+##  Risk Warning
+
+The smart contract for this project has been audited by professional security teams. But there may still has unexpected risks. Please use at your own risk.
 
 ## Summary
 
