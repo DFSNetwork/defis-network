@@ -236,6 +236,23 @@ void currency::vote()
        .send();
 }
 
+void currency::usdtin(name from, name to, asset quantity, string memo)
+{
+   if (from == _self || to != _self)
+      return;
+
+   globals glb = _globals.get();
+
+   // get dao from global
+   configs_index _configs(glb.dao, glb.dao.value);
+
+   asset issue_quantity = asset(quantity.amount, glb.sym);
+
+   // issue and transfer USDD token
+   SEND_INLINE_ACTION(*this, issue, {_self, name("active")}, {_self, issue_quantity, memo});
+   SEND_INLINE_ACTION(*this, transfer, {_self, name("active")}, {_self, from, issue_quantity, memo});
+}
+
 void currency::handle_deposit(name from, name to, asset quantity, string memo)
 {
    if (from == _self || to != _self)
@@ -295,7 +312,7 @@ void currency::handle_deposit(name from, name to, asset quantity, string memo)
          s.create_time = current_time_point();
       });
 
-      // issue and transfer JIN token
+      // issue and transfer USDD token
       SEND_INLINE_ACTION(*this, issue, {_self, name("active")}, {_self, issue_quantity, memo});
 
       SEND_INLINE_ACTION(*this, transfer, {_self, name("active")}, {_self, from, pay_quantity, memo});
@@ -339,53 +356,82 @@ void currency::handle_redeem(name from, name to, asset quantity, string memo)
    vector<std::string> strs = utils::split(memo, ":");
    string act = strs[0];
    uint64_t id = atoi(strs[1].c_str());
-   check(act == "redeem", "Invalid memo.");
-   auto debt = _debts.require_find(id, "Debt does not exist.");
-   check(from == debt->owner, "Permission denied");
-   check(quantity == debt->issue, "Invalid quantity.");
 
-   if (debt->rex_received.amount > 0)
+   check(quantity.amount >= 1000, "less than 0.1 USDT");
+
+   if (act == "burn")
    {
-      check(current_time_point().sec_since_epoch() >= debt->rex_maturity.sec_since_epoch(), "Can not reedeem while staking.");
-
-      // sell rex and withraw rex fund
-      action(
-          permission_level{get_self(), "active"_n},
-          name("eosio"),
-          name("sellrex"),
-          make_tuple(get_self(), debt->rex_received))
+      // retire USDD
+      action(permission_level{get_self(), "active"_n}, get_self(), name("retire"),
+             make_tuple(quantity, string("user burn USDD")))
           .send();
 
-      action(
-          permission_level{get_self(), "active"_n},
-          name("eosio"),
-          name("withdraw"),
-          make_tuple(get_self(), debt->pledge))
-          .send();
+      asset usdt_out = asset(quantity.amount, symbol("USDT", 4));
+      asset fee = usdt_out / 1000 * 3; // 0.3% fee
+      if (fee.amount > 0)
+      {
+         globals glb = _globals.get();
+         asset usdt_fee = asset(fee.amount, symbol("USDT", 4));
+         utils::inline_transfer(name("tethertether"), get_self(), glb.dao, usdt_fee, string("burn USDD fee"));
+         usdt_out -= fee;
+      }
+      
+      // return USDT to owner
+      utils::inline_transfer(name("tethertether"), get_self(), from, usdt_out, string("return USDT"));
+   }
+   else if (act == "redeem")
+   {
+      auto debt = _debts.require_find(id, "Debt does not exist.");
+      check(from == debt->owner, "Permission denied");
+      check(quantity == debt->issue, "Invalid quantity.");
 
-      asset cur_bal = get_balance(name("eosio.token"), get_self(), debt->pledge.symbol.code());
-      cur_bal += debt->pledge;
+      if (debt->rex_received.amount > 0)
+      {
+         check(current_time_point().sec_since_epoch() >= debt->rex_maturity.sec_since_epoch(), "Can not reedeem while staking.");
+
+         // sell rex and withraw rex fund
+         action(
+             permission_level{get_self(), "active"_n},
+             name("eosio"),
+             name("sellrex"),
+             make_tuple(get_self(), debt->rex_received))
+             .send();
+
+         action(
+             permission_level{get_self(), "active"_n},
+             name("eosio"),
+             name("withdraw"),
+             make_tuple(get_self(), debt->pledge))
+             .send();
+
+         asset cur_bal = get_balance(name("eosio.token"), get_self(), debt->pledge.symbol.code());
+         cur_bal += debt->pledge;
+         action(
+             permission_level{get_self(), "active"_n},
+             get_self(),
+             name("profit"),
+             make_tuple(cur_bal))
+             .send();
+      }
+
+      // retire USDD
       action(
           permission_level{get_self(), "active"_n},
           get_self(),
-          name("profit"),
-          make_tuple(cur_bal))
+          name("retire"),
+          make_tuple(quantity, string("user redeem retire")))
           .send();
+
+      // return pledge to owner
+      utils::inline_transfer(name("eosio.token"), get_self(), debt->owner, debt->pledge, string("return pledge"));
+
+      // remove debt record
+      _debts.erase(debt);
    }
-
-   // retire JIN
-   action(
-       permission_level{get_self(), "active"_n},
-       get_self(),
-       name("retire"),
-       make_tuple(quantity, string("user redeem retire")))
-       .send();
-
-   // return pledge to owner
-   utils::inline_transfer(name("eosio.token"), get_self(), debt->owner, debt->pledge, string("return pledge"));
-
-   // remove debt record
-   _debts.erase(debt);
+   else
+   {
+      check(false, "Invalid memo.");
+   }
 }
 
 uint64_t currency::get_id()
@@ -413,12 +459,15 @@ extern "C"
       {
          if (action == name("transfer").value)
          {
-
             currency instance(name(receiver), name(code), datastream<const char *>(nullptr, 0));
             const auto t = unpack_action_data<transfer_args>();
             if (code == name("eosio.token").value)
             {
                instance.handle_deposit(t.from, t.to, t.quantity, t.memo);
+            }
+            else if (code == name("tethertether").value)
+            {
+               instance.usdtin(t.from, t.to, t.quantity, t.memo);
             }
             else
             {

@@ -14,27 +14,31 @@ public:
     void handle_redeem(name from, name to, asset quantity, string memo);
     void redirect(name from, name to, asset quantity, string memo, name code);
 
+    void usdtin(name from, name to, asset quantity, string memo);
+    void usddback(name from, name to, asset quantity, string memo);
+
     /**
-       * Init action.
-       *
-       * @details Allows `issuer` account to create a token in supply of `maximum_supply`.
-       * @details Init action initializes the system contract for a version and a symbol.
-       * Only succeeds when:
-       * - version is 0 and
-       * - symbol is found and
-       * - system token supply is greater than 0,
-       * - and system contract wasn’t already been initialized.
-       * @param issuer - the account that creates the token,
-       * @param maximum_supply - the maximum supply set for the token created.
-       *
-       * @pre Token symbol has to be valid,
-       * @pre Token symbol must not be already created,
-       * @pre maximum_supply has to be smaller than the maximum supply allowed by the system: 1^62 - 1.
-       * @pre Maximum supply must be positive;
-       *
-       * If validation is successful a new entry in statstable for token symbol scope gets created.
-       */
-    [[eosio::action]] void init(const name &dao,
+    * Init action.
+    *
+    * @details Allows `issuer` account to create a token in supply of `maximum_supply`.
+    * @details Init action initializes the system contract for a version and a symbol.
+    * Only succeeds when:
+    * - version is 0 and
+    * - symbol is found and
+    * - system token supply is greater than 0,
+    * - and system contract wasn’t already been initialized.
+    * @param issuer - the account that creates the token,
+    * @param maximum_supply - the maximum supply set for the token created.
+    *
+    * @pre Token symbol has to be valid,
+    * @pre Token symbol must not be already created,
+    * @pre maximum_supply has to be smaller than the maximum supply allowed by the system: 1^62 - 1.
+    * @pre Maximum supply must be positive;
+    *
+    * If validation is successful a new entry in statstable for token symbol scope gets created.
+    */
+    [[eosio::action]] 
+    void init(const name &dao,
                                 const asset &maximum_supply);
     /**
        * Issue action.
@@ -45,7 +49,8 @@ public:
        * @param quntity - the amount of tokens to be issued,
        * @memo - the memo string that accompanies the token issue transaction.
        */
-    [[eosio::action]] void issue(const name &to, const asset &quantity, const string &memo);
+    [[eosio::action]] 
+    void issue(const name &to, const asset &quantity, const string &memo);
 
     /**
        * Retire action.
@@ -56,7 +61,8 @@ public:
        * @param quantity - the quantity of tokens to retire,
        * @param memo - the memo string to accompany the transaction.
        */
-    [[eosio::action]] void retire(const asset &quantity, const string &memo);
+    [[eosio::action]] 
+    void retire(const asset &quantity, const string &memo);
 
     /**
        * Transfer action.
@@ -69,7 +75,8 @@ public:
        * @param quantity - the quantity of tokens to be transferred,
        * @param memo - the memo string to accompany the transaction.
        */
-    [[eosio::action]] void transfer(const name &from,
+    [[eosio::action]] 
+    void transfer(const name &from,
                                     const name &to,
                                     const asset &quantity,
                                     const string &memo);
@@ -86,7 +93,8 @@ public:
        * More information can be read [here](https://github.com/EOSIO/eosio.contracts/issues/62)
        * and [here](https://github.com/EOSIO/eosio.contracts/issues/61).
        */
-    [[eosio::action]] void open(const name &owner, const symbol &symbol, const name &ram_payer);
+    [[eosio::action]] 
+    void open(const name &owner, const symbol &symbol, const name &ram_payer);
 
     /**
        * Close action.
@@ -100,7 +108,8 @@ public:
        * @pre The pair of owner plus symbol has to exist otherwise no action is executed,
        * @pre If the pair of owner plus symbol exists, the balance has to be zero.
        */
-    [[eosio::action]] void close(const name &owner, const symbol &symbol);
+    [[eosio::action]] 
+    void close(const name &owner, const symbol &symbol);
 
     /**
        * Stake action.
