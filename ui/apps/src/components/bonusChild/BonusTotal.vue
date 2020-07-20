@@ -73,10 +73,10 @@ export default {
       return toFixed(p, 4)
     },
     dealWDfs() {
-      if (!Number(this.outTeamSupply)) {
+      if (!Number(this.balanceDfs)) {
         return '0.0000'
       }
-      const perDfs = accDiv(this.balanceEos, this.outTeamSupply)
+      const perDfs = accDiv(this.balanceEos, this.balanceDfs)
       return toFixed(accMul(perDfs, 10000), 4);
     }
   },
