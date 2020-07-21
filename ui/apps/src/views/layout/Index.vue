@@ -34,6 +34,9 @@ export default {
     return {
       marketLists: [],
       timer: null,
+      topLists: [
+        7, 39, 17, 
+      ]
     }
   },
   computed:{
@@ -86,6 +89,7 @@ export default {
       }
       EosModel.getTableRows(params, (res) => {
         const list = res.rows || [];
+        const newList = []
         list.forEach((v) => {
           const sym0 = v.sym0.split(',');
           v.symbol0 = sym0[1]; // 币种
@@ -117,8 +121,14 @@ export default {
             sym: v.sym1,
             symbol: v.symbol1
           }
+          const i = this.topLists.find(vv => vv === v.mid)
+          if (i) {
+            newList.unshift(v)
+          } else {
+            newList.push(v)
+          }
         });
-        this.marketLists = list;
+        this.marketLists = newList;
       })
     }
   }

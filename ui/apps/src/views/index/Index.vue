@@ -262,7 +262,10 @@ export default {
           });
           return
         }
-        this.handleBalanTimer();
+        setTimeout(() => {
+          this.handleBalanTimer();
+          this.handleRowsMint()
+        }, 1000);
         this.$message({
           message: this.$t('public.success'),
           type: 'success'
@@ -282,8 +285,10 @@ export default {
           });
           return
         }
-        this.handleBalanTimer();
-        this.handleRowsMint();
+        setTimeout(() => {
+          this.handleBalanTimer();
+          this.handleRowsMint()
+        }, 1000);
         this.$message({
           message: this.$t('public.success'),
           type: 'success'
@@ -341,8 +346,10 @@ export default {
           });
           return
         }
-        this.handleBalanTimer();
-        this.handleRowsMint();
+        setTimeout(() => {
+          this.handleBalanTimer();
+          this.handleRowsMint()
+        }, 1000);
         this.$message({
           message: this.$t('public.success'),
           type: 'success'
