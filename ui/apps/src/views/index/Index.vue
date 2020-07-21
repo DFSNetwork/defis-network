@@ -205,7 +205,7 @@ export default {
         code: this.baseConfig.toAccountJin,
         scope: this.baseConfig.toAccountJin,
         table: 'debts',
-        limit: 10,
+        limit: 1000,
         lower_bound: this.scatter.identity.accounts[0].name,
         upper_bound: this.scatter.identity.accounts[0].name,
         key_type: 'i64',
