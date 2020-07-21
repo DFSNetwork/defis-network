@@ -3,6 +3,9 @@ build/
 .vscode
 node_modules/
 dist/
+dao/
+feed/
+oracle/
 npm-debug.log
 .idea
 test*
