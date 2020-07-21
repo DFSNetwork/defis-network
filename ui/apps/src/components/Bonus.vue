@@ -283,9 +283,9 @@ export default {
     },
     // 账户转账参与抵押
     handleAccToStake() {
-      if (!Number(this.stakeNum)) {
-        return
-      }
+      // if (!Number(this.stakeNum)) {
+      //   return
+      // }
       if (Number(this.stakeNum) > Number(this.balanceDfs)) {
         this.$message({
           message: '可质押数量不足',
