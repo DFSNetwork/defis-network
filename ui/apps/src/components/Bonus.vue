@@ -283,9 +283,9 @@ export default {
     },
     // 账户转账参与抵押
     handleAccToStake() {
-      // if (!Number(this.stakeNum)) {
-      //   return
-      // }
+      if (!Number(this.stakeNum)) {
+        return
+      }
       if (Number(this.stakeNum) > Number(this.balanceDfs)) {
         this.$message({
           message: '可质押数量不足',
@@ -413,9 +413,9 @@ export default {
     },
     // 账户领取当前红利
     handleClaimNow() {
-      if (!Number(this.ableClaim)) {
-        return;
-      }
+      // if (!Number(this.ableClaim)) {
+      //   return;
+      // }
       const formName = this.$store.state.app.scatter.identity.accounts[0].name;
       const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
       const params = {
