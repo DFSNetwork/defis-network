@@ -115,6 +115,7 @@ export default {
         this.perDfs = res.rows[0].reward_per_dfs;
         // this.wDfs = toFixed(accMul(this.perDfs, 10000), 4);
         this.timeJson = countdown(this.nextTime)
+        this.$emit('listenPerDfs', this.perDfs)
         clearInterval(this.timer)
         this.timer = setInterval(() => {
           if (this.timeJson.total <= 0) {

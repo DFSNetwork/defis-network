@@ -14,9 +14,9 @@
         <span @click="handleClickActive(2)" class="iconfont icon-huaban29 back"></span>
         <span>{{ $t('bonus.redeemDetail') }}</span>
       </div>
-      <bonus-total v-if="active === 1" />
+      <bonus-total v-show="active === 1" @listenPerDfs="handlePerDfs"/>
       <!-- 我的红利 -->
-      <div class="list" v-else-if="active === 2">
+      <div class="list" v-show="active === 2">
         <div class="next">
           <div class="item mt12">
             <span>{{ $t('bonus.myDividends') }}</span>
@@ -69,7 +69,7 @@
         </div>
       </div>
 
-      <div v-else class="unstakeLists">
+      <div v-show="active === 3" class="unstakeLists">
         <div class="unstakeList" v-for="(item, index) in refundingList" :key="index">
           <div>
             <span>{{ $t('bonus.redeemNum') }}</span>
@@ -103,7 +103,7 @@ export default {
     return {
       showBonus: false,
       active: 1, // 1 - 分红池 | 2 - 我的红利 | 3 - 赎回列表
-      ableClaim: '0.0000', // 可领取
+      // ableClaim: '0.0000', // 可领取
       balanceDfs: '0.0000',
       staked: '0.0000',
       refunding: '0.0000',
@@ -112,6 +112,7 @@ export default {
       // input
       stakeNum: '',
       refundNum: '',
+      perDfs: 0,
       supply: '0.0000'
     }
   },
@@ -128,6 +129,12 @@ export default {
       let p = accDiv(this.staked, this.supply)
       p = accMul(p, 100);
       return toFixed(p, 4)
+    },
+    ableClaim() {
+      let able = accMul(this.perDfs, this.staked)
+      able = toFixed(able, 4)
+      console.log(able)
+      return able
     }
   },
   watch: {
@@ -144,6 +151,9 @@ export default {
     clearTimeout(this.timer);
   },
   methods: {
+    handlePerDfs(per) {
+      this.perDfs = per;
+    },
     handleInput(type) {
       if (type === 'stake') {
         const n = Number(this.stakeNum)
@@ -187,7 +197,7 @@ export default {
         this.handleGetBalance();
         this.handleGetAccStakes();
         this.handleGetAccRefunds();
-        this.handleGetAccBonus();
+        // this.handleGetAccBonus();
         this.handleGetDfsStats();
       }
     },
@@ -204,6 +214,7 @@ export default {
       EosModel.getTableRows(params, (res) => {
         const bal = res.rows && res.rows.length ? res.rows[0].bal.split(' ')[0] : '0.0000';
         this.staked = bal;
+        // this.ableClaim = this.staked * 
       })
     },
     // 获取账户分红数量详情
