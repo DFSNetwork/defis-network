@@ -24,7 +24,7 @@ public:
 
    ACTION claim(name user, symbol_code sym);
 
-   ACTION upgrade();
+   ACTION update(name user, asset quantity);
 
 private:
    TABLE dividends

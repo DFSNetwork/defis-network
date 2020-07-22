@@ -10,17 +10,21 @@ ACTION staking::unstake(name user, asset quantity)
       s.bal -= quantity;
    });
 
-   refunds _refunds(get_self(), user.value);
-   _refunds.emplace(user, [&](auto &s) {
-      s.id = _refunds.available_primary_key();
-      s.refund = quantity;
-      s.request_time = current_time_point();
-   });
+   // refunds _refunds(get_self(), user.value);
+   // _refunds.emplace(user, [&](auto &s) {
+   //    s.id = _refunds.available_primary_key();
+   //    s.refund = quantity;
+   //    s.request_time = current_time_point();
+   // });
+
+   action{permission_level{get_self(), "active"_n}, name("minedfstoken"), "transfer"_n,
+          make_tuple(get_self(), user, quantity, std::string("stake refund"))}
+       .send();
 }
 
 ACTION staking::refund(name user, uint64_t id)
 {
-   require_auth(user);
+   // require_auth(user);
 
    refunds _refunds(get_self(), user.value);
 
@@ -56,4 +60,11 @@ void staking::stake(name from, name to, asset quantity, std::string memo)
          s.bal = quantity;
       });
    }
+
+   action{
+       permission_level{get_self(), "active"_n},
+       name("defidividend"),
+       "update"_n,
+       std::make_tuple(from, quantity)}
+       .send();
 }

@@ -11,7 +11,7 @@ public:
 
    static constexpr symbol dfs_symbol = symbol("DFS", 4);
 
-   static constexpr uint32_t seconds_per_day = 24 * 3600;
+   static constexpr uint32_t seconds_per_day = 1;
    static constexpr uint32_t refund_delay_sec = 3 * seconds_per_day;
 
    staking(name receiver, name code, datastream<const char *> ds)

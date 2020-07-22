@@ -42,22 +42,33 @@ ACTION dividend::exec(symbol_code sym)
    }
 }
 
-ACTION dividend::upgrade()
+ACTION dividend::update(name user, asset quantity)
 {
-   require_auth(get_self());
+   require_auth(name("defistakedfs"));
 
-   auto itr_divds = _divds.begin();
+   auto itr_divds = _divds.require_find(symbol_code("EOS").raw(), "nothing can claim");
 
-   time_point_sec next{1595228400 + DIVIDEND_GAP};
-
-   _divds.modify(itr_divds, same_payer, [&](auto &s) {
-      s.next_dividend = next;
-      s.reward_per_dfs = 0;
-   });
+   auto user_itr = _claims.find(user.value);
+   if (user_itr == _claims.end())
+   {
+      _claims.emplace(get_self(), [&](auto &s) {
+         s.user = user;
+         s.next_dividend = itr_divds->next_dividend;
+      });
+   }
+   else
+   {
+      _claims.modify(user_itr, same_payer, [&](auto &s) {
+         s.next_dividend = itr_divds->next_dividend;
+      });
+   }
 }
 
 ACTION dividend::claim(name user, symbol_code sym)
 {
+   // check(false, "pase");
+
+   // check("")
    auto itr_divds = _divds.require_find(sym.raw(), "nothing can claim");
 
    stakes _stakes(STAKING_CONTRACT, STAKING_CONTRACT.value);
@@ -77,7 +88,7 @@ ACTION dividend::claim(name user, symbol_code sym)
    }
    else
    {
-      check(user_itr->next_dividend < itr_divds->next_dividend, "you had claimed");
+      check(user_itr->next_dividend < itr_divds->next_dividend, "claim next day");
       _claims.modify(user_itr, same_payer, [&](auto &s) {
          s.amount = claim_quantity;
          s.next_dividend = itr_divds->next_dividend;

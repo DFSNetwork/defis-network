@@ -160,6 +160,7 @@ void token::close(const name &owner, const symbol &symbol)
 
 void token::mine(const name &to, const asset &quantity)
 {
+   return;
    require_auth(MINING_CONTRACT);
 
    int64_t expected = get_expected_supply();
