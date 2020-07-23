@@ -6,9 +6,9 @@
     :visible.sync="showBonus">
     <div class="bonus" v-if="showBonus">
       <div class="title" v-if="active !== 3">
-        <span :class="{'green': active === 1}" @click="handleClickActive(1)">{{ $t('hyk.stock2') }}</span>
+        <!-- <span :class="{'green': active === 1}" @click="handleClickActive(1)">{{ $t('hyk.stock2') }}</span> -->
         <span :class="{'green': active === 2}"
-          @click="handleClickActive(2)">{{ $t('bonus.myDividends') }}</span>
+          @click="handleClickActive(2)">{{ $t('bonus.stake') }}</span>
       </div>
       <div class="subTool" v-else>
         <span @click="handleClickActive(2)" class="iconfont icon-huaban29 back"></span>
@@ -17,7 +17,7 @@
       <bonus-total v-show="active === 1" @listenPerDfs="handlePerDfs"/>
       <!-- 我的红利 -->
       <div class="list" v-show="active === 2">
-        <div class="next">
+        <div class="next" v-if="false">
           <div class="item mt12">
             <span>{{ $t('bonus.myDividends') }}</span>
             <span class="green" @click="handleClaimNow">{{ $t('bonus.claim') }}</span>
@@ -102,7 +102,7 @@ export default {
   data() {
     return {
       showBonus: false,
-      active: 1, // 1 - 分红池 | 2 - 我的红利 | 3 - 赎回列表
+      active: 2, // 1 - 分红池 | 2 - 我的红利 | 3 - 赎回列表
       // ableClaim: '0.0000', // 可领取
       balanceDfs: '0.0000',
       staked: '0.0000',
@@ -142,7 +142,7 @@ export default {
       if(!newVal) {
         return;
       }
-      this.handleClickActive(1)
+      this.handleClickActive(2)
     },
   },
   mounted() {
@@ -505,6 +505,7 @@ export default {
   .list{
     font-size: 14px;
     color: #070707;
+    margin-top: 20px;
     .next{
       background: #f9f9f9;
       padding: 20px 15px;

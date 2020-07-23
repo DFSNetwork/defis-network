@@ -8,7 +8,7 @@
       :visible.sync="showNav">
       <div class="navList">
         <div class="list" @click="handleToTutorial">{{ $t('public.tutorial') }}</div>
-        <div class="list" @click="handleShowBonus">{{ $t('hyk.stock') }}</div>
+        <div class="list" @click="handleShowBonus">{{ $t('bonus.stake') }}</div>
         <div class="list" v-if="false" @click="handleToPoolRules">挖矿规则</div>
         <div class="list" v-if="false" @click="handleToPoolRules">审计</div>
         <div class="list">

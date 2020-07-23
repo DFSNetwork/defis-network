@@ -192,6 +192,16 @@ export default {
 .list{
   font-size: 14px;
   color: #070707;
+  position: relative;
+  .stop{
+    position: absolute;
+    background: rgba(255,255,255, .8);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .next{
     background: #f9f9f9;
     padding: 20px 15px;
