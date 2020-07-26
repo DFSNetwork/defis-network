@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="14px" viewBox="0 0 15 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>menu_icon</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="兑换/未登录" transform="translate(-328.000000, -67.000000)" fill="#000000">
+            <g id="menu_icon" transform="translate(328.000000, 67.000000)">
+                <g>
+                    <rect id="矩形" x="0" y="0" width="15" height="2" rx="1"></rect>
+                    <rect id="矩形备份" opacity="0.3" x="0" y="6" width="15" height="2" rx="1"></rect>
+                    <rect id="矩形备份-2" x="0" y="12" width="15" height="2" rx="1"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="18px" height="16px" viewBox="0 0 18 16" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>price_switch_icon_btn_right</title>
+    <g id="页面-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="交互文档/兑换" transform="translate(-1290.000000, -794.000000)" fill="#000000">
+            <g id="price_switch_icon_btn_right" transform="translate(1290.000000, 794.000000)">
+                <g>
+                    <g id="切换" fill-rule="nonzero">
+                        <path d="M7,4 L12,4 L12,6 L15,3 L12,0 L12,2 L7,2 C3.13400675,2 0,5.13400675 0,9 L2,9 C2,6.23857625 4.23857625,4 7,4 Z" id="形状"></path>
+                    </g>
+                    <path d="M16,7 C16,8.32608245 15.4732158,9.59785201 14.5355339,10.5355339 C13.597852,11.4732158 12.3260824,12 11,12 L6,12 L6,10 L3,13 L6,16 L6,14 L11,14 C14.8659932,14 18,10.8659932 18,7 L16,7 Z" id="路径" opacity="0.3"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

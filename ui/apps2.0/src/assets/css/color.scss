@@ -1,0 +1,30 @@
+// color css
+
+$color-main: #0bd79a;
+$color-aux: #01c798;
+$color-black: #000;
+$color-bgcolor: #fff;
+$color-border: #f3f3f3;
+$color-shadow: #e0e0e0;
+$color-tip: #a6a6a6;
+
+.tip{
+  color: $color-tip;
+}
+.svgIcon{
+  display: block;
+}
+
+.flex{
+  display: flex;
+}
+.flexc{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.flexb{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

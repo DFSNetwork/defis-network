@@ -5,6 +5,7 @@ class swapRouter {
     this.mid_market_map = {};
     this.tokens = [];
     this.paths = [];
+    this.isInit = false;
   }
   init(data) {
     this.markets = data || [];
@@ -65,9 +66,11 @@ class swapRouter {
     })
 
     // console.log("paths", this.paths);
+    this.isInit = true;
   }
 
-  get_paths(tokenA, tokenB) {
+  get_paths(tokenA, tokenB, ctPath) {
+    if (!this.isInit) return;
     let pair = [tokenA, tokenB].sort().join("-");
     let market = this.pair_market_map[pair];
     let _paths;
@@ -83,6 +86,10 @@ class swapRouter {
           break;
         }
       }
+    }
+    // 获取合约币种路径
+    if (ctPath) {
+      return _paths
     }
     let mids;
     let tks = _paths.split("-");
@@ -103,6 +110,7 @@ class swapRouter {
 
 
   get_amounts_out(mids, token_in, amount_in, type) {
+    if (!this.isInit) return;
     let mid_arr = mids.split("-");
     let quantity_out;
     let price = 1;
@@ -128,6 +136,7 @@ class swapRouter {
   }
 
   swap(mid, token_in, amount_in, type) {
+    if (!this.isInit) return;
     let market = this.mid_market_map[mid];
 
     let tokenA = market.contract0 + ":" + market.sym0.split(",")[1];
@@ -186,6 +195,7 @@ class swapRouter {
   }
 
   get_amount_out(amount_in, reserve_in, reserve_out) {
+    if (!this.isInit) return;
     // console.log(amount_in, reserve_in, reserve_out)
     this.check(amount_in > 0, "invalid input amount");
     this.check(reserve_in > 0 && reserve_out > 0, "insufficient liquidity");
@@ -324,11 +334,12 @@ class swapRouter {
 // const swapRouter1 = new swapRouter()
 // swapRouter1.init(d)
 
-// 计算兑换路径
+// // 计算兑换路径
 // let mids1 = swapRouter1.get_paths("eosio.token:EOS", "everipediaiq:IQ");  // 直接兑换    EOS-IQ
-// let mids2 = swapRouter1.get_paths("eosiotptoken:TPT", "everipediaiq:IQ"); // 中转兑换1次 TPT-EOS-IQ
+// let mids2 = swapRouter1.get_paths("eosiotptoken:TPT", "everipediaiq:IQ", true); // 中转兑换1次 TPT-EOS-IQ
 // let mids3 = swapRouter1.get_paths("eosio.token:EOS", "bgbgbgbgbgbg:BG");  // 中转兑换1次 EOS-NDX-BG
 // let mids4 = swapRouter1.get_paths("eosio.token:EOS", "mkstaketoken:KEY"); // 中转兑换2次 EOS-NDX-BG-KEY
+// console.log(mids1, mids2, mids3, mids4)
 
 
 // 计算amount_out 

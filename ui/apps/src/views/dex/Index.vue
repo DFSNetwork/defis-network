@@ -447,11 +447,13 @@ export default {
       const payNum = inData.type === 'pay' ? inData.payNum : res.quantity_out.split(' ')[0];
       const getNum = inData.type === 'pay' ? res.quantity_out.split(' ')[0] : inData.getNum;
       let minOut = 0;
-      if (inData.type === 'pay') {
-        minOut = getNum * (1 - inData.slipPointUser);
-      } else {
-        minOut = payNum * (1 + Number(inData.slipPointUser));
-      }
+      // if (inData.type === 'pay') {
+      //   minOut = getNum * (1 - inData.slipPointUser);
+      // } else {
+      //   minOut = payNum * (1 + Number(inData.slipPointUser));
+      // }
+      minOut = res.price * (1 - inData.slipPointUser) * payNum;
+
       let aboutPrice = payNum / getNum;
           aboutPrice = toFixed(aboutPrice, this.thisMarket0.decimal)
       // console.log(inData)
@@ -460,7 +462,8 @@ export default {
         getNum,
         aboutPrice,
         type: inData.type,
-        minOut
+        minOut,
+        price: res.price
       }
       // console.log(obj)
       return obj
