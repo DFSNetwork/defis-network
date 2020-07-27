@@ -6,6 +6,7 @@ dist/
 dao/
 feed/
 oracle/
+pools/
 npm-debug.log
 .idea
 test*
