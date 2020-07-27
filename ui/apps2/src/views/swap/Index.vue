@@ -71,16 +71,30 @@
       <el-collapse-transition>
         <div class="tabB" v-show="showDetail">
           <div class="flexb">
-            <span class="flex">
+            <span class="flexb">
               <span class="tip">至少获取</span>
-              <span class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+              <el-popover
+                class="flexc"
+                popper-class="mypopper"
+                placement="top-start"
+                trigger="click">
+                <div class="qusTip">Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.</div>
+                <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+              </el-popover>
             </span>
             <span>{{ tradeInfo.minOut }}</span>
           </div>
           <div class="flexb">
             <span class="flex">
               <span class="tip">价格滑点</span>
-              <span class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+              <el-popover
+                class="flexc"
+                popper-class="mypopper"
+                placement="top-start"
+                trigger="click">
+                <div class="qusTip">The difference between the market price and estimated price due to trade size.</div>
+                <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+              </el-popover>
             </span>
             <span class="green"
               :class="{'yellow': Number(tradeInfo.priceRate) > 5,
@@ -91,7 +105,14 @@
           <div class="flexb fee">
             <span class="flex">
               <span class="tip">手续费</span>
-              <span class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+              <el-popover 
+                class="flexc"
+                popper-class="mypopper"
+                placement="top-start"
+                trigger="click">
+                <div class="qusTip">A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.</div>
+                <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+              </el-popover>
             </span>
             <span>{{fees}} {{ thisMarket0.symbol }}</span>
           </div>
@@ -532,6 +553,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.mypopper{
+  .qusTip{
+    padding: 10px;
+    width: 240px;
+    font-size: 24px;
+  }
+}
 .tabView{
   background: #FAFAFA;
   border-radius:30px;
@@ -665,7 +693,7 @@ export default {
   }
 }
 .btnDiv{
-  margin: 40px;
+  margin: 40px 0;
   font-size: 32px;
   font-weight: 500;
   .btn{
