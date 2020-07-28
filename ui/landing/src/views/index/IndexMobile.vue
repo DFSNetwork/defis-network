@@ -133,7 +133,7 @@
           <div class="listImg flexC"><img src="@/assets/img/partners/meetone.png?v=1" alt=""></div>
           <div class="listImg flexC"><img src="@/assets/img/partners/bitpie.png?v=1" alt=""></div>
           <div class="listImg flexC"><img src="@/assets/img/partners/mykey.png?v=1" alt=""></div>
-          <div class="listImg flexC" @click="showImg = !showImg"><img src="@/assets/img/partners/slowmist.png?v=2" alt=""></div>
+          <div class="listImg flexC" @click="handleToShowReport"><img src="@/assets/img/partners/slowmist.png?v=2" alt=""></div>
           <div class="listImg flexC"><img src="@/assets/img/partners/newdex.png?v=1" alt=""></div>
           <div class="listImg flexC"><img src="@/assets/img/partners/hoov3.png?v=2" alt=""></div>
           <div class="listImg flexC none"></div>
@@ -149,7 +149,7 @@
       </div>
     </transition>
 
-    <nav-list ref="nav" @listenToDiv="handleToDiv"/>
+    <nav-list ref="nav" @listenToDiv="handleToDiv" @listenToShowReport="handleToShowReport"/>
 
     <el-dialog
       top="10vh"
@@ -235,6 +235,9 @@ export default {
         this.showToTop = false
       }
     },
+    handleToShowReport() {
+      this.showImg = true;
+    }
   }
 }
 </script>

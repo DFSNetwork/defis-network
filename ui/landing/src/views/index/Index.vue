@@ -1,6 +1,6 @@
 <template>
   <div class="borrow" :class="{'en': $store.state.app.language === 'en'}">
-    <my-header @listenToDiv="handleToDiv"/>
+    <my-header @listenToDiv="handleToDiv" @listenToShowReport="handleToShowReport"/>
     <div class="dapp" ref="dapp">
       <div class="minW flexB">
         <div class="dappContent">
@@ -132,7 +132,7 @@
         <div class="listImg flexC"><img src="@/assets/img/partners/meetone.png?v=1" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/bitpie.png?v=1" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/mykey.png?v=1" alt=""></div>
-        <div class="listImg flexC" @click="showImg = !showImg"><img src="@/assets/img/partners/slowmist.png?v=2" alt=""></div>
+        <div class="listImg flexC" @click="handleToShowReport"><img src="@/assets/img/partners/slowmist.png?v=2" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/newdex.png?v=1" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/hoov3.png?v=2" alt=""></div>
         <div class="listImg flexC none"></div>
@@ -224,6 +224,9 @@ export default {
         this.showToTop = false
       }
     },
+    handleToShowReport() {
+      this.showImg = true;
+    }
   }
 }
 </script>
