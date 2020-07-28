@@ -18,6 +18,7 @@
 <style lang="scss" scoped>
 .footer{
   font-size: 28px;
+  margin-top: 30px;
   .safe{
     margin: 12px 0 80px;
     font-size: 24px;

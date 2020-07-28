@@ -133,12 +133,14 @@
         {{ bestPath.reserve0 }} / {{ bestPath.reserve1 }}
       </div>
     </div>
-    <div v-else-if="routePath && false">
+    <div v-else-if="routePath" class="routePath">
       多路径兑换： 
-      <div>
-        <span v-for="(item, i) in routePath" :key="i">
-          <span>{{ item }}</span>
-          <span class="el-icon-arrow-right"></span>
+      <div class="flexw">
+        <span v-for="(item, i) in routePath" :key="i" class="flexc coin">
+          <img class="coinUrl" :onerror="errorCoinImg"
+            :src="`https://ndi.340wan.com/eos/${item.toLowerCase().replace(':', '-')}.png`">
+          <span>{{ item.split(':')[1] }}</span>
+          <span v-if="routePath.length - 1 !== i" class="el-icon-arrow-right"></span>
         </span>
       </div>
     </div>
@@ -188,6 +190,8 @@ export default {
       timer: null,
       showMarketList: false,
       type: 'pay',
+      thisCoinsPath: '', // 币种路由路径
+      thisMidsPath: '', // Mids路由路径
       thisMarket0: {
         mid: 1,
         last_update: "2020-05-14T06:49:27",
@@ -236,19 +240,19 @@ export default {
       return fee
     },
     bestPath() {
-      const sym0 = this.thisMarket0;
-      const sym1 = this.thisMarket1;
-      const haspool = this.marketLists.find(v => (v.contract0 === sym0.contract || v.contract0 === sym1.contract)
-                                  && (v.contract1 === sym0.contract || v.contract1 === sym1.contract))
+      const path = this.thisMidsPath;
+      const pathArr = path.split('-');
+      const showPool = pathArr.length <= 1;
+      if (!showPool) {
+        return ''
+      }
+      const haspool = this.marketLists.find(v => (v.mid === Number(path)))
       // console.log(haspool)
       return haspool;
     },
     routePath() {
-      const m0 = this.thisMarket0
-      const m1 = this.thisMarket1
-      const params0 = `${m0.contract}:${m0.symbol}`
-      const params1 = `${m1.contract}:${m1.symbol}`
-      const path = SwapRouter.get_paths(params0, params1, true)
+      const path = this.thisCoinsPath;
+      // console.log(path)
       if(!path) {
         return false
       }
@@ -270,7 +274,8 @@ export default {
         if (!newVal.length) {
           return
         }
-        SwapRouter.init(newVal)
+        const newArr = newVal.filter(v => v.contract1 !== 'autopuptoken' && v.contract0 !== 'autopuptoken')
+        SwapRouter.init(newArr)
         const arr = this.handleDealSymArr(newVal)
         this.coinList = arr;
         if (!arr.length) {
@@ -298,7 +303,7 @@ export default {
       if (Number(newVal) < 0) {
         this.payNum = oldVal;
       }
-    }
+    },
   },
   mounted() {
     // console.log(this.thisMarket0)
@@ -343,7 +348,7 @@ export default {
       try {
         // console.log(inData)
         const outData = this.handleDealAmountOut(inData);
-        // console.log(outData)
+        console.log(outData)
         // in & out 都是0，非焦点ipt置空
         if (!Number(outData.payNum) && !Number(outData.getNum)) {
           if (type === 'pay') {
@@ -365,12 +370,11 @@ export default {
           return;
         }
         type === 'pay' ? this.getNum = toFixed(outData.getNum, this.thisMarket1.decimal) :
-                                      this.payNum = toFixed(outData.payNum, this.thisMarket0.decimal);
+                         this.payNum = toFixed(outData.payNum, this.thisMarket0.decimal);
       } catch (error) {
         // console.log(error)
         this.tradeInfo = {}
         this.tradeInfo.aboutPrice = toFixed(0, this.thisMarket0.decimal)
-        // console.log(error)
       }
     },
     // 计算得到多少 - 正序 - 输入支付
@@ -400,6 +404,8 @@ export default {
       const res = SwapRouter.get_amounts_out(...params)
       const payNum = inData.type === 'pay' ? inData.payNum : res.quantity_out.split(' ')[0];
       const getNum = inData.type === 'pay' ? res.quantity_out.split(' ')[0] : inData.getNum;
+      this.thisCoinsPath = res.bestPath;
+      this.thisMidsPath = res.mid;
       let minOut = 0;
       minOut = res.price * (1 - inData.slipPointUser) * payNum;
       minOut = toFixed(minOut, this.thisMarket1.decimal)
@@ -421,6 +427,8 @@ export default {
         minOut,
         price: res.price,
         priceRate,
+        thisCoinsPath: this.thisCoinsPath,
+        thisMidsPath: this.thisMidsPath,
       }
       // console.log(obj)
       return obj
@@ -429,7 +437,7 @@ export default {
       if (!Number(this.payNum)) {
         return false;
       }
-      const balance = !this.direction ? Number(this.balanceSym0) : Number(this.balanceSym1);
+      const balance = Number(this.balanceSym0);
       if (Number(this.payNum) > balance) {
         this.$message({
           type: 'error',
@@ -444,16 +452,12 @@ export default {
       if (!this.handleReg()) {
         return
       }
-      const m0 = this.thisMarket0
-      const m1 = this.thisMarket1
-      const params0 = `${m0.contract}:${m0.symbol}`
-      const params1 = `${m1.contract}:${m1.symbol}`
-      const path = SwapRouter.get_paths(params0, params1)
+      const path = this.thisMidsPath
 
-      const tradeCoin = this.direction ? this.thisMarket1.symbol : this.thisMarket0.symbol;
-      const minOutDecimal = this.direction ? this.thisMarket1.decimal : this.thisMarket0.decimal;
+      const tradeCoin = this.thisMarket0.symbol;
+      const minOutDecimal = this.thisMarket1.decimal;
       const params = {
-        code: this.direction ? this.thisMarket1.contract : this.thisMarket0.contract,
+        code: this.thisMarket0.contract,
         toAccount: this.baseConfig.toAccountSwap,
         memo: `swap:${path}:${accMul(toFixed(this.tradeInfo.minOut, minOutDecimal), (10 ** minOutDecimal))}`,
         quantity: `${this.payNum} ${tradeCoin}`
@@ -467,6 +471,9 @@ export default {
           });
           return
         }
+        this.payNum = '';
+        this.getNum = '';
+        this.handleInBy(this.tradeInfo.type, 'first')
         this.handleBalanTimer();
         this.$message({
           message: this.$t('public.success'),
@@ -545,6 +552,9 @@ export default {
       } else {
         this.thisMarket1 = item;
       }
+      this.payNum = '';
+      this.getNum = '';
+      this.handleInBy(this.tradeInfo.type, 'first')
       this.handleBalanTimer();
       this.handleClose()
     }
@@ -720,6 +730,30 @@ export default {
   .poolsNum{
     margin-top: 12px;
     color: $color-black;
+  }
+}
+.routePath{
+  font-size: 28px;
+  text-align: left;
+  padding: 20px 40px;
+  background:rgba(255,255,255,1);
+  border-radius:20px;
+  border:2px solid rgba(224,224,224,1);
+  .flexw{
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    .coin{
+      margin-top: 15px;
+      min-width: 30%;
+      margin-right: 10px;
+      justify-content: flex-start;
+    }
+  }
+  .coinUrl{
+    width: 60px;
+    margin-right: 10px;
   }
 }
 

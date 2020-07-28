@@ -68,16 +68,16 @@ export default {
           const arr = this.handleDealSymArr(newVal)
           this.coinList = arr;
         }
-        console.log(this.coinList)
+        // console.log(this.coinList)
       },
       deep: true,
       immediate: true
     }
   },
   mounted() {
-    console.log(this.marketLists)
-    console.log(this.thisMarket0)
-    console.log(this.type)
+    // console.log(this.marketLists)
+    // console.log(this.thisMarket0)
+    // console.log(this.type)
   },
   methods: {
     handleShow(item) {

@@ -112,7 +112,7 @@
           <div class="name">Allen YANG</div>
           <div class="tip">Front-end Developer</div>
         </div>
-        <!-- <div class="user">
+        <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team5.jpeg" alt=""></div>
           <div class="name">JAYSUN XU</div>
           <div class="tip">Project Manager</div>
@@ -121,7 +121,7 @@
           <div class="userImg"><img src="@/assets/img/team/team6.jpeg" alt=""></div>
           <div class="name">MICHELLE CHIN</div>
           <div class="tip">Marketing</div>
-        </div> -->
+        </div>
       </div>
     </div>
     <!-- 合作伙伴 -->
