@@ -132,7 +132,7 @@
         <div class="listImg flexC"><img src="@/assets/img/partners/meetone.png?v=1" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/bitpie.png?v=1" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/mykey.png?v=1" alt=""></div>
-        <div class="listImg flexC"><img src="@/assets/img/partners/slowmist.png?v=2" alt=""></div>
+        <div class="listImg flexC" @click="showImg = !showImg"><img src="@/assets/img/partners/slowmist.png?v=2" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/newdex.png?v=1" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/hoov3.png?v=2" alt=""></div>
         <div class="listImg flexC none"></div>
@@ -145,6 +145,12 @@
         <span class="iconfont icon-huaban35 top"></span>
       </div>
     </transition>
+
+    <el-dialog
+      class="dialog"
+      :visible.sync="showImg">
+      <img width="100%" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gh00tvkd0dj30ku112tbw.jpg" />
+    </el-dialog>
   </div>
 </template>
 
@@ -162,6 +168,7 @@ export default {
       scrollTop: 0,
       showToTop: false,
       timer: null,
+      showImg: false, // 现实审计结果图片
     }
   },
   computed:{
@@ -222,6 +229,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.dialog{
+  /deep/ .el-dialog{
+    width: 375px;
+    .el-dialog__header,
+    .el-dialog__body{
+      padding: 0;
+    }
+  }
+  img{
+    display: block;
+  }
+}
 .borrow{
   color: #000;
   &.en{
