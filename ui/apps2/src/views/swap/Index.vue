@@ -445,6 +445,13 @@ export default {
         })
         return false;
       }
+      if (Number(this.slipPoint) < Number(this.tradeInfo.priceRate)) {
+        this.$message({
+          type: 'error',
+          message: '当前价格滑点过高！请重新输入'
+        })
+        return false;
+      }
       return true
     },
     // swap交易
