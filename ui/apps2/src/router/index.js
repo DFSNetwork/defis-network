@@ -26,6 +26,12 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "index" */ '@/views/index/Index.vue'),
         meta: { title: 'DeFis-BP' },
       },
+      {
+        path: '/tutorial',
+        name: 'tutorial',
+        component: () => import(/* webpackChunkName: "Tutorial" */ '@/views/index/childViews/Tutorial.vue'),
+        meta: { title: 'DeFis-BP' },
+      }
     ]
   },
   // 404

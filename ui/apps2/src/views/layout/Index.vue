@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <header-tools @listenShowNav="handleShowNav" @listenShowTools="handleShowTools"/>
-    <acc-login />
+    <acc-login v-if="$route.name !== 'tutorial'"/>
     <transition name="fade" mode="out-in">
       <router-view class="content" :marketLists="marketLists"/>
     </transition>

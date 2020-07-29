@@ -132,7 +132,7 @@ class swapRouter {
         amount_in: new_amount_in, token_in: new_token_in, quantity_out, price, mid: m, mIndex
       })
     })
-    console.log(amounts_out_arr)
+    // console.log(amounts_out_arr)
     amounts_out_arr.sort((a, b) => {
       return b.amount_in - a.amount_in;
     })

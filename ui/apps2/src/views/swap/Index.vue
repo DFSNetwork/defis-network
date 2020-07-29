@@ -348,7 +348,7 @@ export default {
       try {
         // console.log(inData)
         const outData = this.handleDealAmountOut(inData);
-        console.log(outData)
+        // console.log(outData)
         // in & out 都是0，非焦点ipt置空
         if (!Number(outData.payNum) && !Number(outData.getNum)) {
           if (type === 'pay') {
