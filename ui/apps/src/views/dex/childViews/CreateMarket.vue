@@ -17,7 +17,7 @@
             <div class="label">{{ $t('dex.coinName') }}</div>
             <el-input class="mt10" v-model="symnol0.coinName" type="text" :placeholder="$t('dex.plsCoinName')" clearable></el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-if="false">
             <div class="label">{{ $t('dex.coinDecimal') }}</div>
             <el-input class="mt10" v-model="symnol0.decimal" type="number" :placeholder="$t('dex.plsCoinDecimal')" clearable></el-input>
           </el-form-item>
@@ -35,7 +35,7 @@
             <div class="label">{{ $t('dex.coinName') }}</div>
             <el-input class="mt10" v-model="symnol1.coinName" type="text" :placeholder="$t('dex.plsCoinName')" clearable></el-input>
           </el-form-item>
-          <el-form-item>
+          <el-form-item v-if="false">
             <div class="label">{{ $t('dex.coinDecimal') }}</div>
             <el-input class="mt10" v-model="symnol1.decimal" type="number" :placeholder="$t('dex.plsCoinDecimal')" clearable></el-input>
           </el-form-item>
@@ -97,8 +97,10 @@ export default {
             creator: formName,
             contract0: this.symnol0.contract,
             contract1: this.symnol1.contract,
-            sym0: `${this.symnol0.decimal},${this.symnol0.coinName.toUpperCase()}`,
-            sym1: `${this.symnol1.decimal},${this.symnol1.coinName.toUpperCase()}`
+            // sym0: `${this.symnol0.decimal},${this.symnol0.coinName.toUpperCase()}`,
+            // sym1: `${this.symnol1.decimal},${this.symnol1.coinName.toUpperCase()}`
+            sym0: `${this.symnol0.coinName.toUpperCase()}`,
+            sym1: `${this.symnol1.coinName.toUpperCase()}`
           }
         }]
       }
