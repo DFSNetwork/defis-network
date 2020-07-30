@@ -15,11 +15,27 @@ export default {
     }
   },
   mounted() {
+    const routeName = this.$route.name || 'index';
+    if (routeName === 'index') {
+      this.act = 1;
+    } else if (routeName === 'market') {
+      this.act = 2;
+    }
   },
   methods: {
     handleChangeAct(num = 1) {
-      this.act = num
-    }
+      if (this.act === num) {
+        return
+      }
+      this.act = num;
+      if (this.act === 1) {
+        this.$router.push({name: 'index'})
+      } else if (this.act === 2) {
+        this.$router.push({name: 'market'})
+      } else {
+        this.$router.push({name: 'bank'})
+      }
+    },
   },
 }
 </script>

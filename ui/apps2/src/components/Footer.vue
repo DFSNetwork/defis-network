@@ -53,7 +53,7 @@ export default {
     font-weight: 300;
   }
   .who{
-    font-weight: 500;
+    font-weight: bold;
     color: $color-black;
   }
 }

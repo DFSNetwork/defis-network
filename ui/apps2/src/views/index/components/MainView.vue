@@ -1,7 +1,9 @@
 <template>
   <div class="mainView">
-    <swap :marketLists="marketLists"
+    <swap v-if="routeName === 'index'" :marketLists="marketLists"
           @listenShowDrawer="handleShowDrawer"/>
+    <market v-else-if="routeName === 'market'"
+      :marketLists="marketLists" @listenShowDrawer="handleShowDrawer"/>
     <!-- 弹窗组件 -->
     <el-dialog
       class="mkListDia pcList"
@@ -15,17 +17,29 @@
 <script>
 import MarketList from '@/components/MarketList';
 import Swap from '@/views/swap/Index'
+import Market from '@/views/market/Index'
 export default {
   name: 'mainView',
   components: {
     MarketList,
     Swap,
+    Market,
   },
   data() {
     return {
       sym0: '',
       showMarketList: false,
+      routeName: 'index',
     }
+  },
+  watch: {
+    '$route.name': function rn(val) {
+      this.routeName = val
+    }
+  },
+  mounted() {
+    // console.log(this.$route.name)
+    this.routeName = this.$route.name
   },
   props: {
     marketLists: {
