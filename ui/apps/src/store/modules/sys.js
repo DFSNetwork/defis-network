@@ -59,6 +59,7 @@ const sys = {
         chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
       },
       toAccountSwap: 'defisswapcnt', // 主交易 swap 合约
+      createMarket: 'defisfactory', // 创建市场合约
       toAccountJin: 'bankofusddv1', // JIN 合约
       toAccountByHyk: 'jintokensell', // 限量买HYK
       hykContranct: 'jindaotokens', // HYK 合约

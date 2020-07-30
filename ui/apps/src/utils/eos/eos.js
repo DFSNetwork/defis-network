@@ -514,6 +514,7 @@ async getTableRows(obj, callback) {
 
   //  catch 错误回调
   errorCall(e, callback) {
+    // console.log(e)
     const self = this;
     const scatapp = store.state.app.scatter;
     let back = {

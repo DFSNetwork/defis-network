@@ -87,7 +87,7 @@ export default {
       const permission = this.scatter.identity.accounts[0].authority;
       const params = {
         actions: [{
-          account: this.baseConfig.toAccountSwap,
+          account: this.baseConfig.createMarket,
           name: 'newmarket',
           authorization: [{
             actor: formName, // 转账者
@@ -102,6 +102,7 @@ export default {
           }
         }]
       }
+      // console.log(params)
       EosModel.toTransaction(params, (res) => {
         if(res.code) {
           this.$message({
