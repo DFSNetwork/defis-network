@@ -593,6 +593,9 @@ export default {
     border: 1px solid #F3F3F3;
     &.focus{
       border:1px solid rgba(7,215,155,1);
+      // /deep/ .el-input__inner{
+      //   color: #07D79B !important;
+      // }
     }
     &.pdb10{
       padding-bottom: 28px;

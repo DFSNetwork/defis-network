@@ -4,11 +4,21 @@
       <span>选择市场</span>
       <img class="closeSvg" @click="handleClose" src="@/assets/img/dialog/sd_icon_btn.svg" alt="">
     </div>
-    <div class="iptSearch">
+    <div class="iptSearch" :class="{'other': type === 'other'}">
       <el-input v-model="search" placeholder="搜索市场名称.."></el-input>
     </div>
-    <div class="scroll">
-      <template v-for="(item, i) in coinList">
+    <div class="scroll" v-if="type === 'other'">
+      <template v-for="(item, i) in searchArr">
+        <div class="item flexb" :key="i" @click="handleSelectThis(item)">
+          <div>
+            <div class="coin">{{item.symbol0}} / {{item.symbol1}}</div>
+            <div class="contract tip">{{item.contract0}} / {{item.contract1}}</div>
+          </div>
+        </div>
+      </template>
+    </div>
+    <div class="scroll" v-else>
+      <template v-for="(item, i) in searchArr">
         <div class="item flexb" @click="handleSelectThis(item)" v-if="handleShow(item)" :key="i">
           <div class="left flex">
             <img class="coinImg" :src="item.imgUrl || errUrl" :onerror="errorCoinImg" alt="">
@@ -30,6 +40,7 @@ export default {
   data() {
     return {
       search: '',
+      searchArr: [],
       coinList: [],
       errUrl,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
@@ -62,16 +73,25 @@ export default {
   watch: {
     marketLists: {
       handler: function mlt(newVal) {
+        if (!newVal.length) {
+          return;
+        }
         // 筛选出所有币种
         this.coinList = [];
-        if (newVal.length > 0) {
+        if (this.type !== 'other') {
           const arr = this.handleDealSymArr(newVal)
           this.coinList = arr;
+        } else {
+          this.searchArr = newVal;
         }
+        this.handleSearch();
         // console.log(this.coinList)
       },
       deep: true,
       immediate: true
+    },
+    search() {
+      this.handleSearch();
     }
   },
   mounted() {
@@ -80,6 +100,16 @@ export default {
     // console.log(this.type)
   },
   methods: {
+    handleSearch() {
+      const search = this.search.toUpperCase();
+      if (this.type === 'other') {
+        const searchArr = this.marketLists.filter(v => v.symbol0.indexOf(search) !== -1 || v.symbol1.indexOf(search) !== -1)
+        this.searchArr = searchArr;
+        return
+      }
+      const searchArr = this.coinList.filter(v => v.symbol.indexOf(search) !== -1)
+      this.searchArr = searchArr;
+    },
     handleShow(item) {
       const type = this.type;
       if (type === 'start') {
@@ -137,6 +167,12 @@ export default {
       border-radius:20px;
       outline: none;
       padding-left: 28px;
+    }
+    &.other{
+      /deep/ .el-input__inner{
+        background:#fff;
+        border: 1px solid #000;
+      }
     }
   }
   .scroll{

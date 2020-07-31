@@ -566,7 +566,7 @@ async getTableRows(obj, callback) {
         }
       }
     }
-    self.vthis.$message.error(`${back.message} ${back.code}`);
+    // self.vthis.$message.error(`${back.message} ${back.code}`);
     callback(back);
   }
 }

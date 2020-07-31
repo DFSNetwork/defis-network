@@ -110,7 +110,7 @@ export default {
   margin: 0;
 }
 #app {
-  font-family: Sarasa, Helvetica, Arial, sans-serif;
+  font-family: 'Sarasa', Helvetica, Arial, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
