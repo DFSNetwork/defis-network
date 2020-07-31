@@ -28,6 +28,17 @@
           <el-input class="elIpt" v-model="min" :placeholder="min"></el-input>
           <span>分钟</span>
         </div>
+        <div class="invitation">
+          <div class="subTitle flex">
+            <span>邀请人</span>
+            <img class="iconImg" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+          </div>
+          <div class="invitationIpt flex">
+            <el-input class="elIpt" v-model="inviAcc" placeholder="请输入邀请人账户"></el-input>
+            <span class="btn flexc" @click="handleSureInviArr">确认</span>
+          </div>
+          <!-- <div><span class="btn flexc">确认</span></div> -->
+        </div>
       </div>
     </el-dialog>
   </div>
@@ -44,6 +55,7 @@ export default {
       slipRate: '',
       tipRate: '1.00',
       min: '20',
+      inviAcc: '', // 邀请人账户
     }
   },
   computed: {
@@ -65,8 +77,14 @@ export default {
     }
   },
   mounted() {
+    this.inviAcc = localStorage.getItem('inviAcc')
   },
   methods: {
+    handleSureInviArr() {
+      localStorage.setItem('inviAcc', this.inviAcc);
+      this.showNav = false;
+      this.$message.success('Success')
+    },
     handleSetSlipPoint(num) {
       this.$store.dispatch('setSlipPoint', num)
     },
@@ -149,6 +167,8 @@ export default {
       }
       /deep/ .el-input{
         .el-input__inner{
+          color: #000;
+          font-size: 24px;
           height: 55px;
           border: 1px solid transparent;
           padding-right: 0px;
@@ -178,6 +198,42 @@ export default {
           background: $color-bgcolor;
           border: 0px solid #DCDFE6;
         }
+      }
+    }
+  }
+
+  .invitation{
+    .invitationIpt{
+      margin-top: 20px;
+      /deep/ .el-input{
+        width: 200px;
+        border: 1px solid rgba(224,224,224,1);
+        border-radius: 40px;
+        overflow: hidden;
+        margin-right: 20px;
+        .el-input__inner{
+          color: #000;
+          font-size: 24px;
+          height: 55px;
+          border: 1px solid transparent;
+          padding-right: 0px;
+          padding-left: 0px;
+          text-align: center;
+        }
+        .el-input-group__append{
+          background: $color-bgcolor;
+          border: 0px solid #DCDFE6;
+        }
+      }
+    }
+    .btn{
+      background: #07d79b;
+      border-radius: 10px;
+      color: #fff;
+      height: 60px;
+      width: 100px;
+      &:active{
+        background: #02C698;
       }
     }
   }

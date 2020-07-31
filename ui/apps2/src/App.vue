@@ -46,6 +46,11 @@ export default {
     },
     handleSetLang() {
       const urlParams = getUrlParams(window.location.href) || {};
+      // set inviAcc
+      const inviAcc = urlParams.code;
+      if (inviAcc) {
+        localStorage.setItem('inviAcc', inviAcc)
+      }
       // set Language
       const lang = urlParams.lang;
       if (lang) {
