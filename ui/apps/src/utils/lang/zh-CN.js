@@ -53,6 +53,7 @@ export default {
     coinDecimal: '币种精度',
     plsCoinDecimal: '输入币种精度',
     submit: '创建',
+    createFeeTip: '为了维护良好的交易环境，避免因为无成本上币，而导致的垃圾币横生。创建新的交易对，需要消耗50 DFS。'
   },
   pools: {
     deposit: '存入',

@@ -42,15 +42,22 @@
         </el-form>
       </div>
 
+      <div class="tipDiv flex">
+        <span>{{ $t('public.fee') }}：50.0000 DFS</span>
+        <span class="iconfont icon-huaban tip" @click="handleShowTip"></span>
+      </div>
+
       <el-button class="btn" type="primary" v-if="scatter.identity" @click="handleNewMarket" plain>{{ $t('dex.submit') }}</el-button>
       <el-button class="btn" type="primary" v-else @click="handleLogin">{{ $t('public.loginPls') }}</el-button>
     </div>
+    <create-tip ref="createTip" />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
+import CreateTip from '../components/CreateTip';
 
 export default {
   name: 'createDex',
@@ -58,7 +65,7 @@ export default {
     return {
       symnol0: {
         contract: 'eosio.token', // eosio.token
-        coinName: 'eos', // EOS
+        coinName: 'EOS', // EOS
         decimal: '4', // 4
       },
       symnol1: {
@@ -68,6 +75,9 @@ export default {
       }
     }
   },
+  components: {
+    CreateTip
+  },
   computed: {
     ...mapState({
       // 箭头函数可使代码更简练
@@ -76,6 +86,9 @@ export default {
     })
   },
   methods: {
+    handleShowTip() {
+      this.$refs.createTip.showTip = true;
+    },
     handleBack() {
       this.$router.back();
     },
@@ -83,6 +96,30 @@ export default {
       this.$emit('listenLogin', true)
     },
     handleNewMarket() {
+      const params = {
+        code: 'minedfstoken',
+        toAccount: 'defisfactory',
+        memo: `${this.symnol0.contract}-${this.symnol0.coinName.toUpperCase()}-${this.symnol1.contract}-${this.symnol1.coinName.toUpperCase()}`,
+        quantity: '50.0000 DFS'
+      }
+      // console.log(params)
+      EosModel.transfer(params, (res) => {
+        if(res.code) {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$emit('listenGetMarketsList', true)
+        this.$router.back()
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
+    },
+    handleNewMarket1() {
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
       const params = {
@@ -197,6 +234,17 @@ export default {
         font-weight: 500;
         font-size: 16px;
       }
+    }
+  }
+  .tipDiv{
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #999;
+
+    .tip{
+      margin-left: 5px;
+      font-size: 16px;
     }
   }
   .btn{
