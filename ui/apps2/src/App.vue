@@ -36,7 +36,7 @@ export default {
     this.handleEnvReLoad();
     this.handleEnvSet();
     EosModel.scatterInit(this, () => {
-      // this.handleLogin()
+      this.handleLogin()
     });
   },
   beforeDestroy: function () {
@@ -105,7 +105,7 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss">
 /*iphone Xs Max*/
 @media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio:3){
 }
@@ -115,7 +115,19 @@ export default {
 *{
   padding: 0;
   margin: 0;
+  /deep/ .el-message{
+    // width: 80% !important;
+    // min-width: 80% !important;
+    // max-width: 80% !important;
+    .el-message__icon{
+      font-size: 42px;
+    }
+    .el-message__content{
+      font-size: 26px !important;
+    }
+  }
 }
+
 #app {
   font-family: 'Sarasa', Helvetica, Arial, sans-serif !important;
   -webkit-font-smoothing: antialiased;

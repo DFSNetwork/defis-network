@@ -29,23 +29,107 @@
     .logo{
       position: relative;
       height: 31px;
+      width: 21px;
     }
+    /* .logo::before{
+      content: '';
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      left: 50%;
+      top: 50%;
+      background:linear-gradient(145deg,rgba(255,255,255,1) 0%,rgba(255,255,255,0) 100%);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    } */
+    .turn{
+      position: absolute;
+      display: inline-block;
+      width: 70px;
+      height: 70px;
+      animation:turn 2s linear infinite;      
+      margin: auto;
+      left: 50%;
+      top: 50%;
+      background: #FFF;
+      /* background: #000; */
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      z-index: 7;
+    }
+    .turn::before{
+      content: '';
+      position: absolute;
+      width: 70px;
+      height: 69px;
+      background: #07D79B;
+      border-radius: 50%;
+      right: -1px;
+    }
+    .disc{
+      width: 10px;
+      height: 10px;
+      display: block;
+      position: relative;
+      border-radius: 50%;
+      left: 50%;
+      top: 0;
+      transform: translate(-50%, -50%);
+      background: #FFF;
+      z-index: 11;
+    }
+    /* 
+      turn : 定义的动画名称
+      1s : 动画时间
+      linear : 动画以何种运行轨迹完成一个周期
+      infinite :规定动画应该无限次播放
+     */
+    @keyframes turn{
+      0%{-webkit-transform: translate(-50%, -50%) rotate(0deg);}
+      25%{-webkit-transform: translate(-50%, -50%) rotate(90deg);}
+      50%{-webkit-transform: translate(-50%, -50%) rotate(180deg);}
+      75%{-webkit-transform: translate(-50%, -50%) rotate(270deg);}
+      100%{-webkit-transform: translate(-50%, -50%) rotate(360deg);}
+    }
+    /* .logo::after{
+      content: '';
+      position: absolute;
+      width: 59px;
+      height: 59px;
+      left: 50%;
+      top: 50%;
+      background: #07D79B;
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+    } */
     .one{
       position: absolute;
-      width:11px;
+      width:10px;
       height:31px;
       background: #FFF;
       transform: rotate(30deg);
       border-radius: 7px;
+      z-index: 10;
     }
     .two{
       position: absolute;
       width:31px;
-      height:11px;
-      background: #FFF;
+      height:10px;
+      background:#CDF7EB;
       border-radius: 7px;
       bottom: 0px;
       left: -5px;
+      z-index: 9;
+    }
+    .three{
+      position: absolute;
+      width:10px;
+      height:31px;
+      background: #99EED6;
+      transform: rotate(-30deg);
+      border-radius: 7px;
+      right: 0;
+      z-index: 8;
     }
     </style>
   </head>
@@ -55,7 +139,10 @@
     </noscript>
     <div id="app">
       <div class="loading">
-        <span>
+        <span class="logo">
+          <span class="turn">
+            <span class="disc"></span>
+          </span>
           <span class="one"></span>
           <span class="two"></span>
           <span class="three"></span>
@@ -64,6 +151,9 @@
     </div>
     <!-- <div class="loading">
       <span class="logo">
+        <span class="turn">
+          <span class="disc"></span>
+        </span>
         <span class="one"></span>
         <span class="two"></span>
         <span class="three"></span>
