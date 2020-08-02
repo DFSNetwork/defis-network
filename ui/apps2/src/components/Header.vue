@@ -2,7 +2,7 @@
   <div class="header flexb">
     <div><img class="logo" src="@/assets/img/dex/logo.svg"></div>
     <div class="tools flexb">
-      <span class="create">创建市场</span>
+      <span class="create" @click="handleToCreate">创建市场</span>
       <span class="flexc" @click="listenShowTools"><img class="svgIcon" src="@/assets/img/dex/setup_icon.svg" alt=""></span>
       <span class="flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>
     </div>
@@ -18,6 +18,9 @@ export default {
     },
     listenShowTools() {
       this.$emit('listenShowTools', false)
+    },
+    handleToCreate() {
+      this.$router.push({name: 'createMarket'})
     }
   },
 }

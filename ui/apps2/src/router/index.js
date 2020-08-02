@@ -40,6 +40,13 @@ const constantRouter = [
       }
     ]
   },
+  {
+    path: '/create-market',
+    name: 'createMarket',
+    // component: () => import('@/views/index/Index'),
+    component: () => import(/* webpackChunkName: "nopage" */ '@/views/index/childViews/CreateMarket.vue'),
+    meta: { title: 'bank', noTabbar: true },
+  },
   // 404
   {
     path: '*',

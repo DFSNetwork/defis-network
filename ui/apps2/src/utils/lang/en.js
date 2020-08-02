@@ -53,6 +53,7 @@ export default {
     coinDecimal: 'Token precision',
     plsCoinDecimal: 'Enter token precision',
     submit: 'Create',
+    createFeeTip: 'In order to maintain a good trading environment. Creating a new market consumes 50 DFS.',
   },
   pools: {
     deposit: 'Deposit',

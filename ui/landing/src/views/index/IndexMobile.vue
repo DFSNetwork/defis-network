@@ -97,11 +97,11 @@
           <div class="name">Judy Lee</div>
           <div class="tip">Co-Founder & CTO</div>
         </div>
-        <!-- <div class="user">
+        <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team2.jpeg" alt=""></div>
-          <div class="name">LVJIE WANG</div>
-          <div class="tip">Co-Founder & Marketing Lead</div>
-        </div> -->
+          <div class="name">Jay</div>
+          <div class="tip">Co-Founder & CEO</div>
+        </div>
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team3.jpeg" alt=""></div>
           <div class="name">AYANA LAM</div>
