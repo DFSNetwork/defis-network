@@ -9,7 +9,7 @@
       <div v-if="act === 1">
         <div class="sym0Data" :class="{'focus': ipt1Focus}">
           <div class="info flexb">
-            <span>余额: {{ balanceSym0 }} {{ thisMarket.symbol0 }}</span>
+            <span>{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket.symbol0 }}</span>
             <span class="type"></span>
           </div>
           <div class="iptDiv flexb">
@@ -35,7 +35,7 @@
         </div>
         <div class="sym0Data pdb10" :class="{'focus': ipt2Focus}">
           <div class="info flexb">
-            <span class="ableGet">余额: {{ balanceSym1 }} {{ thisMarket.symbol1 }}</span>
+            <span class="ableGet">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket.symbol1 }}</span>
             <span class="type"></span>
           </div>
           <div class="iptDiv flexb">
@@ -55,7 +55,7 @@
           </div>
         </div>
         <div class="rate flexb">
-          <span class="tip">兑换比率</span>
+          <span class="tip">{{ $t('dex.rate') }}</span>
           <span class="flex">
             <span v-if="!exRate">1{{ thisMarket.symbol0 }} = {{ thisMarket.sym0Rate || '-' }}{{ thisMarket.symbol1 }}</span>
             <span v-else>1{{ thisMarket.symbol1 }} = {{ thisMarket.sym1Rate || '-' }}{{ thisMarket.symbol0 }}</span>
@@ -79,8 +79,8 @@
         </div>
         <div class="backData" :class="{'focus': tokenFocus}">
           <div class="flexb token">
-            <span>凭证</span>
-            <span>可用凭证: {{ token }}</span>
+            <span>{{ $t('pools.token') }}</span>
+            <span>{{ $t('pools.ableToken') }}: {{ token }}</span>
           </div>
           <div class="inputDiv">
             <el-input class="elIpt" type="number" v-model="sellToken" placeholder="0"
@@ -90,24 +90,24 @@
           </div>
         </div>
         <div class="backNum flex">
-          <span class="tip">取回</span>
+          <span class="tip">{{ $t('pools.withdrawal') }}</span>
           <span>{{ getNum1 }} {{thisMarket.symbol0}} + {{ getNum2 }} {{ thisMarket.symbol1 }}</span>
         </div>
       </div>
     </div>
 
     <div class="liquidity" v-if="act === 1">
-      <div class="subTitle">流动池数量</div>
+      <div class="subTitle">{{ $t('dex.poolNum') }}</div>
       <div class="num">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>
-      <div class="subTitle">您的做市 (占比{{  rate }}%)</div>
-      <div class="num">{{ toFixed(payNum1, thisMarket.decimal0) }} EOS  /  {{ toFixed(payNum2, thisMarket.decimal1) }} USDD</div>
-      <div class="subTitle">预计获得凭证</div>
+      <div class="subTitle">{{ $t('pools.accRate', {rate}) }}</div>
+      <div class="num">{{ toFixed(payNum1, thisMarket.decimal0) }} {{thisMarket.symbol0}}  /  {{ toFixed(payNum2, thisMarket.decimal1) }} {{thisMarket.symbol1}}</div>
+      <div class="subTitle">{{ $t('pools.getToken') }}</div>
       <div class="num">{{ getToken }}</div>
     </div>
 
     <div class="btnDiv">
-      <div v-if="act === 1" class="btn flexc" @click="handleAddToken">确 定</div>
-      <div v-else class="btn flexc backBtn" @click="handleToSell">取 回</div>
+      <div v-if="act === 1" class="btn flexc" @click="handleAddToken">{{ $t('pools.deposit') }}</div>
+      <div v-else class="btn flexc backBtn" @click="handleToSell">{{ $t('pools.withdrawal') }}</div>
     </div>
 
     <!-- 弹窗组件 -->
@@ -155,6 +155,7 @@ export default {
       getNum2: '0.0000',
       token: '0',
       showMarketList: false,
+      first: true,
     }
   },
   props: {
@@ -178,6 +179,10 @@ export default {
         if (!newVal.length) {
           return
         }
+        if (this.first) {
+          this.thisMarket.mid = this.$route.params.mid || 7;
+        }
+        this.first = false;
         const thisMarket = newVal.find(v => v.mid === this.thisMarket.mid) || newVal[0];
         const reserve0 = thisMarket.reserve0.split(' ')[0];
         const reserve1 = thisMarket.reserve1.split(' ')[0];
@@ -218,6 +223,9 @@ export default {
         this.sellToken = ''
       }
     }
+  },
+  mounted() {
+    // console.log(this.$route)
   },
   methods: {
     handleClose() {
@@ -524,7 +532,7 @@ export default {
 <style lang="scss" scoped>
 .tabView{
   background: #FFF;
-  font-size: 24px;
+  // font-size: 24px;
   text-align: left;
   position: relative;
   color: #000;
@@ -562,7 +570,7 @@ export default {
     background: #FFF;
     border-radius: 25px;
     position: relative;
-    padding: 32px 20px;
+    padding: 28px 20px;
   }
   .sym0Data{
     padding: 26px 40px 52px;

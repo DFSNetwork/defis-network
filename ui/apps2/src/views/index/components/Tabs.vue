@@ -1,8 +1,8 @@
 <template>
   <div class="tabs tip flexb">
-    <span :class="{'tabAct': act === 1}" @click="handleChangeAct(1)">兑换</span>
-    <span :class="{'tabAct': act === 2}" @click="handleChangeAct(2)">做市</span>
-    <span :class="{'tabAct': act === 3}" @click="handleChangeAct(3)">金库</span>
+    <span :class="{'tabAct': act === 1}" @click="handleChangeAct(1)">{{ $t('tab.dex') }}</span>
+    <span :class="{'tabAct': act === 2}" @click="handleChangeAct(2)">{{ $t('tab.pools') }}</span>
+    <span :class="{'tabAct': act === 3}" @click="handleChangeAct(3)">{{ $t('tab.bank') }}</span>
   </div>
 </template>
 
@@ -20,6 +20,8 @@ export default {
       this.act = 1;
     } else if (routeName === 'market') {
       this.act = 2;
+    } else {
+      this.act = 3;
     }
   },
   methods: {
@@ -31,7 +33,7 @@ export default {
       if (this.act === 1) {
         this.$router.push({name: 'index'})
       } else if (this.act === 2) {
-        this.$router.push({name: 'market'})
+        this.$router.push({name: 'market', params: {mid: 7}})
       } else {
         this.$router.push({name: 'bank'})
       }

@@ -54,6 +54,13 @@ export default {
     plsCoinDecimal: 'Enter token precision',
     submit: 'Create',
     createFeeTip: 'In order to maintain a good trading environment. Creating a new market consumes 50 DFS.',
+    // add
+    ableGet: '可兑',
+    minGet: '至少获取',
+    priceSlip: '价格滑点',
+    marketNow: '立即做市',
+    poolNum: '流动池数量',
+    moreRoute: '多路径兑换',
   },
   pools: {
     deposit: 'Deposit',
@@ -64,6 +71,8 @@ export default {
     token: 'Certificate',
     ableToken: 'Available certificate',
     chooseMarket: 'Select market',
+    // add
+    accRate: '您的做市(占比{rate}%)'
   },
   hyk: {
     stock: 'Dividends Pool',

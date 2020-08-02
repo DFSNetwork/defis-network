@@ -6,8 +6,8 @@
       :visible.sync="showNav">
       <div class="navList">
         <div class="list login" v-if="!scatter.identity" @click="handleLogin">连接钱包</div>
-        <div class="list" @click="handleToTutorial">教程</div>
-        <div class="list">质押</div>
+        <div class="list" @click="handleToTutorial">{{ $t('public.tutorial') }}</div>
+        <!-- <div class="list">质押</div> -->
         <div class="list">
           <span v-if="language !== 'en'" @click="handleChangeLang('en')">EN</span>
           <span v-else @click="handleChangeLang('zh-CN')">CN</span>

@@ -35,7 +35,9 @@ export default {
   mounted(){
     this.handleEnvReLoad();
     this.handleEnvSet();
-    EosModel.scatterInit(this, () => {});
+    EosModel.scatterInit(this, () => {
+      this.handleLogin()
+    });
   },
   beforeDestroy: function () {
   },

@@ -8,7 +8,14 @@
         <div class="title">交易设置</div>
         <div class="subTitle flex">
           <span>滑点设置</span>
-          <img class="iconImg" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+          <el-popover
+            class="flexc"
+            popper-class="mypopper"
+            placement="top-start"
+            trigger="click">
+            <div class="qusTip">{{ $t('dex.slipTip') }}</div>
+            <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+          </el-popover>
         </div>
         <div class="slips flexb">
           <div class="flexc" :class="{'act': Number(tipRate) === 1}" @click="handleSetSlipPoint(1)">1%</div>
@@ -20,18 +27,10 @@
             <template slot="append">%</template>
           </el-input>
         </div>
-        <div class="subTitle flex" v-if="false">
-          <span>交易超时时间</span>
-          <img class="iconImg" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
-        </div>
-        <div class="minute flex" v-if="false">
-          <el-input class="elIpt" v-model="min" :placeholder="min"></el-input>
-          <span>分钟</span>
-        </div>
         <div class="invitation">
           <div class="subTitle flex">
             <span>邀请人</span>
-            <img class="iconImg" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+            <!-- <img class="iconImg" src="@/assets/img/dex/tips_icon_btn.svg" alt=""> -->
           </div>
           <div class="invitationIpt flex">
             <el-input class="elIpt" v-model="inviAcc" placeholder="请输入邀请人账户"></el-input>
@@ -100,9 +99,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.mypopper{
+  .qusTip{
+    padding: 10px;
+    width: 240px;
+    font-size: 24px;
+  }
+}
 .nav{
   position: relative;
   font-size: 26px;
+  .ml10{
+    margin-left: 10px;
+  }
   /deep/ .el-dialog{
     position: absolute;
     border-radius: 30px 0px 30px 30px;

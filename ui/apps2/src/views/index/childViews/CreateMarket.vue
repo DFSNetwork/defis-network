@@ -43,12 +43,19 @@
       </div>
 
       <div class="tipDiv flex">
-        <span>{{ $t('public.fee') }}：50.0000 DFS</span>
-        <span class="iconfont icon-huaban tip" @click="handleShowTip"></span>
+        <span class="flexa">
+          <span>{{ $t('public.fee') }}</span>
+          <span  @click="handleShowTip" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+        </span>
+        <span class="fees">
+          50.0000 DFS
+        </span>
       </div>
 
-      <el-button class="btn" type="primary" v-if="scatter.identity" @click="handleNewMarket" plain>{{ $t('dex.submit') }}</el-button>
-      <el-button class="btn" type="primary" v-else @click="handleLogin">{{ $t('public.loginPls') }}</el-button>
+      <div class="btnDiv">
+        <el-button class="btn" type="primary" v-if="scatter.identity" @click="handleNewMarket" plain>{{ $t('dex.submit') }}</el-button>
+        <el-button class="btn" type="primary" v-else @click="handleLogin">{{ $t('public.loginPls') }}</el-button>
+      </div>
     </div>
     <create-tip ref="createTip" />
   </div>
@@ -57,6 +64,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
+import { login } from '@/utils/public';
 import CreateTip from '../components/CreateTip';
 
 export default {
@@ -93,7 +101,8 @@ export default {
       this.$router.back();
     },
     handleLogin() {
-      this.$emit('listenLogin', true)
+      // this.$emit('listenLogin', true)
+      login(this, () => {})
     },
     handleNewMarket() {
       const params = {
@@ -187,7 +196,7 @@ export default {
     background: #FAFAFA;
     // padding: 20px 18px;
     position: relative;
-    min-height: calc(100vh - 44px);
+    min-height: calc(100vh - 100px);
     .subTitle{
       padding-left: 40px;
       height: 118px;
@@ -242,23 +251,37 @@ export default {
   .tipDiv{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     font-size: 12px;
     color: #999;
+    height: 112px;
+    padding: 0 40px;
+    .ml10{
+      margin-left: 10px;
+    }
+
+    .fees{
+      color: #000;
+    }
 
     .tip{
       margin-left: 5px;
       font-size: 16px;
     }
   }
+  .btnDiv{
+    margin: 0 40px;
+  }
   .btn{
-    margin: 20px 0 0;
-    // position: absolute;
-    bottom: 5px;
-    left: 0px;
-    width: calc(100%);
-    background: #42B48F;
+    display: block;
+    width: 100%;
+    font-size: 32px;
+    box-sizing: border-box;
     color: #fff;
     border-color: transparent;
+    height:88px;
+    background:rgba(7,215,155,1);
+    border-radius:30px;
   }
 }
 </style>

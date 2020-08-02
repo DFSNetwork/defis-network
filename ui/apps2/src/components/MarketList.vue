@@ -17,6 +17,20 @@
         </div>
       </template>
     </div>
+    <div class="scroll" v-else-if="type === 'bankStart' || type === 'bankEnd'">
+      <template v-for="(item, i) in searchArr">
+        <div class="item flexb" @click="handleSelectThis(item)" v-if="handleShowBank(item)" :key="i">
+          <div class="left flex">
+            <img class="coinImg" :src="item.imgUrl || errUrl" :onerror="errorCoinImg" alt="">
+            <div>
+              <div class="coin">{{ item.symbol }}</div>
+              <div class="contract tip">{{ item.contract }}</div>
+            </div>
+          </div>
+          <div class="balan">{{ item.balan }}</div>
+        </div>
+      </template>
+    </div>
     <div class="scroll" v-else>
       <template v-for="(item, i) in searchArr">
         <div class="item flexb" @click="handleSelectThis(item)" v-if="handleShow(item)" :key="i">
@@ -78,7 +92,9 @@ export default {
         }
         // 筛选出所有币种
         this.coinList = [];
-        if (this.type !== 'other') {
+        if (this.type === 'bankStart' || this.type === 'bankEnd') {
+          this.coinList = newVal;
+        } else if (this.type !== 'other') {
           const arr = this.handleDealSymArr(newVal)
           this.coinList = arr;
         } else {
@@ -97,7 +113,7 @@ export default {
   mounted() {
     // console.log(this.marketLists)
     // console.log(this.thisMarket0)
-    // console.log(this.type)
+    console.log(this.type)
   },
   methods: {
     handleSearch() {
@@ -109,6 +125,13 @@ export default {
       }
       const searchArr = this.coinList.filter(v => v.symbol.indexOf(search) !== -1)
       this.searchArr = searchArr;
+    },
+    handleShowBank(item) {
+      const type = this.type;
+      if (type === 'bankEnd') {
+        return !(item.contract === 'eosio.token' && item.symbol === 'EOS')
+      }
+      return true
     },
     handleShow(item) {
       const type = this.type;

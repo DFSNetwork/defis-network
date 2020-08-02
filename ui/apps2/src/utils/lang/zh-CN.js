@@ -53,7 +53,14 @@ export default {
     coinDecimal: '币种精度',
     plsCoinDecimal: '输入币种精度',
     submit: '创建',
-    createFeeTip: '为了维护良好的交易环境，避免因为无成本上币，而导致的垃圾币横生。创建新的交易对，需要消耗50 DFS。'
+    createFeeTip: '为了维护良好的交易环境，避免因为无成本上币，而导致的垃圾币横生。创建新的交易对，需要消耗50 DFS。',
+    // add
+    ableGet: '可兑',
+    minGet: '至少获取',
+    priceSlip: '价格滑点',
+    marketNow: '立即做市',
+    poolNum: '流动池数量',
+    moreRoute: '多路径兑换',
   },
   pools: {
     deposit: '存入',
@@ -64,6 +71,8 @@ export default {
     token: '凭证',
     ableToken: '可用凭证',
     chooseMarket: '选择市场',
+    // add
+    accRate: '您的做市(占比{rate}%)'
   },
   hyk: {
     stock: '分红',

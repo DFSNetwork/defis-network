@@ -24,19 +24,25 @@ const constantRouter = [
         path: '/',
         name: 'index',
         component: () => import(/* webpackChunkName: "index" */ '@/views/index/Index.vue'),
-        meta: { title: 'DeFis-BP' },
+        meta: { title: 'DeFis-Network' },
       },
       {
-        path: '/market',
+        path: '/market/:mid',
         name: 'market',
         component: () => import(/* webpackChunkName: "index" */ '@/views/index/Index.vue'),
-        meta: { title: 'DeFis-BP' },
+        meta: { title: 'DeFis-Network' },
+      },
+      {
+        path: '/bank',
+        name: 'bank',
+        component: () => import(/* webpackChunkName: "index" */ '@/views/bank/Index.vue'),
+        meta: { title: 'DeFis-Network' },
       },
       {
         path: '/tutorial',
         name: 'tutorial',
         component: () => import(/* webpackChunkName: "Tutorial" */ '@/views/index/childViews/Tutorial.vue'),
-        meta: { title: 'DeFis-BP' },
+        meta: { title: 'DeFis-Network' },
       }
     ]
   },
@@ -45,7 +51,7 @@ const constantRouter = [
     name: 'createMarket',
     // component: () => import('@/views/index/Index'),
     component: () => import(/* webpackChunkName: "nopage" */ '@/views/index/childViews/CreateMarket.vue'),
-    meta: { title: 'bank', noTabbar: true },
+    meta: { title: 'DeFis-Network', noTabbar: true },
   },
   // 404
   {

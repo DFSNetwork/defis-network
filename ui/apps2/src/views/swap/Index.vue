@@ -7,8 +7,8 @@
         <div class="symData">
           <div class="sym0Data" :class="{'focus': payIptFocus}">
             <div class="info flexb">
-              <span>余额: {{ balanceSym0 }} {{ thisMarket0.symbol }}</span>
-              <span class="type">支付</span>
+              <span>{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket0.symbol }}</span>
+              <span class="type">{{ $t('dex.pay') }}</span>
             </div>
             <div class="iptDiv flexb">
               <div class="coinInfo flex" @click="listenShowDrawer('start')">
@@ -35,8 +35,8 @@
         </div>
         <div class="sym0Data pdb10" :class="{'focus': getIptFocus}">
           <div class="info flexb">
-            <span class="ableGet">可兑: {{ balanceSym1 }} {{ thisMarket1.symbol }}</span>
-            <span class="type">获取</span>
+            <span class="ableGet">{{ $t('dex.ableGet') }}: {{ balanceSym1 }} {{ thisMarket1.symbol }}</span>
+            <span class="type">{{ $t('dex.obtain') }}</span>
           </div>
           <div class="iptDiv flexb">
             <div class="coinInfo flex" @click="listenShowDrawer('end')">
@@ -56,7 +56,7 @@
         </div>
 
         <div class="rate flexb">
-          <span class="tip">兑换比率</span>
+          <span class="tip">{{ $t('dex.rate') }}</span>
           <span class="flex">
             <span v-if="!exRate">1{{ thisMarket1.symbol }} = {{ tradeInfo.aboutPrice || '-' }}{{ thisMarket0.symbol }}</span>
             <span v-else>1{{ thisMarket0.symbol }} = {{ tradeInfo.aboutPriceSym0 || '-' }}{{ thisMarket1.symbol }}</span>
@@ -72,7 +72,7 @@
         <div class="tabB" v-show="showDetail">
           <div class="flexb">
             <span class="flexb">
-              <span class="tip">至少获取</span>
+              <span class="tip">{{ $t('dex.minGet') }}</span>
               <el-popover
                 class="flexc"
                 popper-class="mypopper"
@@ -86,7 +86,7 @@
           </div>
           <div class="flexb">
             <span class="flex">
-              <span class="tip">价格滑点</span>
+              <span class="tip">{{ $t('dex.priceSlip') }}</span>
               <el-popover
                 class="flexc"
                 popper-class="mypopper"
@@ -104,7 +104,7 @@
           </div>
           <div class="flexb fee">
             <span class="flex">
-              <span class="tip">手续费</span>
+              <span class="tip">{{ $t('public.fee') }}</span>
               <el-popover 
                 class="flexc"
                 popper-class="mypopper"
@@ -121,20 +121,20 @@
     </div>
 
     <div class="btnDiv">
-      <div class="btn flexc" @click="handleSwapTrade">兑 换</div>
+      <div class="btn flexc" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
     </div>
 
     <div class="pool" v-if="marketLists.length && bestPath">
       <div>
-        <span>流动池数量</span>
-        <span class="marketNow">立即做市 ></span>
+        <span>{{ $t('dex.poolNum') }}</span>
+        <span class="marketNow" @click="handleToMarketNow">{{ $t('dex.marketNow') }} ></span>
       </div>
       <div class="poolsNum">
         {{ bestPath.reserve0 }} / {{ bestPath.reserve1 }}
       </div>
     </div>
     <div v-else-if="routePath" class="routePath">
-      多路径兑换： 
+      {{ $t('dex.moreRoute') }}： 
       <div class="flexw">
         <span v-for="(item, i) in routePath" :key="i" class="flexc coin">
           <img class="coinUrl" :onerror="errorCoinImg"
@@ -313,6 +313,14 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    handleToMarketNow() {
+      this.$router.push({
+        name: 'market',
+        params: {
+          mid: this.bestPath.mid
+        }
+      })
+    },
     handleClose() {
       this.showMarketList = false
     },
