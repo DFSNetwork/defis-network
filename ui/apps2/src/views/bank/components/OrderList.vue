@@ -8,7 +8,7 @@
       <div class="list" v-for="(item, index) in tableData" :key="index">
         <div class="time flexb">
           <span>{{ item.ctime }}</span>
-          <span class="redeem">{{ $t('bank.redeem') }}</span>
+          <span class="redeem" @click="handleRedeem(item)">{{ $t('bank.redeem') }}</span>
         </div>
         <div class="numData flexb">
           <div class="left">
@@ -30,7 +30,7 @@
 
 <script>
 import { EosModel } from '@/utils/eos';
-import { toLocalTime } from '@/utils/public';
+import { toLocalTime, toFixed } from '@/utils/public';
 import { mapState } from 'vuex';
 import moment from 'moment';
 export default {
@@ -38,6 +38,7 @@ export default {
     return {
       tableData: [],
       timer: null,
+      balanceSym0: '0.0000'
     }
   },
   computed: {
@@ -67,6 +68,7 @@ export default {
     // 生成列表
     handleRowsMint() {
       clearTimeout(this.timer)
+      this.handleGetBalance();
       const params = {
         code: this.baseConfig.toAccountJin,
         scope: this.baseConfig.toAccountJin,
@@ -94,6 +96,63 @@ export default {
         this.timer = setTimeout(() => {
           this.handleRowsMint();
         }, 20000);
+      })
+    },
+    handleReg(item) {
+      console.log(item)
+      if (!item.ableRedeem) {
+        return;
+      }
+      const issue = item.issue.split(' ')[0]
+      console.log(issue, this.balanceSym0)
+      if (Number(issue) > Number(this.balanceSym0)) {
+        this.$message({
+          message: this.$t('public.balanLow'),
+          type: 'error'
+        })
+        return false;
+      }
+      return true
+    },
+    // 赎回
+    handleRedeem(item) {
+      if (!this.handleReg(item)) {
+        return
+      }
+      const params = {
+        code: this.baseConfig.toAccountJin,
+        toAccount: this.baseConfig.toAccountJin,
+        memo: `redeem: ${item.id}`,
+        quantity: item.issue
+      }
+      EosModel.transfer(params, (res) => {
+        if(res.code) {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        setTimeout(() => {
+          this.handleBalanTimer();
+          this.handleRowsMint()
+        }, 1000);
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
+    },
+    async handleGetBalance() {
+      const params = {
+        code: 'bankofusddv1',
+        coin: 'USDD',
+        decimal: 4
+      };
+      await EosModel.getCurrencyBalance(params, res => {
+        let balance = toFixed('0.000000001', params.decimal);
+        (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
+        this.balanceSym0 = balance;
       })
     },
   },
