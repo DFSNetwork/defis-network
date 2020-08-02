@@ -1,10 +1,10 @@
 <template>
   <div class="footer">
-    <div class="tip">24H兑换量：23610.17 EOS 4000比订单</div>
+    <!-- <div class="tip">24H兑换量：23610.17 EOS 4000比订单</div> -->
     <div class="safe">
-      <span>DFS智能合约由</span>
-      <span class="who" @click="handleToShowReport">慢雾</span>
-      <span>提供安全审计</span>
+      <span>{{ $t('public.safeRecord1') }}</span>
+      <span class="who" @click="handleToShowReport">{{ $t('public.safeRecord2') }}</span>
+      <span>{{ $t('public.safeRecord3') }}</span>
     </div>
 
     <el-dialog

@@ -5,9 +5,9 @@
       :show-close="false"
       :visible.sync="showNav">
       <div class="navList">
-        <div class="title">交易设置</div>
+        <div class="title">{{ $t('dex.TradeSet') }}</div>
         <div class="subTitle flex">
-          <span>滑点设置</span>
+          <span>{{ $t('dex.slipSet') }}</span>
           <el-popover
             class="flexc"
             popper-class="mypopper"
@@ -29,12 +29,12 @@
         </div>
         <div class="invitation">
           <div class="subTitle flex">
-            <span>邀请人</span>
+            <span>{{ $t('dex.inviter') }}</span>
             <!-- <img class="iconImg" src="@/assets/img/dex/tips_icon_btn.svg" alt=""> -->
           </div>
           <div class="invitationIpt flex">
-            <el-input class="elIpt" v-model="inviAcc" placeholder="请输入邀请人账户"></el-input>
-            <span class="btn flexc" @click="handleSureInviArr">确认</span>
+            <el-input class="elIpt" v-model="inviAcc" placeholder="dfsdeveloper"></el-input>
+            <span class="btn flexc" @click="handleSureInviArr">{{ $t('public.confirm') }}</span>
           </div>
           <!-- <div><span class="btn flexc">确认</span></div> -->
         </div>
@@ -237,10 +237,11 @@ export default {
     }
     .btn{
       background: #07d79b;
-      border-radius: 10px;
+      border-radius: 30px;
       color: #fff;
       height: 60px;
-      width: 100px;
+      min-width: 100px;
+      padding: 0 20px;
       &:active{
         background: #02C698;
       }

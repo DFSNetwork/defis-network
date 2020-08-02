@@ -15,6 +15,12 @@ export default {
     tokenLow: '可用凭证数量不足',
     success: '操作成功',
     tutorial: '教程',
+    // add
+    safeRecord: 'DFS智能合约由慢雾提供安全审计',
+    safeRecord1: 'DFS智能合约由',
+    safeRecord2: '慢雾',
+    safeRecord3: '提供安全审计',
+    confirm: '确认',
   },
   tab: {
     bank: '金库',
@@ -61,6 +67,9 @@ export default {
     marketNow: '立即做市',
     poolNum: '流动池数量',
     moreRoute: '多路径兑换',
+    TradeSet: '交易设置',
+    slipSet: '滑点设置',
+    inviter: '邀请人'
   },
   pools: {
     deposit: '存入',

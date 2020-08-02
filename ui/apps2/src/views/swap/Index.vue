@@ -35,7 +35,7 @@
         </div>
         <div class="sym0Data pdb10" :class="{'focus': getIptFocus}">
           <div class="info flexb">
-            <span class="ableGet">{{ $t('dex.ableGet') }}: {{ balanceSym1 }} {{ thisMarket1.symbol }}</span>
+            <span class="ableGet">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket1.symbol }}</span>
             <span class="type">{{ $t('dex.obtain') }}</span>
           </div>
           <div class="iptDiv flexb">

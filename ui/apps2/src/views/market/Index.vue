@@ -3,8 +3,8 @@
     <div class="marketData">
       <tabs />
       <div class="direction flexb">
-        <span class="flexc" :class="{'act': act === 1}" @click="act = 1">存入</span>
-        <span class="flexc" :class="{'act actBack': act === 2}" @click="act = 2">取回</span>
+        <span class="flexc" :class="{'act': act === 1}" @click="act = 1">{{ $t('pools.deposit') }}</span>
+        <span class="flexc" :class="{'act actBack': act === 2}" @click="act = 2">{{ $t('pools.withdrawal') }}</span>
       </div>
       <div v-if="act === 1">
         <div class="sym0Data" :class="{'focus': ipt1Focus}">

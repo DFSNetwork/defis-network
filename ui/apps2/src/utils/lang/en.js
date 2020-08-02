@@ -15,6 +15,11 @@ export default {
     tokenLow: 'Insufficient available certificate',
     success: 'Operate successfully',
     tutorial: 'Tutorial',
+    safeRecord: 'DFS smart contract provides security audit by slow fog',
+    safeRecord1: 'DFS smart contract provides security audit by ',
+    safeRecord2: 'SlowMist',
+    safeRecord3: '',
+    confirm: 'Confirm',
   },
   tab: {
     bank: 'Bank',
@@ -56,11 +61,14 @@ export default {
     createFeeTip: 'In order to maintain a good trading environment. Creating a new market consumes 50 DFS.',
     // add
     ableGet: '可兑',
-    minGet: '至少获取',
-    priceSlip: '价格滑点',
-    marketNow: '立即做市',
-    poolNum: '流动池数量',
-    moreRoute: '多路径兑换',
+    minGet: 'At least get',
+    priceSlip: 'Price slippage',
+    marketNow: 'Add liquidity',
+    poolNum: 'Liquidity',
+    moreRoute: 'Multi-path swap',
+    TradeSet: 'Transaction Settings',
+    slipSet: 'Slippage tolerance',
+    inviter: 'Inviter'
   },
   pools: {
     deposit: 'Deposit',
@@ -72,7 +80,7 @@ export default {
     ableToken: 'Available certificate',
     chooseMarket: 'Select market',
     // add
-    accRate: '您的做市(占比{rate}%)'
+    accRate: ' Your liquidity(Proportion {rate}%)'
   },
   hyk: {
     stock: 'Dividends Pool',
