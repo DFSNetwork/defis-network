@@ -78,7 +78,8 @@
                 popper-class="mypopper"
                 placement="top-start"
                 trigger="click">
-                <div class="qusTip">Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.</div>
+                <!-- 你的交易将会回滚，如果在确认前有很大的价格变化 -->
+                <div class="qusTip">{{ $t('dex.qusTip1') }}</div>
                 <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
@@ -92,7 +93,8 @@
                 popper-class="mypopper"
                 placement="top-start"
                 trigger="click">
-                <div class="qusTip">The difference between the market price and estimated price due to trade size.</div>
+                <!-- 根据交易量的多少，成交价与市价的差异 -->
+                <div class="qusTip">{{ $t('dex.qusTip2') }}</div>
                 <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
@@ -110,7 +112,8 @@
                 popper-class="mypopper"
                 placement="top-start"
                 trigger="click">
-                <div class="qusTip">A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.</div>
+                <!-- 每笔交易的（0.30%）会给到流动性提供者 -->
+                <div class="qusTip">{{ $t('dex.qusTip3') }}</div>
                 <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>

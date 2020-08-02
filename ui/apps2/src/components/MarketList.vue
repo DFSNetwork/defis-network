@@ -113,7 +113,7 @@ export default {
   mounted() {
     // console.log(this.marketLists)
     // console.log(this.thisMarket0)
-    console.log(this.type)
+    // console.log(this.type)
   },
   methods: {
     handleSearch() {

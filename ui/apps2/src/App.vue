@@ -36,7 +36,7 @@ export default {
     this.handleEnvReLoad();
     this.handleEnvSet();
     EosModel.scatterInit(this, () => {
-      this.handleLogin()
+      // this.handleLogin()
     });
   },
   beforeDestroy: function () {

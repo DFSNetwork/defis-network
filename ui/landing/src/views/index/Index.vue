@@ -98,7 +98,7 @@
           <div class="tip">Co-Founder & CTO</div>
         </div>
         <div class="user">
-          <div class="userImg"><img src="@/assets/img/team/team2.jpeg" alt=""></div>
+          <div class="userImg"><img src="@/assets/img/team/team7.jpeg" alt=""></div>
           <div class="name">Jay</div>
           <div class="tip">Co-Founder & CEO</div>
         </div>

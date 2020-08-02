@@ -69,7 +69,10 @@ export default {
     moreRoute: '多路径兑换',
     TradeSet: '交易设置',
     slipSet: '滑点设置',
-    inviter: '邀请人'
+    inviter: '邀请人',
+    qusTip1: '你的交易将会回滚，如果在确认前有很大的价格变化',
+    qusTip2: '根据交易量的多少，成交价与市价的差异',
+    qusTip3: '每笔交易的（0.30%）会给到流动性提供者'
   },
   pools: {
     deposit: '存入',

@@ -20,11 +20,32 @@
       width: 100%;
       position: fixed;
       height: 100%;
-      background: #000;
+      background: #07D79B;
       display: flex;
       align-items: center;
       color: #FFF;
       justify-content: center;
+    }
+    .logo{
+      position: relative;
+      height: 31px;
+    }
+    .one{
+      position: absolute;
+      width:11px;
+      height:31px;
+      background: #FFF;
+      transform: rotate(30deg);
+      border-radius: 7px;
+    }
+    .two{
+      position: absolute;
+      width:31px;
+      height:11px;
+      background: #FFF;
+      border-radius: 7px;
+      bottom: 0px;
+      left: -5px;
     }
     </style>
   </head>
@@ -34,9 +55,20 @@
     </noscript>
     <div id="app">
       <div class="loading">
-        loading...
+        <span>
+          <span class="one"></span>
+          <span class="two"></span>
+          <span class="three"></span>
+        </span>
       </div>
     </div>
+    <!-- <div class="loading">
+      <span class="logo">
+        <span class="one"></span>
+        <span class="two"></span>
+        <span class="three"></span>
+      </span>
+    </div> -->
     <!-- built files will be auto injected -->
   </body>
 </html>

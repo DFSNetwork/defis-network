@@ -68,7 +68,10 @@ export default {
     moreRoute: 'Multi-path swap',
     TradeSet: 'Transaction Settings',
     slipSet: 'Slippage tolerance',
-    inviter: 'Inviter'
+    inviter: 'Inviter',
+    qusTip1: 'Your transaction will revert if there is a large, unfavorable price movement before it is confirmed.',
+    qusTip2: 'The difference between the market price and estimated price due to trade size.',
+    qusTip3: 'A portion of each trade (0.30%) goes to liquidity providers as a protocol incentive.'
   },
   pools: {
     deposit: 'Deposit',
