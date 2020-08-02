@@ -113,7 +113,7 @@
           <div class="tip">Front-end Developer</div>
         </div>
         <div class="user">
-          <div class="userImg"><img src="@/assets/img/team/team5.jpeg" alt=""></div>
+          <div class="userImg"><img src="@/assets/img/team/team2.jpeg" alt=""></div>
           <div class="name">JAYSUN XU</div>
           <div class="tip">Project Manager</div>
         </div>
