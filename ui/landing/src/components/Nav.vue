@@ -13,7 +13,8 @@
         <div class="list" @click="showReport = !showReport">
           <span class="more" :class="{'top': showReport}">{{ $t('nav.report') }}</span>
         </div>
-        <div class="subList" v-if="showReport" @click="handleToShowReport">{{ $t('nav.slowMist') }}</div>
+        <div class="subList" v-if="showReport" @click="handleToShowReport('slowMist')">{{ $t('nav.slowMist') }}</div>
+        <div class="subList" v-if="showReport" @click="handleToShowReport('peckshield')">{{ $t('nav.peckshield') }}</div>
         <div class="list">
           <span v-if="language !== 'en'" @click="handleChangeLang('en')">EN</span>
           <span v-else @click="handleChangeLang('zh-CN')">CN</span>
@@ -48,7 +49,7 @@ export default {
       this.$i18n.locale = type;
       this.$store.dispatch('setLanguage', type);
     },
-    handleToShowReport() {
+    handleToShowReport(name) {
       this.$emit('listenToShowReport', name)
     }
   }

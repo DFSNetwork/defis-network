@@ -10,6 +10,7 @@ export default {
     team: 'TEAM',
     report: 'Audit Report',
     slowMist: 'Slow Mist',
+    peckshield: 'Peckshield',
   },
   index: {
     title1_1: 'An open finance network ',

@@ -46,12 +46,34 @@ export default {
     handleLogin() {
       login(this, () => {})
     },
+    handleRegInviAcc(inviAcc) {
+      setTimeout(() => {
+        const params = {
+          "code": "dfsdfsfamily",
+          "scope": "dfsdfsfamily",
+          "table": "codes",
+          "index_position": 2,
+          "key_type": "i64",
+          "lower_bound": inviAcc,
+          "upper_bound": inviAcc,
+          "json": true,
+        }
+        EosModel.getTableRows(params, (res) => {
+          if (!res.rows.length) {
+            localStorage.removeItem('inviAcc')
+            return
+          }
+          const inviAcc = res.rows[0];
+          localStorage.setItem('inviAcc', JSON.stringify(inviAcc))
+        })
+      }, 200);
+    },
     handleSetLang() {
       const urlParams = getUrlParams(window.location.href) || {};
       // set inviAcc
       const inviAcc = urlParams.code;
       if (inviAcc) {
-        localStorage.setItem('inviAcc', inviAcc)
+        this.handleRegInviAcc(inviAcc)
       }
       // set Language
       const lang = urlParams.lang;

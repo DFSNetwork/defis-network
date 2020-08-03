@@ -46,6 +46,7 @@
 <script>
 import { mapState } from 'vuex';
 import { toFixed } from '@/utils/public';
+import { EosModel } from '@/utils/eos';
 
 export default {
   data() {
@@ -73,16 +74,45 @@ export default {
         }
       },
       immediate: true
+    },
+    showNav() {
+      try {
+        const inviAcc = localStorage.getItem('inviAcc') ? JSON.parse(localStorage.getItem('inviAcc')) : {};
+        this.inviAcc = inviAcc.owner;
+      } catch (error) {
+        localStorage.removeItem('inviAcc')
+        this.inviAcc = '';
+      }
     }
   },
   mounted() {
-    this.inviAcc = localStorage.getItem('inviAcc')
   },
   methods: {
     handleSureInviArr() {
-      localStorage.setItem('inviAcc', this.inviAcc);
-      this.showNav = false;
-      this.$message.success('Success')
+      if (!this.inviAcc) {
+        return
+      }
+      const params = {
+        "code": "dfsdfsfamily",
+        "scope": "dfsdfsfamily",
+        "table": "codes",
+        "index_position": 2,
+        "key_type": "i64",
+        "lower_bound": this.inviAcc,
+        "upper_bound": this.inviAcc,
+        "json": true,
+      }
+      EosModel.getTableRows(params, (res) => {
+        if (!res.rows.length) {
+          localStorage.removeItem('inviAcc');
+          this.$message.error('Invitation code does not exist')
+          return
+        }
+        const inviAcc = res.rows[0];
+        localStorage.setItem('inviAcc', JSON.stringify(inviAcc))
+        this.showNav = false;
+        this.$message.success('Success')
+      })
     },
     handleSetSlipPoint(num) {
       this.$store.dispatch('setSlipPoint', num)

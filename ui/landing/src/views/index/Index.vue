@@ -132,10 +132,11 @@
         <div class="listImg flexC"><img src="@/assets/img/partners/meetone.png?v=1" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/bitpie.png?v=1" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/mykey.png?v=1" alt=""></div>
-        <div class="listImg flexC" @click="handleToShowReport"><img src="@/assets/img/partners/slowmist.png?v=2" alt=""></div>
+        <div class="listImg flexC" @click="handleToShowReport('slowMist')"><img src="@/assets/img/partners/slowmist.png?v=2" alt=""></div>
+        <div class="listImg flexC" @click="handleToShowReport('peckshield')"><img src="@/assets/img/partners/peckshield.png" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/newdex.png?v=1" alt=""></div>
         <div class="listImg flexC"><img src="@/assets/img/partners/hoov3.png?v=2" alt=""></div>
-        <div class="listImg flexC none"></div>
+        <!-- <div class="listImg flexC none"></div> -->
       </div>
     </div>
     <my-footer ref="question"/>
@@ -224,7 +225,10 @@ export default {
         this.showToTop = false
       }
     },
-    handleToShowReport() {
+    handleToShowReport(name) {
+      if (name === 'peckshield') {
+        return;
+      }
       this.showImg = true;
     }
   }

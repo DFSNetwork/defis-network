@@ -9,7 +9,8 @@ export default {
     partners: '合作伙伴',
     team: '团队成员',
     report: '审计报告',
-    slowMist: '慢雾审计报告'
+    slowMist: '慢雾审计报告',
+    peckshield: '派盾审计报告',
   },
   index: {
     title1_1: '一个整合了一系列',

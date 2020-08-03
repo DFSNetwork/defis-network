@@ -13,7 +13,8 @@
             width="130"
             trigger="click">
             <div class="safeList">
-              <div class="list" @click="handleToShowReport()">{{ $t('nav.slowMist') }}</div>
+              <div class="list" @click="handleToShowReport('slowMist')">{{ $t('nav.slowMist') }}</div>
+              <div class="list" @click="handleToShowReport('peckshield')">{{ $t('nav.peckshield') }}</div>
             </div>
             <span class="report" slot="reference">
               <span>{{ $t('nav.report') }}</span>
@@ -58,7 +59,7 @@ export default {
     handleToDiv(name) {
       this.$emit('listenToDiv', name)
     },
-    handleToShowReport() {
+    handleToShowReport(name) {
       this.$emit('listenToShowReport', name)
     }
   }

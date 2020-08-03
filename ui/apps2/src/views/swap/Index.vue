@@ -480,9 +480,9 @@ export default {
         memo: `swap:${path}:${accMul(toFixed(this.tradeInfo.minOut, minOutDecimal), (10 ** minOutDecimal))}`,
         quantity: `${this.payNum} ${tradeCoin}`
       }
-      const inviAcc = localStorage.getItem('inviAcc');
+      const inviAcc = localStorage.getItem('inviAcc') ? JSON.parse(localStorage.getItem('inviAcc')) : '';
       if (inviAcc) {
-        params.memo = `${params.memo}:${inviAcc}`
+        params.memo = `${params.memo}:${inviAcc.id}`
       }
       // console.log(params)
       EosModel.transfer(params, (res) => {
