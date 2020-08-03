@@ -152,6 +152,11 @@
       :visible.sync="showImg">
       <img width="100%" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gh00tvkd0dj30ku112tbw.jpg" />
     </el-dialog>
+    <el-dialog
+      class="dialog"
+      :visible.sync="showImg2">
+      <img width="100%" src="@/assets/img/record/peckshield.jpeg" />
+    </el-dialog>
   </div>
 </template>
 
@@ -170,6 +175,7 @@ export default {
       showToTop: false,
       timer: null,
       showImg: false, // 现实审计结果图片
+      showImg2: false,
     }
   },
   computed:{
@@ -227,6 +233,7 @@ export default {
     },
     handleToShowReport(name) {
       if (name === 'peckshield') {
+        this.showImg2 = true
         return;
       }
       this.showImg = true;

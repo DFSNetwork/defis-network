@@ -7,6 +7,10 @@ import router from './router'
 import store from './store'
 import './utils/filters/index'
 import "amfe-flexible";
+import VueClipboard from 'vue-clipboard2';
+
+// 复制文本插件
+Vue.use(VueClipboard)
 
 Vue.config.productionTip = false
 // 国际化 - 语言

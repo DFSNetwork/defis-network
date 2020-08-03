@@ -18,6 +18,7 @@ export default {
     safeRecord: 'DFS smart contract provides security audit by slow fog',
     safeRecord1: 'DFS smart contract provides security audit by ',
     safeRecord2: 'SlowMist',
+    safeRecord4: 'PeckShield',
     safeRecord3: '',
     confirm: 'Confirm',
   },

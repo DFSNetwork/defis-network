@@ -19,6 +19,7 @@ export default {
     safeRecord: 'DFS智能合约由慢雾提供安全审计',
     safeRecord1: 'DFS智能合约由',
     safeRecord2: '慢雾',
+    safeRecord4: '派盾',
     safeRecord3: '提供安全审计',
     confirm: '确认',
   },

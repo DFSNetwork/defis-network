@@ -8,6 +8,12 @@
     <my-footer />
     <Nav ref="nav"/>
     <SlipPointTools ref="slipPointTools"/>
+
+    <el-dialog
+      class="mydialog"
+      :visible.sync="showInvi">
+      <invi-acc v-if="showInvi" />
+    </el-dialog>
   </div>
 </template>
 
@@ -19,6 +25,8 @@ import AccLogin from '@/components/AccLogin';
 import MyFooter from '@/components/Footer';
 import Nav from '@/components/Nav';
 import SlipPointTools from '@/components/SlipPointTools';
+import InviAcc from '@/components/InviAcc';
+
 export default {
   name: 'layout',
   components: {
@@ -27,6 +35,7 @@ export default {
     MyFooter,
     Nav,
     SlipPointTools,
+    InviAcc
   },
   data() {
     return {
@@ -34,7 +43,8 @@ export default {
       timer: null,
       topLists: [
         7, 39, 17, 
-      ]
+      ],
+      showInvi: false,
     }
   },
   computed:{
@@ -141,5 +151,23 @@ export default {
   margin: auto;
   position: relative;
   box-sizing: border-box;
+  .mydialog{
+    /deep/ .el-dialog{
+      // position: absolute;
+      border-radius: 30px 0px 30px 30px;
+      // right: 150px;
+      // top: 120px;
+      width: 480px;
+      margin-top: 15vh !important;
+      .el-dialog__header{
+        padding: 0;
+      }
+      .el-dialog__body{
+        font-size: 26px;
+        padding: 35px;
+      }
+    }
+  }
 }
+
 </style>

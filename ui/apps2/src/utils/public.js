@@ -49,7 +49,7 @@ export function login(vThis, cb) {
   });
 }
 // 先退出scatter
-function handleScatterOut(cb) {
+export function handleScatterOut(cb) {
   EosModel.accountLoginOut(() => {
     EosModel.getIdentity('eos', (err => cb(err)));
   });
