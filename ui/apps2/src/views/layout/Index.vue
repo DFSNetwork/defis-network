@@ -6,7 +6,7 @@
       <router-view class="content" :marketLists="marketLists"/>
     </transition>
     <my-footer />
-    <Nav ref="nav"/>
+    <Nav ref="nav" @listenShowComp="handleShowComp"/>
     <SlipPointTools ref="slipPointTools"/>
 
     <el-dialog
@@ -62,6 +62,11 @@ export default {
     clearInterval(this.timer);
   },
   methods: {
+    handleShowComp(type) {
+      if (type === 'invi') {
+        this.showInvi = true;
+      }
+    },
     handleShowNav() {
       this.$refs.nav.showNav = true;
     },
@@ -154,7 +159,7 @@ export default {
   .mydialog{
     /deep/ .el-dialog{
       // position: absolute;
-      border-radius: 30px 0px 30px 30px;
+      border-radius: 30px;
       // right: 150px;
       // top: 120px;
       width: 480px;
