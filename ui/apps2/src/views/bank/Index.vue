@@ -5,7 +5,7 @@
         <tabs />
         <div class="sym0Data pdb10 mrb20" :class="{'focus': payIptFocus}">
           <div class="info flexb">
-            <span class="ableGet">{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket0.symbol }}</span>
+            <span class="ableGet" @click="handleClickBalan('pay')">{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket0.symbol }}</span>
             <span class="type">{{ $t('bank.stake') }}</span>
           </div>
           <div class="iptDiv flexb">
@@ -26,7 +26,7 @@
         </div>
         <div class="sym0Data pdb10" :class="{'focus': getIptFocus}">
           <div class="info flexb">
-            <span class="ableGet">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket1.symbol }}</span>
+            <span class="ableGet" @click="handleClickBalan('get')">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket1.symbol }}</span>
             <span class="type">{{ $t('bank.borrow') }}</span>
           </div>
           <div class="iptDiv flexb">
@@ -65,7 +65,7 @@
     </div>
 
     <div class="btnDiv">
-      <div class="btn flexc" @click="handleTransfer">{{ $t('bank.borrow') }}</div>
+      <div class="btn flexc" v-loading="loading" @click="handleTransfer">{{ $t('bank.borrow') }}</div>
     </div>
 
     <order-list ref="orderList"/>
@@ -123,6 +123,7 @@ export default {
       price: 2.7,
       fees: 0.3,
       showMarketList: false,
+      loading: false,
       bankList: [
         {
           symbol: 'EOS',
@@ -228,9 +229,13 @@ export default {
     },
     // 铸币
     handleTransfer() {
+      if (this.loading) {
+        return
+      }
       if (!this.handleRegMint()) {
         return
       }
+      this.loading = true;
       const memo = this.thisMarket0.symbol === 'USDD' ? 'burn' : 'mint';
       const params = {
         code: this.thisMarket0.contract,
@@ -239,6 +244,7 @@ export default {
         quantity: `${this.payNum} ${this.thisMarket0.symbol}`
       }
       EosModel.transfer(params, (res) => {
+        this.loading = false;
         if(res.code) {
           this.$message({
             message: res.message,
@@ -360,6 +366,15 @@ export default {
     },
     handleGetOrder() {
       this.$refs.orderList.handleRowsMint()
+    },
+    handleClickBalan(type) {
+      if (type === 'pay') {
+        this.payNum = this.balanceSym0;
+        this.handleGetNum()
+        return
+      }
+      this.getNum = this.balanceSym1;
+      this.handleGetTransNum()
     }
   },
 }
@@ -453,6 +468,9 @@ export default {
     height:88px;
     background:rgba(7,215,155,1);
     border-radius:30px;
+    &:active{
+      background:rgba(2,198,152,1);
+    }
   }
 }
 .mkListDia{

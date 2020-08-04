@@ -99,12 +99,12 @@ export default {
       })
     },
     handleReg(item) {
-      console.log(item)
+      // console.log(item)
       if (!item.ableRedeem) {
         return;
       }
       const issue = item.issue.split(' ')[0]
-      console.log(issue, this.balanceSym0)
+      // console.log(issue, this.balanceSym0)
       if (Number(issue) > Number(this.balanceSym0)) {
         this.$message({
           message: this.$t('public.balanLow'),
@@ -185,7 +185,7 @@ export default {
 }
 .lists{
   .noData{
-    margin-top: 100px;
+    margin: 100px 0;
     color: #A6A6A6;
     font-size: 24px;
   }

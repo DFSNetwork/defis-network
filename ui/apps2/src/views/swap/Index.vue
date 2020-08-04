@@ -7,7 +7,7 @@
         <div class="symData">
           <div class="sym0Data" :class="{'focus': payIptFocus}">
             <div class="info flexb">
-              <span>{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket0.symbol }}</span>
+              <span @click="handleClickBalan('pay')">{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket0.symbol }}</span>
               <span class="type">{{ $t('dex.pay') }}</span>
             </div>
             <div class="iptDiv flexb">
@@ -35,7 +35,7 @@
         </div>
         <div class="sym0Data pdb10" :class="{'focus': getIptFocus}">
           <div class="info flexb">
-            <span class="ableGet">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket1.symbol }}</span>
+            <span class="ableGet" @click="handleClickBalan('get')">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket1.symbol }}</span>
             <span class="type">{{ $t('dex.obtain') }}</span>
           </div>
           <div class="iptDiv flexb">
@@ -124,7 +124,7 @@
     </div>
 
     <div class="btnDiv">
-      <div class="btn flexc" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
+      <div class="btn flexc" v-loading="loading" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
     </div>
 
     <div class="pool" v-if="marketLists.length && bestPath">
@@ -177,6 +177,7 @@ export default {
   },
   data() {
     return {
+      loading: false,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       payNum: '',
       getNum: '',
@@ -316,6 +317,15 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    handleClickBalan(type) {
+      if (type === 'pay') {
+        this.payNum = this.balanceSym0;
+        this.handleInBy('pay')
+        return
+      }
+      this.getNum = this.balanceSym1;
+      this.handleInBy('get')
+    },
     handleToMarketNow() {
       this.$router.push({
         name: 'market',
@@ -467,9 +477,13 @@ export default {
     },
     // swap交易
     handleSwapTrade() {
+      if (this.loading) {
+        return
+      }
       if (!this.handleReg()) {
         return
       }
+      this.loading = true;
       const path = this.thisMidsPath
 
       const tradeCoin = this.thisMarket0.symbol;
@@ -486,6 +500,7 @@ export default {
       }
       // console.log(params)
       EosModel.transfer(params, (res) => {
+        this.loading = false;
         if(res.code) {
           this.$message({
             message: res.message,

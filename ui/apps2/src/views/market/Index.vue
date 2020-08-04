@@ -3,13 +3,13 @@
     <div class="marketData">
       <tabs />
       <div class="direction flexb">
-        <span class="flexc" :class="{'act': act === 1}" @click="act = 1">{{ $t('pools.deposit') }}</span>
-        <span class="flexc" :class="{'act actBack': act === 2}" @click="act = 2">{{ $t('pools.withdrawal') }}</span>
+        <span class="flexc" :class="{'act': act === 1}" @click="handleChange(1)">{{ $t('pools.deposit') }}</span>
+        <span class="flexc" :class="{'act actBack': act === 2}" @click="handleChange(2)">{{ $t('pools.withdrawal') }}</span>
       </div>
       <div v-if="act === 1">
         <div class="sym0Data" :class="{'focus': ipt1Focus}">
           <div class="info flexb">
-            <span>{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket.symbol0 }}</span>
+            <span @click="handleClickBalan('payNum1')">{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket.symbol0 }}</span>
             <span class="type"></span>
           </div>
           <div class="iptDiv flexb">
@@ -35,7 +35,7 @@
         </div>
         <div class="sym0Data pdb10" :class="{'focus': ipt2Focus}">
           <div class="info flexb">
-            <span class="ableGet">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket.symbol1 }}</span>
+            <span class="ableGet" @click="handleClickBalan('payNum2')">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket.symbol1 }}</span>
             <span class="type"></span>
           </div>
           <div class="iptDiv flexb">
@@ -80,7 +80,7 @@
         <div class="backData" :class="{'focus': tokenFocus}">
           <div class="flexb token">
             <span>{{ $t('pools.token') }}</span>
-            <span>{{ $t('pools.ableToken') }}: {{ token }}</span>
+            <span @click="handleClickBalan('token')">{{ $t('pools.ableToken') }}: {{ token }}</span>
           </div>
           <div class="inputDiv">
             <el-input class="elIpt" type="number" v-model="sellToken" placeholder="0"
@@ -105,7 +105,7 @@
       <div class="num">{{ getToken }}</div>
     </div>
 
-    <div class="btnDiv">
+    <div class="btnDiv" v-loading="loading">
       <div v-if="act === 1" class="btn flexc" @click="handleAddToken">{{ $t('pools.deposit') }}</div>
       <div v-else class="btn flexc backBtn" @click="handleToSell">{{ $t('pools.withdrawal') }}</div>
     </div>
@@ -156,6 +156,7 @@ export default {
       token: '0',
       showMarketList: false,
       first: true,
+      loading: false,
     }
   },
   props: {
@@ -228,6 +229,13 @@ export default {
     // console.log(this.$route)
   },
   methods: {
+    handleChange(act) {
+      this.act = act;
+      this.loading = false;
+      this.payNum1 = '';
+      this.payNum2 = '';
+      this.sellToken = '';
+    },
     handleClose() {
       this.showMarketList = false
     },
@@ -369,9 +377,13 @@ export default {
     },
     // 存币做市
     handleAddToken() {
+      if (this.loading) {
+        return
+      }
       if (!this.handleRegAdd()) {
         return
       }
+      this.loading = true;
       const obj = this.thisMarket;
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
@@ -420,6 +432,7 @@ export default {
         ]
       }
       EosModel.toTransaction(params, (res) => {
+        this.loading = false;
         if(res.code) {
           this.$message({
             message: res.message,
@@ -484,9 +497,13 @@ export default {
     },
     // 卖出Token
     handleToSell() {
+      if (this.loading) {
+        return
+      }
       if (!this.handleRegSell()) {
         return
       }
+      this.loading = true;
       const obj = this.thisMarket;
       const formName = this.$store.state.app.scatter.identity.accounts[0].name;
       const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
@@ -508,6 +525,7 @@ export default {
         ]
       }
       EosModel.toTransaction(params, (res) => {
+        this.loading = false
         if(res.code) {
           this.$message({
             message: res.message,
@@ -524,6 +542,20 @@ export default {
     },
     toFixed(n, l) {
       return toFixed(n, l)
+    },
+    handleClickBalan(type) {
+      if (type === 'token') {
+        this.sellToken = this.token;
+        this.handleSellToken();
+        return
+      }
+      if (type === 'payNum1') {
+        this.payNum1 = this.balanceSym0;
+        this.handleInBy('sym0');
+        return
+      }
+      this.payNum2 = this.balanceSym1;
+      this.handleInBy('sym1')
     }
   },
 }
@@ -745,8 +777,15 @@ export default {
       font-size:32px;
       color: #FFF;
 
+      &:active{
+        background:rgba(2,198,152,1);
+      }
+
       &.backBtn{
         background:rgba(192,93,93,1);
+        &:active{
+          background:rgba(185,78,90,1);
+        }
       }
     }
   }

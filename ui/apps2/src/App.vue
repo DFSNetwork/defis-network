@@ -148,6 +148,9 @@ export default {
       font-size: 26px !important;
     }
   }
+  /deep/ .el-loading-spinner .path{
+    stroke: rgba(2,198,152,1);
+  }
 }
 
 #app {
