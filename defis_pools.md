@@ -41,7 +41,10 @@
 
 ## DeFis Network 概述
 
-DeFis Network的愿景是做聚合多种有价值的DeFi协议的去中心化金融网络。
+
+DeFis Network使命是构建去中心化的，人人皆可参与、共建、共享的开放式金融基础设施。让普惠金融平等服务于全世界每个角落的人。
+
+DeFis Network的当下目标是做聚合多种有价值的DeFi协议的去中心化金融网络。
 
 现阶段已上线Bank、Swap两个项目。
 
