@@ -15,13 +15,26 @@ export default {
     tokenLow: '可用凭证数量不足',
     success: '操作成功',
     tutorial: '教程',
-    // add
     safeRecord: 'DFS智能合约由慢雾提供安全审计',
     safeRecord1: 'DFS智能合约由',
     safeRecord2: '慢雾',
     safeRecord4: '派盾',
     safeRecord3: '提供安全审计',
     confirm: '确认',
+    unLogin: '您还未登录账号，请',
+  },
+  invi: {
+    invitation: '邀请', // invitation
+    toInviter: '成为邀请人', // Become an inviter
+    whatIsInviter: '每当被邀请人通过邀请人链接完成一笔SWAP交易，该笔交易挖矿算力增加5%，其中4%归被邀请人，1%归邀请人。',
+    // Whenever the inviter completes a SWAP transaction through the inviter link, the mining calculation power of the transaction increases by 5%, among which 4% belongs to the inviter and 1% to the inviter.
+    way1: '方式一',
+    way1Tip: '消耗100 DFS成为邀请人',
+    join: '加入',
+    way2: '方式二',
+    way2Tip: '抵押5000DFS成为邀请人，赎回后失去资格',
+    myLink: '我的邀请链接',
+    copy: '复制',
   },
   tab: {
     bank: '金库',

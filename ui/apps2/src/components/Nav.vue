@@ -5,14 +5,15 @@
       :show-close="false"
       :visible.sync="showNav">
       <div class="navList">
-        <div class="list login" v-if="!scatter.identity" @click="handleLogin">连接钱包</div>
+        <!-- <div class="list login" v-if="!scatter.identity" @click="handleLogin">连接钱包</div> -->
         <div class="list" @click="handleToTutorial">{{ $t('public.tutorial') }}</div>
         <!-- <div class="list">质押</div> -->
-        <div class="list" @click="handleShowComp('invi')">邀请</div>
+        <div class="list" @click="handleShowComp('invi')">{{ $t('invi.invitation') }}</div>
         <div class="list">
           <span v-if="language !== 'en'" @click="handleChangeLang('en')">EN</span>
           <span v-else @click="handleChangeLang('zh-CN')">CN</span>
         </div>
+        <!-- <div class="list out" v-if="scatter.identity" @click="handleLoginOut">{{ $t('public.loginOut') }}</div> -->
       </div>
     </el-dialog>
   </div>
@@ -21,6 +22,7 @@
 <script>
 import { mapState } from 'vuex'
 import { login } from '@/utils/public';
+import { EosModel } from '@/utils/eos';
 
 export default {
   data() {
@@ -57,6 +59,9 @@ export default {
     handleShowComp(type) {
       this.$emit('listenShowComp', type)
       this.showNav = false;
+    },
+    handleLoginOut() {
+      EosModel.accountLoginOut()
     }
   }
 }
@@ -96,6 +101,9 @@ export default {
       box-sizing: border-box;
       border: 1px solid #E0E0E0;
       border-radius: 8px;
+    }
+    .out{
+      color: #C05D5D;
     }
   }
 }

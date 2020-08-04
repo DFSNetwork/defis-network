@@ -1,38 +1,38 @@
 <template>
   <div class="invi">
     <div class="title flexa">
-      <span class="mr10">成为邀请人</span>
+      <span class="mr10">{{ $t('invi.toInviter') }}</span>
       <el-popover
             class="flexc"
             popper-class="mypopper"
             placement="top-start"
             trigger="click">
-            <div class="qusTip">每当被邀请人通过邀请人链接完成一笔SWAP交易，该笔交易挖矿算力增加5%，其中4%归被邀请人，1%归邀请人。</div>
+            <div class="qusTip">{{ $t('invi.whatIsInviter') }}</div>
             <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
           </el-popover>
     </div>
     <div class="myLink" v-if="link">
-      <div class="subTitle">我的邀请链接</div>
+      <div class="subTitle">{{ $t('invi.myLink') }}</div>
       <div class="linkDiv">
         <span class="link">{{ link }}</span>
         <span class="copy" v-clipboard:copy="link"
           v-clipboard:success="onCopy"
-          v-clipboard:error="onError">复制</span>
+          v-clipboard:error="onError">{{ $t('invi.copy') }}</span>
       </div>
     </div>
     <div class="content" v-loading="loading">
       <div v-if="!link">
-        <div class="bold">方式一</div>
-        <div>消耗100 DFS成为邀请人</div>
-        <div class="btn flexc" @click="handleTransfer('join')">加入</div>
+        <div class="bold">{{ $t('invi.way1') }}</div>
+        <div>{{ $t('invi.way1Tip') }}</div>
+        <div class="btn flexc" @click="handleTransfer('join')">{{ $t('invi.join') }}</div>
       </div>
       <div v-if="!link">
-        <div class="bold">方式二</div>
-        <div>抵押5000DFS成为邀请人，赎回后失去资格</div>
-        <div class="btn flexc" @click="handleTransfer('stake')">抵押</div>
+        <div class="bold">{{ $t('invi.way2') }}</div>
+        <div>{{ $t('invi.way2Tip') }}</div>
+        <div class="btn flexc" @click="handleTransfer('stake')">{{ $t('bank.stake') }}</div>
       </div>
       <div class="btnDiv flexb">
-        <div class="btn redeem flexc" v-if="redeem" @click="handleRedeem()">赎回</div>
+        <div class="btn redeem flexc" v-if="redeem" @click="handleRedeem()">{{ $t('bank.redeem') }}</div>
       </div>
     </div>
   </div>
@@ -199,6 +199,7 @@ export default {
       font-weight: 500;
     }
     .linkDiv{
+      margin-top: 5px;
       .link{
         color: #999;
       }

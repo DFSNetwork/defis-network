@@ -1,8 +1,8 @@
 <template>
   <div class="accLogin flexc">
     <div class="unLogin" v-if="!scatter.identity">
-      <span class="tip">您还未登录账号，请</span>
-      <span class="loginBtn" @click="handleLogin">登录</span>
+      <span class="tip">{{ $t('public.unLogin') }}</span>
+      <span class="loginBtn" @click="handleLogin">{{ $t('public.login') }}</span>
     </div>
     <div class="login flexc" v-else>
       <span class="flexc iconSpan"><img width="100%" src="@/assets/img/dex/user_icon.svg" alt=""></span>
