@@ -602,7 +602,7 @@ export default {
     background: #FFF;
     border-radius: 25px;
     position: relative;
-    padding: 28px 20px;
+    padding: 32px 20px 28px;
   }
   .sym0Data{
     padding: 26px 40px 52px;
