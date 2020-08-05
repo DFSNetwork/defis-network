@@ -6,6 +6,7 @@
       :visible.sync="showNav">
       <div class="navList">
         <!-- <div class="list login" v-if="!scatter.identity" @click="handleLogin">连接钱包</div> -->
+        <div class="list" @click="handleToV1">V1</div>
         <div class="list" @click="handleToTutorial">{{ $t('public.tutorial') }}</div>
         <!-- <div class="list">质押</div> -->
         <div class="list" @click="handleShowComp('invi')">{{ $t('invi.invitation') }}</div>
@@ -23,6 +24,7 @@
 import { mapState } from 'vuex'
 import { login } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
+import { locale } from 'moment';
 
 export default {
   data() {
@@ -47,6 +49,9 @@ export default {
       login(this, () => {
         this.showNav = false;
       })
+    },
+    handleToV1() {
+      location.href = 'https://app2.defis.network/'
     },
     handleToTutorial() {
       if (this.$route.name === 'tutorial')  {
