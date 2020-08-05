@@ -180,10 +180,10 @@ class model {
       this.scatterEosJs = this.scatter.eos(this.network, Eos, this.eosOptions);
 
       this.conserveAccount(item);
-      self.vthis.$message({
-        message: 'Login Success',
-        type: 'success'
-      });
+      // self.vthis.$message({
+      //   message: 'Login Success',
+      //   type: 'success'
+      // });
     }).catch((error) => {
       if (self.vthis.loading) self.vthis.loading = false;
       callback(error);

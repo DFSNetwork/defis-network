@@ -252,7 +252,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    font-size: 12px;
+    font-size: 28px;
     color: #999;
     height: 112px;
     padding: 0 40px;

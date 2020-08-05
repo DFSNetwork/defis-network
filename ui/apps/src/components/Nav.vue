@@ -7,6 +7,7 @@
       :show-close="false"
       :visible.sync="showNav">
       <div class="navList">
+        <div class="list" @click="handleToV2">V2</div>
         <div class="list" @click="handleToTutorial">{{ $t('public.tutorial') }}</div>
         <div class="list" @click="handleShowBonus">{{ $t('bonus.stake') }}</div>
         <div class="list" v-if="false" @click="handleToPoolRules">挖矿规则</div>
@@ -38,6 +39,9 @@ export default {
     })
   },
   methods: {
+    handleToV2() {
+      location.href = 'https://app.defis.network/'
+    },
     handleToPoolRules() {
       this.showNav = false;
       this.$router.push({
