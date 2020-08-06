@@ -241,6 +241,9 @@ export default {
     },
     fees() {
       let fee = accMul(Number(this.payNum), 0.003);
+      if (Number(fee) < Number(accDiv(1, 10 ** this.thisMarket0.decimal))) {
+        fee = 0;
+      }
       return fee
     },
     bestPath() {
@@ -461,7 +464,7 @@ export default {
         thisCoinsPath: this.thisCoinsPath,
         thisMidsPath: this.thisMidsPath,
       }
-      console.log(obj)
+      // console.log(obj)
       return obj
     },
     handleReg() {

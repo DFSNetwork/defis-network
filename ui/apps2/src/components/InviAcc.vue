@@ -47,7 +47,7 @@ export default {
     return {
       link: '',
       redeem: false, // 是否可赎回
-      loading: true,
+      loading: false,
       joinLoading: false,
       stakeLoading: false,
       unstakeLoading: false,
@@ -73,6 +73,7 @@ export default {
   },
   methods: {
     handleGetInviAcc() {
+      this.loading = true;
       const params = {
         "code": "dfsdfsfamily",
         "scope": "dfsdfsfamily",

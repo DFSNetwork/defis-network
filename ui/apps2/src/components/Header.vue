@@ -1,6 +1,6 @@
 <template>
   <div class="header flexb">
-    <div><img class="logo" src="@/assets/img/dex/logo.svg"></div>
+    <div @click="handleToIndex"><img class="logo" src="@/assets/img/dex/logo.svg"></div>
     <div class="tools flexb">
       <span class="create" @click="handleToCreate">{{ $t('dex.addMarket') }}</span>
       <span class="flexc" @click="listenShowTools"><img class="svgIcon" src="@/assets/img/dex/setup_icon.svg" alt=""></span>
@@ -13,6 +13,12 @@
 export default {
   name: 'headerTools',
   methods: {
+    handleToIndex() {
+      if (this.$route.name === 'index') {
+        return
+      }
+      this.$router.push({name: 'index'})
+    },
     handleShowNav() {
       this.$emit('listenShowNav', false)
     },
