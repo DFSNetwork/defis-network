@@ -446,6 +446,7 @@ export default {
           aboutPriceSym0 = toFixed(aboutPriceSym0, this.thisMarket1.decimal)
       let priceRate = accDiv(aboutPriceSym0, res.price);
           priceRate = accSub(1, priceRate)
+          priceRate = Math.abs(priceRate);
           priceRate = accMul(priceRate, 100)
           priceRate = toFixed(priceRate, 2)
       const obj = {
@@ -460,7 +461,7 @@ export default {
         thisCoinsPath: this.thisCoinsPath,
         thisMidsPath: this.thisMidsPath,
       }
-      // console.log(obj)
+      console.log(obj)
       return obj
     },
     handleReg() {
