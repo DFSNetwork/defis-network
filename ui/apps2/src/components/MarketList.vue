@@ -146,10 +146,10 @@ export default {
     handleDealSymArr(lists = []) {
       const resArr = [];
       lists.forEach((v) => {
-        const imgUrl0 = `https://ndi.340wan.com/eos/${v.sym0Data.contract}-${v.sym0Data.symbol.toLowerCase()}.png`;
-        v.sym0Data.imgUrl = imgUrl0;
-        const imgUrl1 = `https://ndi.340wan.com/eos/${v.sym1Data.contract}-${v.sym1Data.symbol.toLowerCase()}.png`;
-        v.sym1Data.imgUrl = imgUrl1;
+        // const imgUrl0 = `https://ndi.340wan.com/eos/${v.sym0Data.contract}-${v.sym0Data.symbol.toLowerCase()}.png`;
+        // v.sym0Data.imgUrl = imgUrl0;
+        // const imgUrl1 = `https://ndi.340wan.com/eos/${v.sym1Data.contract}-${v.sym1Data.symbol.toLowerCase()}.png`;
+        // v.sym1Data.imgUrl = imgUrl1;
         resArr.push(v.sym0Data, v.sym1Data)
       })
       // 删除重复项

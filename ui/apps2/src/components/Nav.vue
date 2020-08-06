@@ -24,7 +24,6 @@
 import { mapState } from 'vuex'
 import { login } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
-import { locale } from 'moment';
 
 export default {
   data() {

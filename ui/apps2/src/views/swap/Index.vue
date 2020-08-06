@@ -141,7 +141,7 @@
       <div class="flexw">
         <span v-for="(item, i) in routePath" :key="i" class="flexc coin">
           <img class="coinUrl" :onerror="errorCoinImg"
-            :src="`https://ndi.340wan.com/eos/${item.toLowerCase().replace(':', '-')}.png`">
+            :src="handleDealRouteImg(item)">
           <span>{{ item.split(':')[1] }}</span>
           <span v-if="routePath.length - 1 !== i" class="el-icon-arrow-right"></span>
         </span>
@@ -317,6 +317,15 @@ export default {
     clearInterval(this.timer)
   },
   methods: {
+    handleDealRouteImg(item) {
+      const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
+      const inData = item.toLowerCase().replace(':', '-')
+      const has = localeCoin.find(v => v === inData)
+      if (has) {
+        return `/static/coin/${has}.svg`;
+      }
+      return `https://ndi.340wan.com/eos/${inData}.png`
+    },
     handleClickBalan(type) {
       if (type === 'pay') {
         this.payNum = this.balanceSym0;
@@ -529,6 +538,8 @@ export default {
       const b = this.balanceSym0;
       this.balanceSym0 = this.balanceSym1;
       this.balanceSym1 = b;
+      console.log(this.thisMarket0)
+      console.log(this.thisMarket1)
       this.handleInBy(this.tradeInfo.type, 'first')
     },
     handleFocus(type = 'pay') {

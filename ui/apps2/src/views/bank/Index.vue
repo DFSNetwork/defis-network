@@ -108,13 +108,13 @@ export default {
       thisMarket0: {
         symbol: 'EOS',
         contract: 'eosio.token',
-        imgUrl: 'https://ndi.340wan.com/eos/eosio.token-eos.png',
+        imgUrl: '/static/coin/eosio.token-eos.svg',
         decimal: 4,
       },
       thisMarket1: {
         symbol: 'USDD',
         contract: 'bankofusddv1',
-        imgUrl: 'https://ndi.340wan.com/eos/bankofusddv1-usdd.png',
+        imgUrl: '/static/coin/bankofusddv1-usdd.svg',
         decimal: 4,
       },
       exRate: false,
@@ -128,13 +128,13 @@ export default {
         {
           symbol: 'EOS',
           contract: 'eosio.token',
-          imgUrl: 'https://ndi.340wan.com/eos/eosio.token-eos.png',
+          imgUrl: '/static/coin/eosio.token-eos.svg',
           decimal: 4
         },
         {
           symbol: 'USDD',
           contract: 'bankofusddv1',
-          imgUrl: 'https://ndi.340wan.com/eos/bankofusddv1-usdd.png',
+          imgUrl: '/static/coin/bankofusddv1-usdd.svg',
           decimal: 4
         },
         {

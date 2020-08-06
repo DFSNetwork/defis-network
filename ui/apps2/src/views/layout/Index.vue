@@ -79,6 +79,15 @@ export default {
         this.handleRowsMarket();
       }, 5000);
     },
+    handleDealCoinImg(contract, coin) {
+      const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
+      const inData = `${contract}-${coin.toLowerCase()}`
+      const has = localeCoin.find(v => v === inData)
+      if (has) {
+        return `/static/coin/${has}.svg`;
+      }
+      return `https://ndi.340wan.com/eos/${inData}.png`
+    },
     // 获取做市池子
     handleRowsMarket() {
       const params = {
@@ -109,7 +118,7 @@ export default {
             reserve: v.reserve0,
             sym: v.sym0,
             symbol: v.symbol0,
-            imgUrl: `https://ndi.340wan.com/eos/${v.contract0}-${v.symbol0.toLowerCase()}.png`,
+            imgUrl: this.handleDealCoinImg(v.contract0, v.symbol0.toLowerCase()),
           }
           v.sym1Data = {
             mid: v.mid,
@@ -122,7 +131,7 @@ export default {
             reserve: v.reserve1,
             sym: v.sym1,
             symbol: v.symbol1,
-            imgUrl: `https://ndi.340wan.com/eos/${v.contract1}-${v.symbol1.toLowerCase()}.png`,
+            imgUrl: this.handleDealCoinImg(v.contract1, v.symbol1.toLowerCase()),
           }
           const i = this.topLists.find(vv => vv === v.mid)
           if (i) {

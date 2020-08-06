@@ -24,15 +24,16 @@
       <div v-if="!link">
         <div class="bold">{{ $t('invi.way1') }}</div>
         <div>{{ $t('invi.way1Tip') }}</div>
-        <div class="btn flexc" @click="handleTransfer('join')">{{ $t('invi.join') }}</div>
+        <div class="btn flexc" v-loading="joinLoading" @click="handleTransfer('join')">{{ $t('invi.join') }}</div>
       </div>
       <div v-if="!link">
         <div class="bold">{{ $t('invi.way2') }}</div>
         <div>{{ $t('invi.way2Tip') }}</div>
-        <div class="btn flexc" @click="handleTransfer('stake')">{{ $t('bank.stake') }}</div>
+        <div class="btn flexc" v-loading="stakeLoading"  @click="handleTransfer('stake')">{{ $t('bank.stake') }}</div>
       </div>
       <div class="btnDiv flexb">
-        <div class="btn redeem flexc" v-if="redeem" @click="handleRedeem()">{{ $t('bank.redeem') }}</div>
+        <div class="btn redeem flexc" v-if="redeem" v-loading="unstakeLoading"
+          @click="handleRedeem()">{{ $t('bank.redeem') }}</div>
       </div>
     </div>
   </div>
@@ -47,6 +48,9 @@ export default {
       link: '',
       redeem: false, // 是否可赎回
       loading: true,
+      joinLoading: false,
+      stakeLoading: false,
+      unstakeLoading: false,
     }
   },
   computed: {
@@ -117,6 +121,7 @@ export default {
       this.$message.error(this.$t('Copy Error'));
     },
     handleRedeem() {
+      this.unstakeLoading = true;
       // cleos push action dfsdfsfamily unstake '["joetothemoon"]' -p joetothemoon
       const formName = this.$store.state.app.scatter.identity.accounts[0].name;
       const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
@@ -136,6 +141,7 @@ export default {
         ]
       }
       EosModel.toTransaction(params, (res) => {
+        this.unstakeLoading = false;
         if(res.code) {
           this.$message({
             message: res.message,
@@ -146,6 +152,17 @@ export default {
       })
     },
     handleTransfer(type) {
+      if (type === 'stake') {
+        if (this.stakeLoading) {
+          return
+        }
+        this.stakeLoading = true;
+      } else {
+        if (this.joinLoading) {
+          return
+        }
+        this.joinLoading = true
+      }
       const params = {
         code: 'minedfstoken',
         toAccount: 'dfsdfsfamily',
@@ -154,9 +171,10 @@ export default {
       }
       if (type === 'stake') { // 抵押DFS生成推荐码 - 赎回后销毁推荐码
         params.memo = type;
-        params.quantity = '5000.0000 DFS'
+        params.quantity = '5000.0000 DFS';
       }
       EosModel.transfer(params, (res) => {
+        type === 'stake' ? this.stakeLoading = false : this.joinLoading = false;
         if(res.code) {
           this.$message({
             message: res.message,

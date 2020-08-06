@@ -29,7 +29,8 @@
           </div>
         </div>
         <div class="exchange">
-          <div class="border flexc" :class="{'payFocus': ipt1Focus, 'getFocus': ipt2Focus}">
+          <div class="border flexc" :class="{'payFocus': ipt1Focus, 'getFocus': ipt2Focus}"
+            @click="handleAddToken">
             <img class="iconImg" src="@/assets/img/market/switch_add.svg">
           </div>
         </div>
@@ -149,7 +150,19 @@ export default {
       exRate: false,
       tokenFocus: false,
       timer: null,
-      thisMarket: {mid: 7,symbol0: 'EOS', symbol1: 'USDD'},
+      thisMarket: {
+        mid: 7,
+        symbol0: 'EOS',
+        contract0: 'eosio.token',
+        symbol1: 'USDD',
+        contract1: 'bankofusddv1',
+        sym0Data:{
+          imgUrl: '/static/coin/eosio.token-eos.svg'
+        },
+        sym1Data:{
+          imgUrl: '/static/coin/bankofusddv1-usdd.svg'
+        }
+      },
       sellToken: '',
       getNum1: '0.0000',
       getNum2: '0.0000',
@@ -184,7 +197,7 @@ export default {
           this.thisMarket.mid = this.$route.params.mid || 7;
         }
         this.first = false;
-        const thisMarket = newVal.find(v => v.mid === this.thisMarket.mid) || newVal[0];
+        const thisMarket = newVal.find(v => v.mid === Number(this.thisMarket.mid)) || newVal[0];
         const reserve0 = thisMarket.reserve0.split(' ')[0];
         const reserve1 = thisMarket.reserve1.split(' ')[0];
         thisMarket.sym0Rate = toFixed(accDiv(reserve1, reserve0), thisMarket.decimal0)
@@ -313,9 +326,20 @@ export default {
     handleGetCoinImg(type = 'sym0') {
       const market = this.thisMarket;
       if (type === 'sym0') {
-        return `https://ndi.340wan.com/eos/${market.contract0}-${market.symbol0.toLowerCase()}.png`
+        return market.sym0Data.imgUrl;
       }
-      return `https://ndi.340wan.com/eos/${market.contract1}-${market.symbol1.toLowerCase()}.png`
+      return market.sym1Data.imgUrl;
+      // const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
+      // const market = this.thisMarket;
+      // let inData = `${market.contract0}-${market.symbol0.toLowerCase()}`
+      // if (type !== 'sym0') {
+      //   inData = `${market.contract1}-${market.symbol1.toLowerCase()}`
+      // }
+      // const has = localeCoin.find(v => v === inData)
+      // if (has) {
+      //   return `/static/coin/${has}.svg`;
+      // }
+      // return `https://ndi.340wan.com/eos/${inData}.png`
     },
     regInit() {
       if (this.scatter.identity && this.marketLists.length) {
