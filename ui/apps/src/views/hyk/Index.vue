@@ -274,7 +274,7 @@ export default {
         quantity: `${this.payNum} EOS`
       }
       EosModel.transfer(params, (res) => {
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'
@@ -297,7 +297,7 @@ export default {
         quantity: `${this.payNum2} EOS`
       }
       EosModel.transfer(params, (res) => {
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'

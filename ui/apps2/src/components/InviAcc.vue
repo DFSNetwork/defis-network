@@ -142,7 +142,7 @@ export default {
       }
       EosModel.toTransaction(params, (res) => {
         this.unstakeLoading = false;
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'
@@ -175,7 +175,7 @@ export default {
       }
       EosModel.transfer(params, (res) => {
         type === 'stake' ? this.stakeLoading = false : this.joinLoading = false;
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'

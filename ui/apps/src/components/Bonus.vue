@@ -325,7 +325,7 @@ export default {
         ]
       }
       EosModel.toTransaction(params, (res) => {
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'
@@ -367,7 +367,7 @@ export default {
         ]
       }
       EosModel.toTransaction(params, (res) => {
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'
@@ -399,7 +399,7 @@ export default {
         ]
       }
       EosModel.toTransaction(params, (res) => {
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'
@@ -446,7 +446,7 @@ export default {
         ]
       }
       EosModel.toTransaction(params, (res) => {
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'

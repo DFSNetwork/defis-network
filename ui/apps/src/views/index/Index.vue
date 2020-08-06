@@ -255,7 +255,7 @@ export default {
         quantity: item.issue
       }
       EosModel.transfer(params, (res) => {
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'
@@ -278,7 +278,7 @@ export default {
         id: item.id,
       }
       EosModel.stake(params, (res) => {
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'
@@ -339,7 +339,7 @@ export default {
         quantity: `${this.stakeNum} ${this.baseConfig.baseCoin}`
       }
       EosModel.transfer(params, (res) => {
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'

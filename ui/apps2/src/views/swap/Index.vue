@@ -510,7 +510,7 @@ export default {
       // console.log(params)
       EosModel.transfer(params, (res) => {
         this.loading = false;
-        if(res.code) {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
             type: 'error'
