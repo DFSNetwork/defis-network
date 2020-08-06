@@ -96,8 +96,8 @@ export default {
     token: 'Certificate',
     ableToken: 'Available certificate',
     chooseMarket: 'Select market',
-    // add
-    accRate: ' Your liquidity(Proportion {rate}%)'
+    accRate: ' Your liquidity(Proportion {rate}%)',
+    searchMarket: 'Search market name',
   },
   hyk: {
     stock: 'Dividends Pool',

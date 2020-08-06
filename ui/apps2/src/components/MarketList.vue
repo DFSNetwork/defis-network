@@ -1,11 +1,11 @@
 <template>
   <div class="marketList">
     <div class="header flexb">
-      <span>选择市场</span>
+      <span>{{ $t('pools.chooseMarket') }}</span>
       <img class="closeSvg" @click="handleClose" src="@/assets/img/dialog/sd_icon_btn.svg" alt="">
     </div>
     <div class="iptSearch" :class="{'other': type === 'other'}">
-      <el-input v-model="search" placeholder="搜索市场名称.."></el-input>
+      <el-input v-model="search" :placeholder="`${$t('pools.searchMarket')}..`"></el-input>
     </div>
     <div class="scroll" v-if="type === 'other'">
       <template v-for="(item, i) in searchArr">
