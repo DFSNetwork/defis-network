@@ -158,45 +158,30 @@ void token::close(const name &owner, const symbol &symbol)
    acnts.erase(it);
 }
 
-void token::mine(const name &to, const asset &quantity)
+void token::mine(const name &to, const asset &quantity, const string &memo)
 {
-   return;
    require_auth(MINING_CONTRACT);
 
-   int64_t expected = get_expected_supply();
-   asset current_supply = token::get_supply(get_self(), symbol_code("DFS"));
-   asset expected_supply = asset(expected, symbol("DFS", 4));
-   if (current_supply < expected_supply)
-   {
-      asset block_subsidy = expected_supply - current_supply;
-      action{permission_level{get_self(), "active"_n}, get_self(), "issue"_n,
-             make_tuple(get_self(), block_subsidy, string("Issue DFS"))}
-          .send();
-      
-      block_subsidy = block_subsidy / 5;
-      action{permission_level{get_self(), "active"_n}, get_self(), "transfer"_n,
-             make_tuple(get_self(), "difesteam111"_n, block_subsidy, string("Issue to team"))}
-          .send();
-   }
+   if (current_time_point().sec_since_epoch() < GENESIS_BLOCK)
+      return;
 
-   asset balance = token::get_balance(get_self(), get_self(), symbol_code("DFS"));
-   double n = quantity.amount / 10000.0;
-   balance.amount -= balance.amount * pow(0.9999, n);
-   if (balance.amount > 0)
-   {
-      action{permission_level{get_self(), "active"_n}, get_self(), "transfer"_n,
-             make_tuple(get_self(), to, balance, string("Mining reward"))}
-          .send();
-   }
-}
+   asset current_supply = token::get_supply(get_self(), DFS_SYMBOL.code());
+   asset max_supply = asset(MAXIMUM_SUPPLY, DFS_SYMBOL);
+   asset subsidy = quantity;
 
-uint64_t token::get_expected_supply()
-{
-   uint32_t now = current_time_point().sec_since_epoch();
-   if (now <= GENESIS_BLOCK)
-      return 0;
-   uint64_t supply = (now - GENESIS_BLOCK) * 100000;
-   if (supply > MAX_SUPPLY)
-      supply = MAX_SUPPLY;
-   return supply;
+   if ((current_supply + quantity) > max_supply)
+      subsidy = max_supply - current_supply;
+
+   if (subsidy.amount <= 0)
+      return;
+
+   SEND_INLINE_ACTION(*this, issue, {_self, name("active")}, {_self, subsidy, memo});
+   asset saving_pool = subsidy / 5;
+   if (saving_pool.amount > 0)
+   {
+      string saving_memo = string("Send to DSR saving pool.");
+      subsidy -= saving_pool;
+      SEND_INLINE_ACTION(*this, transfer, {_self, name("active")}, {_self, DSR_SAVING_POOL, saving_pool, saving_memo});
+   }
+   SEND_INLINE_ACTION(*this, transfer, {_self, name("active")}, {_self, to, subsidy, memo});
 }

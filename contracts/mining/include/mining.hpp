@@ -15,10 +15,11 @@ class [[eosio::contract("mining")]] token : public contract
 public:
    using contract::contract;
 
-   static constexpr name MINING_CONTRACT{"defisswapcnt"_n};
-
-   static constexpr uint64_t MAX_SUPPLY = 100000 * 100000000ll; // 1 billion  
-   static constexpr uint64_t GENESIS_BLOCK = 1595228400;       // UTC: 2020-07-20T07:00:00 
+   static constexpr name MINING_CONTRACT{"miningpool11"_n};
+   static constexpr name DSR_SAVING_POOL{"dfsavingpool"_n};
+   static constexpr symbol DFS_SYMBOL = symbol(symbol_code("DFS"), 4);
+   static constexpr uint64_t MAXIMUM_SUPPLY = 1000000ll * 10 * 10000; // 10 million
+   static constexpr uint64_t GENESIS_BLOCK = 1597233600;              // UTC: 2020-08-12T12:00:00
 
    /**
     * Create action.
@@ -116,7 +117,7 @@ public:
     * @param to - the account to recive token.
     */
    [[eosio::action]] 
-   void mine(const name &to, const asset &quantity);
+   void mine(const name &to, const asset &quantity, const string &memo);
 
    /**
     * Get supply method.
@@ -180,5 +181,4 @@ private:
 
    void sub_balance(const name &owner, const asset &value);
    void add_balance(const name &owner, const asset &value, const name &ram_payer);
-   uint64_t get_expected_supply();
 };
