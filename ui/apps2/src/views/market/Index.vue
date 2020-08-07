@@ -97,6 +97,8 @@
       </div>
     </div>
 
+    <weight :token="token" :thisMarket="thisMarket"/>
+
     <div class="liquidity" v-if="act === 1">
       <div class="subTitle">{{ $t('dex.poolNum') }}</div>
       <div class="num">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>
@@ -130,10 +132,12 @@ import MarketList from '@/components/MarketList';
 import { toFixed, accAdd, accDiv, accMul } from '@/utils/public';
 import { dealToken, sellToken } from '@/utils/logic';
 import Tabs from '../index/components/Tabs';
+import Weight from './comp/Weight';
 export default {
   components: {
     Tabs,
     MarketList,
+    Weight,
   },
   data() {
     return {
@@ -503,7 +507,7 @@ export default {
       }
       EosModel.getTableRows(params, (res) => {
         const list = res.rows || [];
-        !list[0] ? this.token = 0 : this.token = list[0].token;
+        !list[0] ? this.token = '0' : this.token = list[0].token;
       })
     },
     handleRegSell() {
