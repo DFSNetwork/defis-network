@@ -14,7 +14,7 @@
           <span v-if="language !== 'en'" @click="handleChangeLang('en')">EN</span>
           <span v-else @click="handleChangeLang('zh-CN')">CN</span>
         </div>
-        <!-- <div class="list out" v-if="scatter.identity" @click="handleLoginOut">{{ $t('public.loginOut') }}</div> -->
+        <div class="list out" v-if="scatter.identity" @click="handleLoginOut">{{ $t('public.loginOut') }}</div>
       </div>
     </el-dialog>
   </div>
@@ -65,7 +65,9 @@ export default {
       this.showNav = false;
     },
     handleLoginOut() {
-      EosModel.accountLoginOut()
+      EosModel.accountLoginOut(() => {
+        location.reload()
+      })
     }
   }
 }
