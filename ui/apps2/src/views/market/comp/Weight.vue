@@ -3,8 +3,8 @@
     <div class="noPools" v-if="showAddPools">
       <div class="flexb">
         <div class="flexa">
-          <img width="20px" src="@/assets/img/market/pow.jpg" alt="">
-          <span>当前权重： {{ weight }}</span>
+          <!-- <img width="20px" src="@/assets/img/market/pow.jpg" alt=""> -->
+          <span v-if="Number(buff)">挖矿算力加成： {{ buff }}%</span>
         </div>
         <div class="green" v-if="Number(token) && !Number(minnerData.liq)" @click="handleJoin">加入</div>
       </div>
@@ -22,7 +22,7 @@
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
 import { mapState } from 'vuex';
-import { toFixed, toLocalTime } from '@/utils/public';
+import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, accPow } from '@/utils/public';
 
 export default {
   data() {
@@ -65,6 +65,14 @@ export default {
         return true;
       }
       return false
+    },
+    buff() {
+      let t = accSub(this.weight, 1);
+      t = accMul(t, 100);
+      if (Number(t) < 0) {
+        return '0.00'
+      }
+      return toFixed(t, 2)
     }
   },
   watch: {
@@ -145,10 +153,10 @@ export default {
         code: 'miningpool11',
         scope: id,
         table: 'miners',
-        lower_bound: ` dfsdeveloper`,
-        upper_bound: ` dfsdeveloper`,
-        // lower_bound: ` ${formName}`,
-        // upper_bound: ` ${formName}`,
+        // lower_bound: ` dfsdeveloper`,
+        // upper_bound: ` dfsdeveloper`,
+        lower_bound: ` ${formName}`,
+        upper_bound: ` ${formName}`,
         json: true,
       }
       EosModel.getTableRows(params, (res) => {
