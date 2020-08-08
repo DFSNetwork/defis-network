@@ -10,6 +10,11 @@ ACTION staking::unstake(name user, asset quantity)
       s.bal -= quantity;
    });
 
+   if (itr->bal.amount == 0)
+   {
+      _stakes.erase(itr);
+   }
+
    // refunds _refunds(get_self(), user.value);
    // _refunds.emplace(user, [&](auto &s) {
    //    s.id = _refunds.available_primary_key();
@@ -61,10 +66,10 @@ void staking::stake(name from, name to, asset quantity, std::string memo)
       });
    }
 
-   action{
-       permission_level{get_self(), "active"_n},
-       name("defidividend"),
-       "update"_n,
-       std::make_tuple(from, quantity)}
-       .send();
+   // action{
+   //     permission_level{get_self(), "active"_n},
+   //     name("defidividend"),
+   //     "update"_n,
+   //     std::make_tuple(from, quantity)}
+   //     .send();
 }
