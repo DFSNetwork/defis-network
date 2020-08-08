@@ -542,8 +542,8 @@ export default {
       const b = this.balanceSym0;
       this.balanceSym0 = this.balanceSym1;
       this.balanceSym1 = b;
-      console.log(this.thisMarket0)
-      console.log(this.thisMarket1)
+      // console.log(this.thisMarket0)
+      // console.log(this.thisMarket1)
       this.handleInBy(this.tradeInfo.type, 'first')
     },
     handleFocus(type = 'pay') {

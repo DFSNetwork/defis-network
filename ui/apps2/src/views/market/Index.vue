@@ -97,7 +97,7 @@
       </div>
     </div>
 
-    <weight :token="token" :thisMarket="thisMarket"/>
+    <weight v-if="Number(weight)" :token="token" :thisMarket="thisMarket"/>
 
     <div class="liquidity" v-if="act === 1">
       <div class="subTitle">{{ $t('dex.poolNum') }}</div>
@@ -174,6 +174,7 @@ export default {
       showMarketList: false,
       first: true,
       loading: false,
+      weight: 0,
     }
   },
   props: {
@@ -189,6 +190,7 @@ export default {
       scatter: state => state.app.scatter,
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
+      weightList: state => state.sys.weightList, // 交易对权重列表
     }),
   },
   watch: {
@@ -222,7 +224,17 @@ export default {
       deep: true,
       immediate: true,
     },
+    weightList: {
+      handler: function wl() {
+        const weightData = this.weightList.find(v => v.mid === this.thisMarket.mid) || {};
+        this.weight = weightData.pool_weight || 0;
+      },
+      deep: true,
+      immediate: true
+    },
     thisMarket() {
+      const weightData = this.weightList.find(v => v.mid === this.thisMarket.mid) || {};
+      this.weight = weightData.pool_weight || 0;
       this.handleGetAccToken();
       this.handleBalanTimer()
     },
@@ -507,7 +519,7 @@ export default {
       }
       EosModel.getTableRows(params, (res) => {
         const list = res.rows || [];
-        !list[0] ? this.token = '0' : this.token = list[0].token;
+        !list[0] ? this.token = '0' : this.token = `${list[0].token}`;
       })
     },
     handleRegSell() {

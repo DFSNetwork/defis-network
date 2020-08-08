@@ -41,6 +41,17 @@ export function accDiv(arg1, arg2) {
   return new Decimal(arg1).div(new Decimal(arg2)).toNumber();
 }
 
+/*
+ ** 指数函数，用来得到精确的指数结果
+ ** 返回值：Math.pow(arg1, arg2)的精确结果 Number 型
+*/
+export function accPow(arg1, arg2) {
+  if (!arg1 || !arg2) {
+    return 0
+  }
+  return new Decimal(arg1).pow(new Decimal(arg2)).toNumber();
+}
+
 // 登录
 export function login(vThis, cb) {
   EosModel.scatterInit(vThis, () => {
