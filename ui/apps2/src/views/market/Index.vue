@@ -232,7 +232,10 @@ export default {
       deep: true,
       immediate: true
     },
-    thisMarket() {
+    thisMarket(newVal, oldVal) {
+      if (newVal.mid === oldVal.mid) {
+        return
+      }
       const weightData = this.weightList.find(v => v.mid === this.thisMarket.mid) || {};
       this.weight = weightData.pool_weight || 0;
       this.handleGetAccToken();

@@ -27,8 +27,8 @@ import { toFixed, toLocalTime } from '@/utils/public';
 export default {
   data() {
     return {
-      weight: 1.10000000000000009,
-      price: '0.2427',
+      weight: 1,
+      price: '0',
       minnerData: {},
       cliamNum: '0.00000000',
       reward: '0.0000',
@@ -37,6 +37,18 @@ export default {
       dealTimer: null, // 定时器 - 每秒重新计算收益
       addTimer: null, // 定时器 - 收益数字滚动累加
       priceTimer: null, // 价格定时器 - 5分钟执行一次
+    }
+  },
+  props: {
+    token: {
+      type: String,
+      default: '0'
+    },
+    thisMarket: {
+      type: Object,
+      default: function tmt() {
+        return {}
+      }
     }
   },
   computed: {
@@ -63,7 +75,6 @@ export default {
         }
       },
       deep: true,
-      immediate: true,
     },
     weightList: {
       handler: function wl(newVal) {
@@ -72,30 +83,17 @@ export default {
         }
         this.handleGetData();
       },
-      immediate: true,
       deep: true,
     },
     thisMarket: {
-      handler: function tm(newVal) {
-        if (!newVal) {
+      handler: function tm(newVal, oldVal = {}) {
+        if (newVal.mid === oldVal.mid) {
           return;
         }
         this.handleGetData();
       },
       immediate: true,
       deep: true,
-    }
-  },
-  props: {
-    token: {
-      type: String,
-      default: '0'
-    },
-    thisMarket: {
-      type: Object,
-      default: function tmt() {
-        return {}
-      }
     }
   },
   mounted() {
@@ -114,9 +112,11 @@ export default {
     handleGetData() {
       const weightData = this.weightList.find(v => v.mid === this.thisMarket.mid) || {};
       this.weight = weightData.pool_weight || 0;
-      if (!Number(this.token)) {
-        this.handleGetMiners(this.thisMarket.mid);
+      if (!Number(this.weight) || !Number(this.price)) {
+        return
       }
+      this.handleGetMinNum('perDay')
+      this.handleGetMiners(this.thisMarket.mid);
     },
     handleStartAdd(reward) {
       // console.log(reward)
@@ -145,8 +145,10 @@ export default {
         code: 'miningpool11',
         scope: id,
         table: 'miners',
-        lower_bound: ` ${formName}`,
-        upper_bound: ` ${formName}`,
+        lower_bound: ` dfsdeveloper`,
+        upper_bound: ` dfsdeveloper`,
+        // lower_bound: ` ${formName}`,
+        // upper_bound: ` ${formName}`,
         json: true,
       }
       EosModel.getTableRows(params, (res) => {
@@ -155,6 +157,7 @@ export default {
           this.minnerData = {};
           clearInterval(this.addTimer)
           clearInterval(this.dealTimer)
+          this.handleGetMinNum('perDay')
           return
         }
         const minnerData = rows[0];
@@ -164,6 +167,7 @@ export default {
         const liq = this.thisMarket.symbol0 === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
         minnerData.liq = liq;
         this.minnerData = minnerData;
+        this.handleGetMinNum()
         clearInterval(this.dealTimer)
         this.dealTimer = setInterval(() => {
           this.handleGetMinNum()
@@ -171,10 +175,22 @@ export default {
       })
     },
     // 计算挖矿数量
-    handleGetMinNum() {
+    handleGetMinNum(status) {
       try {
-        const type = this.minnerData.lastTime < this.aprs.lastTime; // 用户时间 < 系统时间
         let minNum = 0;
+        if (status === 'perDay') {
+          // 每万EOS一天 
+          const t = 86400;
+          minNum = 10000 * Math.pow(this.aprs.aprs, t)
+          minNum -= 10000;
+          let reward = minNum / this.price * this.damping * this.weight
+          reward *= 0.8
+          reward = toFixed(reward, 4)
+          this.perDayReward = reward;
+          return
+        }
+        // 用户实际数据计算
+        const type = this.minnerData.lastTime < this.aprs.lastTime; // 用户时间 < 系统时间
         if (type) {
           let t = moment().valueOf() - this.aprs.lastTime;
           t = t / 1000;
@@ -185,7 +201,7 @@ export default {
           minNum = this.minnerData.liq * Math.pow(this.aprs.aprs, t)
         }
         minNum = minNum - this.minnerData.liq;
-        let reward = minNum / (this.price * this.damping * this.weight)
+        let reward = minNum / this.price * this.damping * this.weight
         reward *= 0.8
         reward = toFixed(reward, 8)
         this.handleStartAdd(reward)
@@ -209,6 +225,7 @@ export default {
         }
         const price = rows.find(v => v.key === 300) || {};
         this.price = price.price1_avg_price / 10000 || 0;
+        this.handleGetData();
       })
     },
     handleJoin() {
