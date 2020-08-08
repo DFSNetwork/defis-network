@@ -1,14 +1,16 @@
 <template>
   <div class="weight">
     <div class="noPools" v-if="showAddPools">
-      <div class="flexb">
+      <div class="flexb mb10" v-if="Number(buff)">
         <div class="flexa">
-          <!-- <img width="20px" src="@/assets/img/market/pow.jpg" alt=""> -->
-          <span v-if="Number(buff)">挖矿算力加成： {{ buff }}%</span>
+          <span>挖矿算力加成： {{ buff }}%</span>
         </div>
-        <div class="green" v-if="Number(token) && !Number(minnerData.liq)" @click="handleJoin">加入</div>
+        <div class="green" v-if="Number(token) && !Number(minnerData.liq)" @click="handleJoin">立即加入</div>
       </div>
-      <div class="tip" style="margin-top: 10px">当前交易对可以进行流动性挖矿。预计每万EOS每天收益 {{perDayReward}} DFS</div>
+      <div class="tip">
+        <span>当前交易对可以进行流动性挖矿。预计每万EOS每天收益 {{perDayReward}} DFS。存入资金，可自动开始挖矿。</span>
+        <span class="green" v-if="!Number(buff)">立即加入></span>
+      </div>
     </div>
     
     <div class="hasPools flexb" v-else>
@@ -70,9 +72,9 @@ export default {
       let t = accSub(this.weight, 1);
       t = accMul(t, 100);
       if (Number(t) < 0) {
-        return '0.00'
+        return '0'
       }
-      return toFixed(t, 2)
+      return t.toFixed(0)
     }
   },
   watch: {
@@ -319,7 +321,12 @@ export default {
   border: 1px solid #e0e0e0;
   border-radius: 20px;
 
+  .mb10{
+    margin-bottom: 10px;
+  }
+
   .green{
+    margin-left: 20px;
     color: #07D79B;
   }
 }
