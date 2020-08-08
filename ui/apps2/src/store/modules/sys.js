@@ -68,7 +68,7 @@ const sys = {
       baseCoinContract: 'eosio.token',
       teamFunds: 'jinteamfunds', // 资金账户
     },
-    weightList: localStorage.getItem('weightList') ? JSON.parse(localStorage.getItem('weightList')) : {}, // 挖矿权重列表
+    weightList: localStorage.getItem('weightList') ? JSON.parse(localStorage.getItem('weightList')) : [], // 挖矿权重列表
     aprs: localStorage.getItem('aprs') ? JSON.parse(localStorage.getItem('aprs')) : {}, // 全局aprs
     damping: localStorage.getItem('damping') || 0.75, // DFS流通量计算得出 - Math.pow(0.75, parseInt(dfsCurrent / 1000000))
   },

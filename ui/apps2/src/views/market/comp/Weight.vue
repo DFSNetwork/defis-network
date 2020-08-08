@@ -31,7 +31,7 @@ export default {
       price: '0.2427',
       minnerData: {},
       cliamNum: '0.00000000',
-      reward: '1.0000',
+      reward: '0.0000',
       perDayReward: '0.0000',
       changeReWard: '0.0000',
       dealTimer: null, // 定时器 - 每秒重新计算收益
@@ -273,6 +273,9 @@ export default {
           });
           return
         }
+        this.changeReWard = toFixed(0, 8);
+        this.reward = 0;
+        this.handleGetMiners(this.thisMarket.mid);
         this.$message({
           message: this.$t('public.success'),
           type: 'success'
