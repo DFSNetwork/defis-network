@@ -26,11 +26,7 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showReWardTip">
-      <div class="minReward">
-        <div class="title">最小可领取</div>
-        <div class="mb10">由于币种精度限制，领取小于{{ minReward }}的DFS将不会有奖励到账。</div>
-        <div>奖励的小数掉后四位将被截取。</div>
-      </div>
+      <MinReward :minReward="minReward"/>
     </el-dialog>
   </div>
 </template>
@@ -40,8 +36,13 @@ import { EosModel } from '@/utils/eos';
 import moment from 'moment';
 import { mapState } from 'vuex';
 import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, accPow } from '@/utils/public';
+import MinReward from '../popup/MinReward'
 
 export default {
+  name: 'Weight',
+  components: {
+    MinReward
+  },
   data() {
     return {
       weight: 1,
@@ -387,17 +388,6 @@ export default {
   }
 }
 .myDialog{
-  .minReward{
-    padding: 40px;
-    font-size: 28px;
-    color: #333;
-    .title{
-      color: #000;
-      text-align: center;
-      font-size: 30px;
-      margin-bottom: 20px;
-    }
-  }
   /deep/ .el-dialog{
     position: relative;
     margin: auto;

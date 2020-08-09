@@ -4,31 +4,36 @@
       <div class="title"><span class="act">我的挖矿</span></div>
       <div class="data">
         <div class="flexb">
-          <span>收益：0.00000000 DFS <span class="addition">算力加成：50%</span></span>
-          <span class="green">加入</span>
+          <span>
+            <span>收益：{{ accMineData.showReward || '0.00000000' }} DFS </span>
+            <span v-if="Number(buff)" class="addition">算力加成：{{ buff }}%</span>
+          </span>
+          <span v-if="!Number(accMineData.liq) && getAccData" class="green" @click="handleJoin(thisMarket)">加入</span>
+          <span v-if="Number(accMineData.liq)" class="green" v-loading="claimLoading"
+            @click="handleClaim(thisMarket)">领取</span>
         </div>
         <div class="myMarket">
           <span>您的做市: </span>
-          <span>238.9999 EOS / 10000.0000 DFS</span>
+          <span>{{ accMineData.liq_bal0 || `0.0000 ${thisMarket.symbol0}` }} / {{ accMineData.liq_bal1 || `0.0000 ${thisMarket.symbol1}`}}</span>
         </div>
         <div class="myMarket">
           <span>流动池数量: </span>
-          <span>23800.9999 EOS / 1000000.0000 DFS</span>
+          <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
         </div>
         <div class="symbol flexb">
           <div class="coinInfo flex">
-            <div class="coinImg"><img width="100%" src="https://ndi.340wan.com/eos/eosio.token-eos.png"></div>
+            <div class="coinImg"><img width="100%" :src="thisMarket.sym0Data.imgUrl"></div>
             <div>
-              <div class="coin">EOS</div>
-              <div class="contract tip">eosio.token</div>
+              <div class="coin">{{ thisMarket.symbol0 }}</div>
+              <div class="contract tip">{{ thisMarket.contract0 }}</div>
             </div>
           </div>
           <div class="add">+</div>
           <div class="coinInfo flex">
-            <div class="coinImg"><img width="100%" src="https://ndi.340wan.com/eos/tethertether-usdt.png"></div>
+            <div class="coinImg"><img width="100%" :src="thisMarket.sym1Data.imgUrl"></div>
             <div>
-              <div class="coin">USDT</div>
-              <div class="contract tip">tethertether</div>
+              <div class="coin">{{ thisMarket.symbol1 }}</div>
+              <div class="contract tip">{{ thisMarket.contract1 }}</div>
             </div>
           </div>
         </div>
@@ -37,73 +42,301 @@
 
     <div class="poolsLists">
       <div class="title"><span class="act">挖矿列表</span></div>
-      <div class="list">
-        <div class="flexb mb10">
-          <span>tes******est</span>
-          <span>收益：0.12340000 DFS</span>
+      <template v-for="(item, index) in minersArr">
+        <div class="list" v-if="scatter.identity && item.miner !== scatter.identity.accounts[0].name" :key="index">
+          <div class="flexb mb10">
+            <span>{{ item.miner }}</span>
+            <span>收益：{{ item.showReward || '0.00000000' }} DFS</span>
+          </div>
+          <div class="flexb">
+            <span>做市数量</span>
+            <span>{{ item.liq_bal0 }} / {{ item.liq_bal1 }}</span>
+          </div>
         </div>
-        <div class="flexb">
-          <span>做市数量</span>
-          <span>10.0000 EOS / 100.0000 DFS</span>
-        </div>
-      </div>
-      <div class="list">
-        <div class="flexb mb10">
-          <span>tes******est</span>
-          <span>收益：0.12340000 DFS</span>
-        </div>
-        <div class="flexb">
-          <span>做市数量</span>
-          <span>10.0000 EOS / 100.0000 DFS</span>
-        </div>
-      </div>
-      <div class="list">
-        <div class="flexb mb10">
-          <span>tes******est</span>
-          <span>收益：0.12340000 DFS</span>
-        </div>
-        <div class="flexb">
-          <span>做市数量</span>
-          <span>10.0000 EOS / 100.0000 DFS</span>
-        </div>
-      </div>
-      <div class="list">
-        <div class="flexb mb10">
-          <span>tes******est</span>
-          <span>收益：0.12340000 DFS</span>
-        </div>
-        <div class="flexb">
-          <span>做市数量</span>
-          <span>10.0000 EOS / 100.0000 DFS</span>
-        </div>
-      </div>
-      <div class="list">
-        <div class="flexb mb10">
-          <span>tes******est</span>
-          <span>收益：0.12340000 DFS</span>
-        </div>
-        <div class="flexb">
-          <span>做市数量</span>
-          <span>10.0000 EOS / 100.0000 DFS</span>
-        </div>
-      </div>
-      <div class="list">
-        <div class="flexb mb10">
-          <span>tes******est</span>
-          <span>收益：0.12340000 DFS</span>
-        </div>
-        <div class="flexb">
-          <span>做市数量</span>
-          <span>10.0000 EOS / 100.0000 DFS</span>
-        </div>
-      </div>
+      </template>
     </div>
+
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showReWardTip">
+      <MinReward :minReward="minReward"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
+import moment from 'moment';
+import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, accPow, dealReward, dealMinerData } from '@/utils/public';
+import MinReward from '../popup/MinReward'
+
 export default {
-  
+  components: {
+    MinReward
+  },
+  data() {
+    return {
+      showReWardTip: false,
+      claimLoading: false,
+      getAccData: false,
+      thisMarket: {
+        symbol0: 'EOS',
+        symbol1: 'USDD',
+        contract0: 'eosio.token',
+        contract1: 'bankofusddv1',
+        sym0Data: {
+          imgUrl: "/static/coin/eosio.token-eos.svg"
+        },
+        sym1Data: {
+          imgUrl: "/static/coin/bankofusddv1-usdd.svg"
+        },
+      }, // 当前矿池数据
+      accMineData: {}, // 用户记录
+      minersArr: [], // 所有挖矿者列表
+      timerArr: [], // 所有挖矿者收益定时器
+      secTimer: null, // 秒级定时器
+      accTimer: null, // 用户自己的收益定时器
+      accSecTimer: null, // 用户自己的秒级定时器
+    }
+  },
+  props: {
+    marketLists: {
+      type: Array,
+      default: function lists() {
+        return []
+      }
+    }
+  },
+  watch: {
+    marketLists: {
+      handler: function ml(newVal) {
+        if (this.thisMarket.mid || !newVal.length) {
+          return
+        }
+        this.thisMarket = newVal.find(v => v.mid === Number(this.$route.params.mid))
+        // console.log(this.thisMarket)
+      },
+      immediate: true
+    },
+    scatter: {
+      handler: function listen(newVal) {
+        if (newVal.identity) {
+          this.handleGetMinersLists('user')
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
+  computed: {
+    ...mapState({
+      // 箭头函数可使代码更简练
+      // baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
+      weightList: state => state.sys.weightList, // 交易对权重列表
+      aprs: state => state.sys.aprs,
+      damping: state => state.sys.damping,
+      scatter: state => state.app.scatter,
+      dfsPrice: state => state.sys.dfsPrice,
+    }),
+    minReward() {
+      if (!Number(this.dfsPrice)) {
+        return '0.0005'
+      }
+      let min = accDiv(0.0001, this.dfsPrice)
+      if (Number(toFixed(min, 4)) < min) {
+        min = accAdd(min, 0.0001)
+      }
+      return toFixed(min, 4)
+    },
+    weight() {
+      if (!this.weightList.length || !this.thisMarket.mid) {
+        return '0'
+      }
+      const wData = this.weightList.find(v => v.mid === this.thisMarket.mid)
+      return wData.pool_weight;
+    },
+    buff() {
+      if (Number(this.weight) <= 1) {
+        return 0
+      }
+      let t = accSub(this.weight, 1);
+      t = accMul(t, 100);
+      return t.toFixed(0)
+    }
+  },
+  mounted() {
+    this.handleGetMinersLists()
+  },
+  beforeDestroy() {
+    clearInterval(this.accTimer)
+    clearInterval(this.secTimer)
+    clearInterval(this.accSecTimer)
+    this.timerArr.forEach(v => {
+      clearInterval(v)
+    })
+  },
+  methods: {
+    handleGetMinersLists(type) {
+      const params = {
+        "code": "miningpool11",
+        "scope": this.$route.params.mid,
+        "table": "miners",
+        // "lower_bound": " dfsdeveloper",
+        // "upper_bound": " dfsdeveloper",
+        limit: 20,
+        "json": true,
+      }
+      if (type === 'user') {
+        params.lower_bound = ` ${this.scatter.identity.accounts[0].name}`;
+        params.upper_bound = ` ${this.scatter.identity.accounts[0].name}`;
+      }
+      EosModel.getTableRows(params, (res) => {
+        if (type === 'user') {
+          this.getAccData = true;
+        }
+        const rows = res.rows || []
+        if (!rows.length) {
+          this.accMineData = {};
+          return
+        }
+        rows.forEach(v => {
+          const minnerData = dealMinerData(v, this.thisMarket)
+          if (type === 'user') {
+            this.accMineData = minnerData;
+            this.handleRunAccReward()
+            return;
+          }
+          this.minersArr.push(minnerData)
+        })
+        this.handleRunReward()
+      })
+    },
+    // 秒级定时器
+    handleRunReward() {
+      clearInterval(this.secTimer)
+      this.handleRunLogic()
+      this.secTimer = setInterval(() => {
+        this.handleRunLogic()
+      }, 1000);
+    },
+    // 数据滚动效果
+    handleRunLogic() {
+      this.minersArr.forEach((v, index) => {
+        if (this.timerArr[index]) {
+          clearInterval(this.timerArr[index]);
+        }
+        if (!Number(v.liq)) {
+          this.timerArr[index] = null;
+          return
+        }
+        const reward = dealReward(v, this.weight)
+        let showReward = v.reward || '0.00000000';
+        let countReward = showReward;
+        if (!v.showReward) {
+          this.$set(v, 'showReward', reward)
+          showReward = reward;
+          countReward = reward;
+        }
+        this.$set(v, 'reward', reward)
+        let t = accSub(reward, showReward);
+        t = accDiv(t, 20)
+        this.timerArr[index] = setInterval(() => {
+          countReward = accAdd(countReward, t)
+          if (countReward > Number(reward)) {
+            showReward = toFixed(reward, 8);
+            clearInterval(this.timerArr[index])
+          } else {
+            showReward = toFixed(countReward, 8);
+          }
+          this.$set(v, 'showReward', showReward);
+        }, 50);
+      })
+    },
+    handleRunAccReward() {
+      clearInterval(this.accSecTimer)
+      this.handleAccRun()
+      this.accSecTimer = setInterval(() => {
+        this.handleAccRun()
+      }, 1000);
+    },
+    handleAccRun() {
+      // console.log(this.accMineData)
+      const reward = dealReward(this.accMineData, this.weight)
+      let showReward = this.accMineData.reward || '0.00000000';
+      let countReward = showReward;
+      if (!this.accMineData.showReward) {
+        this.accMineData.showReward = reward;
+        showReward = reward;
+        countReward = reward;
+      }
+      this.accMineData.reward = reward;
+      let t = accSub(reward, showReward);
+      t = accDiv(t, 20)
+      clearInterval(this.accTimer)
+      this.accTimer = setInterval(() => {
+        countReward = accAdd(countReward, t)
+        if (countReward > Number(reward)) {
+          showReward = toFixed(reward, 8);
+          clearInterval(this.accTimer)
+        } else {
+          showReward = toFixed(countReward, 8);
+        }
+        this.accMineData.showReward = showReward;
+        // console.log(this.accMineData.showReward)
+      }, 50);
+    },
+    handleJoin(item) {
+      this.$router.push({
+        name: 'market',
+        params: {
+          mid: item.mid
+        }
+      })
+    },
+    handleClaim(item) {
+      if (Number(this.accMineData.reward) < Number(this.minReward)) {
+        this.showReWardTip = true;
+        return
+      }
+      this.claimLoading = true;
+      const formName = this.$store.state.app.scatter.identity.accounts[0].name;
+      const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
+      const params = {
+        actions: [
+          {
+            account: 'miningpool11',
+            name: 'claim',
+            authorization: [{
+              actor: formName, // 转账者
+              permission,
+            }],
+            data: {
+              user: formName,
+              mid: item.mid,
+            }
+          },
+        ]
+      }
+      EosModel.toTransaction(params, (res) => {
+        this.claimLoading = false
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        // this.changeReWard = toFixed(0, 8);
+        // this.reward = 0;
+        this.handleGetMinersLists('user')
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
+    },
+  },
 }
 </script>
 
@@ -187,6 +420,18 @@ export default {
       .mb10{
         margin-bottom: 10px;
       }
+    }
+  }
+}
+.myDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 570px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
     }
   }
 }

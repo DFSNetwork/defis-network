@@ -9,16 +9,17 @@
     </div>
     <div class="poolsList">
       <div class="title"><span class="act">矿池列表</span></div>
-      <div class="list" v-for="(item, index) in lists" :key="index">
+      <div class="list" v-for="(item, index) in lists" :key="index" @click="handleToMarket(item)">
         <div class="flexb">
           <span>
             <span>收益：</span>
-            <span v-if="!item.minnerData || !Number(item.minnerData.liq)">0.00000000 DFS </span>
-            <span v-else>1.00000000 DFS </span>
+            <!-- <span v-if="!item.minnerData || !Number(item.minnerData.liq)">0.00000000 DFS </span> -->
+            <span>{{ item.showReward || '0.00000000' }} DFS </span>
             <span class="addition" v-if="Number(handleGetBuff(item))">算力加成：{{ handleGetBuff(item) }}%</span>
           </span>
-          <span class="green" v-if="item.minnerData && !Number(item.minnerData.liq)" @click="handleJoin(item)">加入</span>
-          <span class="green" v-if="item.minnerData && Number(item.minnerData.liq)" @click="handleClaim(item)">领取</span>
+          <span class="green" v-if="item.minnerData && !Number(item.minnerData.liq)" @click.stop="handleJoin(item)">加入</span>
+          <span class="green" v-if="item.minnerData && Number(item.minnerData.liq)" v-loading="item.loading"
+            @click.stop="handleClaim(item)">领取</span>
         </div>
         <div class="symbol flexa">
           <div class="coinInfo flex">
@@ -39,6 +40,12 @@
         </div>
       </div>
     </div>
+
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showReWardTip">
+      <MinReward :minReward="minReward"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -46,16 +53,22 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
-import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, accPow } from '@/utils/public';
+import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, accPow, dealReward } from '@/utils/public';
+import MinReward from '../popup/MinReward'
 
 export default {
   name: 'poolsData',
+  components: {
+    MinReward
+  },
   data() {
     return {
+      showReWardTip: false,
       lists: [],
       firstGet: false,
       priceTimer: null,
-      price: '0',
+      listsTimer: null,
+      timerArr: [],
     }
   },
   props: {
@@ -74,12 +87,13 @@ export default {
       aprs: state => state.sys.aprs,
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
+      dfsPrice: state => state.sys.dfsPrice,
     }),
     minReward() {
-      if (!Number(this.price)) {
+      if (!Number(this.dfsPrice)) {
         return '0.0005'
       }
-      let min = accDiv(0.0001, this.price)
+      let min = accDiv(0.0001, this.dfsPrice)
       if (Number(toFixed(min, 4)) < min) {
         min = accAdd(min, 0.0001)
       }
@@ -106,22 +120,32 @@ export default {
         this.lists = lists;
         this.firstGet = true;
         this.handleGetMiners()
+        // console.log(this.lists)
       },
       deep: true,
       immediate: true
     },
   },
   mounted() {
-    clearInterval(this.priceTimer)
-    this.handleGetPrice()
-    this.priceTimer = setInterval(() => {
-      this.handleGetPrice()
-    }, 300000);
+  },
+  beforeDestroy() {
+    clearInterval(this.listsTimer)
+    this.timerArr.forEach(v => {
+      clearInterval(v)
+    })
   },
   methods: {
     handleJoin(item) {
       this.$router.push({
         name: 'market',
+        params: {
+          mid: item.mid
+        }
+      })
+    },
+    handleToMarket(item) {
+      this.$router.push({
+        name: 'poolsMarket',
         params: {
           mid: item.mid
         }
@@ -155,7 +179,62 @@ export default {
           minnerData.liq = liq;
           this.$set(v, 'minnerData', minnerData)
         })
+        this.handleRunReward()
       })
+    },
+    handleRunReward() {
+      clearInterval(this.listsTimer)
+      this.listsTimer = setInterval(() => {
+        this.lists.forEach((v, index) => {
+          if (this.timerArr[index]) {
+            clearInterval(this.timerArr[index]);
+          }
+          if (!v.minnerData || !Number(v.minnerData.liq)) {
+            this.timerArr[index] = null;
+            return
+          }
+          const reward = dealReward(v.minnerData, v.pool_weight)
+          let showReward = v.reward || '0.00000000';
+          let countReward = showReward;
+          if (!v.showReward) {
+            this.$set(v, 'showReward', reward)
+            showReward = reward;
+            countReward = reward;
+          }
+          this.$set(v, 'reward', reward)
+          let t = accSub(reward, showReward);
+          t = accDiv(t, 20)
+          this.timerArr[index] = setInterval(() => {
+            countReward = accAdd(countReward, t)
+            if (countReward > Number(reward)) {
+              showReward = toFixed(reward, 8);
+              clearInterval(this.timerArr[index])
+            } else {
+              showReward = toFixed(countReward, 8);
+            }
+            this.$set(v, 'showReward', showReward);
+          }, 50);
+        })
+      }, 1000);
+    },
+    handleDealMineNum(minnerData, weight) {
+      // 用户实际数据计算
+      let minNum = '0';
+      const type = minnerData.lastTime < this.aprs.lastTime; // 用户时间 < 系统时间
+      if (type) {
+        let t = moment().valueOf() - this.aprs.lastTime;
+        t = t / 1000;
+        minNum = minnerData.liq * this.aprs.aprs_accumulator * Math.pow(this.aprs.aprs, t)
+      } else {
+        let t = moment().valueOf() - minnerData.lastTime;
+        t = t / 1000;
+        minNum = minnerData.liq * Math.pow(this.aprs.aprs, t)
+      }
+      minNum = minNum - minnerData.liq;
+      let reward = minNum / this.dfsPrice * this.damping * weight
+      reward *= 0.8
+      reward = toFixed(reward, 8)
+      return reward
     },
     handleGetBuff(item) {
       let t = accSub(item.pool_weight, 1);
@@ -166,10 +245,11 @@ export default {
       return t.toFixed(0)
     },
     handleClaim(item) {
-      // if (Number(this.reward) < Number(this.minReward)) {
-      //   this.showReWardTip = true;
-      //   return
-      // }
+      if (Number(item.reward) < Number(this.minReward)) {
+        this.showReWardTip = true;
+        return
+      }
+      item.loading = true;
       this.claimLoading = true;
       const formName = this.$store.state.app.scatter.identity.accounts[0].name;
       const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
@@ -190,7 +270,7 @@ export default {
         ]
       }
       EosModel.toTransaction(params, (res) => {
-        this.claimLoading = false
+        item.loading = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
@@ -205,24 +285,6 @@ export default {
           message: this.$t('public.success'),
           type: 'success'
         });
-      })
-    },
-    // DFS价格 - 5分钟一次
-    handleGetPrice() {
-      const params = {
-        "code": "defislinkeos",
-        "scope": "39",
-        "table": "avgprices",
-        "limit": 3,
-        "json": true,
-      }
-      EosModel.getTableRows(params, (res) => {
-        const rows = res.rows || [];
-        if (!rows.length) {
-          return
-        }
-        const price = rows.find(v => v.key === 300) || {};
-        this.price = price.price1_avg_price / 10000 || 0;
       })
     },
     handleGetWeight() {
@@ -315,6 +377,18 @@ export default {
           width: 40px;
         }
       }
+    }
+  }
+}
+.myDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 570px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
     }
   }
 }

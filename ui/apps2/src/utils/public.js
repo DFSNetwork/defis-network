@@ -201,3 +201,35 @@ export function getUrlParams(url) {
   });
   return params;
 }
+// 计算收益
+export function dealReward(minnerData, weight) {
+  const damping = store.state.sys.damping;
+  const dfsPrice = store.state.sys.dfsPrice;
+  const aprs = store.state.sys.aprs;
+  // 用户实际数据计算
+  let minNum = '0';
+  const type = minnerData.lastTime < aprs.lastTime; // 用户时间 < 系统时间
+  if (type) {
+    let t = moment().valueOf() - aprs.lastTime;
+    t = t / 1000;
+    minNum = minnerData.liq * aprs.aprs_accumulator * Math.pow(aprs.aprs, t)
+  } else {
+    let t = moment().valueOf() - minnerData.lastTime;
+    t = t / 1000;
+    minNum = minnerData.liq * Math.pow(aprs.aprs, t)
+  }
+  minNum = minNum - minnerData.liq;
+  let reward = minNum / dfsPrice * damping * weight
+  reward *= 0.8
+  reward = toFixed(reward, 8)
+  return reward
+}
+// 处理用户挖矿数据
+export function dealMinerData(minnerData, thisMarket) {
+  let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
+  lastTime = moment(lastTime).valueOf();
+  minnerData.lastTime = lastTime;
+  const liq = thisMarket.symbol0 === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
+  minnerData.liq = liq;
+  return minnerData
+}
