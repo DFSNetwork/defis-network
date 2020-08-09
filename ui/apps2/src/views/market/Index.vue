@@ -277,6 +277,10 @@ export default {
     },
     handleMarketChange(data) {
       this.thisMarket = data;
+      this.loading = false;
+      this.payNum1 = '';
+      this.payNum2 = '';
+      this.sellToken = '';
       this.showMarketList = false;
     },
     // 计算存币获取凭证
@@ -483,7 +487,10 @@ export default {
           });
           return
         }
-        this.handleGetAccToken();
+        setTimeout(() => {
+          this.handleBalanTimer();
+          this.handleGetAccToken();
+        }, 1000);
         this.$message({
           message: this.$t('public.success'),
           type: 'success'
@@ -576,7 +583,10 @@ export default {
           });
           return
         }
-        this.handleGetAccToken();
+        setTimeout(() => {
+          this.handleBalanTimer();
+          this.handleGetAccToken();
+        }, 1000);
         this.$message({
           message: this.$t('public.success'),
           type: 'success'

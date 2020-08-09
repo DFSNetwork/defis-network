@@ -1,22 +1,37 @@
 <template>
   <div class="weight">
-    <div class="noPools" v-if="showAddPools">
+    <div class="noPools">
       <div class="flexb mb10" v-if="Number(buff)">
         <div class="flexa">
-          <span>挖矿算力加成： {{ buff }}%</span>
+          <span class="flexa">
+            <span>挖矿算力加成： {{ buff }}%</span>
+          </span>
         </div>
-        <div class="green" v-if="Number(token) && !Number(minnerData.liq)" @click="handleJoin">立即加入</div>
+        <div class="green" v-loading="joinLoading" v-if="showAddPools" @click="handleJoin">立即加入</div>
+      </div>
+      <div class="hasPools flexb mb10">
+        <div class="flexa" v-if="addTimer">
+          <span>收益： {{ changeReWard }} DFS</span>
+          <img class="tipIcom" src="@/assets/img/dex/tips_icon_btn.svg" @click="handleShowReWard">
+        </div>
+        <div v-else>收益： 0.00000000 DFS</div>
+        <div v-if="getMinerData && Number(reward)" v-loading="claimLoading" class="green" @click="handleClaim">领取</div>
       </div>
       <div class="tip">
         <span>当前交易对可以进行流动性挖矿。预计每万EOS每天收益 {{perDayReward}} DFS。存入资金，可自动开始挖矿。</span>
-        <span class="green" v-if="!Number(buff)">立即加入></span>
+        <span class="green" v-if="!Number(buff) && showAddPools">立即加入></span>
       </div>
     </div>
-    
-    <div class="hasPools flexb" v-else>
-      <div>收益： {{ changeReWard }} DFS</div>
-      <div class="green" @click="handleClaim">领取</div>
-    </div>
+
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showReWardTip">
+      <div class="minReward">
+        <div class="title">最小可领取</div>
+        <div class="mb10">由于币种精度限制，领取小于{{ minReward }}的DFS将不会有奖励到账。</div>
+        <div>奖励的小数掉后四位将被截取。</div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -30,15 +45,19 @@ export default {
   data() {
     return {
       weight: 1,
-      price: '0',
+      price: '0.0001',
+      getMinerData: false,
       minnerData: {},
       cliamNum: '0.00000000',
       reward: '0.0000',
       perDayReward: '0.0000',
-      changeReWard: '0.0000',
+      changeReWard: '0.00000000',
       dealTimer: null, // 定时器 - 每秒重新计算收益
       addTimer: null, // 定时器 - 收益数字滚动累加
       priceTimer: null, // 价格定时器 - 5分钟执行一次
+      joinLoading: false,
+      claimLoading: false,
+      showReWardTip: false,
     }
   },
   props: {
@@ -63,7 +82,7 @@ export default {
       scatter: state => state.app.scatter,
     }),
     showAddPools() {
-      if (!Number(this.token) || !Number(this.minnerData.liq)) {
+      if (Number(this.token) && !Number(this.minnerData.liq) && this.getMinerData) {
         return true;
       }
       return false
@@ -75,6 +94,13 @@ export default {
         return '0'
       }
       return t.toFixed(0)
+    },
+    minReward() {
+      let min = accDiv(0.0001, this.price)
+      if (Number(toFixed(min, 4)) < min) {
+        min = accAdd(min, 0.0001)
+      }
+      return toFixed(min, 4)
     }
   },
   watch: {
@@ -85,6 +111,9 @@ export default {
         }
       },
       deep: true,
+    },
+    token() {
+      this.handleGetData();
     },
     weightList: {
       handler: function wl(newVal) {
@@ -100,6 +129,14 @@ export default {
         if (newVal.mid === oldVal.mid) {
           return;
         }
+        this.getMinerData = false;
+        clearInterval(this.addTimer)
+        setTimeout(() => {
+          this.changeReWard = '0.00000000';
+          this.reward = '0.0000'
+        }, 110)
+        this.reward = '0.0000'
+        this.changeReWard = '0.00000000';
         this.handleGetData();
       },
       immediate: true,
@@ -119,6 +156,12 @@ export default {
     clearInterval(this.priceTimer)
   },
   methods: {
+    handleShowReWard() {
+      this.showReWardTip = true;
+    },
+    handleClose() {
+      this.showReWardTip = false;
+    },
     handleGetData() {
       const weightData = this.weightList.find(v => v.mid === this.thisMarket.mid) || {};
       this.weight = weightData.pool_weight || 0;
@@ -129,14 +172,13 @@ export default {
       this.handleGetMiners(this.thisMarket.mid);
     },
     handleStartAdd(reward) {
-      // console.log(reward)
       this.changeReWard = toFixed(this.reward, 8);
       this.reward = reward;
       clearInterval(this.addTimer)
       const t = (this.reward - this.changeReWard) / 20;
+      let changeReWard = this.changeReWard
       this.addTimer = setInterval(() => {
-        const changeReWard = Number(this.changeReWard) + t;
-        // console.log(changeReWard)
+        changeReWard = Number(changeReWard) + t;
         if (changeReWard > Number(this.reward)) {
           this.changeReWard = toFixed(this.reward, 8);
           clearInterval(this.addTimer)
@@ -162,8 +204,11 @@ export default {
         json: true,
       }
       EosModel.getTableRows(params, (res) => {
+        this.getMinerData = true;
         const rows = res.rows || []
         if (!rows.length) {
+          this.changeReWard = '0.00000000';
+          this.reward = '0.0000'
           this.minnerData = {};
           clearInterval(this.addTimer)
           clearInterval(this.dealTimer)
@@ -239,6 +284,7 @@ export default {
       })
     },
     handleJoin() {
+      this.joinLoading = true;
       const formName = this.$store.state.app.scatter.identity.accounts[0].name;
       const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
       const params = {
@@ -258,7 +304,7 @@ export default {
         ]
       }
       EosModel.toTransaction(params, (res) => {
-        this.loading = false
+        this.joinLoading = false
         if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
@@ -273,6 +319,11 @@ export default {
       })
     },
     handleClaim() {
+      if (Number(this.reward) < Number(this.minReward)) {
+        this.showReWardTip = true;
+        return
+      }
+      this.claimLoading = true;
       const formName = this.$store.state.app.scatter.identity.accounts[0].name;
       const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
       const params = {
@@ -292,7 +343,7 @@ export default {
         ]
       }
       EosModel.toTransaction(params, (res) => {
-        this.loading = false
+        this.claimLoading = false
         if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
@@ -321,6 +372,11 @@ export default {
   border: 1px solid #e0e0e0;
   border-radius: 20px;
 
+  .tipIcom{
+    width: 30px;
+    margin-left: 10px;
+  }
+
   .mb10{
     margin-bottom: 10px;
   }
@@ -328,6 +384,29 @@ export default {
   .green{
     margin-left: 20px;
     color: #07D79B;
+  }
+}
+.myDialog{
+  .minReward{
+    padding: 40px;
+    font-size: 28px;
+    color: #333;
+    .title{
+      color: #000;
+      text-align: center;
+      font-size: 30px;
+      margin-bottom: 20px;
+    }
+  }
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 570px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+    }
   }
 }
 </style>
