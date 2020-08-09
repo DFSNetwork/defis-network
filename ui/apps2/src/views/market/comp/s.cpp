@@ -48,3 +48,19 @@ double pools::get_dfs_price()
         return 0;
     }
 
+
+// 交易挖矿算法
+if (amountIn.symbol == symbol("EOS", 4))
+    trading_fee.amount = amountIn.amount / 1000 * 3;
+if (amountOut.symbol == symbol("EOS", 4))
+    trading_fee.amount = amountOut.amount / 1000 * 3;
+
+uint64_t trading_mining_reward_amount = trading_fee.amount / price_dfs * trading_mining_discount * damping * pool_weight;
+
+
+// 铸币挖矿算法：
+
+asset mint_fee_value_in_eos = asset(0, symbol("EOS", 4));
+mint_fee_value_in_eos.amount = fee.amount / price_eos;
+
+uint64_t mint_mining_reward_amount = mint_fee_value_in_eos.amount / price_dfs * mint_mining_discount * damping;

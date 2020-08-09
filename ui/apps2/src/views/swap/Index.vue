@@ -3,7 +3,6 @@
     <div class="tabView">
       <div class="tabC">
         <tabs />
-
         <div class="symData">
           <div class="sym0Data" :class="{'focus': payIptFocus}">
             <div class="info flexb">
@@ -104,7 +103,7 @@
               {{ tradeInfo.priceRate }}%
             </span>
           </div>
-          <div class="flexb fee">
+          <div class="flexb" :class="{'fee': !weight}">
             <span class="flex">
               <span class="tip">{{ $t('public.fee') }}</span>
               <el-popover 
@@ -118,6 +117,10 @@
               </el-popover>
             </span>
             <span>{{fees}} {{ thisMarket0.symbol }}</span>
+          </div>
+          <div class="flexb fee" v-if="weight">
+            <span class="tip">挖矿收益</span>
+            <span>{{ reward }} DFS</span>
           </div>
         </div>
       </el-collapse-transition>
@@ -177,6 +180,7 @@ export default {
   },
   data() {
     return {
+      discount: 0.2, // 配置项 - 后期从合约拿
       loading: false,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       payNum: '',
@@ -235,6 +239,10 @@ export default {
       scatter: state => state.app.scatter,
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
+      dfsPrice: state => state.sys.dfsPrice,
+      weightList: state => state.sys.weightList, // 交易对权重列表
+      // aprs: state => state.sys.aprs,
+      damping: state => state.sys.damping,
     }),
     showDetail() {
       return Number(this.payNum) && Number(this.getNum)
@@ -265,6 +273,32 @@ export default {
       }
       const pathArr = path.split('-')
       return pathArr
+    },
+    weight() {
+      if (!this.weightList.length || !this.bestPath) {
+        return 0
+      }
+      const weiData = this.weightList.find(v => v.mid === this.bestPath.mid);
+      if (!weiData) {
+        return 0
+      }
+      return Number(weiData.pool_weight)
+    },
+    reward() {
+      if (!this.bestPath) {
+        return '0.0000';
+      }
+      let amount = '0'
+      if (this.thisMarket0.symbol === 'EOS' && this.thisMarket0.contract === 'eosio.token') {
+        amount = this.payNum;
+      }
+      if (this.thisMarket1.symbol === 'EOS' && this.thisMarket1.contract === 'eosio.token') {
+        amount = this.getNum;
+      }
+      amount = accMul(amount, 3);
+      amount = accDiv(amount, 1000)
+      let reward = amount / this.dfsPrice * this.discount * this.damping * this.weight;
+      return toFixed(reward, 4)
     }
   },
   watch: {

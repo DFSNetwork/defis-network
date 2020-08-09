@@ -29,6 +29,11 @@ export default {
       proConfig: state => state.sys.proConfig, // 生产环境
     }),
   },
+  data() {
+    return {
+      priceTimer: null,
+    }
+  },
   watch: {
   },
   created() {
@@ -42,9 +47,15 @@ export default {
       this.handleGetWeight()
       this.handleGetAprs()
       this.handleGetDfsCurrent()
+      clearInterval(this.priceTimer)
+      this.handleGetPrice()
+      this.priceTimer = setInterval(() => {
+        this.handleGetPrice()
+      }, 300000);
     });
   },
   beforeDestroy: function () {
+    clearInterval(this.priceTimer);
   },
   methods: {
     // 登录
@@ -183,6 +194,25 @@ export default {
       
       const damping = accPow(0.75, accDiv(supply, 1000000).toFixed(0));
       this.$store.dispatch('setDamping', damping)
+    },
+    // DFS价格 - 5分钟一次
+    handleGetPrice() {
+      const params = {
+        "code": "defislinkeos",
+        "scope": "39",
+        "table": "avgprices",
+        "limit": 3,
+        "json": true,
+      }
+      EosModel.getTableRows(params, (res) => {
+        const rows = res.rows || [];
+        if (!rows.length) {
+          return
+        }
+        const price = rows.find(v => v.key === 300) || {};
+        const price5min = accDiv(price.price1_avg_price, 10000) || 0;
+        this.$store.dispatch('setDfsPrice', price5min)
+      })
     },
   },
 }
