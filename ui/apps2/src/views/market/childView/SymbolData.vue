@@ -67,8 +67,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import moment from 'moment';
-import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, accPow, dealReward, dealMinerData } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, dealMinerData } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 
 export default {

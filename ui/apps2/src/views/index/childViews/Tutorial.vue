@@ -88,6 +88,43 @@
         <div class="end">{{ $t('tutorial.done') }}</div>
       </div>
     </div>
+    <div class="list">
+      <div class="title">{{ $t('miningRules.tradeRules') }}</div>
+      <div class="content">
+        <ul class="ul">
+          <li>{{ $t('miningRules.tradeRule1') }}</li>
+          <li>{{ $t('miningRules.tradeRule2') }}</li>
+        </ul>
+        <!-- <div class="end">{{ $t('tutorial.done') }}</div> -->
+      </div>
+    </div>
+    <div class="list">
+      <div class="title">{{ $t('miningRules.bankRules') }}</div>
+      <div class="content">
+        <ul class="ul">
+          <li>{{ $t('miningRules.bankRule1') }}</li>
+          <li>{{ $t('miningRules.tradeRule2') }}</li>
+        </ul>
+        <!-- <div class="end">{{ $t('tutorial.done') }}</div> -->
+      </div>
+    </div>
+    <div class="list">
+      <div class="title">{{ $t('miningRules.marketRules') }}</div>
+      <div class="content">
+        <ul class="ul">
+          <li>{{ $t('miningRules.marketRule1') }}</li>
+          <li>
+            <div>{{ $t('miningRules.marketRule2') }}</div>
+            <div>
+              <div>1. {{ $t('miningRules.marketRule2_1') }}</div>
+              <div>2. {{ $t('miningRules.marketRule2_2') }}</div>
+              <div>3. {{ $t('miningRules.marketRule2_3') }}</div>
+            </div>
+          </li>
+        </ul>
+        <!-- <div class="end">{{ $t('tutorial.done') }}</div> -->
+      </div>
+    </div>
   </div>
 </template>
 
@@ -124,6 +161,9 @@ export default {
         margin-left: 2em;
         color: #070707;
         font-size: 32px;
+        li{
+          padding-top: 5px;
+        }
       }
       .end{
         margin-top: 10px;

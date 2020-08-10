@@ -1,14 +1,13 @@
 <template>
   <div class="pools">
-    <div class="rules">
-      <div class="title"><span class="act">挖矿规则</span></div>
-      <div class="rule1">1. 挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则</div>
-      <div class="rule1">2. 挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则</div>
-      <div class="rule1">3. 挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则</div>
-      <div class="rule1">4. 挖矿规则挖矿规则挖矿规则挖矿规则挖矿规则</div>
-    </div>
     <div class="poolsList">
-      <div class="title"><span class="act">矿池列表</span></div>
+      <div class="title flexb">
+        <span class="act">矿池列表</span>
+        <span class="flexa mineRule" @click="showRules = true">
+          <span>挖矿规则</span>
+          <img class="tipIcon" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+        </span>
+      </div>
       <div class="list" v-for="(item, index) in lists" :key="index" @click="handleToMarket(item)">
         <div class="flexb">
           <span>
@@ -44,7 +43,13 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showReWardTip">
-      <MinReward :minReward="minReward"/>
+      <min-reward :minReward="minReward"/>
+    </el-dialog>
+
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showRules">
+      <mining-rules />
     </el-dialog>
   </div>
 </template>
@@ -53,16 +58,19 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
-import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, accPow, dealReward } from '@/utils/public';
+import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, dealReward } from '@/utils/public';
 import MinReward from '../popup/MinReward'
+import MiningRules from '../popup/MiningRules'
 
 export default {
   name: 'poolsData',
   components: {
-    MinReward
+    MinReward,
+    MiningRules
   },
   data() {
     return {
+      showRules: false,
       showReWardTip: false,
       lists: [],
       firstGet: false,
@@ -108,7 +116,6 @@ export default {
         }
         const weightList = this.weightList;
         const lists = [];
-        const keys = [];
         weightList.sort((a, b) => {
           return b.pool_weight - a.pool_weight
         })
@@ -334,14 +341,16 @@ export default {
       }
     }
   }
-  .rules{
-    margin: 40px;
-    .rule1{
-      margin-top: 10px;
-    }
-  }
   .poolsList{
     margin: 40px;
+    .mineRule{
+      margin-right: 0;
+      font-size: 26px;
+      .tipIcon{
+        margin-left: 10px;
+        width: 28px;
+      }
+    }
     .list{
       margin-top: 20px;
       padding: 20px;
@@ -384,7 +393,7 @@ export default {
   /deep/ .el-dialog{
     position: relative;
     margin: auto;
-    width: 570px;
+    width: 590px;
     border-radius: 20px;
     .el-dialog__body,
     .el-dialog__header{

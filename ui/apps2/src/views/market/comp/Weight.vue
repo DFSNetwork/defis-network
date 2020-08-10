@@ -33,9 +33,8 @@
 
 <script>
 import { EosModel } from '@/utils/eos';
-import moment from 'moment';
 import { mapState } from 'vuex';
-import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, accPow } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 
 export default {
@@ -216,12 +215,7 @@ export default {
           this.handleGetMinNum('perDay')
           return
         }
-        const minnerData = rows[0];
-        let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
-        lastTime = moment(lastTime).valueOf();
-        minnerData.lastTime = lastTime;
-        const liq = this.thisMarket.symbol0 === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
-        minnerData.liq = liq;
+        const minnerData = dealMinerData(rows[0], this.thisMarket)
         this.minnerData = minnerData;
         this.handleGetMinNum()
         clearInterval(this.dealTimer)
@@ -246,20 +240,7 @@ export default {
           return
         }
         // 用户实际数据计算
-        const type = this.minnerData.lastTime < this.aprs.lastTime; // 用户时间 < 系统时间
-        if (type) {
-          let t = moment().valueOf() - this.aprs.lastTime;
-          t = t / 1000;
-          minNum = this.minnerData.liq * this.aprs.aprs_accumulator * Math.pow(this.aprs.aprs, t)
-        } else {
-          let t = moment().valueOf() - this.minnerData.lastTime;
-          t = t / 1000;
-          minNum = this.minnerData.liq * Math.pow(this.aprs.aprs, t)
-        }
-        minNum = minNum - this.minnerData.liq;
-        let reward = minNum / this.price * this.damping * this.weight
-        reward *= 0.8
-        reward = toFixed(reward, 8)
+        const reward = dealReward(this.minnerData, this.weight)
         this.handleStartAdd(reward)
       } catch (error) {
         console.log(error)
