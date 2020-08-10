@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <header-tools @listenShowNav="handleShowNav" @listenShowTools="handleShowTools"/>
-    <acc-login v-if="$route.name !== 'tutorial'"/>
+    <acc-login v-if="showAcc"/>
     <transition name="fade" mode="out-in">
       <router-view class="content" :marketLists="marketLists"/>
     </transition>
@@ -52,7 +52,12 @@ export default {
       // 箭头函数可使代码更简练
       scatter: state => state.app.scatter,
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-    })
+    }),
+    showAcc() {
+      const noArr = ['tutorial', 'pools', 'poolsMarket'];
+      const has = noArr.find(v => v === this.$route.name)
+      return !has
+    }
   },
   mounted() {
     this.handleRowsMarket();

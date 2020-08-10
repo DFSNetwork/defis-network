@@ -1,5 +1,13 @@
 <template>
   <div class="pools">
+    <pools-info :lists="lists"/>
+    <div class="allClaim flexb">
+      <div>
+        <div class="subTitle">待领取收益</div>
+        <div class="claimNum">{{allReward}} DFS</div>
+      </div>
+      <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">一键领取</div>
+    </div>
     <div class="poolsList">
       <div class="title flexb">
         <span class="act">矿池列表</span>
@@ -8,6 +16,7 @@
           <img class="tipIcon" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
         </span>
       </div>
+      <div class="noData" v-loading="!firstGet" v-if="!lists.length">{{ $t('public.noData') }}</div>
       <div class="list" v-for="(item, index) in lists" :key="index" @click="handleToMarket(item)">
         <div class="flexb">
           <span>
@@ -61,17 +70,23 @@ import moment from 'moment';
 import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, dealReward } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MiningRules from '../popup/MiningRules'
+import PoolsInfo from '../comp/PoolsInfo'
 
 export default {
   name: 'poolsData',
   components: {
     MinReward,
-    MiningRules
+    MiningRules,
+    PoolsInfo,
   },
   data() {
     return {
+      poolsInfo: {},
+
       showRules: false,
       showReWardTip: false,
+      listLoading: false,
+      allClaim: false,
       lists: [],
       firstGet: false,
       priceTimer: null,
@@ -106,6 +121,19 @@ export default {
         min = accAdd(min, 0.0001)
       }
       return toFixed(min, 4)
+    },
+    allReward() {
+      if (!this.lists.length) {
+        return '0.00000000'
+      }
+      let all = 0;
+      this.lists.forEach(v => {
+        if (!v.showReward) {
+          return
+        }
+        all = accAdd(Number(v.showReward), all)
+      })
+      return toFixed(all, 8)
     }
   },
   watch: {
@@ -132,6 +160,14 @@ export default {
       deep: true,
       immediate: true
     },
+    scatter: {
+      handler: function sc (newVal) {
+        if (newVal.identity) {
+          this.handleGetMiners()
+        }
+      },
+      deep: true
+    }
   },
   mounted() {
   },
@@ -252,7 +288,10 @@ export default {
       return t.toFixed(0)
     },
     handleClaim(item) {
-      if (Number(item.reward) < Number(this.minReward)) {
+      if (item.loading) {
+        return
+      }
+      if (!item.reward || Number(item.reward) < Number(this.minReward)) {
         this.showReWardTip = true;
         return
       }
@@ -294,6 +333,54 @@ export default {
         });
       })
     },
+    handleClaimAll() {
+      if (this.allClaim) {
+        return
+      }
+      this.allClaim = true;
+      const formName = this.$store.state.app.scatter.identity.accounts[0].name;
+      const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
+      const actions = [];
+      this.lists.forEach(item => {
+        if (!item.reward || Number(item.reward) < Number(this.minReward)) {
+          return
+        }
+        this.$set(item, 'loading', true);
+        actions.push({
+          account: 'miningpool11',
+          name: 'claim',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            user: formName,
+            mid: item.mid,
+          }
+        })
+      })
+      const params = {
+        actions
+      }
+      EosModel.toTransaction(params, (res) => {
+        this.allClaim = false;
+        this.lists.forEach(item => {
+          this.$set(item, 'loading', false);
+        })
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.handleGetMiners();
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
+    },
     handleGetWeight() {
       const params = {
         code: 'miningpool11',
@@ -318,6 +405,28 @@ export default {
   font-size: 28px;
   text-align: left;
   color: #000;
+  .allClaim{
+    margin: 0 40px 40px;
+    background: #07D79B;
+    border-radius: 20px;
+    color: #FFF;
+    padding: 40px;
+    .subTitle{
+      font-size: 26px;
+    }
+    .claimNum{
+      font-size: 30px;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+    .allClaimBtn{
+      background: #FFF;
+      border-radius: 8px;
+      color: #07D79B;
+      font-size: 28px;
+      padding: 10px 30px;
+    }
+  }
   .title{
     font-size: 32px;
     text-align: left;
@@ -343,6 +452,12 @@ export default {
   }
   .poolsList{
     margin: 40px;
+    .noData{
+      text-align: center;
+      margin: 100px 0;
+      color: #A6A6A6;
+      font-size: 24px;
+    }
     .mineRule{
       margin-right: 0;
       font-size: 26px;

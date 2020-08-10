@@ -224,6 +224,18 @@ export function dealReward(minnerData, weight) {
   reward = toFixed(reward, 8)
   return reward
 }
+export function perDayReward(weight) {
+  const damping = store.state.sys.damping;
+  const dfsPrice = store.state.sys.dfsPrice;
+  const aprs = store.state.sys.aprs;
+  const t = 86400;
+  let minNum = 10000 * Math.pow(aprs.aprs, t)
+  minNum -= 10000;
+  let reward = minNum / dfsPrice * damping * weight
+  reward *= 0.8
+  reward = toFixed(reward, 4)
+  return reward
+}
 // 处理用户挖矿数据
 export function dealMinerData(minnerData, thisMarket) {
   let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);

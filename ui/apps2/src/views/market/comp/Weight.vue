@@ -34,7 +34,7 @@
 <script>
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward, perDayReward } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 
 export default {
@@ -227,15 +227,9 @@ export default {
     // 计算挖矿数量
     handleGetMinNum(status) {
       try {
-        let minNum = 0;
         if (status === 'perDay') {
           // 每万EOS一天 
-          const t = 86400;
-          minNum = 10000 * Math.pow(this.aprs.aprs, t)
-          minNum -= 10000;
-          let reward = minNum / this.price * this.damping * this.weight
-          reward *= 0.8
-          reward = toFixed(reward, 4)
+          const reward = perDayReward(this.weight)
           this.perDayReward = reward;
           return
         }

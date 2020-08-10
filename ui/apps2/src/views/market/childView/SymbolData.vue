@@ -37,13 +37,14 @@
             </div>
           </div>
         </div>
+        <div class="rewardPerDay tip">预计每万EOS每天收益 {{ dayRewardNum }} DFS。</div>
       </div>
     </div>
 
     <div class="poolsLists">
-      <div class="title"><span class="act">挖矿列表</span></div>
+      <div class="title"><span class="act">矿工列表</span></div>
       <template v-for="(item, index) in minersArr">
-        <div class="list" v-if="scatter.identity && item.miner !== scatter.identity.accounts[0].name" :key="index">
+        <div class="list" v-if="!(scatter.identity && item.miner === scatter.identity.accounts[0].name)" :key="index">
           <div class="flexb mb10">
             <span>{{ item.miner }}</span>
             <span>收益：{{ item.showReward || '0.00000000' }} DFS</span>
@@ -67,7 +68,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, dealMinerData } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, dealMinerData, perDayReward } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 
 export default {
@@ -162,6 +163,12 @@ export default {
       let t = accSub(this.weight, 1);
       t = accMul(t, 100);
       return t.toFixed(0)
+    },
+    dayRewardNum() {
+      if (Number(this.weight) < 1) {
+        return '0.0000'
+      }
+      return perDayReward(this.weight)
     }
   },
   mounted() {
@@ -294,6 +301,9 @@ export default {
       })
     },
     handleClaim(item) {
+      if (this.claimLoading) {
+        return
+      }
       if (Number(this.accMineData.reward) < Number(this.minReward)) {
         this.showReWardTip = true;
         return
@@ -406,6 +416,10 @@ export default {
       }
     }
     .myMarket{
+      margin-top: 20px;
+    }
+    .rewardPerDay{
+      font-size: 24px;
       margin-top: 20px;
     }
   }

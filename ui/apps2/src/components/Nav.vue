@@ -7,6 +7,7 @@
       <div class="navList">
         <!-- <div class="list login" v-if="!scatter.identity" @click="handleLogin">连接钱包</div> -->
         <div class="list" @click="handleToV1">V1</div>
+        <div class="list" @click="handleToPools">矿池</div>
         <div class="list" @click="handleToTutorial">{{ $t('public.tutorial') }}</div>
         <!-- <div class="list">质押</div> -->
         <div class="list" @click="handleShowComp('invi')">{{ $t('invi.invitation') }}</div>
@@ -58,6 +59,14 @@ export default {
         return;
       }
       this.$router.push({name: 'tutorial'})
+      this.showNav = false;
+    },
+    handleToPools() {
+      if (this.$route.name === 'pools')  {
+        this.showNav = false;
+        return;
+      }
+      this.$router.push({name: 'pools'})
       this.showNav = false;
     },
     handleShowComp(type) {
