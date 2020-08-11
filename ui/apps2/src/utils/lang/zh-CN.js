@@ -147,7 +147,7 @@ export default {
     poolsMine2: '预计每万EOS每天收益 {perDayReward} DFS。',
     poolsMine3: '存入资金，可自动开始挖矿。',
     lockFunds: '锁定资金', // Locked in funds
-    wRewaed: '每万EOS收益',
+    wRewaed: '每万EOS/24H',
     nextLess: '下次产量衰减',
     current: '已经产出',
     waitClaim: '待领取收益',

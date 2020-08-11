@@ -146,7 +146,7 @@ export default {
     poolsMine2: 'It is expected to generate {perDayReward} DFS per 10,000 EOS per day.',
     poolsMine3: 'Deposit funds, can automatically start mining.',
     lockFunds: 'Locked in funds',
-    wRewaed: 'Revenue per 10,000 EOS',
+    wRewaed: '10,000 EOS/24H',
     nextLess: 'Next yield attenuation',
     current: 'Current',
     waitClaim: 'Pending earnings',
