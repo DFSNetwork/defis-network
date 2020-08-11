@@ -3,7 +3,17 @@
     <div class="myPools">
       <div class="title"><span class="act">{{ $t('mine.myMine') }}</span></div>
       <div class="data">
-        <div class="flexb">
+        <div class="allClaim flexb">
+          <div>
+            <div class="subTitle">{{ $t('mine.waitClaim') }}</div>
+            <div class="claimNum">{{ accMineData.showReward || '0.00000000' }} DFS</div>
+          </div>
+          <div class="allClaimBtn" v-if="Number(accMineData.liq)" v-loading="claimLoading"
+            @click="handleClaim(thisMarket)">{{ $t('bonus.claim') }}</div>
+          <div class="allClaimBtn" v-if="!Number(accMineData.liq) && getAccData"
+            @click="handleJoin(thisMarket)">{{ $t('mine.join') }}</div>
+        </div>
+        <!-- <div class="flexb">
           <span>
             <span>{{ $t('mine.earnings') }}：{{ accMineData.showReward || '0.00000000' }} DFS </span>
             <span v-if="Number(buff)" class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
@@ -11,33 +21,48 @@
           <span v-if="!Number(accMineData.liq) && getAccData" class="green" @click="handleJoin(thisMarket)">{{ $t('mine.join') }}</span>
           <span v-if="Number(accMineData.liq)" class="green" v-loading="claimLoading"
             @click="handleClaim(thisMarket)">{{ $t('bonus.claim') }}</span>
-        </div>
-        <div class="myMarket">
-          <span>{{ $t('mine.accPools') }}: </span>
-          <span>{{ accMineData.liq_bal0 || `0.0000 ${thisMarket.symbol0}` }} / {{ accMineData.liq_bal1 || `0.0000 ${thisMarket.symbol1}`}}</span>
-        </div>
-        <div class="myMarket">
-          <span>{{ $t('dex.poolNum') }}: </span>
-          <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
-        </div>
-        <div class="symbol flexb">
-          <div class="coinInfo flex">
-            <div class="coinImg"><img width="100%" :src="thisMarket.sym0Data.imgUrl"></div>
-            <div>
-              <div class="coin">{{ thisMarket.symbol0 }}</div>
-              <div class="contract tip">{{ thisMarket.contract0 }}</div>
+        </div> -->
+        <div class="mylist">
+          <div class="flexb">
+            <span>
+              <!-- <span>{{ $t('mine.earnings') }}：</span>
+              <span>{{ accMineData.showReward || '0.00000000' }} DFS </span> -->
+              <span v-if="Number(buff)" class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
+            </span>
+            <!-- <span class="green" v-if="!Number(accMineData.liq) && getAccData"
+              @click="handleJoin(thisMarket)">{{ $t('mine.join') }}</span> -->
+            <!-- <span class="green" v-if="Number(accMineData.liq)" v-loading="claimLoading"
+              @click="handleClaim(thisMarket)">{{ $t('bonus.claim') }}</span> -->
+          </div>
+          <div class="symbol flexb">
+            <div class="coinInfo flex">
+              <div class="coinImg"><img width="100%" :src="thisMarket.sym0Data.imgUrl"></div>
+              <div>
+                <div class="coin">{{ thisMarket.symbol0 }}</div>
+                <div class="contract tip">{{ thisMarket.contract0 }}</div>
+              </div>
+            </div>
+            <div class="add">+</div>
+            <div class="coinInfo flex">
+              <div class="coinImg"><img width="100%" :src="thisMarket.sym1Data.imgUrl"></div>
+              <div>
+                <div class="coin">{{ thisMarket.symbol1 }}</div>
+                <div class="contract tip">{{ thisMarket.contract1 }}</div>
+              </div>
             </div>
           </div>
-          <div class="add">+</div>
-          <div class="coinInfo flex">
-            <div class="coinImg"><img width="100%" :src="thisMarket.sym1Data.imgUrl"></div>
-            <div>
-              <div class="coin">{{ thisMarket.symbol1 }}</div>
-              <div class="contract tip">{{ thisMarket.contract1 }}</div>
-            </div>
-          </div>
         </div>
-        <div class="rewardPerDay tip">{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</div>
+        <div class="tipDiv">
+          <div>
+            <span>{{ $t('mine.accPools') }}: </span>
+            <span>{{ accMineData.liq_bal0 || `0.0000 ${thisMarket.symbol0}` }} / {{ accMineData.liq_bal1 || `0.0000 ${thisMarket.symbol1}`}}</span>
+          </div>
+          <div class="myMarket">
+            <span>{{ $t('dex.poolNum') }}: </span>
+            <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
+          </div>
+          <div class="rewardPerDay tip">{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</div>
+        </div>
       </div>
     </div>
 
@@ -376,11 +401,42 @@ export default {
 .green{
   color: #07D79B;
 }
-
+.mylist{
+  margin-top: 20px;
+  padding: 20px;
+  border: 1px solid #e0e0e0;
+  border-radius: 20px;
+  .addition{
+    font-size: 24px;
+    color: #C05D5D;
+  }
+}
 .symbolData{
   text-align: left;
   font-size: 28px;
   color: #000;
+  .allClaim{
+    // margin: 0 40px 40px;
+    background: #07D79B;
+    border-radius: 20px;
+    color: #FFF;
+    padding: 40px;
+    .subTitle{
+      font-size: 26px;
+    }
+    .claimNum{
+      font-size: 30px;
+      font-weight: 500;
+      margin-top: 8px;
+    }
+    .allClaimBtn{
+      background: #FFF;
+      border-radius: 8px;
+      color: #07D79B;
+      font-size: 28px;
+      padding: 10px 30px;
+    }
+  }
   .myPools{
     margin: 40px;
     .addition{
@@ -389,8 +445,6 @@ export default {
     }
     .symbol{
       margin-top: 20px;
-      padding: 20px;
-      border: 1px solid #e0e0e0;
       border-radius: 20px;
       .coinInfo{
         text-align: left;
@@ -416,12 +470,19 @@ export default {
       }
     }
     .myMarket{
-      margin-top: 20px;
+      margin-top: 10px;
     }
     .rewardPerDay{
       font-size: 24px;
-      margin-top: 20px;
+      margin-top: 10px;
     }
+  }
+  .tipDiv{
+    border: 1px solid #e3e3e3;
+    margin-top: 20px;
+    border-radius: 20px;
+    padding: 20px;
+    font-size: 28px;
   }
   .poolsLists{
     margin: 40px;
