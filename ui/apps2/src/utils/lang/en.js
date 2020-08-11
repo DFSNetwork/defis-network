@@ -98,6 +98,7 @@ export default {
     chooseMarket: 'Select market',
     accRate: ' Your liquidity(Proportion {rate}%)',
     searchMarket: 'Search market name',
+    myToken: 'My certificate',
   },
   hyk: {
     stock: 'Dividends Pool',

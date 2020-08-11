@@ -105,7 +105,7 @@
       <div class="subTitle">{{ $t('pools.accRate', {rate: thisRate}) }}</div>
       <div class="num">{{ toFixed(accPools.getNum1, thisMarket.decimal0) }} {{thisMarket.symbol0}}
         / {{ toFixed(accPools.getNum2, thisMarket.decimal1) }} {{thisMarket.symbol1}}</div>
-      <div class="subTitle">{{ $t('pools.getToken') }}</div>
+      <div class="subTitle">{{ $t('pools.myToken') }}</div>
       <div class="num">{{ accGetToken }}</div>
     </div>
 

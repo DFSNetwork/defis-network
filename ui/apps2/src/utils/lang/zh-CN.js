@@ -98,7 +98,8 @@ export default {
     ableToken: '可用凭证',
     chooseMarket: '选择市场',
     accRate: '您的做市(占比{rate}%)',
-    searchMarket: '搜索市场名称'
+    searchMarket: '搜索市场名称',
+    myToken: '我的凭证',
   },
   hyk: {
     stock: '分红',
