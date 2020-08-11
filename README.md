@@ -6,9 +6,7 @@ description: v1.1 Aug 10 2020
 
 ### Abstract
 
-That government of the people, by the people and for the people, shall not perish from the earth.                                             
-
-                                                                Abraham Lincoln, 1863, Gettysburg, Pennsylvania
+> That government of the people, by the people and for the people, shall not perish from the earth.                                                             ---- Abraham Lincoln, 1863, Gettysburg, Pennsylvania
 
 Shall the finance of the people, by the people and for the people, perish from the earth? Our answer is no, more importantly, the finance of the people, by the people and for the people is the basis of the cause that mankind has been fighting for generations. 
 
@@ -361,7 +359,5 @@ It's just born, an infant. So please forgive us that we can't disappear like Sat
 
 The surprise has not yet begun. 
 
-The surest way to corrupt a youth is to instruct him to hold in higher esteem those who think alike than those who think differently.
-
-                                                                                           Friedrich Wilhelm Nietzsche, 1881.
+> The surest way to corrupt a youth is to instruct him to hold in higher esteem those who think alike than those who think differently.          ----  Friedrich Wilhelm Nietzsche, 1881.
 
