@@ -102,10 +102,11 @@
     <div class="liquidity" v-if="act === 1">
       <div class="subTitle">{{ $t('dex.poolNum') }}</div>
       <div class="num">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>
-      <div class="subTitle">{{ $t('pools.accRate', {rate}) }}</div>
-      <div class="num">{{ toFixed(payNum1, thisMarket.decimal0) }} {{thisMarket.symbol0}}  /  {{ toFixed(payNum2, thisMarket.decimal1) }} {{thisMarket.symbol1}}</div>
+      <div class="subTitle">{{ $t('pools.accRate', {rate: thisRate}) }}</div>
+      <div class="num">{{ toFixed(accPools.getNum1, thisMarket.decimal0) }} {{thisMarket.symbol0}}
+        / {{ toFixed(accPools.getNum2, thisMarket.decimal1) }} {{thisMarket.symbol1}}</div>
       <div class="subTitle">{{ $t('pools.getToken') }}</div>
-      <div class="num">{{ getToken }}</div>
+      <div class="num">{{ accGetToken }}</div>
     </div>
 
     <div class="btnDiv" v-loading="loading">
@@ -149,7 +150,7 @@ export default {
       payNum1: '',
       payNum2: '',
       getToken: '0',
-      rate: '0.00',
+      // rate: '0.00',
       balanceSym0: '0.0000',
       balanceSym1: '0.0000',
       exRate: false,
@@ -194,6 +195,32 @@ export default {
       baseConfig: state => state.sys.baseConfig,
       weightList: state => state.sys.weightList, // 交易对权重列表
     }),
+    accPools() {
+      if (!this.thisMarket.reserve0 || !this.thisMarket.reserve1) {
+        return {}
+      }
+      const inData = {
+        poolSym0: this.thisMarket.reserve0.split(' ')[0],
+        poolSym1: this.thisMarket.reserve1.split(' ')[0],
+        poolToken: this.thisMarket.liquidity_token,
+        sellToken: accAdd(this.getToken || 0, this.token)
+      }
+      const outData = sellToken(inData);
+      return outData
+    },
+    accGetToken() {
+      const accToken = accAdd(this.token, this.getToken)
+      return accToken
+    },
+    thisRate() {
+      if (!this.thisMarket.liquidity_token) {
+        return '0.00'
+      }
+      let rate = accAdd(this.thisMarket.liquidity_token, this.getToken)
+      rate = accDiv(this.accGetToken, rate);
+      rate = accMul(rate, 100)
+      return toFixed(rate, 2)
+    }
   },
   watch: {
     marketLists: {
@@ -257,7 +284,7 @@ export default {
       if (!Number(val)) {
         this.sellToken = ''
       }
-    }
+    },
   },
   mounted() {
     // console.log(this.$route)
@@ -314,10 +341,10 @@ export default {
       type === 'sym0' ? this.payNum2 = toFixed(outData.payNum2, this.thisMarket.decimal1) :
                        this.payNum1 = toFixed(outData.payNum1, this.thisMarket.decimal0);
       this.getToken = outData.getToken;
-      let rate = accAdd(this.thisMarket.liquidity_token, this.getToken)
-      rate = accDiv(this.getToken, rate);
-      rate = accMul(rate, 100)
-      this.rate = toFixed(rate, 2)
+      // let rate = accAdd(this.thisMarket.liquidity_token, this.getToken)
+      // rate = accDiv(this.getToken, rate);
+      // rate = accMul(rate, 100)
+      // this.rate = toFixed(rate, 2)
     },
     handleFocus(type = 'sym0') {
       if (this.act !== 1) {
