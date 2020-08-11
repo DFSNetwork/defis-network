@@ -133,6 +133,30 @@ export default {
     redeemTime: '赎回时间',
     lastTime: '剩余{day}天{hour}小时',
   },
+  mine: {
+    minReward: '领取小于{minReward}的DFS将不会有奖励到账。',
+    rewardCut: '奖励的小数点后四位将被截取。',
+    minAbleReward: '最小可领取', // Minimum recoverable
+    mineBuff: '挖矿算力加成',
+    buff: '算力加成',
+    joinNow: '立即加入',
+    join: '加入',
+    earnings: '收益', // earnings
+    poolsMine1: '当前交易对可以进行流动性挖矿。',
+    poolsMine2: '预计每万EOS每天收益 {perDayReward} DFS。',
+    poolsMine3: '存入资金，可自动开始挖矿。',
+    lockFunds: '锁定资金', // Locked in funds
+    wRewaed: '每万EOS收益',
+    nextLess: '下次产量衰减',
+    current: '已经产出',
+    waitClaim: '待领取收益',
+    claimAll: '一键领取',
+    poolsList: '矿池列表',
+    myMine: '我的挖矿',
+    accPools: '您的做市',
+    minersList: '矿工列表',
+    poolsNum: '做市数量',
+  },
   miningRules: {
     rules: '挖矿规则',
     tradeRules: '交易挖矿规则',

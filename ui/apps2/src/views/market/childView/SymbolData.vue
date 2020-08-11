@@ -1,23 +1,23 @@
 <template>
   <div class="symbolData">
     <div class="myPools">
-      <div class="title"><span class="act">我的挖矿</span></div>
+      <div class="title"><span class="act">{{ $t('mine.myMine') }}</span></div>
       <div class="data">
         <div class="flexb">
           <span>
-            <span>收益：{{ accMineData.showReward || '0.00000000' }} DFS </span>
-            <span v-if="Number(buff)" class="addition">算力加成：{{ buff }}%</span>
+            <span>{{ $t('mine.earnings') }}：{{ accMineData.showReward || '0.00000000' }} DFS </span>
+            <span v-if="Number(buff)" class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
           </span>
-          <span v-if="!Number(accMineData.liq) && getAccData" class="green" @click="handleJoin(thisMarket)">加入</span>
+          <span v-if="!Number(accMineData.liq) && getAccData" class="green" @click="handleJoin(thisMarket)">{{ $t('mine.join') }}</span>
           <span v-if="Number(accMineData.liq)" class="green" v-loading="claimLoading"
-            @click="handleClaim(thisMarket)">领取</span>
+            @click="handleClaim(thisMarket)">{{ $t('bonus.claim') }}</span>
         </div>
         <div class="myMarket">
-          <span>您的做市: </span>
+          <span>{{ $t('mine.accPools') }}: </span>
           <span>{{ accMineData.liq_bal0 || `0.0000 ${thisMarket.symbol0}` }} / {{ accMineData.liq_bal1 || `0.0000 ${thisMarket.symbol1}`}}</span>
         </div>
         <div class="myMarket">
-          <span>流动池数量: </span>
+          <span>{{ $t('dex.poolNum') }}: </span>
           <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
         </div>
         <div class="symbol flexb">
@@ -37,20 +37,20 @@
             </div>
           </div>
         </div>
-        <div class="rewardPerDay tip">预计每万EOS每天收益 {{ dayRewardNum }} DFS。</div>
+        <div class="rewardPerDay tip">{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</div>
       </div>
     </div>
 
     <div class="poolsLists">
-      <div class="title"><span class="act">矿工列表</span></div>
+      <div class="title"><span class="act">{{ $t('mine.minersList') }}</span></div>
       <template v-for="(item, index) in minersArr">
         <div class="list" v-if="!(scatter.identity && item.miner === scatter.identity.accounts[0].name)" :key="index">
           <div class="flexb mb10">
             <span>{{ item.miner }}</span>
-            <span>收益：{{ item.showReward || '0.00000000' }} DFS</span>
+            <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
           </div>
           <div class="flexb">
-            <span>做市数量</span>
+            <span>{{ $t('mine.poolsNum') }}</span>
             <span>{{ item.liq_bal0 }} / {{ item.liq_bal1 }}</span>
           </div>
         </div>

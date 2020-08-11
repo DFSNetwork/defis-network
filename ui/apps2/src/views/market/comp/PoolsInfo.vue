@@ -8,24 +8,24 @@
         <div class="left">
           <div>{{ lockEos }}</div>
           <div class="tip flexb bonus">
-            <span>锁定资金（EOS）</span>
+            <span>{{ $t('mine.lockFunds') }}（EOS）</span>
           </div>
         </div>
         <div class="right">
           <div>{{ maxPerDayReward }}</div>
           <div class="tip bonus">
-            <span>每万EOS收益（DFS）</span>
+            <span>{{ $t('mine.wRewaed') }}（DFS）</span>
           </div>
         </div>
       </div>
     </div>
     <div class="miningInfo flexb" v-loading="loading">
       <div class="miningData">
-        <div class="tip">下次产量衰减</div>
+        <div class="tip">{{ $t('mine.nextLess') }}</div>
         <div class="num">{{ nextLess }} DFS</div>
       </div>
       <div class="miningData">
-        <div class="tip">已经产出</div>
+        <div class="tip">{{ $t('mine.current') }}</div>
         <div class="num">{{ showCurrent }} DFS</div>
       </div>
     </div>

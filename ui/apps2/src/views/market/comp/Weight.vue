@@ -4,22 +4,22 @@
       <div class="flexb mb10" v-if="Number(buff)">
         <div class="flexa">
           <span class="flexa">
-            <span>挖矿算力加成： {{ buff }}%</span>
+            <span>{{ $t('mine.mineBuff') }}： {{ buff }}%</span>
           </span>
         </div>
-        <div class="green" v-loading="joinLoading" v-if="showAddPools" @click="handleJoin">立即加入</div>
+        <div class="green" v-loading="joinLoading" v-if="showAddPools" @click="handleJoin">{{ $t('mine.joinNow') }}</div>
       </div>
       <div class="hasPools flexb mb10">
-        <div class="flexa" v-if="addTimer">
-          <span>收益： {{ changeReWard }} DFS</span>
+        <div class="flexa">
+          <span>{{ $t('mine.earnings') }}： {{ changeReWard || '0.00000000' }} DFS</span>
           <img class="tipIcom" src="@/assets/img/dex/tips_icon_btn.svg" @click="handleShowReWard">
         </div>
-        <div v-else>收益： 0.00000000 DFS</div>
-        <div v-if="getMinerData && Number(reward)" v-loading="claimLoading" class="green" @click="handleClaim">领取</div>
+        <div v-if="getMinerData && Number(reward)" v-loading="claimLoading"
+          class="green" @click="handleClaim">{{ $t('bonus.claim') }}</div>
       </div>
       <div class="tip">
-        <span>当前交易对可以进行流动性挖矿。预计每万EOS每天收益 {{perDayReward}} DFS。存入资金，可自动开始挖矿。</span>
-        <span class="green" v-if="!Number(buff) && showAddPools">立即加入></span>
+        <span>{{ $t('mine.poolsMine1') }}{{ $t('mine.poolsMine2', {perDayReward}) }}{{ $t('mine.poolsMine3') }}</span>
+        <span class="green" v-if="!Number(buff) && showAddPools">{{ $t('mine.joinNow') }}></span>
       </div>
     </div>
 

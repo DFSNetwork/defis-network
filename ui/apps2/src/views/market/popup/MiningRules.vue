@@ -27,6 +27,7 @@
               <div class="rule2">3. {{ $t('miningRules.marketRule2_3') }}</div>
             </div>
           </li>
+          <li class="rule1">{{ $t('mine.minReward', {minReward: minReward}) }}{{ $t('mine.rewardCut') }}</li>
         </ul>
       </div>
   </div>
@@ -34,7 +35,12 @@
 
 <script>
 export default {
-  
+  props: {
+    minReward: {
+      type: String,
+      default: '0.0005'
+    }
+  }
 }
 </script>
 

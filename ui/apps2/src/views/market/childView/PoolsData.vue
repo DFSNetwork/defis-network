@@ -3,16 +3,16 @@
     <pools-info :lists="lists"/>
     <div class="allClaim flexb">
       <div>
-        <div class="subTitle">待领取收益</div>
+        <div class="subTitle">{{ $t('mine.waitClaim') }}</div>
         <div class="claimNum">{{allReward}} DFS</div>
       </div>
-      <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">一键领取</div>
+      <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">{{ $t('mine.claimAll') }}</div>
     </div>
     <div class="poolsList">
       <div class="title flexb">
-        <span class="act">矿池列表</span>
+        <span class="act">{{ $t('mine.poolsList') }}</span>
         <span class="flexa mineRule" @click="showRules = true">
-          <span>挖矿规则</span>
+          <span>{{ $t('miningRules.rules') }}</span>
           <img class="tipIcon" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
         </span>
       </div>
@@ -20,14 +20,14 @@
       <div class="list" v-for="(item, index) in lists" :key="index" @click="handleToMarket(item)">
         <div class="flexb">
           <span>
-            <span>收益：</span>
+            <span>{{ $t('mine.earnings') }}：</span>
             <!-- <span v-if="!item.minnerData || !Number(item.minnerData.liq)">0.00000000 DFS </span> -->
             <span>{{ item.showReward || '0.00000000' }} DFS </span>
-            <span class="addition" v-if="Number(handleGetBuff(item))">算力加成：{{ handleGetBuff(item) }}%</span>
+            <span class="addition" v-if="Number(handleGetBuff(item))">{{ $t('mine.buff') }}：{{ handleGetBuff(item) }}%</span>
           </span>
-          <span class="green" v-if="item.minnerData && !Number(item.minnerData.liq)" @click.stop="handleJoin(item)">加入</span>
+          <span class="green" v-if="item.minnerData && !Number(item.minnerData.liq)" @click.stop="handleJoin(item)">{{ $t('mine.join') }}</span>
           <span class="green" v-if="item.minnerData && Number(item.minnerData.liq)" v-loading="item.loading"
-            @click.stop="handleClaim(item)">领取</span>
+            @click.stop="handleClaim(item)">{{ $t('bonus.claim') }}</span>
         </div>
         <div class="symbol flexa">
           <div class="coinInfo flex">
@@ -58,7 +58,7 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showRules">
-      <mining-rules />
+      <mining-rules :minReward="minReward"/>
     </el-dialog>
   </div>
 </template>
