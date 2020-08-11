@@ -116,6 +116,7 @@
     <!-- 弹窗组件 -->
     <el-dialog
       class="mkListDia"
+      :class="{'pcList': !this.minScreen}"
       :show-close="false"
       :visible.sync="showMarketList">
       <market-list :marketLists="marketLists"
@@ -187,6 +188,7 @@ export default {
   },
   computed: {
     ...mapState({
+      minScreen: state => state.app.minScreen,
       scatter: state => state.app.scatter,
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,

@@ -25,8 +25,12 @@ const app = {
       timer: '',
     },
     slipPoint: localStorage.getItem('slipPoint') ? parseInt(localStorage.getItem('slipPoint')) : 1,
+    minScreen: false,
   },
   mutations: {
+    SET_MINSCREEN: (state, minScreen) => {
+      state.minScreen = minScreen;
+    },
     SET_LANGUAGE: (state, language) => {
       state.language = language;
       localStorage.setItem('language', language);
@@ -50,6 +54,9 @@ const app = {
     },
   },
   actions: {
+    setMinScreen({ commit }, minScreen) {
+      commit('SET_MINSCREEN', minScreen);
+    },
     setLanguage({ commit }, language) {
       commit('SET_LANGUAGE', language);
     },

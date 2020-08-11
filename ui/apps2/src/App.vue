@@ -38,6 +38,7 @@ export default {
   },
   created() {
     this.handleSetLang();
+    this.handleResize();
   },
   mounted(){
     this.handleEnvReLoad();
@@ -58,6 +59,15 @@ export default {
     clearInterval(this.priceTimer);
   },
   methods: {
+    handleResize () {
+      if (document.documentElement.clientWidth <= 750 && !this.minScreen) {
+        this.$store.dispatch('setMinScreen', true)
+        return;
+      }
+      if (document.documentElement.clientWidth > 750 && this.minScreen) {
+        this.$store.dispatch('setMinScreen', false)
+      }
+    },
     // 登录
     handleLogin() {
       login(this, () => {})
