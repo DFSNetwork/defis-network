@@ -93,7 +93,7 @@
       <div class="title">{{ $t('nav.team') }}</div>
       <div class="users">
         <div class="user">
-          <div class="userImg"><img src="@/assets/img/team/team1.jpeg" alt=""></div>
+          <div class="userImg"><img src="@/assets/img/team/team3.jpeg" alt=""></div>
           <div class="name">Judy Lee</div>
           <div class="tip">Co-Founder & CTO</div>
         </div>
@@ -103,24 +103,34 @@
           <div class="tip">Co-Founder & CEO</div>
         </div>
         <div class="user">
-          <div class="userImg"><img src="@/assets/img/team/team3.jpeg" alt=""></div>
-          <div class="name">AYANA LAM</div>
+          <div class="userImg"><img src="@/assets/img/team/team6.jpeg" alt=""></div>
+          <div class="name">Ayana Lam</div>
           <div class="tip">Co-Founder & Project Manager</div>
+        </div>
+         <div class="user">
+          <div class="userImg"><img src="@/assets/img/team/team1.jpeg" alt=""></div>
+          <div class="name">Jaysun Xu</div>
+          <div class="tip">Project Manager</div>
         </div>
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team4.jpeg" alt=""></div>
-          <div class="name">Allen YANG</div>
+          <div class="name">Allen Yang</div>
           <div class="tip">Front-end Developer</div>
         </div>
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team2.jpeg" alt=""></div>
-          <div class="name">JAYSUN XU</div>
-          <div class="tip">Project Manager</div>
+          <div class="name">BB 8</div>
+          <div class="tip">Back-end Developer</div>
         </div>
         <div class="user">
-          <div class="userImg"><img src="@/assets/img/team/team6.jpeg" alt=""></div>
+          <div class="userImg"><img src="@/assets/img/team/team8.jpeg" alt=""></div>
           <div class="name">MICHELLE CHIN</div>
           <div class="tip">Marketing</div>
+        </div>
+        <div class="user">
+          <div class="userImg"><img src="@/assets/img/team/team9.jpeg" alt=""></div>
+          <div class="name">Joe</div>
+          <div class="tip">Consultant </div>
         </div>
       </div>
     </div>
