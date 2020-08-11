@@ -1,21 +1,21 @@
 <template>
   <div class="weight">
-    <div class="noPools">
+    <div class="noPools" @click="handleToSymbolPools">
       <div class="flexb mb10" v-if="Number(buff)">
         <div class="flexa">
           <span class="flexa">
             <span>{{ $t('mine.mineBuff') }}： {{ buff }}%</span>
           </span>
         </div>
-        <div class="green" v-loading="joinLoading" v-if="showAddPools" @click="handleJoin">{{ $t('mine.joinNow') }}</div>
+        <div class="green" v-loading="joinLoading" v-if="showAddPools" @click.stop="handleJoin">{{ $t('mine.joinNow') }}</div>
       </div>
       <div class="hasPools flexb mb10">
         <div class="flexa">
           <span>{{ $t('mine.earnings') }}： {{ changeReWard || '0.00000000' }} DFS</span>
-          <img class="tipIcom" src="@/assets/img/dex/tips_icon_btn.svg" @click="handleShowReWard">
+          <img class="tipIcom" src="@/assets/img/dex/tips_icon_btn.svg" @click.stop="handleShowReWard">
         </div>
         <div v-if="getMinerData && Number(reward)" v-loading="claimLoading"
-          class="green" @click="handleClaim">{{ $t('bonus.claim') }}</div>
+          class="green" @click.stop="handleClaim">{{ $t('bonus.claim') }}</div>
       </div>
       <div class="tip">
         <span>{{ $t('mine.poolsMine1') }}{{ $t('mine.poolsMine2', {perDayReward}) }}{{ $t('mine.poolsMine3') }}</span>
@@ -156,6 +156,14 @@ export default {
     clearInterval(this.priceTimer)
   },
   methods: {
+    handleToSymbolPools() {
+      this.$router.push({
+        name: 'poolsMarket',
+        params: {
+          mid: this.thisMarket.mid
+        }
+      })
+    },
     handleShowReWard() {
       this.showReWardTip = true;
     },

@@ -337,7 +337,9 @@ export default {
       if (this.allClaim) {
         return
       }
-      this.allClaim = true;
+      if (!this.scatter.identity || !this.scatter.identity.accounts[0].name) {
+        return
+      }
       const formName = this.$store.state.app.scatter.identity.accounts[0].name;
       const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
       const actions = [];
@@ -359,9 +361,13 @@ export default {
           }
         })
       })
+      if (!actions.length) {
+        return
+      }
       const params = {
         actions
       }
+      this.allClaim = true;
       EosModel.toTransaction(params, (res) => {
         this.allClaim = false;
         this.lists.forEach(item => {

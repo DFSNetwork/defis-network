@@ -68,6 +68,7 @@
 
     <div class="poolsLists">
       <div class="title"><span class="act">{{ $t('mine.minersList') }}</span></div>
+      <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
       <template v-for="(item, index) in minersArr">
         <div class="list" v-if="!(scatter.identity && item.miner === scatter.identity.accounts[0].name)" :key="index">
           <div class="flexb mb10">
@@ -102,6 +103,7 @@ export default {
   },
   data() {
     return {
+      getMinersList: false,
       showReWardTip: false,
       claimLoading: false,
       getAccData: false,
@@ -225,6 +227,8 @@ export default {
       EosModel.getTableRows(params, (res) => {
         if (type === 'user') {
           this.getAccData = true;
+        } else {
+          this.getMinersList = true;
         }
         const rows = res.rows || []
         if (!rows.length) {
@@ -494,6 +498,12 @@ export default {
       .mb10{
         margin-bottom: 10px;
       }
+    }
+    .noData{
+      text-align: center;
+      margin: 100px 0;
+      color: #A6A6A6;
+      font-size: 24px;
     }
   }
 }
