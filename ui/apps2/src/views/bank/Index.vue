@@ -200,7 +200,8 @@ export default {
       let amount = accMul(this.payNum, 3);
       amount = accDiv(this.payNum, 1000);
       amount = accDiv(this.payNum, this.price);
-      const reward = amount / this.dfsPrice * this.discount * this.damping;
+      let reward = amount / this.dfsPrice * this.discount * this.damping;
+      reward = accMul(reward, 0.8)
       return toFixed(reward, 4)
     },
     handleClose() {

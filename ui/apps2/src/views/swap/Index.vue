@@ -119,7 +119,7 @@
             <span>{{fees}} {{ thisMarket0.symbol }}</span>
           </div>
           <div class="flexb fee" v-if="weight">
-            <span class="tip">挖矿收益</span>
+            <span class="tip">{{ $t('mine.mineBonus') }}</span>
             <span>{{ reward }} DFS</span>
           </div>
         </div>
@@ -298,6 +298,7 @@ export default {
       amount = accMul(amount, 3);
       amount = accDiv(amount, 1000)
       let reward = amount / this.dfsPrice * this.discount * this.damping * this.weight;
+      reward = accMul(reward, 0.8);
       return toFixed(reward, 4)
     }
   },

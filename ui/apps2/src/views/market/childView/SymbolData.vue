@@ -1,7 +1,8 @@
 <template>
   <div class="symbolData">
     <div class="myPools">
-      <div class="title"><span class="act">{{ $t('mine.myMine') }}</span></div>
+      <!-- <div class="title"><span class="act">{{ $t('mine.myMine') }}</span></div> -->
+      <div class="title"><span class="act">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span></div>
       <div class="data">
         <div class="allClaim flexb">
           <div>
@@ -77,7 +78,7 @@
             <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
           </div>
           <div class="flexb">
-            <span>{{ $t('mine.poolsNum') }}</span>
+            <span>{{ $t('dex.poolNum') }}</span>
             <span>{{ item.liq_bal0 }} / {{ item.liq_bal1 }}</span>
           </div>
         </div>

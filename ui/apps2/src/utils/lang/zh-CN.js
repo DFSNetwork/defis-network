@@ -155,9 +155,11 @@ export default {
     claimAll: '一键领取',
     poolsList: '矿池列表',
     myMine: '我的挖矿',
+    symbolPool: '{symbol} 矿池',
     accPools: '您的做市',
     minersList: '矿工列表',
     poolsNum: '做市数量',
+    mineBonus: '挖矿收益', // Mining earnings
   },
   miningRules: {
     rules: '挖矿规则',

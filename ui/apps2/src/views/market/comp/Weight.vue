@@ -2,17 +2,21 @@
   <div class="weight">
     <div class="noPools" @click="handleToSymbolPools">
       <div class="flexb mb10" v-if="Number(buff)">
-        <div class="flexa">
+        <!-- <div class="flexa">
           <span class="flexa">
             <img class="buffImg" src="@/assets/img/poolspage/buff.svg">
             <span>{{ $t('mine.mineBuff') }}： {{ buff }}%</span>
           </span>
-        </div>
+        </div> -->
         <div class="green" v-loading="joinLoading" v-if="showAddPools" @click.stop="handleJoin">{{ $t('mine.joinNow') }}</div>
       </div>
       <div class="hasPools flexb mb10">
         <div class="flexa">
           <span>{{ $t('mine.earnings') }}： {{ changeReWard || '0.00000000' }} DFS</span>
+          <span class="flexa red">
+            <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
+            <span>{{ buff }}%</span>
+          </span>
           <img class="tipIcom" src="@/assets/img/dex/tips_icon_btn.svg" @click.stop="handleShowReWard">
         </div>
         <div v-if="getMinerData && Number(reward)" v-loading="claimLoading"
@@ -366,13 +370,18 @@ export default {
     margin-bottom: 10px;
   }
 
+  .red{
+    color: #E9574F;
+    margin-left: 4px;
+  }
+
   .green{
     margin-left: 20px;
     color: #07D79B;
   }
   .buffImg{
     width: 30px;
-    margin-right: 8px;
+    margin-right: 0px;
   }
 }
 .myDialog{
