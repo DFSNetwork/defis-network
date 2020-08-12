@@ -169,7 +169,8 @@ export default {
       amount = accDiv(amount, 1000);
       amount = accDiv(amount, this.price);
       // console.log(amount, this.dfsPrice , this.discount , this.damping)
-      const reward = amount / this.dfsPrice * this.discount * this.damping;
+      let reward = amount / this.dfsPrice * this.discount * this.damping;
+      reward = accMul(reward, 0.8)
       return toFixed(reward, 4)
     }
   },
