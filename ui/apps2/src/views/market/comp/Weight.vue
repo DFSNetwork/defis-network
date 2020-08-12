@@ -4,6 +4,7 @@
       <div class="flexb mb10" v-if="Number(buff)">
         <div class="flexa">
           <span class="flexa">
+            <img class="buffImg" src="@/assets/img/poolspage/buff.svg">
             <span>{{ $t('mine.mineBuff') }}： {{ buff }}%</span>
           </span>
         </div>
@@ -368,6 +369,10 @@ export default {
   .green{
     margin-left: 20px;
     color: #07D79B;
+  }
+  .buffImg{
+    width: 30px;
+    margin-right: 8px;
   }
 }
 .myDialog{

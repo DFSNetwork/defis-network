@@ -8,13 +8,13 @@
         <div class="left">
           <div>{{ lockEos }}</div>
           <div class="tip flexb bonus">
-            <span>{{ $t('mine.lockFunds') }}（EOS）</span>
+            <span>{{ $t('mine.lockFunds') }} (EOS)</span>
           </div>
         </div>
         <div class="right">
           <div>{{ maxPerDayReward }}</div>
           <div class="tip bonus">
-            <span>{{ $t('mine.wRewaed') }}（DFS）</span>
+            <span>{{ $t('mine.wRewaed') }} (DFS)</span>
           </div>
         </div>
       </div>

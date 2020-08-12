@@ -24,9 +24,10 @@
         </div> -->
         <div class="mylist">
           <div class="flexb">
-            <span>
+            <span class="flexa">
               <!-- <span>{{ $t('mine.earnings') }}：</span>
               <span>{{ accMineData.showReward || '0.00000000' }} DFS </span> -->
+              <img class="buffImg" src="@/assets/img/poolspage/buff.svg">
               <span v-if="Number(buff)" class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
             </span>
             <!-- <span class="green" v-if="!Number(accMineData.liq) && getAccData"
@@ -412,7 +413,11 @@ export default {
   border-radius: 20px;
   .addition{
     font-size: 24px;
-    color: #C05D5D;
+    color: #E9574F;
+  }
+  .buffImg{
+    width: 30px;
+    margin-right: 8px;
   }
 }
 .symbolData{
@@ -445,7 +450,7 @@ export default {
     margin: 40px;
     .addition{
       font-size: 24px;
-      color: #C05D5D;
+      color: #E9574F;
     }
     .symbol{
       margin-top: 20px;

@@ -135,6 +135,7 @@ export default {
     lastTime: '剩余{day}天{hour}小时',
   },
   mine: {
+    pools: '矿池',
     minReward: '领取小于{minReward}的DFS将不会有奖励到账。',
     rewardCut: '奖励的小数点后四位将被截取。',
     minAbleReward: '最小可领取', // Minimum recoverable

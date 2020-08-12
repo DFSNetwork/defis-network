@@ -134,6 +134,7 @@ export default {
     lastTime: '{day} days and {hour} hours remaining',
   },
   mine: {
+    pools: 'Pools',
     minReward: 'DFS reward less than {minReward} will not be send .',
     rewardCut: 'The last four digits of the reward decimal will be truncated.',
     minAbleReward: 'Minimum recoverable',

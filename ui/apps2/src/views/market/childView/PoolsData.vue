@@ -19,11 +19,14 @@
       <div class="noData" v-loading="!firstGet" v-if="!lists.length">{{ $t('public.noData') }}</div>
       <div class="list" v-for="(item, index) in lists" :key="index" @click="handleToMarket(item)">
         <div class="flexb">
-          <span>
+          <span class="flexa">
             <span>{{ $t('mine.earnings') }}：</span>
             <!-- <span v-if="!item.minnerData || !Number(item.minnerData.liq)">0.00000000 DFS </span> -->
             <span>{{ item.showReward || '0.00000000' }} DFS </span>
-            <span class="addition" v-if="Number(handleGetBuff(item))">{{ $t('mine.buff') }}：{{ handleGetBuff(item) }}%</span>
+            <span class="addition flexa" v-if="Number(handleGetBuff(item))">
+              <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
+              <span>{{ handleGetBuff(item) }}%</span>
+            </span>
           </span>
           <span class="green" v-if="item.minnerData && !Number(item.minnerData.liq)" @click.stop="handleJoin(item)">{{ $t('mine.join') }}</span>
           <span class="green" v-if="item.minnerData && Number(item.minnerData.liq)" v-loading="item.loading"
@@ -479,7 +482,13 @@ export default {
       border-radius: 20px;
       .addition{
         font-size: 24px;
-        color: #C05D5D;
+        color: #E9574F;
+        line-height: 40px;
+        margin-left: 10px;
+      }
+      .buffImg{
+        width: 30px;
+        margin: 0 0px 0 8px;
       }
       .symbol{
         margin-top: 20px;
