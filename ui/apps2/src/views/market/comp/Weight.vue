@@ -23,7 +23,7 @@
           class="green" @click.stop="handleClaim">{{ $t('bonus.claim') }}</div>
       </div>
       <div class="tip">
-        <span>{{ $t('mine.poolsMine1') }}{{ $t('mine.poolsMine2', {perDayReward}) }}{{ $t('mine.poolsMine3') }}</span>
+        <span>{{ $t('mine.poolsMine2', {perDayReward}) }}</span>
         <span class="green" v-if="!Number(buff) && showAddPools">{{ $t('mine.joinNow') }}></span>
       </div>
     </div>

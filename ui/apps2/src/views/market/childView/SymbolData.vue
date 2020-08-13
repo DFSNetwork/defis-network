@@ -28,7 +28,7 @@
             <span class="flexa" v-if="Number(buff)">
               <!-- <span>{{ $t('mine.earnings') }}：</span>
               <span>{{ accMineData.showReward || '0.00000000' }} DFS </span> -->
-              <img class="buffImg" src="@/assets/img/poolspage/buff.svg">
+              <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
               <span class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
             </span>
             <!-- <span class="green" v-if="!Number(accMineData.liq) && getAccData"
