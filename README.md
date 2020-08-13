@@ -219,6 +219,14 @@ So it is recommended that you get the invitation code when DFS price is still lo
 
 Transfer 100 DFS to dfsdfsfamily, you will get a unique invitation code bound to the transfer account \(Invitation codes can be transferred and sold later\).
 
+**Iucky eggs of trading mining \(time-limited\)**
+
+**Design ideas:**
+
+\*\*\*\*
+
+\*\*\*\*
+
 **2. Liquidity mining pool**
 
 **Design ideas:**
