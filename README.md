@@ -272,7 +272,7 @@ trading_mining_reward = 3 / 0.5 * 0.2 * 0.75 * 1.2 * 0.8 = 0.8640 DFS
 
 7.5 times transaction mining income every ten minutes! 
 
-Techincal miners can compete with their technologies. Mining machine manufacturers benefits from it. Market makers and liquidity providers have more risk-free profits. DFS buying demand from whales will also be fulfilled.
+Technical miners can compete with their technologies. Mining machine manufacturers benefits from it. Market makers and liquidity providers have more risk-free profits. DFS buying demand from whales will also be fulfilled.
 
 **2. Liquidity mining pool**
 
