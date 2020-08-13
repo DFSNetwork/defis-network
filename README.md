@@ -103,8 +103,6 @@ DFS tokens are mainly used for:
 5. Stablecoin minting incentive
 6. Creating synthetic assets
 7. Staking fixed income
-8. Community enhancement
-9. Partner cooperation
 
 Through the aggregation and innovation of more DeFi protocols in the future, DFS tokens will continue to capture more further value. DFS distribution are executed by smart contracts automatically, so that each DFS holder can share the benefits of DeFis Network development fairly. 
 
