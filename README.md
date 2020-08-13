@@ -270,11 +270,9 @@ Suppose this transaction did not trigger Lucky Egg:
 trading_mining_reward = 3 / 0.5 * 0.2 * 0.75 * 1.2 * 0.8 = 0.8640 DFS 
 ```
 
-7.5 times transaction mining income! Once every ten minutes.
+7.5 times transaction mining income every ten minutes! 
 
-Script-making techincal miners can compete with their technologies. Mining machine manufacturers benefits from it. Market makers and liquidity providers have more risk-free profits. DFS buying demand from whales will also be fulfilled.
-
-
+Techincal miners can compete with their technologies. Mining machine manufacturers benefits from it. Market makers and liquidity providers have more risk-free profits. DFS buying demand from whales will also be fulfilled.
 
 **2. Liquidity mining pool**
 
@@ -345,8 +343,8 @@ Parameter assumptions:
 
 1. Average DFS market price: 1 DFS = 0.15 EOS, 
 2. Minting 10000.0000 USDD, fee 0.3% = 30 USDD = 10.7 EOS 
-3. discount: 0.2, 
-4. damping 0.75 
+3. Discount: 0.2, 
+4. Damping 0.75 
 
 Question: How much DFS can i get for minting 10000 USDD in thie example?
 
