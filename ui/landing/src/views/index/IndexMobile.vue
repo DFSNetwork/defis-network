@@ -124,8 +124,8 @@
         </div>
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team8.jpeg" alt=""></div>
-          <div class="name">MICHELLE CHIN</div>
-          <div class="tip">Marketing</div>
+          <div class="name">Jennifer.D</div>
+          <div class="tip">UI & Marketing</div>
         </div>
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team9.jpeg" alt=""></div>
