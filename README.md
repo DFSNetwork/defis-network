@@ -221,7 +221,7 @@ Transfer 100 DFS to dfsdfsfamily, you will get a unique invitation code bound to
 
 **Design ideas:**
 
-In the Bitcoin mining system, there is a concept of lucky value. On the basis of an average of every ten minutes, there are usually lucky miners who can calculate the hash value in advance within ten minutes and obtain miner rewards in advance. In the DFS trading mining pool, we also retain the concept of "luck". 
+In the Bitcoin mining system, there is a concept of luck. On the basis of an average of every ten minutes, there are usually lucky miners who can calculate the hash value in advance within ten minutes and obtain rewards in advance. In the DFS trading mining pool, we also retain the concept of luck. 
 
 On average, every ten minutes, there will be a Lucky Egg. A transaction that meets the following two conditions can be regarded as triggering Lucky Egg receiving additional rewards:
 
