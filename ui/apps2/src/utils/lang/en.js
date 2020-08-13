@@ -22,6 +22,8 @@ export default {
     safeRecord3: '',
     confirm: 'Confirm',
     unLogin: 'You are not logged in yet, please ',
+    warmPrompt: 'Tip',
+    usddTip: 'Please consider the fluctuations of USDD price due to direct exchange or leverage, and use at your own risk',
   },
   invi: {
     invitation: 'Invitation',

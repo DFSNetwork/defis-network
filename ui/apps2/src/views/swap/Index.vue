@@ -131,16 +131,28 @@
     </div>
 
     <div class="pool" v-if="marketLists.length && bestPath">
-      <div>
-        <span>{{ $t('dex.poolNum') }}</span>
-        <span class="marketNow" @click="handleToMarketNow">{{ $t('dex.marketNow') }} ></span>
+      <div class="flexb">
+        <div>
+          <span>{{ $t('dex.poolNum') }}</span>
+          <span class="marketNow" @click="handleToMarketNow">{{ $t('dex.marketNow') }} ></span>
+        </div>
+        <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
+          <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
+          <span>{{ $t('public.warmPrompt') }}</span>
+        </div>
       </div>
       <div class="poolsNum">
         {{ bestPath.reserve0 }} / {{ bestPath.reserve1 }}
       </div>
     </div>
     <div v-else-if="routePath" class="routePath">
-      {{ $t('dex.moreRoute') }}： 
+      <div class="flexb">
+        <div>{{ $t('dex.moreRoute') }}： </div>
+        <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
+          <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
+          <span>{{ $t('public.warmPrompt') }}</span>
+        </div>
+      </div>
       <div class="flexw">
         <span v-for="(item, i) in routePath" :key="i" class="flexc coin">
           <img class="coinUrl" :onerror="errorCoinImg"
@@ -161,6 +173,12 @@
         @listenMarketChange="handleMarketChange"
         @listenClose="handleClose"/>
     </el-dialog>
+    <el-dialog
+      class="mkListDia pcList"
+      :show-close="true"
+      :visible.sync="showUsddTip">
+      <usdd-tip />
+    </el-dialog>
   </div>
 </template>
 
@@ -171,12 +189,14 @@ import Tabs from '../index/components/Tabs';
 import { toFixed, accMul, accDiv, accSub } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
 import MarketList from '@/components/MarketList';
+import UsddTip from '@/components/UsddTip';
 
 export default {
   name: 'swap',
   components: {
     Tabs,
-    MarketList
+    MarketList,
+    UsddTip
   },
   data() {
     return {
@@ -197,6 +217,7 @@ export default {
       balanceSym1: '0.0000',
       timer: null,
       showMarketList: false,
+      showUsddTip: false,
       type: 'pay',
       thisCoinsPath: '', // 币种路由路径
       thisMidsPath: '', // Mids路由路径
@@ -300,6 +321,12 @@ export default {
       let reward = amount / this.dfsPrice * this.discount * this.damping * this.weight;
       reward = accMul(reward, 0.8);
       return toFixed(reward, 4)
+    },
+    showTip() {
+      if (this.thisMarket1.contract === 'bankofusddv1' && this.thisMarket1.symbol === 'USDD') {
+        return true
+      }
+      return false
     }
   },
   watch: {
@@ -804,6 +831,15 @@ export default {
     &:active{
       background:rgba(2,198,152,1);
     }
+  }
+}
+.usddTip{
+  color: #f5a623;
+  font-size: 26px;
+  .tipIcon{
+    width: 32px;
+    display: block;
+    margin-right: 6px;
   }
 }
 .pool{

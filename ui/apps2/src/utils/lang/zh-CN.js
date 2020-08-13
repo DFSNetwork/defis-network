@@ -22,6 +22,8 @@ export default {
     safeRecord3: '提供安全审计',
     confirm: '确认',
     unLogin: '您还未登录账号，请',
+    warmPrompt: '温馨提示',
+    usddTip: '请考虑USDD价格存在因直接兑换或加杠杆行为导致的波动，自负使用风险',
   },
   invi: {
     invitation: '邀请', // invitation
