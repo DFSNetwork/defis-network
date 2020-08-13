@@ -248,7 +248,7 @@ The final DFS rewards obtained by trading mining are still affected by the dampi
 
 **Example Case:**
 
-1. Transaction amount 1000 EOS -&gt; EOS/DFS, fee 3 EOS 
+1. Transaction amount: 1000 EOS -&gt; EOS/DFS, fee: 3 EOS 
 2. pool\_weight: 1.2 
 3. damping: 0.75 
 4. discount: 1.5 \(default 0.2\) 
