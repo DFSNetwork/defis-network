@@ -154,7 +154,7 @@ export default {
     current: 'Current supply',
     waitClaim: 'Pending reward',
     claimAll: 'Claim all',
-    poolsList: 'Pool list',
+    poolsList: 'Pools',
     myMine: 'My dig',
     symbolPool: '{symbol} Pool',
     accPools: 'Your market',
