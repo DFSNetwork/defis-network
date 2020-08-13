@@ -219,13 +219,62 @@ So it is recommended that you get the invitation code when DFS price is still lo
 
 Transfer 100 DFS to dfsdfsfamily, you will get a unique invitation code bound to the transfer account \(Invitation codes can be transferred and sold later\).
 
-**Iucky eggs of trading mining \(time-limited\)**
+**Lucky Egg of trading mining \(time-limited\)**
 
 **Design ideas:**
 
-\*\*\*\*
+In the Bitcoin mining system, there is the concept of lucky value. On the basis of an average of every ten minutes, there are usually lucky miners who can calculate the hash value in advance within ten minutes and obtain miner rewards in advance. In the DFS trading mining pool, we also retain the concept of "luck". 
 
-\*\*\*\*
+On average, every ten minutes, there will be a Lucky Egg. A transaction that meets the following two conditions can be regarded as triggering Lucky Egg receiving additional rewards:
+
+1. The transaction volume is less than 5000 EOS. 
+2. The transaction time is within 60 seconds of the first minute of each ten minutes.
+
+**Code example:**
+
+```text
+uint64_t lucky_key = current_time_point().sec_since_epoch() / 60;
+bool is_lucky_hint = lucky_key % 10 == 0;
+double discount = trading_mining_discount; //default 0.2
+if (is_lucky_hint && trading_fee.amount <= (5000 * 10000))
+{
+   discount = 1.5;
+}
+```
+
+In the trading mining algorithm, there is a discount coefficient, which indicates the discount strength of the transaction fee.
+
+Trigger the reward of Lucky Egg, and you will get a reward of discount=1.5. It means that this transaction fee is not only free, but also an additional DFS token reward.
+
+However, the final DFS rewards obtained by trading mining are still affected by the damping parameters, pool\_weight and dfs\_price parameters.
+
+The same 20% of the DFS from mining will enter the DSR saving pool public account, waiting for DSR allocation
+
+**Example Case:**
+
+1. Transaction amount 1000 EOS -&gt; EOS/DFS, 
+2. Handling fee 3 EOS pool\_weight: 1.2 
+3. Damping: 0.75 
+4. Discount: 1.5 \(default 0.2\) 
+5. DFS price: 0.5 
+
+Suppose this transaction triggers a Lucky Egg every ten minutes:
+
+```text
+trading_mining_reward = 3 / 0.5 * 1.2 * 0.75 * 1.2 * 0.8 = 6.48 DFS 
+```
+
+Suppose this transaction did not trigger Lucky Egg:
+
+```text
+trading_mining_reward = 3 / 0.5 * 0.2 * 0.75 * 1.2 * 0.8 = 0.8640 DFS 
+```
+
+7.5 times transaction mining income! Once every ten minutes.
+
+Script-making techincal miners can compete with their technologies. Mining machine manufacturers benefits from it. Market makers and liquidity providers have more risk-free profits. DFS buying demand from whales will also be fulfilled.
+
+
 
 **2. Liquidity mining pool**
 
