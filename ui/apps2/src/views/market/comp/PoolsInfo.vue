@@ -128,9 +128,9 @@ export default {
     },
     handleRun(current) {
       clearInterval(this.runTimer)
-      // if (!Number(this.showCurrent)) {
-      //   this.showCurrent = current;
-      // }
+      if (!Number(this.showCurrent)) {
+        this.showCurrent = current;
+      }
       let tShowCurrent = this.showCurrent;
       let t = accSub(current, tShowCurrent) / 100;
       if (t < 0) {

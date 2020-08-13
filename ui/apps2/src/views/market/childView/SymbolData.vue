@@ -244,6 +244,9 @@ export default {
             this.handleRunAccReward()
             return;
           }
+          if (this.scatter.identity && this.scatter.identity.accounts[0].name === v.miner) {
+            return
+          }
           this.minersArr.push(minnerData)
         })
         this.handleRunReward()
