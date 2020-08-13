@@ -156,6 +156,7 @@ export default {
         scope: 'miningpool11',
         table: 'weights',
         json: true,
+        limit: 100
       }
       EosModel.getTableRows(params, (res) => {
         const rows = res.rows || [];

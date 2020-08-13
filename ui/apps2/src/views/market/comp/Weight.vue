@@ -13,7 +13,7 @@
       <div class="hasPools flexb mb10">
         <div class="flexa">
           <span>{{ $t('mine.earnings') }}： {{ changeReWard || '0.00000000' }} DFS</span>
-          <span class="flexa red">
+          <span class="flexa red" v-if="Number(buff)">
             <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
             <span>{{ buff }}%</span>
           </span>

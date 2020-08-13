@@ -509,6 +509,7 @@ export default {
           aboutPrice = toFixed(aboutPrice, this.thisMarket0.decimal)
       let aboutPriceSym0 = getNum / payNum;
           aboutPriceSym0 = toFixed(aboutPriceSym0, this.thisMarket1.decimal)
+      // console.log(aboutPriceSym0, res.price)
       let priceRate = accDiv(aboutPriceSym0, res.price);
           priceRate = accSub(1, priceRate)
           priceRate = Math.abs(priceRate);

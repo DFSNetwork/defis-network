@@ -25,11 +25,11 @@
         </div> -->
         <div class="mylist">
           <div class="flexb">
-            <span class="flexa">
+            <span class="flexa" v-if="Number(buff)">
               <!-- <span>{{ $t('mine.earnings') }}：</span>
               <span>{{ accMineData.showReward || '0.00000000' }} DFS </span> -->
               <img class="buffImg" src="@/assets/img/poolspage/buff.svg">
-              <span v-if="Number(buff)" class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
+              <span class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
             </span>
             <!-- <span class="green" v-if="!Number(accMineData.liq) && getAccData"
               @click="handleJoin(thisMarket)">{{ $t('mine.join') }}</span> -->
@@ -194,7 +194,7 @@ export default {
       return t.toFixed(0)
     },
     dayRewardNum() {
-      if (Number(this.weight) < 1) {
+      if (Number(this.weight) <= 0) {
         return '0.0000'
       }
       return perDayReward(this.weight)
