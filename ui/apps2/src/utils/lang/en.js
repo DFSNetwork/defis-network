@@ -139,7 +139,7 @@ export default {
     pools: 'Pools',
     minReward: 'DFS reward less than {minReward} will not be send .',
     rewardCut: 'The last four digits of the reward decimal will be truncated.',
-    minAbleReward: 'Minimum recoverable',
+    minAbleReward: 'Minimum claimable',
     mineBuff: 'Calculate power bonus',
     buff: 'Calculate power bonus',
     joinNow: 'Join Now',
@@ -161,6 +161,11 @@ export default {
     minersList: 'Miners',
     poolsNum: 'Number of market',
     mineBonus: 'Mining earnings',
+  },
+  node: {
+    nodeSet: 'Node Setting',
+    defaultNode: 'Default',
+    standbyNode: 'Standby',
   },
   miningRules: {
     rules: 'Mining rules',

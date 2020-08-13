@@ -163,6 +163,11 @@ export default {
     poolsNum: '做市数量',
     mineBonus: '挖矿收益', // Mining earnings
   },
+  node: {
+    nodeSet: '节点设置',
+    defaultNode: '默认节点',
+    standbyNode: '备用节点',
+  },
   miningRules: {
     rules: '挖矿规则',
     tradeRules: '交易挖矿规则',

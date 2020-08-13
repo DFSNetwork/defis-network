@@ -49,7 +49,7 @@ const sys = {
       baseCoinContract: 'eosio.token',
       teamFunds: 'jinteamfunds', // 资金账户
     },
-    proConfig: { // 生产环境配置
+    proConfig: localStorage.getItem('proConfig') ? JSON.parse(localStorage.getItem('proConfig')) : { // 生产环境配置
       node: {
         area: 'production',
         protocol: 'https',
