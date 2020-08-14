@@ -150,7 +150,7 @@ export default {
     poolsMine3: 'Deposit funds, can automatically start mining.',
     lockFunds: 'Total Lock Value',
     wRewaed: '10,000 EOS/24H',
-    nextLess: 'Netx damping',
+    nextLess: 'Next damping',
     current: 'Current supply',
     waitClaim: 'Pending reward',
     claimAll: 'Claim all',
