@@ -188,7 +188,7 @@ trading_mining_reward = 0.3 / 0.15 * 0.2 * 0.75 = 0.3 DFS
 平均每十分钟，会出现一次Lucky Hint。 
 满足以下两个条件的交易，可视为触发 Lucky Hint，获得Lucky Hint的额外奖励:
 
-1. 交易额小于5000 EOS。
+1. 交易额小于2500 EOS。
 2. 交易的时间，在每个十分钟的第一分钟的60秒内。
 
 代码示例： 
@@ -197,15 +197,15 @@ trading_mining_reward = 0.3 / 0.15 * 0.2 * 0.75 = 0.3 DFS
 uint64_t lucky_key = current_time_point().sec_since_epoch() / 60;
 bool is_lucky_hint = lucky_key % 10 == 0;
 double discount = trading_mining_discount; //default 0.2
-if (is_lucky_hint && trading_fee.amount <= (5000 * 10000))
+if (is_lucky_hint && trading_fee.amount <= (2500 * 10000))
 {
-   discount = 1.5;
+   discount = 3;
 }
 ```
 
 在交易挖矿算法中，有一个 discount 系数，表示交易手续费的打折力度。
 
-触发Lucky Hint的 奖励，将获得 discount=1.5 的奖赏。这意味着这笔交易手续费不仅全免， 还有额外DFS赠送。
+触发Lucky Hint的 奖励，将获得 discount=3 的奖赏。这意味着这笔交易手续费不仅全免， 还有额外DFS赠送。
 
 但交易挖矿最终所能获得的DFS奖励，依旧受到 damping 参数、pool_weight 、dfs_price参数的影响，
 
@@ -218,14 +218,14 @@ if (is_lucky_hint && trading_fee.amount <= (5000 * 10000))
 * 交易额 1000 EOS -> EOS/DFS , 手续费 3 EOS
 * pool_weight:  1.2
 * damping : 0.75
-* discount: 1.5 (默认0.2)
+* discount: 3 (默认0.2)
 * dfs price: 0.5
 
 
 假设这笔交易，触发了每十分钟一次的幸运暴击 :
 
 ```
-trading_mining_reward = 3 / 0.5 * 1.2 * 0.75 * 1.2 * 0.8 = 6.48 DFS 
+trading_mining_reward = 3 / 0.5 * 3 * 0.75 * 1.2 * 0.8 = 12.96 DFS 
 ```
 
 假设这笔交易，没有触发幸运暴击 :
@@ -234,7 +234,7 @@ trading_mining_reward = 3 / 0.5 * 1.2 * 0.75 * 1.2 * 0.8 = 6.48 DFS
 trading_mining_reward = 3 / 0.5 * 0.2 * 0.75 * 1.2 * 0.8 = 0.8640 DFS 
 ```
 
-7.5 倍交易挖矿收益！十分钟一次。
+15 倍交易挖矿收益！十分钟一次。
 
 不仅科学家可以进行技术竞赛。
 
