@@ -50,7 +50,7 @@
           <span class="tip">{{ $t('public.fee') }}</span>
           <span>{{ fees }}%</span>
         </div>
-        <div class="rate flexb" v-if="thisMarket1.symbol === 'USDD' && thisMarket1.contract === 'bankofusddv1'">
+        <div class="rate flexb" v-if="thisMarket0.symbol === 'EOS' && thisMarket0.contract === 'eosio.token'">
           <span class="tip">{{ $t('mine.mineBonus') }}</span>
           <span>{{ reward }} DFS</span>
         </div>
