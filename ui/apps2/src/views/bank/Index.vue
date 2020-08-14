@@ -51,7 +51,7 @@
           <span>{{ fees }}%</span>
         </div>
         <div class="rate flexb" v-if="thisMarket1.symbol === 'USDD' && thisMarket1.contract === 'bankofusddv1'">
-          <span class="tip">挖矿收益</span>
+          <span class="tip">{{ $t('mine.mineBonus') }}</span>
           <span>{{ reward }} DFS</span>
         </div>
         <div class="rate flexb" v-if="false">
