@@ -45,6 +45,8 @@ export default {
     this.handleEnvSet();
     EosModel.scatterInit(this, () => {
       this.handleLogin()
+    });
+    setTimeout(() => {
       this.handleGetWeight()
       this.handleGetAprs()
       this.handleGetDfsCurrent()
@@ -53,7 +55,7 @@ export default {
       this.priceTimer = setInterval(() => {
         this.handleGetPrice()
       }, 300000);
-    });
+    }, 500);
   },
   beforeDestroy: function () {
     clearInterval(this.priceTimer);

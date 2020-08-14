@@ -237,6 +237,7 @@ export default {
           this.accMineData = {};
           return
         }
+        const newList = [];
         rows.forEach(v => {
           const minnerData = dealMinerData(v, this.thisMarket)
           if (type === 'user') {
@@ -247,8 +248,12 @@ export default {
           if (this.scatter.identity && this.scatter.identity.accounts[0].name === v.miner) {
             return
           }
-          this.minersArr.push(minnerData)
+          newList.push(minnerData)
         })
+        const newListSort = newList.sort((a, b) => {
+          return b.liq - a.liq;
+        })
+        this.minersArr = newList;
         this.handleRunReward()
       })
     },
