@@ -244,9 +244,9 @@ export default {
             this.accMineData = minnerData;
             return;
           }
-          if (this.scatter.identity && this.scatter.identity.accounts[0].name === v.miner) {
-            return
-          }
+          // if (this.scatter.identity && this.scatter.identity.accounts[0].name === v.miner) {
+          //   return
+          // }
           newList.push(minnerData)
         })
         if (type === 'user') {
