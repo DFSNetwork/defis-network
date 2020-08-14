@@ -72,7 +72,7 @@
       <div class="title"><span class="act">{{ $t('mine.minersList') }}</span></div>
       <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
       <template v-for="(item, index) in minersArr">
-        <div class="list" v-if="!(scatter.identity && item.miner === scatter.identity.accounts[0].name)" :key="index">
+        <div class="list" :key="index">
           <div class="flexb mb10">
             <span>{{ item.miner }}</span>
             <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
