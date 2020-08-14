@@ -331,7 +331,7 @@ mint_mininng_reward = mint_fee / dfs_price * discount * damping
 mint_mininng_reward = 10.7 / 0.15 * 0.2 * 0.75 = 10.7 DFS 
 ```
 
-最终交易挖矿获得 10.7 DFS = 1.6 EOS。直接卖出DFS相当于铸币手续费打了8.5折，不卖出，相当于拿住了无限可能。
+最终铸币挖矿获得 10.7 DFS = 1.6 EOS。直接卖出DFS相当于铸币手续费打了8.5折，不卖出，相当于拿住了无限可能。
 
 
 ### 四、邀请挖矿设计概述 (optional)
