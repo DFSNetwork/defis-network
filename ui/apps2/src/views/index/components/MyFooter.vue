@@ -13,7 +13,7 @@
           </a>
           <img @click="showWeChat = true" src="@/assets/img/team/wechat.svg" alt="wechat">
           <!-- <img src="@/assets/img/team/discord.svg" alt="discord"> -->
-          <a href="https://twitter.com/Defis2020" target="_blank">
+          <a href="https://twitter.com/DefisNetwork" target="_blank">
              <img src="@/assets/img/team/twitter.svg" alt="twitter">
           </a>
         </div>

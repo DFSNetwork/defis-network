@@ -50,7 +50,7 @@ export default {
       marketLists: [],
       timer: null,
       topLists: [
-        7, 39, 17, 
+        39
       ],
       showInvi: false,
       showNode: false,
@@ -117,6 +117,7 @@ export default {
       EosModel.getTableRows(params, (res) => {
         const list = res.rows || [];
         const newList = []
+        let dfsData = {}
         list.forEach((v) => {
           const sym0 = v.sym0.split(',');
           v.symbol0 = sym0[1]; // 币种
@@ -152,12 +153,38 @@ export default {
           }
           const i = this.topLists.find(vv => vv === v.mid)
           if (i) {
-            newList.unshift(v)
+            // newList.unshift(v)
+            dfsData = v;
           } else {
+            if (v.sym0Data.symbol === 'EOS' && v.sym0Data.contract === 'eosio.token') {
+              newList.unshift(v)
+              return
+            }
+            if (v.sym1Data.symbol === 'EOS' && v.sym1Data.contract === 'eosio.token') {
+              newList.unshift(v)
+              return;
+            }
             newList.push(v)
           }
         });
-        this.marketLists = newList;
+        const newListSort = newList.sort((a, b) => {
+          let aEos = 0;
+          if (a.sym0Data.contract === 'eosio.token') {
+            aEos = parseInt(a.reserve0)
+          } else if(a.sym1Data.contract === 'eosio.token') {
+            aEos = parseInt(a.reserve1)
+          }
+          let bEos = 0;
+          if (b.sym0Data.contract === 'eosio.token') {
+            bEos = parseInt(b.reserve0)
+          } else if(a.sym1Data.contract === 'eosio.token') {
+            bEos = parseInt(b.reserve1)
+          }
+
+          return bEos - aEos;
+        })
+        newListSort.splice(1, 0, dfsData)
+        this.marketLists = newListSort;
       })
     }
   }
