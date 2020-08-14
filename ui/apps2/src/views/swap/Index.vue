@@ -118,7 +118,7 @@
             </span>
             <span>{{fees}} {{ thisMarket0.symbol }}</span>
           </div>
-          <div class="flexb fee" v-if="weight">
+          <div class="flexb fee" v-if="weight && Number(reward)">
             <span class="tip">{{ $t('mine.mineBonus') }}</span>
             <span>{{ reward }} DFS</span>
           </div>
@@ -310,12 +310,13 @@ export default {
         return '0.0000';
       }
       let amount = '0'
-      if (this.thisMarket0.symbol === 'EOS' && this.thisMarket0.contract === 'eosio.token') {
-        amount = this.payNum;
+      if (!(this.thisMarket0.symbol === 'EOS' && this.thisMarket0.contract === 'eosio.token')) {
+        return '0.0000'
       }
-      if (this.thisMarket1.symbol === 'EOS' && this.thisMarket1.contract === 'eosio.token') {
-        amount = this.getNum;
-      }
+      amount = this.payNum;
+      // if (this.thisMarket1.symbol === 'EOS' && this.thisMarket1.contract === 'eosio.token') {
+      //   amount = this.getNum;
+      // }
       amount = accMul(amount, 3);
       amount = accDiv(amount, 1000)
       let reward = amount / this.dfsPrice * this.discount * this.damping * this.weight;
