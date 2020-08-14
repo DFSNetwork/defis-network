@@ -33,6 +33,18 @@ const constantRouter = [
         meta: { title: 'DeFis-Network' },
       },
       {
+        path: '/pools',
+        name: 'pools',
+        component: () => import(/* webpackChunkName: "pools" */ '@/views/market/childView/PoolsData.vue'),
+        meta: { title: 'DeFis-Network' },
+      },
+      {
+        path: '/pools/:mid',
+        name: 'poolsMarket',
+        component: () => import(/* webpackChunkName: "pools" */ '@/views/market/childView/SymbolData.vue'),
+        meta: { title: 'DeFis-Network' },
+      },
+      {
         path: '/bank',
         name: 'bank',
         component: () => import(/* webpackChunkName: "bank" */ '@/views/bank/Index.vue'),

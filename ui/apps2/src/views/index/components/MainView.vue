@@ -65,7 +65,7 @@ export default {
 .mainView{
   margin: 0 40px;
   .tabView{
-    background: #FAFAFA;
+    // background: #FAFAFA;
     border-radius:30px;
     font-size: 24px;;
     .tabC{

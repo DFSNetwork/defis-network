@@ -7,9 +7,11 @@
 </template>
 
 <script>
+import moment from 'moment';
+import axios from 'axios';
 import { mapState } from 'vuex';
 import WarmTip from '@/components/WarmTip';
-import { GetUrlPara, login, getUrlParams } from '@/utils/public';
+import { GetUrlPara, login, getUrlParams, toLocalTime, accPow, accDiv } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
 
 export default {
@@ -27,21 +29,45 @@ export default {
       proConfig: state => state.sys.proConfig, // 生产环境
     }),
   },
+  data() {
+    return {
+      priceTimer: null,
+    }
+  },
   watch: {
   },
   created() {
     this.handleSetLang();
+    this.handleResize();
   },
   mounted(){
     this.handleEnvReLoad();
     this.handleEnvSet();
     EosModel.scatterInit(this, () => {
       this.handleLogin()
+      this.handleGetWeight()
+      this.handleGetAprs()
+      this.handleGetDfsCurrent()
+      clearInterval(this.priceTimer)
+      this.handleGetPrice()
+      this.priceTimer = setInterval(() => {
+        this.handleGetPrice()
+      }, 300000);
     });
   },
   beforeDestroy: function () {
+    clearInterval(this.priceTimer);
   },
   methods: {
+    handleResize () {
+      if (document.documentElement.clientWidth <= 750 && !this.minScreen) {
+        this.$store.dispatch('setMinScreen', true)
+        return;
+      }
+      if (document.documentElement.clientWidth > 750 && this.minScreen) {
+        this.$store.dispatch('setMinScreen', false)
+      }
+    },
     // 登录
     handleLogin() {
       login(this, () => {})
@@ -72,7 +98,8 @@ export default {
       const urlParams = getUrlParams(window.location.href) || {};
       // set inviAcc
       const inviAcc = urlParams.code;
-      if (inviAcc) {
+      const localInviAcc = localStorage.getItem('inviAcc') ? JSON.parse(localStorage.getItem('inviAcc')) : {}
+      if (inviAcc && !localInviAcc.accSet) {
         this.handleRegInviAcc(inviAcc)
       }
       // set Language
@@ -122,7 +149,83 @@ export default {
         config = this.devConfig;
       }
       this.$store.dispatch('setBaseConfig', config)
-    }
+    },
+    // 获取交易对权重 - 全局取一次
+    handleGetWeight() {
+      const params = {
+        code: 'miningpool11',
+        scope: 'miningpool11',
+        table: 'weights',
+        json: true,
+        limit: 100
+      }
+      EosModel.getTableRows(params, (res) => {
+        const rows = res.rows || [];
+        if (!rows.length) {
+          return
+        }
+        this.$store.dispatch('setWeightList', rows)
+      })
+    },
+    // 获取aprs - 全局一次
+    handleGetAprs() {
+      const params = {
+        code: 'miningpool11',
+        scope: 'miningpool11',
+        table: 'args',
+        lower_bound: 'EOS',
+        upper_bound: 'EOS',
+        // primary_key: 'EOS',
+        json: true,
+      }
+      EosModel.getTableRows(params, (res) => {
+        const rows = res.rows || [];
+        if (!rows.length) {
+          return
+        }
+        const aprs = rows[0];
+        let lastTime = toLocalTime(`${aprs.last_drip}.000+0000`);
+        lastTime = moment(lastTime).valueOf();
+        aprs.lastTime = lastTime;
+        this.$store.dispatch('setAprs', aprs)
+      })
+    },
+    // 获取DFS流通量 - 全局区一次
+    async handleGetDfsCurrent() {
+      const https = this.baseConfig.node.url;
+      const params = {
+        code: 'minedfstoken',
+        symbol: 'DFS'
+      }
+      const result = await axios.post(`${https}/v1/chain/get_currency_stats`, JSON.stringify(params))
+      if (result.status !== 200) {
+        return;
+      }
+      const res = result.data['DFS'];
+      const supply = res.supply.split(' ')[0];
+      
+      const damping = accPow(0.75, accDiv(supply, 1000000).toFixed(0));
+      this.$store.dispatch('setDamping', damping)
+    },
+    // DFS价格 - 5分钟一次
+    handleGetPrice() {
+      const params = {
+        "code": "defislinkeos",
+        "scope": "39",
+        "table": "avgprices",
+        "limit": 3,
+        "json": true,
+      }
+      EosModel.getTableRows(params, (res) => {
+        const rows = res.rows || [];
+        if (!rows.length) {
+          return
+        }
+        const price = rows.find(v => v.key === 300) || {};
+        const price5min = accDiv(price.price1_avg_price, 10000) || 0;
+        this.$store.dispatch('setDfsPrice', price5min)
+      })
+    },
   },
 }
 </script>

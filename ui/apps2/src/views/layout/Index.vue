@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
     <header-tools @listenShowNav="handleShowNav" @listenShowTools="handleShowTools"/>
-    <acc-login v-if="$route.name !== 'tutorial'"/>
+    <acc-login v-if="showAcc"/>
     <transition name="fade" mode="out-in">
       <router-view class="content" :marketLists="marketLists"/>
     </transition>
@@ -13,6 +13,12 @@
       class="mydialog"
       :visible.sync="showInvi">
       <invi-acc v-if="showInvi" />
+    </el-dialog>
+
+    <el-dialog
+      class="nodeDialog"
+      :visible.sync="showNode">
+      <NodeSet v-if="showNode" />
     </el-dialog>
   </div>
 </template>
@@ -26,6 +32,7 @@ import MyFooter from '@/components/Footer';
 import Nav from '@/components/Nav';
 import SlipPointTools from '@/components/SlipPointTools';
 import InviAcc from '@/components/InviAcc';
+import NodeSet from '@/components/popup/NodeSet';
 
 export default {
   name: 'layout',
@@ -35,7 +42,8 @@ export default {
     MyFooter,
     Nav,
     SlipPointTools,
-    InviAcc
+    InviAcc,
+    NodeSet
   },
   data() {
     return {
@@ -45,6 +53,7 @@ export default {
         7, 39, 17, 
       ],
       showInvi: false,
+      showNode: false,
     }
   },
   computed:{
@@ -52,7 +61,12 @@ export default {
       // 箭头函数可使代码更简练
       scatter: state => state.app.scatter,
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-    })
+    }),
+    showAcc() {
+      const noArr = ['tutorial', 'pools', 'poolsMarket'];
+      const has = noArr.find(v => v === this.$route.name)
+      return !has
+    }
   },
   mounted() {
     this.handleRowsMarket();
@@ -65,6 +79,9 @@ export default {
     handleShowComp(type) {
       if (type === 'invi') {
         this.showInvi = true;
+      }
+      if (type === 'node') {
+        this.showNode = true
       }
     },
     handleShowNav() {
@@ -165,7 +182,7 @@ export default {
   margin: auto;
   position: relative;
   box-sizing: border-box;
-  .mydialog{
+  .mydialog,.nodeDialog{
     /deep/ .el-dialog{
       // position: absolute;
       border-radius: 30px;
@@ -180,6 +197,11 @@ export default {
         font-size: 26px;
         padding: 35px;
       }
+    }
+  }
+  .nodeDialog{
+    /deep/ .el-dialog{
+      width: 620px;
     }
   }
 }

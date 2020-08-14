@@ -50,6 +50,10 @@
           <span class="tip">{{ $t('public.fee') }}</span>
           <span>{{ fees }}%</span>
         </div>
+        <div class="rate flexb" v-if="thisMarket1.symbol === 'USDD' && thisMarket1.contract === 'bankofusddv1'">
+          <span class="tip">挖矿收益</span>
+          <span>{{ reward }} DFS</span>
+        </div>
         <div class="rate flexb" v-if="false">
           <span class="tip">生成比率</span>
           <span class="flex">
@@ -85,7 +89,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, getPrice } from '@/utils/public';
+import { toFixed, getPrice, accMul, accDiv } from '@/utils/public';
 import MarketList from '@/components/MarketList';
 import Tabs from '../index/components/Tabs';
 import OrderList from './components/OrderList';
@@ -97,6 +101,7 @@ export default {
   },
   data() {
     return {
+      discount: 0.2, // 配置项 - 后期从合约拿
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       payNum: '',
       getNum: '',
@@ -151,7 +156,23 @@ export default {
       // 箭头函数可使代码更简练
       scatter: state => state.app.scatter,
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-    })
+      dfsPrice: state => state.sys.dfsPrice,
+      // weightList: state => state.sys.weightList, // 交易对权重列表
+      // aprs: state => state.sys.aprs,
+      damping: state => state.sys.damping,
+    }),
+    reward() {
+      if (this.thisMarket1.symbol !== 'USDD' || this.thisMarket1.contract !== 'bankofusddv1') {
+        return '0'
+      }
+      let amount = accMul(this.getNum, 3);
+      amount = accDiv(amount, 1000);
+      amount = accDiv(amount, this.price);
+      // console.log(amount, this.dfsPrice , this.discount , this.damping)
+      let reward = amount / this.dfsPrice * this.discount * this.damping;
+      reward = accMul(reward, 0.8)
+      return toFixed(reward, 4)
+    }
   },
   watch: {
     payNum(newVal, oldVal) {
@@ -173,6 +194,17 @@ export default {
     clearInterval(this.timer);
   },
   methods: {
+    handleDealMine() {
+      if (this.thisMarket0.symbol !== 'EOS' || this.thisMarket0.contract !== 'eosio.token') {
+        return '0'
+      }
+      let amount = accMul(this.payNum, 3);
+      amount = accDiv(this.payNum, 1000);
+      amount = accDiv(this.payNum, this.price);
+      let reward = amount / this.dfsPrice * this.discount * this.damping;
+      reward = accMul(reward, 0.8)
+      return toFixed(reward, 4)
+    },
     handleClose() {
       this.showMarketList = false;
     },

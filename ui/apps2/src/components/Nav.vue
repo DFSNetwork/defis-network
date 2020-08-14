@@ -7,9 +7,11 @@
       <div class="navList">
         <!-- <div class="list login" v-if="!scatter.identity" @click="handleLogin">连接钱包</div> -->
         <div class="list" @click="handleToV1">V1</div>
+        <div class="list" @click="handleToPools">{{ $t('mine.pools') }}</div>
         <div class="list" @click="handleToTutorial">{{ $t('public.tutorial') }}</div>
         <!-- <div class="list">质押</div> -->
         <div class="list" @click="handleShowComp('invi')">{{ $t('invi.invitation') }}</div>
+        <div class="list" @click="handleShowNode">{{ $t('node.nodeSet') }}</div>
         <div class="list">
           <span v-if="language !== 'en'" @click="handleChangeLang('en')">EN</span>
           <span v-else @click="handleChangeLang('zh-CN')">CN</span>
@@ -49,6 +51,10 @@ export default {
         this.showNav = false;
       })
     },
+    handleShowNode() {
+      this.$emit('listenShowComp', 'node')
+      this.showNav = false;
+    },
     handleToV1() {
       location.href = 'https://app2.defis.network/'
     },
@@ -58,6 +64,14 @@ export default {
         return;
       }
       this.$router.push({name: 'tutorial'})
+      this.showNav = false;
+    },
+    handleToPools() {
+      if (this.$route.name === 'pools')  {
+        this.showNav = false;
+        return;
+      }
+      this.$router.push({name: 'pools'})
       this.showNav = false;
     },
     handleShowComp(type) {

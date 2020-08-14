@@ -3,7 +3,6 @@
     <div class="tabView">
       <div class="tabC">
         <tabs />
-
         <div class="symData">
           <div class="sym0Data" :class="{'focus': payIptFocus}">
             <div class="info flexb">
@@ -104,7 +103,7 @@
               {{ tradeInfo.priceRate }}%
             </span>
           </div>
-          <div class="flexb fee">
+          <div class="flexb" :class="{'fee': !weight}">
             <span class="flex">
               <span class="tip">{{ $t('public.fee') }}</span>
               <el-popover 
@@ -119,6 +118,10 @@
             </span>
             <span>{{fees}} {{ thisMarket0.symbol }}</span>
           </div>
+          <div class="flexb fee" v-if="weight">
+            <span class="tip">{{ $t('mine.mineBonus') }}</span>
+            <span>{{ reward }} DFS</span>
+          </div>
         </div>
       </el-collapse-transition>
     </div>
@@ -128,16 +131,28 @@
     </div>
 
     <div class="pool" v-if="marketLists.length && bestPath">
-      <div>
-        <span>{{ $t('dex.poolNum') }}</span>
-        <span class="marketNow" @click="handleToMarketNow">{{ $t('dex.marketNow') }} ></span>
+      <div class="flexb">
+        <div>
+          <span>{{ $t('dex.poolNum') }}</span>
+          <span class="marketNow" @click="handleToMarketNow">{{ $t('dex.marketNow') }} ></span>
+        </div>
+        <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
+          <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
+          <span>{{ $t('public.warmPrompt') }}</span>
+        </div>
       </div>
       <div class="poolsNum">
         {{ bestPath.reserve0 }} / {{ bestPath.reserve1 }}
       </div>
     </div>
     <div v-else-if="routePath" class="routePath">
-      {{ $t('dex.moreRoute') }}： 
+      <div class="flexb">
+        <div>{{ $t('dex.moreRoute') }}： </div>
+        <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
+          <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
+          <span>{{ $t('public.warmPrompt') }}</span>
+        </div>
+      </div>
       <div class="flexw">
         <span v-for="(item, i) in routePath" :key="i" class="flexc coin">
           <img class="coinUrl" :onerror="errorCoinImg"
@@ -158,6 +173,12 @@
         @listenMarketChange="handleMarketChange"
         @listenClose="handleClose"/>
     </el-dialog>
+    <el-dialog
+      class="mkListDia pcList"
+      :show-close="true"
+      :visible.sync="showUsddTip">
+      <usdd-tip />
+    </el-dialog>
   </div>
 </template>
 
@@ -168,15 +189,18 @@ import Tabs from '../index/components/Tabs';
 import { toFixed, accMul, accDiv, accSub } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
 import MarketList from '@/components/MarketList';
+import UsddTip from '@/components/UsddTip';
 
 export default {
   name: 'swap',
   components: {
     Tabs,
-    MarketList
+    MarketList,
+    UsddTip
   },
   data() {
     return {
+      discount: 0.2, // 配置项 - 后期从合约拿
       loading: false,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       payNum: '',
@@ -193,6 +217,7 @@ export default {
       balanceSym1: '0.0000',
       timer: null,
       showMarketList: false,
+      showUsddTip: false,
       type: 'pay',
       thisCoinsPath: '', // 币种路由路径
       thisMidsPath: '', // Mids路由路径
@@ -235,6 +260,10 @@ export default {
       scatter: state => state.app.scatter,
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
+      dfsPrice: state => state.sys.dfsPrice,
+      weightList: state => state.sys.weightList, // 交易对权重列表
+      // aprs: state => state.sys.aprs,
+      damping: state => state.sys.damping,
     }),
     showDetail() {
       return Number(this.payNum) && Number(this.getNum)
@@ -265,6 +294,39 @@ export default {
       }
       const pathArr = path.split('-')
       return pathArr
+    },
+    weight() {
+      if (!this.weightList.length || !this.bestPath) {
+        return 0
+      }
+      const weiData = this.weightList.find(v => v.mid === this.bestPath.mid);
+      if (!weiData) {
+        return 0
+      }
+      return Number(weiData.pool_weight)
+    },
+    reward() {
+      if (!this.bestPath) {
+        return '0.0000';
+      }
+      let amount = '0'
+      if (this.thisMarket0.symbol === 'EOS' && this.thisMarket0.contract === 'eosio.token') {
+        amount = this.payNum;
+      }
+      if (this.thisMarket1.symbol === 'EOS' && this.thisMarket1.contract === 'eosio.token') {
+        amount = this.getNum;
+      }
+      amount = accMul(amount, 3);
+      amount = accDiv(amount, 1000)
+      let reward = amount / this.dfsPrice * this.discount * this.damping * this.weight;
+      reward = accMul(reward, 0.8);
+      return toFixed(reward, 4)
+    },
+    showTip() {
+      if (this.thisMarket1.contract === 'bankofusddv1' && this.thisMarket1.symbol === 'USDD') {
+        return true
+      }
+      return false
     }
   },
   watch: {
@@ -447,6 +509,7 @@ export default {
           aboutPrice = toFixed(aboutPrice, this.thisMarket0.decimal)
       let aboutPriceSym0 = getNum / payNum;
           aboutPriceSym0 = toFixed(aboutPriceSym0, this.thisMarket1.decimal)
+      // console.log(aboutPriceSym0, res.price)
       let priceRate = accDiv(aboutPriceSym0, res.price);
           priceRate = accSub(1, priceRate)
           priceRate = Math.abs(priceRate);
@@ -542,8 +605,8 @@ export default {
       const b = this.balanceSym0;
       this.balanceSym0 = this.balanceSym1;
       this.balanceSym1 = b;
-      console.log(this.thisMarket0)
-      console.log(this.thisMarket1)
+      // console.log(this.thisMarket0)
+      // console.log(this.thisMarket1)
       this.handleInBy(this.tradeInfo.type, 'first')
     },
     handleFocus(type = 'pay') {
@@ -769,6 +832,15 @@ export default {
     &:active{
       background:rgba(2,198,152,1);
     }
+  }
+}
+.usddTip{
+  color: #f5a623;
+  font-size: 26px;
+  .tipIcon{
+    width: 32px;
+    display: block;
+    margin-right: 6px;
   }
 }
 .pool{

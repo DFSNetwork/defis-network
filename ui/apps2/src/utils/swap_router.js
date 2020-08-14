@@ -171,8 +171,8 @@ class swapRouter {
       }
       token_out = tokenB
       quantity_out = (amount_out / (10 ** market.sym1.split(",")[0])).toFixed(market.sym1.split(",")[0]) + " " + market.reserve1.split(" ")[1];
-
-      price = reserve_out / reserve_in;
+      // console.log(reserve_out, reserve_in)
+      price = parseFloat(market.reserve1) / parseFloat(market.reserve0);
     }
     if (token_in === tokenB) {
       let reserve_in = parseFloat(market.reserve1) * (10 ** market.sym1.split(",")[0]);
@@ -196,7 +196,8 @@ class swapRouter {
       } else {
         quantity_out = (amount_out / (10 ** market.sym1.split(",")[0])).toFixed(market.sym1.split(",")[0]) + " " + market.reserve1.split(" ")[1];
       }
-      price = reserve_out / reserve_in;
+      // console.log(reserve_out, reserve_in)
+      price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
     }
     return {
       token_out,

@@ -22,6 +22,8 @@ export default {
     safeRecord3: '提供安全审计',
     confirm: '确认',
     unLogin: '您还未登录账号，请',
+    warmPrompt: '温馨提示',
+    usddTip: '请考虑USDD价格存在因直接兑换或加杠杆行为导致的波动，自负使用风险',
   },
   invi: {
     invitation: '邀请', // invitation
@@ -98,7 +100,8 @@ export default {
     ableToken: '可用凭证',
     chooseMarket: '选择市场',
     accRate: '您的做市(占比{rate}%)',
-    searchMarket: '搜索市场名称'
+    searchMarket: '搜索市场名称',
+    myToken: '我的凭证',
   },
   hyk: {
     stock: '分红',
@@ -132,6 +135,52 @@ export default {
     redeemNum: '赎回数量',
     redeemTime: '赎回时间',
     lastTime: '剩余{day}天{hour}小时',
+  },
+  mine: {
+    pools: '矿池',
+    minReward: '领取小于{minReward}的DFS将不会有奖励到账。',
+    rewardCut: '奖励的小数点后四位将被截取。',
+    minAbleReward: '最小可领取', // Minimum recoverable
+    mineBuff: '挖矿算力加成',
+    buff: '算力加成',
+    joinNow: '立即加入',
+    join: '加入',
+    earnings: '收益', // earnings
+    poolsMine1: '当前交易对可以进行流动性挖矿。',
+    poolsMine2: '预计每万EOS每天收益 {perDayReward} DFS。',
+    poolsMine3: '存入资金，可自动开始挖矿。',
+    lockFunds: '锁定资金', // Locked in funds
+    wRewaed: '每万EOS/24H',
+    nextLess: '下次产量衰减',
+    current: '已经产出',
+    waitClaim: '待领取收益',
+    claimAll: '一键领取',
+    poolsList: '矿池列表',
+    myMine: '我的挖矿',
+    symbolPool: '{symbol} 矿池',
+    accPools: '您的做市',
+    minersList: '矿工列表',
+    poolsNum: '做市数量',
+    mineBonus: '挖矿收益', // Mining earnings
+  },
+  node: {
+    nodeSet: '节点设置',
+    defaultNode: '默认节点',
+    standbyNode: '备用节点',
+  },
+  miningRules: {
+    rules: '挖矿规则',
+    tradeRules: '交易挖矿规则',
+    tradeRule1: '在Swap中参与兑换代币, 即可获得DFS。交易额越大。获得DFS越多。',
+    tradeRule2: 'DFS奖励实时到账。',
+    bankRules: '铸币挖矿规则',
+    bankRule1: '在Bank中参与铸币USDD，即可获得DFS。铸币越多。获得DFS越多。',
+    marketRules: '做市挖矿规则',
+    marketRule1: '参与指定的交易对的做市。即可参与挖矿。做市资金越大，获得DFS越多。',
+    marketRule2: '做市挖矿奖励的领取方式有3',
+    marketRule2_1: '用户主动领取。',
+    marketRule2_2: '添加做市资金时自动领取。',
+    marketRule2_3: '减少做市资金时自动领取。',
   },
   tutorial: {
     done: '搞定！',

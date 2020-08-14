@@ -49,7 +49,7 @@ const sys = {
       baseCoinContract: 'eosio.token',
       teamFunds: 'jinteamfunds', // 资金账户
     },
-    proConfig: { // 生产环境配置
+    proConfig: localStorage.getItem('proConfig') ? JSON.parse(localStorage.getItem('proConfig')) : { // 生产环境配置
       node: {
         area: 'production',
         protocol: 'https',
@@ -67,25 +67,52 @@ const sys = {
       baseCoin: 'EOS', // 母币
       baseCoinContract: 'eosio.token',
       teamFunds: 'jinteamfunds', // 资金账户
-    }
+    },
+    weightList: localStorage.getItem('weightList') ? JSON.parse(localStorage.getItem('weightList')) : [], // 挖矿权重列表
+    aprs: localStorage.getItem('aprs') ? JSON.parse(localStorage.getItem('aprs')) : {}, // 全局aprs
+    damping: localStorage.getItem('damping') || 0.75, // DFS流通量计算得出 - Math.pow(0.75, parseInt(dfsCurrent / 1000000))
+    dfsPrice: localStorage.getItem('dfsPrice') || '0', // DFS 5分钟均价
   },
   mutations: {
     SET_BASECONFIG: (state, baseConfig) => {
       state.baseConfig = baseConfig;
     },
-    // 接收账户
-    SET_TOACCOUNT: (state, toAccount) => {
-      state.toAccount = toAccount;
-      localStorage.setItem('toAccount', toAccount);
+    // 挖矿权重列表
+    SET_WEIGHTLIST: (state, weightList) => {
+      state.weightList = weightList;
+      localStorage.setItem('weightList', JSON.stringify(weightList));
+    },
+    // 全局aprs
+    SET_APRS: (state, aprs) => {
+      state.aprs = aprs;
+      localStorage.setItem('aprs', JSON.stringify(aprs));
+    },
+    SET_DAMPING: (state, damping) => {
+      state.damping = damping;
+      localStorage.setItem('damping', JSON.stringify(damping));
+    },
+    SET_DFSPRICE: (state, dfsPrice) => {
+      state.dfsPrice = dfsPrice;
+      localStorage.setItem('dfsPrice', dfsPrice);
     },
   },
   actions: {
     setBaseConfig({ commit }, baseConfig) {
       commit('SET_BASECONFIG', baseConfig);
     },
-    // 接收账户
-    setToAccount({ commit }, toAccount) {
-      commit('SET_TOACCOUNT', toAccount);
+    // 挖矿权重列表
+    setWeightList({ commit }, weightList) {
+      commit('SET_WEIGHTLIST', weightList);
+    },
+    // 全局aprs
+    setAprs({ commit }, aprs) {
+      commit('SET_APRS', aprs);
+    },
+    setDamping({ commit }, damping) {
+      commit('SET_DAMPING', damping);
+    },
+    setDfsPrice({ commit }, dfsPrice) {
+      commit('SET_DFSPRICE', dfsPrice);
     },
   }
 };

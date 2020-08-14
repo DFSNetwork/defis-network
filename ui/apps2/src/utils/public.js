@@ -41,6 +41,17 @@ export function accDiv(arg1, arg2) {
   return new Decimal(arg1).div(new Decimal(arg2)).toNumber();
 }
 
+/*
+ ** 指数函数，用来得到精确的指数结果
+ ** 返回值：Math.pow(arg1, arg2)的精确结果 Number 型
+*/
+export function accPow(arg1, arg2) {
+  if (!arg1 || !arg2) {
+    return 0
+  }
+  return new Decimal(arg1).pow(new Decimal(arg2)).toNumber();
+}
+
 // 登录
 export function login(vThis, cb) {
   EosModel.scatterInit(vThis, () => {
@@ -189,4 +200,48 @@ export function getUrlParams(url) {
     params[key] = value;
   });
   return params;
+}
+// 计算收益
+export function dealReward(minnerData, weight) {
+  const damping = store.state.sys.damping;
+  const dfsPrice = store.state.sys.dfsPrice;
+  const aprs = store.state.sys.aprs;
+  // 用户实际数据计算
+  let minNum = '0';
+  const type = minnerData.lastTime < aprs.lastTime; // 用户时间 < 系统时间
+  if (type) {
+    let t = moment().valueOf() - aprs.lastTime;
+    t = t / 1000;
+    minNum = minnerData.liq * aprs.aprs_accumulator * Math.pow(aprs.aprs, t)
+  } else {
+    let t = moment().valueOf() - minnerData.lastTime;
+    t = t / 1000;
+    minNum = minnerData.liq * Math.pow(aprs.aprs, t)
+  }
+  minNum = minNum - minnerData.liq;
+  let reward = minNum / dfsPrice * damping * weight
+  reward *= 0.8
+  reward = toFixed(reward, 8)
+  return reward
+}
+export function perDayReward(weight) {
+  const damping = store.state.sys.damping;
+  const dfsPrice = store.state.sys.dfsPrice;
+  const aprs = store.state.sys.aprs;
+  const t = 86400;
+  let minNum = 10000 * Math.pow(aprs.aprs, t)
+  minNum -= 10000;
+  let reward = minNum / dfsPrice * damping * weight
+  reward *= 0.8
+  reward = toFixed(reward, 4)
+  return reward
+}
+// 处理用户挖矿数据
+export function dealMinerData(minnerData, thisMarket) {
+  let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
+  lastTime = moment(lastTime).valueOf();
+  minnerData.lastTime = lastTime;
+  const liq = thisMarket.symbol0 === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
+  minnerData.liq = liq;
+  return minnerData
 }

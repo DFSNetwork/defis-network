@@ -1,7 +1,11 @@
 <template>
   <div>
-    <div class="title">
+    <div class="title flexb">
       <span class="act">{{ $t('bank.record') }}</span>
+      <div class="flexa usddTip" @click="showUsddTip = true">
+        <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
+        <span>{{ $t('public.warmPrompt') }}</span>
+      </div>
     </div>
     <div class="lists">
       <div class="noData" v-if="!tableData.length">{{ $t('public.noData') }}</div>
@@ -25,6 +29,13 @@
         </div>
       </div>
     </div>
+
+    <el-dialog
+      class="mkListDia pcList"
+      :show-close="true"
+      :visible.sync="showUsddTip">
+      <usdd-tip />
+    </el-dialog>
   </div>
 </template>
 
@@ -33,12 +44,18 @@ import { EosModel } from '@/utils/eos';
 import { toLocalTime, toFixed } from '@/utils/public';
 import { mapState } from 'vuex';
 import moment from 'moment';
+import UsddTip from '@/components/UsddTip';
+
 export default {
+  components: {
+    UsddTip
+  },
   data() {
     return {
       tableData: [],
       timer: null,
-      balanceSym0: '0.0000'
+      balanceSym0: '0.0000',
+      showUsddTip: false,
     }
   },
   computed: {
@@ -182,6 +199,15 @@ export default {
       transform: translateX(-45%);
     }
   }
+  .usddTip{
+    color: #f5a623;
+    font-size: 26px;
+    .tipIcon{
+      width: 32px;
+      display: block;
+      margin-right: 6px;
+    }
+  }
 }
 .lists{
   .noData{
@@ -213,6 +239,29 @@ export default {
       .right{
         text-align: right;
       }
+    }
+  }
+}
+
+.mkListDia{
+  // animation: none;
+  /deep/ .el-dialog{
+    position: absolute;
+    bottom: 0px;
+    margin: 0px;
+    width: 100%;
+    border-radius:30px 30px 0px 0px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+    }
+  }
+  &.pcList{
+    /deep/ .el-dialog{
+      position: relative;
+      margin: auto;
+      width: 670px;
+      border-radius:30px;
     }
   }
 }
