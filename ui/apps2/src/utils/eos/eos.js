@@ -567,6 +567,10 @@ async getTableRows(obj, callback) {
       }
     }
     // self.vthis.$message.error(`${back.message} ${back.code}`);
+    back = {
+      code: 9999,
+      message: JSON.stringify(e)
+    }
     callback(back);
   }
 }
