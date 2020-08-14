@@ -237,18 +237,27 @@ export default {
           this.accMineData = {};
           return
         }
+        const newList = [];
         rows.forEach(v => {
           const minnerData = dealMinerData(v, this.thisMarket)
           if (type === 'user') {
             this.accMineData = minnerData;
-            this.handleRunAccReward()
             return;
           }
           if (this.scatter.identity && this.scatter.identity.accounts[0].name === v.miner) {
             return
           }
-          this.minersArr.push(minnerData)
+          newList.push(minnerData)
         })
+        if (type === 'user') {
+          this.handleRunAccReward()
+          return
+        }
+        const newListSort = newList.sort((a, b) => {
+          return b.liq - a.liq;
+        })
+        // console.log(newListSort)
+        this.minersArr = newListSort;
         this.handleRunReward()
       })
     },
