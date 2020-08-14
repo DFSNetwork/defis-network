@@ -98,7 +98,8 @@ export default {
       const urlParams = getUrlParams(window.location.href) || {};
       // set inviAcc
       const inviAcc = urlParams.code;
-      if (inviAcc) {
+      const localInviAcc = localStorage.getItem('inviAcc') ? JSON.parse(localStorage.getItem('inviAcc')) : {}
+      if (inviAcc && !localInviAcc.accSet) {
         this.handleRegInviAcc(inviAcc)
       }
       // set Language

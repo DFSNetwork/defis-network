@@ -33,8 +33,8 @@
             <!-- <img class="iconImg" src="@/assets/img/dex/tips_icon_btn.svg" alt=""> -->
           </div>
           <div class="invitationIpt flex">
-            <el-input class="elIpt" v-model="inviAcc" placeholder="dfsdeveloper"></el-input>
-            <span class="btn flexc" @click="handleSureInviArr">{{ $t('public.confirm') }}</span>
+            <el-input class="elIpt" v-model="inviAcc"></el-input>
+            <span class="btn flexc" v-loading="loading" @click="handleSureInviArr">{{ $t('public.confirm') }}</span>
           </div>
           <!-- <div><span class="btn flexc">确认</span></div> -->
         </div>
@@ -56,6 +56,7 @@ export default {
       tipRate: '1.00',
       min: '20',
       inviAcc: '', // 邀请人账户
+      loading: false,
     }
   },
   computed: {
@@ -89,9 +90,13 @@ export default {
   },
   methods: {
     handleSureInviArr() {
+      if (this.loading) {
+        return
+      }
       if (!this.inviAcc) {
         return
       }
+      this.loading = true;
       const params = {
         "code": "dfsdfsfamily",
         "scope": "dfsdfsfamily",
@@ -103,12 +108,14 @@ export default {
         "json": true,
       }
       EosModel.getTableRows(params, (res) => {
+        this.loading = false;
         if (!res.rows.length) {
           localStorage.removeItem('inviAcc');
           this.$message.error('Invitation code does not exist')
           return
         }
         const inviAcc = res.rows[0];
+        inviAcc.accSet = true;
         localStorage.setItem('inviAcc', JSON.stringify(inviAcc))
         this.showNav = false;
         this.$message.success('Success')
