@@ -196,7 +196,7 @@ trading_mining_reward = 0.3 / 0.15 * 0.2 * 0.75 = 0.3 DFS
 uint64_t lucky_key = current_time_point().sec_since_epoch() / 60;
 bool is_lucky_hint = lucky_key % 10 == 0;
 double discount = trading_mining_discount; //default 0.2
-if (is_lucky_hint && trading_fee.amount <= (2500 * 10000))
+if (is_lucky_hint && tranding_eos.amount <= (2500 * 10000))
 {
    discount = 3;
 }
