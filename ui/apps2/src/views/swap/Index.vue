@@ -498,6 +498,7 @@ export default {
         params.push(inData.type)
       }
       const res = SwapRouter.get_amounts_out(...params)
+      // console.log(res)
       const payNum = inData.type === 'pay' ? inData.payNum : res.quantity_out.split(' ')[0];
       const getNum = inData.type === 'pay' ? res.quantity_out.split(' ')[0] : inData.getNum;
       this.thisCoinsPath = res.bestPath;
@@ -506,16 +507,18 @@ export default {
       minOut = res.price * (1 - inData.slipPointUser) * payNum;
       minOut = toFixed(minOut, this.thisMarket1.decimal)
 
-      let aboutPrice = payNum / getNum;
-          aboutPrice = toFixed(aboutPrice, this.thisMarket0.decimal)
-      let aboutPriceSym0 = getNum / payNum;
-          aboutPriceSym0 = toFixed(aboutPriceSym0, this.thisMarket1.decimal)
+      let aboutPrice = res.swapOutPrice;
+          aboutPrice = toFixed(aboutPrice, Number(this.thisMarket0.decimal) + 2)
+      let aboutPriceSym0 = res.swapInPrice;
+          aboutPriceSym0 = toFixed(aboutPriceSym0, Number(this.thisMarket1.decimal) + 2)
       // console.log(aboutPriceSym0, res.price)
-      let priceRate = accDiv(aboutPriceSym0, res.price);
+      let priceRate = accDiv(res.swapInPrice, res.price);
           priceRate = accSub(1, priceRate)
-          priceRate = Math.abs(priceRate);
           priceRate = accMul(priceRate, 100)
-          priceRate = toFixed(priceRate, 2)
+      if (Number(priceRate) < 0) {
+        priceRate = '0.00000000';
+      }
+      priceRate = toFixed(priceRate, 2)
       const obj = {
         payNum,
         getNum,
