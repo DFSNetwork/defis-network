@@ -1,0 +1,114 @@
+@import 'color.scss';
+
+html *{
+  margin: 0;
+  padding: 0;
+}
+
+img {
+  border: none;
+}
+
+input {
+  outline: none;
+  -webkit-appearance: none;
+  -webkit-tap-highlight-color: rgba(255, 0, 0, 0);
+}
+
+a {
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -webkit-tap-highlight-color: rgba(255, 0, 0, 0);
+  color: #6b6c6e;
+}
+
+a:link {
+  text-decoration: none;
+}
+
+a:visited {
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: none;
+  -webkit-transition: color .2s linear;
+  transition: color .2s linear;
+}
+
+a:active {
+  text-decoration: none;
+}
+
+ul {
+  list-style: none;
+}
+
+div {
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+}
+
+table {
+  border-collapse: collapse;
+}
+
+i, em {
+  font-weight: normal;
+  font-style: normal;
+}
+
+input,
+select,
+button {
+  border: none;
+  outline: none;
+}
+
+select {
+  -webkit-appearance: none;
+}
+
+.fl {
+  float: left;
+}
+
+.fr {
+  float: right;
+}
+
+.display-none {
+  display: none !important;
+}
+
+.hidden{
+  visibility: hidden;
+}
+
+input::-webkit-input-placeholder{
+  color: #999 !important;
+}
+.el-icon-loading {
+  display: inline-block;
+  -webkit-animation: rotating 2s linear infinite;
+  animation: rotating 2s linear infinite;
+  vertical-align: middle;
+}
+@-webkit-keyframes rotating {
+  0% {
+    -webkit-transform: rotateZ(0deg);
+    transform: rotateZ(0deg); }
+  100% {
+    -webkit-transform: rotateZ(360deg);
+    transform: rotateZ(360deg); } }
+
+@keyframes rotating {
+  0% {
+    -webkit-transform: rotateZ(0deg);
+    transform: rotateZ(0deg); }
+  100% {
+    -webkit-transform: rotateZ(360deg);
+    transform: rotateZ(360deg);
+  }
+}
