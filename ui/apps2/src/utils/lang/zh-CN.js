@@ -59,7 +59,7 @@ export default {
     canRedeem: '后可进行赎回。',
     mininum: '最少1.0000 EOS',
     usdtLower: 'Bank的USDT库存不足，无法完成兑换。', // 'The Bank\'s USDT inventory is insufficient to complete the conversion.'
-    bankUpdata: 'Bank V2合约正在审计中。抵押EOS铸币通道暂时关闭。抵押中的EOS赎回不受影响。',
+    bankUpdata: 'USDD暂停EOS铸币，赎回和交易不受影响。',
   },
   dex: {
     pay: '支付',

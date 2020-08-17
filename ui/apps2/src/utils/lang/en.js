@@ -58,7 +58,7 @@ export default {
     canRedeem: ' can be redeemed.',
     mininum: 'Minimum 1.0000 EOS',
     usdtLower: 'The Bank\'s USDT inventory is insufficient to complete the conversion.',
-    bankUpdata: 'Bank V2 contract is under audit. The mortgage EOS coinage channel is temporarily closed. EOS redemption in mortgages is not affected.',
+    bankUpdata: 'USDD suspends EOS coinage, redemptions and transactions are unaffected.',
   },
   dex: {
     pay: 'Pay',
