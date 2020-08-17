@@ -310,6 +310,7 @@ export default {
       this.payNum1 = '';
       this.payNum2 = '';
       this.sellToken = '';
+      this.getToken = 0;
       this.showMarketList = false;
     },
     // 计算存币获取凭证
