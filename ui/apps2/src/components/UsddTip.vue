@@ -1,13 +1,13 @@
 <template>
   <div class="usdd">
     <div class="title">{{ $t('public.warmPrompt') }}</div>
-    <div>{{ $t('public.usddTip') }}</div>
+    <div>{{ this.$t('bank.bankUpdata') }}</div>
+    <!-- <div class="mt10">{{ $t('public.usddTip') }}</div> -->
   </div>
 </template>
 
 <script>
 export default {
-  
 }
 </script>
 
@@ -17,6 +17,9 @@ export default {
   padding: 40px;
   color: #000;
   font-size: 28px;
+  .mt10{
+    margin-top: 10px;
+  }
   .title{
     text-align: center;
     font-size: 30px;

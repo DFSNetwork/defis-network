@@ -109,12 +109,13 @@ export default {
       getIptFocus: false,
       balanceSym0: '0.0000',
       balanceSym1: '0.0000',
+      toAccountUsdtBalan: '0.0000',
       type: 'bankStart',
       thisMarket0: {
-        symbol: 'EOS',
-        contract: 'eosio.token',
-        imgUrl: '/static/coin/eosio.token-eos.svg',
-        decimal: 4,
+        symbol: 'USDT',
+        contract: 'tethertether',
+        imgUrl: 'https://ndi.340wan.com/eos/tethertether-usdt.png',
+        decimal: 4
       },
       thisMarket1: {
         symbol: 'USDD',
@@ -130,12 +131,12 @@ export default {
       showMarketList: false,
       loading: false,
       bankList: [
-        {
-          symbol: 'EOS',
-          contract: 'eosio.token',
-          imgUrl: '/static/coin/eosio.token-eos.svg',
-          decimal: 4
-        },
+        // {
+        //   symbol: 'EOS',
+        //   contract: 'eosio.token',
+        //   imgUrl: '/static/coin/eosio.token-eos.svg',
+        //   decimal: 4
+        // },
         {
           symbol: 'USDD',
           contract: 'bankofusddv1',
@@ -257,6 +258,15 @@ export default {
         })
         return false;
       }
+      if (this.thisMarket1.contract === 'tethertether' && this.thisMarket1.symbol === 'USDT') {
+        if (Number(this.payNum) > Number(this.toAccountUsdtBalan)) {
+          this.$message({
+            type: 'error',
+            message: this.$t('bank.usdtLower')
+          })
+          return false;
+        }
+      }
       return true;
     },
     // 铸币
@@ -369,9 +379,11 @@ export default {
       clearInterval(this.timer);
       this.handleGetBalance();
       this.handleGetBalance('next');
+      this.handleGetBalance('usdt');
       this.timer = setInterval(() => {
         this.handleGetBalance();
         this.handleGetBalance('next');
+        this.handleGetBalance('usdt');
       }, 20000)
     },
     // 获取账户余额
@@ -381,16 +393,26 @@ export default {
         coin: this.thisMarket0.symbol,
         decimal: this.thisMarket0.decimal
       };
-      if (next) {
+      if (next === 'next') {
         params.code = this.thisMarket1.contract;
         params.coin = this.thisMarket1.symbol;
         params.decimal = this.thisMarket1.decimal;
       }
+      if (next === 'usdt') {
+        params.code = 'tethertether';
+        params.coin = 'USDT';
+        params.decimal = 4;
+        params.account = this.baseConfig.toAccountJin;
+      }
       await EosModel.getCurrencyBalance(params, res => {
         let balance = toFixed('0.000000001', params.decimal);
         (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
-        if (next) {
+        if (next === 'next') {
           this.balanceSym1 = balance;
+          return;
+        }
+        if (next === 'usdt') {
+          this.toAccountUsdtBalan = balance;
           return;
         }
         this.balanceSym0 = balance;
