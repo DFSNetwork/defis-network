@@ -45,7 +45,7 @@
             <span>{{ accMineData.liq_bal0 || `0.0000 ${thisMarket.symbol0}` }} / {{ accMineData.liq_bal1 || `0.0000 ${thisMarket.symbol1}`}}</span>
           </div>
           <div class="myMarket">
-            <span>{{ $t('dex.poolNum') }}: </span>
+            <span>{{ $t('dex.pools') }}: </span>
             <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
           </div>
           <div class="rewardPerDay tip">{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</div>
@@ -54,7 +54,10 @@
     </div>
 
     <div class="poolsLists">
-      <div class="title"><span class="act">{{ $t('mine.minersList') }}</span></div>
+      <div class="title flexb">
+        <span class="act">{{ $t('mine.minersList') }}</span>
+        <span class="totalMiners">{{ $t('mine.totalMiners') }}：{{ allMinersList.length }}</span>
+      </div>
       <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
       <template v-for="(item, index) in minersArr">
         <div class="list" :key="index">
@@ -63,7 +66,7 @@
             <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
           </div>
           <div class="flexb">
-            <span>{{ $t('dex.poolNum') }}</span>
+            <span>{{ $t('dex.pools') }}</span>
             <span>{{ item.liq_bal0 }} / {{ item.liq_bal1 }}</span>
           </div>
         </div>
@@ -74,7 +77,7 @@
         layout="prev, pager, next"
         @current-change="handleCurrentChange"
         :current-page.sync="page"
-        :page-size="50"
+        :page-size="pageSize"
         :total="allMinersList.length">
       </el-pagination>
     </div>
@@ -118,6 +121,7 @@ export default {
       accMineData: {}, // 用户记录
       allMinersList: [], // 所有挖矿者列表
       page: 1,
+      pageSize: 20,
       minersArr: [], // 所有挖矿者列表 - 单页面
       timerArr: [], // 所有挖矿者收益定时器
       secTimer: null, // 秒级定时器
@@ -263,10 +267,10 @@ export default {
       })
     },
     handleGetPageArr() {
-      const start = (this.page - 1) * 50;
-      const end = this.page * 50;
+      const start = (this.page - 1) * this.pageSize;
+      const end = this.page * this.pageSize;
       this.minersArr = this.allMinersList.slice(start, end);
-      console.log(this.minersArr)
+      // console.log(this.minersArr)
       this.handleRunReward()
     },
     // 秒级定时器
@@ -516,6 +520,14 @@ export default {
   }
   .poolsLists{
     margin: 40px;
+    .totalMiners{
+      margin-right: 0;
+      font-size: 26px;
+      .tipIcon{
+        margin-left: 10px;
+        width: 28px;
+      }
+    }
     .list{
       margin-top: 20px;
       border: 1px solid #e0e0e0;

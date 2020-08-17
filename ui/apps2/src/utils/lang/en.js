@@ -81,6 +81,7 @@ export default {
     priceSlip: 'Price slippage',
     marketNow: 'Add liquidity',
     poolNum: 'Liquidity',
+    pools: 'Liquidity',
     moreRoute: 'Multi-path swap',
     TradeSet: 'Transaction Settings',
     slipSet: 'Slippage tolerance',
@@ -161,6 +162,7 @@ export default {
     minersList: 'Miners',
     poolsNum: 'Number of market',
     mineBonus: 'Mining earnings',
+    totalMiners: 'Total',
   },
   node: {
     nodeSet: 'Node Setting',

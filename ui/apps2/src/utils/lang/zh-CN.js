@@ -82,6 +82,7 @@ export default {
     priceSlip: '价格滑点',
     marketNow: '立即做市',
     poolNum: '流动池数量',
+    pools: '资金池',
     moreRoute: '多路径兑换',
     TradeSet: '交易设置',
     slipSet: '滑点设置',
@@ -162,6 +163,7 @@ export default {
     minersList: '矿工列表',
     poolsNum: '做市数量',
     mineBonus: '挖矿收益', // Mining earnings
+    totalMiners: '总矿工',
   },
   node: {
     nodeSet: '节点设置',
