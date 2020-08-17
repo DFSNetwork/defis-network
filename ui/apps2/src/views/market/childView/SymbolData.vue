@@ -212,7 +212,7 @@ export default {
     })
   },
   methods: {
-    handleCurrentChange(val) {
+    handleCurrentChange() {
       this.handleGetPageArr();
     },
     handleGetMinersLists(type) {
