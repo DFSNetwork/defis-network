@@ -236,7 +236,7 @@ export default {
       thisCoinsPath: '', // 币种路由路径
       thisMidsPath: '', // Mids路由路径
       thisMarket0: {
-        mid: 1,
+        mid: 17,
         last_update: "2020-05-14T06:49:27",
         liquidity_token: 2509980,
         price_cumulative_last: "10524156827",
@@ -248,16 +248,16 @@ export default {
         symbol: "EOS",
       }, // 当前选中的做市池子
       thisMarket1: {
-        mid: 7,
+        mid: 17,
         last_update: "2020-05-14T06:49:27",
         liquidity_token: 2509980,
         price_cumulative_last: 1513579653,
         price_last: "0.39589999999999997",
-        contract: "bankofusddv1",
+        contract: "tethertether",
         decimal: "4",
-        reserve: "398.7956 USDD",
-        sym: "4,USDD",
-        symbol: "USDD",
+        reserve: "398.7956 USDT",
+        sym: "4,USDT",
+        symbol: "USDT",
       },
     }
   },
@@ -386,6 +386,7 @@ export default {
         const market0 = arr.find(v => v.contract === this.thisMarket0.contract && v.symbol === this.thisMarket0.symbol) || arr[0]
         this.thisMarket0 = market0;
         const market1 = arr.find(v => v.contract === this.thisMarket1.contract && v.symbol === this.thisMarket1.symbol) || arr[1]
+        // const market1 = arr[1]
         this.thisMarket1 = market1;
         this.handleInBy(this.tradeInfo.type, 'first')
       },
