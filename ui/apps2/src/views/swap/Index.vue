@@ -559,7 +559,7 @@ export default {
         params.push(inData.type)
       }
       const res = SwapRouter.get_amounts_out(...params)
-      console.log(res)
+      // console.log(res)
       const payNum = inData.type === 'pay' ? inData.payNum : res.quantity_out.split(' ')[0];
       const getNum = inData.type === 'pay' ? res.quantity_out.split(' ')[0] : inData.getNum;
       this.thisCoinsPath = res.bestPath;
