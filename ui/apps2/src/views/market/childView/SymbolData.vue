@@ -6,7 +6,10 @@
       <div class="data">
         <div class="allClaim flexb">
           <div>
-            <div class="subTitle">{{ $t('mine.waitClaim') }}</div>
+            <div class="subTitle flexa">
+              <span>{{ $t('mine.waitClaim') }}</span>
+              <img class="tipIcon ml10" @click="showReWardTip = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+            </div>
             <div class="claimNum">{{ accMineData.showReward || '0.00000000' }} DFS</div>
           </div>
           <div class="allClaimBtn" v-if="Number(accMineData.liq)" v-loading="claimLoading"
@@ -455,6 +458,9 @@ export default {
     border-radius: 20px;
     color: #FFF;
     padding: 40px;
+    .ml10{
+      margin-left: 10px;
+    }
     .subTitle{
       font-size: 26px;
     }
