@@ -154,7 +154,7 @@ class swapRouter {
     if (!type) {
       amount_in -= amount_in * 0.001; // 协议费扣除
     }
-    let inNum = amount_in * (0.999 * 0.998);
+    let inNum = amount_in * 0.998;
     let amount_out;
     let token_out;
     let quantity_out;
