@@ -214,7 +214,7 @@ class swapRouter {
     if (!type) {
       swapInPrice = swapPrice / inNum;
       swapOutPrice = inNum / swapPrice;
-      console.log(amount_out, inNum, swapPrice)
+      // console.log(amount_out, inNum, swapPrice)
     } else {
       swapInPrice = inNum / swapPrice;
       swapOutPrice = swapPrice / inNum;
