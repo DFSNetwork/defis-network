@@ -121,10 +121,14 @@ class swapRouter {
       for (let i = 0; i < mid_arr.length; i++) {
         let mid = mid_arr[i];
         let swap_result
-        if (!type) {
-          swap_result = this.swap(mid, new_token_in, new_amount_in);
-        } else {
-          swap_result = this.swap(mid, new_token_in, new_amount_in, type);
+        try {
+          if (!type) {
+            swap_result = this.swap(mid, new_token_in, new_amount_in);
+          } else {
+            swap_result = this.swap(mid, new_token_in, new_amount_in, type);
+          }
+        } catch (error) {
+          console.log(error)
         }
         new_amount_in = swap_result.amount_out;
         new_token_in = swap_result.token_out;
@@ -159,7 +163,8 @@ class swapRouter {
     let token_out;
     let quantity_out;
     let price;
-    let swapPrice; // 兑换后的价格
+    // let swapPrice; // 兑换后的价格
+    let swapInPrice, swapOutPrice;
     if (token_in === tokenA) {
       inNum = inNum / (10 ** market.sym0.split(",")[0]);
       let reserve_in = parseFloat(market.reserve0) * (10 ** market.sym0.split(",")[0]);
@@ -181,6 +186,8 @@ class swapRouter {
       quantity_out = toFixed((amount_out / (10 ** market.sym1.split(",")[0])), market.sym1.split(",")[0]) + " " + market.reserve1.split(" ")[1];
       // console.log(reserve_out, reserve_in)
       price = parseFloat(market.reserve1) / parseFloat(market.reserve0);
+      swapInPrice = (reserve_out + amount_out) / (reserve_in + amount_in)
+      swapOutPrice = (reserve_in + amount_in) / (reserve_out + amount_out)
     }
     if (token_in === tokenB) {
       inNum = inNum / (10 ** market.sym1.split(",")[0]);
@@ -207,16 +214,17 @@ class swapRouter {
       }
       // console.log(reserve_out, reserve_in)
       price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
+      swapInPrice = (reserve_out + amount_out) / (reserve_in + amount_in)
+      swapOutPrice = (reserve_in + amount_in) / (reserve_out + amount_out)
     }
-    swapPrice = accDiv(amount_out, 10 ** market.sym1.split(",")[0]); // 计算总输出 - 不截取
-    let swapInPrice, swapOutPrice;
-    if (!type) {
-      swapInPrice = swapPrice / inNum;
-      swapOutPrice = inNum / swapPrice;
-    } else {
-      swapInPrice = inNum / swapPrice;
-      swapOutPrice = swapPrice / inNum;
-    }
+    // swapPrice = accDiv(amount_out, 10 ** market.sym1.split(",")[0]); // 计算总输出 - 不截取
+    // if (!type) {
+    //   swapInPrice = swapPrice / inNum;
+    //   swapOutPrice = inNum / swapPrice;
+    // } else {
+    //   swapInPrice = inNum / swapPrice;
+    //   swapOutPrice = swapPrice / inNum;
+    // }
     // console.log(swapPrice, inNum)
     return {
       token_out,

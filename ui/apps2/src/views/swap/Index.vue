@@ -565,6 +565,10 @@ export default {
       this.thisCoinsPath = res.bestPath;
       this.thisMidsPath = res.mid;
       let minOut = 0;
+      // console.log('quantity_out - ', res.quantity_out)
+      // console.log('price - ', res.price)
+      // console.log('slipPointUser - ', inData.slipPointUser)
+      // console.log('payNum - ', payNum)
       minOut = res.price * (1 - inData.slipPointUser) * payNum;
       minOut = toFixed(minOut, this.thisMarket1.decimal)
 
