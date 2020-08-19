@@ -27,7 +27,7 @@
       "trigger_value_max": "1000.0000 EOS"
     },
     {
-      "mid": 39,
+      "mid": 309,
       "default_distount": "0.2",
       "lucky_distount": "3.0",
       "trigger_value_max": "500.0000 EOS"
