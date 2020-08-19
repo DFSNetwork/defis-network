@@ -17,7 +17,7 @@
           <div class="allClaimBtn" v-if="!Number(accMineData.liq) && getAccData"
             @click="handleJoin(thisMarket)">{{ $t('mine.join') }}</div>
         </div>
-        <div class="mylist">
+        <div class="mylist" @click="handleJoin(thisMarket)">
           <div class="flexb">
             <span class="flexa" v-if="Number(buff)">
               <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
@@ -244,8 +244,20 @@ export default {
           return
         }
         const newList = [];
-        rows.forEach(v => {
+        rows.forEach(item => {
+          let v = item;
+          // if (this.thisMarket.exchangeSym) {
+          if (v.liq_bal1.split(' ')[1] === 'EOS' || this.thisMarket.exchangeSym) {
+            const tList = {
+              last_drip: v.last_drip,
+              liq_bal0: v.liq_bal1,
+              liq_bal1: v.liq_bal0,
+              miner: v.miner
+            }
+            v = tList;
+          }
           const minnerData = dealMinerData(v, this.thisMarket)
+          // console.log(minnerData)
           if (type === 'user') {
             this.accMineData = minnerData;
             return;
@@ -262,11 +274,12 @@ export default {
         const newListSort = newList.sort((a, b) => {
           return b.liq - a.liq;
         })
-        // console.log(newListSort)
-        this.allMinersList = newListSort;
-        this.handleGetPageArr();
-        // this.minersArr = newListSort;
-        // this.handleRunReward()
+        try {
+          this.allMinersList = newListSort;
+          this.handleGetPageArr();
+        } catch (error) {
+          console.log(error)
+        }
       })
     },
     handleGetPageArr() {

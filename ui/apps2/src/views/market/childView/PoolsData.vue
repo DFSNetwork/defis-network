@@ -226,7 +226,7 @@ export default {
           let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
           lastTime = moment(lastTime).valueOf();
           minnerData.lastTime = lastTime;
-          const liq = v.symbol0 === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
+          const liq = minnerData.liq_bal0.split(' ')[1] === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
           minnerData.liq = liq;
           this.$set(v, 'minnerData', minnerData)
         })
