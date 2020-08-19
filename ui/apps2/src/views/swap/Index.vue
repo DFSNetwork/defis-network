@@ -198,7 +198,7 @@
 import { mapState } from 'vuex';
 import { SwapRouter } from '@/utils/swap_router';
 import Tabs from '../index/components/Tabs';
-import { toFixed, accMul, accDiv, accSub, getPrice } from '@/utils/public';
+import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
 import MarketList from '@/components/MarketList';
 import UsddTip from '@/components/UsddTip';
@@ -408,6 +408,9 @@ export default {
       }
     },
   },
+  created() {
+    this.handleGetUrlInAndOut()
+  },
   mounted() {
     // console.log(this.thisMarket0)
     // console.log(this.thisMarket1)
@@ -422,6 +425,28 @@ export default {
     clearInterval(this.priceTimer)
   },
   methods: {
+    handleGetUrlInAndOut() {
+      const urlData = GetUrlPara();
+      if (urlData.in && urlData.out) {
+        try {
+          const inData = urlData.in.split('-');
+          const sym0 = {
+            contract: inData[0],
+            decimal: "4",
+            symbol: inData[1].toUpperCase(),
+          }
+          this.thisMarket0 = sym0;
+          const outData = urlData.out.split('-');
+          const sym1 = {
+            contract: outData[0],
+            decimal: "4",
+            symbol: outData[1].toUpperCase(),
+          }
+          this.thisMarket1 = sym1;
+        } catch (error) {
+        }
+      }
+    },
     // 获取60秒均价
     handleGetPrice() {
       getPrice((price) => {
