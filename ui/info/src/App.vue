@@ -23,12 +23,22 @@ export default {
     this.handleGetPhoneLanguage();
   },
   mounted(){
+    this.handleResize();
     window.addEventListener('resize', this.handleResize)
   },
   beforeDestroy: function () {
     window.removeEventListener('resize', this.handleResize)
   },
   methods: {
+    handleResize () {
+      if (document.documentElement.clientWidth <= 750 && !this.minScreen) {
+        this.$store.dispatch('setMinScreen', true)
+        return;
+      }
+      if (document.documentElement.clientWidth > 750 && this.minScreen) {
+        this.$store.dispatch('setMinScreen', false)
+      }
+    },
     // 第一次使用dapp时，获取手机语言
     handleGetPhoneLanguage() {
       const lang = localStorage.getItem('language')
