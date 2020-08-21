@@ -3,6 +3,7 @@
     <router-view></router-view>
 
     <warm-tip />
+    <my-konami />
   </div>
 </template>
 
@@ -13,11 +14,13 @@ import { mapState } from 'vuex';
 import WarmTip from '@/components/WarmTip';
 import { GetUrlPara, login, getUrlParams, toLocalTime, accPow, accDiv } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
+import MyKonami from '@/views/konami/Index';
 
 export default {
   name: 'App',
   components: {
-    WarmTip
+    WarmTip,
+    MyKonami
   },
   computed: {
     ...mapState({
