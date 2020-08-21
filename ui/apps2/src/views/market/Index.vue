@@ -240,6 +240,7 @@ export default {
         thisMarket.sym1Rate = toFixed(accDiv(reserve0, reserve1), thisMarket.decimal1)
         this.thisMarket = thisMarket;
         this.handleInBy(this.dealType)
+        this.handleBeforeDestroy()
       },
       deep: true,
       immediate: true
@@ -290,7 +291,22 @@ export default {
   mounted() {
     // console.log(this.$route)
   },
+  beforeDestroy() {
+  },
   methods: {
+    handleBeforeDestroy() {
+      const localData = localStorage.getItem('swapMarkets') ? JSON.parse(localStorage.getItem('swapMarkets')) : null;
+      if (localData && localData.thisMidsPath == this.thisMarket.mid) {
+        return
+      }
+      const swapMarkets = {
+        thisMarket0: this.thisMarket.sym0Data,
+        thisMarket1: this.thisMarket.sym1Data,
+        thisCoinsPath: '',
+        thisMidsPath: `${this.thisMarket.mid}`,
+      }
+      localStorage.setItem('swapMarkets', JSON.stringify(swapMarkets))
+    },
     handleChange(act) {
       this.act = act;
       this.loading = false;
@@ -313,6 +329,8 @@ export default {
       this.sellToken = '';
       this.getToken = 0;
       this.showMarketList = false;
+
+      this.handleBeforeDestroy();
     },
     // 计算存币获取凭证
     handleInBy(type = 'sym0') {

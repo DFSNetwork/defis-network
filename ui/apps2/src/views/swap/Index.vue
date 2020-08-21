@@ -423,8 +423,19 @@ export default {
   beforeDestroy() {
     clearInterval(this.timer)
     clearInterval(this.priceTimer)
+    this.handleSetMarkets();
   },
   methods: {
+    handleSetMarkets() {
+      const swapMarkets = {
+        thisMarket0: this.thisMarket0,
+        thisMarket1: this.thisMarket1,
+        thisCoinsPath: this.thisCoinsPath,
+        thisMidsPath: this.thisMidsPath,
+      }
+      // console.log(JSON.stringify(this.thisMidsPath))
+      localStorage.setItem('swapMarkets', JSON.stringify(swapMarkets))
+    },
     handleGetUrlInAndOut() {
       const urlData = GetUrlPara();
       if (urlData.in && urlData.out) {
@@ -443,9 +454,18 @@ export default {
             symbol: outData[1].toUpperCase(),
           }
           this.thisMarket1 = sym1;
+          return
         } catch (error) {
           console.log(error)
         }
+      }
+      const localData = localStorage.getItem('swapMarkets') ? JSON.parse(localStorage.getItem('swapMarkets')) : null;
+      // console.log(localData)
+      if (localData) {
+        this.thisMarket0 = localData.thisMarket0;
+        this.thisMarket1 = localData.thisMarket1;
+        this.thisCoinsPath = localData.thisCoinsPath;
+        this.thisMidsPath = localData.thisMidsPath;
       }
     },
     // 获取60秒均价
@@ -742,6 +762,7 @@ export default {
       // console.log(this.thisMarket0)
       // console.log(this.thisMarket1)
       this.handleInBy(this.tradeInfo.type, 'first')
+      this.handleSetMarkets();
     },
     handleFocus(type = 'pay') {
       type === 'pay' ? this.payIptFocus = true : this.getIptFocus = true
@@ -806,6 +827,7 @@ export default {
       this.handleInBy(this.tradeInfo.type, 'first')
       this.handleBalanTimer();
       this.handleClose()
+      this.handleSetMarkets();
     }
   },
 }

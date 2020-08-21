@@ -33,7 +33,13 @@ export default {
       if (this.act === 1) {
         this.$router.push({name: 'index'})
       } else if (this.act === 2) {
-        this.$router.push({name: 'market', params: {mid: 17}})
+        const localData = localStorage.getItem('swapMarkets') ? JSON.parse(localStorage.getItem('swapMarkets')) : null;
+        let mid = 17;
+        if (localData) {
+          const MidsLength = localData.thisMidsPath.split('-').length;
+          MidsLength === 1 ? mid = localData.thisMidsPath : null;
+        }
+        this.$router.push({name: 'market', params: {mid}})
       } else {
         this.$router.push({name: 'bank'})
       }
