@@ -128,6 +128,11 @@
           <div class="tip">UI & Marketing</div>
         </div>
         <div class="user">
+          <div class="userImg"><img src="@/assets/img/team/team5.jpeg" alt=""></div>
+          <div class="name">Opa</div>
+          <div class="tip">Marketing </div>
+        </div>
+        <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team9.jpeg" alt=""></div>
           <div class="name">Joe</div>
           <div class="tip">Consultant </div>
