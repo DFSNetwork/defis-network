@@ -35,7 +35,7 @@ var Konami = function (keys, callback) {
           konami = ref_obj;
         } // IE
         const isEnter = (e ? e.keyCode : event.keyCode) == '13';
-        console.log(isEnter, e ? e.keyCode : event.keyCode)
+        // console.log(isEnter, e ? e.keyCode : event.keyCode)
         if (isEnter) {
           const hasPattern = konami.pattern.findIndex(v => v === konami.input)
           if (hasPattern === -1) {
@@ -87,19 +87,25 @@ var Konami = function (keys, callback) {
             }
           },
           touchendHandler: function () {
-            konami.iphone.input.push(konami.iphone.check_direction());
-            if (konami.iphone.input.length > konami.iphone.keys.length) konami.iphone.input.shift();
-            if (konami.iphone.input.length === konami.iphone.keys.length) {
-              var match = true;
-              for (var i = 0; i < konami.iphone.keys.length; i++) {
-                if (konami.iphone.input[i] !== konami.iphone.keys[i]) {
-                  match = false;
+            const tIpt = konami.iphone.check_direction();
+            if (tIpt === 'TAP') {
+              const iptLast = konami.iphone.input[konami.iphone.input.length - 1];
+              // console.log(iptLast)
+              if (iptLast === tIpt || !iptLast) {
+                const thisIpt = konami.iphone.input.join(',');
+                const index = konami.iphone.keys.findIndex(v => v.join(',') === thisIpt);
+                if (index === -1) {
+                  konami.iphone.input = []
+                } else {
+                  konami.iphone.input = []
+                  konami.iphone.code(index);
                 }
-              }
-              if (match) {
-                konami.iphone.code(konami._currentLink);
+                return
               }
             }
+            konami.iphone.input.push(tIpt);
+            if (konami.iphone.input.length > 20) konami.iphone.input.shift();
+            // console.log(konami.iphone.input)
           },
           touchstartHandler: function (e) {
             konami.iphone.start_x = e.changedTouches[0].pageX;

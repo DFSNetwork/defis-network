@@ -20,9 +20,13 @@ export default {
     return {
       egg: null,
       showVersion: false,
-      keys = {
-        pc: ['18986', '18983'],
-        apps: ["RIGHT", "DOWN", "UP", "TAP", "TAP"]
+      keys: {
+        pc: [ // 按键
+          '18986', // - v 回车
+        ],
+        apps: [ // 手势
+          ["RIGHT", "DOWN", "UP", "TAP"], // 右 下 上 点击 点击
+        ]
       },
       showArr: {
         dialog0: false,
@@ -32,11 +36,9 @@ export default {
   },
   mounted() {
     this.egg = new Konami(this.keys, (index) => {
-      console.log(index)
-      this.showArr[index] = true;
-      this.$message('当前版本 V2.0.1');
+      this.showArr[`dialog${index}`] = true;
+      this.$message('Versions V2.0.1');
     });
-    console.log(this.egg)
   },
   beforeDestroy() {
     this.egg.unload()
