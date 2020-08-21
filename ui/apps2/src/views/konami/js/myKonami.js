@@ -50,6 +50,9 @@ var Konami = function (keys, callback) {
           }
         }
         konami.input += e ? e.keyCode : event.keyCode;
+        if (konami.input > 100) {
+          konami.input = e ? e.keyCode : event.keyCode;
+        }
       },
       load: function (link) {
         this._currentLink = link;
@@ -97,8 +100,8 @@ var Konami = function (keys, callback) {
                 if (index === -1) {
                   konami.iphone.input = []
                 } else {
-                  konami.iphone.input = []
                   konami.iphone.code(index);
+                  konami.iphone.input = []
                 }
                 return
               }
@@ -113,7 +116,7 @@ var Konami = function (keys, callback) {
             konami.iphone.tap = true;
             konami.iphone.capture = true;
           },
-          load: function (link) {
+          load: function () {
             this.orig_keys = this.keys;
             konami.addEvent(document, "touchmove", this.touchmoveHandler);
             konami.addEvent(document, "touchend", this.touchendHandler, false);
@@ -125,11 +128,11 @@ var Konami = function (keys, callback) {
             konami.removeEvent(document, 'touchstart', this.touchstartHandler);
           },
           check_direction: function () {
-            x_magnitude = Math.abs(this.start_x - this.stop_x);
-            y_magnitude = Math.abs(this.start_y - this.stop_y);
-            x = ((this.start_x - this.stop_x) < 0) ? "RIGHT" : "LEFT";
-            y = ((this.start_y - this.stop_y) < 0) ? "DOWN" : "UP";
-            result = (x_magnitude > y_magnitude) ? x : y;
+            let x_magnitude = Math.abs(this.start_x - this.stop_x);
+            let y_magnitude = Math.abs(this.start_y - this.stop_y);
+            let x = ((this.start_x - this.stop_x) < 0) ? "RIGHT" : "LEFT";
+            let y = ((this.start_y - this.stop_y) < 0) ? "DOWN" : "UP";
+            let result = (x_magnitude > y_magnitude) ? x : y;
             result = (this.tap === true) ? "TAP" : result;
             // console.log(result)
             return result;
@@ -148,13 +151,7 @@ var Konami = function (keys, callback) {
 
 
 if (typeof module !== 'undefined' && typeof module.exports !== 'undefined') {
-      module.exports = Konami;
+  module.exports = Konami;
 } else {
-      if (typeof define === 'function' && define.amd) {
-              define([], function() {
-                      return Konami;
-              });
-      } else {
-              window.Konami = Konami;
-      }
+  window.Konami = Konami;
 }

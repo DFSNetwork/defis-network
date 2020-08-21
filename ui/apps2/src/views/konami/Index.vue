@@ -1,10 +1,8 @@
 <template>
   <div>
     <el-dialog
-      title=""
-      :visible.sync="showArr.dialog0"
-      width="width">
-      <Version />
+      :visible.sync="showDialog0">
+      <Version v-if="showDialog0"/>
     </el-dialog>
   </div>
 </template>
@@ -28,16 +26,17 @@ export default {
           ["RIGHT", "DOWN", "UP", "TAP"], // 右 下 上 点击 点击
         ]
       },
-      showArr: {
-        dialog0: false,
-        dialog1: false,
-      }
+      showDialog0: false,
     }
   },
   mounted() {
     this.egg = new Konami(this.keys, (index) => {
-      this.showArr[`dialog${index}`] = true;
-      this.$message('Versions V2.0.1');
+      setTimeout(() => {
+        if (index === 0) {
+          this.showDialog0 = true;
+          this.$message('Versions V2.0.1');
+        }
+      }, 100);
     });
   },
   beforeDestroy() {
