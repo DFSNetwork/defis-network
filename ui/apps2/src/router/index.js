@@ -23,13 +23,13 @@ const constantRouter = [
       {
         path: '/',
         name: 'index',
-        component: () => import(/* webpackChunkName: "index" */ '@/views/index/Index.vue'),
+        component: () => import('@/views/index/Index.vue'),
         meta: { title: 'DeFis-Network' },
       },
       {
         path: '/market/:mid',
         name: 'market',
-        component: () => import(/* webpackChunkName: "market" */ '@/views/index/Index.vue'),
+        component: () => import('@/views/index/Index.vue'),
         meta: { title: 'DeFis-Network' },
       },
       {

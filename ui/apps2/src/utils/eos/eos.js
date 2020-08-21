@@ -81,10 +81,10 @@ class model {
       // 获取scatter来源
       let scatterFrom = 'Scatter';
       try {
-        const getVersion = await scatterJS.scatter.getVersion();
-        if (getVersion && getVersion.indexOf(' ') >= 0 && getVersion.split(' ')[0]) {
-          scatterFrom = getVersion.split(' ')[0].toLowerCase(); // leafwallet 叶子钱包
-        }
+        // const getVersion = await scatterJS.scatter.getVersion();
+        // if (getVersion && getVersion.indexOf(' ') >= 0 && getVersion.split(' ')[0]) {
+        //   scatterFrom = getVersion.split(' ')[0].toLowerCase(); // leafwallet 叶子钱包
+        // }
         self.scatapp.scatterFrom = scatterFrom;
         store.dispatch('setScatter', self.scatapp);
         self.initNext();
