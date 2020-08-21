@@ -1,6 +1,6 @@
 <template>
   <div class="version">
-    当前版本 V2.0.1
+    Versions V2.0.1
   </div>
 </template>
 
