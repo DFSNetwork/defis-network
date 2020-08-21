@@ -23,7 +23,7 @@ export default {
           '18986', // - v 回车
         ],
         apps: [ // 手势
-          ["RIGHT", "DOWN", "UP", "TAP"], // 右 下 上 点击 点击
+          ["RIGHT", "DOWN", "TAP"], // 右 下 上 点击 点击
         ]
       },
       showDialog0: false,
@@ -34,7 +34,7 @@ export default {
       setTimeout(() => {
         if (index === 0) {
           this.showDialog0 = true;
-          this.$message('Versions V2.0.1');
+          // this.$message('Versions V2.0.1');
         }
       }, 100);
     });
