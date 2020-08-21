@@ -58,6 +58,8 @@ export default {
     stakeInMining: '抵押中',
     canRedeem: '后可进行赎回。',
     mininum: '最少1.0000 EOS',
+    usdtLower: 'Bank的USDT库存不足，无法完成兑换。', // 'The Bank\'s USDT inventory is insufficient to complete the conversion.'
+    bankUpdata: 'USDD暂停EOS铸币，赎回和交易不受影响。',
   },
   dex: {
     pay: '支付',
@@ -82,13 +84,17 @@ export default {
     priceSlip: '价格滑点',
     marketNow: '立即做市',
     poolNum: '流动池数量',
+    pools: '资金池',
     moreRoute: '多路径兑换',
     TradeSet: '交易设置',
     slipSet: '滑点设置',
     inviter: '邀请人',
     qusTip1: '你的交易将会回滚，如果在确认前有很大的价格变化',
     qusTip2: '根据交易量的多少，成交价与市价的差异',
-    qusTip3: '每笔交易的（0.30%）会给到流动性提供者'
+    qusTip3: '每笔交易的（0.30%）会给到流动性提供者',
+    bankFor: 'BANK 兑换',
+    bankForTip: '本兑换经过USDD BANK 兑换。0手续费，0滑点，还有挖矿奖励。', // This exchange is made through USDD BANK. 0 poundage, 0 slip point, still have dig mine reward.
+    heightSlip: '当前价格滑点过高！请重新输入', // Current price sliding point is too high! Please re-enter
   },
   pools: {
     deposit: '存入',
@@ -140,7 +146,8 @@ export default {
     pools: '矿池',
     minReward: '领取小于{minReward}的DFS将不会有奖励到账。',
     rewardCut: '奖励的小数点后四位将被截取。',
-    minAbleReward: '最小可领取', // Minimum recoverable
+    rewardPrice: '未领取的DFS奖励受到DFS当前币价涨跌影响，可能增多或减少。',
+    minAbleReward: '领取注意事项', // Minimum recoverable
     mineBuff: '挖矿算力加成',
     buff: '算力加成',
     joinNow: '立即加入',
@@ -162,6 +169,7 @@ export default {
     minersList: '矿工列表',
     poolsNum: '做市数量',
     mineBonus: '挖矿收益', // Mining earnings
+    totalMiners: '总矿工',
   },
   node: {
     nodeSet: '节点设置',

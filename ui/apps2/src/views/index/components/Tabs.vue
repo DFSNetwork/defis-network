@@ -33,7 +33,7 @@ export default {
       if (this.act === 1) {
         this.$router.push({name: 'index'})
       } else if (this.act === 2) {
-        this.$router.push({name: 'market', params: {mid: 7}})
+        this.$router.push({name: 'market', params: {mid: 17}})
       } else {
         this.$router.push({name: 'bank'})
       }

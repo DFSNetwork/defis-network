@@ -2,7 +2,8 @@
   <div class="minReward">
     <div class="title">{{ $t('mine.minAbleReward') }}</div>
     <div class="mb10">{{ $t('mine.minReward', {minReward: minReward}) }}</div>
-    <div>{{ $t('mine.rewardCut') }}</div>
+    <div class="mb10">{{ $t('mine.rewardCut') }}</div>
+    <div>{{ $t('mine.rewardPrice') }}</div>
   </div>
 </template>
 

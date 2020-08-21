@@ -3,10 +3,15 @@
     <pools-info :lists="lists"/>
     <div class="allClaim flexb">
       <div>
-        <div class="subTitle">{{ $t('mine.waitClaim') }}</div>
+        <div class="subTitle flexa">
+          <span>{{ $t('mine.waitClaim') }}</span>
+          <img class="tipIcon ml10" @click="showReWardTip = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+        </div>
         <div class="claimNum">{{allReward}} DFS</div>
       </div>
-      <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">{{ $t('mine.claimAll') }}</div>
+      <div class="flexb">
+        <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">{{ $t('mine.claimAll') }}</div>
+      </div>
     </div>
     <div class="poolsList">
       <div class="title flexb">
@@ -221,7 +226,7 @@ export default {
           let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
           lastTime = moment(lastTime).valueOf();
           minnerData.lastTime = lastTime;
-          const liq = v.symbol0 === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
+          const liq = minnerData.liq_bal0.split(' ')[1] === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
           minnerData.liq = liq;
           this.$set(v, 'minnerData', minnerData)
         })
@@ -420,6 +425,9 @@ export default {
     border-radius: 20px;
     color: #FFF;
     padding: 40px;
+    .ml10{
+      margin-left: 10px;
+    }
     .subTitle{
       font-size: 26px;
     }

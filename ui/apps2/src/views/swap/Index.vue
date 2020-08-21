@@ -103,7 +103,7 @@
               {{ tradeInfo.priceRate }}%
             </span>
           </div>
-          <div class="flexb" :class="{'fee': !weight}">
+          <div class="flexb" :class="{'fee': !(weight || useBank)}">
             <span class="flex">
               <span class="tip">{{ $t('public.fee') }}</span>
               <el-popover 
@@ -118,7 +118,7 @@
             </span>
             <span>{{fees}} {{ thisMarket0.symbol }}</span>
           </div>
-          <div class="flexb fee" v-if="weight && Number(reward)">
+          <div class="flexb fee" v-if="(weight && Number(reward)) || useBank">
             <span class="tip">{{ $t('mine.mineBonus') }}</span>
             <span>{{ reward }} DFS</span>
           </div>
@@ -130,7 +130,19 @@
       <div class="btn flexc" v-loading="loading" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
     </div>
 
-    <div class="pool" v-if="marketLists.length && bestPath">
+    <div class="routePath" v-if="useBank">
+      <div class="flexb">
+        <div>
+          <span>{{ $t('dex.bankFor') }}</span>
+        </div>
+        <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
+          <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
+          <span>{{ $t('public.warmPrompt') }}</span>
+        </div>
+      </div>
+      <div class="tip bankTip">{{ $t('dex.bankForTip') }}</div>
+    </div>
+    <div class="pool" v-else-if="marketLists.length && bestPath">
       <div class="flexb">
         <div>
           <span>{{ $t('dex.poolNum') }}</span>
@@ -186,7 +198,7 @@
 import { mapState } from 'vuex';
 import { SwapRouter } from '@/utils/swap_router';
 import Tabs from '../index/components/Tabs';
-import { toFixed, accMul, accDiv, accSub } from '@/utils/public';
+import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
 import MarketList from '@/components/MarketList';
 import UsddTip from '@/components/UsddTip';
@@ -216,13 +228,15 @@ export default {
       balanceSym0: '0.0000',
       balanceSym1: '0.0000',
       timer: null,
+      priceTimer: null,
+      price: 2.7,
       showMarketList: false,
       showUsddTip: false,
       type: 'pay',
       thisCoinsPath: '', // 币种路由路径
       thisMidsPath: '', // Mids路由路径
       thisMarket0: {
-        mid: 1,
+        mid: 17,
         last_update: "2020-05-14T06:49:27",
         liquidity_token: 2509980,
         price_cumulative_last: "10524156827",
@@ -234,16 +248,16 @@ export default {
         symbol: "EOS",
       }, // 当前选中的做市池子
       thisMarket1: {
-        mid: 7,
+        mid: 17,
         last_update: "2020-05-14T06:49:27",
         liquidity_token: 2509980,
         price_cumulative_last: 1513579653,
         price_last: "0.39589999999999997",
-        contract: "bankofusddv1",
+        contract: "tethertether",
         decimal: "4",
-        reserve: "398.7956 USDD",
-        sym: "4,USDD",
-        symbol: "USDD",
+        reserve: "398.7956 USDT",
+        sym: "4,USDT",
+        symbol: "USDT",
       },
     }
   },
@@ -269,6 +283,9 @@ export default {
       return Number(this.payNum) && Number(this.getNum)
     },
     fees() {
+      if (this.useBank) {
+        return 0
+      }
       let fee = accMul(Number(this.payNum), 0.003);
       if (Number(fee) < Number(accDiv(1, 10 ** this.thisMarket0.decimal))) {
         fee = 0;
@@ -306,6 +323,17 @@ export default {
       return Number(weiData.pool_weight)
     },
     reward() {
+      if (this.useBank) {
+        if (this.thisMarket1.symbol !== 'USDD' || this.thisMarket1.contract !== 'bankofusddv1') {
+          return '0'
+        }
+        let amount = accMul(this.getNum, 3);
+        amount = accDiv(amount, 1000);
+        amount = accDiv(amount, this.price);
+        let reward = amount / this.dfsPrice * this.discount * this.damping;
+        reward = accMul(reward, 0.8)
+        return toFixed(reward, 4)
+      }
       if (!this.bestPath) {
         return '0.0000';
       }
@@ -314,9 +342,6 @@ export default {
         return '0.0000'
       }
       amount = this.payNum;
-      // if (this.thisMarket1.symbol === 'EOS' && this.thisMarket1.contract === 'eosio.token') {
-      //   amount = this.getNum;
-      // }
       amount = accMul(amount, 3);
       amount = accDiv(amount, 1000)
       let reward = amount / this.dfsPrice * this.discount * this.damping * this.weight;
@@ -325,6 +350,13 @@ export default {
     },
     showTip() {
       if (this.thisMarket1.contract === 'bankofusddv1' && this.thisMarket1.symbol === 'USDD') {
+        return true
+      }
+      return false
+    },
+    useBank() {
+      if ((this.thisMarket0.contract === 'tethertether' && this.thisMarket0.symbol === 'USDT') &&
+          (this.thisMarket1.contract === 'bankofusddv1' && this.thisMarket1.symbol === 'USDD')) {
         return true
       }
       return false
@@ -354,6 +386,7 @@ export default {
         const market0 = arr.find(v => v.contract === this.thisMarket0.contract && v.symbol === this.thisMarket0.symbol) || arr[0]
         this.thisMarket0 = market0;
         const market1 = arr.find(v => v.contract === this.thisMarket1.contract && v.symbol === this.thisMarket1.symbol) || arr[1]
+        // const market1 = arr[1]
         this.thisMarket1 = market1;
         this.handleInBy(this.tradeInfo.type, 'first')
       },
@@ -375,14 +408,52 @@ export default {
       }
     },
   },
+  created() {
+    this.handleGetUrlInAndOut()
+  },
   mounted() {
     // console.log(this.thisMarket0)
     // console.log(this.thisMarket1)
+    this.handleGetPrice()
+    clearInterval(this.priceTimer)
+    this.priceTimer = setInterval(() => {
+      this.handleGetPrice()
+    }, 60000)
   },
   beforeDestroy() {
     clearInterval(this.timer)
+    clearInterval(this.priceTimer)
   },
   methods: {
+    handleGetUrlInAndOut() {
+      const urlData = GetUrlPara();
+      if (urlData.in && urlData.out) {
+        try {
+          const inData = urlData.in.split('-');
+          const sym0 = {
+            contract: inData[0],
+            decimal: "4",
+            symbol: inData[1].toUpperCase(),
+          }
+          this.thisMarket0 = sym0;
+          const outData = urlData.out.split('-');
+          const sym1 = {
+            contract: outData[0],
+            decimal: "4",
+            symbol: outData[1].toUpperCase(),
+          }
+          this.thisMarket1 = sym1;
+        } catch (error) {
+          console.log(error)
+        }
+      }
+    },
+    // 获取60秒均价
+    handleGetPrice() {
+      getPrice((price) => {
+        this.price = price;
+      })
+    },
     handleDealRouteImg(item) {
       const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
       const inData = item.toLowerCase().replace(':', '-')
@@ -441,6 +512,22 @@ export default {
       } else {
         inData.getNum = this.getNum || `${toFixed(1, this.thisMarket1.decimal)}`;
       }
+      if (this.useBank) {
+        if (status === 'first') {
+          return;
+        }
+        (type === 'pay') ? this.getNum = toFixed(this.payNum, this.thisMarket1.decimal)
+                            : this.payNum = toFixed(this.getNum, this.thisMarket0.decimal)
+        this.tradeInfo = {
+          aboutPrice: '1.000000',
+          aboutPriceSym0: '1.000000',
+          type,
+          minOut: toFixed(this.getNum, this.thisMarket0.decimal),
+          price: '1.000000',
+          priceRate: '0.00',
+        }
+        return
+      }
       try {
         // console.log(inData)
         const outData = this.handleDealAmountOut(inData);
@@ -498,24 +585,31 @@ export default {
         params.push(inData.type)
       }
       const res = SwapRouter.get_amounts_out(...params)
+      // console.log(res)
       const payNum = inData.type === 'pay' ? inData.payNum : res.quantity_out.split(' ')[0];
       const getNum = inData.type === 'pay' ? res.quantity_out.split(' ')[0] : inData.getNum;
       this.thisCoinsPath = res.bestPath;
       this.thisMidsPath = res.mid;
       let minOut = 0;
+      // console.log('quantity_out - ', res.quantity_out)
+      // console.log('price - ', res.price)
+      // console.log('slipPointUser - ', inData.slipPointUser)
+      // console.log('payNum - ', payNum)
       minOut = res.price * (1 - inData.slipPointUser) * payNum;
       minOut = toFixed(minOut, this.thisMarket1.decimal)
 
-      let aboutPrice = payNum / getNum;
-          aboutPrice = toFixed(aboutPrice, this.thisMarket0.decimal)
-      let aboutPriceSym0 = getNum / payNum;
-          aboutPriceSym0 = toFixed(aboutPriceSym0, this.thisMarket1.decimal)
+      let aboutPrice = res.swapOutPrice;
+          aboutPrice = toFixed(aboutPrice, Number(this.thisMarket0.decimal) + 2)
+      let aboutPriceSym0 = res.swapInPrice;
+          aboutPriceSym0 = toFixed(aboutPriceSym0, Number(this.thisMarket1.decimal) + 2)
       // console.log(aboutPriceSym0, res.price)
-      let priceRate = accDiv(aboutPriceSym0, res.price);
+      let priceRate = accDiv(res.swapInPrice, res.price);
           priceRate = accSub(1, priceRate)
-          priceRate = Math.abs(priceRate);
           priceRate = accMul(priceRate, 100)
-          priceRate = toFixed(priceRate, 2)
+      if (Number(priceRate) < 0) {
+        priceRate = '0.00000000';
+      }
+      priceRate = toFixed(priceRate, 2)
       const obj = {
         payNum,
         getNum,
@@ -546,11 +640,47 @@ export default {
       if (Number(this.slipPoint) < Number(this.tradeInfo.priceRate)) {
         this.$message({
           type: 'error',
-          message: '当前价格滑点过高！请重新输入'
+          message: this.$t('dex.heightSlip')
         })
         return false;
       }
       return true
+    },
+    handleToBank() {
+      if (this.useBank) {
+        this.handleTransfer()
+        return false
+      }
+      return true
+    },
+    // 铸币
+    handleTransfer() {
+      this.loading = true;
+      const memo = this.thisMarket0.symbol === 'USDD' ? 'burn' : 'mint';
+      const params = {
+        code: this.thisMarket0.contract,
+        toAccount: this.baseConfig.toAccountJin,
+        memo,
+        quantity: `${this.payNum} ${this.thisMarket0.symbol}`
+      }
+      EosModel.transfer(params, (res) => {
+        this.loading = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.payNum = '';
+        this.getNum = '';
+        this.handleInBy(this.tradeInfo.type, 'first')
+        this.handleBalanTimer();
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
     },
     // swap交易
     handleSwapTrade() {
@@ -558,6 +688,9 @@ export default {
         return
       }
       if (!this.handleReg()) {
+        return
+      }
+      if (!this.handleToBank()) {
         return
       }
       this.loading = true;
@@ -867,6 +1000,10 @@ export default {
   background:rgba(255,255,255,1);
   border-radius:20px;
   border:2px solid rgba(224,224,224,1);
+  .bankTip{
+    margin-top: 10px;
+    font-size: 24px;
+  }
   .flexw{
     display: flex;
     align-items: center;

@@ -99,6 +99,7 @@ export default {
     },
     handleBack() {
       this.$router.back();
+      console.log("log")
     },
     handleLogin() {
       // this.$emit('listenLogin', true)

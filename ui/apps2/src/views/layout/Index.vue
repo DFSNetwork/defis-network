@@ -118,7 +118,27 @@ export default {
         const list = res.rows || [];
         const newList = []
         let dfsData = {}
-        list.forEach((v) => {
+        list.forEach((item) => {
+          let v = item;
+          if (v.contract1 === 'eosio.token' && v.sym1 === '4,EOS') {
+            const newList = {
+              contract0: v.contract1,
+              contract1: v.contract0,
+              last_update: v.last_update,
+              liquidity_token: v.liquidity_token,
+              mid: v.mid,
+              price0_cumulative_last: v.price1_cumulative_last,
+              price0_last: v.price1_last,
+              price1_cumulative_last: v.price0_cumulative_last,
+              price1_last: v.price0_last,
+              reserve0: v.reserve1,
+              reserve1: v.reserve0,
+              sym0: v.sym1,
+              sym1: v.sym0,
+              exchangeSym: true,
+            }
+            v = newList;
+          }
           const sym0 = v.sym0.split(',');
           v.symbol0 = sym0[1]; // 币种
           v.decimal0 = sym0[0]; // 精度

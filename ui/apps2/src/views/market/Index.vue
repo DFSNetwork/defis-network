@@ -157,16 +157,16 @@ export default {
       tokenFocus: false,
       timer: null,
       thisMarket: {
-        mid: 7,
+        mid: 17,
         symbol0: 'EOS',
         contract0: 'eosio.token',
-        symbol1: 'USDD',
-        contract1: 'bankofusddv1',
+        symbol1: 'USDT',
+        contract1: 'tethertether',
         sym0Data:{
           imgUrl: '/static/coin/eosio.token-eos.svg'
         },
         sym1Data:{
-          imgUrl: '/static/coin/bankofusddv1-usdd.svg'
+          imgUrl: '/static/coin/tethertether-usdt.svg'
         }
       },
       sellToken: '',
@@ -233,6 +233,7 @@ export default {
         }
         this.first = false;
         const thisMarket = newVal.find(v => v.mid === Number(this.thisMarket.mid)) || newVal[0];
+        // const thisMarket = newVal[0];
         const reserve0 = thisMarket.reserve0.split(' ')[0];
         const reserve1 = thisMarket.reserve1.split(' ')[0];
         thisMarket.sym0Rate = toFixed(accDiv(reserve1, reserve0), thisMarket.decimal0)
@@ -310,6 +311,7 @@ export default {
       this.payNum1 = '';
       this.payNum2 = '';
       this.sellToken = '';
+      this.getToken = 0;
       this.showMarketList = false;
     },
     // 计算存币获取凭证

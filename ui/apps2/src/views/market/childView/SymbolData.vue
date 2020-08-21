@@ -6,7 +6,10 @@
       <div class="data">
         <div class="allClaim flexb">
           <div>
-            <div class="subTitle">{{ $t('mine.waitClaim') }}</div>
+            <div class="subTitle flexa">
+              <span>{{ $t('mine.waitClaim') }}</span>
+              <img class="tipIcon ml10" @click="showReWardTip = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+            </div>
             <div class="claimNum">{{ accMineData.showReward || '0.00000000' }} DFS</div>
           </div>
           <div class="allClaimBtn" v-if="Number(accMineData.liq)" v-loading="claimLoading"
@@ -14,27 +17,12 @@
           <div class="allClaimBtn" v-if="!Number(accMineData.liq) && getAccData"
             @click="handleJoin(thisMarket)">{{ $t('mine.join') }}</div>
         </div>
-        <!-- <div class="flexb">
-          <span>
-            <span>{{ $t('mine.earnings') }}：{{ accMineData.showReward || '0.00000000' }} DFS </span>
-            <span v-if="Number(buff)" class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
-          </span>
-          <span v-if="!Number(accMineData.liq) && getAccData" class="green" @click="handleJoin(thisMarket)">{{ $t('mine.join') }}</span>
-          <span v-if="Number(accMineData.liq)" class="green" v-loading="claimLoading"
-            @click="handleClaim(thisMarket)">{{ $t('bonus.claim') }}</span>
-        </div> -->
-        <div class="mylist">
+        <div class="mylist" @click="handleJoin(thisMarket)">
           <div class="flexb">
             <span class="flexa" v-if="Number(buff)">
-              <!-- <span>{{ $t('mine.earnings') }}：</span>
-              <span>{{ accMineData.showReward || '0.00000000' }} DFS </span> -->
               <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
               <span class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
             </span>
-            <!-- <span class="green" v-if="!Number(accMineData.liq) && getAccData"
-              @click="handleJoin(thisMarket)">{{ $t('mine.join') }}</span> -->
-            <!-- <span class="green" v-if="Number(accMineData.liq)" v-loading="claimLoading"
-              @click="handleClaim(thisMarket)">{{ $t('bonus.claim') }}</span> -->
           </div>
           <div class="symbol flexb">
             <div class="coinInfo flex">
@@ -60,7 +48,7 @@
             <span>{{ accMineData.liq_bal0 || `0.0000 ${thisMarket.symbol0}` }} / {{ accMineData.liq_bal1 || `0.0000 ${thisMarket.symbol1}`}}</span>
           </div>
           <div class="myMarket">
-            <span>{{ $t('dex.poolNum') }}: </span>
+            <span>{{ $t('dex.pools') }}: </span>
             <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
           </div>
           <div class="rewardPerDay tip">{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</div>
@@ -69,7 +57,10 @@
     </div>
 
     <div class="poolsLists">
-      <div class="title"><span class="act">{{ $t('mine.minersList') }}</span></div>
+      <div class="title flexb">
+        <span class="act">{{ $t('mine.minersList') }}</span>
+        <span class="totalMiners">{{ $t('mine.totalMiners') }}：{{ allMinersList.length }}</span>
+      </div>
       <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
       <template v-for="(item, index) in minersArr">
         <div class="list" :key="index">
@@ -78,11 +69,20 @@
             <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
           </div>
           <div class="flexb">
-            <span>{{ $t('dex.poolNum') }}</span>
+            <span>{{ $t('dex.pools') }}</span>
             <span>{{ item.liq_bal0 }} / {{ item.liq_bal1 }}</span>
           </div>
         </div>
       </template>
+      <el-pagination
+        v-if="allMinersList.length"
+        class="pagination"
+        layout="prev, pager, next"
+        @current-change="handleCurrentChange"
+        :current-page.sync="page"
+        :page-size="pageSize"
+        :total="allMinersList.length">
+      </el-pagination>
     </div>
 
     <el-dialog
@@ -122,7 +122,10 @@ export default {
         },
       }, // 当前矿池数据
       accMineData: {}, // 用户记录
-      minersArr: [], // 所有挖矿者列表
+      allMinersList: [], // 所有挖矿者列表
+      page: 1,
+      pageSize: 20,
+      minersArr: [], // 所有挖矿者列表 - 单页面
       timerArr: [], // 所有挖矿者收益定时器
       secTimer: null, // 秒级定时器
       accTimer: null, // 用户自己的收益定时器
@@ -212,6 +215,9 @@ export default {
     })
   },
   methods: {
+    handleCurrentChange() {
+      this.handleGetPageArr();
+    },
     handleGetMinersLists(type) {
       const params = {
         "code": "miningpool11",
@@ -219,7 +225,7 @@ export default {
         "table": "miners",
         // "lower_bound": " dfsdeveloper",
         // "upper_bound": " dfsdeveloper",
-        limit: 100,
+        limit: 1000,
         "json": true,
       }
       if (type === 'user') {
@@ -238,8 +244,20 @@ export default {
           return
         }
         const newList = [];
-        rows.forEach(v => {
+        rows.forEach(item => {
+          let v = item;
+          // if (this.thisMarket.exchangeSym) {
+          if (v.liq_bal1.split(' ')[1] === 'EOS' || this.thisMarket.exchangeSym) {
+            const tList = {
+              last_drip: v.last_drip,
+              liq_bal0: v.liq_bal1,
+              liq_bal1: v.liq_bal0,
+              miner: v.miner
+            }
+            v = tList;
+          }
           const minnerData = dealMinerData(v, this.thisMarket)
+          // console.log(minnerData)
           if (type === 'user') {
             this.accMineData = minnerData;
             return;
@@ -256,10 +274,20 @@ export default {
         const newListSort = newList.sort((a, b) => {
           return b.liq - a.liq;
         })
-        // console.log(newListSort)
-        this.minersArr = newListSort;
-        this.handleRunReward()
+        try {
+          this.allMinersList = newListSort;
+          this.handleGetPageArr();
+        } catch (error) {
+          console.log(error)
+        }
       })
+    },
+    handleGetPageArr() {
+      const start = (this.page - 1) * this.pageSize;
+      const end = this.page * this.pageSize;
+      this.minersArr = this.allMinersList.slice(start, end);
+      // console.log(this.minersArr)
+      this.handleRunReward()
     },
     // 秒级定时器
     handleRunReward() {
@@ -443,6 +471,9 @@ export default {
     border-radius: 20px;
     color: #FFF;
     padding: 40px;
+    .ml10{
+      margin-left: 10px;
+    }
     .subTitle{
       font-size: 26px;
     }
@@ -508,6 +539,14 @@ export default {
   }
   .poolsLists{
     margin: 40px;
+    .totalMiners{
+      margin-right: 0;
+      font-size: 26px;
+      .tipIcon{
+        margin-left: 10px;
+        width: 28px;
+      }
+    }
     .list{
       margin-top: 20px;
       border: 1px solid #e0e0e0;
@@ -522,6 +561,30 @@ export default {
       margin: 100px 0;
       color: #A6A6A6;
       font-size: 24px;
+    }
+  }
+}
+.pagination{
+  text-align: right;
+  margin-top: 20px;
+  font-size: 26px;
+  /deep/ .el-pager{
+    li.active{
+      color: #07D79B;
+    }
+    li:hover{
+      color: #07D79B;
+    }
+    li{
+      font-size: 26px;
+    }
+  }
+  /deep/ .btn-prev, /deep/ .btn-next{
+    &:hover {
+      color: #07D79B;
+    }
+    .el-icon-arrow-left, .el-icon-arrow-right{
+      font-size: 26px;
     }
   }
 }

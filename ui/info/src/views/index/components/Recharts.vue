@@ -124,7 +124,6 @@ export default {
       console.log(newArr)
     },
     test1(newArr = [], arr = []) {
-      // console.log(newArr, arr)
       if (!arr.length) {
         return newArr
       }
@@ -138,8 +137,6 @@ export default {
         }
       }
       const unDealArr = arr.filter(v => !v.deal)
-      // console.log(arr)
-      // console.log(unDealArr)
       return this.test1(newArr, unDealArr);
     },
     handleChecked(num) {
@@ -235,7 +232,6 @@ export default {
           bottom: '3%',
           containLabel: true
         },
-        tooltip: {},
         xAxis: {
           data: ['EOS', 'DFS', 'USDT', 'USDD', 'KEY', 'TPT']
         },

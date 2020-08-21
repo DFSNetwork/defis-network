@@ -1,3 +1,4 @@
+import { toFixed, accDiv } from './public';
 class swapRouter {
   constructor() {
     this.markets = [];
@@ -114,6 +115,8 @@ class swapRouter {
       let mid_arr = m.split("-");
       let quantity_out;
       let price = 1;
+      let swapInPrice = 1;
+      let swapOutPrice = 1;
       let new_token_in = token_in, new_amount_in = amount_in;
       for (let i = 0; i < mid_arr.length; i++) {
         let mid = mid_arr[i];
@@ -127,12 +130,14 @@ class swapRouter {
         new_token_in = swap_result.token_out;
         quantity_out = swap_result.quantity_out;
         price = swap_result.price * price;
+        swapInPrice = swap_result.swapInPrice * swapInPrice;
+        swapOutPrice = swap_result.swapOutPrice * swapOutPrice;
       }
       amounts_out_arr.push({
-        amount_in: new_amount_in, token_in: new_token_in, quantity_out, price, mid: m, mIndex
+        amount_in: new_amount_in, token_in: new_token_in, quantity_out, price, mid: m, mIndex,
+        swapInPrice, swapOutPrice
       })
     })
-    // console.log(amounts_out_arr)
     amounts_out_arr.sort((a, b) => {
       return b.amount_in - a.amount_in;
     })
@@ -149,11 +154,14 @@ class swapRouter {
     if (!type) {
       amount_in -= amount_in * 0.001; // 协议费扣除
     }
+    let inNum = amount_in * 0.998;
     let amount_out;
     let token_out;
     let quantity_out;
     let price;
+    let swapPrice; // 兑换后的价格
     if (token_in === tokenA) {
+      inNum = inNum / (10 ** market.sym0.split(",")[0]);
       let reserve_in = parseFloat(market.reserve0) * (10 ** market.sym0.split(",")[0]);
       let reserve_out = parseFloat(market.reserve1) * (10 ** market.sym1.split(",")[0]);
       if (!(reserve_in > 0 && reserve_out > 0)) {
@@ -170,11 +178,13 @@ class swapRouter {
         amount_out = this.get_amount_in(amount_in, reserve_in, reserve_out);
       }
       token_out = tokenB
-      quantity_out = (amount_out / (10 ** market.sym1.split(",")[0])).toFixed(market.sym1.split(",")[0]) + " " + market.reserve1.split(" ")[1];
+      quantity_out = toFixed((amount_out / (10 ** market.sym1.split(",")[0])), market.sym1.split(",")[0]) + " " + market.reserve1.split(" ")[1];
       // console.log(reserve_out, reserve_in)
       price = parseFloat(market.reserve1) / parseFloat(market.reserve0);
+      swapPrice = accDiv(amount_out, 10 ** market.sym1.split(",")[0]); // 计算总输出 - 不截取
     }
     if (token_in === tokenB) {
+      inNum = inNum / (10 ** market.sym1.split(",")[0]);
       let reserve_in = parseFloat(market.reserve1) * (10 ** market.sym1.split(",")[0]);
       let reserve_out = parseFloat(market.reserve0) * (10 ** market.sym0.split(",")[0]);
       if (!(reserve_in > 0 && reserve_out > 0)) {
@@ -192,18 +202,31 @@ class swapRouter {
       }
       token_out = tokenA;
       if (!type) {
-        quantity_out = (amount_out / (10 ** market.sym0.split(",")[0])).toFixed(market.sym0.split(",")[0]) + " " + market.reserve0.split(" ")[1];
+        quantity_out = toFixed((amount_out / (10 ** market.sym0.split(",")[0])), (market.sym0.split(",")[0])) + " " + market.reserve0.split(" ")[1];
       } else {
-        quantity_out = (amount_out / (10 ** market.sym1.split(",")[0])).toFixed(market.sym1.split(",")[0]) + " " + market.reserve1.split(" ")[1];
+        quantity_out = toFixed((amount_out / (10 ** market.sym1.split(",")[0])), (market.sym1.split(",")[0])) + " " + market.reserve1.split(" ")[1];
       }
       // console.log(reserve_out, reserve_in)
       price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
+      swapPrice = accDiv(amount_out, 10 ** market.sym0.split(",")[0]); // 计算总输出 - 不截取
     }
+    let swapInPrice, swapOutPrice;
+    if (!type) {
+      swapInPrice = swapPrice / inNum;
+      swapOutPrice = inNum / swapPrice;
+      // console.log(amount_out, inNum, swapPrice)
+    } else {
+      swapInPrice = inNum / swapPrice;
+      swapOutPrice = swapPrice / inNum;
+    }
+    // console.log(swapPrice, inNum)
     return {
       token_out,
       amount_out,
       quantity_out,
-      price
+      price,
+      swapInPrice,
+      swapOutPrice
     }
   }
 

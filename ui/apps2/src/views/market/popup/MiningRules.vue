@@ -28,6 +28,7 @@
             </div>
           </li>
           <li class="rule1">{{ $t('mine.minReward', {minReward: minReward}) }}{{ $t('mine.rewardCut') }}</li>
+          <li class="rule1">{{ $t('mine.rewardPrice') }}</li>
         </ul>
       </div>
   </div>

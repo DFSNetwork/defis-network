@@ -237,11 +237,12 @@ export function perDayReward(weight) {
   return reward
 }
 // 处理用户挖矿数据
-export function dealMinerData(minnerData, thisMarket) {
+export function dealMinerData(minnerData) {
   let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
   lastTime = moment(lastTime).valueOf();
   minnerData.lastTime = lastTime;
-  const liq = thisMarket.symbol0 === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
+  // const liq = thisMarket.symbol0 === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
+  const liq = minnerData.liq_bal0.split(' ')[1] === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
   minnerData.liq = liq;
   return minnerData
 }
