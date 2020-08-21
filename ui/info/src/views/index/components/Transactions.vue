@@ -1,6 +1,6 @@
 <template>
-  <div class="symbols">
-    <div class="minW">
+  <div class="symbols" :class="{'minScSymbols': minScreen}">
+    <div class="minW" v-if="!minScreen">
       <div class="title">
         <span>Transactions</span>
       </div>
@@ -55,12 +55,60 @@
         </div>
       </div>
     </div>
+    <div v-else>
+      <div class="title">
+        <span class="act">Transactions</span>
+      </div>
+      <div class="tables">
+        <div class="listHeard flexb">
+          <span>Market</span>
+          <span>Total Value</span>
+          <span>Time</span>
+        </div>
+        <div class="list flexb">
+          <span>EOS-DFS</span>
+          <span>$1000K</span>
+          <span>2020-08-15 22:11</span>
+        </div>
+        <div class="list flexb">
+          <span>EOS-DFS</span>
+          <span>$10M</span>
+          <span>2020-08-15 22:11</span>
+        </div>
+        <div class="list flexb">
+          <span>EOS-DFS</span>
+          <span>$1000K</span>
+          <span>2020-08-15 22:11</span>
+        </div>
+        <div class="list flexb">
+          <span>EOS-DFS</span>
+          <span>$100</span>
+          <span>2020-08-15 22:11</span>
+        </div>
+        <div class="list flexb">
+          <span>EOS-DFS</span>
+          <span>$100K</span>
+          <span>2020-08-15 22:11</span>
+        </div>
+        <div class="list flexb">
+          <span>EOS-DFS</span>
+          <span>$1000K</span>
+          <span>2020-08-15 22:11</span>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   
+  computed:{
+    ...mapState({
+      minScreen: state => state.app.minScreen,
+    })
+  },
 }
 </script>
 
@@ -101,6 +149,13 @@ export default {
       .add{
         color: #07d79b;
       }
+    }
+  }
+
+  &.minScSymbols{
+    margin: 40px;
+    .title{
+      font-size: 32px;
     }
   }
 }

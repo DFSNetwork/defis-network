@@ -1,5 +1,5 @@
 <template>
-  <div class="poolsInfo">
+  <div class="poolsInfo" :class="{'minscNoBg': minScreen}">
     <div class="minW" v-if="!minScreen">
       <div class="item">
         <div class="subTitle">DFS Price</div>
@@ -19,7 +19,7 @@
       </div>
     </div>
     <div v-else class="minSc flexb">
-      <div class="bgSize"></div>
+      <div class="bgSize"><img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt=""></div>
       <div class="li">
         <div class="item">
           <div class="subTitle tip">DFS Price</div>
@@ -65,8 +65,12 @@ export default {
 
 <style lang="scss" scoped>
 .poolsInfo{
-  // background: #07d79b;
-  // padding: 20px 0;
+  background: #07d79b;
+  padding: 20px 0;
+  &.minscNoBg{
+    background: transparent;
+    padding: 0;
+  }
   .minW{
     max-width: 1240px;
     margin: auto;
@@ -97,6 +101,7 @@ export default {
   }
   .minSc{
     padding: 40px;
+    padding-top: 60px;
     text-align: left;
     position: relative;
     .bgSize{
@@ -106,11 +111,20 @@ export default {
       height: 55%;
       left: 0;
       top: 0;
+      overflow: hidden;
+      .bgImg{
+        position: absolute;
+        top: -50%;
+        left: 0;
+        width: 100%;
+        z-index: 0;
+      }
     }
     .li{
       position: relative;
-      background: #FFF;
+      background: rgba(255, 255, 255, .9);
       font-size: 26px;
+      padding: 5px 10px;
       flex: 1;
       margin-right: 20px;
       border-radius: 20px;
@@ -121,6 +135,15 @@ export default {
       .item{
         padding: 0;
         margin: 20px;
+        background-color: rgba(255, 255, 255, 0);
+        .subTitle{
+          font-size: 28px;
+          font-weight: bold;
+        }
+        .num{
+          font-weight: bold;
+          font-size: 30px;
+        }
       }
     }
   }
