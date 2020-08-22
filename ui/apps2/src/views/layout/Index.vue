@@ -63,9 +63,11 @@ export default {
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
     }),
     showAcc() {
-      const noArr = ['tutorial', 'pools', 'poolsMarket'];
-      const has = noArr.find(v => v === this.$route.name)
-      return !has
+      // const noArr = ['tutorial', 'pools', 'poolsMarket'];
+      // const has = noArr.find(v => v === this.$route.name)
+      // return !has
+      const showAcc = !this.$route.meta.noAcc;
+      return showAcc
     }
   },
   mounted() {

@@ -36,13 +36,13 @@ const constantRouter = [
         path: '/pools',
         name: 'pools',
         component: () => import(/* webpackChunkName: "pools" */ '@/views/market/childView/PoolsData.vue'),
-        meta: { title: 'DeFis-Network' },
+        meta: { title: 'DeFis-Network', noAcc: true },
       },
       {
         path: '/pools/:mid',
         name: 'poolsMarket',
         component: () => import(/* webpackChunkName: "pools" */ '@/views/market/childView/SymbolData.vue'),
-        meta: { title: 'DeFis-Network' },
+        meta: { title: 'DeFis-Network', noAcc: true },
       },
       {
         path: '/bank',
@@ -54,8 +54,14 @@ const constantRouter = [
         path: '/tutorial',
         name: 'tutorial',
         component: () => import(/* webpackChunkName: "Tutorial" */ '@/views/index/childViews/Tutorial.vue'),
-        meta: { title: 'DeFis-Network' },
-      }
+        meta: { title: 'DeFis-Network', noAcc: true},
+      },
+      {
+        path: '/dsr',
+        name: 'dsr',
+        component: () => import(/* webpackChunkName: "dsr" */ '@/views/dsr/Index.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true },
+      },
     ]
   },
   {

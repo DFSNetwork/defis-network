@@ -23,6 +23,7 @@ export default {
   padding: 40px;
   font-size: 28px;
   color: #333;
+  text-align: left;
   .title{
     color: #000;
     text-align: center;

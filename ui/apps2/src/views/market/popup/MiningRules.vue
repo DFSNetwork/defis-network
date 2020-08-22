@@ -49,6 +49,7 @@ export default {
 .rules{
   padding: 40px;
   color: #000;
+  text-align: left;
   .title{
     text-align: center;
     font-size: 32px;
