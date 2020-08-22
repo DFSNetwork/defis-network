@@ -76,6 +76,7 @@ var Konami = function (keys, callback) {
           orig_keys: "",
           keys: keys.apps,
           input: [],
+          timer: null, // 定时器 - 3S内完成操作。否则，清空操作记录
           code: function (link) {
             konami.code(link);
           },
@@ -91,24 +92,42 @@ var Konami = function (keys, callback) {
           },
           touchendHandler: function () {
             const tIpt = konami.iphone.check_direction();
-            if (tIpt === 'TAP') {
-              const iptLast = konami.iphone.input[konami.iphone.input.length - 1];
-              // console.log(iptLast)
-              if (iptLast === tIpt || !iptLast) {
-                const thisIpt = konami.iphone.input.join(',');
-                const index = konami.iphone.keys.findIndex(v => v.join(',') === thisIpt);
-                if (index === -1) {
-                  konami.iphone.input = []
-                } else {
-                  konami.iphone.code(index);
-                  konami.iphone.input = []
-                }
-                return
-              }
-            }
+            // if (tIpt === 'TAP') {
+            //   const iptLast = konami.iphone.input[konami.iphone.input.length - 1];
+            //   // console.log(iptLast)
+            //   if (iptLast === tIpt || !iptLast) {
+            //     // const thisIpt = konami.iphone.input.join(',');
+            //     // console.log(thisIpt)
+            //     const index = konami.iphone.keys.findIndex(v => {
+            //       const ipt = konami.iphone.input
+            //       const vIpt = ipt.slice(ipt.length - v.length);
+            //       return v.join(',') === vIpt.join(',');
+            //     });
+            //     if (index === -1) {
+            //       konami.iphone.input = []
+            //     } else {
+            //       konami.iphone.code(index);
+            //       konami.iphone.input = []
+            //     }
+            //     return
+            //   }
+            // }
             konami.iphone.input.push(tIpt);
             if (konami.iphone.input.length > 20) konami.iphone.input.shift();
             // console.log(konami.iphone.input)
+            const index = konami.iphone.keys.findIndex(v => {
+              const ipt = konami.iphone.input
+              const vIpt = ipt.slice(ipt.length - v.length);
+              return v.join(',') === vIpt.join(',');
+            });
+            if (index !== -1) {
+              konami.iphone.code(index);
+              konami.iphone.input = []
+            }
+            clearTimeout(konami.iphone.timer);
+            konami.iphone.timer = setTimeout(() => {
+              konami.iphone.input = []
+            }, 3000);
           },
           touchstartHandler: function (e) {
             konami.iphone.start_x = e.changedTouches[0].pageX;
