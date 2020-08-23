@@ -24,7 +24,7 @@ let memes = [
   "如果你说你有一个亿，那我只觉得你是个平庸的富人而已，但是你说你有1万个DFS，那我会肃然起敬，因为你不但极其富有且很有品味——万乎涨",
   "选择和你步伐一致的人同行，如果没有，那就一个人战斗。",
   "If something is important enough you should try, even if the probable outcome is failure. -- Elon Musk",
-  "我们创建DFS不是为了赚钱；我们赚钱是为了做出更好的DFS。这是我们做事的态度。 -- Judy "
+  "简单来说, 我们创建DFS不是为了赚钱；我们赚钱是为了做出更好的DFS。这是我们做事的态度。 -- Judy "
 ];
 
 // let random = (Math.random() * 1000) % memes.length;
