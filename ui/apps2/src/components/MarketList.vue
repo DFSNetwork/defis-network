@@ -2,7 +2,10 @@
   <div class="marketList">
     <div class="header flexb">
       <span>{{ $t('pools.chooseMarket') }}</span>
-      <img class="closeSvg" @click="handleClose" src="@/assets/img/dialog/sd_icon_btn.svg" alt="">
+      <span>
+        <span class="create" v-if="$route.name === 'market'" @click="handleToCreate">{{ $t('dex.addMarket') }}</span>
+        <img class="closeSvg" @click="handleClose" src="@/assets/img/dialog/sd_icon_btn.svg" alt="">
+      </span>
     </div>
     <div class="iptSearch" :class="{'other': type === 'other'}">
       <el-input v-model="search" :placeholder="`${$t('pools.searchMarket')}..`"></el-input>
@@ -116,6 +119,9 @@ export default {
     // console.log(this.type)
   },
   methods: {
+    handleToCreate() {
+      this.$router.push({name: 'createMarket'})
+    },
     handleSearch() {
       const search = this.search.toUpperCase();
       if (this.type === 'other') {
@@ -178,6 +184,16 @@ export default {
     padding: 40px 40px 0;
     .closeSvg{
       width: 24px;
+    }
+    .create{
+      margin-right: 30px;
+      height: 80px;
+      min-width: 80px;
+      background: $color-bgcolor;
+      border-radius: 30px;
+      box-shadow: 0px 20px 40px 0px rgba(220,220,220,0.5);
+      box-sizing: border-box;
+      padding: 12px 24px;
     }
   }
   .iptSearch{

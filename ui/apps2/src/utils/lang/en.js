@@ -170,6 +170,8 @@ export default {
     poolsNum: 'Number of market',
     mineBonus: 'Mining earnings',
     totalMiners: 'Total',
+    mineApr: 'Forecast annual mining revenue',
+    marketFeesApr: 'Estimated annualized fee income',
   },
   node: {
     nodeSet: 'Node Setting',

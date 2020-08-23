@@ -155,7 +155,7 @@ export default {
     join: '加入',
     earnings: '收益', // earnings
     poolsMine1: '当前交易对可以进行流动性挖矿。',
-    poolsMine2: '预计每万EOS每天收益 {perDayReward} DFS。',
+    poolsMine2: '预估每万EOS每天收益 {perDayReward} DFS。',
     poolsMine3: '存入资金，可自动开始挖矿。',
     lockFunds: '锁定资金', // Locked in funds
     wRewaed: '每万EOS/24H',
@@ -171,6 +171,8 @@ export default {
     poolsNum: '做市数量',
     mineBonus: '挖矿收益', // Mining earnings
     totalMiners: '总矿工',
+    mineApr: '预估挖矿年化收益',
+    marketFeesApr: '预估手续费年化收益',
   },
   node: {
     nodeSet: '节点设置',
