@@ -187,7 +187,7 @@ export default {
     num: '数值',
     total: '总计',
     circulation: '流通',
-    dsr: 'dsr',
+    dsr: 'DSR',
     apr: '年化'
   },
   miningRules: {
