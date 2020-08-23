@@ -112,7 +112,7 @@ export default {
       return toFixed(min, 4)
     },
     apr() {
-      const apr = this.perDayReward * this.dfsPrice / 10000 * 365 * 100;
+      const apr = this.perDayReward * this.dfsPrice / 20000 * 365 * 100;
       return apr.toFixed(2)
     },
     feesApr() {

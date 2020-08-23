@@ -207,7 +207,7 @@ export default {
       return perDayReward(this.weight)
     },
     apr() {
-      const apr = this.dayRewardNum * this.dfsPrice / 10000 * 365 * 100;
+      const apr = this.dayRewardNum * this.dfsPrice / 20000 * 365 * 100;
       return apr.toFixed(2)
     },
     feesApr() {
