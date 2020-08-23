@@ -97,6 +97,11 @@
       </div>
     </div>
 
+    <div class="btnDiv" v-loading="loading">
+      <div v-if="act === 1" class="btn flexc" @click="handleAddToken">{{ $t('pools.deposit') }}</div>
+      <div v-else class="btn flexc backBtn" @click="handleToSell">{{ $t('pools.withdrawal') }}</div>
+    </div>
+
     <weight v-if="Number(weight)" :token="token" :thisMarket="thisMarket"/>
 
     <div class="liquidity" v-if="act === 1">
@@ -107,11 +112,6 @@
         / {{ toFixed(accPools.getNum2, thisMarket.decimal1) }} {{thisMarket.symbol1}}</div>
       <div class="subTitle">{{ $t('pools.myToken') }}</div>
       <div class="num">{{ accGetToken }}</div>
-    </div>
-
-    <div class="btnDiv" v-loading="loading">
-      <div v-if="act === 1" class="btn flexc" @click="handleAddToken">{{ $t('pools.deposit') }}</div>
-      <div v-else class="btn flexc backBtn" @click="handleToSell">{{ $t('pools.withdrawal') }}</div>
     </div>
 
     <!-- 弹窗组件 -->
