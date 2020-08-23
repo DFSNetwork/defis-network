@@ -1,4 +1,4 @@
-import { toFixed, accDiv } from './public';
+import { toFixed, accDiv, accMul } from './public';
 class swapRouter {
   constructor() {
     this.markets = [];
@@ -151,10 +151,11 @@ class swapRouter {
     let market = this.mid_market_map[mid];
     let tokenA = market.contract0 + ":" + market.sym0.split(",")[1];
     let tokenB = market.contract1 + ":" + market.sym1.split(",")[1];
+    let inNum = amount_in;
     if (!type) {
       amount_in -= amount_in * 0.001; // 协议费扣除
+      inNum = amount_in * 0.998;
     }
-    let inNum = amount_in * 0.998;
     let amount_out;
     let token_out;
     let quantity_out;
@@ -216,10 +217,12 @@ class swapRouter {
       swapOutPrice = inNum / swapPrice;
       // console.log(amount_out, inNum, swapPrice)
     } else {
+      const noFeesAmt = accMul(amount_out, 0.998);
+      swapPrice = accDiv(noFeesAmt, 10 ** market.sym0.split(",")[0]); // 计算总输出 - 不截取
       swapInPrice = inNum / swapPrice;
       swapOutPrice = swapPrice / inNum;
     }
-    // console.log(swapPrice, inNum)
+    // console.log(swapInPrice, inNum, price)
     return {
       token_out,
       amount_out,
