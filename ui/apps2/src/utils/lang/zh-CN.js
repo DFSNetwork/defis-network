@@ -171,7 +171,7 @@ export default {
     poolsNum: '做市数量',
     mineBonus: '挖矿收益', // Mining earnings
     totalMiners: '总矿工',
-    mineApr: '预测挖矿年化收益',
+    mineApr: '预估挖矿年化收益',
     marketFeesApr: '预估手续费年化收益',
   },
   node: {
