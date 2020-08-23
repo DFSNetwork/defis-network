@@ -1,6 +1,7 @@
 <template>
   <div class="version">
-    Versions V2.0.1
+    <div>Versions V2.0.2</div>
+    <!-- <div class="updata">{{ $t('public.lastUpdate') }}: 2020-08-23</div> -->
   </div>
 </template>
 
@@ -17,5 +18,10 @@ export default {
 .version{
   padding: 40px;
   font-size: 28px;
+  // text-align: left;
+  // padding-left: 100px;
+  .updata{
+    margin-top: 10px;
+  }
 }
 </style>

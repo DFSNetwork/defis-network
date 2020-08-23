@@ -31,7 +31,7 @@ export default {
           '18986', // - v 回车
         ],
         apps: [ // 手势
-          ['LEFT', 'RIGHT', 'TAP', 'TAP'], // 左 右 点击 点击
+          ['RIGHT', 'RIGHT', 'DOWN', 'DOWN', 'TAP', 'TAP'], // 左 右 点击 点击
           ["RIGHT", "DOWN", "TAP", 'TAP'], // 右 下 上 点击 点击
         ]
       },

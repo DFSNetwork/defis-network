@@ -24,6 +24,7 @@ export default {
     unLogin: 'You are not logged in yet, please ',
     warmPrompt: 'Tip',
     usddTip: 'Please consider the fluctuations of USDD price due to direct exchange or leverage, and use at your own risk',
+    lastUpdate: 'last update',
   },
   invi: {
     invitation: 'Invitation',
@@ -174,6 +175,19 @@ export default {
     nodeSet: 'Node Setting',
     defaultNode: 'Default',
     standbyNode: 'Standby',
+  },
+  footer: {
+    swapNum: ' Swap',
+    orderNum: ' Orders',
+    marketsFee: 'Market Info',
+    token: 'Token',
+    mineDfsNum: 'Cumulative mining output DFS',
+    label: 'Description',
+    num: 'Value',
+    total: 'Total',
+    circulation: 'Circulation',
+    dsr: 'DSR',
+    apr: 'Apr'
   },
   miningRules: {
     rules: 'Mining rules',

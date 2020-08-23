@@ -24,6 +24,7 @@ export default {
     unLogin: '您还未登录账号，请',
     warmPrompt: '温馨提示',
     usddTip: '请考虑USDD价格存在因直接兑换或加杠杆行为导致的波动，自负使用风险',
+    lastUpdate: '最近更新时间', // last update
   },
   invi: {
     invitation: '邀请', // invitation
@@ -175,6 +176,19 @@ export default {
     nodeSet: '节点设置',
     defaultNode: '默认节点',
     standbyNode: '备用节点',
+  },
+  footer: {
+    swapNum: '兑换量',
+    orderNum: '笔订单',
+    marketsFee: '池子概况',
+    token: '代币',
+    mineDfsNum: '累计挖矿产出DFS',
+    label: '说明',
+    num: '数值',
+    total: '总计',
+    circulation: '流通',
+    dsr: 'dsr',
+    apr: '年化'
   },
   miningRules: {
     rules: '挖矿规则',
