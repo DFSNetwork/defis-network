@@ -186,6 +186,7 @@ export default {
       width: 24px;
     }
     .create{
+      font-size: 26px;
       margin-right: 30px;
       height: 80px;
       min-width: 80px;
