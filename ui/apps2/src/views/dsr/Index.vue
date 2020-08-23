@@ -14,6 +14,7 @@
       </div>
     </div>
     <dsr-list />
+    <dsr-miner-list />
 
     <el-dialog
       class="myDialog"
@@ -28,12 +29,14 @@ import { mapState } from 'vuex';
 import MinReward from '@/views/market/popup/MinReward'
 import DsrInfo from './comp/DsrInfo';
 import DsrList from './comp/DsrList';
+import DsrMinerList from './comp/DsrMinerList';
 export default {
   name: 'dsr',
   components: {
     DsrInfo,
     MinReward,
-    DsrList
+    DsrList,
+    DsrMinerList
   },
   computed: {
     ...mapState({
@@ -69,6 +72,7 @@ export default {
     border-radius: 20px;
     color: #FFF;
     padding: 40px;
+    box-shadow: 0px 20px 40px 0px rgba(220,220,220,0.5);
     .ml10{
       margin-left: 10px;
     }

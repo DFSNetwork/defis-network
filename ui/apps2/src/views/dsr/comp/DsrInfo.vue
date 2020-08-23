@@ -2,8 +2,8 @@
   <div>
     <div class="banner">
       <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
-      <div class="bannerTitle">DFS DSR</div>
-      <div class="bannerSubTitle">No Founder. No Investor. No Pre-mine.</div>
+      <div class="bannerTitle">DFS Saving System</div>
+      <div class="bannerSubTitle">HOLD DFS Get More DFS</div>
       <div class="flexb floatDiv">
         <div class="left">
           <div>{{ lockDfs }}</div>
