@@ -17,6 +17,14 @@ let memes = [
   "今天你挖DFS了吗?",
   "从开始你就后悔下注，这圈子你没办法踏入。 -- 先生",
   "大丰收我不敢买太多，我怕沦为废人。 -- 万乎涨",
+  "我只是一只追车的狗，DFS价格超过EOS并非我的本意。 -- Judy",
+  "画个祈福的十字，DFS，许你一生幸福;轻敲两下屏幕，DFS，开启幸运之门！——旋舞之风",
+  "如果生活只剩挖矿，那生活还有什么意义。",
+  "挖DFS的日子，就是这么朴实无华，且枯燥。",
+  "如果你说你有一个亿，那我只觉得你是个平庸的富人而已，但是你说你有1万个DFS，那我会肃然起敬，因为你不但极其富有且很有品味——万乎涨",
+  "选择和你步伐一致的人同行，如果没有，那就一个人战斗。",
+  "If something is important enough you should try, even if the probable outcome is failure. -- Elon Musk",
+  "我们创建DFS不是为了赚钱；我们赚钱是为了做出更好的DFS。这是我们做事的态度。 -- Judy "
 ];
 
 // let random = (Math.random() * 1000) % memes.length;
