@@ -81,7 +81,7 @@ export default {
     },
     // 获取总发行量
     async handleGetDfsInfoData() {
-      const result = await axios.get("http://dfsinfoapi.sgxiang.com/dapi/dfsdata");
+      const result = await axios.get("//dfsinfoapi.sgxiang.com/dapi/dfsdata");
       if (result.status !== 200) {
         return;
       }
