@@ -130,6 +130,14 @@ export default {
       overflow-y: auto;
       margin-bottom: 60px;
     }
+    /deep/ .el-table {
+      .el-table__row, .el-table__header {
+        .cell {
+          font-size: 24px;
+          line-height: 24px;
+        }
+      }
+    }
     .coinImg {
       width: 220px;
     }
