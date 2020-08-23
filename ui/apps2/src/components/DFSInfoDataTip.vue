@@ -79,13 +79,16 @@ export default {
           if (market) {
             const sym1Liq = market.reserve1.split(' ')[0];
             let apr = value / (sym1Liq - value) * 365 * 100;
-            result[isShowToken] = {
+            result.push({
               symbol: key,
               value: `${apr.toFixed(2)}%`,
-            };
+            });
           }
         }
       }
+      result = result.sort((a, b) => {
+        return parseInt(b.value) - parseInt(a.value)
+      })
       return result;
     },
     dfsTableData() {
