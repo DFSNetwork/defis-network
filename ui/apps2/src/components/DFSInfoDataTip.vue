@@ -77,7 +77,7 @@ export default {
     },
     feesTableData() {
       let result = [];
-      if (!this.marketLists.length) {
+      if (!this.marketLists.length || !this.feesData) {
         return
       }
       this.eggargs.forEach((item) => {
@@ -85,11 +85,22 @@ export default {
         const weight = this.weightList.find(v => v.mid === item.mid).pool_weight;
         const reward = perDayReward(weight);
         const apr = reward * this.dfsPrice / 20000 * 365 * 100;
-        const poolsApr = getPoolApr(isShowToken)
+        const feesDataKeys = Object.keys(this.feesData)
+        // console.log(feesDataKeys)
+        const key = feesDataKeys.find(v => v === isShowToken.symbol1)
+        let poolsApr = '0.00%';
+        if (key) {
+          const value = this.feesData[key];
+          const sym1Liq = isShowToken.reserve1.split(' ')[0];
+          poolsApr = value / (sym1Liq - value) * 365 * 100;
+          console.log(value, sym1Liq)
+        }
+
+        // const poolsApr = getPoolApr(isShowToken)
         result.push({
           symbol: isShowToken.symbol1,
           value: `${apr.toFixed(2)}%`,
-          poolsApr: `${poolsApr}%`
+          poolsApr: `${poolsApr.toFixed(3)}%`
         });
       });
       // if (!this.feesData) {
