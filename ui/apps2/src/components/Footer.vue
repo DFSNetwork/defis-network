@@ -1,9 +1,10 @@
 <template>
   <div class="footer">
     <div class="tip" @click="clickOnDFSInfoData">
-      24H{{ $t('footer.swapNum') }}：{{ dfsInfoData.eos_volume ? dfsInfoData.eos_volume : "0.00" }}
+      24H{{ $t('footer.swapNum') }}: {{ dfsInfoData.eos_volume ? dfsInfoData.eos_volume : "0.00" }}
       {{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('footer.orderNum') }}
     </div>
+    <div class="poolsNum tip">{{ $t('footer.tlv') }}: {{ poolsEos }} EOS</div>
     <div class="safe">
       <span>{{ $t('public.safeRecord1') }}</span>
       <span class="who" @click="handleToShowReport('slotMist')"> {{ $t('public.safeRecord2') }}</span> &
@@ -36,6 +37,8 @@
 <script>
 import axios from "axios";
 import DfsInfoDataTip from "@/components/DFSInfoDataTip";
+import { EosModel } from '@/utils/eos';
+import { toFixed, accMul } from '@/utils/public';
 
 export default {
   data() {
@@ -45,6 +48,7 @@ export default {
       dfsInfoData: {},
       timer: null,
       closeDFSInfoDataTip: true,
+      poolsEos: '0.0000 EOS',
     }
   },
   props: {
@@ -64,9 +68,11 @@ export default {
   mounted() {
     clearInterval(this.timer);
     this.timer = setInterval(() => {
+      this.handleGetBalance()
       this.handleGetDfsInfoData();
     }, 1000 * 10);
     this.handleGetDfsInfoData();
+    this.handleGetBalance()
   },
   methods: {
     handleToShowReport(name) {
@@ -86,6 +92,20 @@ export default {
         return;
       }
       this.dfsInfoData = result.data;
+    },
+    // 获取账户余额
+    async handleGetBalance() {
+      const params = {
+        code: 'eosio.token',
+        coin: 'EOS',
+        decimal: 4,
+        account: 'defisswapcnt'
+      };
+      await EosModel.getCurrencyBalance(params, res => {
+        let balance = toFixed('0.000000001', params.decimal);
+        (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
+        this.poolsEos = accMul(balance, 2).toFixed(4);
+      })
     },
   },
 }
@@ -108,6 +128,9 @@ export default {
 .footer{
   font-size: 28px;
   margin-top: 30px;
+  .poolsNum{
+    margin-top: 8px;
+  }
   .safe{
     margin: 12px 0 80px;
     font-size: 24px;

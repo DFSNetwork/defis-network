@@ -190,7 +190,8 @@ export default {
     total: 'Total',
     circulation: 'Circulation',
     dsr: 'DSR',
-    apr: 'Apr'
+    apr: 'Apr',
+    tlv: 'Total Lock Value',
   },
   dsr: {
     ableInve: 'Available inventory',
