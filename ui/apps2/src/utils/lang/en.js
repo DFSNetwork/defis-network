@@ -200,7 +200,9 @@ export default {
     percent: '% Of',
     deposit: 'Deposit',
     retrieve: 'Retrieve',
-    unOpen: 'The DSR contract is under review and is waiting for its official opening.'
+    unOpen: 'The DSR contract is under review and is waiting for its official opening.',
+    dfsHolders: 'DFS Holders', // DFS Holders
+    total: 'Total', // Total
   },
   miningRules: {
     rules: 'Mining rules',

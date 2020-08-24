@@ -201,7 +201,9 @@ export default {
     percent: '存款占比', // % Of deposits
     deposit: '存款', // deposit
     retrieve: '取回', // retrieve
-    unOpen: 'DSR合约正在审核中，等待正式开放。'
+    unOpen: 'DSR合约正在审核中，等待正式开放。',
+    dfsHolders: 'DFS 家人', // DFS Holders
+    total: '总数', // Total
   },
   miningRules: {
     rules: '挖矿规则',

@@ -1,8 +1,8 @@
 <template>
   <div class="poolsLists">
     <div class="title flexb">
-      <span class="act">{{ $t('mine.minersList') }}</span>
-      <span class="totalMiners">{{ $t('mine.totalMiners') }}：{{ allMinersList.length }}</span>
+      <span class="act">{{ $t('dsr.dfsHolders') }}</span>
+      <span class="totalMiners">{{ $t('dsr.total') }}：{{ allMinersList.length }}</span>
     </div>
     <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
     <template v-for="(item, index) in minersArr">
