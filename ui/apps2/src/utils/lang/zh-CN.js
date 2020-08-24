@@ -193,6 +193,8 @@ export default {
     dsr: 'DSR',
     apr: '年化',
     tlv: '流动池总量',
+    mineApr: '挖矿年化',
+    marketApr: '做市年化',
   },
   dsr: {
     ableInve: '可用库存', // Available inventory

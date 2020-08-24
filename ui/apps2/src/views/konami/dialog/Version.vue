@@ -1,7 +1,7 @@
 <template>
   <div class="version">
-    <div>Versions V2.0.9</div>
-    <div class="updata">{{ $t('public.lastUpdate') }}: 2020-08-24 13:58</div>
+    <div>Versions V2.0.10</div>
+    <div class="updata">{{ $t('public.lastUpdate') }}: 2020-08-24 16:45</div>
   </div>
 </template>
 

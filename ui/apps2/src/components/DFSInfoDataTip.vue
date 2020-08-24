@@ -12,7 +12,8 @@
         <div class="fees-data-content" v-if="feesData">
           <el-table :data="feesTableData" style="width: 100%">
             <el-table-column prop="symbol" :label="$t('footer.token')"> </el-table-column>
-            <el-table-column prop="value" :label="$t('footer.apr')"> </el-table-column>
+            <el-table-column prop="value" :label="$t('footer.mineApr')"> </el-table-column>
+            <el-table-column prop="poolsApr" :label="$t('footer.marketApr')"> </el-table-column>
           </el-table>
         </div>
         <div class="tip">{{ $t('footer.mineDfsNum') }}(24H)</div>
@@ -33,6 +34,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { toFixed, perDayReward, getPoolApr } from '@/utils/public';
 export default {
   data() {
     return {
@@ -63,31 +66,52 @@ export default {
   },
   watch: {},
   computed: {
+    ...mapState({
+      // 箭头函数可使代码更简练
+      weightList: state => state.sys.weightList, // 交易对权重列表
+      eggargs: state => state.sys.eggargs,
+      dfsPrice: state => state.sys.dfsPrice,
+    }),
     feesData() {
       return this.dfsInfoData && this.dfsInfoData.feesData;
     },
     feesTableData() {
       let result = [];
-      if (!this.feesData) {
-        return result;
+      if (!this.marketLists.length) {
+        return
       }
-      // const showTokens = ['DFS', 'KEY', 'OGX', 'USDT'];
-      for (let [key, value] of Object.entries(this.feesData)) {
-        const isShowToken = this.showTokens.findIndex(v => v === key);
-        if(isShowToken !== -1) {
-          const market = this.marketLists.find(v => v.symbol1 === key)
-          if (market) {
-            const sym1Liq = market.reserve1.split(' ')[0];
-            let apr = value / (sym1Liq - value) * 365 * 100;
-            result.push({
-              symbol: key,
-              value: `${apr.toFixed(2)}%`,
-            });
-          }
-        }
-      }
+      this.eggargs.forEach((item) => {
+        const isShowToken = this.marketLists.find(v => v.mid === item.mid);
+        const weight = this.weightList.find(v => v.mid === item.mid).pool_weight;
+        const reward = perDayReward(weight);
+        const apr = reward * this.dfsPrice / 20000 * 365 * 100;
+        const poolsApr = getPoolApr(isShowToken)
+        result.push({
+          symbol: isShowToken.symbol1,
+          value: `${apr.toFixed(2)}%`,
+          poolsApr: `${poolsApr}%`
+        });
+      });
+      // if (!this.feesData) {
+      //   return result;
+      // }
+      // // const showTokens = ['DFS', 'KEY', 'OGX', 'USDT'];
+      // for (let [key, value] of Object.entries(this.feesData)) {
+      //   const isShowToken = this.showTokens.findIndex(v => v === key);
+      //   if(isShowToken !== -1) {
+      //     const market = this.marketLists.find(v => v.symbol1 === key)
+      //     if (market) {
+      //       const sym1Liq = market.reserve1.split(' ')[0];
+      //       let apr = value / (sym1Liq - value) * 365 * 100;
+      //       result.push({
+      //         symbol: key,
+      //         value: `${apr.toFixed(2)}%`,
+      //       });
+      //     }
+      //   }
+      // }
       result = result.sort((a, b) => {
-        return parseInt(b.value) - parseInt(a.value)
+        return parseInt(b.poolsApr) - parseInt(a.poolsApr)
       })
       return result;
     },

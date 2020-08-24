@@ -192,6 +192,8 @@ export default {
     dsr: 'DSR',
     apr: 'Apr',
     tlv: 'Total Lock Value',
+    mineApr: 'Mining Apr',
+    marketApr: 'Market Apr',
   },
   dsr: {
     ableInve: 'Available inventory',
