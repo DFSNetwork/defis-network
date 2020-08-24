@@ -201,6 +201,7 @@ export default {
     deposit: 'Deposit',
     retrieve: 'Retrieve',
     unOpen: 'The DSR contract is under review and is waiting for its official opening.',
+    testData: 'The page data are all test data. Estimated open day on September 8. It may be advanced or delayed.',
     dfsHolders: 'DFS Holders', // DFS Holders
     total: 'Total', // Total
   },
