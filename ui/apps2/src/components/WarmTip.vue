@@ -1,18 +1,18 @@
 <template>
-  <div class="warmTip" v-if="!close">
+  <div class="warmTip">
     <el-dialog
       class="dialog"
       top="20vh"
       :center="true"
       :show-close="false"
-      :visible.sync="showWarm">
+      :visible.sync="show">
       <div class="tipDiv">
         <div class="flex">
           <img class="coinImg" src="@/assets/img/dialog/tips_poto.svg" alt="">
         </div>
         <div class="tip">{{ $t('public.warmTip') }}</div>
-        <div><el-button class="btn" type="primary" @click="showWarm = false">{{ $t('public.known') }}</el-button></div>
-        <div class="flex"><el-button class="noTip" type="primary" @click="handleClose">{{ $t('public.noTip') }}</el-button></div>
+        <div><el-button class="btn" type="primary" @click="show = false">{{ $t('public.known') }}</el-button></div>
+        <!-- <div class="flex"><el-button class="noTip" type="primary" @click="handleClose">{{ $t('public.noTip') }}</el-button></div> -->
       </div>
     </el-dialog>
   </div>
@@ -20,14 +20,30 @@
 
 <script>
 export default {
+  props: {
+    showWarm: {
+      type: Boolean,
+      default: true
+    }
+  },
+  watch: {
+    showWarm(val) {
+      this.show = val;
+    },
+    show(val) {
+      if (!val) {
+        this.$emit('listenClose')
+      }
+    }
+  },
   data() {
     return {
       close: false,
-      showWarm: true,
+      show: false,
     }
   },
   mounted() {
-    this.handleRegClose();
+    // this.handleRegClose();
   },
   methods: {
     handleRegClose() {
@@ -37,6 +53,7 @@ export default {
     handleClose() {
       localStorage.setItem('WARMTIP', true);
       this.close = true;
+      this.show = false;
     }
   },
 }

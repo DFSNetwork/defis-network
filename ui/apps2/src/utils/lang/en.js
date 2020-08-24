@@ -25,6 +25,7 @@ export default {
     warmPrompt: 'Tip',
     usddTip: 'Please consider the fluctuations of USDD price due to direct exchange or leverage, and use at your own risk',
     lastUpdate: 'Last update',
+    warnTip: 'Risk Warning',
   },
   invi: {
     invitation: 'Invitation',

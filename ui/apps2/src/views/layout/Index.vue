@@ -20,6 +20,8 @@
       :visible.sync="showNode">
       <NodeSet v-if="showNode" />
     </el-dialog>
+
+    <warm-tip :showWarm="showWarm" @listenClose="handleClose" />
   </div>
 </template>
 
@@ -33,6 +35,7 @@ import Nav from '@/components/Nav';
 import SlipPointTools from '@/components/SlipPointTools';
 import InviAcc from '@/components/InviAcc';
 import NodeSet from '@/components/popup/NodeSet';
+import WarmTip from '@/components/WarmTip';
 
 export default {
   name: 'layout',
@@ -43,7 +46,8 @@ export default {
     Nav,
     SlipPointTools,
     InviAcc,
-    NodeSet
+    NodeSet,
+    WarmTip,
   },
   data() {
     return {
@@ -54,6 +58,7 @@ export default {
       ],
       showInvi: false,
       showNode: false,
+      showWarm: false,
     }
   },
   computed:{
@@ -76,12 +81,18 @@ export default {
     clearInterval(this.timer);
   },
   methods: {
+    handleClose() {
+      this.showWarm = false;
+    },
     handleShowComp(type) {
       if (type === 'invi') {
         this.showInvi = true;
       }
       if (type === 'node') {
         this.showNode = true
+      }
+      if (type === 'warn') {
+        this.showWarm = true;
       }
     },
     handleShowNav() {

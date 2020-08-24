@@ -2,7 +2,6 @@
   <div id="app" class="app">
     <router-view></router-view>
 
-    <warm-tip />
     <my-konami />
   </div>
 </template>
@@ -11,7 +10,6 @@
 import moment from 'moment';
 import axios from 'axios';
 import { mapState } from 'vuex';
-import WarmTip from '@/components/WarmTip';
 import { GetUrlPara, login, getUrlParams, toLocalTime, accPow, accDiv } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
 import MyKonami from '@/views/konami/Index';
@@ -19,7 +17,6 @@ import MyKonami from '@/views/konami/Index';
 export default {
   name: 'App',
   components: {
-    WarmTip,
     MyKonami
   },
   computed: {

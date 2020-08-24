@@ -25,6 +25,7 @@ export default {
     warmPrompt: '温馨提示',
     usddTip: '请考虑USDD价格存在因直接兑换或加杠杆行为导致的波动，自负使用风险',
     lastUpdate: '最近更新时间', // last update
+    warnTip: '风险提示',
   },
   invi: {
     invitation: '邀请', // invitation
