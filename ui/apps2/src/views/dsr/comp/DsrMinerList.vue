@@ -13,7 +13,7 @@
         </div>
         <div class="flexb">
           <span>{{ $t('dex.pools') }}</span>
-          <span>{{ item.liq_bal0 }} / {{ item.liq_bal1 }}</span>
+          <span>{{ item.liq_bal1 }}</span>
         </div>
       </div>
     </template>
@@ -33,6 +33,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, dealMinerData, perDayReward } from '@/utils/public';
+import Mock from 'mockjs';
 export default {
   name: 'dsrMinerList',
   data() {
@@ -42,12 +43,33 @@ export default {
       allMinersList: [],
       pageSize: 10,
       page: 1,
+      timerArr: [],
+      weight: 1.2,
+      mock: null,
     }
   },
   mounted() {
-    this.handleGetMinersLists()
+    this.handlMock();
+    // this.handleGetMinersLists()
   },
   methods: {
+    handlMock() {
+      this.mock = Mock.mock({
+        // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
+        'allMinersList|0-200': [{
+          'lastTime|1598222381000-1598223381000': 1598223381000,
+          last_drip: "2020-08-23T22:56:21",
+          'liq': Mock.mock('@float(100, 10000)'),
+          'liq_bal0': Mock.mock('@float(100, 10000)').toFixed(4) + ` EOS`,
+          'liq_bal1': Mock.mock('@float(200, 30000)'),
+          'miner': '@string("lower", 12)',
+        }]
+      })
+      this.allMinersList = this.mock.allMinersList
+      this.handleGetPageArr();
+      // 输出结果
+      console.log(this.mock)
+    },
     handleCurrentChange() {
       this.handleGetPageArr();
     },
@@ -104,6 +126,7 @@ export default {
         const newListSort = newList.sort((a, b) => {
           return b.liq - a.liq;
         })
+        console.log(newListSort)
         try {
           this.allMinersList = newListSort;
           this.handleGetPageArr();
