@@ -12,6 +12,7 @@
         <!-- <div class="list">质押</div> -->
         <div class="list" @click="handleShowComp('invi')">{{ $t('invi.invitation') }}</div>
         <div class="list" @click="handleShowNode">{{ $t('node.nodeSet') }}</div>
+        <div class="list" @click="handleShowComp('warn')">{{ $t('public.warnTip') }}</div>
         <div class="list">
           <span v-if="language !== 'en'" @click="handleChangeLang('en')">EN</span>
           <span v-else @click="handleChangeLang('zh-CN')">CN</span>
