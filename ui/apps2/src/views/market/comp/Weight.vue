@@ -24,8 +24,11 @@
       </div>
       <div class="tip">
         <span>{{ $t('mine.poolsMine2', {perDayReward}) }}</span>
+        <!-- <span>预估挖矿年化收益: {{ apr }}%</span> -->
         <span class="green" v-if="!Number(buff) && showAddPools">{{ $t('mine.joinNow') }}></span>
       </div>
+      <div class="tip">{{ $t('mine.mineApr') }}: {{ apr }}%</div>
+      <div class="tip" v-if="Number(feesApr)">{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</div>
     </div>
 
     <el-dialog
@@ -39,7 +42,7 @@
 <script>
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward, perDayReward } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward, perDayReward, getPoolApr } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 
 export default {
@@ -85,6 +88,7 @@ export default {
       aprs: state => state.sys.aprs,
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
+      dfsPrice: state => state.sys.dfsPrice,
     }),
     showAddPools() {
       if (Number(this.token) && !Number(this.minnerData.liq) && this.getMinerData) {
@@ -106,6 +110,13 @@ export default {
         min = accAdd(min, 0.0001)
       }
       return toFixed(min, 4)
+    },
+    apr() {
+      const apr = this.perDayReward * this.dfsPrice / 20000 * 365 * 100;
+      return apr.toFixed(2)
+    },
+    feesApr() {
+      return getPoolApr(this.thisMarket)
     }
   },
   watch: {

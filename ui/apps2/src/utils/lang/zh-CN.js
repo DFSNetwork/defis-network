@@ -24,6 +24,7 @@ export default {
     unLogin: '您还未登录账号，请',
     warmPrompt: '温馨提示',
     usddTip: '请考虑USDD价格存在因直接兑换或加杠杆行为导致的波动，自负使用风险',
+    lastUpdate: '最近更新时间', // last update
   },
   invi: {
     invitation: '邀请', // invitation
@@ -154,7 +155,7 @@ export default {
     join: '加入',
     earnings: '收益', // earnings
     poolsMine1: '当前交易对可以进行流动性挖矿。',
-    poolsMine2: '预计每万EOS每天收益 {perDayReward} DFS。',
+    poolsMine2: '预估每万EOS每天收益 {perDayReward} DFS。',
     poolsMine3: '存入资金，可自动开始挖矿。',
     lockFunds: '锁定资金', // Locked in funds
     wRewaed: '每万EOS/24H',
@@ -170,11 +171,26 @@ export default {
     poolsNum: '做市数量',
     mineBonus: '挖矿收益', // Mining earnings
     totalMiners: '总矿工',
+    mineApr: '预估挖矿年化收益',
+    marketFeesApr: '预估手续费年化收益',
   },
   node: {
     nodeSet: '节点设置',
     defaultNode: '默认节点',
     standbyNode: '备用节点',
+  },
+  footer: {
+    swapNum: '兑换量',
+    orderNum: '笔订单',
+    marketsFee: '池子概况',
+    token: '代币',
+    mineDfsNum: '累计挖矿产出DFS',
+    label: '说明',
+    num: '数值',
+    total: '总计',
+    circulation: '流通',
+    dsr: 'DSR',
+    apr: '年化'
   },
   miningRules: {
     rules: '挖矿规则',

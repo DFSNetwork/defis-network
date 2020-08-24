@@ -1,6 +1,9 @@
 <template>
   <div class="footer">
-    <!-- <div class="tip">24H兑换量：23610.17 EOS 4000比订单</div> -->
+    <div class="tip" @click="clickOnDFSInfoData">
+      24H{{ $t('footer.swapNum') }}：{{ dfsInfoData.eos_volume ? dfsInfoData.eos_volume : "0.00" }}
+      {{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('footer.orderNum') }}
+    </div>
     <div class="safe">
       <span>{{ $t('public.safeRecord1') }}</span>
       <span class="who" @click="handleToShowReport('slotMist')"> {{ $t('public.safeRecord2') }}</span> &
@@ -18,16 +21,52 @@
       :visible.sync="showImg2">
       <img width="100%" src="@/assets/img/footer/peckshield.jpeg" />
     </el-dialog>
+
+    <dfs-info-data-tip
+      :dfsInfoData="dfsInfoData"
+      :close="closeDFSInfoDataTip"
+      :marketLists="marketLists"
+      @onConfirm="() => {
+        this.closeDFSInfoDataTip = true;
+      }"
+    />
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import DfsInfoDataTip from "@/components/DFSInfoDataTip";
+
 export default {
   data() {
     return {
       showImg: false,
-      showImg2: false
+      showImg2: false,
+      dfsInfoData: {},
+      timer: null,
+      closeDFSInfoDataTip: true,
     }
+  },
+  props: {
+    marketLists: {
+      type: Array,
+      default: function lists() {
+        return []
+      }
+    }
+  },
+  components: {
+    DfsInfoDataTip,
+  },
+  beforeDestroy() {
+    clearInterval(this.timer);
+  },
+  mounted() {
+    clearInterval(this.timer);
+    this.timer = setInterval(() => {
+      this.handleGetDfsInfoData();
+    }, 1000 * 10);
+    this.handleGetDfsInfoData();
   },
   methods: {
     handleToShowReport(name) {
@@ -36,7 +75,18 @@ export default {
         return
       }
       this.showImg = true;
-    }
+    },
+    clickOnDFSInfoData() {
+      this.closeDFSInfoDataTip = false;
+    },
+    // 获取总发行量
+    async handleGetDfsInfoData() {
+      const result = await axios.get("//dfsinfoapi.sgxiang.com/dapi/dfsdata");
+      if (result.status !== 200) {
+        return;
+      }
+      this.dfsInfoData = result.data;
+    },
   },
 }
 </script>

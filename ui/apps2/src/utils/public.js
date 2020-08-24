@@ -246,3 +246,20 @@ export function dealMinerData(minnerData) {
   minnerData.liq = liq;
   return minnerData
 }
+
+// 计算池子手续费年化
+export function getPoolApr(market) {
+  const eggargs = store.state.sys.eggargs;
+  const egg = eggargs.find(v => v.mid == market.mid);
+  if (!egg || !market.reserve0) {
+    return 0;
+  }
+  // console.log(egg)
+  // console.log(market)
+  // const damping = store.state.sys.damping;
+  // const dfsPrice = store.state.sys.dfsPrice;
+  // const aprs = store.state.sys.aprs;
+  let fee_eos = parseFloat(egg.trigger_value_max) * 6 * 24 * 0.002;
+  let apr = (fee_eos * 365 / parseFloat(market.reserve0) * 100).toFixed(3)
+  return apr
+}

@@ -5,7 +5,7 @@
     <transition name="fade" mode="out-in">
       <router-view class="content" :marketLists="marketLists"/>
     </transition>
-    <my-footer />
+    <my-footer :marketLists="marketLists"/>
     <Nav ref="nav" @listenShowComp="handleShowComp"/>
     <SlipPointTools ref="slipPointTools"/>
 

@@ -53,6 +53,7 @@ export default {
       this.handleGetWeight()
       this.handleGetAprs()
       this.handleGetDfsCurrent()
+      this.handleGetDiscount();
       clearInterval(this.priceTimer)
       this.handleGetPrice()
       this.priceTimer = setInterval(() => {
@@ -85,8 +86,8 @@ export default {
           "table": "codes",
           "index_position": 2,
           "key_type": "i64",
-          "lower_bound": inviAcc,
-          "upper_bound": inviAcc,
+          "lower_bound": ` ${inviAcc}`,
+          "upper_bound": ` ${inviAcc}`,
           "json": true,
         }
         EosModel.getTableRows(params, (res) => {
@@ -229,6 +230,23 @@ export default {
         const price = rows.find(v => v.key === 300) || {};
         const price5min = accDiv(price.price1_avg_price, 10000) || 0;
         this.$store.dispatch('setDfsPrice', price5min)
+      })
+    },
+    // 获取交易对权重discount - 全局取一次
+    handleGetDiscount() {
+      const params = {
+        code: "miningpool11",
+        scope: "miningpool11",
+        table: "eggargs",
+        json: true,
+        limit: 1000,
+      }
+      EosModel.getTableRows(params, (res) => {
+        const rows = res.rows || [];
+        if (!rows.length) {
+          return
+        }
+        this.$store.dispatch('setEggargs', rows)
       })
     },
   },

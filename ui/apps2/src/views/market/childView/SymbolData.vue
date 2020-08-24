@@ -51,7 +51,11 @@
             <span>{{ $t('dex.pools') }}: </span>
             <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
           </div>
-          <div class="rewardPerDay tip">{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</div>
+          <div class="rewardPerDay tip">
+            <span>{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</span>
+          </div>
+          <div class="rewardPerDay tip"><span>{{ $t('mine.mineApr') }}: {{ apr }}%</span></div>
+          <div class="rewardPerDay tip" v-if="Number(feesApr)"><span>{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</span></div>
         </div>
       </div>
     </div>
@@ -96,7 +100,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, dealMinerData, perDayReward } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, dealMinerData, perDayReward, getPoolApr } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 
 export default {
@@ -201,6 +205,13 @@ export default {
         return '0.0000'
       }
       return perDayReward(this.weight)
+    },
+    apr() {
+      const apr = this.dayRewardNum * this.dfsPrice / 20000 * 365 * 100;
+      return apr.toFixed(2)
+    },
+    feesApr() {
+      return getPoolApr(this.thisMarket)
     }
   },
   mounted() {
