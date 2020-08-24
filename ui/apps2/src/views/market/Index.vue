@@ -572,8 +572,8 @@ export default {
         code: this.baseConfig.toAccountSwap,
         scope: this.thisMarket.mid,
         table: 'liquidity',
-        lower_bound: this.scatter.identity.accounts[0].name,
-        upper_bound: this.scatter.identity.accounts[0].name,
+        lower_bound: ` ${this.scatter.identity.accounts[0].name}`,
+        upper_bound: ` ${this.scatter.identity.accounts[0].name}`,
         json: true
       }
       EosModel.getTableRows(params, (res) => {

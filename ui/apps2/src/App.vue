@@ -86,8 +86,8 @@ export default {
           "table": "codes",
           "index_position": 2,
           "key_type": "i64",
-          "lower_bound": inviAcc,
-          "upper_bound": inviAcc,
+          "lower_bound": ` ${inviAcc}`,
+          "upper_bound": ` ${inviAcc}`,
           "json": true,
         }
         EosModel.getTableRows(params, (res) => {
