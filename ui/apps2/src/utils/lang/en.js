@@ -158,7 +158,7 @@ export default {
     poolsMine2: 'Expected {perDayReward} DFS per 10000 EOS/24H.',
     poolsMine3: 'Deposit funds, can automatically start mining.',
     lockFunds: 'Total Lock Value',
-    wRewaed: '10,000 EOS/24H',
+    wRewaed: '10,000 {coin}/24H',
     nextLess: 'Next damping',
     current: 'Current supply',
     waitClaim: 'Pending reward',
@@ -191,6 +191,15 @@ export default {
     circulation: 'Circulation',
     dsr: 'DSR',
     apr: 'Apr'
+  },
+  dsr: {
+    ableInve: 'Available inventory',
+    claimPerDay: 'Available every day',
+    myDeposit: 'Deposit',
+    percent: '% Of',
+    deposit: 'Deposit',
+    retrieve: 'Retrieve',
+    unOpen: 'The DSR contract is under review and is waiting for its official opening.'
   },
   miningRules: {
     rules: 'Mining rules',

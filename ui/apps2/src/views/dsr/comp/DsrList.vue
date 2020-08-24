@@ -4,31 +4,23 @@
       <div>
         <div class="flexa header">
           <!-- <div>币种</div> -->
-          <div>我的存款(DFS)</div>
-          <div>存款占比</div>
+          <div>{{ $t('dsr.myDeposit') }}(DFS)</div>
+          <div>{{ $t('dsr.percent') }}</div>
           <div></div>
         </div>
         <div class="flexb content">
-          <!-- <div class="flexa">
-            <img class="coinImg" src="https://ndi.340wan.com/eos/minedfstoken-dfs.png" />
-            <span>DFS</span>
-          </div> -->
           <div>
             0.0000
           </div>
           <div>
             0.00%
           </div>
-          <!-- <div class="flexa tools">
-            <div class="btn flexc">存款</div>
-            <div class="btn backBtn flexc">取回</div>
-          </div> -->
         </div>
       </div>
       <div class="flexb tools">
         <div class="flexa">
-          <div class="btn flexc">存款</div>
-          <div class="btn backBtn flexc">取回</div>
+          <div class="btn flexc" @click="listenShowUnOpen">{{ $t('dsr.deposit') }}</div>
+          <div class="btn backBtn flexc" @click="listenShowUnOpen">{{ $t('dsr.retrieve') }}</div>
         </div>
       </div>
     </div>
@@ -49,6 +41,11 @@ export default {
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
     }),
+  },
+  methods: {
+    listenShowUnOpen() {
+      this.$emit('listenShowUnOpen')
+    }
   },
 }
 </script>

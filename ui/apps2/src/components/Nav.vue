@@ -7,6 +7,7 @@
       <div class="navList">
         <!-- <div class="list login" v-if="!scatter.identity" @click="handleLogin">连接钱包</div> -->
         <div class="list" @click="handleToV1">V1</div>
+        <div class="list" @click="handleToDsr">DSR</div>
         <div class="list" @click="handleToPools">{{ $t('mine.pools') }}</div>
         <div class="list" @click="handleToTutorial">{{ $t('public.tutorial') }}</div>
         <!-- <div class="list">质押</div> -->
@@ -83,6 +84,16 @@ export default {
       EosModel.accountLoginOut(() => {
         location.reload()
       })
+    },
+    handleToDsr() {
+      if (this.$route.name === 'dsr')  {
+        this.showNav = false;
+        return;
+      }
+      this.$router.push({
+        name: 'dsr'
+      })
+      this.showNav = false;
     }
   }
 }

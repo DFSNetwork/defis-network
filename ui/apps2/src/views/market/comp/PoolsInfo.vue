@@ -14,7 +14,7 @@
         <div class="right">
           <div>{{ maxPerDayReward }}</div>
           <div class="tip bonus">
-            <span>{{ $t('mine.wRewaed') }} (DFS)</span>
+            <span>{{ $t('mine.wRewaed', {coin: 'EOS'}) }} (DFS)</span>
           </div>
         </div>
       </div>

@@ -159,7 +159,7 @@ export default {
     poolsMine2: '预估每万EOS每天收益 {perDayReward} DFS。',
     poolsMine3: '存入资金，可自动开始挖矿。',
     lockFunds: '锁定资金', // Locked in funds
-    wRewaed: '每万EOS/24H',
+    wRewaed: '每万{coin}/24H',
     nextLess: '下次产量衰减',
     current: '已经产出',
     waitClaim: '待领取收益',
@@ -192,6 +192,15 @@ export default {
     circulation: '流通',
     dsr: 'DSR',
     apr: '年化'
+  },
+  dsr: {
+    ableInve: '可用库存', // Available inventory
+    claimPerDay: '每天可领取', // Available every day
+    myDeposit: '我的存款', // My deposit
+    percent: '存款占比', // % Of deposits
+    deposit: '存款', // deposit
+    retrieve: '取回', // retrieve
+    unOpen: 'DSR合约正在审核中，等待正式开放。'
   },
   miningRules: {
     rules: '挖矿规则',

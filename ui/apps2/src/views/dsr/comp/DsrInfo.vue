@@ -14,18 +14,18 @@
         <div class="right">
           <div>{{ maxPerDayReward }}</div>
           <div class="tip bonus">
-            <span>{{ $t('mine.wRewaed') }} (DFS)</span>
+            <span>{{ $t('mine.wRewaed', {coin: 'DFS'}) }} (DFS)</span>
           </div>
         </div>
       </div>
     </div>
     <div class="miningInfo flexb" v-loading="loading">
       <div class="miningData">
-        <div class="tip">可用库存</div>
+        <div class="tip">{{ $t('dsr.ableInve') }}</div>
         <div class="num">{{ ableUse }} DFS</div>
       </div>
       <div class="miningData">
-        <div class="tip">每天可领取</div>
+        <div class="tip">{{ $t('dsr.claimPerDay') }}</div>
         <div class="num">{{ ableClaimNum }} DFS</div>
       </div>
     </div>

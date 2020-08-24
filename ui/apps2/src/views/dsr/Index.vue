@@ -13,13 +13,19 @@
         <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">{{ $t('mine.claimAll') }}</div>
       </div>
     </div>
-    <dsr-list />
+    <dsr-list @listenShowUnOpen="handleClaimAll"/>
     <dsr-miner-list />
 
     <el-dialog
       class="myDialog"
       :visible.sync="showReWardTip">
       <MinReward :minReward="minReward"/>
+    </el-dialog>
+
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showUnOpen">
+      <UnOpen/>
     </el-dialog>
   </div>
 </template>
@@ -30,13 +36,15 @@ import MinReward from '@/views/market/popup/MinReward'
 import DsrInfo from './comp/DsrInfo';
 import DsrList from './comp/DsrList';
 import DsrMinerList from './comp/DsrMinerList';
+import UnOpen from './dialog/UnOpen';
 export default {
   name: 'dsr',
   components: {
     DsrInfo,
     MinReward,
     DsrList,
-    DsrMinerList
+    DsrMinerList,
+    UnOpen
   },
   computed: {
     ...mapState({
@@ -55,10 +63,12 @@ export default {
       allReward: '0.00000000',
       minReward: '0.0001',
       showReWardTip: false,
+      showUnOpen: false
     }
   },
   methods: {
     handleClaimAll() {
+      this.showUnOpen = true;
     },
   }
 }
