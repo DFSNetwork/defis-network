@@ -191,7 +191,8 @@ export default {
     total: '总计',
     circulation: '流通',
     dsr: 'DSR',
-    apr: '年化'
+    apr: '年化',
+    tlv: '流动池总量',
   },
   miningRules: {
     rules: '挖矿规则',

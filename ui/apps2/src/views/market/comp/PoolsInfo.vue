@@ -33,6 +33,7 @@
 </template>
 
 <script>
+import { EosModel } from '@/utils/eos';
 import axios from 'axios';
 import { mapState } from 'vuex';
 import { toFixed, accSub, accAdd, accMul, perDayReward } from '@/utils/public';
@@ -45,6 +46,7 @@ export default {
       current: '0.0000',
       showCurrent: '0.0000',
       loading: true,
+      lockEos: '0.0000'
     }
   },
   props: {
@@ -60,20 +62,20 @@ export default {
       // 箭头函数可使代码更简练
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
     }),
-    lockEos() {
-      let count = 0
-      this.lists.forEach(v => {
-        let poolsEos = 0;
-        if (v.symbol0 === 'EOS') {
-          poolsEos = v.reserve0.split(' ')[0];
-        } else if (v.symbol1 === 'EOS') {
-          poolsEos = v.reserve1.split(' ')[0];
-        }
-        count = accAdd(count, poolsEos)
-      });
-      count = accMul(count, 2);
-      return toFixed(count, 4);
-    },
+    // lockEos() {
+    //   let count = 0
+    //   this.lists.forEach(v => {
+    //     let poolsEos = 0;
+    //     if (v.symbol0 === 'EOS') {
+    //       poolsEos = v.reserve0.split(' ')[0];
+    //     } else if (v.symbol1 === 'EOS') {
+    //       poolsEos = v.reserve1.split(' ')[0];
+    //     }
+    //     count = accAdd(count, poolsEos)
+    //   });
+    //   count = accMul(count, 2);
+    //   return toFixed(count, 4);
+    // },
     maxPerDayReward() {
       if (!this.lists.length) {
         return '0.0000'
@@ -98,9 +100,11 @@ export default {
   },
   mounted() {
     this.handleGetDfsCurrent();
+    this.handleGetBalance()
     clearInterval(this.getTimer)
     this.getTimer = setInterval(() => {
       this.handleGetDfsCurrent();
+      this.handleGetBalance()
     }, 5000);
   },
   beforeDestroy() {
@@ -108,6 +112,20 @@ export default {
     clearInterval(this.runTimer)
   },
   methods: {
+    // 获取账户余额
+    async handleGetBalance() {
+      const params = {
+        code: 'eosio.token',
+        coin: 'EOS',
+        decimal: 4,
+        account: 'defisswapcnt'
+      };
+      await EosModel.getCurrencyBalance(params, res => {
+        let balance = toFixed('0.000000001', params.decimal);
+        (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
+        this.lockEos = accMul(balance, 2).toFixed(4);
+      })
+    },
     // 获取DFS流通量 - 全局区一次
     async handleGetDfsCurrent() {
       const https = this.baseConfig.node.url;
