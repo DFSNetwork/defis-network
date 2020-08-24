@@ -13,7 +13,7 @@
         </div>
         <div class="flexb">
           <span>{{ $t('dex.pools') }}</span>
-          <span>{{ item.liq_bal1 }}</span>
+          <span>{{ parseFloat(item.liq_bal1).toFixed(4) }} DFS</span>
         </div>
       </div>
     </template>
@@ -56,19 +56,19 @@ export default {
     handlMock() {
       this.mock = Mock.mock({
         // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
-        'allMinersList|0-200': [{
+        'allMinersList|0-50': [{
           'lastTime|1598222381000-1598223381000': 1598223381000,
           last_drip: "2020-08-23T22:56:21",
-          'liq': Mock.mock('@float(100, 10000)'),
-          'liq_bal0': Mock.mock('@float(100, 10000)').toFixed(4) + ` EOS`,
-          'liq_bal1': Mock.mock('@float(200, 30000)'),
+          'liq': '@float(100, 10000)',
+          'liq_bal0': '@float(100, 10000)' + ` EOS`,
+          'liq_bal1': '@float(200, 30000)' + ` DFS`,
           'miner': '@string("lower", 12)',
         }]
       })
       this.allMinersList = this.mock.allMinersList
       this.handleGetPageArr();
       // 输出结果
-      console.log(this.mock)
+      // console.log(this.mock)
     },
     handleCurrentChange() {
       this.handleGetPageArr();
