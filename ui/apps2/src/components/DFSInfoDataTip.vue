@@ -93,14 +93,13 @@ export default {
           const value = this.feesData[key];
           const sym1Liq = isShowToken.reserve1.split(' ')[0];
           poolsApr = value / (sym1Liq - value) * 365 * 100;
-          console.log(value, sym1Liq)
+          // console.log(value, sym1Liq)
         }
-
-        // const poolsApr = getPoolApr(isShowToken)
+        const poolsAprM = getPoolApr(isShowToken)
         result.push({
           symbol: isShowToken.symbol1,
           value: `${apr.toFixed(2)}%`,
-          poolsApr: `${poolsApr.toFixed(3)}%`
+          poolsApr: poolsApr > poolsAprM ? `${poolsApr.toFixed(3)}%` : `${poolsAprM}%`
         });
       });
       // if (!this.feesData) {
