@@ -15,43 +15,56 @@
 3. 幸运彩蛋的奖励加成
 
 ```
-[{
-      "mid": 5,
-      "default_distount": "0.2",
-      "lucky_distount": "3.0",
-      "trigger_value_max": "800.0000 EOS"
-    },{
-      "mid": 7,
-      "default_distount": "0.2",
-      "lucky_distount": "2.75",
-      "trigger_value_max": "3000.0000 EOS"
-    },{
-      "mid": 39,
-      "default_distount": "0.2",
-      "lucky_distount": "2.75",
-      "trigger_value_max": "1200.0000 EOS"
-    },
+[   
     {
-      "mid": 309,
+      "mid": 39, // DFS
+      "default_distount": "0.2",
+      "lucky_distount": "2.75",
+      "trigger_value_max": "1500.0000 EOS"
+    },{
+      "mid": 5, // KEY
       "default_distount": "0.2",
       "lucky_distount": "3.0",
-      "trigger_value_max": "400.0000 EOS"
+      "trigger_value_max": "1000.0000 EOS"
+    },{
+      "mid": 17, // USDT
+      "default_distount": "0.2",
+      "lucky_distount": "2.75",
+      "trigger_value_max": "1000.0000 EOS"
+    },{
+      "mid": 309, // OGX
+      "default_distount": "0.2",
+      "lucky_distount": "3.0",
+      "trigger_value_max": "500.0000 EOS"
+    },{
+      "mid": 4, // BG
+      "default_distount": "0.2",
+      "lucky_distount": "3.0",
+      "trigger_value_max": "500.0000 EOS"
     }
-  ]
-
+]
 ```
 
 参数解读: 
 
-目前在 DFS/EOS ,USDT/EOS, KEY/EOS , OGX/EOS 池子中交易，有几率会触发幸运彩蛋。
 
-DFS/EOS池子，触发条件是交易额小于 1200 EOS。奖励加成是 2.75。是普通交易挖矿的13.75倍。
+* DFS / EOS
+* USDT / EOS 
+* KEY / EOS
+* OGX / EOS
+* BG / EOS
 
-USDT/EOS池子，触发条件是交易额小于 3000 EOS。奖励加成是 2.75。是普通交易挖矿的13.75倍。
+在以上池子中交易，有几率会触发幸运彩蛋。
 
-KEY/EOS池子，触发条件是交易额小于 800 EOS。奖励加成是 3。是普通交易挖矿的15倍。
+DFS/EOS池子，触发条件是交易额小于 1500 EOS。奖励加成是 2.75。是普通交易挖矿的13.75倍。
+
+USDT/EOS池子，触发条件是交易额小于 1000 EOS。奖励加成是 2.75。是普通交易挖矿的13.75倍。
+
+KEY/EOS池子，触发条件是交易额小于 1000 EOS。奖励加成是 3。是普通交易挖矿的15倍。
 
 OGX/EOS池子，触发条件是交易额小于 500 EOS。奖励加成是 3。是普通交易挖矿的15倍。
+
+BG/EOS池子，触发条件是交易额小于 500 EOS。奖励加成是 3。是普通交易挖矿的15倍。
 
 #### 规则和算法
 
