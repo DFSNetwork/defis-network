@@ -73,6 +73,7 @@ const sys = {
     damping: localStorage.getItem('damping') || 0.75, // DFS流通量计算得出 - Math.pow(0.75, parseInt(dfsCurrent / 1000000))
     dfsPrice: localStorage.getItem('dfsPrice') || '0', // DFS 5分钟均价
     eggargs: localStorage.getItem('eggargs') ? JSON.parse(localStorage.getItem('eggargs')) : [], // 全局aprs
+    feesApr: localStorage.getItem('feesApr') ? JSON.parse(localStorage.getItem('feesApr')) : [], // 全局aprs
   },
   mutations: {
     SET_BASECONFIG: (state, baseConfig) => {
@@ -100,6 +101,10 @@ const sys = {
       state.eggargs = eggargs;
       localStorage.setItem('eggargs', JSON.stringify(eggargs));
     },
+    SET_FEESAPR: (state, feesApr) => {
+      state.feesApr = feesApr;
+      localStorage.setItem('feesApr', JSON.stringify(feesApr));
+    },
   },
   actions: {
     setBaseConfig({ commit }, baseConfig) {
@@ -121,6 +126,9 @@ const sys = {
     },
     setEggargs({ commit }, eggargs) {
       commit('SET_EGGARGS', eggargs);
+    },
+    setFeesApr({ commit }, feesApr) {
+      commit('SET_FEESAPR', feesApr);
     },
   }
 };

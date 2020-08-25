@@ -173,6 +173,7 @@ export default {
     totalMiners: 'Total',
     mineApr: 'Forecast annual mining revenue',
     marketFeesApr: 'Estimated annualized fee income',
+    marketApr24H: 'Recent 24H fee annualized',
   },
   node: {
     nodeSet: 'Node Setting',

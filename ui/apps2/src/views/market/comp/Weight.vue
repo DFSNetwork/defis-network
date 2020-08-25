@@ -28,7 +28,8 @@
         <span class="green" v-if="!Number(buff) && showAddPools">{{ $t('mine.joinNow') }}></span>
       </div>
       <div class="tip">{{ $t('mine.mineApr') }}: {{ apr }}%</div>
-      <div class="tip" v-if="Number(feesApr)">{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</div>
+      <div class="tip" v-if="!isActual && Number(feesApr)">{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</div>
+      <div class="tip" v-if="isActual && Number(feesApr)">{{ $t('mine.marketApr24H') }}: {{ feesApr }} %</div>
     </div>
 
     <el-dialog
@@ -89,6 +90,7 @@ export default {
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
+      storeFeesApr: state => state.sys.feesApr,
     }),
     showAddPools() {
       if (Number(this.token) && !Number(this.minnerData.liq) && this.getMinerData) {
@@ -116,7 +118,14 @@ export default {
       return apr.toFixed(2)
     },
     feesApr() {
-      return getPoolApr(this.thisMarket)
+      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {};
+      const thisPoolApr = getPoolApr(this.thisMarket)
+      return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr) ? parseFloat(feesApr.poolsApr) : parseFloat(thisPoolApr)
+    },
+    isActual() {
+      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
+      const thisPoolApr = getPoolApr(this.thisMarket)
+      return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr)
     }
   },
   watch: {

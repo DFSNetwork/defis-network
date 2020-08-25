@@ -35,7 +35,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { toFixed, perDayReward, getPoolApr } from '@/utils/public';
+import { perDayReward } from '@/utils/public';
 export default {
   data() {
     return {
@@ -86,43 +86,24 @@ export default {
         const reward = perDayReward(weight);
         const apr = reward * this.dfsPrice / 20000 * 365 * 100;
         const feesDataKeys = Object.keys(this.feesData)
-        // console.log(feesDataKeys)
         const key = feesDataKeys.find(v => v === isShowToken.symbol1)
         let poolsApr = '0.00%';
         if (key) {
           const value = this.feesData[key];
           const sym1Liq = isShowToken.reserve1.split(' ')[0];
           poolsApr = value / (sym1Liq - value) * 365 * 100;
-          // console.log(value, sym1Liq)
         }
-        const poolsAprM = getPoolApr(isShowToken)
+        // const poolsAprM = getPoolApr(isShowToken)
         result.push({
           symbol: isShowToken.symbol1,
           value: `${apr.toFixed(2)}%`,
-          poolsApr: poolsApr > poolsAprM ? `${poolsApr.toFixed(3)}%` : `${poolsAprM}%`
+          poolsApr: `${poolsApr.toFixed(3)}%`
         });
       });
-      // if (!this.feesData) {
-      //   return result;
-      // }
-      // // const showTokens = ['DFS', 'KEY', 'OGX', 'USDT'];
-      // for (let [key, value] of Object.entries(this.feesData)) {
-      //   const isShowToken = this.showTokens.findIndex(v => v === key);
-      //   if(isShowToken !== -1) {
-      //     const market = this.marketLists.find(v => v.symbol1 === key)
-      //     if (market) {
-      //       const sym1Liq = market.reserve1.split(' ')[0];
-      //       let apr = value / (sym1Liq - value) * 365 * 100;
-      //       result.push({
-      //         symbol: key,
-      //         value: `${apr.toFixed(2)}%`,
-      //       });
-      //     }
-      //   }
-      // }
       result = result.sort((a, b) => {
         return parseInt(b.poolsApr) - parseInt(a.poolsApr)
       })
+      this.$store.dispatch('setFeesApr', result);
       return result;
     },
     dfsTableData() {

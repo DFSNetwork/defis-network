@@ -55,7 +55,8 @@
             <span>{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</span>
           </div>
           <div class="rewardPerDay tip"><span>{{ $t('mine.mineApr') }}: {{ apr }}%</span></div>
-          <div class="rewardPerDay tip" v-if="Number(feesApr)"><span>{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</span></div>
+          <div class="rewardPerDay tip" v-if="!isActual && Number(feesApr)"><span>{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</span></div>
+          <div class="rewardPerDay tip" v-if="isActual && Number(feesApr)"><span>{{ $t('mine.marketApr24H') }}: {{ feesApr }} %</span></div>
         </div>
       </div>
     </div>
@@ -174,6 +175,7 @@ export default {
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
+      storeFeesApr: state => state.sys.feesApr,
     }),
     minReward() {
       if (!Number(this.dfsPrice)) {
@@ -211,7 +213,15 @@ export default {
       return apr.toFixed(2)
     },
     feesApr() {
-      return getPoolApr(this.thisMarket)
+      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
+      const thisPoolApr = getPoolApr(this.thisMarket)
+      return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr) ? parseFloat(feesApr.poolsApr) : parseFloat(thisPoolApr)
+      // return getPoolApr(this.thisMarket)
+    },
+    isActual() {
+      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
+      const thisPoolApr = getPoolApr(this.thisMarket)
+      return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr)
     }
   },
   mounted() {

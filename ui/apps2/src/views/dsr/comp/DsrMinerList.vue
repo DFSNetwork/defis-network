@@ -30,9 +30,9 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
+// import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, dealMinerData, perDayReward } from '@/utils/public';
+import { toFixed, accSub, accAdd, accDiv, dealReward, dealMinerData } from '@/utils/public';
 import Mock from 'mockjs';
 export default {
   name: 'dsrMinerList',

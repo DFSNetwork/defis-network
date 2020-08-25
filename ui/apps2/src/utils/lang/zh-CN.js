@@ -174,6 +174,7 @@ export default {
     totalMiners: '总矿工',
     mineApr: '预估挖矿年化收益',
     marketFeesApr: '预估手续费年化收益',
+    marketApr24H: '最近24H手续费年化',
   },
   node: {
     nodeSet: '节点设置',
