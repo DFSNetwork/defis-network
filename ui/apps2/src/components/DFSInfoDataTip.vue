@@ -162,7 +162,7 @@ export default {
     }
     .fees-data-content,
     .dfs-data-content {
-      max-height: 255px;
+      max-height: 320px;
       overflow-y: auto;
       margin-bottom: 40px;
     }

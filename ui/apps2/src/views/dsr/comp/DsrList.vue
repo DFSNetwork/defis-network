@@ -24,13 +24,28 @@
         </div>
       </div>
     </div>
+
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showActionsIn">
+      <ActionsIn />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import ActionsIn from '../dialog/ActionsIn';
 export default {
   name: 'dsrList',
+  components: {
+    ActionsIn
+  },
+  data() {
+    return {
+      showActionsIn: false,
+    }
+  },
   computed: {
     ...mapState({
       // 箭头函数可使代码更简练
@@ -103,6 +118,18 @@ export default {
   .coinImg{
     width: 60px;
     margin-right: 5px;
+  }
+}
+.myDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 650px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+    }
   }
 }
 </style>
