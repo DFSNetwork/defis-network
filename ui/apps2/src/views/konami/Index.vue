@@ -11,6 +11,12 @@
         {{picked_meme}}
       </div>
     </el-dialog>
+
+    <el-dialog
+      :show-close="false"
+      :visible.sync="showThanks">
+      <Thanks v-if="showThanks"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -18,9 +24,11 @@
 import Konami from './js/myKonami';
 import Version from './dialog/Version';
 import memes from './js/memes.js';
+import Thanks from './dialog/Thanks';
 export default {
   components: {
     Version,
+    Thanks,
   },
   data() {
     return {
@@ -33,14 +41,18 @@ export default {
         apps: [ // 手势
           ['RIGHT', 'RIGHT', 'DOWN', 'DOWN', 'TAP', 'TAP'], // 左 右 点击 点击
           ["RIGHT", "DOWN", "TAP", 'TAP'], // 右 下 上 点击 点击
+          ['DOWN', 'RIGHT', 'RIGHT', 'TAP', 'TAP']
         ]
       },
       picked_meme: '',
       showDialog0: false,
       showDialog1: false,
+      showThanks: false,
     }
   },
   mounted() {
+    // console.log(this)
+    // console.log(this['showDialog1'])
     this.egg = new Konami(this.keys, (index) => {
       setTimeout(() => {
         if (index === 0) {
@@ -50,6 +62,9 @@ export default {
         if (index === 1) {
           this.showDialog1 = true;
           this.picked_meme = this.handleRandom()
+        }
+        if (index === 2) {
+          this.showThanks = true;
         }
       }, 100);
     });

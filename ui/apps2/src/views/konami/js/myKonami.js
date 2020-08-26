@@ -88,30 +88,11 @@ var Konami = function (keys, callback) {
               konami.iphone.tap = false;
               konami.iphone.capture = false;
               // konami.iphone.check_direction();
+              console.log('touchmoveHandler', e)
             }
           },
           touchendHandler: function () {
             const tIpt = konami.iphone.check_direction();
-            // if (tIpt === 'TAP') {
-            //   const iptLast = konami.iphone.input[konami.iphone.input.length - 1];
-            //   // console.log(iptLast)
-            //   if (iptLast === tIpt || !iptLast) {
-            //     // const thisIpt = konami.iphone.input.join(',');
-            //     // console.log(thisIpt)
-            //     const index = konami.iphone.keys.findIndex(v => {
-            //       const ipt = konami.iphone.input
-            //       const vIpt = ipt.slice(ipt.length - v.length);
-            //       return v.join(',') === vIpt.join(',');
-            //     });
-            //     if (index === -1) {
-            //       konami.iphone.input = []
-            //     } else {
-            //       konami.iphone.code(index);
-            //       konami.iphone.input = []
-            //     }
-            //     return
-            //   }
-            // }
             konami.iphone.input.push(tIpt);
             if (konami.iphone.input.length > 20) konami.iphone.input.shift();
             // console.log(konami.iphone.input)
@@ -134,6 +115,7 @@ var Konami = function (keys, callback) {
             konami.iphone.start_y = e.changedTouches[0].pageY;
             konami.iphone.tap = true;
             konami.iphone.capture = true;
+            console.log(e)
           },
           load: function () {
             this.orig_keys = this.keys;
