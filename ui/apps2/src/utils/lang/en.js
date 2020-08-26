@@ -192,7 +192,7 @@ export default {
     circulation: 'Circulation',
     dsr: 'DSR',
     apr: 'Apr',
-    tlv: 'Total Lock Value',
+    tlv: 'Total Value Locked',
     mineApr: 'Mining Apr',
     marketApr: 'Market Apr',
   },
