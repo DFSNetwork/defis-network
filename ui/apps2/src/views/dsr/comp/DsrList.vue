@@ -30,20 +30,28 @@
       :visible.sync="showActionsIn">
       <ActionsIn />
     </el-dialog>
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showActionsOut">
+      <ActionsOut />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import ActionsIn from '../dialog/ActionsIn';
+import ActionsOut from '../dialog/ActionsOut';
 export default {
   name: 'dsrList',
   components: {
-    ActionsIn
+    ActionsIn,
+    ActionsOut
   },
   data() {
     return {
       showActionsIn: false,
+      showActionsOut: true,
     }
   },
   computed: {

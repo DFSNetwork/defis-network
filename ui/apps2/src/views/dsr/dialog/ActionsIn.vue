@@ -8,7 +8,7 @@
           <span class="type">存款</span>
         </div>
         <div class="iptDiv flexb">
-          <div class="coinInfo flex" @click="listenShowDrawer('start')">
+          <div class="coinInfo flex">
             <div class="coinImg"><img width="100%" :src="thisMarket.imgUrl" :onerror="errorCoinImg" alt=""></div>
             <div>
               <div class="coin">{{ thisMarket.symbol }}</div>
@@ -43,7 +43,7 @@
       </div>
     </div>
     <div class="btnDiv">
-      <div class="btn flexc">确认</div>
+      <div class="btn flexc" @click="handleTransfer">确认</div>
     </div>
 
     <div class="rules">
@@ -64,6 +64,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
 import { toFixed, accMul, accAdd } from '@/utils/public';
 
 export default {
@@ -76,6 +78,7 @@ export default {
       thisMarket: {
         symbol: 'DFS',
         contract: 'minedfstoken',
+        decimal: 4,
         imgUrl: 'https://ndi.340wan.com/eos/minedfstoken-dfs.png'
       },
       options: [{
@@ -98,6 +101,9 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      scatter: state => state.app.scatter,
+    }),
     timeApr() {
       if (!this.value) {
         return this.apr;
@@ -107,9 +113,19 @@ export default {
       return accAdd(newApr, this.apr)
     }
   },
+  watch: {
+    scatter: {
+      handler: function listen(newVal) {
+        if (newVal.identity) {
+          this.handleBalanTimer();
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   methods: {
     handleInBy() {
-
     },
     handleFocus() {
       const n = Number(this.payNum);
@@ -118,7 +134,58 @@ export default {
     handleBlur() {
       const n = Number(this.payNum);
       n > 0 ? this.payNum = toFixed(n, 4) : this.payNum = '';
-    }
+    },
+    handleClickBalan() {
+      this.payNum = this.balance;
+    },
+    // 铸币
+    handleTransfer() {
+      this.loading = true;
+      const memo = 'mint';
+      const params = {
+        code: this.thisMarket.contract,
+        toAccount: 'iq3rwbsfcqlv',
+        memo,
+        quantity: `${this.payNum} ${this.thisMarket.symbol}`
+      }
+      EosModel.transfer(params, (res) => {
+        this.loading = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.payNum = '';
+        this.handleBalanTimer();
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
+    },
+    // 重启余额定时器
+    handleBalanTimer() {
+      clearInterval(this.timer);
+      this.handleGetBalance();
+      this.timer = setInterval(() => {
+        this.handleGetBalance();
+      }, 20000)
+    },
+    // 获取账户余额
+    async handleGetBalance(next) {
+      const params = {
+        code: this.thisMarket.contract,
+        coin: this.thisMarket.symbol,
+        decimal: this.thisMarket.decimal
+      };
+      await EosModel.getCurrencyBalance(params, res => {
+        let balance = toFixed('0.000000001', params.decimal);
+        (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
+        this.balance = balance;
+      })
+    },
   }
 }
 </script>
