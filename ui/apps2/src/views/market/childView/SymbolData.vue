@@ -17,7 +17,7 @@
           <div class="allClaimBtn" v-if="!Number(accMineData.liq) && getAccData"
             @click="handleJoin(thisMarket)">{{ $t('mine.join') }}</div>
         </div>
-        <div class="mylist" @click="handleJoin(thisMarket)">
+        <div :class="`mylist ${handleGetClass(thisMarket.mid)}`" @click="handleJoin(thisMarket)">
           <div class="flexb">
             <span class="flexa" v-if="Number(buff)">
               <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
@@ -68,7 +68,7 @@
       </div>
       <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
       <template v-for="(item, index) in minersArr">
-        <div class="list" :key="index">
+        <div class="list" :class="{'page1': page === 1}" :key="index">
           <div class="flexb mb10">
             <span>{{ item.miner }}</span>
             <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
@@ -101,7 +101,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, dealMinerData, perDayReward, getPoolApr } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, dealMinerData, perDayReward, getPoolApr, getClass } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 
 export default {
@@ -237,6 +237,9 @@ export default {
     })
   },
   methods: {
+    handleGetClass(mid) {
+      return getClass(mid)
+    },
     handleCurrentChange() {
       this.handleGetPageArr();
     },
@@ -474,6 +477,18 @@ export default {
   padding: 20px;
   border: 1px solid #e0e0e0;
   border-radius: 20px;
+  &.gold {
+    border: 1px solid rgb(238, 198, 4);
+    box-shadow: 0 0 5px 0px rgba(238, 198, 4, .5);
+  }
+  &.silver {
+    border: 1px solid #c0c0c0;
+    box-shadow: 0 0 5px 0px rgba(#c0c0c0, .5);
+  }
+  &.bronze {
+    border: 1px solid #8C7853;
+    box-shadow: 0 0 5px 0px rgba(#8C7853, .5);
+  }
   .addition{
     font-size: 24px;
     color: #E9574F;
@@ -574,6 +589,20 @@ export default {
       border: 1px solid #e0e0e0;
       border-radius: 20px;
       padding: 20px;
+      &.page1{
+        &:nth-child(2) {
+          border: 1px solid rgb(238, 198, 4);
+          box-shadow: 0 0 5px 0px rgba(238, 198, 4, .5);
+        }
+        &:nth-child(3) {
+          border: 1px solid #c0c0c0;
+          box-shadow: 0 0 5px 0px rgba(#c0c0c0, .5);
+        }
+        &:nth-child(4) {
+          border: 1px solid #8C7853;
+          box-shadow: 0 0 5px 0px rgba(#8C7853, .5);
+        }
+      }
       .mb10{
         margin-bottom: 10px;
       }

@@ -22,7 +22,7 @@
         </span>
       </div>
       <div class="noData" v-loading="!firstGet" v-if="!lists.length">{{ $t('public.noData') }}</div>
-      <div class="list" v-for="(item, index) in lists" :key="index" @click="handleToMarket(item)">
+      <div :class="`list ${handleGetClass(item.mid)}`" v-for="(item, index) in lists" :key="index" @click="handleToMarket(item)">
         <div class="flexb">
           <span class="flexa">
             <span>{{ $t('mine.earnings') }}：</span>
@@ -75,7 +75,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
-import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, dealReward } from '@/utils/public';
+import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, dealReward, getClass } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MiningRules from '../popup/MiningRules'
 import PoolsInfo from '../comp/PoolsInfo'
@@ -120,6 +120,7 @@ export default {
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
+      sortClass: state => state.sys.sortClass,
     }),
     minReward() {
       if (!Number(this.dfsPrice)) {
@@ -153,15 +154,24 @@ export default {
         }
         const weightList = this.weightList;
         const lists = [];
+        const gold = [], silver = [], bronze = [];
         weightList.sort((a, b) => {
           return b.pool_weight - a.pool_weight
         })
         weightList.forEach(v => {
           const item = newVal.find(vv => vv.mid === v.mid)
           item.pool_weight = v.pool_weight;
-          lists.push(item)
+          if (this.sortClass.gold.find(vv => vv === item.mid)) {
+            gold.push(item)
+          } else if (this.sortClass.silver.find(vv => vv === item.mid)) {
+            silver.push(item)
+          } else if (this.sortClass.bronze.find(vv => vv === item.mid)) {
+            bronze.push(item)
+          } else {
+            lists.push(item)
+          }
         });
-        this.lists = lists;
+        this.lists = [...gold, ...silver, ...bronze, ...lists];
         this.firstGet = true;
         this.handleGetMiners()
         // console.log(this.lists)
@@ -187,6 +197,9 @@ export default {
     })
   },
   methods: {
+    handleGetClass(mid) {
+      return getClass(mid)
+    },
     handleJoin(item) {
       this.$router.push({
         name: 'market',
@@ -489,6 +502,18 @@ export default {
       padding: 20px;
       border: 1px solid #e0e0e0;
       border-radius: 20px;
+      &.gold {
+        border: 1px solid rgb(238, 198, 4);
+        box-shadow: 0 0 5px 0px rgba(238, 198, 4, .5);
+      }
+      &.silver {
+        border: 1px solid #c0c0c0;
+        box-shadow: 0 0 5px 0px rgba(#c0c0c0, .5);
+      }
+      &.bronze {
+        border: 1px solid #8C7853;
+        box-shadow: 0 0 5px 0px rgba(#8C7853, .5);
+      }
       .addition{
         font-size: 24px;
         color: #E9574F;

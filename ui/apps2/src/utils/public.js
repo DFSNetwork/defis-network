@@ -254,12 +254,18 @@ export function getPoolApr(market) {
   if (!egg || !market.reserve0) {
     return 0;
   }
-  // console.log(egg)
-  // console.log(market)
-  // const damping = store.state.sys.damping;
-  // const dfsPrice = store.state.sys.dfsPrice;
-  // const aprs = store.state.sys.aprs;
   let fee_eos = parseFloat(egg.trigger_value_max) * 6 * 24 * 0.002;
   let apr = (fee_eos * 365 / parseFloat(market.reserve0) * 100).toFixed(3)
   return apr
+}
+
+export function getClass(mid) {
+  const sortClass =  store.state.sys.sortClass;
+  for (let item in sortClass) {
+    const has = sortClass[item].find(v => v === mid);
+    if (has) {
+      return item
+    }
+  }
+  return ''
 }
