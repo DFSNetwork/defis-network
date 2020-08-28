@@ -35,9 +35,9 @@ DFS Swap，深得DeFi开发设计的各种最佳实践。在经历过上线后33
 
 安全审计上，已经经过慢雾、派盾的审计。
 
-![-w280](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6rgs2nqfj30ku112whf.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6rgs2nqfj30ku112whf.jpg)
 
-![-w280](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6rhd5926j30ku112n2t.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6rhd5926j30ku112n2t.jpg)
 
 这是一份，逐行逐字逐个标点符号，都被反复测试过的代码。
 
@@ -50,9 +50,9 @@ Swap是基于极简的数学模型创建的，输入x必然输出y，不存在�
 
 [合约table数据和action接口链上查看链接](https://bloks.io/account/defisswapcnt?tab=Tables&account=defisswapcnt&scope=defisswapcnt&limit=100&table=markets&loadContract=true)
 
-![-w280](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6ri05jncj30ui0hidhd.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6ri05jncj30ui0hidhd.jpg)
 
-![-w280](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6ridk54aj30u00ygjub.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6ridk54aj30u00ygjub.jpg)
 
 
 
