@@ -24,7 +24,7 @@ Uniswap已经用日流水过亿的成绩告诉我们，什么是真正的去中�
 
 DFS Swap采用了和Uniswap一样的数学公式，以317行干净的代码，在性能更好的EOS公链上，实现了集自主上币、人人做市、代币互换的功能完备的去中心化交易所。
 
-![](media/15986100785570.jpg)
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6rge6svgj30vc0a8401.jpg)
 
 
 然后，在 DFS Swap core 保持代码极简的基础上，通过外部logic合约，在完全不影响DFS Swap core的交易和做市功能的情况下，做后续一系列业务功能的拓展。
@@ -34,9 +34,10 @@ DFS Swap采用了和Uniswap一样的数学公式，以317行干净的代码，�
 DFS Swap，深得DeFi开发设计的各种最佳实践。在经历过上线后33小时内9500万美金的日流水之后，直到现在，也没遭遇过任何异常。
 
 安全审计上，已经经过慢雾、派盾的审计。
-![dfs_swap_audit_by_SlowMist-w280](media/dfs_swap_audit_by_SlowMist.png)![dfs_swap_audit_by_PechShield-w280](media/dfs_swap_audit_by_PechShield.jpeg)
 
+![-w280](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6rgs2nqfj30ku112whf.jpg)
 
+![-w280](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6rhd5926j30ku112n2t.jpg)
 
 这是一份，逐行逐字逐个标点符号，都被反复测试过的代码。
 
@@ -49,9 +50,9 @@ Swap是基于极简的数学模型创建的，输入x必然输出y，不存在�
 
 [合约table数据和action接口链上查看链接](https://bloks.io/account/defisswapcnt?tab=Tables&account=defisswapcnt&scope=defisswapcnt&limit=100&table=markets&loadContract=true)
 
-![-w280](media/15986066932698.jpg)
+![-w280](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6ri05jncj30ui0hidhd.jpg)
 
-![-w280](media/15986067367395.jpg)
+![-w280](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6ridk54aj30u00ygjub.jpg)
 
 
 
@@ -107,6 +108,8 @@ dfsdeveloper@active  2/5
 大户代表: wangruixiwww 王首富
 DFS项目方: dfsdeveloper 猪弟
 特别出席: b1     就那
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gi6rj0p53wj310f0u0q88.jpg)
 
 ### 权限多签说明: 
 
