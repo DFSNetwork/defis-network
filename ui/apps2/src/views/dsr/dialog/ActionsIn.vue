@@ -39,18 +39,17 @@
         </div>
       </div>
       <div class="about tip">
-        预计年化收益: {{timeApr}}%
+        预计年化收益: {{aboutNum}} DFS
       </div>
     </div>
     <div class="btnDiv">
-      <div class="btn flexc" @click="handleTransfer">确认</div>
+      <div class="btn flexc" @click="handleShowSure">确认</div>
     </div>
 
     <div class="rules">
       <div class="subTitle">存款规则</div>
-      <div class="rules">1. 基本年化收益: 5%</div>
       <div class="rules">
-        <div>2. 存款时-，可以选择存款时间，目前有以下五档可供选择</div>
+        <div>存款时，可以选择存款时间，目前有以下五档可供选择</div>
         <div class="subRules">
           <div>1. 随存随取，年化5%</div>
           <div>2. 1月，年化 5.25%</div>
@@ -59,22 +58,35 @@
           <div>5. 1年，年化 7.5%</div>
         </div>
       </div>
+      <div class="spcRules rules">*注：已有存款时只能选择同期或者更长的存款时间，且到期时间以最后一次存款时间计算。</div>
     </div>
+    <el-dialog
+      class="myDialog"
+      append-to-body
+      :show-close="false"
+      :visible="showSure">
+      <ActionsInSure @listenClose="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accMul, accAdd } from '@/utils/public';
+import { toFixed, accMul, accAdd, accDiv } from '@/utils/public';
+import ActionsInSure from './ActionsInSure';
 
 export default {
+  components: {
+    ActionsInSure
+  },
   data() {
     return {
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       payNum: '',
       balance: '0.0000',
       apr: 5,
+      showSure: true,
       thisMarket: {
         symbol: 'DFS',
         contract: 'minedfstoken',
@@ -111,6 +123,11 @@ export default {
       const buff = [0, 0.05, 0.1, 0.2, 0.5]
       const newApr = accMul(this.apr, buff[Number(this.value)]);
       return accAdd(newApr, this.apr)
+    },
+    aboutNum() {
+      let about = accMul(this.timeApr, Number(this.payNum));
+      about = accDiv(about, 100)
+      return toFixed(about, 4)
     }
   },
   watch: {
@@ -125,6 +142,12 @@ export default {
     },
   },
   methods: {
+    handleClose() {
+      this.showSure = false;
+    },
+    handleShowSure() {
+      this.showSure = true;
+    },
     handleInBy() {
     },
     handleFocus() {
@@ -174,7 +197,7 @@ export default {
       }, 20000)
     },
     // 获取账户余额
-    async handleGetBalance(next) {
+    async handleGetBalance() {
       const params = {
         code: this.thisMarket.contract,
         coin: this.thisMarket.symbol,
@@ -322,6 +345,21 @@ export default {
     }
     .subRules{
       padding: 5px 0 5px 20px;
+    }
+  }
+  .spcRules{
+    color: #f5a623;;
+  }
+}
+.myDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 650px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
     }
   }
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="dsrList">
     <div class="list flexb">
-      <div>
+      <div @click="showMyDeposit = true">
         <div class="flexa header">
           <!-- <div>币种</div> -->
           <div>{{ $t('dsr.myDeposit') }}(DFS)</div>
@@ -19,8 +19,8 @@
       </div>
       <div class="flexb tools">
         <div class="flexa">
-          <div class="btn flexc" @click="listenShowUnOpen">{{ $t('dsr.deposit') }}</div>
-          <div class="btn backBtn flexc" @click="listenShowUnOpen">{{ $t('dsr.retrieve') }}</div>
+          <div class="btn flexc" @click.stop="listenShowUnOpen">{{ $t('dsr.deposit') }}</div>
+          <div class="btn backBtn flexc" @click.stop="listenShowUnOpen">{{ $t('dsr.retrieve') }}</div>
         </div>
       </div>
     </div>
@@ -35,6 +35,11 @@
       :visible.sync="showActionsOut">
       <ActionsOut />
     </el-dialog>
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showMyDeposit">
+      <MyDeposit />
+    </el-dialog>
   </div>
 </template>
 
@@ -42,16 +47,19 @@
 import { mapState } from 'vuex';
 import ActionsIn from '../dialog/ActionsIn';
 import ActionsOut from '../dialog/ActionsOut';
+import MyDeposit from '../dialog/MyDeposit';
 export default {
   name: 'dsrList',
   components: {
     ActionsIn,
-    ActionsOut
+    ActionsOut,
+    MyDeposit
   },
   data() {
     return {
-      showActionsIn: false,
-      showActionsOut: true,
+      showActionsIn: true,
+      showActionsOut: false,
+      showMyDeposit: false,
     }
   },
   computed: {
