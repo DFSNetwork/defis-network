@@ -111,10 +111,15 @@ export default {
     },
     handleDealCoinImg(contract, coin) {
       const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
+      const localCoinPng = ['hbbguanfang5-hbb']
       const inData = `${contract}-${coin.toLowerCase()}`
       const has = localeCoin.find(v => v === inData)
       if (has) {
         return `/static/coin/${has}.svg`;
+      }
+      const hasPng = localCoinPng.find(v => v === inData);
+      if (!has && hasPng) {
+        return `/static/coin/${hasPng}.png`;
       }
       return `https://ndi.340wan.com/eos/${inData}.png`
     },
