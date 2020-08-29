@@ -95,17 +95,17 @@
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team3.jpeg" alt=""></div>
           <div class="name">Judy Lee</div>
-          <div class="tip">Co-Founder & CTO</div>
+          <div class="tip">Smart Contract Dev</div>
         </div>
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team7.jpeg" alt=""></div>
           <div class="name">Jay</div>
-          <div class="tip">Co-Founder & CEO</div>
+          <div class="tip">Marketing</div>
         </div>
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team6.jpeg" alt=""></div>
           <div class="name">Ayana Lam</div>
-          <div class="tip">Co-Founder & Project Manager</div>
+          <div class="tip">Project Manager</div>
         </div>
          <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team1.jpeg" alt=""></div>
