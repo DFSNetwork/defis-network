@@ -48,12 +48,13 @@
           <span  @click="handleShowTip" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
         </span>
         <span class="fees">
-          50.0000 DFS
+          1.0000 DFS
         </span>
       </div>
 
       <div class="btnDiv">
-        <el-button class="btn" type="primary" v-if="scatter.identity" @click="handleNewMarket" plain>{{ $t('dex.submit') }}</el-button>
+        <el-button class="btn" type="primary" v-loading="loading"
+          v-if="scatter.identity" @click="handleNewMarket" plain>{{ $t('dex.submit') }}</el-button>
         <el-button class="btn" type="primary" v-else @click="handleLogin">{{ $t('public.loginPls') }}</el-button>
       </div>
     </div>
@@ -71,6 +72,7 @@ export default {
   name: 'createDex',
   data() {
     return {
+      loading: false,
       symnol0: {
         contract: 'eosio.token', // eosio.token
         coinName: 'EOS', // EOS
@@ -106,14 +108,22 @@ export default {
       login(this, () => {})
     },
     handleNewMarket() {
+      if (this.loading) {
+        return
+      }
+      if (!this.symnol0.contract || !this.symnol0.coinName || !this.symnol1.contract || !this.symnol1.coinName) {
+        return;
+      }
+      this.loading = true;
       const params = {
         code: 'minedfstoken',
         toAccount: 'defisfactory',
         memo: `${this.symnol0.contract}-${this.symnol0.coinName.toUpperCase()}-${this.symnol1.contract}-${this.symnol1.coinName.toUpperCase()}`,
-        quantity: '50.0000 DFS'
+        quantity: '1.0000 DFS'
       }
       // console.log(params)
       EosModel.transfer(params, (res) => {
+        this.loading = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
@@ -283,6 +293,7 @@ export default {
     height:88px;
     background:rgba(7,215,155,1);
     border-radius:30px;
+    overflow: hidden;
   }
 }
 </style>
