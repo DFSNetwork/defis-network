@@ -42,7 +42,7 @@
             </div>
           </div>
         </div>
-        <div class="tipDiv">
+        <div :class="`tipDiv ${handleGetClass(thisMarket.mid)}`">
           <div>
             <span>{{ $t('mine.accPools') }}: </span>
             <span>{{ accMineData.liq_bal0 || `0.0000 ${thisMarket.symbol0}` }} / {{ accMineData.liq_bal1 || `0.0000 ${thisMarket.symbol1}`}}</span>
