@@ -69,6 +69,7 @@
       <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
       <template v-for="(item, index) in minersArr">
         <div class="list" :class="{'page1': page === 1}" :key="index">
+          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`/static/rank/rank${index + 1}.png`" alt=""></label>
           <div class="flexb mb10">
             <span>{{ item.miner }}</span>
             <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
@@ -585,22 +586,47 @@ export default {
       }
     }
     .list{
-      margin-top: 20px;
+      margin-top: 25px;
       border: 1px solid #e0e0e0;
       border-radius: 20px;
-      padding: 20px;
+      // padding: 20px;
+      position: relative;
       &.page1{
         &:nth-child(2) {
           border: 1px solid rgb(238, 198, 4);
           box-shadow: 0 0 5px 0px rgba(238, 198, 4, .5);
         }
         &:nth-child(3) {
-          border: 1px solid #c0c0c0;
-          box-shadow: 0 0 5px 0px rgba(#c0c0c0, .5);
+          border: 1px solid #b1dcff;
+          box-shadow: 0 0 5px 0px rgba(#b1dcff, .5);
         }
         &:nth-child(4) {
           border: 1px solid #8C7853;
           box-shadow: 0 0 5px 0px rgba(#8C7853, .5);
+        }
+        .rankImg{
+          position: absolute;
+          top: -0px;
+          left: -0px;
+          width: 72px;
+          transform: translate(-47%, -47%) rotate(-45deg);
+          img{
+            width: 100%;
+          }
+        }
+      }
+      &>div{
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+        background: #FFF;
+        border-radius: 30px;
+
+        &:nth-child(2) {
+          padding-bottom: 0;;
+        }
+        &:nth-child(3) {
+          padding-top: 0;;
         }
       }
       .mb10{
