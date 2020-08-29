@@ -39,7 +39,7 @@
         </div>
         <div class="symbol flexa">
           <div class="coinInfo flex">
-            <div class="coinImg"><img width="100%" :src="item.sym0Data.imgUrl"></div>
+            <div class="coinImg"><img width="100%" :src="item.sym0Data.imgUrl" :onerror="errorCoinImg"></div>
             <div>
               <div class="coin">{{ item.symbol0 }}</div>
               <div class="contract tip">{{ item.contract0 }}</div>
@@ -47,7 +47,7 @@
           </div>
           <div class="add">+</div>
           <div class="coinInfo flex">
-            <div class="coinImg"><img width="100%" :src="item.sym1Data.imgUrl"></div>
+            <div class="coinImg"><img width="100%" :src="item.sym1Data.imgUrl" :onerror="errorCoinImg"></div>
             <div>
               <div class="coin">{{ item.symbol1 }}</div>
               <div class="contract tip">{{ item.contract1 }}</div>
@@ -89,6 +89,7 @@ export default {
   },
   data() {
     return {
+      errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       poolsInfo: {},
 
       showRules: false,
