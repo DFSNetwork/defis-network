@@ -28,7 +28,7 @@
             <span>{{ $t('mine.earnings') }}：</span>
             <!-- <span v-if="!item.minnerData || !Number(item.minnerData.liq)">0.00000000 DFS </span> -->
             <span>{{ item.showReward || '0.00000000' }} DFS </span>
-            <span class="addition flexa" v-if="Number(handleGetBuff(item))">
+            <span class="addition flexa" v-if="handleGetClass(item.mid) === '' && Number(handleGetBuff(item))">
               <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
               <span>{{ handleGetBuff(item) }}%</span>
             </span>

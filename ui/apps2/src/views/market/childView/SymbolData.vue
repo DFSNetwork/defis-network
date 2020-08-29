@@ -19,7 +19,7 @@
         </div>
         <div :class="`mylist ${handleGetClass(thisMarket.mid)}`" @click="handleJoin(thisMarket)">
           <div class="flexb">
-            <span class="flexa" v-if="Number(buff)">
+            <span class="flexa" v-if="handleGetClass(thisMarket.mid) === '' && Number(buff)">
               <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
               <span class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
             </span>
