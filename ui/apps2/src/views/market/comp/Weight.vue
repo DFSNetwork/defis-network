@@ -1,5 +1,5 @@
 <template>
-  <div class="weight">
+  <div :class="`weight ${handleGetClass(thisMarket.mid)}` ">
     <div class="noPools" @click="handleToSymbolPools">
       <div class="flexb mb10" v-if="Number(buff)">
         <!-- <div class="flexa">
@@ -13,7 +13,7 @@
       <div class="hasPools flexb mb10">
         <div class="flexa">
           <span>{{ $t('mine.earnings') }}： {{ changeReWard || '0.00000000' }} DFS</span>
-          <span class="flexa red" v-if="Number(buff)">
+          <span class="flexa red" v-if="handleGetClass(thisMarket.mid) === '' && Number(buff)">
             <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
             <span>{{ buff }}%</span>
           </span>
@@ -43,7 +43,7 @@
 <script>
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward, perDayReward, getPoolApr } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward, perDayReward, getPoolApr, getClass } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 
 export default {
@@ -181,6 +181,9 @@ export default {
     clearInterval(this.priceTimer)
   },
   methods: {
+    handleGetClass(mid) {
+      return getClass(mid)
+    },
     handleToSymbolPools() {
       this.$router.push({
         name: 'poolsMarket',

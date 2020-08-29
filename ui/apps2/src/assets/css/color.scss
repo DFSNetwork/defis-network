@@ -32,3 +32,15 @@ $color-tip: #a6a6a6;
   display: flex;
   align-items: center;
 }
+.gold {
+  border: 1px solid rgb(238, 198, 4) !important;
+  box-shadow: 0 0 5px 0px rgba(238, 198, 4, .5) !important;
+}
+.silver {
+  border: 1px solid #c0c0c0 !important;
+  box-shadow: 0 0 5px 0px rgba(#c0c0c0, .5) !important;
+}
+.bronze {
+  border: 1px solid #8C7853 !important;
+  box-shadow: 0 0 5px 0px rgba(#8C7853, .5) !important;
+}

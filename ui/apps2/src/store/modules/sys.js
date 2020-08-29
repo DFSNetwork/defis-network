@@ -74,6 +74,13 @@ const sys = {
     dfsPrice: localStorage.getItem('dfsPrice') || '0', // DFS 5分钟均价
     eggargs: localStorage.getItem('eggargs') ? JSON.parse(localStorage.getItem('eggargs')) : [], // 全局aprs
     feesApr: localStorage.getItem('feesApr') ? JSON.parse(localStorage.getItem('feesApr')) : [], // 全局aprs
+    sortClass: {
+      gold: [39],
+      silver: [],
+      bronze: []
+      // silver: [5, 17, 309],
+      // bronze: [4]
+    }
   },
   mutations: {
     SET_BASECONFIG: (state, baseConfig) => {
