@@ -243,7 +243,7 @@ export default {
         price_last: "2.52539999999999987",
         contract: "eosio.token",
         decimal: "4",
-        reserve: "157.9329 EOS",
+        reserve: "",
         sym: "4,EOS",
         symbol: "EOS",
       }, // 当前选中的做市池子
@@ -255,7 +255,7 @@ export default {
         price_last: "0.39589999999999997",
         contract: "tethertether",
         decimal: "4",
-        reserve: "398.7956 USDT",
+        reserve: "",
         sym: "4,USDT",
         symbol: "USDT",
       },
@@ -383,6 +383,7 @@ export default {
         if (!arr.length) {
           return;
         }
+        this.handleGetUrlInAndOut()
         const market0 = arr.find(v => v.contract === this.thisMarket0.contract && v.symbol === this.thisMarket0.symbol) || arr[0]
         this.thisMarket0 = market0;
         const market1 = arr.find(v => v.contract === this.thisMarket1.contract && v.symbol === this.thisMarket1.symbol) || arr[1]
