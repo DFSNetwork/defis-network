@@ -115,6 +115,8 @@
       <div class="num">{{ accGetToken }}</div>
     </div>
 
+    <MarketLists :marketLists="marketLists"/>
+
     <!-- 弹窗组件 -->
     <el-dialog
       class="mkListDia"
@@ -137,12 +139,15 @@ import { dealToken, sellToken } from '@/utils/logic';
 import Tabs from '../index/components/Tabs';
 import Weight from './comp/Weight';
 import MarketData from './comp/MarketData';
+import MarketLists from './comp/MarketLists';
+
 export default {
   components: {
     Tabs,
     MarketList,
     Weight,
     MarketData,
+    MarketLists,
   },
   data() {
     return {

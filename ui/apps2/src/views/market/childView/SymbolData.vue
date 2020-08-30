@@ -639,7 +639,7 @@ export default {
     }
   }
   .myPools{
-    margin: 40px;
+    margin: 20px 40px 40px;
     .addition{
       font-size: 24px;
       color: #E9574F;

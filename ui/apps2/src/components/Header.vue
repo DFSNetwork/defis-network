@@ -56,7 +56,7 @@ export default {
   padding: 0 40px;
   font-size: 28px;
   color: $color-tip;
-  margin-bottom: 20px;
+  margin-bottom: 5px;
   .logo{
     width: 196px;
   }
