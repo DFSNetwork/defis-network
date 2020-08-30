@@ -258,7 +258,7 @@ export default {
       return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr)
     },
     marketReward() {
-      if (!this.marketData.length || !this.nowMarket.getNum1) {
+      if (!this.marketData.length || !Number(this.nowMarket.getNum1)) {
         return '0.0000';
       }
       const sym0 = accSub(parseFloat(this.nowMarket.getNum1), this.marketData[0]);
