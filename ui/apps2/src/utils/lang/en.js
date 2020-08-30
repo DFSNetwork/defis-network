@@ -208,6 +208,13 @@ export default {
     dfsHolders: 'DFS Holders', // DFS Holders
     total: 'Total', // Total
   },
+  market: {
+    capital: 'Liq capital',
+    anthorOne: 'Please re-initiate a market making operation',
+    rightNow: 'Immediately',
+    marketReward: 'Current profit',
+    has: 'Incl {coin}'
+  },
   miningRules: {
     rules: 'Mining rules',
     tradeRules: 'Trading mining rules',

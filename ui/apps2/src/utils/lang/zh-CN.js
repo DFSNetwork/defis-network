@@ -209,6 +209,13 @@ export default {
     dfsHolders: 'DFS 家人', // DFS Holders
     total: '总数', // Total
   },
+  market: {
+    capital: '做市本金',
+    anthorOne: '请重新发起一笔做市操作',
+    rightNow: '立即操作',
+    marketReward: '做市收益',
+    has: '含{coin}'
+  },
   miningRules: {
     rules: '挖矿规则',
     tradeRules: '交易挖矿规则',

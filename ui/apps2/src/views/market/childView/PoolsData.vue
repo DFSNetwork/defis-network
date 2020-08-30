@@ -54,6 +54,7 @@
             </div>
           </div>
         </div>
+        <label class="rankImg" v-if="handleGetClass(item.mid)"><img :src="handleGetSrc(item.mid)" alt=""></label>
       </div>
     </div>
 
@@ -197,6 +198,19 @@ export default {
     })
   },
   methods: {
+    handleGetSrc(mid) {
+        // '/static/rank/rank${index + 1}.png'
+      const myclass = getClass(mid);
+      if (myclass === 'gold') {
+        return '/static/rank/rank1.png'
+      } else if (myclass === 'silver') {
+        return '/static/rank/rank2.png'
+      } else if (myclass === 'bronze') {
+        return '/static/rank/rank3.png'
+      } else {
+        return ''
+      }
+    },
     handleGetClass(mid) {
       return getClass(mid)
     },
@@ -502,6 +516,7 @@ export default {
       padding: 20px;
       border: 1px solid #e0e0e0;
       border-radius: 20px;
+      position: relative;
       &.gold {
         border: 1px solid rgb(238, 198, 4);
         box-shadow: 0 0 5px 0px rgba(238, 198, 4, .5);
@@ -513,6 +528,16 @@ export default {
       &.bronze {
         border: 1px solid #8C7853;
         box-shadow: 0 0 5px 0px rgba(#8C7853, .5);
+      }
+      .rankImg{
+        position: absolute;
+        top: -0px;
+        left: -0px;
+        width: 72px;
+        transform: translate(-47%, -47%) rotate(-45deg);
+        img{
+          width: 100%;
+        }
       }
       .addition{
         font-size: 24px;

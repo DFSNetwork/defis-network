@@ -102,6 +102,7 @@
       <div v-else class="btn flexc backBtn" @click="handleToSell">{{ $t('pools.withdrawal') }}</div>
     </div>
 
+    <MarketData  :thisMarket="thisMarket" :token="token"/>
     <weight v-if="Number(weight)" :token="token" :thisMarket="thisMarket"/>
 
     <div class="liquidity" v-if="act === 1">
@@ -135,11 +136,13 @@ import { toFixed, accAdd, accDiv, accMul } from '@/utils/public';
 import { dealToken, sellToken } from '@/utils/logic';
 import Tabs from '../index/components/Tabs';
 import Weight from './comp/Weight';
+import MarketData from './comp/MarketData';
 export default {
   components: {
     Tabs,
     MarketList,
     Weight,
+    MarketData,
   },
   data() {
     return {
@@ -328,6 +331,7 @@ export default {
       this.payNum2 = '';
       this.sellToken = '';
       this.getToken = 0;
+      this.token = '0'
       this.showMarketList = false;
 
       this.handleBeforeDestroy();
