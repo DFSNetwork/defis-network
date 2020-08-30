@@ -193,6 +193,7 @@ export default {
       margin-top: 0px;
     }
     &>span{
+      line-height: 37px;
       &:first-child{
         margin-right: 10px;
       }
