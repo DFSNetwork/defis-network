@@ -214,7 +214,9 @@ export default {
     anthorOne: '请重新发起一笔做市操作',
     rightNow: '立即操作',
     marketReward: '做市收益',
-    has: '含{coin}'
+    has: '含{coin}',
+    manage: '管理',
+    myMarkets: '我的做市',
   },
   miningRules: {
     rules: '挖矿规则',

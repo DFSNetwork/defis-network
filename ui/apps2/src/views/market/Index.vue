@@ -115,7 +115,7 @@
       <div class="num">{{ accGetToken }}</div>
     </div>
 
-    <MarketLists :marketLists="marketLists"/>
+    <MarketLists :marketLists="marketLists" @listenToMarket="handleChangeMarket"/>
 
     <!-- 弹窗组件 -->
     <el-dialog
@@ -302,6 +302,10 @@ export default {
   beforeDestroy() {
   },
   methods: {
+    handleChangeMarket(item) {
+      document.scrollingElement.scrollTop = 0;
+      this.handleMarketChange(item)
+    },
     handleBeforeDestroy() {
       const localData = localStorage.getItem('swapMarkets') ? JSON.parse(localStorage.getItem('swapMarkets')) : null;
       if (localData && localData.thisMidsPath == this.thisMarket.mid) {

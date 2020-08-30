@@ -24,7 +24,7 @@
               <span class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
             </span>
           </div>
-          <div class="symbol flexb">
+          <div class="symbol flexb" :class="{'noTop': !(handleGetClass(thisMarket.mid) === '' && Number(buff))}">
             <div class="coinInfo flex">
               <div class="coinImg"><img width="100%" :src="thisMarket.sym0Data.imgUrl" :onerror="errorCoinImg"></div>
               <div>
@@ -69,7 +69,7 @@
           </div>
         </div>
         <div :class="`tipDiv ${handleGetClass(thisMarket.mid)}`">
-          <div class="myMarket">
+          <div class="">
             <span>{{ $t('dex.pools') }}: </span>
             <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
           </div>
@@ -647,6 +647,9 @@ export default {
     .symbol{
       margin-top: 20px;
       border-radius: 20px;
+      &.noTop{
+        margin-top: 0px;
+      }
       .coinInfo{
         text-align: left;
         .coinImg{

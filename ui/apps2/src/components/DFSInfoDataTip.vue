@@ -101,7 +101,9 @@ export default {
         });
       });
       result = result.sort((a, b) => {
-        return parseInt(b.poolsApr) - parseInt(a.poolsApr)
+        const bApr = parseInt(b.poolsApr) + parseInt(b.value)
+        const aApr = parseInt(a.poolsApr) + parseInt(a.value)
+        return bApr - aApr
       })
       this.handleSetAllRes();
       return result;

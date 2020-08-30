@@ -1,15 +1,25 @@
 <template>
   <div>
     <div :class="`tipDiv marketReward ${handleGetClass(thisMarket.mid)}`" v-if="Number(token)">
-      <div class="flexa">
+      <div class="flexb" v-if="isList">
+        <div class="flexa symbolInfo">
+          <img class="imgCoin" :src="thisMarket.sym0Data.imgUrl" :onerror="errorCoinImg"/>
+          <span>{{ thisMarket.symbol0 }}</span>
+          <span class="and">+</span>
+          <img class="imgCoin" :src="thisMarket.sym1Data.imgUrl" :onerror="errorCoinImg"/>
+          <span>{{ thisMarket.symbol1 }}</span>
+        </div>
+        <span @click="handleJoin" class="green">{{ $t('market.manage') }}</span>
+      </div>
+      <div class="flex">
         <span>{{ $t('mine.accPools') }}: </span>
-        <span>{{ nowMarket.getNum1 || `0.0000` }} {{thisMarket.symbol0}} / {{ nowMarket.getNum2 || `0.0000`}} {{thisMarket.symbol1}}</span>
+        <span class="">{{ nowMarket.getNum1 || `0.0000` }} {{thisMarket.symbol0}} / {{ nowMarket.getNum2 || `0.0000`}} {{thisMarket.symbol1}}</span>
       </div>
       <div class="flex">
         <span>{{ $t('market.capital') }}: </span>
         <span v-if="!marketData.length" class="tip maxW">
           <span>{{ $t('market.anthorOne') }}</span>
-          <!-- <span class="green">立即操作</span> -->
+          <!-- <span v-if="isList" class="green" @click="handleJoin">立即操作</span> -->
         </span>
         <span v-else>{{ `${marketData[0]} ${thisMarket.symbol0}` }} / {{ `${marketData[1]} ${thisMarket.symbol1}` }}</span>
       </div>
@@ -43,25 +53,45 @@ export default {
       default: function tmt() {
         return {}
       }
+    },
+    capital: {
+      type: Array,
+      default: function cp() {
+        return []
+      }
+    },
+    isList: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {
     return {
+      errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       nowMarket: {},
       marketData: [],
       direction: true,
     }
   },
   mounted() {
-    this.handleGetMarketData()
   },
   watch: {
-    token() {
-      this.handleGetNowMarket();
+    token: {
+      handler: function tk() {
+        this.handleGetNowMarket();
+      },
+      immediate: true
     },
-    thisMarket() {
-      this.handleGetMarketData()
-      this.handleGetNowMarket();
+    thisMarket: {
+      handler: function tm() {
+        if (this.capital.length) {
+          this.marketData = this.capital;
+          return
+        }
+        this.handleGetMarketData()
+        this.handleGetNowMarket();
+      },
+      immediate: true
     }
   },
   computed: {
@@ -131,6 +161,9 @@ export default {
     handleGetClass(mid) {
       return getClass(mid)
     },
+    handleJoin() {
+      this.$emit('listenToMarket', this.thisMarket)
+    },
   },
 }
 </script>
@@ -150,7 +183,7 @@ export default {
   margin-top: 40px;
   border-radius: 20px;
   padding: 20px 40px;
-  font-size: 28px;
+  font-size: 26px;
   overflow: hidden;
 }
 .marketReward{
@@ -172,6 +205,15 @@ export default {
     }
     .maxW{
       max-width: 420px;
+    }
+  }
+  .symbolInfo{
+    .imgCoin{
+      width: 50px;
+      margin-right: 10px;
+    }
+    .and{
+      margin: 0 20px;
     }
   }
 }

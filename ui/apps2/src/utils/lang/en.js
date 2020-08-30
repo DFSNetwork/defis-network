@@ -213,7 +213,9 @@ export default {
     anthorOne: 'Please re-initiate a market making operation',
     rightNow: 'Immediately',
     marketReward: 'Current profit',
-    has: 'Incl {coin}'
+    has: 'Incl {coin}',
+    manage: 'Manage',
+    myMarkets: 'My liquidity',
   },
   miningRules: {
     rules: 'Mining rules',

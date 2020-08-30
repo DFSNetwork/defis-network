@@ -154,8 +154,8 @@ export default {
           return
         }
         const weightList = this.weightList;
-        const lists = [];
-        const gold = [], silver = [], bronze = [];
+        let lists = [];
+        let gold = [], silver = [], bronze = [];
         weightList.sort((a, b) => {
           return b.pool_weight - a.pool_weight
         })
@@ -172,6 +172,18 @@ export default {
             lists.push(item)
           }
         });
+        gold = gold.sort((a, b) => {
+          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        })
+        silver = silver.sort((a, b) => {
+          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        })
+        bronze = bronze.sort((a, b) => {
+          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        })
+        lists = lists.sort((a, b) => {
+          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        })
         this.lists = [...gold, ...silver, ...bronze, ...lists];
         this.firstGet = true;
         this.handleGetMiners()
