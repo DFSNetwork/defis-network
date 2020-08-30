@@ -333,9 +333,9 @@ export default {
         for (const key in res) {
           if (key !== 'logs') {
             if (key !== 'EOS') {
-              newArr.push(res[key])
+              newArr.push(toFixed(res[key], this.thisMarket.decimal1 || 4))
             } else {
-              newArr.unshift(res[key])
+              newArr.unshift(toFixed(res[key], this.thisMarket.decimal0 || 4))
             }
           }
         }
