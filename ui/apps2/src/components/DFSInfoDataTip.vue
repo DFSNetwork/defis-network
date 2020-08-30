@@ -103,7 +103,7 @@ export default {
       result = result.sort((a, b) => {
         return parseInt(b.poolsApr) - parseInt(a.poolsApr)
       })
-      this.$store.dispatch('setFeesApr', result);
+      this.handleSetAllRes();
       return result;
     },
     dfsTableData() {
@@ -134,6 +134,34 @@ export default {
   },
   mounted() {},
   methods: {
+    handleSetAllRes() {
+      const allResult = [];
+      const feesDataKeys = Object.keys(this.feesData)
+      const coinArr = this.handleDealSymArr(this.marketLists);
+      feesDataKeys.forEach((key) => {
+        const isShowToken = coinArr.find(v => v.symbol === key);
+        const value = this.feesData[key];
+        const sym1Liq = isShowToken.reserve.split(' ')[0];
+        const poolsApr = value / (sym1Liq - value) * 365 * 100;
+        allResult.push({
+          symbol: isShowToken.symbol,
+          poolsApr: `${poolsApr.toFixed(3)}%`
+        });
+      })
+      this.$store.dispatch('setFeesApr', allResult);
+    },
+    handleDealSymArr(lists = []) {
+      const resArr = [];
+      lists.forEach((v) => {
+        resArr.push(v.sym0Data, v.sym1Data)
+      })
+      // 删除重复项
+      const newArr = resArr.filter((item, index, self) => {
+        const i = self.findIndex(v => v.contract === item.contract && v.symbol === item.symbol);
+        return self.indexOf(item) === i;
+      })
+      return newArr
+    },
     clickOnConfirm() {
       this.$emit("onConfirm");
     },
