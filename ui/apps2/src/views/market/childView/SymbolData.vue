@@ -182,6 +182,7 @@ export default {
       direction: true,
       nowMarket: {}, // 实时做市资金
       nowMarketLoading: true,
+      timer: null,
       marketTime: {
         days: 0,
         hours: '00',
@@ -199,9 +200,6 @@ export default {
     }
   },
   watch: {
-    sTime() {
-      this.handleGetTime()
-    },
     marketLists: {
       handler: function ml(newVal) {
         if (!newVal.length) {
@@ -313,6 +311,7 @@ export default {
     this.handleGetMinersLists()
   },
   beforeDestroy() {
+    clearTimeout(this.timer)
     clearInterval(this.accTimer)
     clearInterval(this.secTimer)
     clearInterval(this.accSecTimer)
@@ -393,7 +392,8 @@ export default {
             }
           }
         }
-        this.sTime = res.tag_log_utc_block_time
+        this.sTime = res.tag_log_utc_block_time;
+        this.handleGetTime();
         this.marketData = newArr;
       })
     },

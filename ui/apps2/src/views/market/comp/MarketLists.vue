@@ -125,11 +125,12 @@ export default {
     handleGetCapital(v, token) {
       const params = {
         user: this.scatter.identity.accounts[0].name,
+        // user: 'dfsdevloper',
         mid: v.mid,
       }
       axios.get('https://dfsinfoapi.sgxiang.com/dapi/changelogdata', {params}).then((result) => {
         const res = result.data;
-        const newArr = [res[v.symbol0], res[v.symbol1]];
+        const newArr = [toFixed(res[v.symbol0], v.decimal0), toFixed(res[v.symbol1], v.decimal1)];
         this.lists.push(Object.assign(v, {
           token,
           capital: newArr,
