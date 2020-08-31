@@ -42,7 +42,7 @@ const constantRouter = [
         path: '/pools/:mid',
         name: 'poolsMarket',
         component: () => import(/* webpackChunkName: "poolsMarket" */ '@/views/market/childView/SymbolData.vue'),
-        meta: { title: 'DeFis-Network' },
+        meta: { title: 'DeFis-Network', noAcc: true },
       },
       {
         path: '/bank',

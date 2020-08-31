@@ -24,7 +24,7 @@
               <span class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
             </span>
           </div>
-          <div class="symbol flexb">
+          <div class="symbol flexb" :class="{'noTop': !(handleGetClass(thisMarket.mid) === '' && Number(buff))}">
             <div class="coinInfo flex">
               <div class="coinImg"><img width="100%" :src="thisMarket.sym0Data.imgUrl" :onerror="errorCoinImg"></div>
               <div>
@@ -42,12 +42,49 @@
             </div>
           </div>
         </div>
-        <div class="tipDiv">
-          <div>
+        <div :class="`tipDiv marketReward ${handleGetClass(thisMarket.mid)}`"
+          v-loading="nowMarketLoading"
+          v-if="Number(nowMarket.getNum1) || marketData.length">
+          <div class="flexa">
             <span>{{ $t('mine.accPools') }}: </span>
-            <span>{{ accMineData.liq_bal0 || `0.0000 ${thisMarket.symbol0}` }} / {{ accMineData.liq_bal1 || `0.0000 ${thisMarket.symbol1}`}}</span>
+            <span>{{ nowMarket.getNum1 || `0.0000` }} {{thisMarket.symbol0}} / {{ nowMarket.getNum2 || `0.0000`}} {{thisMarket.symbol1}}</span>
           </div>
-          <div class="myMarket">
+          <div class="flex">
+            <span>{{ $t('market.capital') }}: </span>
+            <span v-if="!marketData.length" class="tip maxW">
+              <span>{{ $t('market.anthorOne') }} </span>
+              <span class="green" @click="handleJoin(thisMarket)">{{ $t('market.rightNow') }}</span>
+            </span>
+            <span v-else>{{ `${marketData[0]} ${thisMarket.symbol0}` }} / {{ `${marketData[1]} ${thisMarket.symbol1}` }}</span>
+          </div>
+          <div class="flexa">
+            <span>{{ $t('market.marketReward') }}: </span>
+            <span :class="{'green': marketReward > 0, 'red': marketReward < 0}">{{ marketReward }} </span>
+            <span @click="direction = !direction" class="flexa ml10">
+              <span>{{ direction ? thisMarket.symbol1 : thisMarket.symbol0 }}</span><span
+                class="small">（{{ $t('market.has', {coin: direction ? thisMarket.symbol0 : thisMarket.symbol1}) }}）</span>
+              <img class="changeImg" v-if="direction" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
+              <img class="changeImg" v-else src="@/assets/img/dex/price_switch_icon_green_right.svg" alt="">
+            </span>
+          </div>
+          <div class="flexa">
+            <span>{{ $t('market.marketTime') }}: </span>
+            <span>{{ $t('market.timer', {
+                days: marketTime.days,
+                hours: marketTime.hours,
+                mins: marketTime.minutes,
+                secs: marketTime.seconds
+              }) }}</span>
+            <span class="tip">（{{ $t('market.pl') }}: 
+              <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
+                {{ percent }}%
+              </span>）
+            </span>
+            <!-- <span>{{ JSON.stringify(marketTime) }}</span> -->
+          </div>
+        </div>
+        <div :class="`tipDiv ${handleGetClass(thisMarket.mid)}`">
+          <div class="">
             <span>{{ $t('dex.pools') }}: </span>
             <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
           </div>
@@ -77,6 +114,7 @@
             <span>{{ $t('dex.pools') }}</span>
             <span>{{ item.liq_bal0 }} / {{ item.liq_bal1 }}</span>
           </div>
+          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`/static/rank/rank${index + 1}.png`" alt=""></label>
         </div>
       </template>
       <el-pagination
@@ -99,9 +137,12 @@
 </template>
 
 <script>
+import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, dealMinerData, perDayReward, getPoolApr, getClass } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, getMarketTime,
+         dealMinerData, perDayReward, getPoolApr, getClass } from '@/utils/public';
+import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
 
 export default {
@@ -136,6 +177,18 @@ export default {
       secTimer: null, // 秒级定时器
       accTimer: null, // 用户自己的收益定时器
       accSecTimer: null, // 用户自己的秒级定时器
+      token: '0',
+      marketData: [], // 做市本金
+      direction: true,
+      nowMarket: {}, // 实时做市资金
+      nowMarketLoading: true,
+      timer: null,
+      marketTime: {
+        days: 0,
+        hours: '00',
+        minutes: '00',
+        seconds: '00'
+      }
     }
   },
   props: {
@@ -149,11 +202,11 @@ export default {
   watch: {
     marketLists: {
       handler: function ml(newVal) {
-        if (this.thisMarket.mid || !newVal.length) {
+        if (!newVal.length) {
           return
         }
         this.thisMarket = newVal.find(v => v.mid === Number(this.$route.params.mid))
-        // console.log(this.thisMarket)
+        this.handleGetNowMarket()
       },
       immediate: true
     },
@@ -161,6 +214,8 @@ export default {
       handler: function listen(newVal) {
         if (newVal.identity) {
           this.handleGetMinersLists('user')
+          this.handleGetMarketData()
+          this.handleGetAccToken()
         }
       },
       deep: true,
@@ -170,7 +225,7 @@ export default {
   computed: {
     ...mapState({
       // 箭头函数可使代码更简练
-      // baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
+      baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
       weightList: state => state.sys.weightList, // 交易对权重列表
       aprs: state => state.sys.aprs,
       damping: state => state.sys.damping,
@@ -223,12 +278,40 @@ export default {
       const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
       const thisPoolApr = getPoolApr(this.thisMarket)
       return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr)
+    },
+    marketReward() {
+      if (!this.marketData.length || !Number(this.nowMarket.getNum1)) {
+        return '0.0000';
+      }
+      const sym0 = accSub(parseFloat(this.nowMarket.getNum1), this.marketData[0]);
+      const sym1 = accSub(parseFloat(this.nowMarket.getNum2), this.marketData[1]);
+      const price = accDiv(parseFloat(this.nowMarket.getNum2), parseFloat(this.nowMarket.getNum1));
+      if (this.direction) {
+        const reward = sym1 + sym0 * price;
+        return toFixed(reward, this.thisMarket.decimal1)
+      }
+      const reward = sym0 + sym1 / price;
+      return toFixed(reward, this.thisMarket.decimal0)
+    },
+    percent() {
+      if (!this.marketData.length || !Number(this.nowMarket.getNum1)) {
+        return '0.0000';
+      }
+      const sym0 = accSub(parseFloat(this.nowMarket.getNum1), this.marketData[0]);
+      const sym1 = accSub(parseFloat(this.nowMarket.getNum2), this.marketData[1]);
+      const price = accDiv(parseFloat(this.nowMarket.getNum2), parseFloat(this.nowMarket.getNum1));
+      const reward = sym0 + sym1 / price;
+      let mD = accMul(this.marketData[0], 2)
+      let p = accDiv(reward, mD)
+      p = accMul(p, 100);
+      return toFixed(p, 2)
     }
   },
   mounted() {
     this.handleGetMinersLists()
   },
   beforeDestroy() {
+    clearTimeout(this.timer)
     clearInterval(this.accTimer)
     clearInterval(this.secTimer)
     clearInterval(this.accSecTimer)
@@ -237,6 +320,83 @@ export default {
     })
   },
   methods: {
+    handleGetTime() {
+      clearTimeout(this.timer)
+      if (Number(this.sTime)) {
+        this.marketTime = getMarketTime(this.sTime)
+        this.timer = setTimeout(() => {
+          this.handleGetTime()
+        }, 1000);
+        return
+      }
+      this.marketTime = {
+        days: 0,
+        hours: '00',
+        minutes: '00',
+        seconds: '00'
+      }
+    },
+    handleGetAccToken() {
+      const params = {
+        code: this.baseConfig.toAccountSwap,
+        scope: this.$route.params.mid,
+        table: 'liquidity',
+        lower_bound: ` ${this.scatter.identity.accounts[0].name}`,
+        upper_bound: ` ${this.scatter.identity.accounts[0].name}`,
+        json: true
+      }
+      EosModel.getTableRows(params, (res) => {
+        const list = res.rows || [];
+        !list[0] ? this.token = '0' : this.token = `${list[0].token}`;
+        this.handleGetNowMarket()
+      })
+    },
+    handleGetNowMarket() {
+      try {
+        const inData = {
+          poolSym0: this.thisMarket.reserve0.split(' ')[0],
+          poolSym1: this.thisMarket.reserve1.split(' ')[0],
+          poolToken: this.thisMarket.liquidity_token,
+          sellToken: this.token
+        }
+        const nowMarket = sellToken(inData);
+        nowMarket.getNum1 = toFixed(nowMarket.getNum1, 4)
+        nowMarket.getNum2 = toFixed(nowMarket.getNum2, 4)
+        this.nowMarket = nowMarket;
+        this.nowMarketLoading = false;
+      } catch(error) {
+        setTimeout(() => {
+          this.handleGetNowMarket()
+        }, 200);
+      }
+    },
+    handleGetMarketData() {
+      const params = {
+        user: this.scatter.identity.accounts[0].name,
+        mid: this.$route.params.mid,
+      }
+      axios.get('https://dfsinfoapi.sgxiang.com/dapi/changelogdata', {params}).then((result) => {
+        const res = result.data;
+        this.marketData = [];
+        this.sTime = '0'
+        if (!result.data.logs.length) {
+          return
+        }
+        const newArr = []
+        for (const key in res) {
+          if (key !== 'logs' && key !== 'tag_log_format_block_time' && key !== 'tag_log_utc_block_time') {
+            if (key !== 'EOS') {
+              newArr.push(toFixed(res[key], this.thisMarket.decimal1 || 4))
+            } else {
+              newArr.unshift(toFixed(res[key], this.thisMarket.decimal0 || 4))
+            }
+          }
+        }
+        this.sTime = res.tag_log_utc_block_time;
+        this.handleGetTime();
+        this.marketData = newArr;
+      })
+    },
     handleGetClass(mid) {
       return getClass(mid)
     },
@@ -472,6 +632,12 @@ export default {
 .green{
   color: #07D79B;
 }
+.red{
+  color: #E9574F;
+}
+.ml10{
+  margin-left: 10px;
+}
 .mylist{
   margin-top: 20px;
   padding: 20px;
@@ -528,7 +694,7 @@ export default {
     }
   }
   .myPools{
-    margin: 40px;
+    margin: 20px 40px 40px;
     .addition{
       font-size: 24px;
       color: #E9574F;
@@ -536,6 +702,9 @@ export default {
     .symbol{
       margin-top: 20px;
       border-radius: 20px;
+      &.noTop{
+        margin-top: 0px;
+      }
       .coinInfo{
         text-align: left;
         .coinImg{
@@ -573,6 +742,30 @@ export default {
     border-radius: 20px;
     padding: 20px;
     font-size: 28px;
+    overflow: hidden;
+  }
+  .marketReward{
+    &>div{
+      margin-top: 10px;
+      &:first-child{
+        margin-top: 0px;
+      }
+      &>span{
+        line-height: 37px;
+        &:first-child{
+          margin-right: 10px;
+        }
+      }
+      .small{
+        font-size: 26px;
+      }
+      .changeImg{
+        width: 30px;
+      }
+      .maxW{
+        max-width: 480px;
+      }
+    }
   }
   .poolsLists{
     margin: 40px;
@@ -585,22 +778,47 @@ export default {
       }
     }
     .list{
-      margin-top: 20px;
+      margin-top: 25px;
       border: 1px solid #e0e0e0;
       border-radius: 20px;
-      padding: 20px;
+      // padding: 20px;
+      position: relative;
       &.page1{
         &:nth-child(2) {
           border: 1px solid rgb(238, 198, 4);
           box-shadow: 0 0 5px 0px rgba(238, 198, 4, .5);
         }
         &:nth-child(3) {
-          border: 1px solid #c0c0c0;
-          box-shadow: 0 0 5px 0px rgba(#c0c0c0, .5);
+          border: 1px solid #b1dcff;
+          box-shadow: 0 0 5px 0px rgba(#b1dcff, .5);
         }
         &:nth-child(4) {
           border: 1px solid #8C7853;
           box-shadow: 0 0 5px 0px rgba(#8C7853, .5);
+        }
+        .rankImg{
+          position: absolute;
+          top: -0px;
+          left: -0px;
+          width: 72px;
+          transform: translate(-47%, -47%) rotate(-45deg);
+          img{
+            width: 100%;
+          }
+        }
+      }
+      &>div{
+        padding: 20px;
+        position: relative;
+        z-index: 1;
+        background: #FFF;
+        border-radius: 30px;
+
+        &:nth-child(1) {
+          padding-bottom: 0;;
+        }
+        &:nth-child(2) {
+          padding-top: 0;;
         }
       }
       .mb10{

@@ -78,7 +78,7 @@ export default {
     coinDecimal: 'Token precision',
     plsCoinDecimal: 'Enter token precision',
     submit: 'Create',
-    createFeeTip: 'In order to maintain a good trading environment. Creating a new market consumes 50 DFS.',
+    createFeeTip: 'In order to maintain a good trading environment. Creating a new market consumes 1 DFS.',
     // add
     ableGet: '可兑',
     minGet: 'At least get',
@@ -207,6 +207,18 @@ export default {
     testData: 'The page data are all test data. Estimated open day on September 8. It may be advanced or delayed.',
     dfsHolders: 'DFS Holders', // DFS Holders
     total: 'Total', // Total
+  },
+  market: {
+    capital: 'Liq capital',
+    anthorOne: 'Please re-initiate a market making operation',
+    rightNow: 'Immediately',
+    marketReward: 'P&L',
+    has: 'Incl {coin}',
+    manage: 'Manage',
+    myMarkets: 'My liquidity',
+    marketTime: 'Time',
+    timer: '{days}D {hours}H:{mins}M:{secs}S',
+    pl: 'P&L',
   },
   miningRules: {
     rules: 'Mining rules',

@@ -37,7 +37,7 @@ export default {
 .accLogin{
   font-family: 'Sarasa UI';
   height: 80px;
-  margin: 30px 40px;
+  margin: 10px 40px 30px;
   font-size: 30px;
   background: $color-bgcolor;
   border-radius:30px;

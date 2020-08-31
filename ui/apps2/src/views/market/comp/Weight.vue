@@ -1,13 +1,7 @@
 <template>
   <div :class="`weight ${handleGetClass(thisMarket.mid)}` ">
     <div class="noPools" @click="handleToSymbolPools">
-      <div class="flexb mb10" v-if="Number(buff)">
-        <!-- <div class="flexa">
-          <span class="flexa">
-            <img class="buffImg" src="@/assets/img/poolspage/buff.svg">
-            <span>{{ $t('mine.mineBuff') }}： {{ buff }}%</span>
-          </span>
-        </div> -->
+      <div class="flexb mb10" v-if="Number(buff) && showAddPools">
         <div class="green" v-loading="joinLoading" v-if="showAddPools" @click.stop="handleJoin">{{ $t('mine.joinNow') }}</div>
       </div>
       <div class="hasPools flexb mb10">
@@ -379,7 +373,7 @@ export default {
 <style lang="scss" scoped>
 .weight{
   background: #FFF;
-  padding: 40px;
+  padding: 20px 40px;
   margin-top: 40px;
   border: 1px solid #e0e0e0;
   border-radius: 20px;

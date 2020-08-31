@@ -79,7 +79,7 @@ export default {
     coinDecimal: '币种精度',
     plsCoinDecimal: '输入币种精度',
     submit: '创建',
-    createFeeTip: '为了维护良好的交易环境，避免因为无成本上币，而导致的垃圾币横生。创建新的交易对，需要消耗50 DFS。',
+    createFeeTip: '为了维护良好的交易环境，避免因为无成本上币，而导致的垃圾币横生。创建新的交易对，需要消耗1 DFS。',
     // add
     ableGet: '可兑',
     minGet: '至少获取',
@@ -208,6 +208,18 @@ export default {
     testData: '页面数据均为测试数据。预估开放日九月八。可能提前或延迟。',
     dfsHolders: 'DFS 家人', // DFS Holders
     total: '总数', // Total
+  },
+  market: {
+    capital: '做市本金',
+    anthorOne: '请重新发起一笔做市操作',
+    rightNow: '立即操作',
+    marketReward: '做市盈亏',
+    has: '含{coin}',
+    manage: '管理',
+    myMarkets: '我的做市',
+    marketTime: '做市时长',
+    timer: '{days}天{hours}时{mins}分{secs}秒',
+    pl: '盈亏',
   },
   miningRules: {
     rules: '挖矿规则',
