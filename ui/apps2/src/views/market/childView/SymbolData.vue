@@ -67,6 +67,21 @@
               <img class="changeImg" v-else src="@/assets/img/dex/price_switch_icon_green_right.svg" alt="">
             </span>
           </div>
+          <div class="flexa">
+            <span>{{ $t('market.marketTime') }}: </span>
+            <span>{{ $t('market.timer', {
+                days: marketTime.days,
+                hours: marketTime.hours,
+                mins: marketTime.minutes,
+                secs: marketTime.seconds
+              }) }}</span>
+            <span class="tip">（{{ $t('market.pl') }}: 
+              <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
+                {{ percent }}%
+              </span>）
+            </span>
+            <!-- <span>{{ JSON.stringify(marketTime) }}</span> -->
+          </div>
         </div>
         <div :class="`tipDiv ${handleGetClass(thisMarket.mid)}`">
           <div class="">
@@ -125,7 +140,7 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealReward,
+import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, getMarketTime,
          dealMinerData, perDayReward, getPoolApr, getClass } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
@@ -167,6 +182,12 @@ export default {
       direction: true,
       nowMarket: {}, // 实时做市资金
       nowMarketLoading: true,
+      marketTime: {
+        days: 0,
+        hours: '00',
+        minutes: '00',
+        seconds: '00'
+      }
     }
   },
   props: {
@@ -178,6 +199,9 @@ export default {
     }
   },
   watch: {
+    sTime() {
+      this.handleGetTime()
+    },
     marketLists: {
       handler: function ml(newVal) {
         if (!newVal.length) {
@@ -270,6 +294,19 @@ export default {
       }
       const reward = sym0 + sym1 / price;
       return toFixed(reward, this.thisMarket.decimal0)
+    },
+    percent() {
+      if (!this.marketData.length || !Number(this.nowMarket.getNum1)) {
+        return '0.0000';
+      }
+      const sym0 = accSub(parseFloat(this.nowMarket.getNum1), this.marketData[0]);
+      const sym1 = accSub(parseFloat(this.nowMarket.getNum2), this.marketData[1]);
+      const price = accDiv(parseFloat(this.nowMarket.getNum2), parseFloat(this.nowMarket.getNum1));
+      const reward = sym0 + sym1 / price;
+      let mD = accMul(this.marketData[0], 2)
+      let p = accDiv(reward, mD)
+      p = accMul(p, 100);
+      return toFixed(p, 2)
     }
   },
   mounted() {
@@ -284,6 +321,22 @@ export default {
     })
   },
   methods: {
+    handleGetTime() {
+      clearTimeout(this.timer)
+      if (Number(this.sTime)) {
+        this.marketTime = getMarketTime(this.sTime)
+        this.timer = setTimeout(() => {
+          this.handleGetTime()
+        }, 1000);
+        return
+      }
+      this.marketTime = {
+        days: 0,
+        hours: '00',
+        minutes: '00',
+        seconds: '00'
+      }
+    },
     handleGetAccToken() {
       const params = {
         code: this.baseConfig.toAccountSwap,
@@ -326,12 +379,13 @@ export default {
       axios.get('https://dfsinfoapi.sgxiang.com/dapi/changelogdata', {params}).then((result) => {
         const res = result.data;
         this.marketData = [];
+        this.sTime = '0'
         if (!result.data.logs.length) {
           return
         }
         const newArr = []
         for (const key in res) {
-          if (key !== 'logs') {
+          if (key !== 'logs' && key !== 'tag_log_format_block_time' && key !== 'tag_log_utc_block_time') {
             if (key !== 'EOS') {
               newArr.push(toFixed(res[key], this.thisMarket.decimal1 || 4))
             } else {
@@ -339,6 +393,7 @@ export default {
             }
           }
         }
+        this.sTime = res.tag_log_utc_block_time
         this.marketData = newArr;
       })
     },

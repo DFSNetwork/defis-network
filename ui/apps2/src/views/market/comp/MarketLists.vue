@@ -7,6 +7,7 @@
       <div class="noData" v-loading="!getToken" v-if="!dealLists.length">{{ $t('public.noData') }}</div>
       <div v-for="(item, index) in dealLists" :key="index">
         <MarketData :thisMarket="item" :token="item.token" :capital="item.capital" :isList="true"
+          :startTime="item.startTime"
           @listenToMarket="handleToMarket"/>
       </div>
     </div>
@@ -128,19 +129,11 @@ export default {
       }
       axios.get('https://dfsinfoapi.sgxiang.com/dapi/changelogdata', {params}).then((result) => {
         const res = result.data;
-        const newArr = []
-        for (const key in res) {
-          if (key !== 'logs') {
-            if (key !== v.symbol0) {
-              newArr.push(res[key])
-            } else {
-              newArr.unshift(res[key])
-            }
-          }
-        }
+        const newArr = [res[v.symbol0], res[v.symbol1]];
         this.lists.push(Object.assign(v, {
           token,
           capital: newArr,
+          startTime: res.tag_log_utc_block_time
         }))
       })
     },
