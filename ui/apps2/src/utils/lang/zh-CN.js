@@ -220,6 +220,7 @@ export default {
     marketTime: '做市时长',
     timer: '{days}天{hours}时{mins}分{secs}秒',
     pl: '盈亏',
+    marketTip: '做市本金数据可能延迟1 - 3分钟，请稍后查看。', //The market-making principal data may be delayed by 1-3 minutes, please check later.
   },
   miningRules: {
     rules: '挖矿规则',

@@ -32,6 +32,7 @@
           <img class="changeImg" v-if="direction" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
           <img class="changeImg" v-else src="@/assets/img/dex/price_switch_icon_green_right.svg" alt="">
         </span>
+        <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
       </div>
       <div class="flexa">
         <span>{{ $t('market.marketTime') }}: </span>
@@ -49,6 +50,12 @@
         <!-- <span>{{ JSON.stringify(marketTime) }}</span> -->
       </div>
     </div>
+
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showMarketTip">
+      <MarketTip v-if="showMarketTip"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -57,7 +64,11 @@ import axios from "axios";
 import { mapState } from 'vuex';
 import { toFixed, accSub, accMul, accDiv, getClass, getMarketTime } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
+import MarketTip from '../popup/MarketTip';
 export default {
+  components: {
+    MarketTip
+  },
   props: {
     token: {
       type: String,
@@ -97,7 +108,8 @@ export default {
         hours: '00',
         minutes: '00',
         seconds: '00'
-      }
+      },
+      showMarketTip: false
     }
   },
   mounted() {
@@ -278,6 +290,11 @@ export default {
     .maxW{
       max-width: 420px;
     }
+    .qusTip{
+      padding: 0 0 0 10px;
+      width: 30px;
+      font-size: 24px;
+    }
   }
   .symbolInfo{
     .imgCoin{
@@ -286,6 +303,18 @@ export default {
     }
     .and{
       margin: 0 20px;
+    }
+  }
+}
+.myDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 590px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
     }
   }
 }
