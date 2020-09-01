@@ -219,6 +219,7 @@ export default {
     marketTime: 'Time',
     timer: '{days}D {hours}H:{mins}M:{secs}S',
     pl: 'P&L',
+    marketTip: 'The market-making principal data may be delayed by 1-3 minutes, please check later.',
   },
   miningRules: {
     rules: 'Mining rules',
