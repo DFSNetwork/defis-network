@@ -80,7 +80,27 @@ const sys = {
       // bronze: []
       silver: [5, 17, 309],
       bronze: [4]
-    }
+    },
+    dsrPools: [{
+      "id": 1,
+      "bonus": "1.05000000000000004",
+      "refund_delay_sec": 2592000
+    },
+    {
+      "id": 2,
+      "bonus": "1.10000000000000009",
+      "refund_delay_sec": 7776000
+    },
+    {
+      "id": 3,
+      "bonus": "1.19999999999999996",
+      "refund_delay_sec": 15552000
+    },
+    {
+      "id": 4,
+      "bonus": "1.50000000000000000",
+      "refund_delay_sec": 31104000
+    }]
   },
   mutations: {
     SET_BASECONFIG: (state, baseConfig) => {

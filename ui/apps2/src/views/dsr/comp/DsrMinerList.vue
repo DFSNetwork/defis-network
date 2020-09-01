@@ -8,12 +8,22 @@
     <template v-for="(item, index) in minersArr">
       <div class="list" :key="index">
         <div class="flexb mb10">
-          <span>{{ item.miner }}</span>
-          <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
+          <span>{{ item.holder }}</span>
+          <span class="flexc">
+            <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
+            <span class="addition flexa" v-if="Number(item.buff)">
+              <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
+              <span>{{ item.buff }}%</span>
+            </span>
+          </span>
+        </div>
+        <div class="flexb mb10">
+          <span>存款时间</span>
+          <span>{{ item.inTime }}</span>
         </div>
         <div class="flexb">
           <span>{{ $t('dex.pools') }}</span>
-          <span>{{ parseFloat(item.liq_bal1).toFixed(4) }} DFS</span>
+          <span>{{ item.bal }}</span>
         </div>
       </div>
     </template>
@@ -30,9 +40,10 @@
 </template>
 
 <script>
-// import { mapState } from 'vuex';
+import { mapState } from 'vuex';
+import moment from 'moment';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accAdd, accDiv, dealReward, dealMinerData } from '@/utils/public';
+import { toFixed, accAdd, accMul, toLocalTime } from '@/utils/public';
 import Mock from 'mockjs';
 export default {
   name: 'dsrMinerList',
@@ -44,13 +55,19 @@ export default {
       pageSize: 10,
       page: 1,
       timerArr: [],
-      weight: 1.2,
+      args: '0',
       mock: null,
     }
   },
+  computed: {
+    ...mapState({
+      dsrPools: state => state.sys.dsrPools,
+    }),
+  },
   mounted() {
-    this.handlMock();
-    // this.handleGetMinersLists()
+    // this.handlMock();
+    this.handleGetList()
+    this.handleGetArgs()
   },
   methods: {
     handlMock() {
@@ -70,6 +87,54 @@ export default {
       // 输出结果
       // console.log(this.mock)
     },
+    handleGetArgs() {
+      const params = {
+        "code": "dfsdsrsystem",
+        "scope": "dfsdsrsystem",
+        "table": "args",
+        "json": true,
+      }
+      EosModel.getTableRows(params, (res) => {
+        if (!res.rows.length) {
+          return
+        }
+        this.args = res.rows[0];
+        this.handleRunReward()
+        console.log(this.args)
+      })
+    },
+    handleGetList() {
+      const params = {
+        "code": "dfsdsrsystem",
+        "scope": "dfsdsrsystem",
+        "table": "holders",
+        "index_position": 2,
+        "key_type": "i64",
+        // "lower_bound": ` ${this.inviAcc}`,
+        // "upper_bound": ` ${this.inviAcc}`,
+        "json": true,
+      }
+      EosModel.getTableRows(params, (res) => {
+        this.loading = false;
+        if (!res.rows.length) {
+          this.allMinersList = []
+          return
+        }
+        const allList = res.rows;
+        const buff = [0, 0.05, 0.1, 0.2, 0.5]
+        allList.forEach((v) => {
+          let accApr = accMul(5, buff[Number(v.pool)]);
+          this.$set(v, 'buff', accApr);
+          accApr = accAdd(5, accApr);
+          this.$set(v, 'accApr', accApr);
+          const inTime = toLocalTime(`${v.last_drip}.000+0000`)
+          this.$set(v, 'inTime', inTime);
+        })
+        this.allMinersList = allList.reverse();
+        this.handleGetPageArr();
+        console.log(allList)
+      })
+    },
     handleCurrentChange() {
       this.handleGetPageArr();
     },
@@ -79,65 +144,12 @@ export default {
       this.minersArr = this.allMinersList.slice(start, end);
       this.handleRunReward()
     },
-
-    handleGetMinersLists(type) {
-      const params = {
-        "code": "miningpool11",
-        "scope": 39,
-        "table": "miners",
-        // "lower_bound": " dfsdeveloper",
-        // "upper_bound": " dfsdeveloper",
-        limit: 1000,
-        "json": true,
-      }
-      if (type === 'user') {
-        params.lower_bound = ` ${this.scatter.identity.accounts[0].name}`;
-        params.upper_bound = ` ${this.scatter.identity.accounts[0].name}`;
-      }
-      EosModel.getTableRows(params, (res) => {
-        if (type === 'user') {
-          this.getAccData = true;
-        } else {
-          this.getMinersList = true;
-        }
-        const rows = res.rows || []
-        if (!rows.length) {
-          this.accMineData = {};
-          return
-        }
-        const newList = [];
-        rows.forEach(item => {
-          let v = item;
-          const minnerData = dealMinerData(v, this.thisMarket)
-          // console.log(minnerData)
-          if (type === 'user') {
-            this.accMineData = minnerData;
-            return;
-          }
-          // if (this.scatter.identity && this.scatter.identity.accounts[0].name === v.miner) {
-          //   return
-          // }
-          newList.push(minnerData)
-        })
-        if (type === 'user') {
-          this.handleRunAccReward()
-          return
-        }
-        const newListSort = newList.sort((a, b) => {
-          return b.liq - a.liq;
-        })
-        console.log(newListSort)
-        try {
-          this.allMinersList = newListSort;
-          this.handleGetPageArr();
-        } catch (error) {
-          console.log(error)
-        }
-      })
-    },
     // 秒级定时器
     handleRunReward() {
       clearInterval(this.secTimer)
+      if (!this.minersArr.length || !Number(this.args.aprs) || !this.dsrPools.length) {
+        return
+      }
       this.handleRunLogic()
       this.secTimer = setInterval(() => {
         this.handleRunLogic()
@@ -149,31 +161,24 @@ export default {
         if (this.timerArr[index]) {
           clearInterval(this.timerArr[index]);
         }
-        if (!Number(v.liq)) {
+        if (!parseFloat(v.bal)) {
           this.timerArr[index] = null;
           return
         }
-        const reward = dealReward(v, this.weight)
-        let showReward = v.reward || '0.00000000';
-        let countReward = showReward;
-        if (!v.showReward) {
-          this.$set(v, 'showReward', reward)
-          showReward = reward;
-          countReward = reward;
+        // v.ableRedeemDate = toLocalTime(`${v.rex_maturity}.000+0000`);
+        //   const redeemTime = moment(v.ableRedeemDate).valueOf(); // 解锁时间
+        //   const nowTime = moment().valueOf(); // 当前时间
+        let userTime = toLocalTime(`${v.last_drip}.000+0000`)
+        userTime = moment(userTime).valueOf();
+        const nowTime = moment().valueOf(); // 当前时间
+        const t = (nowTime - userTime) / 1000;
+        let reward = parseFloat(v.bal) * Math.pow(this.args.aprs, t) - parseFloat(v.bal)
+        if (v.pool) {
+          const pool = this.dsrPools.find(vv => vv.id === v.pool)
+          reward = reward * pool.bonus;
         }
         this.$set(v, 'reward', reward)
-        let t = accSub(reward, showReward);
-        t = accDiv(t, 20)
-        this.timerArr[index] = setInterval(() => {
-          countReward = accAdd(countReward, t)
-          if (countReward > Number(reward)) {
-            showReward = toFixed(reward, 8);
-            clearInterval(this.timerArr[index])
-          } else {
-            showReward = toFixed(countReward, 8);
-          }
-          this.$set(v, 'showReward', showReward);
-        }, 50);
+        this.$set(v, 'showReward', toFixed(reward, 8))
       })
     },
   }
@@ -219,6 +224,15 @@ export default {
     padding: 20px;
     .mb10{
       margin-bottom: 10px;
+    }
+    .addition{
+      font-size: 24px;
+      color: #E9574F;
+      line-height: 40px;
+      margin-left: 10px;
+    }
+    .buffImg{
+      width: 20px;
     }
   }
   .noData{

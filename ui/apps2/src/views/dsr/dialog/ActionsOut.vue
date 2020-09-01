@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { EosModel } from '@/utils/eos';
 import { toFixed } from '@/utils/public';
 export default {
   data() {
@@ -62,7 +63,37 @@ export default {
       n > 0 ? this.payNum = toFixed(n, 4) : this.payNum = '';
     },
     handleWithdraw() {
-      console.log(this.payNum)
+      const formName = this.$store.state.app.scatter.identity.accounts[0].name;
+      const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
+      const params = {
+        actions: [
+          {
+            account: 'dfsdsrsystem',
+            name: 'withdraw',
+            authorization: [{
+              actor: formName, // 转账者
+              permission,
+            }],
+            data: {
+              user: formName,
+              quantity: `${this.payNum} DFS`,
+            }
+          },
+        ]
+      }
+      EosModel.toTransaction(params, (res) => {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
     }
   },
 }

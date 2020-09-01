@@ -4,13 +4,13 @@
       <div @click="showMyDeposit = true">
         <div class="flexa header">
           <!-- <div>币种</div> -->
-          <div>{{ $t('dsr.myDeposit') }}(DFS)</div>
+          <div>{{ $t('dsr.myDeposit') }}</div>
           <div>{{ $t('dsr.percent') }}</div>
           <div></div>
         </div>
         <div class="flexb content">
           <div>
-            0.0000
+            {{ myDepositInfo.bal || '0.0000 DFS'}}
           </div>
           <div>
             0.00%
@@ -19,8 +19,8 @@
       </div>
       <div class="flexb tools">
         <div class="flexa">
-          <div class="btn flexc" @click.stop="listenShowUnOpen">{{ $t('dsr.deposit') }}</div>
-          <div class="btn backBtn flexc" @click.stop="listenShowUnOpen">{{ $t('dsr.retrieve') }}</div>
+          <div class="btn flexc" @click.stop="showActionsIn = true">{{ $t('dsr.deposit') }}</div>
+          <div class="btn backBtn flexc" @click.stop="showActionsOut = true">{{ $t('dsr.retrieve') }}</div>
         </div>
       </div>
     </div>
@@ -45,6 +45,9 @@
 
 <script>
 import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
+// import moment from 'moment';
+import { accAdd, accMul, toLocalTime } from '@/utils/public';
 import ActionsIn from '../dialog/ActionsIn';
 import ActionsOut from '../dialog/ActionsOut';
 import MyDeposit from '../dialog/MyDeposit';
@@ -57,26 +60,64 @@ export default {
   },
   data() {
     return {
-      showActionsIn: true,
+      showActionsIn: false,
       showActionsOut: false,
       showMyDeposit: false,
+      myDepositInfo: {},
     }
   },
   computed: {
     ...mapState({
       // 箭头函数可使代码更简练
-      // baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-      weightList: state => state.sys.weightList, // 交易对权重列表
-      aprs: state => state.sys.aprs,
-      damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
-      dfsPrice: state => state.sys.dfsPrice,
+      dsrPools: state => state.sys.dsrPools,
     }),
   },
+  watch: {
+    scatter: {
+      handler: function listen(newVal) {
+        if (newVal.identity) {
+          this.handleGetList()
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
   methods: {
+    handleGetList() {
+      const formName = this.$store.state.app.scatter.identity.accounts[0].name;
+      const params = {
+        "code": "dfsdsrsystem",
+        "scope": "dfsdsrsystem",
+        "table": "holders",
+        "lower_bound": ` ${formName}`,
+        "upper_bound": ` ${formName}`,
+        "json": true,
+      }
+      EosModel.getTableRows(params, (res) => {
+        this.loading = false;
+        if (!res.rows.length) {
+          this.myDepositInfo = {}
+          return
+        }
+        const allList = res.rows;
+        const buff = [0, 0.05, 0.1, 0.2, 0.5]
+        allList.forEach((v) => {
+          let accApr = accMul(5, buff[Number(v.pool)]);
+          this.$set(v, 'buff', accApr);
+          accApr = accAdd(5, accApr);
+          this.$set(v, 'accApr', accApr);
+          const inTime = toLocalTime(`${v.last_drip}.000+0000`)
+          this.$set(v, 'inTime', inTime);
+        })
+        this.myDepositInfo = allList[0];
+        console.log(this.myDepositInfo)
+      })
+    },
     listenShowUnOpen() {
       this.$emit('listenShowUnOpen')
-    }
+    },
   },
 }
 </script>

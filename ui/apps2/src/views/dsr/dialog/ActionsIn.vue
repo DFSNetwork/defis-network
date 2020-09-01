@@ -65,7 +65,7 @@
       append-to-body
       :show-close="false"
       :visible="showSure">
-      <ActionsInSure @listenClose="handleClose"/>
+      <ActionsInSure @listenClose="handleClose" @listenSure="handleTransfer"/>
     </el-dialog>
   </div>
 </template>
@@ -86,7 +86,7 @@ export default {
       payNum: '',
       balance: '0.0000',
       apr: 5,
-      showSure: true,
+      showSure: false,
       thisMarket: {
         symbol: 'DFS',
         contract: 'minedfstoken',
@@ -164,12 +164,12 @@ export default {
     // 铸币
     handleTransfer() {
       this.loading = true;
-      const memo = 'mint';
+      const memo = `deposit:${Number(this.value)}`;
       const params = {
-        code: this.thisMarket.contract,
-        toAccount: 'iq3rwbsfcqlv',
+        code: 'minedfstoken',
+        toAccount: 'dfsdsrsystem',
         memo,
-        quantity: `${this.payNum} ${this.thisMarket.symbol}`
+        quantity: `${this.payNum} DFS`
       }
       EosModel.transfer(params, (res) => {
         this.loading = false;
@@ -182,6 +182,7 @@ export default {
         }
         this.payNum = '';
         this.handleBalanTimer();
+        this.showSure = false;
         this.$message({
           message: this.$t('public.success'),
           type: 'success'

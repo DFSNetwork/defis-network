@@ -25,7 +25,7 @@
     </div>
     <div class="btnDiv flexb">
       <div class="btn flexc cancel" @click="handleClose">取消</div>
-      <div class="btn flexc sure">确认</div>
+      <div class="btn flexc sure" @click="handleSure">确认</div>
     </div>
   </div>
 </template>
@@ -46,6 +46,9 @@ export default {
   methods: {
     handleClose() {
       this.$emit('listenClose')
+    },
+    handleSure() {
+      this.$emit('listenSure', true)
     }
   },
 }

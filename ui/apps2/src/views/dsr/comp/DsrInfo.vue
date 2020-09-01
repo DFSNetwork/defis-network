@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-loading="loading">
     <div class="banner">
       <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
       <div class="bannerTitle">DFS Saving System</div>
@@ -12,7 +12,7 @@
           </div>
         </div>
         <div class="right">
-          <div>{{ maxPerDayReward }}</div>
+          <div>{{ perDayReward }}</div>
           <div class="tip bonus">
             <span>{{ $t('mine.wRewaed', {coin: 'DFS'}) }} (DFS)</span>
           </div>
@@ -33,23 +33,21 @@
 </template>
 
 <script>
-import axios from 'axios';
+// import axios from 'axios';
+import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
-import { toFixed, accSub, accAdd } from '@/utils/public';
+import { toFixed, accMul, accDiv } from '@/utils/public';
 
 export default {
   data() {
     return {
       lockDfs: '0.0000',
-      maxPerDayReward: '0.0000',
       ableUse: '0.0000',
       ableClaimNum: '0.0000',
-
-      runTimer: null, // 数据滚动定时器
-      getTimer: null, // axios定时器
-      current: '0.0000',
-      showCurrent: '0.0000',
-      loading: false,
+      timer: null,
+      lockLoading: true,
+      stockLoading: true,
+      claimLoading: true,
     }
   },
   props: {
@@ -59,53 +57,67 @@ export default {
       // 箭头函数可使代码更简练
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
     }),
+    perDayReward() {
+      let wDfs = accMul(10000, 0.05);
+      wDfs = accDiv(wDfs, 365);
+      return toFixed(wDfs, 4)
+    },
+    loading() {
+      return this.lockLoading && this.stockLoading && this.claimLoading;
+    }
   },
   watch: {
   },
   mounted() {
+    this.handleTimer()
   },
   beforeDestroy() {
     clearInterval(this.getTimer)
     clearInterval(this.runTimer)
   },
   methods: {
-    // 获取DFS流通量 - 全局区一次
-    async handleGetDfsCurrent() {
-      const https = this.baseConfig.node.url;
+    handleTimer() {
+      this.handleGetDfsBalance('lock')
+      this.handleGetDfsBalance('stock')
+      this.handleGetDfsBalance('claim')
+      clearTimeout(this.timer);
+      this.timer = setTimeout(() => {
+        this.handleTimer()
+      }, 10000)
+    },
+    // 获取DFS锁定量
+    handleGetDfsBalance(type) {
       const params = {
         code: 'minedfstoken',
-        symbol: 'DFS'
+        coin: 'DFS',
+        decimal: 4,
+      };
+      if (type === 'lock') {
+        params.account = 'dfsdsrsystem';
       }
-      const result = await axios.post(`${https}/v1/chain/get_currency_stats`, JSON.stringify(params))
-      this.loading = false;
-      if (result.status !== 200) {
-        return;
+      if (type === 'stock') {
+        params.account = 'dfsavingpool';
       }
-      const res = result.data['DFS'];
-      const supply = res.supply.split(' ')[0];
-
-      this.current = supply;
-      this.handleRun(this.current)
-    },
-    handleRun(current) {
-      clearInterval(this.runTimer)
-      if (!Number(this.showCurrent)) {
-        this.showCurrent = current;
+      if (type === 'claim') {
+        params.account = 'dfsdsrbuffer';
       }
-      let tShowCurrent = this.showCurrent;
-      let t = accSub(current, tShowCurrent) / 100;
-      if (t < 0) {
-        return
-      }
-      this.runTimer = setInterval(() => {
-        tShowCurrent = accAdd(tShowCurrent, t);
-        if (tShowCurrent > current) {
-          clearInterval(this.runTimer)
-          return
+      EosModel.getCurrencyBalance(params, res => {
+        let balance = toFixed('0.000000001', params.decimal);
+        (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
+        if (type === 'lock') {
+          this.lockLoading = false;
+          this.lockDfs = balance;
         }
-        this.showCurrent = toFixed(tShowCurrent, 4);
-      }, 50)
-    }
+        if (type === 'stock') {
+          this.stockLoading = false;
+          this.ableUse = balance;
+        }
+        if (type === 'claim') {
+          this.claimLoading = false;
+          this.ableClaimNum = balance;
+        }
+      })
+    },
   },
 }
 </script>
