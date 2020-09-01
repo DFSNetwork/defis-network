@@ -74,6 +74,9 @@ export default {
       this.loading = false;
     },
     handleShowTip() {
+      if (this.loading) {
+        return
+      }
       this.loading = true;
       if (this.params.endDate) {
         this.showTimeTip = true;

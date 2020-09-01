@@ -81,6 +81,7 @@ export default {
       runTimer: null,
       allLock: '0.0000',
       timesmap: 0,
+      allClaim: false,
     }
   },
   mounted() {
@@ -109,7 +110,10 @@ export default {
       }, 5000);
     },
     handleClaimAll() {
-      // this.showUnOpen = true;
+      if (this.allClaim) {
+        return
+      }
+      this.allClaim = true;
       const formName = this.$store.state.app.scatter.identity.accounts[0].name;
       const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
       const params = {
@@ -128,6 +132,7 @@ export default {
         ]
       }
       EosModel.toTransaction(params, (res) => {
+        this.allClaim = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
@@ -170,7 +175,6 @@ export default {
         "json": true,
       }
       EosModel.getTableRows(params, (res) => {
-        this.loading = false;
         if (!res.rows.length) {
           this.myDepositInfo = {}
           return

@@ -29,7 +29,7 @@
       </div>
     </div>
     <div class="btnDiv">
-      <div class="btn flexc" @click="handleWithdraw">确认</div>
+      <div class="btn flexc" v-loading="loading" @click="handleWithdraw">确认</div>
     </div>
   </div>
 </template>
@@ -49,6 +49,7 @@ export default {
         decimal: 4,
         imgUrl: 'https://ndi.340wan.com/eos/minedfstoken-dfs.png'
       },
+      loading: false,
     }
   },
   props: {
@@ -87,6 +88,9 @@ export default {
       return true;
     },
     handleWithdraw() {
+      if (this.loading) {
+        return
+      }
       if (!this.handleReg()) {
         return
       }
@@ -108,7 +112,9 @@ export default {
           },
         ]
       }
+      this.loading = true;
       EosModel.toTransaction(params, (res) => {
+        this.loading = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,
