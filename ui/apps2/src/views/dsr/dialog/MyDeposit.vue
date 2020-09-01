@@ -20,7 +20,7 @@
       </div>
       <div class="item">
         <span>到期时间：</span>
-        <span v-if="myDepositInfo.isRelease" class="warn">{{myDepositInfo.releaseTime || '-'}}</span>
+        <span v-if="!myDepositInfo.isRelease" class="warn">{{myDepositInfo.releaseTime || '-'}}</span>
         <span v-else>随存随取</span>
       </div>
     </div>
