@@ -1,6 +1,6 @@
 <template>
   <div class="dsr">
-    <dsr-info :args="args" @listenAllLock="listenAllLock"/>
+    <dsr-info :args="args" :timesmap="timesmap" @listenAllLock="listenAllLock"/>
     <div class="allClaim flexb">
       <div>
         <div class="subTitle flexa">
@@ -13,9 +13,9 @@
         <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">领取</div>
       </div>
     </div>
-    <dsr-list :args="args" @listenShowUnOpen="handleClaimAll"
+    <dsr-list :args="args" @listenUpdate="listenUpdate"
               :myDepositInfo="myDepositInfo" :allLock="allLock"/>
-    <dsr-miner-list :args="args"/>
+    <dsr-miner-list :args="args" :timesmap="timesmap"/>
 
     <el-dialog
       class="myDialog"
@@ -35,7 +35,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
-import { toFixed, accAdd, accMul, toLocalTime } from '@/utils/public';
+import { toFixed, accAdd, accSub, accMul, accDiv, toLocalTime, countdown } from '@/utils/public';
 import MinReward from '@/views/market/popup/MinReward'
 import DsrInfo from './comp/DsrInfo';
 import DsrList from './comp/DsrList';
@@ -78,7 +78,9 @@ export default {
       args: {},
       argsTimer: null,
       secTimer: null,
+      runTimer: null,
       allLock: '0.0000',
+      timesmap: 0,
     }
   },
   mounted() {
@@ -86,8 +88,16 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.secTimer)
+    clearInterval(this.runTimer)
+    clearInterval(this.argsTimer)
   },
   methods: {
+    listenUpdate() {
+      this.timesmap = Date.parse(new Date());
+      this.handleArgsTimer();
+      this.handleGetList()
+      console.log('update')
+    },
     listenAllLock(balan) {
       this.allLock = balan;
     },
@@ -177,6 +187,8 @@ export default {
           const releaseTime = toLocalTime(`${v.release_time}.000+0000`)
           this.$set(v, 'releaseTime', releaseTime);
           this.$set(v, 'balance', v.bal.split(' ')[0]);
+          const endT = countdown(releaseTime);
+          this.$set(v, 'isRelease', endT.total < 0);
         })
         this.myDepositInfo = allList[0];
         this.handleRunReward()
@@ -194,17 +206,38 @@ export default {
       }, 1000);
     },
     handleRunLogic() {
+      clearInterval(this.runTimer)
       let userTime = toLocalTime(`${this.myDepositInfo.last_drip}.000+0000`)
       userTime = moment(userTime).valueOf();
       const nowTime = moment().valueOf(); // 当前时间
-      const t = (nowTime - userTime) / 1000;
-      let reward = parseFloat(this.myDepositInfo.bal) * Math.pow(this.args.aprs, t) - parseFloat(this.myDepositInfo.bal)
+      const time = (nowTime - userTime) / 1000;
+      let reward = parseFloat(this.myDepositInfo.bal) * Math.pow(this.args.aprs, time) - parseFloat(this.myDepositInfo.bal)
       if (this.myDepositInfo.pool) {
         const pool = this.dsrPools.find(vv => vv.id === this.myDepositInfo.pool)
         reward = reward * pool.bonus;
       }
-      this.$set(this.myDepositInfo, 'reward', reward)
-      this.$set(this.myDepositInfo, 'showReward', toFixed(reward, 8))
+      reward = toFixed(reward, 8)
+      const v = this.myDepositInfo;
+      let showReward = v.reward || '0.00000000';
+        let countReward = showReward;
+        if (!v.showReward) {
+          this.$set(v, 'showReward', reward)
+          showReward = reward;
+          countReward = reward;
+        }
+        this.$set(v, 'reward', reward)
+        let t = accSub(reward, showReward);
+        t = accDiv(t, 20)
+        this.runTimer = setInterval(() => {
+          countReward = accAdd(countReward, t)
+          if (countReward > Number(reward)) {
+            showReward = toFixed(reward, 8);
+            clearInterval(this.runTimer)
+          } else {
+            showReward = toFixed(countReward, 8);
+          }
+          this.$set(v, 'showReward', showReward);
+        }, 50);
     },
   }
 }

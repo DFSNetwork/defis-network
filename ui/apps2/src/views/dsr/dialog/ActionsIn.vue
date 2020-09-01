@@ -224,6 +224,7 @@ export default {
       EosModel.transfer(params, (res) => {
         this.loading = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.handleClose();
           this.$message({
             message: res.message,
             type: 'error'
@@ -233,6 +234,7 @@ export default {
         this.payNum = '';
         this.handleBalanTimer();
         this.showSure = false;
+        this.$emit('listenClose', true)
         this.$message({
           message: this.$t('public.success'),
           type: 'success'

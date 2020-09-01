@@ -17,13 +17,12 @@
           </div>
           <div class="inputDiv">
             <el-input class="elIpt" type="number" v-model="payNum" placeholder="0.0"
-              @input="handleInBy('pay')"
               @focus="handleFocus('pay')"
               @blur="handleBlur('pay')"></el-input>
           </div>
         </div>
       </div>
-      <div class="flexc allTip" v-if="!isRelease">
+      <div class="flexc allTip" v-if="!myDepositInfo.isRelease">
         <!-- <span>已存入: 10000.0000 DFS</span>
         <span>未到期: 9000.0000 DFS ></span> -->
         到期时间：{{myDepositInfo.releaseTime}}
@@ -37,7 +36,7 @@
 
 <script>
 import { EosModel } from '@/utils/eos';
-import { toFixed, countdown } from '@/utils/public';
+import { toFixed } from '@/utils/public';
 export default {
   data() {
     return {
@@ -61,17 +60,8 @@ export default {
     }
   },
   computed: {
-    isRelease() {
-      if (!this.myDepositInfo.releaseTime) {
-        return true
-      }
-      const endT = countdown(this.myDepositInfo.releaseTime)
-      return endT.total < 0
-    }
   },
   methods: {
-    handleInBy() {
-    },
     handleFocus() {
       const n = Number(this.payNum);
       n > 0 ? this.payNum = n : this.payNum = '';
@@ -87,7 +77,7 @@ export default {
       if (!Number(this.payNum)) {
         return false
       }
-      if (!this.isRelease) {
+      if (!this.myDepositInfo.isRelease) {
         return false;
       }
       if (Number(this.myDepositInfo.balance) < Number(this.payNum)) {
@@ -126,6 +116,7 @@ export default {
           });
           return
         }
+        this.$emit('listenClose', true)
         this.$message({
           message: this.$t('public.success'),
           type: 'success'

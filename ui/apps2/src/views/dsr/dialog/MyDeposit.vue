@@ -20,7 +20,8 @@
       </div>
       <div class="item">
         <span>到期时间：</span>
-        <span>2{{myDepositInfo.releaseTime || '-'}}</span>
+        <span v-if="myDepositInfo.isRelease" class="warn">{{myDepositInfo.releaseTime || '-'}}</span>
+        <span v-else>随存随取</span>
       </div>
     </div>
   </div>
@@ -49,6 +50,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.warn{
+  color: #f5a623;
+}
 .myDeposit{
   padding: 40px;
   color: #000;

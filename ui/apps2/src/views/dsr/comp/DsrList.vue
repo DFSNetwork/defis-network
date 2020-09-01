@@ -28,12 +28,12 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showActionsIn">
-      <ActionsIn :myDepositInfo="myDepositInfo" :yearApr="yearApr"/>
+      <ActionsIn :myDepositInfo="myDepositInfo" :yearApr="yearApr" @listenClose="handleClose"/>
     </el-dialog>
     <el-dialog
       class="myDialog"
       :visible.sync="showActionsOut">
-      <ActionsOut :myDepositInfo="myDepositInfo"/>
+      <ActionsOut :myDepositInfo="myDepositInfo" @listenClose="handleClose"/>
     </el-dialog>
     <el-dialog
       class="myDialog"
@@ -44,10 +44,10 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
-import { EosModel } from '@/utils/eos';
+// import { mapState } from 'vuex';
+// import { EosModel } from '@/utils/eos';
 // import moment from 'moment';
-import { toFixed, accAdd, accMul, accDiv, toLocalTime } from '@/utils/public';
+import { toFixed, accMul, accDiv } from '@/utils/public';
 import ActionsIn from '../dialog/ActionsIn';
 import ActionsOut from '../dialog/ActionsOut';
 import MyDeposit from '../dialog/MyDeposit';
@@ -84,11 +84,6 @@ export default {
     }
   },
   computed: {
-    ...mapState({
-      // 箭头函数可使代码更简练
-      scatter: state => state.app.scatter,
-      dsrPools: state => state.sys.dsrPools,
-    }),
     yearApr() {
       let apr = Math.pow(this.args.aprs, 86400 * 365) - 1
       apr = apr * 100;
@@ -101,47 +96,11 @@ export default {
       return toFixed(rate, 2)
     }
   },
-  watch: {
-    scatter: {
-      handler: function listen(newVal) {
-        if (newVal.identity) {
-          // this.handleGetList()
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
-  },
   methods: {
-    handleGetList() {
-      const formName = this.$store.state.app.scatter.identity.accounts[0].name;
-      const params = {
-        "code": "dfsdsrsystem",
-        "scope": "dfsdsrsystem",
-        "table": "holders",
-        "lower_bound": ` ${formName}`,
-        "upper_bound": ` ${formName}`,
-        "json": true,
-      }
-      EosModel.getTableRows(params, (res) => {
-        this.loading = false;
-        if (!res.rows.length) {
-          this.myDepositInfo = {}
-          return
-        }
-        const allList = res.rows;
-        const buff = [0, 0.05, 0.1, 0.2, 0.5]
-        allList.forEach((v) => {
-          let accApr = accMul(5, buff[Number(v.pool)]);
-          this.$set(v, 'buff', accApr);
-          accApr = accAdd(5, accApr);
-          this.$set(v, 'accApr', accApr);
-          const inTime = toLocalTime(`${v.last_drip}.000+0000`)
-          this.$set(v, 'inTime', inTime);
-        })
-        this.myDepositInfo = allList[0];
-        console.log(this.myDepositInfo)
-      })
+    handleClose() {
+      this.showActionsIn = false;
+      this.showActionsOut = false;
+      this.$emit('listenUpdate', true)
     },
     listenShowUnOpen() {
       this.$emit('listenShowUnOpen')

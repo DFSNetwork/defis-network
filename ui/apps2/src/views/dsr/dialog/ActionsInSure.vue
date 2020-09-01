@@ -18,22 +18,40 @@
         <span>总计：</span>
         <span>{{ params.total || '0.0000' }} DFS</span>
       </div>
-      <div class="item" v-if="params.endDate">
+      <div class="item warn" v-if="params.endDate">
         <span>预计到期时间：</span>
         <span>{{ params.endDate }}</span>
       </div>
     </div>
     <div class="btnDiv flexb">
       <div class="btn flexc cancel" @click="handleClose">取消</div>
-      <div class="btn flexc sure" @click="handleSure">确认</div>
+      <div class="btn flexc sure" v-loading="loading" @click="handleShowTip">确认</div>
     </div>
+
+    <el-dialog
+      class="myDialog"
+      append-to-body
+      :show-close="false"
+      :visible="showTimeTip">
+      <div class="timeTip">
+        <div class="title">温馨提示</div>
+        <div>确认存款后，您的DFS将于<span class="warn">{{ params.endDate }}</span>解锁，期间无法取回存款！请谨慎操作！</div>
+        <div class="btnDiv flexb">
+          <div class="btn flexc cancel" @click="handleCancel">取消</div>
+          <div class="btn flexc sure" @click="handleSure">确认</div>
+        </div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 export default {
   data() {
-    return {}
+    return {
+      showTimeTip: false,
+      loading: false,
+    }
   },
   props: {
     params: {
@@ -48,13 +66,32 @@ export default {
       this.$emit('listenClose')
     },
     handleSure() {
+      this.showTimeTip = false;
       this.$emit('listenSure', true)
+    },
+    handleCancel() {
+      this.showTimeTip = false;
+      this.loading = false;
+    },
+    handleShowTip() {
+      this.loading = true;
+      if (this.params.endDate) {
+        this.showTimeTip = true;
+        return
+      }
+      this.handleSure()
     }
   },
 }
 </script>
 
 <style lang="scss" scoped>
+.red{
+  color: #c05d5d;
+}
+.warn{
+  color: #f5a623;
+}
 .preview{
   padding: 40px;
   color: #000;
@@ -86,28 +123,51 @@ export default {
       }
     }
   }
-  .btnDiv{
-    margin: 40px 0 0;
-    font-size: 32px;
-    // font-weight: 500;
-    .btn{
-      flex: 1;
-      height: 88px;
-      background:rgba(7,215,155,1);
-      border-radius:30px;
-      color: #fff;
-      &:first-child{
-        margin-right: 8px;
-        background: #FFF;
-        color: $color-tip;
-        border: 1px solid #e3e3e3;
-        &:active{
-          background: linear-gradient(#eee, #ededed);
-        }
-      }
+}
+
+.btnDiv{
+  margin: 40px 0 0;
+  font-size: 32px;
+  // font-weight: 500;
+  .btn{
+    flex: 1;
+    height: 88px;
+    background:rgba(7,215,155,1);
+    border-radius:30px;
+    color: #fff;
+    &:first-child{
+      margin-right: 8px;
+      background: #FFF;
+      color: $color-tip;
+      border: 1px solid #e3e3e3;
       &:active{
-        background:rgba(2,198,152,1);
+        background: linear-gradient(#eee, #ededed);
       }
+    }
+    &:active{
+      background:rgba(2,198,152,1);
+    }
+  }
+}
+.myDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 650px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+    }
+  }
+  .timeTip{
+    font-size: 28px;
+    padding: 40px;
+    .title{
+      text-align: center;
+      font-size: 32px;
+      color: #f5a623;
+      margin-bottom: 20px;
     }
   }
 }

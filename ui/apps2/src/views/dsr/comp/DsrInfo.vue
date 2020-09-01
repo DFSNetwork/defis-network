@@ -66,6 +66,10 @@ export default {
       default: function a() {
         return {}
       }
+    },
+    timesmap: {
+      type: Number,
+      default: 0,
     }
   },
   computed: {
@@ -88,14 +92,16 @@ export default {
     },
   },
   watch: {
+    timesmap() {
+      this.handleNextUpdataTime()
+      this.handleTimer()
+    }
   },
   mounted() {
     this.handleNextUpdataTime()
     this.handleTimer()
   },
   beforeDestroy() {
-    clearInterval(this.getTimer)
-    clearInterval(this.runTimer)
     clearTimeout(this.secTimer)
   },
   methods: {
@@ -104,7 +110,7 @@ export default {
         "code": "dfsdsrsystem",
         "scope": "dfsdsrsystem",
         "table": "allocates",
-        "limit": 1000,
+        "limit": 10,
         "json": true,
         "reverse": true
       }

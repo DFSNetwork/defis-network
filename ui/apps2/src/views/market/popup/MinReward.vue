@@ -3,7 +3,7 @@
     <div class="title">{{ $t('mine.minAbleReward') }}</div>
     <div class="mb10">{{ $t('mine.minReward', {minReward: minReward}) }}</div>
     <div class="mb10">{{ $t('mine.rewardCut') }}</div>
-    <div>{{ $t('mine.rewardPrice') }}</div>
+    <div v-if="$route.name !== 'dsr'">{{ $t('mine.rewardPrice') }}</div>
   </div>
 </template>
 

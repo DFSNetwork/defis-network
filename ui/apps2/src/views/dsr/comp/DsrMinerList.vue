@@ -43,7 +43,7 @@
 import { mapState } from 'vuex';
 import moment from 'moment';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accAdd, accMul, toLocalTime } from '@/utils/public';
+import { toFixed, accAdd, accSub, accMul, accDiv, toLocalTime } from '@/utils/public';
 import Mock from 'mockjs';
 export default {
   name: 'dsrMinerList',
@@ -64,6 +64,10 @@ export default {
       default: function a() {
         return {}
       }
+    },
+    timesmap: {
+      type: Number,
+      default: 0,
     }
   },
   computed: {
@@ -74,12 +78,13 @@ export default {
   watch: {
     args() {
       this.handleRunReward()
+    },
+    timesmap() {
+      this.handleGetList()
     }
   },
   mounted() {
-    // this.handlMock();
     this.handleGetList()
-    // this.handleGetArgs()
   },
   methods: {
     handlMock() {
@@ -181,14 +186,34 @@ export default {
         let userTime = toLocalTime(`${v.last_drip}.000+0000`)
         userTime = moment(userTime).valueOf();
         const nowTime = moment().valueOf(); // 当前时间
-        const t = (nowTime - userTime) / 1000;
-        let reward = parseFloat(v.bal) * Math.pow(this.args.aprs, t) - parseFloat(v.bal)
+        const times = (nowTime - userTime) / 1000;
+        let reward = parseFloat(v.bal) * Math.pow(this.args.aprs, times) - parseFloat(v.bal)
         if (v.pool) {
           const pool = this.dsrPools.find(vv => vv.id === v.pool)
           reward = reward * pool.bonus;
         }
+        reward = toFixed(reward, 8)
+
+        let showReward = v.reward || '0.00000000';
+        let countReward = showReward;
+        if (!v.showReward) {
+          this.$set(v, 'showReward', reward)
+          showReward = reward;
+          countReward = reward;
+        }
         this.$set(v, 'reward', reward)
-        this.$set(v, 'showReward', toFixed(reward, 8))
+        let t = accSub(reward, showReward);
+        t = accDiv(t, 20)
+        this.timerArr[index] = setInterval(() => {
+          countReward = accAdd(countReward, t)
+          if (countReward > Number(reward)) {
+            showReward = toFixed(reward, 8);
+            clearInterval(this.timerArr[index])
+          } else {
+            showReward = toFixed(countReward, 8);
+          }
+          this.$set(v, 'showReward', showReward);
+        }, 50);
       })
     },
   }
