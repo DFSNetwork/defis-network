@@ -172,8 +172,13 @@ export function toBrowser(id, chain, type) {
 }
 
 // 倒计时
-export function countdown(endtime) {
-  let t = Date.parse(endtime.replace(/-/g, '/')) - Date.parse(new Date());
+export function countdown(endtime, istamp) {
+  let t;
+  if (!istamp) {
+    t = Date.parse(endtime.replace(/-/g, '/')) - Date.parse(new Date());
+  } else {
+    t = endtime * 1000 - Date.parse(new Date());
+  }
   const days = Math.floor(t / (1000 * 60 * 60 * 24));
   let hours = Math.floor((t / (1000 * 60 * 60)) % 24); // 不累加天数的小时
   // let hours = Math.floor((t / (1000 * 60 * 60))); // 累加天数的小时

@@ -4,23 +4,23 @@
     <div class="content">
       <div class="item">
         <span>我的存款：</span>
-        <span>10000.0000 DFS</span>
+        <span>{{ myDepositInfo.bal || '0.0000 DFS' }}</span>
       </div>
-      <div class="item">
+      <!-- <div class="item">
         <span>已得利息：</span>
         <span>2.1234 DFS</span>
-      </div>
+      </div> -->
       <div class="item">
         <span>年化：</span>
-        <span>6%</span>
+        <span>{{ yearApr }}%</span>
       </div>
       <div class="item">
         <span>存款占比：</span>
-        <span>0.3%</span>
+        <span>{{ rate }}%</span>
       </div>
       <div class="item">
         <span>到期时间：</span>
-        <span>2020-11-28 12:12</span>
+        <span>2{{myDepositInfo.releaseTime || '-'}}</span>
       </div>
     </div>
   </div>
@@ -29,6 +29,22 @@
 <script>
 export default {
   name: 'myDeposit',
+  props: {
+    myDepositInfo: {
+      type: Object,
+      default: function md() {
+        return {}
+      }
+    },
+    yearApr: {
+      type: String,
+      default: '5.00'
+    },
+    rate: {
+      type: String,
+      default: '0.00'
+    }
+  }
 }
 </script>
 
@@ -53,12 +69,12 @@ export default {
       justify-content: center;
 
       &>span{
-        flex: 1;
-        max-width: 50%;
+        flex: 3;
         height: 50px;
         display: flex;
         align-items: center;
         &:first-child{
+          flex: 2;
           justify-content: flex-end;
         }
       }

@@ -1,6 +1,6 @@
 <template>
   <div class="dsr">
-    <dsr-info />
+    <dsr-info :args="args" @listenAllLock="listenAllLock"/>
     <div class="allClaim flexb">
       <div>
         <div class="subTitle flexa">
@@ -10,10 +10,11 @@
         <div class="claimNum">{{myDepositInfo.showReward || '0.00000000'}} DFS</div>
       </div>
       <div class="flexb">
-        <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">{{ $t('mine.claimAll') }}</div>
+        <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">领取</div>
       </div>
     </div>
-    <dsr-list @listenShowUnOpen="handleClaimAll" :myDepositInfo="myDepositInfo"/>
+    <dsr-list :args="args" @listenShowUnOpen="handleClaimAll"
+              :myDepositInfo="myDepositInfo" :allLock="allLock"/>
     <dsr-miner-list :args="args"/>
 
     <el-dialog
@@ -75,16 +76,28 @@ export default {
       showUnOpen: false,
       myDepositInfo: {},
       args: {},
+      argsTimer: null,
       secTimer: null,
+      allLock: '0.0000',
     }
   },
   mounted() {
-    this.handleGetArgs();
+    this.handleArgsTimer();
   },
   beforeDestroy() {
     clearInterval(this.secTimer)
   },
   methods: {
+    listenAllLock(balan) {
+      this.allLock = balan;
+    },
+    handleArgsTimer() {
+      clearTimeout(this.argsTimer)
+      this.handleGetArgs();
+      this.argsTimer = setTimeout(() => {
+        this.handleArgsTimer()
+      }, 5000);
+    },
     handleClaimAll() {
       // this.showUnOpen = true;
       const formName = this.$store.state.app.scatter.identity.accounts[0].name;
@@ -161,6 +174,9 @@ export default {
           this.$set(v, 'accApr', accApr);
           const inTime = toLocalTime(`${v.last_drip}.000+0000`)
           this.$set(v, 'inTime', inTime);
+          const releaseTime = toLocalTime(`${v.release_time}.000+0000`)
+          this.$set(v, 'releaseTime', releaseTime);
+          this.$set(v, 'balance', v.bal.split(' ')[0]);
         })
         this.myDepositInfo = allList[0];
         this.handleRunReward()

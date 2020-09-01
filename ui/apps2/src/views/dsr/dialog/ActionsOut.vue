@@ -23,10 +23,11 @@
           </div>
         </div>
       </div>
-      <!-- <div class="flexb tip allTip">
-        <span>已存入: 10000.0000 DFS</span>
-        <span>未到期: 9000.0000 DFS ></span>
-      </div> -->
+      <div class="flexc allTip" v-if="!isRelease">
+        <!-- <span>已存入: 10000.0000 DFS</span>
+        <span>未到期: 9000.0000 DFS ></span> -->
+        到期时间：{{myDepositInfo.releaseTime}}
+      </div>
     </div>
     <div class="btnDiv">
       <div class="btn flexc" @click="handleWithdraw">确认</div>
@@ -36,7 +37,7 @@
 
 <script>
 import { EosModel } from '@/utils/eos';
-import { toFixed } from '@/utils/public';
+import { toFixed, countdown } from '@/utils/public';
 export default {
   data() {
     return {
@@ -59,6 +60,12 @@ export default {
       }
     }
   },
+  computed: {
+    isRelease() {
+      const endT = countdown(this.myDepositInfo.releaseTime)
+      return endT.total < 0
+    }
+  },
   methods: {
     handleInBy() {
     },
@@ -70,7 +77,26 @@ export default {
       const n = Number(this.payNum);
       n > 0 ? this.payNum = toFixed(n, 4) : this.payNum = '';
     },
+    handleClickBalan() {
+      this.payNum = this.myDepositInfo.balance || '0.0000';
+    },
+    handleReg() {
+      if (!Number(this.payNum)) {
+        return false
+      }
+      if (!this.isRelease) {
+        return false;
+      }
+      if (Number(this.myDepositInfo.balance) < Number(this.payNum)) {
+        this.$message.error('存款余额不足')
+        return false
+      }
+      return true;
+    },
     handleWithdraw() {
+      if (!this.handleReg()) {
+        return
+      }
       const formName = this.$store.state.app.scatter.identity.accounts[0].name;
       const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
       const params = {
@@ -206,12 +232,13 @@ export default {
     }
   }
   .allTip{
+    font-size: 28px;
     margin: 20px 0;
-    
+    color: #f5a623;
   }
 }
 .btnDiv{
-  margin: 40px 0 0;
+  margin: 30px 0 0;
   font-size: 32px;
   font-weight: 500;
   .btn{

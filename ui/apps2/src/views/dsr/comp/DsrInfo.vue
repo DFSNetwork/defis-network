@@ -8,24 +8,26 @@
         <div class="left">
           <div>{{ lockDfs }}</div>
           <div class="tip flexb bonus">
-            <span>{{ $t('mine.lockFunds') }} (DFS)</span>
+            <span>总存款 (DFS)</span>
           </div>
         </div>
         <div class="right">
-          <div>{{ perDayReward }}</div>
+          <div>{{ yearApr }}%</div>
           <div class="tip bonus">
-            <span>{{ $t('mine.wRewaed', {coin: 'DFS'}) }} (DFS)</span>
+            <span>实时年化</span>
           </div>
         </div>
       </div>
     </div>
     <div class="miningInfo flexb" v-loading="loading">
       <div class="miningData">
-        <div class="tip">{{ $t('dsr.ableInve') }}</div>
+        <div class="tip">总库存</div>
         <div class="num">{{ ableUse }} DFS</div>
       </div>
       <div class="miningData">
-        <div class="tip">{{ $t('dsr.claimPerDay') }}</div>
+        <div class="tip">分配池余额
+          <span>({{ `${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}` }})</span>
+        </div>
         <div class="num">{{ ableClaimNum }} DFS</div>
       </div>
     </div>
@@ -36,7 +38,7 @@
 // import axios from 'axios';
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
-import { toFixed, accMul, accDiv } from '@/utils/public';
+import { toFixed, accMul, accDiv, countdown } from '@/utils/public';
 
 export default {
   data() {
@@ -44,13 +46,27 @@ export default {
       lockDfs: '0.0000',
       ableUse: '0.0000',
       ableClaimNum: '0.0000',
+      nextTime: 0,
       timer: null,
       lockLoading: true,
       stockLoading: true,
       claimLoading: true,
+      timeObj: {
+        days: 0,
+        hours: '00',
+        minutes: '00',
+        seconds: '00'
+      },
+      secTimer: null,
     }
   },
   props: {
+    args: {
+      type: Object,
+      default: function a() {
+        return {}
+      }
+    }
   },
   computed: {
     ...mapState({
@@ -64,18 +80,56 @@ export default {
     },
     loading() {
       return this.lockLoading && this.stockLoading && this.claimLoading;
-    }
+    },
+    yearApr() {
+      let apr = Math.pow(this.args.aprs, 86400 * 365) - 1
+      apr = apr * 100;
+      return toFixed(apr, 2)
+    },
   },
   watch: {
   },
   mounted() {
+    this.handleNextUpdataTime()
     this.handleTimer()
   },
   beforeDestroy() {
     clearInterval(this.getTimer)
     clearInterval(this.runTimer)
+    clearTimeout(this.secTimer)
   },
   methods: {
+    handleNextUpdataTime() {
+      const params = {
+        "code": "dfsdsrsystem",
+        "scope": "dfsdsrsystem",
+        "table": "allocates",
+        "limit": 1000,
+        "json": true,
+        "reverse": true
+      }
+      EosModel.getTableRows(params, (res) => {
+        if (!res.rows.length) {
+          return
+        }
+        const rows = res.rows[0]
+        let nextTime = rows.key;
+        nextTime = nextTime + (60 * 60 * 8)
+        this.nextTime = nextTime;
+        this.handleCutDown()
+      })
+    },
+    handleCutDown() {
+      clearTimeout(this.secTimer)
+      this.timeObj = countdown(this.nextTime, true)
+      if (this.timeObj.total <= 0) {
+        this.handleNextUpdataTime();
+        return
+      }
+      this.secTimer = setTimeout(() => {
+        this.handleCutDown()
+      }, 1000);
+    },
     handleTimer() {
       this.handleGetDfsBalance('lock')
       this.handleGetDfsBalance('stock')
@@ -107,10 +161,13 @@ export default {
         if (type === 'lock') {
           this.lockLoading = false;
           this.lockDfs = balance;
+          this.$emit('listenAllLock', balance)
+          return
         }
         if (type === 'stock') {
           this.stockLoading = false;
           this.ableUse = balance;
+          return
         }
         if (type === 'claim') {
           this.claimLoading = false;

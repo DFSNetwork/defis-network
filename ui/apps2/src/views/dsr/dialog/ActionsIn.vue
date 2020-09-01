@@ -26,7 +26,7 @@
           <span>存款时间</span>
           <el-select
             class="select"
-            v-model="value" clearable placeholder="请选择"
+            v-model="value" placeholder="请选择"
             :popper-append-to-body="false"
             :popper-class="'mySelectItem'">
             <el-option
@@ -50,13 +50,13 @@
       <div class="subTitle">存款规则</div>
       <div class="rules">
         <div>存款时，可以选择存款时间，目前有以下五档可供选择</div>
-        <div class="subRules">
-          <div>1. 随存随取，年化5%</div>
-          <div>2. 1月，年化 5.25%</div>
-          <div>3. 3月，年化 5.5%</div>
-          <div>4. 6月，年化 6.0%</div>
-          <div>5. 1年，年化 7.5%</div>
-        </div>
+        <ul class="subRules">
+          <li>随存随取，年化{{handleApr(0)}}%</li>
+          <li>1月，年化 {{handleApr(1)}}%</li>
+          <li>3月，年化 {{handleApr(2)}}%</li>
+          <li>6月，年化 {{handleApr(3)}}%</li>
+          <li>1年，年化 {{handleApr(4)}}%</li>
+        </ul>
       </div>
       <div class="spcRules rules">*注：已有存款时只能选择同期或者更长的存款时间，且到期时间以最后一次存款时间计算。</div>
     </div>
@@ -73,7 +73,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accMul, accAdd, accDiv } from '@/utils/public';
+import { toFixed, accMul, accAdd, accDiv, toLocalTime } from '@/utils/public';
 import ActionsInSure from './ActionsInSure';
 
 export default {
@@ -95,22 +95,28 @@ export default {
       },
       options: [{
         value: '0',
-        label: '随存随取'
+        label: '随存随取',
+        day: '0',
       }, {
         value: '1',
-        label: '1月'
+        label: '1月',
+        day: '30',
       }, {
         value: '2',
-        label: '3月'
+        label: '3月',
+        day: '90',
       }, {
         value: '3',
-        label: '6月'
+        label: '6月',
+        day: '180',
       }, {
         value: '4',
-        label: '1年'
+        label: '1年',
+        day: '365',
       }],
       value: '0',
       sureData: {},
+      aboutReleasrDate: '',
     }
   },
   props: {
@@ -119,6 +125,10 @@ export default {
       default: function mdi() {
         return {}
       }
+    },
+    yearApr: {
+      type: String,
+      default: '5.00'
     }
   },
   computed: {
@@ -126,12 +136,7 @@ export default {
       scatter: state => state.app.scatter,
     }),
     timeApr() {
-      if (!this.value) {
-        return this.apr;
-      }
-      const buff = [0, 0.05, 0.1, 0.2, 0.5]
-      const newApr = accMul(this.apr, buff[Number(this.value)]);
-      return accAdd(newApr, this.apr)
+      return this.handleApr(this.value);
     },
     aboutNum() {
       let about = accMul(this.timeApr, Number(this.payNum));
@@ -149,8 +154,35 @@ export default {
       deep: true,
       immediate: true,
     },
+    value: {
+      handler: function listen() {
+        this.handleDealDate()
+      },
+      deep: true,
+      immediate: true,
+    }
   },
   methods: {
+    handleDealDate() {
+      if (this.value === '0') {
+        this.aboutReleasrDate = '';
+        return
+      }
+      const curDate = (new Date()).getTime();
+      let addTime = this.options[Number(this.value)].day;
+      addTime = addTime * 24 * 3600 * 1000;
+      const threeMonths = curDate + addTime;
+      this.aboutReleasrDate = toLocalTime(threeMonths);
+    },
+    handleApr(value) {
+      if (!Number(value)) {
+        return this.yearApr;
+      }
+      const buff = [0, 0.05, 0.1, 0.2, 0.5]
+      let newApr = accMul(this.yearApr, buff[Number(value)]);
+      newApr = accAdd(newApr, this.yearApr)
+      return toFixed(newApr, 2)
+    },
     handleClose() {
       this.showSure = false;
     },
@@ -163,7 +195,7 @@ export default {
         dateLong: this.options[Number(this.value)].label,
         hasNum: this.myDepositInfo.bal,
         total,
-        endDate: '2020-09-01',
+        endDate: this.aboutReleasrDate.substr(0, 10),
       }
     },
     handleInBy() {
@@ -363,7 +395,7 @@ export default {
       padding-bottom: 0;
     }
     .subRules{
-      padding: 5px 0 5px 20px;
+      padding: 5px 0 5px 40px;
     }
   }
   .spcRules{

@@ -18,9 +18,9 @@
         <span>总计：</span>
         <span>{{ params.total || '0.0000' }} DFS</span>
       </div>
-      <div class="item">
+      <div class="item" v-if="params.endDate">
         <span>预计到期时间：</span>
-        <span>{{ params.endDate || '2020-11-27' }}</span>
+        <span>{{ params.endDate }}</span>
       </div>
     </div>
     <div class="btnDiv flexb">

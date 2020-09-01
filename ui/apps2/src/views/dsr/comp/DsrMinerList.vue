@@ -22,7 +22,7 @@
           <span>{{ item.inTime }}</span>
         </div>
         <div class="flexb">
-          <span>{{ $t('dex.pools') }}</span>
+          <span>存款</span>
           <span>{{ item.bal }}</span>
         </div>
       </div>
@@ -144,7 +144,7 @@ export default {
         })
         this.allMinersList = allList.reverse();
         this.handleGetPageArr();
-        console.log(allList)
+        // console.log(allList)
       })
     },
     handleCurrentChange() {

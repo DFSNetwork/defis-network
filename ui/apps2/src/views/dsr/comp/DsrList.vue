@@ -1,26 +1,26 @@
 <template>
   <div class="dsrList">
-    <div class="list flexb">
-      <div @click="showMyDeposit = true">
-        <div class="flexa header">
-          <!-- <div>币种</div> -->
-          <div>{{ $t('dsr.myDeposit') }}</div>
-          <div>{{ $t('dsr.percent') }}</div>
-          <div></div>
-        </div>
-        <div class="flexb content">
-          <div>
-            {{ myDepositInfo.bal || '0.0000 DFS'}}
-          </div>
-          <div>
-            0.00%
-          </div>
-        </div>
-      </div>
+    <div class="list">
       <div class="flexb tools">
+        <div class="coinName">DFS Bank</div>
         <div class="flexa">
           <div class="btn flexc" @click.stop="showActionsIn = true">{{ $t('dsr.deposit') }}</div>
           <div class="btn backBtn flexc" @click.stop="showActionsOut = true">{{ $t('dsr.retrieve') }}</div>
+        </div>
+      </div>
+      <div class="flexb header" @click="showMyDeposit = true">
+        <div>
+          <div class="mb10">{{ $t('dsr.myDeposit') }}(DFS)</div>
+          <div>
+            <span>{{ myDepositInfo.balance || '0.0000'}} </span>
+            <span class="tip">({{rate}}%)</span>
+          </div>
+        </div>
+        <div>
+          <div class="mb10">到期时间</div>
+          <div>
+            {{myDepositInfo.releaseTime || '-'}}
+          </div>
         </div>
       </div>
     </div>
@@ -28,7 +28,7 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showActionsIn">
-      <ActionsIn :myDepositInfo="myDepositInfo"/>
+      <ActionsIn :myDepositInfo="myDepositInfo" :yearApr="yearApr"/>
     </el-dialog>
     <el-dialog
       class="myDialog"
@@ -38,7 +38,7 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showMyDeposit">
-      <MyDeposit />
+      <MyDeposit :myDepositInfo="myDepositInfo" :yearApr="yearApr" :rate="rate"/>
     </el-dialog>
   </div>
 </template>
@@ -47,7 +47,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 // import moment from 'moment';
-import { accAdd, accMul, toLocalTime } from '@/utils/public';
+import { toFixed, accAdd, accMul, accDiv, toLocalTime } from '@/utils/public';
 import ActionsIn from '../dialog/ActionsIn';
 import ActionsOut from '../dialog/ActionsOut';
 import MyDeposit from '../dialog/MyDeposit';
@@ -71,6 +71,16 @@ export default {
       default: function md() {
         return {}
       }
+    },
+    args: {
+      type: Object,
+      default: function a() {
+        return {}
+      }
+    },
+    allLock: {
+      type: String,
+      default: '0.0000'
     }
   },
   computed: {
@@ -79,6 +89,17 @@ export default {
       scatter: state => state.app.scatter,
       dsrPools: state => state.sys.dsrPools,
     }),
+    yearApr() {
+      let apr = Math.pow(this.args.aprs, 86400 * 365) - 1
+      apr = apr * 100;
+      return toFixed(apr, 2)
+    },
+    rate() {
+      if (!Number(this.allLock)) return;
+      let rate = accDiv(parseFloat(this.myDepositInfo.balance), this.allLock)
+      rate = accMul(rate, 100);
+      return toFixed(rate, 2)
+    }
   },
   watch: {
     scatter: {
@@ -130,6 +151,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.mb10{
+  margin-bottom: 8px;
+}
 .dsrList{
   font-size: 28px;
   margin: 40px;
@@ -141,25 +165,22 @@ export default {
       margin-bottom: 10px;
       text-align: left;
       &>div{
-        // flex: 2;
-        &:first-child{
-          min-width: 200px;
-        }
-        &:nth-child(2){
-          min-width: 120px;
-          margin: 0 20px;
-        }
-        &:nth-child(3){
-          flex: 1;
-          text-align: right;
-        }
+        flex: 1;
       }
+    }
+    .tip{
+      font-size: 24px
     }
     .content{
       margin-bottom: 0;
     }
     .tools{
-      justify-content: flex-end;
+      margin-bottom: 20px;
+      .coinName{
+        font-size: 40px;
+        font-weight: 500;
+        color: rgba(2,198,152,1);
+      }
       .btn{
         font-size: 24px;
         background:rgba(7,215,155,1);
