@@ -55,8 +55,15 @@ export default {
       pageSize: 10,
       page: 1,
       timerArr: [],
-      args: '0',
       mock: null,
+    }
+  },
+  props: {
+    args: {
+      type: Object,
+      default: function a() {
+        return {}
+      }
     }
   },
   computed: {
@@ -64,10 +71,15 @@ export default {
       dsrPools: state => state.sys.dsrPools,
     }),
   },
+  watch: {
+    args() {
+      this.handleRunReward()
+    }
+  },
   mounted() {
     // this.handlMock();
     this.handleGetList()
-    this.handleGetArgs()
+    // this.handleGetArgs()
   },
   methods: {
     handlMock() {
@@ -165,9 +177,6 @@ export default {
           this.timerArr[index] = null;
           return
         }
-        // v.ableRedeemDate = toLocalTime(`${v.rex_maturity}.000+0000`);
-        //   const redeemTime = moment(v.ableRedeemDate).valueOf(); // 解锁时间
-        //   const nowTime = moment().valueOf(); // 当前时间
         let userTime = toLocalTime(`${v.last_drip}.000+0000`)
         userTime = moment(userTime).valueOf();
         const nowTime = moment().valueOf(); // 当前时间

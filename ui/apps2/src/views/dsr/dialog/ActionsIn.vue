@@ -65,7 +65,7 @@
       append-to-body
       :show-close="false"
       :visible="showSure">
-      <ActionsInSure @listenClose="handleClose" @listenSure="handleTransfer"/>
+      <ActionsInSure :params="sureData" @listenClose="handleClose" @listenSure="handleTransfer"/>
     </el-dialog>
   </div>
 </template>
@@ -109,7 +109,16 @@ export default {
         value: '4',
         label: '1年'
       }],
-      value: '0'
+      value: '0',
+      sureData: {},
+    }
+  },
+  props: {
+    myDepositInfo: {
+      type: Object,
+      default: function mdi() {
+        return {}
+      }
     }
   },
   computed: {
@@ -147,6 +156,15 @@ export default {
     },
     handleShowSure() {
       this.showSure = true;
+      let total = accAdd(parseFloat(this.myDepositInfo.bal), this.payNum);
+      total = `${toFixed(total, 4)}`;
+      this.sureData = {
+        payNum: this.payNum,
+        dateLong: this.options[Number(this.value)].label,
+        hasNum: this.myDepositInfo.bal,
+        total,
+        endDate: '2020-09-01',
+      }
     },
     handleInBy() {
     },

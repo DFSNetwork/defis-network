@@ -5,7 +5,7 @@
       <div class="item">
         <div class="info flexb">
           <span class="type">币种</span>
-          <span @click="handleClickBalan('pay')">可用凭证: {{ token }}</span>
+          <span @click="handleClickBalan('pay')">存款余额: {{ myDepositInfo.bal }}</span>
         </div>
         <div class="iptDiv flexb">
           <div class="coinInfo flex">
@@ -23,10 +23,10 @@
           </div>
         </div>
       </div>
-      <div class="flexb tip allTip">
+      <!-- <div class="flexb tip allTip">
         <span>已存入: 10000.0000 DFS</span>
         <span>未到期: 9000.0000 DFS ></span>
-      </div>
+      </div> -->
     </div>
     <div class="btnDiv">
       <div class="btn flexc" @click="handleWithdraw">确认</div>
@@ -49,6 +49,14 @@ export default {
         decimal: 4,
         imgUrl: 'https://ndi.340wan.com/eos/minedfstoken-dfs.png'
       },
+    }
+  },
+  props: {
+    myDepositInfo: {
+      type: Object,
+      default: function mdi() {
+        return {}
+      }
     }
   },
   methods: {

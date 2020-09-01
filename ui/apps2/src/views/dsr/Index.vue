@@ -7,14 +7,14 @@
           <span>{{ $t('mine.waitClaim') }}</span>
           <img class="tipIcon ml10" @click="showReWardTip = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
         </div>
-        <div class="claimNum">{{allReward}} DFS</div>
+        <div class="claimNum">{{myDepositInfo.showReward || '0.00000000'}} DFS</div>
       </div>
       <div class="flexb">
         <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">{{ $t('mine.claimAll') }}</div>
       </div>
     </div>
-    <dsr-list @listenShowUnOpen="handleClaimAll"/>
-    <dsr-miner-list />
+    <dsr-list @listenShowUnOpen="handleClaimAll" :myDepositInfo="myDepositInfo"/>
+    <dsr-miner-list :args="args"/>
 
     <el-dialog
       class="myDialog"
@@ -32,6 +32,9 @@
 
 <script>
 import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
+import moment from 'moment';
+import { toFixed, accAdd, accMul, toLocalTime } from '@/utils/public';
 import MinReward from '@/views/market/popup/MinReward'
 import DsrInfo from './comp/DsrInfo';
 import DsrList from './comp/DsrList';
@@ -48,14 +51,20 @@ export default {
   },
   computed: {
     ...mapState({
-      // 箭头函数可使代码更简练
-      // baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-      weightList: state => state.sys.weightList, // 交易对权重列表
-      aprs: state => state.sys.aprs,
-      damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
-      dfsPrice: state => state.sys.dfsPrice,
+      dsrPools: state => state.sys.dsrPools,
     }),
+  },
+  watch: {
+    scatter: {
+      handler: function listen(newVal) {
+        if (newVal.identity) {
+          this.handleGetList()
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   data() {
     return {
@@ -63,12 +72,123 @@ export default {
       allReward: '0.00000000',
       minReward: '0.0001',
       showReWardTip: false,
-      showUnOpen: false
+      showUnOpen: false,
+      myDepositInfo: {},
+      args: {},
+      secTimer: null,
     }
+  },
+  mounted() {
+    this.handleGetArgs();
+  },
+  beforeDestroy() {
+    clearInterval(this.secTimer)
   },
   methods: {
     handleClaimAll() {
-      this.showUnOpen = true;
+      // this.showUnOpen = true;
+      const formName = this.$store.state.app.scatter.identity.accounts[0].name;
+      const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
+      const params = {
+        actions: [
+          {
+            account: 'dfsdsrsystem',
+            name: 'claim',
+            authorization: [{
+              actor: formName, // 转账者
+              permission,
+            }],
+            data: {
+              user: formName,
+            }
+          },
+        ]
+      }
+      EosModel.toTransaction(params, (res) => {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+        setTimeout(() => {
+          this.handleGetList();
+        }, 1000);
+      })
+    },
+    handleGetArgs() {
+      const params = {
+        "code": "dfsdsrsystem",
+        "scope": "dfsdsrsystem",
+        "table": "args",
+        "json": true,
+      }
+      EosModel.getTableRows(params, (res) => {
+        if (!res.rows.length) {
+          return
+        }
+        this.args = res.rows[0];
+        this.handleRunReward()
+      })
+    },
+    handleGetList() {
+      const formName = this.$store.state.app.scatter.identity.accounts[0].name;
+      const params = {
+        "code": "dfsdsrsystem",
+        "scope": "dfsdsrsystem",
+        "table": "holders",
+        "lower_bound": ` ${formName}`,
+        "upper_bound": ` ${formName}`,
+        "json": true,
+      }
+      EosModel.getTableRows(params, (res) => {
+        this.loading = false;
+        if (!res.rows.length) {
+          this.myDepositInfo = {}
+          return
+        }
+        const allList = res.rows;
+        const buff = [0, 0.05, 0.1, 0.2, 0.5]
+        allList.forEach((v) => {
+          let accApr = accMul(5, buff[Number(v.pool)]);
+          this.$set(v, 'buff', accApr);
+          accApr = accAdd(5, accApr);
+          this.$set(v, 'accApr', accApr);
+          const inTime = toLocalTime(`${v.last_drip}.000+0000`)
+          this.$set(v, 'inTime', inTime);
+        })
+        this.myDepositInfo = allList[0];
+        this.handleRunReward()
+      })
+    },
+    // 秒级定时器
+    handleRunReward() {
+      clearInterval(this.secTimer)
+      if (!this.myDepositInfo.holder || !Number(this.args.aprs) || !this.dsrPools.length) {
+        return
+      }
+      this.handleRunLogic()
+      this.secTimer = setInterval(() => {
+        this.handleRunLogic()
+      }, 1000);
+    },
+    handleRunLogic() {
+      let userTime = toLocalTime(`${this.myDepositInfo.last_drip}.000+0000`)
+      userTime = moment(userTime).valueOf();
+      const nowTime = moment().valueOf(); // 当前时间
+      const t = (nowTime - userTime) / 1000;
+      let reward = parseFloat(this.myDepositInfo.bal) * Math.pow(this.args.aprs, t) - parseFloat(this.myDepositInfo.bal)
+      if (this.myDepositInfo.pool) {
+        const pool = this.dsrPools.find(vv => vv.id === this.myDepositInfo.pool)
+        reward = reward * pool.bonus;
+      }
+      this.$set(this.myDepositInfo, 'reward', reward)
+      this.$set(this.myDepositInfo, 'showReward', toFixed(reward, 8))
     },
   }
 }

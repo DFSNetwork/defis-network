@@ -8,11 +8,11 @@
       </div>
       <div class="item">
         <span>存款时间：</span>
-        <span>{{ params.date || '3个月' }}</span>
+        <span>{{ params.dateLong || '3个月' }}</span>
       </div>
       <div class="item">
         <span>已有存款：</span>
-        <span>{{ params.hasNum || '0.0000' }} DFS</span>
+        <span>{{ params.hasNum || '0.0000' }}</span>
       </div>
       <div class="item">
         <span>总计：</span>
@@ -20,7 +20,7 @@
       </div>
       <div class="item">
         <span>预计到期时间：</span>
-        <span>{{ params.localDate || '2020-11-27' }}</span>
+        <span>{{ params.endDate || '2020-11-27' }}</span>
       </div>
     </div>
     <div class="btnDiv flexb">

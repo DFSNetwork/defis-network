@@ -28,12 +28,12 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showActionsIn">
-      <ActionsIn />
+      <ActionsIn :myDepositInfo="myDepositInfo"/>
     </el-dialog>
     <el-dialog
       class="myDialog"
       :visible.sync="showActionsOut">
-      <ActionsOut />
+      <ActionsOut :myDepositInfo="myDepositInfo"/>
     </el-dialog>
     <el-dialog
       class="myDialog"
@@ -63,7 +63,14 @@ export default {
       showActionsIn: false,
       showActionsOut: false,
       showMyDeposit: false,
-      myDepositInfo: {},
+    }
+  },
+  props: {
+    myDepositInfo: {
+      type: Object,
+      default: function md() {
+        return {}
+      }
     }
   },
   computed: {
@@ -77,7 +84,7 @@ export default {
     scatter: {
       handler: function listen(newVal) {
         if (newVal.identity) {
-          this.handleGetList()
+          // this.handleGetList()
         }
       },
       deep: true,
