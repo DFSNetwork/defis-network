@@ -62,6 +62,9 @@ export default {
   },
   computed: {
     isRelease() {
+      if (!this.myDepositInfo.releaseTime) {
+        return true
+      }
       const endT = countdown(this.myDepositInfo.releaseTime)
       return endT.total < 0
     }

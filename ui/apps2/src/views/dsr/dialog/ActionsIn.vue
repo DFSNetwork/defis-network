@@ -325,6 +325,7 @@ export default {
     }
     .time{
       margin: 20px 0 0;
+      font-size: 26px;
       .select{
         height: 60px
       }
@@ -336,7 +337,7 @@ export default {
         }
         .el-input__inner{
           height: 60px;
-          font-size: 16px;
+          font-size: 26px;
           text-align: right;
           width: 160px;
           border: 0px;
@@ -363,6 +364,7 @@ export default {
     }
   }
   .about{
+    font-size: 26px;
     margin: 20px;
     text-align: left;
   }
