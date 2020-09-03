@@ -477,10 +477,15 @@ export default {
     },
     handleDealRouteImg(item) {
       const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
+      const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed']
       const inData = item.toLowerCase().replace(':', '-')
       const has = localeCoin.find(v => v === inData)
       if (has) {
         return `/static/coin/${has}.svg`;
+      }
+      const hasPng = localCoinPng.find(v => v === inData);
+      if (!has && hasPng) {
+        return `/static/coin/${hasPng}.png`;
       }
       return `https://ndi.340wan.com/eos/${inData}.png`
     },
@@ -880,6 +885,8 @@ export default {
           width: 60px;
           height: 60px;
           margin-right: 10px;
+          border-radius: 60px;
+          overflow: hidden;
         }
         .coin{
           font-size: 28px;
@@ -1041,7 +1048,10 @@ export default {
   }
   .coinUrl{
     width: 60px;
+    height: 60px;
     margin-right: 10px;
+    border-radius: 60px;
+    overflow: hidden;
   }
 }
 

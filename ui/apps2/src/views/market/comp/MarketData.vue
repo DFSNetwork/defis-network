@@ -17,7 +17,7 @@
       </div>
       <div class="flex">
         <span>{{ $t('market.capital') }}: </span>
-        <span v-if="!marketData.length" class="tip maxW">
+        <span v-if="!marketData.length || !Number(marketData[0])" class="tip maxW">
           <span>{{ $t('market.anthorOne') }}</span>
           <!-- <span v-if="isList" class="green" @click="handleJoin">立即操作</span> -->
         </span>
@@ -153,7 +153,7 @@ export default {
       scatter: state => state.app.scatter,
     }),
     marketReward() {
-      if (!this.marketData.length || !this.nowMarket.getNum1) {
+      if (!this.marketData.length || !Number(this.marketData[0])  || !this.nowMarket.getNum1) {
         return '0.0000';
       }
       const sym0 = accSub(parseFloat(this.nowMarket.getNum1), this.marketData[0]);
@@ -299,7 +299,10 @@ export default {
   .symbolInfo{
     .imgCoin{
       width: 50px;
+      height: 50px;
       margin-right: 10px;
+      border-radius: 60px;
+      overflow: hidden;
     }
     .and{
       margin: 0 20px;
