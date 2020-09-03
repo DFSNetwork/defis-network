@@ -150,7 +150,7 @@ class swapRouter {
         return a.amount_in - b.amount_in;
       })
     }
-    console.log(amounts_out_arr)
+    // console.log(amounts_out_arr)
     this.bestPath = this._pathsArr[amounts_out_arr[0].mIndex]
     amounts_out_arr[0].bestPath = this.bestPath;
     return amounts_out_arr[0]
@@ -197,7 +197,7 @@ class swapRouter {
         price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
       }
       swapPrice = accDiv(amount_out, 10 ** market.sym1.split(",")[0]); // 计算总输出 - 不截取
-      console.log('1 ----- ', quantity_out, ' ------- ', price)
+      // console.log('1 ----- ', quantity_out, ' ------- ', price)
     }
     if (token_in === tokenB) {
       inNum = inNum / (10 ** market.sym1.split(",")[0]);
@@ -226,7 +226,7 @@ class swapRouter {
       }
       // console.log(reserve_out, reserve_in)
       swapPrice = accDiv(amount_out, 10 ** market.sym0.split(",")[0]); // 计算总输出 - 不截取
-      console.log('2 ----- ', quantity_out, ' ------- ', price)
+      // console.log('2 ----- ', quantity_out, ' ------- ', price)
     }
     let swapInPrice, swapOutPrice;
     if (!type) {
