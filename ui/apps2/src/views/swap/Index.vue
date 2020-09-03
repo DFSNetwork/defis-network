@@ -477,7 +477,7 @@ export default {
     },
     handleDealRouteImg(item) {
       const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
-      const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed']
+      const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb']
       const inData = item.toLowerCase().replace(':', '-')
       const has = localeCoin.find(v => v === inData)
       if (has) {
@@ -599,10 +599,10 @@ export default {
       const m1 = this.thisMarket1
       const params0 = `${m0.contract}:${m0.symbol}`
       const params1 = `${m1.contract}:${m1.symbol}`
-      const path = SwapRouter.get_paths(params0, params1)
+      const path = SwapRouter.get_paths(params0, params1, inData.type)
       const params = [
         path,
-        params0,
+        inData.type === 'pay' ? params0 : params1,
       ]
       if (inData.type === 'pay') {
         params.push(accMul(inData.payNum, 10 ** this.thisMarket0.decimal))
@@ -615,13 +615,13 @@ export default {
       const payNum = inData.type === 'pay' ? inData.payNum : res.quantity_out.split(' ')[0];
       const getNum = inData.type === 'pay' ? res.quantity_out.split(' ')[0] : inData.getNum;
       this.thisCoinsPath = res.bestPath;
-      this.thisMidsPath = res.mid;
+      this.thisMidsPath = inData.type === 'pay' ? res.mid : res.mid.split('-').reverse().join('-');
       let minOut = 0;
       // console.log('quantity_out - ', res.quantity_out)
       // console.log('price - ', res.price)
       // console.log('slipPointUser - ', inData.slipPointUser)
       // console.log('payNum - ', payNum)
-      minOut = res.price * (1 - inData.slipPointUser) * payNum;
+      minOut = res.price * (1 - inData.slipPointUser) * payNum * 0.997;
       minOut = toFixed(minOut, this.thisMarket1.decimal)
 
       let aboutPrice = res.swapOutPrice;
@@ -887,6 +887,7 @@ export default {
           margin-right: 10px;
           border-radius: 60px;
           overflow: hidden;
+          display: flex;
         }
         .coin{
           font-size: 28px;
