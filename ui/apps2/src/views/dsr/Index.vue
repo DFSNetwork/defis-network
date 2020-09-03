@@ -15,7 +15,7 @@
     </div>
     <dsr-list :args="args" @listenUpdate="listenUpdate"
               :myDepositInfo="myDepositInfo" :allLock="allLock"/>
-    <dsr-miner-list :args="args" :timesmap="timesmap"/>
+    <dsr-miner-list :args="args" :timesmap="timesmap" :allLock="allLock"/>
 
     <el-dialog
       class="myDialog"
@@ -35,7 +35,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
-import { toFixed, accAdd, accSub, accMul, accDiv, toLocalTime, countdown } from '@/utils/public';
+import { toFixed, accAdd, accSub, accDiv, toLocalTime, countdown } from '@/utils/public';
 import MinReward from '@/views/market/popup/MinReward'
 import DsrInfo from './comp/DsrInfo';
 import DsrList from './comp/DsrList';
@@ -69,7 +69,6 @@ export default {
   },
   data() {
     return {
-      allClaim: false,
       allReward: '0.00000000',
       minReward: '0.0001',
       showReWardTip: false,
@@ -180,9 +179,8 @@ export default {
           return
         }
         const allList = res.rows;
-        const buff = [0, 0.05, 0.1, 0.2, 0.5]
         allList.forEach((v) => {
-          let accApr = accMul(5, buff[Number(v.pool)]);
+          let accApr = this.handleYearApr(v)
           this.$set(v, 'buff', accApr);
           accApr = accAdd(5, accApr);
           this.$set(v, 'accApr', accApr);
@@ -197,6 +195,15 @@ export default {
         this.myDepositInfo = allList[0];
         this.handleRunReward()
       })
+    },
+    handleYearApr(item) {
+      let apr = Math.pow(this.args.aprs, 86400 * 365) - 1
+      apr = apr * 100;
+      if (item.pool) {
+        const pool = this.dsrPools.find(vv => vv.id === item.pool)
+        apr = apr * pool.bonus;
+      }
+      return toFixed(apr, 2)
     },
     // 秒级定时器
     handleRunReward() {

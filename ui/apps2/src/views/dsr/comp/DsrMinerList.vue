@@ -6,7 +6,7 @@
     </div>
     <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
     <template v-for="(item, index) in minersArr">
-      <div class="list" :key="index">
+      <div class="list" :key="index" @click="handleCheckItem(item)">
         <div class="flexb mb10">
           <span>{{ item.holder }}</span>
           <span class="flexc">
@@ -17,10 +17,10 @@
             </span>
           </span>
         </div>
-        <div class="flexb mb10">
+        <!-- <div class="flexb mb10">
           <span>存款时间</span>
           <span>{{ item.inTime }}</span>
-        </div>
+        </div> -->
         <div class="flexb">
           <span>存款</span>
           <span>{{ item.bal }}</span>
@@ -36,6 +36,12 @@
       :page-size="pageSize"
       :total="allMinersList.length">
     </el-pagination>
+
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showMyDeposit">
+      <MyDeposit :myDepositInfo="checkItem" :rate="checkItem.rate"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -43,10 +49,14 @@
 import { mapState } from 'vuex';
 import moment from 'moment';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accAdd, accSub, accMul, accDiv, toLocalTime } from '@/utils/public';
+import { toFixed, accAdd, accSub, accMul, accDiv, toLocalTime, countdown } from '@/utils/public';
 import Mock from 'mockjs';
+import MyDeposit from '../dialog/MyDeposit';
 export default {
   name: 'dsrMinerList',
+  components: {
+    MyDeposit
+  },
   data() {
     return {
       getMinersList: true,
@@ -56,6 +66,8 @@ export default {
       page: 1,
       timerArr: [],
       mock: null,
+      checkItem: {},
+      showMyDeposit: false,
     }
   },
   props: {
@@ -68,6 +80,10 @@ export default {
     timesmap: {
       type: Number,
       default: 0,
+    },
+    allLock: {
+      type: String,
+      default: '0.0000'
     }
   },
   computed: {
@@ -87,6 +103,16 @@ export default {
     this.handleGetList()
   },
   methods: {
+    handleCheckItem(item) {
+      this.checkItem = item;
+      this.showMyDeposit = true
+    },
+    handleRate(item) {
+      if (!Number(this.allLock)) return;
+      let rate = accDiv(parseFloat(item.balance), this.allLock)
+      rate = accMul(rate, 100);
+      return toFixed(rate, 2)
+    },
     handlMock() {
       this.mock = Mock.mock({
         // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
@@ -103,22 +129,6 @@ export default {
       this.handleGetPageArr();
       // 输出结果
       // console.log(this.mock)
-    },
-    handleGetArgs() {
-      const params = {
-        "code": "dfsdsrsystem",
-        "scope": "dfsdsrsystem",
-        "table": "args",
-        "json": true,
-      }
-      EosModel.getTableRows(params, (res) => {
-        if (!res.rows.length) {
-          return
-        }
-        this.args = res.rows[0];
-        this.handleRunReward()
-        console.log(this.args)
-      })
     },
     handleGetList() {
       const params = {
@@ -147,11 +157,28 @@ export default {
           this.$set(v, 'accApr', accApr);
           const inTime = toLocalTime(`${v.last_drip}.000+0000`)
           this.$set(v, 'inTime', inTime);
+          const releaseTime = toLocalTime(`${v.release_time}.000+0000`)
+          this.$set(v, 'releaseTime', releaseTime);
+          this.$set(v, 'balance', v.bal.split(' ')[0]);
+          const endT = countdown(releaseTime);
+          this.$set(v, 'isRelease', endT.total < 0);
+          const rate = this.handleRate(v)
+          this.$set(v, 'rate', rate)
+          const yearApr = this.handleYearApr(v)
+          this.$set(v, 'yearApr', yearApr)
         })
         this.allMinersList = allList.reverse();
         this.handleGetPageArr();
-        // console.log(allList)
       })
+    },
+    handleYearApr(item) {
+      let apr = Math.pow(this.args.aprs, 86400 * 365) - 1
+      apr = apr * 100;
+      if (item.pool) {
+        const pool = this.dsrPools.find(vv => vv.id === item.pool)
+        apr = apr * pool.bonus;
+      }
+      return toFixed(apr, 2)
     },
     handleCurrentChange() {
       this.handleGetPageArr();
@@ -298,6 +325,18 @@ export default {
     }
     .el-icon-arrow-left, .el-icon-arrow-right{
       font-size: 26px;
+    }
+  }
+}
+.myDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 650px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
     }
   }
 }

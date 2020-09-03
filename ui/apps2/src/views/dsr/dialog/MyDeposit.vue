@@ -1,9 +1,12 @@
 <template>
   <div class="myDeposit">
-    <div class="title">我的存款</div>
+    <div class="title">
+      <span v-if="isMe">我的存款</span>
+      <span v-else>{{myDepositInfo.holder}}的存款</span>
+    </div>
     <div class="content">
       <div class="item">
-        <span>我的存款：</span>
+        <span>存款：</span>
         <span>{{ myDepositInfo.bal || '0.0000 DFS' }}</span>
       </div>
       <!-- <div class="item">
@@ -12,7 +15,7 @@
       </div> -->
       <div class="item">
         <span>年化：</span>
-        <span>{{ yearApr }}%</span>
+        <span>{{ myDepositInfo.accApr }}%</span>
       </div>
       <div class="item">
         <span>存款占比：</span>
@@ -44,6 +47,10 @@ export default {
     rate: {
       type: String,
       default: '0.00'
+    },
+    isMe: {
+      type: Boolean,
+      default: false,
     }
   }
 }

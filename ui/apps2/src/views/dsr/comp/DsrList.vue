@@ -38,13 +38,13 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showMyDeposit">
-      <MyDeposit :myDepositInfo="myDepositInfo" :yearApr="yearApr" :rate="rate"/>
+      <MyDeposit :myDepositInfo="myDepositInfo" :rate="rate" :isMe="true"/>
     </el-dialog>
   </div>
 </template>
 
 <script>
-// import { mapState } from 'vuex';
+import { mapState } from 'vuex';
 // import { EosModel } from '@/utils/eos';
 // import moment from 'moment';
 import { toFixed, accMul, accDiv } from '@/utils/public';
@@ -84,9 +84,16 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      dsrPools: state => state.sys.dsrPools,
+    }),
     yearApr() {
       let apr = Math.pow(this.args.aprs, 86400 * 365) - 1
       apr = apr * 100;
+      if (this.myDepositInfo.pool) {
+        const pool = this.dsrPools.find(vv => vv.id === this.myDepositInfo.pool)
+        apr = apr * pool.bonus;
+      }
       return toFixed(apr, 2)
     },
     rate() {
