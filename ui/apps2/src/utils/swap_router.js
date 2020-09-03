@@ -150,7 +150,7 @@ class swapRouter {
         return a.amount_in - b.amount_in;
       })
     }
-    console.log(amounts_out_arr)
+    // console.log(amounts_out_arr)
     this.bestPath = this._pathsArr[amounts_out_arr[0].mIndex]
     amounts_out_arr[0].bestPath = this.bestPath;
     return amounts_out_arr[0]
