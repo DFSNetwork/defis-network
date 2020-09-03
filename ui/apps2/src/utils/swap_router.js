@@ -74,7 +74,9 @@ class swapRouter {
     this.isInit = true;
   }
 
-  get_paths(tokenA, tokenB) {
+  get_paths(tokenA, tokenB, type) {
+    const newTokenA = type === 'pay' ? tokenA : tokenB
+    const newTokenB = type === 'pay' ? tokenB : tokenA
     if (!this.isInit) return;
     let _paths;
     const _pathsArr = [];
@@ -82,7 +84,7 @@ class swapRouter {
     for (let i = 0; i < this.paths.length; i++) {
       let path = this.paths[i];
       let tks = path.split("-");
-      if ((tks[0] === tokenA && tks[tks.length - 1] === tokenB)) {
+      if ((tks[0] === newTokenA && tks[tks.length - 1] === newTokenB)) {
         _paths = path;
         _pathsArr.push(_paths)
       }
@@ -110,7 +112,7 @@ class swapRouter {
   //  mids = [], token_in = eosio.token:EOS, amount_in = 10000, type = 'pay' | 'get'
   get_amounts_out(mids, token_in, amount_in, type) {
     if (!this.isInit) return;
-    const amounts_out_arr = [];
+    let amounts_out_arr = [];
     mids.forEach((m, mIndex) => {
       let mid_arr = m.split("-");
       let quantity_out;
@@ -138,9 +140,17 @@ class swapRouter {
         swapInPrice, swapOutPrice
       })
     })
-    amounts_out_arr.sort((a, b) => {
-      return b.amount_in - a.amount_in;
-    })
+    if (!type) {
+      amounts_out_arr.sort((a, b) => {
+        return b.amount_in - a.amount_in;
+      })
+    } else {
+      amounts_out_arr = amounts_out_arr.filter(v => v.amount_in > 0)
+      amounts_out_arr.sort((a, b) => {
+        return a.amount_in - b.amount_in;
+      })
+    }
+    console.log(amounts_out_arr)
     this.bestPath = this._pathsArr[amounts_out_arr[0].mIndex]
     amounts_out_arr[0].bestPath = this.bestPath;
     return amounts_out_arr[0]
@@ -179,9 +189,11 @@ class swapRouter {
         amount_out = this.get_amount_in(amount_in, reserve_in, reserve_out);
       }
       token_out = tokenB
-      quantity_out = toFixed((amount_out / (10 ** market.sym1.split(",")[0])), market.sym1.split(",")[0]) + " " + market.reserve1.split(" ")[1];
-      // console.log(reserve_out, reserve_in)
-      price = parseFloat(market.reserve1) / parseFloat(market.reserve0);
+      if (!type) {
+        quantity_out = toFixed((amount_out / (10 ** market.sym1.split(",")[0])), market.sym1.split(",")[0]) + " " + market.reserve1.split(" ")[1];
+      } else {
+        quantity_out = toFixed((amount_out / (10 ** market.sym0.split(",")[0])), market.sym0.split(",")[0]) + " " + market.reserve0.split(" ")[1];
+      }
       swapPrice = accDiv(amount_out, 10 ** market.sym1.split(",")[0]); // 计算总输出 - 不截取
     }
     if (token_in === tokenB) {
@@ -208,9 +220,9 @@ class swapRouter {
         quantity_out = toFixed((amount_out / (10 ** market.sym1.split(",")[0])), (market.sym1.split(",")[0])) + " " + market.reserve1.split(" ")[1];
       }
       // console.log(reserve_out, reserve_in)
-      price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
       swapPrice = accDiv(amount_out, 10 ** market.sym0.split(",")[0]); // 计算总输出 - 不截取
     }
+    price = parseFloat(market.reserve1) / parseFloat(market.reserve0);
     let swapInPrice, swapOutPrice;
     if (!type) {
       swapInPrice = swapPrice / inNum;
@@ -253,10 +265,16 @@ class swapRouter {
     if (!(amount_out > 0)) {
       return 0
     }
-    let numerator = reserve_in * amount_out;
-    let denominator = reserve_out - amount_out;
-    let amount_in_with_fee = numerator / denominator;
-    let amount_in = amount_in_with_fee * 10000 / (10000 - 20);
+    // let numerator = reserve_in * amount_out;
+    // let denominator = reserve_out - amount_out;
+    // let amount_in_with_fee = numerator / denominator;
+    // let amount_in = amount_in_with_fee * 10000 / (10000 - 20);
+
+    let amount_in_with_fee = amount_out * 10000; // 去除手续费后总输入
+    let numerator = amount_in_with_fee * reserve_out;
+    let denominator = reserve_in * 10000 - amount_in_with_fee;
+    let amount_in = numerator / denominator;
+    amount_in = amount_in / 0.997
     if (!(amount_in > 0)) {
       return 0
     }
