@@ -477,7 +477,7 @@ export default {
     },
     handleDealRouteImg(item) {
       const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
-      const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed']
+      const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb']
       const inData = item.toLowerCase().replace(':', '-')
       const has = localeCoin.find(v => v === inData)
       if (has) {
@@ -883,10 +883,10 @@ export default {
         flex: 1;
         .coinImg{
           width: 60px;
-          height: 60px;
           margin-right: 10px;
           border-radius: 60px;
           overflow: hidden;
+          display: flex;
         }
         .coin{
           font-size: 28px;
