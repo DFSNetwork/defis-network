@@ -195,6 +195,7 @@ class swapRouter {
         quantity_out = toFixed((amount_out / (10 ** market.sym0.split(",")[0])), market.sym0.split(",")[0]) + " " + market.reserve0.split(" ")[1];
       }
       swapPrice = accDiv(amount_out, 10 ** market.sym1.split(",")[0]); // 计算总输出 - 不截取
+      price = parseFloat(market.reserve1) / parseFloat(market.reserve0);
     }
     if (token_in === tokenB) {
       inNum = inNum / (10 ** market.sym1.split(",")[0]);
@@ -221,8 +222,8 @@ class swapRouter {
       }
       // console.log(reserve_out, reserve_in)
       swapPrice = accDiv(amount_out, 10 ** market.sym0.split(",")[0]); // 计算总输出 - 不截取
+      price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
     }
-    price = parseFloat(market.reserve1) / parseFloat(market.reserve0);
     let swapInPrice, swapOutPrice;
     if (!type) {
       swapInPrice = swapPrice / inNum;
