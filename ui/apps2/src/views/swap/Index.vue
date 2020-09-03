@@ -883,6 +883,7 @@ export default {
         flex: 1;
         .coinImg{
           width: 60px;
+          height: 60px;
           margin-right: 10px;
           border-radius: 60px;
           overflow: hidden;
