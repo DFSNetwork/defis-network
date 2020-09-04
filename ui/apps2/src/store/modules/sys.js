@@ -79,7 +79,7 @@ const sys = {
       // silver: [],
       // bronze: []
       silver: [5, 17, 309],
-      bronze: [4]
+      bronze: [4, 305]
     },
     dsrPools: [{
       "id": 1,
