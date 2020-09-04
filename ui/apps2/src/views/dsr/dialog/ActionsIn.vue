@@ -1,11 +1,11 @@
 <template>
   <div class="inset">
-    <div class="title">存款</div>
+    <div class="title">{{ $t('dsr.deposit') }}</div>
     <div class="content">
       <div class="item">
         <div class="info flexb">
           <span @click="handleClickBalan('pay')">{{ $t('public.balance') }}: {{ balance }} {{ thisMarket.symbol }}</span>
-          <span class="type">存款</span>
+          <span class="type">{{ $t('dsr.deposit') }}</span>
         </div>
         <div class="iptDiv flexb">
           <div class="coinInfo flex">
@@ -23,42 +23,42 @@
           </div>
         </div>
         <div class="time flexb">
-          <span>存款时间</span>
+          <span>{{ $t('dsr.depositTime') }}</span>
           <el-select
             class="select"
-            v-model="value" placeholder="请选择"
+            v-model="value"
             :popper-append-to-body="false"
             :popper-class="'mySelectItem'">
             <el-option
               v-for="item in options"
               :key="item.value"
-              :label="item.label"
+              :label="$t(`dsr.${item.label}`)"
               :value="item.value">
             </el-option>
           </el-select>
         </div>
       </div>
       <div class="about tip">
-        预计年化收益: {{aboutNum}} DFS
+        {{ $t('dsr.abtApy') }}: {{aboutNum}} DFS
       </div>
     </div>
     <div class="btnDiv">
-      <div class="btn flexc" @click="handleShowSure">确认</div>
+      <div class="btn flexc" @click="handleShowSure">{{ $t('public.confirm') }}</div>
     </div>
 
     <div class="rules">
-      <div class="subTitle">存款规则</div>
+      <div class="subTitle">{{ $t('dsrRules.title') }}</div>
       <div class="rules">
-        <div>存款时，可以选择存款时间，目前有以下五档可供选择</div>
+        <div>{{ $t('dsrRules.rule1') }}</div>
         <ul class="subRules">
-          <li>随存随取，年化{{handleApr(0)}}%</li>
-          <li>1月，年化 {{handleApr(1)}}%</li>
-          <li>3月，年化 {{handleApr(2)}}%</li>
-          <li>6月，年化 {{handleApr(3)}}%</li>
-          <li>1年，年化 {{handleApr(4)}}%</li>
+          <li>{{ $t('dsrRules.rule2_1', {apy: handleApr(0)}) }}</li>
+          <li>{{ $t('dsrRules.rule2_2', {apy: handleApr(1)}) }}</li>
+          <li>{{ $t('dsrRules.rule2_3', {apy: handleApr(2)}) }}</li>
+          <li>{{ $t('dsrRules.rule2_4', {apy: handleApr(3)}) }}</li>
+          <li>{{ $t('dsrRules.rule2_5', {apy: handleApr(4)}) }}</li>
         </ul>
       </div>
-      <div class="spcRules rules">*注：已有存款时只能选择同期或者更长的存款时间，且到期时间以最后一次存款时间计算。</div>
+      <div class="spcRules rules">{{ $t('dsrRules.sptTip') }}</div>
     </div>
     <el-dialog
       class="myDialog"
@@ -95,23 +95,23 @@ export default {
       },
       options: [{
         value: '0',
-        label: '随存随取',
+        label: 'anyTime',
         day: '0',
       }, {
         value: '1',
-        label: '1月',
+        label: 'oneMonth',
         day: '30',
       }, {
         value: '2',
-        label: '3月',
+        label: 'threeMonth',
         day: '90',
       }, {
         value: '3',
-        label: '6月',
+        label: 'sixMonth',
         day: '180',
       }, {
         value: '4',
-        label: '1年',
+        label: 'oneYear',
         day: '365',
       }],
       value: '0',

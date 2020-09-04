@@ -201,6 +201,7 @@ export default {
     ableInve: '可用库存', // Available inventory
     claimPerDay: '每天可领取', // Available every day
     myDeposit: '我的存款', // My deposit
+    whoDeposit: '{acc}的存款', 
     percent: '存款占比', // % Of deposits
     deposit: '存款', // deposit
     retrieve: '取回', // retrieve
@@ -208,6 +209,26 @@ export default {
     testData: '页面数据均为测试数据。预估开放日九月八。可能提前或延迟。',
     dfsHolders: 'DFS 家人', // DFS Holders
     total: '总数', // Total
+    totalNum: '总存款',
+    nowApy: '实时年化',
+    allInve: '总库存',
+    poolBal: '分配池余额',
+    endDate: '到期时间',
+    depositTime: '存款时间',
+    abtApy: '预计年化收益',
+    anyTime: '随存随取',
+    oneMonth: '1月',
+    threeMonth: '3月',
+    sixMonth: '6月',
+    oneYear: '1年',
+    depositView: '存款预览',
+    depositNum: '存款数量',
+    allDeposit: '已有存款',
+    value: '总计',
+    abtEndDate: '预计到期时间',
+    warmTip1: '确认存款后，您的DFS将于',
+    warmTip2: '解锁，期间无法取回存款！请谨慎操作！',
+    depositBal: '存款余额',
   },
   market: {
     capital: '做市本金',
@@ -279,5 +300,15 @@ export default {
     ul6_3: '选择币种',
     ul6_4: '输入凭证数量',
     ul6_5: '点击「取回」按钮',
+  },
+  dsrRules: {
+    title: '存款规则',
+    rule1: '存款时，可以选择存款时间，目前有以下五档可供选择',
+    rule2_1: '随存随取，年化 {apy}%',
+    rule2_2: '1月，年化 {apy}%',
+    rule2_3: '3月，年化 {apy}%',
+    rule2_4: '6月，年化 {apy}%',
+    rule2_5: '1年，年化 {apy}%',
+    sptTip: '*注：已有存款时只能选择同期或者更长的存款时间，且到期时间以最后一次存款时间计算。',
   }
 }

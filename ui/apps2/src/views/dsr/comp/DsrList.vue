@@ -17,7 +17,7 @@
           </div>
         </div>
         <div>
-          <div class="mb10">到期时间</div>
+          <div class="mb10">{{ $t('dsr.endDate') }}</div>
           <div>
             {{myDepositInfo.releaseTime || '-'}}
           </div>

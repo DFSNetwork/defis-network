@@ -7,25 +7,26 @@
       <div class="flexb floatDiv">
         <div class="left">
           <div>{{ lockDfs }}</div>
-          <div class="tip flexb bonus">
-            <span>总存款 (DFS)</span>
+          <div class="tip flexc bonus">
+            <span>{{ $t('dsr.totalNum') }} (DFS)</span>
           </div>
         </div>
         <div class="right">
           <div>{{ yearApr }}%</div>
           <div class="tip bonus">
-            <span>实时年化</span>
+            <span>{{ $t('dsr.nowApy') }}</span>
           </div>
         </div>
       </div>
     </div>
     <div class="miningInfo flexb" v-loading="loading">
       <div class="miningData">
-        <div class="tip">总库存</div>
+        <div class="tip">{{ $t('dsr.allInve') }}</div>
         <div class="num">{{ ableUse }} DFS</div>
       </div>
       <div class="miningData">
-        <div class="tip">分配池余额
+        <div class="tip">
+          <span>{{ $t('dsr.poolBal') }}</span>
           <span>({{ `${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}` }})</span>
         </div>
         <div class="num">{{ ableClaimNum }} DFS</div>
@@ -226,6 +227,7 @@ export default {
       background: #FFF;
       padding: 40px 20px;
       border-radius: 20px;
+    text-align: center;
       &:first-child{
         margin-right: 30px;
       }

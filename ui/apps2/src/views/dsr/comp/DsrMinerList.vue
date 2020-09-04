@@ -22,7 +22,7 @@
           <span>{{ item.inTime }}</span>
         </div> -->
         <div class="flexb">
-          <span>存款</span>
+          <span>{{ $t('dsr.deposit') }}</span>
           <span>{{ item.bal }}</span>
         </div>
       </div>

@@ -1,11 +1,11 @@
 <template>
   <div class="actions">
-    <div class="title">取回</div>
+    <div class="title">{{ $t('dsr.retrieve') }}</div>
     <div class="content">
       <div class="item">
         <div class="info flexb">
-          <span class="type">币种</span>
-          <span @click="handleClickBalan('pay')">存款余额: {{ myDepositInfo.bal }}</span>
+          <span class="type">{{ $t('dex.coin', {coin: ''}) }}</span>
+          <span @click="handleClickBalan('pay')">{{ $t('dsr.depositBal') }}: {{ myDepositInfo.bal }}</span>
         </div>
         <div class="iptDiv flexb">
           <div class="coinInfo flex">
@@ -25,11 +25,11 @@
       <div class="flexc allTip" v-if="!myDepositInfo.isRelease">
         <!-- <span>已存入: 10000.0000 DFS</span>
         <span>未到期: 9000.0000 DFS ></span> -->
-        到期时间：{{myDepositInfo.releaseTime}}
+        {{ $t('dsr.endDate') }}：{{myDepositInfo.releaseTime}}
       </div>
     </div>
     <div class="btnDiv">
-      <div class="btn flexc" v-loading="loading" @click="handleWithdraw">确认</div>
+      <div class="btn flexc" v-loading="loading" @click="handleWithdraw">{{ $t('public.confirm') }}</div>
     </div>
   </div>
 </template>

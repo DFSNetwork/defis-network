@@ -10,7 +10,7 @@
         <div class="claimNum">{{myDepositInfo.showReward || '0.00000000'}} DFS</div>
       </div>
       <div class="flexb">
-        <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">领取</div>
+        <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">{{ $t('bonus.claim') }}</div>
       </div>
     </div>
     <dsr-list :args="args" @listenUpdate="listenUpdate"

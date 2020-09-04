@@ -1,31 +1,31 @@
 <template>
   <div class="preview">
-    <div class="title">存款预览</div>
+    <div class="title">{{ $t('dsr.depositView') }}</div>
     <div class="content">
       <div class="item">
-        <span>存款数量：</span>
+        <span>{{ $t('dsr.depositNum') }}：</span>
         <span>{{ params.payNum || '0.0000' }} DFS</span>
       </div>
       <div class="item">
-        <span>存款时间：</span>
+        <span>{{ $t('dsr.depositTime') }}：</span>
         <span>{{ params.dateLong || '3个月' }}</span>
       </div>
       <div class="item">
-        <span>已有存款：</span>
+        <span>{{ $t('dsr.allDeposit') }}：</span>
         <span>{{ params.hasNum || '0.0000' }}</span>
       </div>
       <div class="item">
-        <span>总计：</span>
+        <span>{{ $t('dsr.value') }}：</span>
         <span>{{ params.total || '0.0000' }} DFS</span>
       </div>
       <div class="item warn" v-if="params.endDate">
-        <span>预计到期时间：</span>
+        <span>{{ $t('dsr.abtEndDate') }}：</span>
         <span>{{ params.endDate }}</span>
       </div>
     </div>
     <div class="btnDiv flexb">
-      <div class="btn flexc cancel" @click="handleClose">取消</div>
-      <div class="btn flexc sure" v-loading="loading" @click="handleShowTip">确认</div>
+      <div class="btn flexc cancel" @click="handleClose">{{ $t('pulic.cancel') }}</div>
+      <div class="btn flexc sure" v-loading="loading" @click="handleShowTip">{{ $t('public.confirm') }}</div>
     </div>
 
     <el-dialog
@@ -34,11 +34,15 @@
       :show-close="false"
       :visible="showTimeTip">
       <div class="timeTip">
-        <div class="title">温馨提示</div>
-        <div>确认存款后，您的DFS将于<span class="warn">{{ params.endDate }}</span>解锁，期间无法取回存款！请谨慎操作！</div>
+        <div class="title">{{ $t('dsr.warmPrompt') }}</div>
+        <div>
+          <span>{{ $t('dsr.warmTip1') }}</span>
+          <span class="warn">{{ params.endDate }}</span>
+          <span>{{ $t('dsr.warmTip2') }}</span>
+        </div>
         <div class="btnDiv flexb">
-          <div class="btn flexc cancel" @click="handleCancel">取消</div>
-          <div class="btn flexc sure" @click="handleSure">确认</div>
+          <div class="btn flexc cancel" @click="handleCancel">{{ $t('pulic.cancel') }}</div>
+          <div class="btn flexc sure" @click="handleSure">{{ $t('public.confirm') }}</div>
         </div>
       </div>
     </el-dialog>
