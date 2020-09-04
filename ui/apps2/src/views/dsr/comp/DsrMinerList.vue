@@ -40,7 +40,7 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showMyDeposit">
-      <MyDeposit :myDepositInfo="checkItem" :rate="checkItem.rate"/>
+      <MyDeposit :myDepositInfo="checkItem" :yearApr="yearApr" :rate="checkItem.rate"/>
     </el-dialog>
   </div>
 </template>
@@ -90,6 +90,16 @@ export default {
     ...mapState({
       dsrPools: state => state.sys.dsrPools,
     }),
+    yearApr() {
+      const item = this.checkItem;
+      let apr = Math.pow(this.args.aprs, 86400 * 365) - 1
+      apr = apr * 100;
+      if (item.pool) {
+        const pool = this.dsrPools.find(vv => vv.id === item.pool)
+        apr = apr * pool.bonus;
+      }
+      return toFixed(apr, 2)
+    }
   },
   watch: {
     args() {

@@ -20,7 +20,7 @@
     <el-dialog
       class="dialog"
       :visible.sync="showImg2">
-      <img width="100%" src="@/assets/img/footer/peckshield.jpeg" />
+      <img width="100%" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gieh1hl5i4j30ku112tf3.jpg" />
     </el-dialog>
 
     <dfs-info-data-tip

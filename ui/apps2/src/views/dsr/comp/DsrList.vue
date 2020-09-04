@@ -38,7 +38,7 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showMyDeposit">
-      <MyDeposit :myDepositInfo="myDepositInfo" :rate="rate" :isMe="true"/>
+      <MyDeposit :myDepositInfo="myDepositInfo" :yearApr="yearApr" :rate="rate" :isMe="true"/>
     </el-dialog>
   </div>
 </template>

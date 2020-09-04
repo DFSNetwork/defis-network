@@ -15,7 +15,7 @@
       </div> -->
       <div class="item">
         <span>年化：</span>
-        <span>{{ myDepositInfo.accApr }}%</span>
+        <span>{{ yearApr }}%</span>
       </div>
       <div class="item">
         <span>存款占比：</span>
@@ -42,7 +42,7 @@ export default {
     },
     yearApr: {
       type: String,
-      default: '5.00'
+      default: '-'
     },
     rate: {
       type: String,

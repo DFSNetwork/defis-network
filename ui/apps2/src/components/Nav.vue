@@ -7,7 +7,7 @@
       <div class="navList">
         <!-- <div class="list login" v-if="!scatter.identity" @click="handleLogin">连接钱包</div> -->
         <div class="list" @click="handleToV1">V1</div>
-        <div class="list" @click="handleToDsr">DSR</div>
+        <div class="list" @click="handleToDsr">DSS</div>
         <div class="list" @click="handleToPools">{{ $t('mine.pools') }}</div>
         <div class="list" @click="handleToTutorial">{{ $t('public.tutorial') }}</div>
         <!-- <div class="list">质押</div> -->
@@ -86,12 +86,12 @@ export default {
       })
     },
     handleToDsr() {
-      if (this.$route.name === 'dsr')  {
+      if (this.$route.name === 'dss')  {
         this.showNav = false;
         return;
       }
       this.$router.push({
-        name: 'dsr'
+        name: 'dss'
       })
       this.showNav = false;
     }

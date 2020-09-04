@@ -57,8 +57,8 @@ const constantRouter = [
         meta: { title: 'DeFis-Network', noAcc: true},
       },
       {
-        path: '/dsr',
-        name: 'dsr',
+        path: '/dss',
+        name: 'dss',
         component: () => import(/* webpackChunkName: "dsr" */ '@/views/dsr/Index.vue'),
         meta: { title: 'DeFis-Network', noAcc: true },
       },
