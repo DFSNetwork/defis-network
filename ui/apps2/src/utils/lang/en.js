@@ -209,7 +209,7 @@ export default {
     dfsHolders: 'DFS Holders', // DFS Holders
     total: 'Total', // Total
     totalNum: 'Total deposit',
-    nowApy: 'Real-time APY',
+    nowApy: 'Current APY',
     allInve: 'Total inventory',
     poolBal: 'Pool balance',
     endDate: 'Expire date',
