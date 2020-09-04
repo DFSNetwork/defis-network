@@ -7,7 +7,7 @@
         <span class="flexc iconSpan"><img width="100%" src="@/assets/img/dex/user_icon.svg" alt=""></span>
         <span>{{ scatter.identity.accounts[0].name }}</span>
       </label> -->
-      <!-- <span class="create" @click="handleToCreate">{{ $t('dex.addMarket') }}</span> -->
+      <span class="create" @click="handleToCreate">{{ $t('dex.addMarket') }}</span>
       <span class="flexc" @click="listenShowTools"><img class="svgIcon" src="@/assets/img/dex/setup_icon.svg" alt=""></span>
       <span class="flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>
     </div>
