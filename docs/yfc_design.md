@@ -139,13 +139,21 @@ YFC 总量10000
 交易对  权重 池子上限分配
 
 EOS/YFC   4     4000
+
 EOS/DFS   3     3000
+
 EOS/OGX   1.5   1500
+
 EOS/USDT  1.2   1200
+
 EOS/DMD   1.1    500
+
 EOS/KEY   1     500
+
 EOS/BOX   1     100
+
 EOS/DAPP 1     100
+
 EOS/VIG 1     100
 
 
