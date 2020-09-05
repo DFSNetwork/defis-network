@@ -120,8 +120,10 @@ class swapRouter {
       let swapInPrice = 1;
       let swapOutPrice = 1;
       let new_token_in = token_in, new_amount_in = amount_in;
+      // console.log(' --------------------- ')
       for (let i = 0; i < mid_arr.length; i++) {
         let mid = mid_arr[i];
+        // console.log('mid', mid)
         let swap_result
         if (!type) {
           swap_result = this.swap(mid, new_token_in, new_amount_in);
@@ -142,12 +144,12 @@ class swapRouter {
     })
     if (!type) {
       amounts_out_arr.sort((a, b) => {
-        return parseFloat(b.quantity_out) - parseFloat(a.quantity_out);
+        return parseFloat(b.swapInPrice) - parseFloat(a.swapInPrice);
       })
     } else {
       amounts_out_arr = amounts_out_arr.filter(v => v.amount_in > 0)
       amounts_out_arr.sort((a, b) => {
-        return parseFloat(a.quantity_out) - parseFloat(b.quantity_out);
+        return parseFloat(a.swapInPrice) - parseFloat(b.swapInPrice);
       })
     }
     // console.log(amounts_out_arr)
@@ -189,11 +191,11 @@ class swapRouter {
         amount_out = this.get_amount_in(amount_in, reserve_in, reserve_out);
       }
       token_out = tokenB
+      // console.log('tokenA' ,amount_out)
+      quantity_out = toFixed((amount_out / (10 ** market.sym1.split(",")[0])), market.sym1.split(",")[0]) + " " + market.reserve1.split(" ")[1];
       if (!type) {
-        quantity_out = toFixed((amount_out / (10 ** market.sym1.split(",")[0])), market.sym1.split(",")[0]) + " " + market.reserve1.split(" ")[1];
         price = parseFloat(market.reserve1) / parseFloat(market.reserve0);
       } else {
-        quantity_out = toFixed((amount_out / (10 ** market.sym0.split(",")[0])), market.sym0.split(",")[0]) + " " + market.reserve0.split(" ")[1];
         price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
       }
       swapPrice = accDiv(amount_out, 10 ** market.sym1.split(",")[0]); // 计算总输出 - 不截取
@@ -217,25 +219,26 @@ class swapRouter {
         amount_out = this.get_amount_in(amount_in, reserve_in, reserve_out);
       }
       token_out = tokenA;
+      // console.log('tokenB' ,amount_out)
+      quantity_out = toFixed((amount_out / (10 ** market.sym0.split(",")[0])), (market.sym0.split(",")[0])) + " " + market.reserve0.split(" ")[1];
       if (!type) {
-        quantity_out = toFixed((amount_out / (10 ** market.sym1.split(",")[0])), (market.sym1.split(",")[0])) + " " + market.reserve1.split(" ")[1];
         price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
       } else {
-        quantity_out = toFixed((amount_out / (10 ** market.sym0.split(",")[0])), (market.sym0.split(",")[0])) + " " + market.reserve0.split(" ")[1];
         price = parseFloat(market.reserve1) / parseFloat(market.reserve0);
       }
       // console.log(reserve_out, reserve_in)
       swapPrice = accDiv(amount_out, 10 ** market.sym0.split(",")[0]); // 计算总输出 - 不截取
       // console.log('2 ----- ', quantity_out, ' ------- ', price)
     }
+    // console.log('swapPrice', swapPrice)
     let swapInPrice, swapOutPrice;
     if (!type) {
       swapInPrice = swapPrice / inNum;
       swapOutPrice = inNum / swapPrice;
       // console.log(amount_out, inNum, swapPrice)
     } else {
-      const noFeesAmt = accMul(amount_out, 0.998);
-      swapPrice = accDiv(noFeesAmt, 10 ** market.sym0.split(",")[0]); // 计算总输出 - 不截取
+      // const noFeesAmt = accMul(amount_out, 0.998);
+      // swapPrice = accDiv(noFeesAmt, 10 ** market.sym0.split(",")[0]); // 计算总输出 - 不截取
       swapInPrice = inNum / swapPrice;
       swapOutPrice = swapPrice / inNum;
     }

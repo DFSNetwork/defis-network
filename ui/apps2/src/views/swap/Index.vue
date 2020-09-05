@@ -583,6 +583,11 @@ export default {
       } catch (error) {
         // console.log(error)
         this.tradeInfo = {}
+        if (type === 'pay') {
+          this.getNum = '';
+        } else {
+          this.payNum = '';
+        }
         this.tradeInfo.aboutPrice = toFixed(0, this.thisMarket0.decimal)
       }
     },
