@@ -144,15 +144,15 @@ class swapRouter {
     })
     if (!type) {
       amounts_out_arr.sort((a, b) => {
-        return parseFloat(b.swapInPrice) - parseFloat(a.swapInPrice);
+        return parseFloat(b.quantity_out) - parseFloat(a.quantity_out);
       })
     } else {
       amounts_out_arr = amounts_out_arr.filter(v => v.amount_in > 0)
       amounts_out_arr.sort((a, b) => {
-        return parseFloat(a.swapInPrice) - parseFloat(b.swapInPrice);
+        return parseFloat(a.quantity_out) - parseFloat(b.quantity_out);
       })
     }
-    // console.log(amounts_out_arr)
+    console.log(amounts_out_arr)
     this.bestPath = this._pathsArr[amounts_out_arr[0].mIndex]
     amounts_out_arr[0].bestPath = this.bestPath;
     return amounts_out_arr[0]
