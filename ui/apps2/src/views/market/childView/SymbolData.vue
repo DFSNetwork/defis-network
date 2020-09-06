@@ -57,7 +57,7 @@
             </span>
             <span v-else>{{ `${marketData[0]} ${thisMarket.symbol0}` }} / {{ `${marketData[1]} ${thisMarket.symbol1}` }}</span>
           </div>
-          <div class="flexa">
+          <!-- <div class="flexa">
             <span>{{ $t('market.marketReward') }}: </span>
             <span :class="{'green': marketReward > 0, 'red': marketReward < 0}">{{ marketReward }} </span>
             <span @click="direction = !direction" class="flexa ml10">
@@ -65,6 +65,18 @@
                 class="small">（{{ $t('market.has', {coin: direction ? thisMarket.symbol0 : thisMarket.symbol1}) }}）</span>
               <img class="changeImg" v-if="direction" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
               <img class="changeImg" v-else src="@/assets/img/dex/price_switch_icon_green_right.svg" alt="">
+            </span>
+            <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
+          </div> -->
+          <div class="flexa">
+            <span>{{ $t('market.marketReward') }}: </span>
+            <span :class="{'green': sym0AndSy1 ? parseFloat(marketRewardSym0) > 0 : parseFloat(marketRewardSym1) > 0,
+                          'red': sym0AndSy1 ? parseFloat(marketRewardSym0) < 0 : parseFloat(marketRewardSym1) < 0}">
+              {{ sym0AndSy1 ? marketRewardSym0 : marketRewardSym1 }}
+            </span>
+            <span :class="{'green':  sym0AndSy1 ? parseFloat(marketRewardSym1) > 0 : parseFloat(marketRewardSym0) > 0,
+                          'red':  sym0AndSy1 ? parseFloat(marketRewardSym1) < 0 : parseFloat(marketRewardSym0) < 0}">
+              ({{ sym0AndSy1 ? marketRewardSym1 : marketRewardSym0 }})
             </span>
             <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
           </div>
@@ -302,6 +314,15 @@ export default {
       const reward = sym0 + sym1 / price;
       return toFixed(reward, this.thisMarket.decimal0)
     },
+    marketRewardSym0() {
+      return this.handleDealReward('sym0')
+    },
+    marketRewardSym1() {
+      return this.handleDealReward('sym1')
+    },
+    sym0AndSy1() {
+      return parseFloat(this.marketRewardSym0) > parseFloat(this.marketRewardSym1)
+    },
     percent() {
       if (!this.marketData.length || !Number(this.nowMarket.getNum1)) {
         return '0.0000';
@@ -329,6 +350,19 @@ export default {
     })
   },
   methods: {
+    handleDealReward(sym) {
+      if (!this.marketData.length || !Number(this.marketData[0])  || !this.nowMarket.getNum1) {
+        return `0.0000 ${sym === 'sym1'? this.thisMarket.symbol1 : this.thisMarket.symbol0}`;
+      }
+      if (sym === 'sym1') {
+        const sym1 = accSub(parseFloat(this.nowMarket.getNum2), this.marketData[1]);
+        const t = sym1 > 0 ? '+' : ''
+        return `${t}${toFixed(sym1, this.thisMarket.decimal1)} ${this.thisMarket.symbol1}`
+      }
+      const t = sym0 > 0 ? '+' : ''
+      const sym0 = accSub(parseFloat(this.nowMarket.getNum1), this.marketData[0]);
+      return `${t}${toFixed(sym0, this.thisMarket.decimal0)} ${this.thisMarket.symbol0}`
+    },
     handleGetTime() {
       clearTimeout(this.timer)
       if (Number(this.sTime)) {
@@ -419,7 +453,7 @@ export default {
         "table": "miners",
         // "lower_bound": " dfsdeveloper",
         // "upper_bound": " dfsdeveloper",
-        limit: 1000,
+        limit: 2000,
         "json": true,
       }
       if (type === 'user') {

@@ -13,5 +13,6 @@ export default {
 <style lang="scss" scoped>
 .marketTip{
   padding: 40px;
+  font-size: 26px;
 }
 </style>
