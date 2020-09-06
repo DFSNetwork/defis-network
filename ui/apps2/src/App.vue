@@ -246,6 +246,40 @@ export default {
         this.$store.dispatch('setEggargs', rows)
       })
     },
+    handleGetPonds() {
+      const params = {
+        "code": "yfcfishponds",
+        "scope": "yfcfishponds",
+        "table": "ponds",
+        "json": true,
+        limit: 100
+      }
+      EosModel.getTableRows(params, (res) => {
+        const rows = res.rows || []
+        if (!rows.length) {
+          return
+        }
+        const list = this.list;
+        list.forEach(v => {
+          const pond = rows.find(vv => vv.id === v.mid) || {};
+          const multiple = Number(pond.weight)
+          this.$set(v, 'multiple', multiple)
+          const maxNum = parseFloat(pond.max_supply)
+          this.$set(v, 'maxNum', Number(maxNum))
+          if (pond.start) {
+            let beginTime = toLocalTime(`${pond.start}.000+0000`);
+            beginTime = moment(beginTime).valueOf();
+            this.$set(v, 'beginTime', beginTime / 1000);
+          }
+          if (pond.end) {
+            let endTime = toLocalTime(`${pond.end}.000+0000`);
+            endTime = moment(endTime).valueOf();
+            this.$set(v, 'endTime', endTime / 1000);
+          }
+        });
+        this.$store.dispatch('setList', list)
+      })
+    }
   },
 }
 </script>

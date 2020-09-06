@@ -1,4 +1,4 @@
-import { toFixed, accDiv, accMul } from './public';
+import { toFixed, accDiv } from './public';
 class swapRouter {
   constructor() {
     this.markets = [];

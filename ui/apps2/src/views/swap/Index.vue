@@ -259,6 +259,7 @@ export default {
         sym: "4,USDT",
         symbol: "USDT",
       },
+      firstUrl: true,
     }
   },
   props: {
@@ -383,7 +384,7 @@ export default {
         if (!arr.length) {
           return;
         }
-        this.handleGetUrlInAndOut()
+        // this.handleGetUrlInAndOut()
         const market0 = arr.find(v => v.contract === this.thisMarket0.contract && v.symbol === this.thisMarket0.symbol) || arr[0]
         this.thisMarket0 = market0;
         const market1 = arr.find(v => v.contract === this.thisMarket1.contract && v.symbol === this.thisMarket1.symbol) || arr[1]
@@ -439,8 +440,9 @@ export default {
     },
     handleGetUrlInAndOut() {
       const urlData = GetUrlPara();
-      if (urlData.in && urlData.out) {
+      if (urlData.in && urlData.out && this.firstUrl) {
         try {
+          this.firstUrl = false;
           const inData = urlData.in.split('-');
           const sym0 = {
             contract: inData[0],
@@ -459,6 +461,7 @@ export default {
         } catch (error) {
           console.log(error)
         }
+        return
       }
       const localData = localStorage.getItem('swapMarkets') ? JSON.parse(localStorage.getItem('swapMarkets')) : null;
       // console.log(localData)

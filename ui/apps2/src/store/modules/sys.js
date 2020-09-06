@@ -100,7 +100,8 @@ const sys = {
       "id": 4,
       "bonus": "1.50000000000000000",
       "refund_delay_sec": 31104000
-    }]
+    }],
+    list: [],
   },
   mutations: {
     SET_BASECONFIG: (state, baseConfig) => {
@@ -132,6 +133,9 @@ const sys = {
       state.feesApr = feesApr;
       localStorage.setItem('feesApr', JSON.stringify(feesApr));
     },
+    SET_List: (state, list) => {
+      state.list = list;
+    },
   },
   actions: {
     setBaseConfig({ commit }, baseConfig) {
@@ -156,6 +160,9 @@ const sys = {
     },
     setFeesApr({ commit }, feesApr) {
       commit('SET_FEESAPR', feesApr);
+    },
+    setList({ commit }, list) {
+      commit('SET_List', list);
     },
   }
 };
