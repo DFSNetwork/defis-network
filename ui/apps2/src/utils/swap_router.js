@@ -239,6 +239,7 @@ class swapRouter {
     } else {
       // const noFeesAmt = accMul(amount_out, 0.998);
       // swapPrice = accDiv(noFeesAmt, 10 ** market.sym0.split(",")[0]); // 计算总输出 - 不截取
+      swapPrice = swapPrice * 0.997;
       swapInPrice = inNum / swapPrice;
       swapOutPrice = swapPrice / inNum;
     }
