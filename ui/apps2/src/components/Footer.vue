@@ -96,7 +96,10 @@ export default {
       this.showImg = true;
     },
     clickOnDFSInfoData() {
-      this.closeDFSInfoDataTip = false;
+      // this.closeDFSInfoDataTip = false;
+      this.$router.push({
+        name: 'total',
+      })
     },
     // 获取总发行量
     async handleGetDfsInfoData() {

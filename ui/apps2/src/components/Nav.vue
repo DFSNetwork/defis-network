@@ -5,20 +5,18 @@
       :show-close="false"
       :visible.sync="showNav">
       <div class="navList">
-        <!-- <div class="list login" v-if="!scatter.identity" @click="handleLogin">连接钱包</div> -->
-        <div class="list" @click="handleToV1">V1</div>
-        <div class="list" @click="handleTo('dss')">DSS</div>
         <div class="list" @click="handleTo('pools')">{{ $t('mine.pools') }}</div>
+        <div class="list" @click="handleTo('dss')">DSS</div>
+        <div class="list" @click="handleTo('total')">{{ $t('info.info') }}</div>
         <div class="list" @click="handleTo('tutorial')">{{ $t('public.tutorial') }}</div>
-        <!-- <div class="list">质押</div> -->
         <div class="list" @click="handleShowComp('invi')">{{ $t('invi.invitation') }}</div>
         <div class="list" @click="handleShowNode">{{ $t('node.nodeSet') }}</div>
         <div class="list" @click="handleShowComp('warn')">{{ $t('public.warnTip') }}</div>
-        <div class="list" @click="handleTo('total')">统计</div>
         <div class="list">
           <span v-if="language !== 'en'" @click="handleChangeLang('en')">EN</span>
           <span v-else @click="handleChangeLang('zh-CN')">CN</span>
         </div>
+        <div class="list" @click="handleToV1">V1</div>
         <div class="list out" v-if="scatter.identity" @click="handleLoginOut">{{ $t('public.loginOut') }}</div>
       </div>
     </el-dialog>

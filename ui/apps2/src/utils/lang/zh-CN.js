@@ -196,6 +196,7 @@ export default {
     tlv: '流动池总量',
     mineApr: '挖矿年化',
     marketApr: '做市年化',
+    yfcApr: 'YFC年化',
   },
   dsr: {
     ableInve: '可用库存', // Available inventory
@@ -242,6 +243,14 @@ export default {
     timer: '{days}天{hours}时{mins}分{secs}秒',
     pl: '盈亏',
     marketTip: '做市本金数据可能延迟1 - 3分钟，请稍后查看。', //The market-making principal data may be delayed by 1-3 minutes, please check later.
+  },
+  info: {
+    info: '概览',
+    top10: '大丰收农场TOP10',
+    dfsMineApr: 'DFS挖矿年化',
+    markerFeesApr: '做市手续费年化',
+    yfcApr: 'YFC钓鱼年化',
+    totalApr: '总年化',
   },
   miningRules: {
     rules: '挖矿规则',

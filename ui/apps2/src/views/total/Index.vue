@@ -2,25 +2,62 @@
   <div class="totalInfo">
     <div>
       <div class="title">
-        <span class="act">{{ $t('footer.marketsFee') }}(24H)</span>
+        <span class="act">{{ $t('info.top10') }}</span>
+        <span class="date">{{ nowDate }}</span>
       </div>
-      <div class="fees-data-content" v-if="feesData">
-        <el-table :data="feesTableData" style="width: 100%">
-          <el-table-column prop="symbol" :label="$t('footer.token')"> </el-table-column>
-          <el-table-column prop="value" :label="$t('footer.mineApr')"> </el-table-column>
-          <el-table-column prop="poolsApr" :label="$t('footer.marketApr')"> </el-table-column>
-        </el-table>
+      <div class="lists" v-loading="topLoading">
+        <div class="noData" v-if="!showArr.length">{{ $t('public.noData') }}</div>
+        <div class="list" v-for="(item, index) in showArr" :key="index">
+          <div class="coin flexb">
+            <span class="coinName">
+              <img class="coinImg" :src="item.img" alt="">
+              <span>{{ item.symbol }}</span>
+            </span>
+            <span class="green" @click="handleToMarket(item.mid)">{{ $t('invi.join') }}</span>
+          </div>
+          <div class="flexb percent">
+            <div>
+              <div class="num">{{ item.value || '—' }}</div>
+              <div class="tip">{{ $t('info.dfsMineApr') }}</div>
+            </div>
+            <div>
+              <div class="num">{{ item.poolsApr || '—' }}</div>
+              <div class="tip">{{ $t('info.markerFeesApr') }}</div>
+            </div>
+            <div>
+              <div class="num">{{ item.yfcApr || '—' }}</div>
+              <div class="tip">{{ $t('info.yfcApr') }}</div>
+            </div>
+          </div>
+          <div class="flexb total">
+            <span>{{ $t('info.totalApr') }}</span>
+            <span class="num">{{ item.count }}%</span>
+          </div>
+        </div>
       </div>
     </div>
+
     <div>
       <div class="title">
         <span class="act">{{ $t('footer.mineDfsNum') }}(24H)</span>
       </div>
-      <div class="dfs-data-content">
-        <el-table :data="dfsTableData" style="width: 100%">
-          <el-table-column prop="des" :label="$t('footer.label')"> </el-table-column>
-          <el-table-column prop="value" :label="$t('footer.num')"> </el-table-column>
-        </el-table>
+      <div class="lists dfsMine" v-loading="loading">
+        <div class="list">
+          <div class="flexb percent">
+            <div>
+              <div class="num">{{ dfsTableData[1].value }}</div>
+              <div class="tip">{{ $t('footer.circulation') }}</div>
+            </div>
+            <div>
+              <div class="num">{{ dfsTableData[2].value }}</div>
+              <div class="tip">DSS</div>
+            </div>
+            <div>
+              <div class="num">{{ dfsTableData[0].value }}</div>
+              <div class="tip">{{ $t('footer.total') }}</div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -28,24 +65,118 @@
 
 <script>
 import { mapState } from 'vuex';
+import { perDayReward, getYfcReward, accAdd, toLocalTime } from '@/utils/public';
 export default {
   name: 'total',
-  props: {},
+  props: {
+    marketLists: {
+      type: Array,
+      default: function lists() {
+        return []
+      }
+    }
+  },
   computed: {
     ...mapState({
       // 箭头函数可使代码更简练
-      minScreen: state => state.app.minScreen,
-      baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-      testConfig: state => state.sys.testConfig, // 测试网环境
-      devConfig: state => state.sys.devConfig, // 开发环境
-      proConfig: state => state.sys.proConfig, // 生产环境
+      feesApr: state => state.sys.feesApr,
+      eggargs: state => state.sys.eggargs,
+      weightList: state => state.sys.weightList, // 交易对权重列表
+      list: state => state.sys.list,
+      dfsPrice: state => state.sys.dfsPrice,
+      dfsData: state => state.sys.dfsData,
     }),
+    showArr() {
+      if (!this.marketLists.length || !this.feesApr) {
+        return []
+      }
+      let arr = [];
+      const YfcPool = this.marketLists.find(vv => vv.mid === 329);
+      this.handleTopLoading()
+      const top10 = this.marketLists.slice(0, 10)
+      top10.forEach(market => {
+        try {
+          let count = 0;
+          // const v = this.eggargs.find(vv => vv.mid === market.mid);
+          const wlist = this.weightList.find(vv => vv.mid === market.mid) || {}
+          const weight = wlist.pool_weight || 0;
+          const reward = perDayReward(weight);
+          const apr = reward * this.dfsPrice / 20000 * 365 * 100;
+          count = accAdd(count, apr.toFixed(2))
+
+          const feesApr = this.feesApr.find(vv => vv.symbol === market.symbol1);
+          feesApr.value = `${apr.toFixed(2)}%`;
+          feesApr.img = market.sym1Data.imgUrl;
+          feesApr.mid = market.mid;
+          count = accAdd(count, parseFloat(feesApr.poolsApr))
+          const yfcReward = getYfcReward(market.mid, 'year')
+          if (Number(yfcReward)) {
+            const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
+            const apy = yfcReward * price / 10000 * 100;
+            feesApr.yfcApr = apy.toFixed(2);
+            count = accAdd(count, apy.toFixed(2))
+          }
+          feesApr.count = count.toFixed(2);
+          arr.push(feesApr)
+        } catch (error) {
+          console.log(error)
+        }
+      })
+      arr = arr.sort((a, b) => {
+        return b.count - a.count
+      })
+      return arr;
+    },
+    dfsTableData() {
+      return [
+        {
+          des: this.$t('footer.total'),
+          value:
+            this.dfsData && this.dfsData.reward_dfs_total
+              ? this.dfsData.reward_dfs_total.split(' ')[0]
+              : '0.0000',
+        },
+        {
+          des: this.$t('footer.circulation'),
+          value:
+            this.dfsData && this.dfsData.circulation_dfs_total
+              ? this.dfsData.circulation_dfs_total.split(' ')[0]
+              : '0.0000',
+        },
+        {
+          des: this.$t('footer.dsr'),
+          value:
+            this.dfsData && this.dfsData.dsr_dfs_total
+              ? this.dfsData.dsr_dfs_total.split(' ')[0]
+              : '0.0000',
+        },
+      ];
+    },
+    nowDate() {
+      const now = new Date()
+      return toLocalTime(now).substr(0, 10)
+    },
+    loading() {
+      if (this.dfsData && this.dfsData.reward_dfs_total ||
+          this.dfsData && this.dfsData.circulation_dfs_total ||
+          this.dfsData && this.dfsData.dsr_dfs_total) {
+        return false;
+      }
+      return true
+    },
+  },
+  watch: {
   },
   data() {
     return {
+      // loading: true,
+      topLoading: true,
     }
   },
   methods: {
+    handleTopLoading() {
+      this.topLoading = false;
+    },
     handleSetAllRes() {
       const allResult = [];
       const feesDataKeys = Object.keys(this.feesData)
@@ -61,6 +192,14 @@ export default {
         });
       })
       this.$store.dispatch('setFeesApr', allResult);
+    },
+    handleToMarket(mid) {
+      this.$router.push({
+        name: 'market',
+        params: {
+          mid
+        }
+      })
     },
     handleDealSymArr(lists = []) {
       const resArr = [];
@@ -79,10 +218,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.green{
+  color: rgba(2,198,152,1);
+}
 .title{
   font-size: 32px;
   text-align: left;
   margin: 0 0 40px;
+  position: relative;
   &>span{
     margin-right: 60px;;
   }
@@ -101,52 +244,82 @@ export default {
       // transform: translateX(-45%);
     }
   }
+  .date{
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    margin-right: 0;
+    font-size: 28px;
+    color: #a6a6a6;
+    transform: translateY(-50%);
+  }
+}
+.lists{
+  text-align: left;
+  &:first-child{
+    padding-top: 0;
+  }
+  .noData{
+    text-align: center;
+    margin: 100px 0;
+    color: #A6A6A6;
+    font-size: 24px;
+  }
+  .list{
+    margin-bottom: 40px;
+    font-size: 28px;
+    color: #000;
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0px 20px 40px 0px rgba(220,220,220,0.5);
+    .coin{
+      margin-bottom: 10px;
+      .coinName{
+        font-size: 40px;
+        font-weight: 500;
+        // color: rgba(2,198,152,1);
+        display: flex;
+        align-items: center;
+        .coinImg{
+          width: 50px;
+          height: 50px;
+          margin-right: 10px;
+        }
+      }
+    }
+    .percent{
+      padding-bottom: 10px;
+      border-bottom: 1px solid #eee;
+      &>div{
+        flex: 1;
+        &:nth-child(2){
+          text-align: center;
+        }
+        &:last-child{
+          text-align: right;
+        }
+      }
+    }
+    .num{
+      font-size: 32px;
+      font-weight: 500;
+    }
+    .tip{
+      color: #a6a6a6;;
+      font-size: 24px;
+    }
+    .total{
+      padding-top: 10px;
+    }
+  }
+}
+.dfsMine{
+  .percent{
+    padding-bottom: 0 !important;
+    border: 0 !important;
+  }
 }
 .totalInfo{
   margin: 40px;
-  .flex {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .fees-data-content,
-  .dfs-data-content {
-    max-height: 320px;
-    overflow-y: auto;
-    margin-bottom: 40px;
-  }
-  /deep/ .el-table {
-    .el-table__row, .el-table__header {
-      .cell {
-        font-size: 24px;
-        line-height: 28px;
-      }
-    }
-  }
-  .coinImg {
-    width: 220px;
-  }
-  .tip {
-    color: #070707;
-    font-size: 28px;
-    text-align: left;
-    font-weight: bold;
-    margin: 0px 0 20px;
-  }
-  .btn {
-    width: 100%;
-    background: #07d79b;
-    border-color: transparent;
-    font-size: 30px;
-    height: 74px;
-    border-radius: 12px;
-  }
-  .noTip {
-    margin: auto;
-    background: transparent;
-    font-size: 28px;
-    color: #999999;
-    border-color: transparent;
-  }
 }
 </style>

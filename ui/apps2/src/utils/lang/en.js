@@ -195,6 +195,7 @@ export default {
     tlv: 'Total Value Locked',
     mineApr: 'Mining Apr',
     marketApr: 'Market Apr',
+    yfcApr: 'YFC Apr',
   },
   dsr: {
     ableInve: 'Available inventory',
@@ -241,6 +242,14 @@ export default {
     timer: '{days}D {hours}H:{mins}M:{secs}S',
     pl: 'P&L',
     marketTip: 'The market-making principal data may be delayed by 1-3 minutes, please check later.',
+  },
+  info: {
+    info: 'Info',
+    top10: 'DFS Farm TOP10',
+    dfsMineApr: 'DFS Mining Apr',
+    markerFeesApr: 'Market Fees Apr',
+    yfcApr: 'YFC APR',
+    totalApr: 'Total Apr',
   },
   miningRules: {
     rules: 'Mining rules',
