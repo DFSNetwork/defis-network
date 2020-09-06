@@ -2,7 +2,7 @@
   <div class="dfsInfoDataTip">
     <el-dialog
       class="dialog"
-      top="20vh"
+      top="10vh"
       :center="true"
       :show-close="false"
       :visible="!close"
@@ -192,7 +192,7 @@ export default {
     }
     .fees-data-content,
     .dfs-data-content {
-      max-height: 320px;
+      max-height: 520px;
       overflow-y: auto;
       margin-bottom: 40px;
     }
