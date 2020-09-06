@@ -101,7 +101,11 @@ const sys = {
       "bonus": "1.50000000000000000",
       "refund_delay_sec": 31104000
     }],
-    list: [],
+    dfsData: {},
+    list: [], // yfc挖矿列表
+    poolsBal: '0.0000', // swap EOS数量
+    yfcBal: '0.00000000', // YFC池子余额
+    dampingYfc: 1, // YFC挖矿衰减
   },
   mutations: {
     SET_BASECONFIG: (state, baseConfig) => {
@@ -133,8 +137,20 @@ const sys = {
       state.feesApr = feesApr;
       localStorage.setItem('feesApr', JSON.stringify(feesApr));
     },
+    SET_DfsData: (state, dfsData) => {
+      state.dfsData = dfsData;
+    },
     SET_List: (state, list) => {
       state.list = list;
+    },
+    SET_PoolsBal: (state, poolsBal) => {
+      state.poolsBal = poolsBal;
+    },
+    SET_YfcBal: (state, yfcBal) => {
+      state.yfcBal = yfcBal;
+    },
+    SET_DampingYfc: (state, dampingYfc) => {
+      state.dampingYfc = dampingYfc;
     },
   },
   actions: {
@@ -161,8 +177,20 @@ const sys = {
     setFeesApr({ commit }, feesApr) {
       commit('SET_FEESAPR', feesApr);
     },
+    setDfsData({ commit }, dfsData) {
+      commit('SET_DfsData', dfsData);
+    },
     setList({ commit }, list) {
       commit('SET_List', list);
+    },
+    setPoolsBal({ commit }, poolsBal) {
+      commit('SET_PoolsBal', poolsBal);
+    },
+    setYfcBal({ commit }, poolsBal) {
+      commit('SET_YfcBal', poolsBal);
+    },
+    setDampingYfc({ commit }, poolsBal) {
+      commit('SET_DampingYfc', poolsBal);
     },
   }
 };

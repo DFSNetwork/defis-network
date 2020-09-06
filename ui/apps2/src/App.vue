@@ -10,7 +10,7 @@
 import moment from 'moment';
 import axios from 'axios';
 import { mapState } from 'vuex';
-import { GetUrlPara, login, getUrlParams, toLocalTime, accPow, accDiv } from '@/utils/public';
+import { GetUrlPara, login, getUrlParams, toLocalTime, accPow, accDiv, toFixed } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
 import MyKonami from '@/views/konami/Index';
 
@@ -32,6 +32,8 @@ export default {
   data() {
     return {
       priceTimer: null,
+      yfcTimer: null,
+      dampingYfc: 1,
     }
   },
   watch: {
@@ -51,17 +53,32 @@ export default {
       this.handleGetAprs()
       this.handleGetDfsCurrent()
       this.handleGetDiscount();
+      this.handleYfcData();
+
       clearInterval(this.priceTimer)
       this.handleGetPrice()
       this.priceTimer = setInterval(() => {
         this.handleGetPrice()
       }, 300000);
+
     }, 500);
   },
   beforeDestroy: function () {
     clearInterval(this.priceTimer);
   },
   methods: {
+    handleYfcData() {
+      this.handleGetPonds()
+      this.handleGetBalance()
+      this.handleGetBalance('yfc')
+      this.handleGetYfcCurrent();
+      clearInterval(this.yfcTimer)
+      this.yfcTimer = setInterval(() => {
+        this.handleGetBalance()
+        this.handleGetBalance('yfc')
+        this.handleGetYfcCurrent();
+      }, 10000)
+    },
     handleResize () {
       if (document.documentElement.clientWidth <= 750 && !this.minScreen) {
         this.$store.dispatch('setMinScreen', true)
@@ -246,6 +263,7 @@ export default {
         this.$store.dispatch('setEggargs', rows)
       })
     },
+    // 获取YFC矿池列表 - 执行一次
     handleGetPonds() {
       const params = {
         "code": "yfcfishponds",
@@ -259,27 +277,65 @@ export default {
         if (!rows.length) {
           return
         }
-        const list = this.list;
+        const list = rows;
         list.forEach(v => {
-          const pond = rows.find(vv => vv.id === v.mid) || {};
-          const multiple = Number(pond.weight)
-          this.$set(v, 'multiple', multiple)
-          const maxNum = parseFloat(pond.max_supply)
-          this.$set(v, 'maxNum', Number(maxNum))
-          if (pond.start) {
-            let beginTime = toLocalTime(`${pond.start}.000+0000`);
+          if (v.start) {
+            let beginTime = toLocalTime(`${v.start}.000+0000`);
             beginTime = moment(beginTime).valueOf();
             this.$set(v, 'beginTime', beginTime / 1000);
           }
-          if (pond.end) {
-            let endTime = toLocalTime(`${pond.end}.000+0000`);
+          if (v.end) {
+            let endTime = toLocalTime(`${v.end}.000+0000`);
             endTime = moment(endTime).valueOf();
             this.$set(v, 'endTime', endTime / 1000);
           }
         });
         this.$store.dispatch('setList', list)
       })
-    }
+    },
+    // 获取swap, yfc池子账户余额 - 10秒轮询
+    async handleGetBalance(type) {
+      let params = {
+        code: 'eosio.token',
+        coin: 'EOS',
+        decimal: 4,
+        account: 'defisswapcnt'
+      };
+      if (type === 'yfc') {
+        params = {
+          code: 'yfctokenmain',
+          coin: 'YFC',
+          decimal: 8,
+          account: 'yfcfishponds'
+        };
+      }
+      await EosModel.getCurrencyBalance(params, res => {
+        let balanceYfc = toFixed('0.00000000001', params.decimal);
+        (!res || res.length === 0) ? balanceYfc : balanceYfc = res.split(' ')[0];
+        if (type === 'yfc') {
+          this.$store.dispatch('setYfcBal', balanceYfc)
+          return
+        }
+        this.$store.dispatch('setPoolsBal', balanceYfc)
+      })
+    },
+    // 获取当前发行量 和 计算衰减
+    async handleGetYfcCurrent() {
+      const https = this.baseConfig.node.url;
+      const params = {
+        code: 'yfctokenmain',
+        symbol: 'YFC'
+      }
+      const result = await axios.post(`${https}/v1/chain/get_currency_stats`, JSON.stringify(params))
+      if (result.status !== 200) {
+        return;
+      }
+      const res = result.data['YFC'];
+      const supply = res.supply.split(' ')[0];
+      const t = parseInt(supply / 1000)
+      this.dampingYfc = 1 * Math.pow(0.75, t)
+      this.$store.dispatch('setDampingYfc', this.dampingYfc)
+    },
   },
 }
 </script>

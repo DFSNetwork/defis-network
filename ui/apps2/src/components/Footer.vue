@@ -36,6 +36,7 @@
 
 <script>
 import axios from "axios";
+import { mapState } from 'vuex';
 import DfsInfoDataTip from "@/components/DFSInfoDataTip";
 import { EosModel } from '@/utils/eos';
 import { toFixed, accMul } from '@/utils/public';
@@ -59,6 +60,11 @@ export default {
       }
     }
   },
+  computed: {
+    ...mapState({
+      poolsBal: state => state.sys.poolsBal,
+    }),
+  },
   components: {
     DfsInfoDataTip,
   },
@@ -68,11 +74,18 @@ export default {
   mounted() {
     clearInterval(this.timer);
     this.timer = setInterval(() => {
-      this.handleGetBalance()
       this.handleGetDfsInfoData();
     }, 1000 * 10);
     this.handleGetDfsInfoData();
-    this.handleGetBalance()
+  },
+  watch: {
+    poolsBal: {
+      handler: function pb(val) {
+        this.poolsEos = accMul(val, 2).toFixed(4);
+      },
+      immediate: true,
+      deep: true,
+    }
   },
   methods: {
     handleToShowReport(name) {
@@ -92,6 +105,7 @@ export default {
         return;
       }
       this.dfsInfoData = result.data;
+      this.$store.dispatch('setDfsData', this.dfsInfoData)
     },
     // 获取账户余额
     async handleGetBalance() {

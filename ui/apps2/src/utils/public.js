@@ -296,3 +296,24 @@ export function getMarketTime(startTime) {
   }
   return { total: t, days, hours, minutes, seconds };
 }
+
+export function getYfcReward(minnerData, data, type) {
+  const poolsBal = store.state.sys.poolsBal;
+  const yfcBal = store.state.sys.yfcBal;
+  const dampingYfc = store.state.sys.dampingYfc;
+  const lists = store.state.sys.lists.find(v => minnerData.mid === v.id);
+  const weight = Number(lists.weight)
+  
+  const rate = accDiv(minnerData.liq || 10000, poolsBal);
+  let t = 3600;
+  if (minnerData.lastTime) {
+    t = moment().valueOf() - minnerData.lastTime;
+    t = t / 1000;
+  }
+  let reward = yfcBal - yfcBal * Math.pow(0.9999, t * rate * weight * dampingYfc);
+  if (type === 'year') {
+    reward = reward * 24;
+    reward = reward * 365;
+  }
+  return toFixed(reward, 8)
+}
