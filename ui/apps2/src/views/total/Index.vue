@@ -25,7 +25,7 @@
               <div class="tip">{{ $t('info.markerFeesApr') }}</div>
             </div>
             <div>
-              <div class="num">{{ item.yfcApr || '—' }}</div>
+              <div class="num">{{ item.yfcApr || '—' }}%</div>
               <div class="tip">{{ $t('info.yfcApr') }}</div>
             </div>
           </div>
