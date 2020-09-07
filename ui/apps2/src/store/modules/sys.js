@@ -75,7 +75,7 @@ const sys = {
     eggargs: localStorage.getItem('eggargs') ? JSON.parse(localStorage.getItem('eggargs')) : [], // 全局aprs
     feesApr: localStorage.getItem('feesApr') ? JSON.parse(localStorage.getItem('feesApr')) : [], // 全局aprs
     sortClass: {
-      gold: [39],
+      gold: [39, 329],
       // silver: [],
       // bronze: []
       silver: [5, 17, 309],
