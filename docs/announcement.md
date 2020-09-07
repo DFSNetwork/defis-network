@@ -1,6 +1,58 @@
 # DFS 历史公告归档
 
 
+## 9月6号
+
+由于访问人数激增，可能造成页面访问困难。紧急召集了三个备份入口。分别由DFS科学家，生权和tp钱包提供，请放心切换使用。
+
+https://yfc.one
+
+https://yfcbak.gitee.io
+
+http://yfc.sgxiang.com
+
+https://yfc.tokenpocket.pro
+
+## 9月5号
+
+大丰收农场里，第一个由社区开发者社区发起的DeFi项目介绍: 
+
+YFC，你的小锦鲤(Your Fancy Crap)
+
+详细文档: https://github.com/defis-net/defis-network/blob/master/docs/yfc_design.md
+
+首页直达: https://www.yfc.one
+
+EOS上首个基于LP Token的无额外资金风险的第一套娃双挖项目。将于9月6号凌晨开启创世挖矿。请提前做好准备。
+项目最大风险就是，当一个机会摆在你面前时，而你却错过了，以后想起来身心难受。
+
+## 9月4号
+
+三大利好:
+
+1. DSS: DFS Saving System 提前上线。
+DSS已经通过派盾安全审计。接受了审计报告上的改进意见。在合约安全和执行效率上，达到了保障。
+DSS简单介绍和攻略: https://github.com/defis-net/defis-network/blob/master/docs/dfs_saving_system.md
+DSS直达链接: https://apps.defis.network/dss
+
+2. PIZZA加入大丰收农场青铜鱼塘
+PIZZA是EOS上老牌DeFi，在DeFi路上兢兢业业探索着。
+在借贷、闪兑、稳定币方方面面都干得不错。是EOS DeFi生态的重要成员。
+PIZZA和大丰收农场在EOS DeFi统一战线上步调一致，展开深度合作。
+PIZZA代币，今日上线青铜鱼塘，福利如下: 
+随存随取，以币赚币，买PIZZA手续费85折。做市挖矿收益加成，幸运彩蛋加持，做市商年化恐怖。so，做市吧。PIZZA少年。
+PIZZA交易对直达链接: https://apps.defis.network/market/305
+PIZZA矿池直达链接: https://apps.defis.network/pools/305
+
+9月4号。对币圈人来说，是一个特殊的日子。
+当我们回首币圈往事，再向前看，看到的，是技术在创新，是历史在前进。
+如今的DeFi热潮相比当年的ICO热潮。
+不变的币民们的炒币热情，变化的却是更多有用的项目在落地。
+区块链技术正在被应用。期待下一个94会更好。
+
+3. 今晚公布第一个由DFS开发者社区发起的DeFi项目的项目介绍。
+
+
 ## 8月17号: 深夜, USDD暂停铸币
 
 USDD由于设计得腊鸡。价格无法保持稳定。团队讨论决定，再一次躺平认输。悲痛的暂停EOS抵押发行USDD的通道。以防止无脑加杠杆而导致的USDD持续下跌。
