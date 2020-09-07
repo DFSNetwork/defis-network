@@ -65,6 +65,8 @@ YFC，锦鲤之池，从矿工人数、日交易量、定价权，均满足大�
 
 从青铜鱼塘越迁为黄金鱼塘。和DFS一起并列成为第二个黄金鱼塘。
 
+做市 EOS/YFC: 享受最大化的权重YFC钓鱼权重 + 最大化的DFS挖矿权重。
+
 关于大丰收的鱼塘升级规则参考： [大丰收农场鱼塘升级计划](https://github.com/defis-net/defis-network/blob/master/docs/pool_upgrade_plan.md)
 
 ## 说句心里话
