@@ -121,7 +121,7 @@ export default {
         account: 'defisswapcnt'
       };
       await EosModel.getCurrencyBalance(params, res => {
-        let balance = toFixed('0.000000001', params.decimal);
+        let balance = toFixed('0.0000000000001', params.decimal);
         (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
         this.lockEos = accMul(balance, 2).toFixed(4);
       })

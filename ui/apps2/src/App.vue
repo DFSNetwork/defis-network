@@ -310,7 +310,7 @@ export default {
         };
       }
       await EosModel.getCurrencyBalance(params, res => {
-        let balanceYfc = toFixed('0.00000000001', params.decimal);
+        let balanceYfc = toFixed('0.0000000000001', params.decimal);
         (!res || res.length === 0) ? balanceYfc : balanceYfc = res.split(' ')[0];
         if (type === 'yfc') {
           this.$store.dispatch('setYfcBal', balanceYfc)

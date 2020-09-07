@@ -112,7 +112,7 @@ export default {
           const yfcReward = getYfcReward(market.mid, 'year')
           if (Number(yfcReward)) {
             const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
-            const apy = yfcReward * price / 10000 * 100;
+            const apy = yfcReward * price / 20000 * 100;
             feesApr.yfcApr = apy.toFixed(2);
             count = accAdd(count, apy.toFixed(2))
           }

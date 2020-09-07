@@ -163,7 +163,7 @@ export default {
         params.account = 'dfsdsrbuffer';
       }
       EosModel.getCurrencyBalance(params, res => {
-        let balance = toFixed('0.000000001', params.decimal);
+        let balance = toFixed('0.0000000000001', params.decimal);
         (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
         if (type === 'lock') {
           this.lockLoading = false;

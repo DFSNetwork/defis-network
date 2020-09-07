@@ -2,16 +2,10 @@
   <div class="nodeSet">
     <div class="title">{{ $t('node.nodeSet') }}</div>
     <div class="content">
-      <div class="nodeList" @click="radio = 1">
-        <div class="icon" :class="{'act': radio === 1}">
-          <span>{{ $t('node.defaultNode') }}：</span>
-          <span>https://eos.greymass.com</span>
-        </div>
-      </div>
-      <div class="nodeList" @click="radio = 2">
-        <div class="icon" :class="{'act': radio === 2}">
-          <span>{{ $t('node.standbyNode') }}：</span>
-          <span>https://nodes.get-scatter.com</span>
+      <div class="nodeList" v-for="(node, index) in nodeList" :key="index"  @click="handleCheck(node, index)">
+        <div class="icon" :class="{'act': radio === index}">
+          <span>{{ $t('node.standbyNode') }}{{index + 1}}：</span>
+          <span>{{ node.url }}</span>
         </div>
       </div>
     </div>
@@ -24,22 +18,49 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
-      node1: {
-        area: 'production',
-        protocol: 'https',
-        host: 'eos.greymass.com', // eospush.tokenpocket.pro
-        port: '443',
-        url: 'https://eos.greymass.com', // https://eospush.tokenpocket.pro
-        chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-      },
-      node2: {
-        area: 'production',
-        protocol: 'https',
-        host: 'nodes.get-scatter.com', // eospush.tokenpocket.pro
-        port: '443',
-        url: 'https://nodes.get-scatter.com', // https://eospush.tokenpocket.pro
-        chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-      },
+      nodeList: [
+        {
+          area: 'production',
+          protocol: 'https',
+          host: 'eos.greymass.com', // eospush.tokenpocket.pro
+          port: '443',
+          url: 'https://eos.greymass.com', // https://eospush.tokenpocket.pro
+          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        },
+        {
+          area: 'production',
+          protocol: 'https',
+          host: 'nodes.get-scatter.com', // eospush.tokenpocket.pro
+          port: '443',
+          url: 'https://nodes.get-scatter.com', // https://eospush.tokenpocket.pro
+          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        },
+        {
+          area: 'production',
+          protocol: 'https',
+          host: 'mainnet.meet.one',
+          port: '443',
+          url: 'https://mainnet.meet.one', // https://eospush.tokenpocket.pro
+          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        },
+        {
+          area: 'production',
+          protocol: 'https',
+          host: 'api.eossweden.se',
+          port: '443',
+          url: 'https://api.eossweden.se', // https://eospush.tokenpocket.pro
+          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        },
+        {
+          area: 'production',
+          protocol: 'https',
+          host: 'api.eoslaomao.com',
+          port: '443',
+          url: 'https://api.eoslaomao.com', // https://eospush.tokenpocket.pro
+          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        }
+      ],
+      node: null,
       radio: 1,
     }
   },
@@ -54,18 +75,19 @@ export default {
   watch: {
     baseConfig: {
       handler: function bc() {
-        if (this.baseConfig.node.url === 'https://nodes.get-scatter.com') {
-          this.radio = 2;
-          return
-        }
-        this.radio = 1;
+        const url = this.baseConfig.node.url;
+        this.radio = this.nodeList.findIndex(v => v.url === url);
       },
       immediate: true
     }
   },
   methods: {
+    handleCheck(node, index) {
+      this.node = node;
+      this.radio = index;
+    },
     handleSetNode() {
-      const node = this.radio === 1 ? this.node1 : this.node2;
+      const node = this.nodeList[this.radio];
       const newConf = this.baseConfig;
       newConf.node = node;
       localStorage.setItem('proConfig', JSON.stringify(newConf))

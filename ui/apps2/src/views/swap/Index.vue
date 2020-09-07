@@ -821,11 +821,19 @@ export default {
         params.decimal = this.thisMarket1.decimal;
       }
       await EosModel.getCurrencyBalance(params, res => {
-        let balance = toFixed('0.000000001', params.decimal);
+        let balance = toFixed('0.0000000000001', params.decimal);
         (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
         if (next) {
+          if (params.coin !== this.thisMarket1.symbol || params.code !== this.thisMarket1.contract) {
+            this.handleGetBalance(next)
+            return
+          }
           this.balanceSym1 = balance;
           return;
+        }
+        if (params.coin !== this.thisMarket0.symbol || params.code !== this.thisMarket0.contract) {
+          this.handleGetBalance()
+          return
         }
         this.balanceSym0 = balance;
       })

@@ -130,7 +130,7 @@ export default {
         scope: this.baseConfig.toAccountSwap,
         table: 'markets',
         json: true,
-        limit: 100
+        limit: 1000
       }
       EosModel.getTableRows(params, (res) => {
         const list = res.rows || [];

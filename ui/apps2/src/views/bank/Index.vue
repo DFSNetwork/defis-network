@@ -405,7 +405,7 @@ export default {
         params.account = this.baseConfig.toAccountJin;
       }
       await EosModel.getCurrencyBalance(params, res => {
-        let balance = toFixed('0.000000001', params.decimal);
+        let balance = toFixed('0.0000000000001', params.decimal);
         (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
         if (next === 'next') {
           this.balanceSym1 = balance;
