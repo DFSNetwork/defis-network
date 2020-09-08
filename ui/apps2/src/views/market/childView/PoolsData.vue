@@ -161,26 +161,27 @@ export default {
         })
         weightList.forEach(v => {
           const item = newVal.find(vv => vv.mid === v.mid)
-          item.pool_weight = v.pool_weight;
-          if (this.sortClass.gold.find(vv => vv === item.mid)) {
+          const weight = Number(v.pool_weight).toFixed(4)
+          item.pool_weight = weight;
+          if (weight === '4.1903') {
             gold.push(item)
-          } else if (this.sortClass.silver.find(vv => vv === item.mid)) {
+          } else if (weight === '2.5468') {
             silver.push(item)
-          } else if (this.sortClass.bronze.find(vv => vv === item.mid)) {
+          } else if (weight === '1.4790') {
             bronze.push(item)
           } else {
             lists.push(item)
           }
         });
-        gold = gold.sort((a, b) => {
-          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        })
-        silver = silver.sort((a, b) => {
-          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        })
-        bronze = bronze.sort((a, b) => {
-          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        })
+        // gold = gold.sort((a, b) => {
+        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        // })
+        // silver = silver.sort((a, b) => {
+        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        // })
+        // bronze = bronze.sort((a, b) => {
+        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        // })
         lists = lists.sort((a, b) => {
           return parseFloat(b.reserve0) - parseFloat(a.reserve0)
         })

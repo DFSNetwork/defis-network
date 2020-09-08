@@ -178,7 +178,7 @@ class model {
       }
       this.scatterEosJs = this.scatter.eos(this.network, Eos, this.eosOptions);
 
-      this.conserveAccount(item);
+      this.conserveAccount(item, callback);
       // self.vthis.$message({
       //   message: 'Login Success',
       //   type: 'success'
@@ -206,7 +206,7 @@ class model {
     })
   }
 
-  conserveAccount(item) {
+  conserveAccount(item, callback) {
     const scatterItem = store.state.app.scatter;
     this.accountByScatter = item.identity.accounts[0];
     const { identity = null, wallet, chain, online = true } = item;
@@ -216,6 +216,7 @@ class model {
     scatterItem.online = online;
     store.dispatch('setScatter', scatterItem);
     localStorage.setItem('Frontend-Token', '');
+    callback()
   }
 
   // 退出账户

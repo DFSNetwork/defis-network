@@ -111,7 +111,8 @@ export default {
     },
     handleDealCoinImg(contract, coin) {
       const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
-      const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb', 'yfctokenmain-yfc']
+      const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb',
+      'yfctokenmain-yfc', 'eossanguotkt-tkt']
       const inData = `${contract}-${coin.toLowerCase()}`
       const has = localeCoin.find(v => v === inData)
       if (has) {

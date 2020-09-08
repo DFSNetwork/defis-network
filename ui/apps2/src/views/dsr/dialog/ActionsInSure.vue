@@ -24,7 +24,7 @@
       </div>
     </div>
     <div class="btnDiv flexb">
-      <div class="btn flexc cancel" @click="handleClose">{{ $t('pulic.cancel') }}</div>
+      <div class="btn flexc cancel" @click="handleClose">{{ $t('public.cancel') }}</div>
       <div class="btn flexc sure" v-loading="loading" @click="handleShowTip">{{ $t('public.confirm') }}</div>
     </div>
 
@@ -41,7 +41,7 @@
           <span>{{ $t('dsr.warmTip2') }}</span>
         </div>
         <div class="btnDiv flexb">
-          <div class="btn flexc cancel" @click="handleCancel">{{ $t('pulic.cancel') }}</div>
+          <div class="btn flexc cancel" @click="handleCancel">{{ $t('public.cancel') }}</div>
           <div class="btn flexc sure" @click="handleSure">{{ $t('public.confirm') }}</div>
         </div>
       </div>

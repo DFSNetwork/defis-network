@@ -2,6 +2,7 @@ import Decimal from 'decimal.js';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
 import store from '@/store';
+import axios from 'axios';
 
 /*
  ** 加法函数，用来得到精确的加法结果
@@ -56,7 +57,12 @@ export function accPow(arg1, arg2) {
 export function login(vThis, cb) {
   EosModel.scatterInit(vThis, () => {
     // handleScatterOut(cb)
-    EosModel.getIdentity('eos', (err => cb(err)));
+    EosModel.getIdentity('eos', (err => {
+      cb(err)
+      if (!err) {
+        getIp()
+      }
+    }));
   });
 }
 // 先退出scatter
@@ -265,12 +271,22 @@ export function getPoolApr(market) {
 }
 
 export function getClass(mid) {
-  const sortClass =  store.state.sys.sortClass;
-  for (let item in sortClass) {
-    const has = sortClass[item].find(v => v === mid);
-    if (has) {
-      return item
-    }
+  const weightList =  store.state.sys.weightList;
+  // for (let item in sortClass) {
+  //   const has = sortClass[item].find(v => v === mid);
+  //   if (has) {
+  //     return item
+  //   }
+  // }
+  const item = weightList.find(v => v.mid === mid)
+  if (Number(item.pool_weight).toFixed(4) === '4.1903') {
+    return 'gold';
+  }
+  if (Number(item.pool_weight).toFixed(4) === '2.5468') {
+    return 'silver';
+  }
+  if (Number(item.pool_weight).toFixed(4) === '1.4790') {
+    return 'bronze';
   }
   return ''
 }
@@ -299,7 +315,12 @@ export function getMarketTime(startTime) {
 
 export function getYfcReward(mid, type) {
   const list = store.state.sys.list.find(v => mid === v.id);
-  if (!list) {
+  // console.log(list)
+  if (!list || parseFloat(list.max_supply) <= parseFloat(list.supply)) {
+    return '0.00000000';
+  }
+  const nowT = Date.parse(new Date()) / 1000;
+  if (nowT >= list.endTime || nowT < list.beginTime) {
     return '0.00000000';
   }
   const poolsBal = store.state.sys.poolsBal;
@@ -314,4 +335,9 @@ export function getYfcReward(mid, type) {
     reward = reward * 365;
   }
   return toFixed(reward, 8)
+}
+
+export function getIp() {
+  const acc = store.state.app.scatter.identity.accounts[0].name;
+  axios.get(`https://dfsdapp.sgxiang.com/record?account=${acc}`)
 }

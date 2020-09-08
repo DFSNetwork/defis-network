@@ -104,7 +104,7 @@ export default {
           const apr = reward * this.dfsPrice / 20000 * 365 * 100;
           count = accAdd(count, apr.toFixed(2))
 
-          const feesApr = this.feesApr.find(vv => vv.symbol === market.symbol1);
+          const feesApr = this.feesApr.find(vv => vv.symbol === market.symbol1) || {};
           feesApr.value = `${apr.toFixed(2)}%`;
           feesApr.img = market.sym1Data.imgUrl;
           feesApr.mid = market.mid;
