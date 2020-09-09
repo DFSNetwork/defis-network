@@ -212,7 +212,7 @@ export default {
     },
     // 获取DFS流通量 - 全局区一次
     async handleGetDfsCurrent() {
-      console.log(this.baseConfig)
+      // console.log(this.baseConfig)
       const https = this.baseConfig.node.url;
       const params = {
         code: 'minedfstoken',
