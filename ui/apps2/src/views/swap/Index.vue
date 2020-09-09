@@ -490,7 +490,7 @@ export default {
       }
       const hasPng = localCoinPng.find(v => v === inData);
       if (!has && hasPng) {
-        return `/static/coin/${hasPng}.png`;
+        return `https://apps.defis.network/static/coin/${hasPng}.png`;
       }
       return `https://ndi.340wan.com/eos/${inData}.png`
     },

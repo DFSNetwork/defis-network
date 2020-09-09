@@ -171,10 +171,10 @@ export default {
         symbol1: 'USDT',
         contract1: 'tethertether',
         sym0Data:{
-          imgUrl: '/static/coin/eosio.token-eos.svg'
+          imgUrl: 'https://apps.defis.network/static/coin/eosio.token-eos.svg'
         },
         sym1Data:{
-          imgUrl: '/static/coin/tethertether-usdt.svg'
+          imgUrl: 'https://apps.defis.network/static/coin/tethertether-usdt.svg'
         }
       },
       sellToken: '',

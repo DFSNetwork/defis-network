@@ -140,7 +140,7 @@ export default {
         {
           symbol: 'USDD',
           contract: 'bankofusddv1',
-          imgUrl: '/static/coin/bankofusddv1-usdd.svg',
+          imgUrl: 'https://apps.defis.network/static/coin/bankofusddv1-usdd.svg',
           decimal: 4
         },
         {

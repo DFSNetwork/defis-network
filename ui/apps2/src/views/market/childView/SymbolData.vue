@@ -129,7 +129,7 @@
             <span>{{ $t('dex.pools') }}</span>
             <span>{{ item.liq_bal0 }} / {{ item.liq_bal1 }}</span>
           </div>
-          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`/static/rank/rank${index + 1}.png`" alt=""></label>
+          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://apps.defis.network/static/rank/rank${index + 1}.png`" alt=""></label>
         </div>
       </template>
       <el-pagination
@@ -184,10 +184,10 @@ export default {
         contract0: 'eosio.token',
         contract1: 'bankofusddv1',
         sym0Data: {
-          imgUrl: "/static/coin/eosio.token-eos.svg"
+          imgUrl: "https://apps.defis.network/static/coin/eosio.token-eos.svg"
         },
         sym1Data: {
-          imgUrl: "/static/coin/bankofusddv1-usdd.svg"
+          imgUrl: "https://apps.defis.network/static/coin/bankofusddv1-usdd.svg"
         },
       }, // 当前矿池数据
       accMineData: {}, // 用户记录

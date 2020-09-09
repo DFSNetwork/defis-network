@@ -215,11 +215,11 @@ export default {
         // '/static/rank/rank${index + 1}.png'
       const myclass = getClass(mid);
       if (myclass === 'gold') {
-        return '/static/rank/rank1.png'
+        return 'https://apps.defis.network/static/rank/rank1.png'
       } else if (myclass === 'silver') {
-        return '/static/rank/rank2.png'
+        return 'https://apps.defis.network/static/rank/rank2.png'
       } else if (myclass === 'bronze') {
-        return '/static/rank/rank3.png'
+        return 'https://apps.defis.network/static/rank/rank3.png'
       } else {
         return ''
       }
