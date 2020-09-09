@@ -116,7 +116,7 @@ export default {
       const inData = `${contract}-${coin.toLowerCase()}`
       const has = localeCoin.find(v => v === inData)
       if (has) {
-        return `/static/coin/${has}.svg`;
+        return `https://apps.defis.network/static/coin/${has}.svg`;
       }
       const hasPng = localCoinPng.find(v => v === inData);
       if (!has && hasPng) {

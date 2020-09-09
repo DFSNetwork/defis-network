@@ -412,6 +412,7 @@ export default {
   },
   created() {
     this.handleGetUrlInAndOut()
+    this.handleInBy(this.tradeInfo.type, 'first')
   },
   mounted() {
     // console.log(this.thisMarket0)
@@ -485,7 +486,7 @@ export default {
       const inData = item.toLowerCase().replace(':', '-')
       const has = localeCoin.find(v => v === inData)
       if (has) {
-        return `/static/coin/${has}.svg`;
+        return `https://apps.defis.network/static/coin/${has}.svg`;
       }
       const hasPng = localCoinPng.find(v => v === inData);
       if (!has && hasPng) {
@@ -559,7 +560,7 @@ export default {
         return
       }
       try {
-        // console.log(inData)
+        console.log(inData)
         const outData = this.handleDealAmountOut(inData);
         // console.log(outData)
         // in & out 都是0，非焦点ipt置空

@@ -8,7 +8,7 @@
       </span>
     </div>
     <div class="iptSearch" :class="{'other': type === 'other'}">
-      <el-input v-model="search" :placeholder="`${$t('pools.searchMarket')}..`"></el-input>
+      <el-input v-model="search" clearable :placeholder="`${$t('pools.searchMarket')}..`"></el-input>
     </div>
     <div class="scroll" v-if="type === 'other'">
       <template v-for="(item, i) in searchArr">

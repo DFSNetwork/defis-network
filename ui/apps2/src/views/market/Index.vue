@@ -102,7 +102,7 @@
       <div v-else class="btn flexc backBtn" @click="handleToSell">{{ $t('pools.withdrawal') }}</div>
     </div>
 
-    <MarketData  :thisMarket="thisMarket" :token="token"/>
+    <MarketData v-if="Number(token) !== 0" :thisMarket="thisMarket" :token="token"/>
     <weight v-if="Number(weight)" :token="token" :thisMarket="thisMarket" :marketLists="marketLists"/>
 
     <div class="liquidity" v-if="act === 1">
@@ -244,8 +244,8 @@ export default {
         // const thisMarket = newVal[0];
         const reserve0 = thisMarket.reserve0.split(' ')[0];
         const reserve1 = thisMarket.reserve1.split(' ')[0];
-        thisMarket.sym0Rate = toFixed(accDiv(reserve1, reserve0), thisMarket.decimal0)
-        thisMarket.sym1Rate = toFixed(accDiv(reserve0, reserve1), thisMarket.decimal1)
+        thisMarket.sym0Rate = toFixed(accDiv(reserve1, reserve0), thisMarket.decimal1)
+        thisMarket.sym1Rate = toFixed(accDiv(reserve0, reserve1), thisMarket.decimal0)
         this.thisMarket = thisMarket;
         this.handleInBy(this.dealType)
         this.handleBeforeDestroy()
@@ -275,6 +275,10 @@ export default {
       if (newVal.mid === oldVal.mid) {
         return
       }
+      const reserve0 = newVal.reserve0.split(' ')[0];
+      const reserve1 = newVal.reserve1.split(' ')[0];
+      newVal.sym0Rate = toFixed(accDiv(reserve1, reserve0), newVal.decimal1)
+      newVal.sym1Rate = toFixed(accDiv(reserve0, reserve1), newVal.decimal0)
       const weightData = this.weightList.find(v => v.mid === this.thisMarket.mid) || {};
       this.weight = weightData.pool_weight || 0;
       this.handleGetAccToken();
