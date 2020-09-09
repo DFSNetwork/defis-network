@@ -278,7 +278,7 @@ export function getClass(mid) {
   //     return item
   //   }
   // }
-  const item = weightList.find(v => v.mid === mid)
+  const item = weightList.find(v => v.mid === mid) || {}
   if (Number(item.pool_weight).toFixed(4) === '4.1903') {
     return 'gold';
   }

@@ -101,12 +101,14 @@
             <span>{{ $t('dex.pools') }}: </span>
             <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
           </div>
+          <div class="tip rewardPerDay allApr">总年化: <b>{{ countApy }}%</b></div>
           <div class="rewardPerDay tip">
             <span>{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</span>
           </div>
           <div class="rewardPerDay tip"><span>{{ $t('mine.mineApr') }}: {{ apr }}%</span></div>
           <div class="rewardPerDay tip" v-if="!isActual && Number(feesApr)"><span>{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</span></div>
           <div class="rewardPerDay tip" v-if="isActual && Number(feesApr)"><span>{{ $t('mine.marketApr24H') }}: {{ feesApr }} %</span></div>
+          <div class="rewardPerDay tip" v-if="Number(yfcApy)">YFC钓鱼年化: {{ yfcApy }}%</div>
         </div>
       </div>
     </div>
@@ -159,7 +161,7 @@ import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, getMarketTime,
-         dealMinerData, perDayReward, getPoolApr, getClass } from '@/utils/public';
+         dealMinerData, perDayReward, getPoolApr, getClass, getYfcReward } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
 import MarketTip from '../popup/MarketTip';
@@ -254,6 +256,27 @@ export default {
       dfsPrice: state => state.sys.dfsPrice,
       storeFeesApr: state => state.sys.feesApr,
     }),
+    yfcApy() {
+      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
+      const YfcPool = this.marketLists.find(vv => vv.mid === 329);
+      const yfcReward = getYfcReward(this.thisMarket.mid, 'year')
+      if (Number(yfcReward)) {
+        const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
+        const apy = yfcReward * price / 20000 * 100;
+        feesApr.yfcApr = apy.toFixed(2);
+      }
+      return feesApr.yfcApr || '0.00';
+    },
+    countApy() {
+      let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
+      if (this.yfcApy) {
+        all = accAdd(all, parseFloat(this.yfcApy))
+      }
+      if (isNaN(all)) {
+        return '—'
+      }
+      return all.toFixed(2)
+    },
     minReward() {
       if (!Number(this.dfsPrice)) {
         return '0.0005'
@@ -268,7 +291,7 @@ export default {
       if (!this.weightList.length || !this.thisMarket.mid) {
         return '0'
       }
-      const wData = this.weightList.find(v => v.mid === this.thisMarket.mid)
+      const wData = this.weightList.find(v => v.mid === this.thisMarket.mid) || {}
       return wData.pool_weight;
     },
     buff() {
@@ -788,6 +811,9 @@ export default {
     padding: 20px;
     font-size: 28px;
     overflow: hidden;
+    .allApr{
+      color: #000;
+    }
   }
   .marketReward{
     &>div{

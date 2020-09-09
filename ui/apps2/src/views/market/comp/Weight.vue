@@ -16,6 +16,8 @@
         <div v-if="getMinerData && Number(reward)" v-loading="claimLoading"
           class="green" @click.stop="handleClaim">{{ $t('bonus.claim') }}</div>
       </div>
+
+      <div class="tip allApr">总年化: <b>{{ countApy }}%</b></div>
       <div class="tip">
         <span>{{ $t('mine.poolsMine2', {perDayReward}) }}</span>
         <!-- <span>预估挖矿年化收益: {{ apr }}%</span> -->
@@ -24,6 +26,7 @@
       <div class="tip">{{ $t('mine.mineApr') }}: {{ apr }}%</div>
       <div class="tip" v-if="!isActual && Number(feesApr)">{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</div>
       <div class="tip" v-if="isActual && Number(feesApr)">{{ $t('mine.marketApr24H') }}: {{ feesApr }} %</div>
+      <div class="tip">YFC钓鱼年化: {{ yfcApy }}%</div>
     </div>
 
     <el-dialog
@@ -37,7 +40,7 @@
 <script>
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward, perDayReward, getPoolApr, getClass } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward, perDayReward, getPoolApr, getClass, getYfcReward } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 
 export default {
@@ -73,7 +76,13 @@ export default {
       default: function tmt() {
         return {}
       }
-    }
+    },
+    marketLists: {
+      type: Array,
+      default: function tmt() {
+        return []
+      }
+    },
   },
   computed: {
     ...mapState({
@@ -120,6 +129,27 @@ export default {
       const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
       const thisPoolApr = getPoolApr(this.thisMarket)
       return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr)
+    },
+    yfcApy() {
+      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
+      const YfcPool = this.marketLists.find(vv => vv.mid === 329);
+      const yfcReward = getYfcReward(this.thisMarket.mid, 'year')
+      if (Number(yfcReward)) {
+        const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
+        const apy = yfcReward * price / 20000 * 100;
+        feesApr.yfcApr = apy.toFixed(2);
+      }
+      return feesApr.yfcApr || '0.00';
+    },
+    countApy() {
+      let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
+      if (this.yfcApy) {
+        all = accAdd(all, parseFloat(this.yfcApy))
+      }
+      if (isNaN(all)) {
+        return '—'
+      }
+      return all.toFixed(2)
     }
   },
   watch: {
@@ -377,6 +407,9 @@ export default {
   margin-top: 40px;
   border: 1px solid #e0e0e0;
   border-radius: 20px;
+  .allApr{
+    color: #000;
+  }
 
   .tipIcom{
     width: 30px;

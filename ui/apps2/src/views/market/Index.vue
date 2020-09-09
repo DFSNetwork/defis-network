@@ -103,7 +103,7 @@
     </div>
 
     <MarketData  :thisMarket="thisMarket" :token="token"/>
-    <weight v-if="Number(weight)" :token="token" :thisMarket="thisMarket"/>
+    <weight v-if="Number(weight)" :token="token" :thisMarket="thisMarket" :marketLists="marketLists"/>
 
     <div class="liquidity" v-if="act === 1">
       <div class="subTitle">{{ $t('dex.poolNum') }}</div>
