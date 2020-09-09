@@ -179,6 +179,7 @@ export default {
     nodeSet: 'Node Setting',
     defaultNode: 'Default',
     standbyNode: 'Standby',
+    slef: 'Custom',
   },
   footer: {
     swapNum: ' Swap',

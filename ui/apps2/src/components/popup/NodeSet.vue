@@ -2,10 +2,16 @@
   <div class="nodeSet">
     <div class="title">{{ $t('node.nodeSet') }}</div>
     <div class="content">
-      <div class="nodeList" v-for="(node, index) in nodeList" :key="index"  @click="handleCheck(node, index)">
+      <div class="nodeList" v-for="(node, index) in nodeList" :key="index" @click="handleCheck(node, index)">
         <div class="icon" :class="{'act': radio === index}">
           <span>{{ $t('node.standbyNode') }}{{index + 1}}：</span>
           <span>{{ node.url }}</span>
+        </div>
+      </div>
+      <div class="nodeList" @click="handleCheck(node, nodeList.length)">
+        <div class="icon" :class="{'act': radio === nodeList.length}">
+          <span>{{ $t('node.slef') }}：</span>
+          <span><input class="input" type="text" @blur="handleBlur" v-model="nodeUrl" placeholder="eg. https://..."></span>
         </div>
       </div>
     </div>
@@ -18,6 +24,7 @@ import { mapState } from 'vuex'
 export default {
   data() {
     return {
+      nodeUrl: '',
       nodeList: [
         {
           area: 'production',
@@ -76,20 +83,63 @@ export default {
     baseConfig: {
       handler: function bc() {
         const url = this.baseConfig.node.url;
-        this.radio = this.nodeList.findIndex(v => v.url === url);
+        let radio = this.nodeList.findIndex(v => v.url === url);
+        if (radio === -1) {
+          radio = this.nodeList.length;
+          this.nodeUrl = url
+        }
+        this.radio = radio;
       },
       immediate: true
+    },
+    nodeUrl() {
+      const protocol = this.nodeUrl.split('://')[0];
+      const host = this.nodeUrl.split('://')[1];
+      const self = {
+        area: 'production',
+        protocol,
+        host,
+        port: '443',
+        url: this.nodeUrl, // https://eospush.tokenpocket.pro
+        chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+      }
+      this.node.url = this.nodeUrl;
     }
   },
   methods: {
+    handleBlur() {
+      const inArr = this.nodeUrl.split('://');
+
+      const protocol = inArr.length > 1 ? inArr[0] : 'https'
+      const host = inArr.length > 1 ? inArr[1] : inArr[0];
+      const url = inArr.length > 1 ? this.nodeUrl : `https://${inArr[0]}`
+      const self = {
+        area: 'production',
+        protocol,
+        host,
+        port: '443',
+        url, // https://eospush.tokenpocket.pro
+        chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+      }
+      this.node = self;
+    },
     handleCheck(node, index) {
-      this.node = node;
       this.radio = index;
+      if (index === this.nodeList.length) {
+        if (!this.nodeUrl) {
+          this.node = {};
+          return
+        }
+        this.handleBlur()
+        return
+      }
+      this.node = node;
     },
     handleSetNode() {
-      const node = this.nodeList[this.radio];
+      // const node = this.nodeList[this.radio];
+      // console.log(this.node)
       const newConf = this.baseConfig;
-      newConf.node = node;
+      newConf.node = this.node;
       localStorage.setItem('proConfig', JSON.stringify(newConf))
       this.$store.dispatch('setBaseConfig', newConf);
       location.reload()
@@ -110,6 +160,13 @@ export default {
   .nodeList{
     text-align: left;
     margin-top: 20px;
+    .input{
+      outline: none;
+      border: 1px solid #e3e3e3;
+      height: 40px;
+      padding-left: 10px;
+      border-radius: 3px;
+    }
     .icon{
       position: relative;
       padding-left: 42px;
@@ -147,7 +204,7 @@ export default {
     }
   }
   .btn{
-    margin-top: 20px;
+    margin-top: 30px;
     background: #07d79b;
     border-radius: 10px;
     color: #fff;

@@ -17,7 +17,7 @@
           class="green" @click.stop="handleClaim">{{ $t('bonus.claim') }}</div>
       </div>
 
-      <div class="tip allApr">总年化: <b>{{ countApy }}%</b></div>
+      <div class="tip allApr">{{ $t('info.totalApr') }}}: <b>{{ countApy }}%</b></div>
       <div class="tip">
         <span>{{ $t('mine.poolsMine2', {perDayReward}) }}</span>
         <!-- <span>预估挖矿年化收益: {{ apr }}%</span> -->
@@ -26,7 +26,7 @@
       <div class="tip">{{ $t('mine.mineApr') }}: {{ apr }}%</div>
       <div class="tip" v-if="!isActual && Number(feesApr)">{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</div>
       <div class="tip" v-if="isActual && Number(feesApr)">{{ $t('mine.marketApr24H') }}: {{ feesApr }} %</div>
-      <div class="tip">YFC钓鱼年化: {{ yfcApy }}%</div>
+      <div class="tip">{{ $t('info.yfcApr') }}}: {{ yfcApy }}%</div>
     </div>
 
     <el-dialog
