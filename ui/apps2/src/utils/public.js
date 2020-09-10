@@ -341,3 +341,13 @@ export function getIp() {
   const acc = store.state.app.scatter.identity.accounts[0].name;
   axios.get(`https://dfsdapp.sgxiang.com/record?account=${acc}`)
 }
+
+export function getDmdMinerHourRoi(market) {
+  const config = store.state.config.dmdMineConfig;
+  const thisConf = config.find(v => v.mid === market.mid) || {};
+  const maxSupply = thisConf.maxSupply || 0;
+  const hour = thisConf.duration / 3600;
+  const reserve = parseFloat(market.reserve1) * 2;
+  const hourRoi = maxSupply / hour / reserve * 100;
+  return toFixed(hourRoi, 3);
+}

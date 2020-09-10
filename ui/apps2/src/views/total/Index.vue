@@ -28,6 +28,10 @@
               <div class="num">{{ item.yfcApr || '—' }}%</div>
               <div class="tip">{{ $t('info.yfcApr') }}</div>
             </div>
+            <div>
+              <div class="num">{{ item.value || '—' }}</div>
+              <div class="tip">DMD挖矿年化</div>
+            </div>
           </div>
           <div class="flexb total">
             <span>{{ $t('info.totalApr') }}</span>

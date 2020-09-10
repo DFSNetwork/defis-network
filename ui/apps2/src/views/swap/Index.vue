@@ -560,7 +560,7 @@ export default {
         return
       }
       try {
-        console.log(inData)
+        // console.log(inData)
         const outData = this.handleDealAmountOut(inData);
         // console.log(outData)
         // in & out 都是0，非焦点ipt置空

@@ -1,11 +1,11 @@
 <template>
   <div class="layout">
-    <header-tools @listenShowNav="handleShowNav" @listenShowTools="handleShowTools"/>
-    <acc-login v-if="showAcc"/>
+    <header-tools v-if="!$route.meta.noFooter" @listenShowNav="handleShowNav" @listenShowTools="handleShowTools"/>
+    <acc-login v-if="showAcc && !$route.meta.noFooter"/>
     <transition name="fade" mode="out-in">
       <router-view class="content" :marketLists="marketLists"/>
     </transition>
-    <my-footer :marketLists="marketLists"/>
+    <my-footer v-if="!$route.meta.noFooter" :marketLists="marketLists"/>
     <Nav ref="nav" @listenShowComp="handleShowComp"/>
     <SlipPointTools ref="slipPointTools"/>
 

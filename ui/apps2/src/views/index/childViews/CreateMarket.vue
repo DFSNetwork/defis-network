@@ -6,50 +6,57 @@
     </div>
     <div class="content">
       <div class="list">
-        <div class="subTitle flexa">{{ $t('dex.coin', {coin: 'A'}) }}</div>
+        <div class="subTitle flexb">
+          <span>{{ $t('dex.coin', {coin: 'A'}) }}</span>
+          <span class="green" @click="handleShowList('start')">选择已有币种</span>
+        </div>
         <el-form class="formDiv" ref="formBorrow">
           <!-- 抵押数量 -->
           <el-form-item>
             <div class="label">{{ $t('dex.contract') }}</div>
-            <el-input v-model="symnol0.contract" type="text" :placeholder="$t('dex.plsContract')" clearable></el-input>
+            <el-input v-model="symbol0.contract" type="text" :placeholder="$t('dex.plsContract')" clearable></el-input>
           </el-form-item>
           <el-form-item>
             <div class="label">{{ $t('dex.coinName') }}</div>
-            <el-input class="mt10" v-model="symnol0.coinName" type="text" :placeholder="$t('dex.plsCoinName')" clearable></el-input>
+            <el-input class="mt10" v-model="symbol0.symbol" type="text" :placeholder="$t('dex.plsCoinName')" clearable></el-input>
           </el-form-item>
           <el-form-item v-if="false">
             <div class="label">{{ $t('dex.coinDecimal') }}</div>
-            <el-input class="mt10" v-model="symnol0.decimal" type="number" :placeholder="$t('dex.plsCoinDecimal')" clearable></el-input>
+            <el-input class="mt10" v-model="symbol0.decimal" type="number" :placeholder="$t('dex.plsCoinDecimal')" clearable></el-input>
           </el-form-item>
         </el-form>
       </div>
 
       <div class="list">
-        <div class="subTitle flexa">{{ $t('dex.coin', {coin: 'B'}) }}</div>
+        <div class="subTitle flexb">
+          <span>{{ $t('dex.coin', {coin: 'B'}) }}</span>
+          <span class="green" @click="handleShowList('end')">选择已有币种</span>
+        </div>
         <el-form class="formDiv" ref="formBorrow">
           <el-form-item>
             <div class="label">{{ $t('dex.contract') }}</div>
-            <el-input v-model="symnol1.contract" type="text" :placeholder="$t('dex.plsContract')"  clearable></el-input>
+            <el-input v-model="symbol1.contract" type="text" :placeholder="$t('dex.plsContract')"  clearable></el-input>
           </el-form-item>
           <el-form-item>
             <div class="label">{{ $t('dex.coinName') }}</div>
-            <el-input class="mt10" v-model="symnol1.coinName" type="text" :placeholder="$t('dex.plsCoinName')" clearable></el-input>
+            <el-input class="mt10" v-model="symbol1.symbol" type="text" :placeholder="$t('dex.plsCoinName')" clearable></el-input>
           </el-form-item>
           <el-form-item v-if="false">
             <div class="label">{{ $t('dex.coinDecimal') }}</div>
-            <el-input class="mt10" v-model="symnol1.decimal" type="number" :placeholder="$t('dex.plsCoinDecimal')" clearable></el-input>
+            <el-input class="mt10" v-model="symbol1.decimal" type="number" :placeholder="$t('dex.plsCoinDecimal')" clearable></el-input>
           </el-form-item>
         </el-form>
       </div>
 
       <div class="tipDiv flex">
         <span class="flexa">
-          <span>{{ $t('public.fee') }}</span>
-          <span  @click="handleShowTip" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+          * 创建市场无需任何费用
+          <!-- <span>{{ $t('public.fee') }}</span>
+          <span  @click="handleShowTip" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span> -->
         </span>
-        <span class="fees">
+        <!-- <span class="fees">
           1.0000 DFS
-        </span>
+        </span> -->
       </div>
 
       <div class="btnDiv">
@@ -59,6 +66,16 @@
       </div>
     </div>
     <create-tip ref="createTip" />
+    <!-- 弹窗组件 -->
+    <el-dialog
+      class="mkListDia pcList"
+      :show-close="false"
+      :visible.sync="showMarketList">
+      <market-list :marketLists="marketLists" :thisMarket0="symbol0" :thisMarket1="symbol1"
+        :type="type"
+        @listenMarketChange="handleMarketChange"
+        @listenClose="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -67,26 +84,38 @@ import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { login } from '@/utils/public';
 import CreateTip from '../components/CreateTip';
+import MarketList from '@/components/MarketList';
 
 export default {
   name: 'createDex',
   data() {
     return {
       loading: false,
-      symnol0: {
+      showMarketList: false,
+      type: 'pay',
+      symbol0: {
         contract: 'eosio.token', // eosio.token
-        coinName: 'EOS', // EOS
+        symbol: 'EOS', // EOS
         decimal: '4', // 4
       },
-      symnol1: {
+      symbol1: {
         contract: '', // eosio.token
-        coinName: '', // EOS
-        decimal: '', // 4
+        symbol: '', // EOS
+        decimal: '4', // 4
+      }
+    }
+  },
+  props: {
+    marketLists: {
+      type: Array,
+      default: function lists() {
+        return []
       }
     }
   },
   components: {
-    CreateTip
+    CreateTip,
+    MarketList
   },
   computed: {
     ...mapState({
@@ -96,12 +125,27 @@ export default {
     })
   },
   methods: {
+    handleShowList(type) {
+      this.type = type;
+      this.showMarketList = true;
+    },
+    handleMarketChange(item) {
+      if (this.type === 'start') {
+        this.symbol0 = item;
+      } else {
+        this.symbol1 = item;
+        this.symbol1.symbol = item.symbol;
+      }
+      this.showMarketList = false;
+    },
+    handleClose() {
+      this.showMarketList = false;
+    },
     handleShowTip() {
       this.$refs.createTip.showTip = true;
     },
     handleBack() {
       this.$router.back();
-      console.log("log")
     },
     handleLogin() {
       // this.$emit('listenLogin', true)
@@ -111,18 +155,34 @@ export default {
       if (this.loading) {
         return
       }
-      if (!this.symnol0.contract || !this.symnol0.coinName || !this.symnol1.contract || !this.symnol1.coinName) {
+      if (!this.symbol0.contract || !this.symbol0.symbol || !this.symbol1.contract || !this.symbol1.symbol) {
         return;
       }
       this.loading = true;
+      // const params = {
+      //   code: 'minedfstoken',
+      //   toAccount: 'defisfactory',
+      //   memo: `${this.symbol0.contract}-${this.symbol0.symbol.toUpperCase()}-${this.symbol1.contract}-${this.symbol1.symbol.toUpperCase()}`,
+      //   quantity: '1.0000 DFS'
+      // }
+      const formName = this.scatter.identity.accounts[0].name;
+      const permission = this.scatter.identity.accounts[0].authority;
       const params = {
-        code: 'minedfstoken',
-        toAccount: 'defisfactory',
-        memo: `${this.symnol0.contract}-${this.symnol0.coinName.toUpperCase()}-${this.symnol1.contract}-${this.symnol1.coinName.toUpperCase()}`,
-        quantity: '1.0000 DFS'
+        actions: [{
+          account: 'defisfactory',
+          name: 'newmarket',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            creator: formName,
+            memo: `${this.symbol0.contract}-${this.symbol0.symbol.toUpperCase()}-${this.symbol1.contract}-${this.symbol1.symbol.toUpperCase()}`,
+          }
+        }]
       }
       // console.log(params)
-      EosModel.transfer(params, (res) => {
+      EosModel.toTransaction(params, (res) => {
         this.loading = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
@@ -152,12 +212,12 @@ export default {
           }],
           data: {
             creator: formName,
-            contract0: this.symnol0.contract,
-            contract1: this.symnol1.contract,
-            // sym0: `${this.symnol0.decimal},${this.symnol0.coinName.toUpperCase()}`,
-            // sym1: `${this.symnol1.decimal},${this.symnol1.coinName.toUpperCase()}`
-            sym0: `${this.symnol0.coinName.toUpperCase()}`,
-            sym1: `${this.symnol1.coinName.toUpperCase()}`
+            contract0: this.symbol0.contract,
+            contract1: this.symbol1.contract,
+            // sym0: `${this.symbol0.decimal},${this.symbol0.symbol.toUpperCase()}`,
+            // sym1: `${this.symbol1.decimal},${this.symbol1.symbol.toUpperCase()}`
+            sym0: `${this.symbol0.symbol.toUpperCase()}`,
+            sym1: `${this.symbol1.symbol.toUpperCase()}`
           }
         }]
       }
@@ -183,6 +243,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.green{
+  color: #02C698;
+  font-size: 27px
+}
 .createDex{
   min-height: 100vh;
   position: relative;
@@ -209,7 +273,7 @@ export default {
     position: relative;
     min-height: calc(100vh - 100px);
     .subTitle{
-      padding-left: 40px;
+      padding: 0 40px;
       height: 118px;
       text-align: left;
       font-size: 30px;
@@ -294,6 +358,28 @@ export default {
     background:rgba(7,215,155,1);
     border-radius:30px;
     overflow: hidden;
+  }
+}
+.mkListDia{
+  // animation: none;
+  /deep/ .el-dialog{
+    position: absolute;
+    bottom: 0px;
+    margin: 0px;
+    width: 100%;
+    border-radius:30px 30px 0px 0px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+    }
+  }
+  &.pcList{
+    /deep/ .el-dialog{
+      position: relative;
+      margin: auto;
+      width: 670px;
+      border-radius:30px;
+    }
   }
 }
 </style>
