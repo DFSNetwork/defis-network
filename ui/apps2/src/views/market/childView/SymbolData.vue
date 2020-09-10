@@ -57,17 +57,6 @@
             </span>
             <span v-else>{{ `${marketData[0]} ${thisMarket.symbol0}` }} / {{ `${marketData[1]} ${thisMarket.symbol1}` }}</span>
           </div>
-          <!-- <div class="flexa">
-            <span>{{ $t('market.marketReward') }}: </span>
-            <span :class="{'green': marketReward > 0, 'red': marketReward < 0}">{{ marketReward }} </span>
-            <span @click="direction = !direction" class="flexa ml10">
-              <span>{{ direction ? thisMarket.symbol1 : thisMarket.symbol0 }}</span><span
-                class="small">（{{ $t('market.has', {coin: direction ? thisMarket.symbol0 : thisMarket.symbol1}) }}）</span>
-              <img class="changeImg" v-if="direction" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
-              <img class="changeImg" v-else src="@/assets/img/dex/price_switch_icon_green_right.svg" alt="">
-            </span>
-            <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
-          </div> -->
           <div class="flexa">
             <span>{{ $t('market.marketReward') }}: </span>
             <span :class="{'green': sym0AndSy1 ? parseFloat(marketRewardSym0) > 0 : parseFloat(marketRewardSym1) > 0,
@@ -93,7 +82,6 @@
                 {{ percent }}%
               </span>）
             </span>
-            <!-- <span>{{ JSON.stringify(marketTime) }}</span> -->
           </div>
         </div>
         <div :class="`tipDiv ${handleGetClass(thisMarket.mid)}`">
@@ -101,14 +89,17 @@
             <span>{{ $t('dex.pools') }}: </span>
             <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
           </div>
-          <div class="tip rewardPerDay allApr">总年化: <b>{{ countApy }}%</b></div>
+          <div class="tip rewardPerDay allApr">
+            <span>预估24H年化: <b>{{ countApy }}%</b></span>
+            <span class="green" @click.stop="showApyDetail = true">详情></span>
+          </div>
           <div class="rewardPerDay tip">
             <span>{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</span>
           </div>
-          <div class="rewardPerDay tip"><span>{{ $t('mine.mineApr') }}: {{ apr }}%</span></div>
+          <!-- <div class="rewardPerDay tip"><span>{{ $t('mine.mineApr') }}: {{ apr }}%</span></div>
           <div class="rewardPerDay tip" v-if="!isActual && Number(feesApr)"><span>{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</span></div>
           <div class="rewardPerDay tip" v-if="isActual && Number(feesApr)"><span>{{ $t('mine.marketApr24H') }}: {{ feesApr }} %</span></div>
-          <div class="rewardPerDay tip" v-if="Number(yfcApy)">YFC钓鱼年化: {{ yfcApy }}%</div>
+          <div class="rewardPerDay tip" v-if="Number(yfcApy)">YFC钓鱼年化: {{ yfcApy }}%</div> -->
         </div>
       </div>
     </div>
@@ -153,6 +144,12 @@
       :visible.sync="showMarketTip">
       <MarketTip v-if="showMarketTip"/>
     </el-dialog>
+    <el-dialog
+      class="myDialog apy"
+      :visible.sync="showApyDetail">
+      <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="isActual"
+                 :apr="apr" :yfcApy="yfcApy" :dmdApy="dmdApy"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -161,15 +158,17 @@ import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, getMarketTime,
-         dealMinerData, perDayReward, getPoolApr, getClass, getYfcReward } from '@/utils/public';
+         dealMinerData, perDayReward, getPoolApr, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
 import MarketTip from '../popup/MarketTip';
+import MarketApy from '../popup/MarketApy'
 
 export default {
   components: {
     MinReward,
-    MarketTip
+    MarketTip,
+    MarketApy
   },
   data() {
     return {
@@ -212,6 +211,7 @@ export default {
         seconds: '00'
       },
       showMarketTip: false,
+      showApyDetail: false,
     }
   },
   props: {
@@ -267,10 +267,20 @@ export default {
       }
       return feesApr.yfcApr || '0.00';
     },
+    dmdApy() {
+      let dmdRoi = getDmdMinerHourRoi(this.thisMarket, 'year')
+      if (Number(dmdRoi)) {
+        return dmdRoi;
+      }
+      return '0.000';
+    },
     countApy() {
       let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
       if (this.yfcApy) {
         all = accAdd(all, parseFloat(this.yfcApy))
+      }
+      if (this.dmdApy) {
+        all = accAdd(all, Number(this.dmdApy))
       }
       if (isNaN(all)) {
         return '—'
@@ -813,6 +823,9 @@ export default {
     overflow: hidden;
     .allApr{
       color: #000;
+      .green{
+        margin-left: 20px;
+      }
     }
   }
   .marketReward{
@@ -942,6 +955,11 @@ export default {
     .el-dialog__body,
     .el-dialog__header{
       padding: 0;
+    }
+  }
+  &.apy{
+    /deep/ .el-dialog{
+      width: 620px;
     }
   }
 }

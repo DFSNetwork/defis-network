@@ -17,16 +17,18 @@
           class="green" @click.stop="handleClaim">{{ $t('bonus.claim') }}</div>
       </div>
 
-      <div class="tip allApr">{{ $t('info.totalApr') }}: <b>{{ countApy }}%</b></div>
-      <div class="tip">
+      <div class="tip allApr">
+        <span>{{ $t('apy.title') }}: <b>{{ countApy }}%</b></span>
+        <span class="green" @click.stop="showApyDetail = true">{{ $t('public.detail') }}></span>
+      </div>
+      <div class="tip minePerDay">
         <span>{{ $t('mine.poolsMine2', {perDayReward}) }}</span>
-        <!-- <span>预估挖矿年化收益: {{ apr }}%</span> -->
         <span class="green" v-if="!Number(buff) && showAddPools">{{ $t('mine.joinNow') }}></span>
       </div>
-      <div class="tip">{{ $t('mine.mineApr') }}: {{ apr }}%</div>
-      <div class="tip" v-if="!isActual && Number(feesApr)">{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</div>
-      <div class="tip" v-if="isActual && Number(feesApr)">{{ $t('mine.marketApr24H') }}: {{ feesApr }} %</div>
-      <div class="tip">{{ $t('info.yfcApr') }}: {{ yfcApy }}%</div>
+      <!-- <div class="tip" v-if="!isActual && Number(feesApr)">{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</div>
+      <div class="tip" v-if="isActual && Number(feesApr)">{{ $t('mine.marketApr24H') }}: {{ feesApr }} %</div> -->
+      <!-- <div class="tip">{{ $t('mine.mineApr') }}: {{ apr }}%</div>
+      <div class="tip">{{ $t('info.yfcApr') }}: {{ yfcApy }}%</div> -->
     </div>
 
     <el-dialog
@@ -34,19 +36,28 @@
       :visible.sync="showReWardTip">
       <MinReward :minReward="minReward"/>
     </el-dialog>
+    <el-dialog
+      class="myDialog apy"
+      :visible.sync="showApyDetail">
+      <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="isActual"
+                 :apr="apr" :yfcApy="yfcApy" :dmdApy="dmdApy"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward, perDayReward, getPoolApr, getClass, getYfcReward } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward,
+perDayReward, getPoolApr, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import MinReward from '../popup/MinReward'
+import MarketApy from '../popup/MarketApy'
 
 export default {
   name: 'Weight',
   components: {
-    MinReward
+    MinReward,
+    MarketApy,
   },
   data() {
     return {
@@ -64,6 +75,7 @@ export default {
       joinLoading: false,
       claimLoading: false,
       showReWardTip: false,
+      showApyDetail: false,
     }
   },
   props: {
@@ -141,10 +153,20 @@ export default {
       }
       return feesApr.yfcApr || '0.00';
     },
+    dmdApy() {
+      let dmdRoi = getDmdMinerHourRoi(this.thisMarket, 'year')
+      if (Number(dmdRoi)) {
+        return dmdRoi;
+      }
+      return '0.000';
+    },
     countApy() {
       let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
       if (this.yfcApy) {
         all = accAdd(all, parseFloat(this.yfcApy))
+      }
+      if (this.dmdApy) {
+        all = accAdd(all, Number(this.dmdApy))
       }
       if (isNaN(all)) {
         return '—'
@@ -410,6 +432,9 @@ export default {
   .allApr{
     color: #000;
   }
+  .minePerDay{
+    margin-top: 10px;
+  }
 
   .tipIcom{
     width: 30px;
@@ -443,6 +468,11 @@ export default {
     .el-dialog__body,
     .el-dialog__header{
       padding: 0;
+    }
+  }
+  &.apy{
+    /deep/ .el-dialog{
+      width: 620px;
     }
   }
 }

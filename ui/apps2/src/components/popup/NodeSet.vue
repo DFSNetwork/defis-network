@@ -93,16 +93,6 @@ export default {
       immediate: true
     },
     nodeUrl() {
-      const protocol = this.nodeUrl.split('://')[0];
-      const host = this.nodeUrl.split('://')[1];
-      const self = {
-        area: 'production',
-        protocol,
-        host,
-        port: '443',
-        url: this.nodeUrl, // https://eospush.tokenpocket.pro
-        chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-      }
       this.node.url = this.nodeUrl;
     }
   },

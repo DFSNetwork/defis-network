@@ -26,6 +26,7 @@ export default {
     usddTip: '请考虑USDD价格存在因直接兑换或加杠杆行为导致的波动，自负使用风险',
     lastUpdate: '最近更新时间', // last update
     warnTip: '风险提示',
+    detail: '详情',
   },
   invi: {
     invitation: '邀请', // invitation
@@ -97,6 +98,10 @@ export default {
     bankFor: 'BANK 兑换',
     bankForTip: '本兑换经过USDD BANK 兑换。0手续费，0滑点，还有挖矿奖励。', // This exchange is made through USDD BANK. 0 poundage, 0 slip point, still have dig mine reward.
     heightSlip: '当前价格滑点过高！请重新输入', // Current price sliding point is too high! Please re-enter
+  },
+  createMarket: {
+    selectHas: '选择已有币种', // Select existing token
+    noFees: '* 创建市场无需任何费用', // * There is no cost to create liquidity
   },
   pools: {
     deposit: '存入',
@@ -252,6 +257,11 @@ export default {
     markerFeesApr: '做市手续费年化',
     yfcApr: 'YFC钓鱼年化',
     totalApr: '总年化',
+  },
+  apy: {
+    title: '预估24H年化',
+    dmdApy: 'DMD挖矿年化',
+    exchange24: '24H兑换量',
   },
   miningRules: {
     rules: '挖矿规则',

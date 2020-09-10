@@ -7,36 +7,49 @@
       </div>
       <div class="lists" v-loading="topLoading">
         <div class="noData" v-if="!showArr.length">{{ $t('public.noData') }}</div>
-        <div class="list" v-for="(item, index) in showArr" :key="index">
+        <div class="list" v-for="(item, index) in showArr" :key="index" @click="handleToMarket(item.mid)">
           <div class="coin flexb">
             <span class="coinName">
               <img class="coinImg" :src="item.img" alt="">
               <span>{{ item.symbol }}</span>
             </span>
-            <span class="green" @click="handleToMarket(item.mid)">{{ $t('invi.join') }}</span>
+            <span>{{ $t('apy.exchange24') }}: {{ item.countEos || '—' }}</span>
+            <!-- <span class="green" @click="handleToMarket(item.mid)">{{ $t('invi.join') }}</span> -->
           </div>
           <div class="flexb percent">
-            <div>
-              <div class="num">{{ item.value || '—' }}</div>
-              <div class="tip">{{ $t('info.dfsMineApr') }}</div>
-            </div>
             <div>
               <div class="num">{{ item.poolsApr || '—' }}</div>
               <div class="tip">{{ $t('info.markerFeesApr') }}</div>
             </div>
             <div>
-              <div class="num">{{ item.yfcApr || '—' }}%</div>
-              <div class="tip">{{ $t('info.yfcApr') }}</div>
+              <div class="num">{{ parseFloat(item.value) ? item.value : '—' }}</div>
+              <div class="tip">{{ $t('info.dfsMineApr') }}</div>
             </div>
             <div>
-              <div class="num">{{ item.value || '—' }}</div>
-              <div class="tip">DMD挖矿年化</div>
+              <div class="num">{{ parseFloat(item.yfcApr) ? `${item.yfcApr}%` : '—' }}</div>
+              <div class="tip">{{ $t('info.yfcApr') }}</div>
             </div>
           </div>
-          <div class="flexb total">
+          <div class="flexb percent">
+            <div>
+              <div class="num">{{ parseFloat(item.dmdRoi) ? `${item.dmdRoi}%` : '—' }}</div>
+              <div class="tip">{{ $t('apy.dmdApy') }}</div>
+            </div>
+            <div>
+            </div>
+            <div class="total">
+              <div class="num">{{ item.count }}%</div>
+              <div class="tip">{{ $t('info.totalApr') }}</div>
+            </div>
+          </div>
+          <div class="flexb liq">
+            <div>{{ $t('dex.pools') }}: </div>
+            <div>{{ item.reserve0 }} / {{ item.reserve1 }}</div>
+          </div>
+          <!-- <div class="flexb total">
             <span>{{ $t('info.totalApr') }}</span>
             <span class="num">{{ item.count }}%</span>
-          </div>
+          </div> -->
         </div>
       </div>
     </div>
@@ -69,7 +82,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { perDayReward, getYfcReward, accAdd, toLocalTime } from '@/utils/public';
+import { perDayReward, getYfcReward, accAdd, toLocalTime, getDmdMinerHourRoi } from '@/utils/public';
 export default {
   name: 'total',
   props: {
@@ -112,6 +125,8 @@ export default {
           feesApr.value = `${apr.toFixed(2)}%`;
           feesApr.img = market.sym1Data.imgUrl;
           feesApr.mid = market.mid;
+          feesApr.reserve0 = market.reserve0;
+          feesApr.reserve1 = market.reserve1;
           count = accAdd(count, parseFloat(feesApr.poolsApr))
           const yfcReward = getYfcReward(market.mid, 'year')
           if (Number(yfcReward)) {
@@ -120,7 +135,21 @@ export default {
             feesApr.yfcApr = apy.toFixed(2);
             count = accAdd(count, apy.toFixed(2))
           }
+          let dmdRoi = getDmdMinerHourRoi(market, 'year')
+          if (Number(dmdRoi)) {
+            feesApr.dmdRoi = dmdRoi;
+            count = accAdd(count, dmdRoi)
+          }
           feesApr.count = count.toFixed(2);
+
+          // 计算24H兑换量
+          if (this.dfsData.tradingVolumeData) {
+            const key = `mid-${market.mid}`;
+            const countData = this.dfsData.tradingVolumeData[key] || {};
+            let countEos = (countData.amountIn.EOS || 0) + (countData.amountOut.EOS || 0);
+            countEos = countEos > 1000 ? `${(countEos / 1000).toFixed(2)}K` : countEos;
+            feesApr.countEos = countEos;
+          }
           arr.push(feesApr)
         } catch (error) {
           console.log(error)
@@ -292,12 +321,31 @@ export default {
       }
     }
     .percent{
-      padding-bottom: 10px;
-      border-bottom: 1px solid #eee;
+      margin-top: 20px;
+      &:last-child{
+        margin-top: 10px;
+      }
       &>div{
         flex: 1;
         &:nth-child(2){
           text-align: center;
+        }
+        &:last-child{
+          text-align: right;
+        }
+      }
+    }
+    .liq{
+      font-size: 27px;
+      margin-top: 10px;
+      border-top: 1px solid #eee;
+      padding-top: 10px;
+      align-items: flex-start;
+      line-height: 40px;
+      &>div{
+        &:first-child{
+          width: 90px;
+          min-width: 90px;
         }
         &:last-child{
           text-align: right;

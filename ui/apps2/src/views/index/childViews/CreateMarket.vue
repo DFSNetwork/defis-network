@@ -8,7 +8,7 @@
       <div class="list">
         <div class="subTitle flexb">
           <span>{{ $t('dex.coin', {coin: 'A'}) }}</span>
-          <span class="green" @click="handleShowList('start')">选择已有币种</span>
+          <span class="green" @click="handleShowList('start')">{{ $t('createMarket.selectHas') }}</span>
         </div>
         <el-form class="formDiv" ref="formBorrow">
           <!-- 抵押数量 -->
@@ -30,7 +30,7 @@
       <div class="list">
         <div class="subTitle flexb">
           <span>{{ $t('dex.coin', {coin: 'B'}) }}</span>
-          <span class="green" @click="handleShowList('end')">选择已有币种</span>
+          <span class="green" @click="handleShowList('end')">{{ $t('createMarket.selectHas') }}</span>
         </div>
         <el-form class="formDiv" ref="formBorrow">
           <el-form-item>
@@ -50,13 +50,8 @@
 
       <div class="tipDiv flex">
         <span class="flexa">
-          * 创建市场无需任何费用
-          <!-- <span>{{ $t('public.fee') }}</span>
-          <span  @click="handleShowTip" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span> -->
+          {{ $t('createMarket.noFees') }}
         </span>
-        <!-- <span class="fees">
-          1.0000 DFS
-        </span> -->
       </div>
 
       <div class="btnDiv">
@@ -65,7 +60,6 @@
         <el-button class="btn" type="primary" v-else @click="handleLogin">{{ $t('public.loginPls') }}</el-button>
       </div>
     </div>
-    <create-tip ref="createTip" />
     <!-- 弹窗组件 -->
     <el-dialog
       class="mkListDia pcList"
@@ -83,7 +77,6 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { login } from '@/utils/public';
-import CreateTip from '../components/CreateTip';
 import MarketList from '@/components/MarketList';
 
 export default {
@@ -114,7 +107,6 @@ export default {
     }
   },
   components: {
-    CreateTip,
     MarketList
   },
   computed: {
@@ -141,9 +133,6 @@ export default {
     handleClose() {
       this.showMarketList = false;
     },
-    handleShowTip() {
-      this.$refs.createTip.showTip = true;
-    },
     handleBack() {
       this.$router.back();
     },
@@ -159,12 +148,6 @@ export default {
         return;
       }
       this.loading = true;
-      // const params = {
-      //   code: 'minedfstoken',
-      //   toAccount: 'defisfactory',
-      //   memo: `${this.symbol0.contract}-${this.symbol0.symbol.toUpperCase()}-${this.symbol1.contract}-${this.symbol1.symbol.toUpperCase()}`,
-      //   quantity: '1.0000 DFS'
-      // }
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
       const params = {
@@ -181,7 +164,6 @@ export default {
           }
         }]
       }
-      // console.log(params)
       EosModel.toTransaction(params, (res) => {
         this.loading = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
@@ -199,45 +181,6 @@ export default {
         });
       })
     },
-    handleNewMarket1() {
-      const formName = this.scatter.identity.accounts[0].name;
-      const permission = this.scatter.identity.accounts[0].authority;
-      const params = {
-        actions: [{
-          account: this.baseConfig.createMarket,
-          name: 'newmarket',
-          authorization: [{
-            actor: formName, // 转账者
-            permission,
-          }],
-          data: {
-            creator: formName,
-            contract0: this.symbol0.contract,
-            contract1: this.symbol1.contract,
-            // sym0: `${this.symbol0.decimal},${this.symbol0.symbol.toUpperCase()}`,
-            // sym1: `${this.symbol1.decimal},${this.symbol1.symbol.toUpperCase()}`
-            sym0: `${this.symbol0.symbol.toUpperCase()}`,
-            sym1: `${this.symbol1.symbol.toUpperCase()}`
-          }
-        }]
-      }
-      // console.log(params)
-      EosModel.toTransaction(params, (res) => {
-        if(res.code && JSON.stringify(res.code) !== '{}') {
-          this.$message({
-            message: res.message,
-            type: 'error'
-          });
-          return
-        }
-        this.$emit('listenGetMarketsList', true)
-        this.$router.back()
-        this.$message({
-          message: this.$t('public.success'),
-          type: 'success'
-        });
-      })
-    }
   },
 }
 </script>

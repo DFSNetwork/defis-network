@@ -110,9 +110,9 @@ export default {
       }, 5000);
     },
     handleDealCoinImg(contract, coin) {
-      const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
+      const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd', 'whaleextoken-wal'];
       const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb',
-      'yfctokenmain-yfc', 'eossanguotkt-tkt']
+      'yfctokenmain-yfc', 'eossanguotkt-tkt', 'pink.bank-pink']
       const inData = `${contract}-${coin.toLowerCase()}`
       const has = localeCoin.find(v => v === inData)
       if (has) {

@@ -54,6 +54,10 @@
             </div>
           </div>
         </div>
+        <div class="flexa liq">
+          <div>流动池：</div>
+          <div>{{ item.reserve0 }} / {{ item.reserve1 }}</div>
+        </div>
         <label class="rankImg" v-if="handleGetClass(item.mid)"><img :src="handleGetSrc(item.mid)" alt=""></label>
       </div>
     </div>
@@ -589,6 +593,10 @@ export default {
         .add{
           width: 40px;
         }
+      }
+      .liq{
+        margin-top: 15px;
+        font-size: 27px;
       }
     }
   }

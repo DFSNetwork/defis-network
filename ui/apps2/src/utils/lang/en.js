@@ -26,6 +26,7 @@ export default {
     usddTip: 'Please consider the fluctuations of USDD price due to direct exchange or leverage, and use at your own risk',
     lastUpdate: 'Last update',
     warnTip: 'Risk Warning',
+    detail: 'Detail',
   },
   invi: {
     invitation: 'Invitation',
@@ -96,6 +97,10 @@ export default {
     bankFor: 'BANK SWAP',
     bankForTip: 'This exchange is made through USDD BANK. 0 fee 0 slippage and get DFS mining reward.',
     heightSlip: 'Current price sliding point is too high! Please re-enter',
+  },
+  createMarket: {
+    selectHas: 'Select existing token',
+    noFees: '* There is no cost to create liquidity',
   },
   pools: {
     deposit: 'Deposit',
@@ -251,6 +256,11 @@ export default {
     markerFeesApr: 'Market Fees Apr',
     yfcApr: 'YFC APR',
     totalApr: 'Total Apr',
+  },
+  apy: {
+    title: 'Forecast 24H ',
+    dmdApy: 'DMD APR',
+    exchange24: '24H Volume',
   },
   miningRules: {
     rules: 'Mining rules',
