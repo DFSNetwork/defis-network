@@ -40,7 +40,7 @@
       class="myDialog apy"
       :visible.sync="showApyDetail">
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="isActual"
-                 :apr="apr" :yfcApy="yfcApy" :dmdApy="dmdApy"/>
+                 :apr="apr" :yfcApy="yfcApy" :dbcApy="dbcApy" :dmdApy="dmdApy"/>
     </el-dialog>
   </div>
 </template>
@@ -49,7 +49,7 @@
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
 import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward,
-perDayReward, getPoolApr, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
+perDayReward, getPoolApr, getClass, getYfcReward, getDmdMinerHourRoi, getDbcReward } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MarketApy from '../popup/MarketApy'
 
@@ -143,15 +143,7 @@ export default {
       return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr)
     },
     yfcApy() {
-      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
-      const YfcPool = this.marketLists.find(vv => vv.mid === 329);
-      const yfcReward = getYfcReward(this.thisMarket.mid, 'year')
-      if (Number(yfcReward)) {
-        const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
-        const apy = yfcReward * price / 20000 * 100;
-        feesApr.yfcApr = apy.toFixed(2);
-      }
-      return feesApr.yfcApr || '0.00';
+      return this.handleDealApy(329)
     },
     dmdApy() {
       let dmdRoi = getDmdMinerHourRoi(this.thisMarket, 'year')
@@ -160,6 +152,9 @@ export default {
       }
       return '0.000';
     },
+    dbcApy() {
+      return this.handleDealApy(346)
+    },
     countApy() {
       let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
       if (this.yfcApy) {
@@ -167,6 +162,9 @@ export default {
       }
       if (this.dmdApy) {
         all = accAdd(all, Number(this.dmdApy))
+      }
+      if (this.dbcApy) {
+        all = accAdd(all, Number(this.dbcApy))
       }
       if (isNaN(all)) {
         return '—'
@@ -227,6 +225,22 @@ export default {
     clearInterval(this.priceTimer)
   },
   methods: {
+    handleDealApy(mid = 329) {
+      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
+      const YfcPool = this.marketLists.find(vv => vv.mid === mid);
+      let yfcReward = 0;
+      if (mid === 329) {
+        yfcReward = getYfcReward(this.thisMarket.mid, 'year')
+      } else {
+        yfcReward = getDbcReward(this.thisMarket.mid, 'year')
+      }
+      if (Number(yfcReward)) {
+        const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
+        const apy = yfcReward * price / 20000 * 100;
+        feesApr.yfcApr = apy.toFixed(2);
+      }
+      return feesApr.yfcApr || '0.00';
+    },
     handleGetClass(mid) {
       return getClass(mid)
     },

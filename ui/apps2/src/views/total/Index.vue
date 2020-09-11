@@ -36,6 +36,8 @@
               <div class="tip">{{ $t('apy.dmdApy') }}</div>
             </div>
             <div>
+              <div class="num">{{ parseFloat(item.dbcApr) ? `${item.dbcApr}%` : '—' }}</div>
+              <div class="tip">{{ $t('apy.dbcApy') }}</div>
             </div>
             <div class="total">
               <div class="num">{{ item.count }}%</div>
@@ -82,7 +84,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { perDayReward, getYfcReward, accAdd, toLocalTime, getDmdMinerHourRoi } from '@/utils/public';
+import { perDayReward, getYfcReward, accAdd, toLocalTime, getDmdMinerHourRoi, getDbcReward } from '@/utils/public';
 export default {
   name: 'total',
   props: {
@@ -109,6 +111,7 @@ export default {
       }
       let arr = [];
       const YfcPool = this.marketLists.find(vv => vv.mid === 329);
+      const DbcPool = this.marketLists.find(vv => vv.mid === 346);
       this.handleTopLoading()
       const top10 = this.marketLists.slice(0, 10)
       top10.forEach(market => {
@@ -133,6 +136,13 @@ export default {
             const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
             const apy = yfcReward * price / 20000 * 100;
             feesApr.yfcApr = apy.toFixed(2);
+            count = accAdd(count, apy.toFixed(2))
+          }
+          const dbcReward = getDbcReward(market.mid, 'year')
+          if (Number(dbcReward)) {
+            const price = parseFloat(DbcPool.reserve0) / parseFloat(DbcPool.reserve1)
+            const apy = dbcReward * price / 20000 * 100;
+            feesApr.dbcApr = apy.toFixed(2);
             count = accAdd(count, apy.toFixed(2))
           }
           let dmdRoi = getDmdMinerHourRoi(market, 'year')

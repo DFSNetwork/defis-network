@@ -260,6 +260,7 @@ export default {
   apy: {
     title: 'Forecast 24H ',
     dmdApy: 'DMD APR',
+    dbcApy: 'DBC APR',
     exchange24: '24H Volume',
   },
   miningRules: {

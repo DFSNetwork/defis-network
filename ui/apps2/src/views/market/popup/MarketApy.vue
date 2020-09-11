@@ -18,6 +18,10 @@
         <span>{{ $t('apy.dmdApy') }}：</span>
         <span>{{ parseFloat(dmdApy) ? `${dmdApy}%` : '—' }}</span>
       </div>
+      <div class="flexa">
+        <span>{{ $t('apy.dbcApy') }}：</span>
+        <span>{{ parseFloat(dbcApy) ? `${dbcApy}%` : '—' }}</span>
+      </div>
       <div class="flexa total">
         <span>{{ $t('info.totalApr') }}：</span>
         <span>{{ countApy }}%</span>
@@ -50,6 +54,10 @@ export default {
       default: '0.00'
     },
     dmdApy: {
+      type: String,
+      default: '0.00'
+    },
+    dbcApy: {
       type: String,
       default: '0.00'
     },

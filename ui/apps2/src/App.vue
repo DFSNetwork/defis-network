@@ -69,13 +69,16 @@ export default {
   methods: {
     handleYfcData() {
       this.handleGetPonds()
+      this.handleGetPonds('dbc')
       this.handleGetBalance()
       this.handleGetBalance('yfc')
+      this.handleGetBalance('dbc')
       this.handleGetYfcCurrent();
       clearInterval(this.yfcTimer)
       this.yfcTimer = setInterval(() => {
         this.handleGetBalance()
         this.handleGetBalance('yfc')
+        this.handleGetBalance('dbc')
         this.handleGetYfcCurrent();
       }, 10000)
     },
@@ -265,13 +268,22 @@ export default {
       })
     },
     // 获取YFC矿池列表 - 执行一次
-    handleGetPonds() {
-      const params = {
+    handleGetPonds(type) {
+      let params = {
         "code": "yfcfishponds",
         "scope": "yfcfishponds",
         "table": "ponds",
         "json": true,
         limit: 100
+      }
+      if (type === 'dbc') {
+        params = {
+          "code": "dbcfarmers11",
+          "scope": "dbcfarmers11",
+          "table": "ponds",
+          "json": true,
+          limit: 100
+        }
       }
       EosModel.getTableRows(params, (res) => {
         const rows = res.rows || []
@@ -291,6 +303,10 @@ export default {
             this.$set(v, 'endTime', endTime / 1000);
           }
         });
+        if (type === 'dbc') {
+          this.$store.dispatch('setDbcList', list)
+          return
+        }
         this.$store.dispatch('setList', list)
       })
     },
@@ -310,11 +326,23 @@ export default {
           account: 'yfcfishponds'
         };
       }
+      if (type === 'dbc') {
+        params = {
+          code: 'dbctokenmain',
+          coin: 'DBC',
+          decimal: 8,
+          account: 'dbcfarmers11'
+        };
+      }
       await EosModel.getCurrencyBalance(params, res => {
         let balanceYfc = toFixed('0.0000000000001', params.decimal);
         (!res || res.length === 0) ? balanceYfc : balanceYfc = res.split(' ')[0];
         if (type === 'yfc') {
           this.$store.dispatch('setYfcBal', balanceYfc)
+          return
+        }
+        if (type === 'dbc') {
+          this.$store.dispatch('setDbcBal', balanceYfc)
           return
         }
         this.$store.dispatch('setPoolsBal', balanceYfc)

@@ -102,10 +102,15 @@ const sys = {
       "refund_delay_sec": 31104000
     }],
     dfsData: {},
-    list: [], // yfc挖矿列表
     poolsBal: '0.0000', // swap EOS数量
+
+    // 挖矿年化计算数据
+    list: [], // yfc挖矿列表
+    dbcList: [], // DBC 挖矿列表
     yfcBal: '0.00000000', // YFC池子余额
+    dbcBal: '0.00000000', // YFC池子余额
     dampingYfc: 1, // YFC挖矿衰减
+    dampingDbc: 1, // DBC挖矿衰减
   },
   mutations: {
     SET_BASECONFIG: (state, baseConfig) => {
@@ -140,17 +145,26 @@ const sys = {
     SET_DfsData: (state, dfsData) => {
       state.dfsData = dfsData;
     },
-    SET_List: (state, list) => {
-      state.list = list;
-    },
     SET_PoolsBal: (state, poolsBal) => {
       state.poolsBal = poolsBal;
+    },
+    SET_List: (state, list) => {
+      state.list = list;
     },
     SET_YfcBal: (state, yfcBal) => {
       state.yfcBal = yfcBal;
     },
     SET_DampingYfc: (state, dampingYfc) => {
       state.dampingYfc = dampingYfc;
+    },
+    SET_DbcList: (state, dbcList) => {
+      state.dbcList = dbcList;
+    },
+    SET_DbcBal: (state, dbcBal) => {
+      state.dbcBal = dbcBal;
+    },
+    SET_DampingDbc: (state, dampingDbc) => {
+      state.dampingDbc = dampingDbc;
     },
   },
   actions: {
@@ -180,17 +194,26 @@ const sys = {
     setDfsData({ commit }, dfsData) {
       commit('SET_DfsData', dfsData);
     },
-    setList({ commit }, list) {
-      commit('SET_List', list);
-    },
     setPoolsBal({ commit }, poolsBal) {
       commit('SET_PoolsBal', poolsBal);
+    },
+    setList({ commit }, list) {
+      commit('SET_List', list);
     },
     setYfcBal({ commit }, poolsBal) {
       commit('SET_YfcBal', poolsBal);
     },
     setDampingYfc({ commit }, poolsBal) {
       commit('SET_DampingYfc', poolsBal);
+    },
+    setDbcList({ commit }, dbcList) {
+      commit('SET_DbcList', dbcList);
+    },
+    setDbcBal({ commit }, poolsBal) {
+      commit('SET_DbcBal', poolsBal);
+    },
+    setDampingDbc({ commit }, poolsBal) {
+      commit('SET_DampingDbc', poolsBal);
     },
   }
 };

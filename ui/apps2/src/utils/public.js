@@ -337,6 +337,30 @@ export function getYfcReward(mid, type) {
   return toFixed(reward, 8)
 }
 
+export function getDbcReward(mid, type) {
+  const list = store.state.sys.dbcList.find(v => mid === v.id);
+  if (!list || parseFloat(list.max_supply) <= parseFloat(list.supply)) {
+    return '0.00000000';
+  }
+  const nowT = Date.parse(new Date()) / 1000;
+  if (nowT >= list.endTime || nowT < list.beginTime) {
+    return '0.00000000';
+  }
+  const poolsBal = store.state.sys.poolsBal;
+  const yfcBal = store.state.sys.dbcBal;
+  const dampingYfc = store.state.sys.dampingDbc;
+  const weight = Number(list.weight)
+  const rate = accDiv(10000, poolsBal);
+  let t = 3600;
+  let reward = yfcBal - yfcBal * Math.pow(0.9999, t * rate * weight * dampingYfc);
+  if (type === 'year') {
+    reward = reward * 24;
+    reward = reward * 365;
+  }
+  return toFixed(reward, 8)
+}
+
+
 export function getIp() {
   const acc = store.state.app.scatter.identity.accounts[0].name;
   axios.get(`https://dfsdapp.sgxiang.com/record?account=${acc}`)

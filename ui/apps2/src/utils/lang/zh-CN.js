@@ -261,6 +261,7 @@ export default {
   apy: {
     title: '预估24H年化',
     dmdApy: 'DMD挖矿年化',
+    dbcApy: 'DBC挖矿年化',
     exchange24: '24H兑换量',
   },
   miningRules: {
