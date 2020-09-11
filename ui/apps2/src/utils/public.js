@@ -312,9 +312,11 @@ export function getMarketTime(startTime) {
   }
   return { total: t, days, hours, minutes, seconds };
 }
-
-export function getYfcReward(mid, type) {
-  const list = store.state.sys.list.find(v => mid === v.id);
+// project - 指代项目：eg： DBC ｜ YFC
+export function getYfcReward(mid, type, project = 'YFC') {
+  const lpMineList = store.state.config.lpMineList;
+  const pList = lpMineList[project] || [];
+  const list = pList.find(v => mid === v.id);
   // console.log(list)
   if (!list || parseFloat(list.max_supply) <= parseFloat(list.supply)) {
     return '0.00000000';
@@ -324,8 +326,8 @@ export function getYfcReward(mid, type) {
     return '0.00000000';
   }
   const poolsBal = store.state.sys.poolsBal;
-  const yfcBal = store.state.sys.yfcBal;
-  const dampingYfc = store.state.sys.dampingYfc;
+  const yfcBal = store.state.config.lpPoolsBal[project] || '0';
+  const dampingYfc = store.state.config.lpDamping[project] || 1;
   const weight = Number(list.weight)
   const rate = accDiv(10000, poolsBal);
   let t = 3600;
@@ -334,6 +336,7 @@ export function getYfcReward(mid, type) {
     reward = reward * 24;
     reward = reward * 365;
   }
+  // console.log(yfcBal, poolsBal, dampingYfc, rate, weight)
   return toFixed(reward, 8)
 }
 

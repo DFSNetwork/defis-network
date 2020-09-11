@@ -84,7 +84,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { perDayReward, getYfcReward, accAdd, toLocalTime, getDmdMinerHourRoi, getDbcReward } from '@/utils/public';
+import { perDayReward, getYfcReward, accAdd, toLocalTime, getDmdMinerHourRoi } from '@/utils/public';
 export default {
   name: 'total',
   props: {
@@ -104,14 +104,13 @@ export default {
       list: state => state.sys.list,
       dfsPrice: state => state.sys.dfsPrice,
       dfsData: state => state.sys.dfsData,
+      lpMid: state => state.config.lpMid,
     }),
     showArr() {
       if (!this.marketLists.length || !this.feesApr) {
         return []
       }
       let arr = [];
-      const YfcPool = this.marketLists.find(vv => vv.mid === 329);
-      const DbcPool = this.marketLists.find(vv => vv.mid === 346);
       this.handleTopLoading()
       const top10 = this.marketLists.slice(0, 10)
       top10.forEach(market => {
@@ -131,20 +130,16 @@ export default {
           feesApr.reserve0 = market.reserve0;
           feesApr.reserve1 = market.reserve1;
           count = accAdd(count, parseFloat(feesApr.poolsApr))
-          const yfcReward = getYfcReward(market.mid, 'year')
-          if (Number(yfcReward)) {
+
+          this.lpMid.forEach(lp => {
+            const yfcReward = getYfcReward(market.mid, 'year', lp.symbol)
+            const YfcPool = this.marketLists.find(vv => vv.mid === lp.mid);
             const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
             const apy = yfcReward * price / 20000 * 100;
-            feesApr.yfcApr = apy.toFixed(2);
+            feesApr[`${lp.symbol.toLowerCase()}Apr`] = apy.toFixed(2);
             count = accAdd(count, apy.toFixed(2))
-          }
-          const dbcReward = getDbcReward(market.mid, 'year')
-          if (Number(dbcReward)) {
-            const price = parseFloat(DbcPool.reserve0) / parseFloat(DbcPool.reserve1)
-            const apy = dbcReward * price / 20000 * 100;
-            feesApr.dbcApr = apy.toFixed(2);
-            count = accAdd(count, apy.toFixed(2))
-          }
+          })
+
           let dmdRoi = getDmdMinerHourRoi(market, 'year')
           if (Number(dmdRoi)) {
             feesApr.dmdRoi = dmdRoi;

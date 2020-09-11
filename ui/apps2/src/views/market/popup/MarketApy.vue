@@ -12,7 +12,7 @@
       </div>
       <div class="flexa">
         <span>{{ $t('info.yfcApr') }}：</span>
-        <span>{{ parseFloat(yfcApy) ? `${yfcApy}%` : '—' }}</span>
+        <span>{{ parseFloat(lpApy.yfcApy) ? `${lpApy.yfcApy}%` : '—' }}</span>
       </div>
       <div class="flexa">
         <span>{{ $t('apy.dmdApy') }}：</span>
@@ -20,7 +20,7 @@
       </div>
       <div class="flexa">
         <span>{{ $t('apy.dbcApy') }}：</span>
-        <span>{{ parseFloat(dbcApy) ? `${dbcApy}%` : '—' }}</span>
+        <span>{{ parseFloat(lpApy.dbcApy) ? `${lpApy.dbcApy}%` : '—' }}</span>
       </div>
       <div class="flexa total">
         <span>{{ $t('info.totalApr') }}：</span>
@@ -49,18 +49,16 @@ export default {
       type: String,
       default: '0.00'
     },
-    yfcApy: {
-      type: String,
-      default: '0.00'
-    },
     dmdApy: {
       type: String,
       default: '0.00'
     },
-    dbcApy: {
-      type: String,
-      default: '0.00'
-    },
+    lpApy: {
+      type: Object,
+      default: function la() {
+        return {}
+      }
+    }
   },
 }
 </script>

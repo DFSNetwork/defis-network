@@ -40,7 +40,7 @@
       class="myDialog apy"
       :visible.sync="showApyDetail">
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="isActual"
-                 :apr="apr" :yfcApy="yfcApy" :dbcApy="dbcApy" :dmdApy="dmdApy"/>
+                 :apr="apr" :lpApy="lpApy" :dmdApy="dmdApy"/>
     </el-dialog>
   </div>
 </template>
@@ -49,7 +49,7 @@
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
 import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward,
-perDayReward, getPoolApr, getClass, getYfcReward, getDmdMinerHourRoi, getDbcReward } from '@/utils/public';
+perDayReward, getPoolApr, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MarketApy from '../popup/MarketApy'
 
@@ -76,6 +76,7 @@ export default {
       claimLoading: false,
       showReWardTip: false,
       showApyDetail: false,
+      lpApy: {},
     }
   },
   props: {
@@ -106,6 +107,7 @@ export default {
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
       storeFeesApr: state => state.sys.feesApr,
+      lpMid: state => state.config.lpMid,
     }),
     showAddPools() {
       if (Number(this.token) && !Number(this.minnerData.liq) && this.getMinerData) {
@@ -142,9 +144,6 @@ export default {
       const thisPoolApr = getPoolApr(this.thisMarket)
       return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr)
     },
-    yfcApy() {
-      return this.handleDealApy(329)
-    },
     dmdApy() {
       let dmdRoi = getDmdMinerHourRoi(this.thisMarket, 'year')
       if (Number(dmdRoi)) {
@@ -152,20 +151,18 @@ export default {
       }
       return '0.000';
     },
-    dbcApy() {
-      return this.handleDealApy(346)
-    },
     countApy() {
       let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
-      if (this.yfcApy) {
-        all = accAdd(all, parseFloat(this.yfcApy))
-      }
       if (this.dmdApy) {
-        all = accAdd(all, Number(this.dmdApy))
+        all = accAdd(all, parseFloat(this.dmdApy))
       }
-      if (this.dbcApy) {
-        all = accAdd(all, Number(this.dbcApy))
-      }
+      this.lpMid.forEach(v => {
+        const apy = this.handleDealApy(v.mid, v.symbol);
+        this.lpApy[`${v.symbol.toLowerCase()}Apy`] = apy;
+        if (apy) {
+          all = accAdd(all, Number(apy))
+        }
+      })
       if (isNaN(all)) {
         return '—'
       }
@@ -225,21 +222,15 @@ export default {
     clearInterval(this.priceTimer)
   },
   methods: {
-    handleDealApy(mid = 329) {
-      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
-      const YfcPool = this.marketLists.find(vv => vv.mid === mid);
-      let yfcReward = 0;
-      if (mid === 329) {
-        yfcReward = getYfcReward(this.thisMarket.mid, 'year')
-      } else {
-        yfcReward = getDbcReward(this.thisMarket.mid, 'year')
-      }
+    handleDealApy(mid = 329, project) {
+      let yfcReward = getYfcReward(this.thisMarket.mid, 'year', project);
       if (Number(yfcReward)) {
-        const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
-        const apy = yfcReward * price / 20000 * 100;
-        feesApr.yfcApr = apy.toFixed(2);
+        const YfcPool = this.marketLists.find(vv => vv.mid === mid);
+        const price = parseFloat(YfcPool.reserve0 || 0) / parseFloat(YfcPool.reserve1 || 1)
+        yfcReward = yfcReward * price / 20000 * 100;
+        yfcReward = yfcReward.toFixed(2);
       }
-      return feesApr.yfcApr || '0.00';
+      return yfcReward || '0.00';
     },
     handleGetClass(mid) {
       return getClass(mid)

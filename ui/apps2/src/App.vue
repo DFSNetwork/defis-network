@@ -36,7 +36,6 @@ export default {
     return {
       priceTimer: null,
       yfcTimer: null,
-      dampingYfc: 1,
     }
   },
   watch: {
@@ -268,7 +267,7 @@ export default {
       })
     },
     // 获取YFC矿池列表 - 执行一次
-    handleGetPonds(type) {
+    handleGetPonds() {
       this.lpMid.forEach(v => {
         const params = {
           "code": v.poolAcc,
@@ -326,34 +325,32 @@ export default {
         EosModel.getCurrencyBalance(params, res => {
           let balanceYfc = toFixed('0.0000000000001', params.decimal);
           (!res || res.length === 0) ? balanceYfc : balanceYfc = res.split(' ')[0];
-          if (type === 'yfc') {
-            this.$store.dispatch('setYfcBal', balanceYfc)
-            return
-          }
-          if (type === 'dbc') {
-            this.$store.dispatch('setDbcBal', balanceYfc)
-            return
-          }
-          this.$store.dispatch('setPoolsBal', balanceYfc)
+          const lpPoolsBal = this.$store.state.config.lpPoolsBal;
+          lpPoolsBal[v.symbol] = balanceYfc;
+          this.$store.dispatch('setLpPoolsBal', lpPoolsBal)
         })
       })
     },
     // 获取当前发行量 和 计算衰减
-    async handleGetYfcCurrent() {
+    handleGetYfcCurrent() {
       const https = this.baseConfig.node.url;
-      const params = {
-        code: 'yfctokenmain',
-        symbol: 'YFC'
-      }
-      const result = await axios.post(`${https}/v1/chain/get_currency_stats`, JSON.stringify(params))
-      if (result.status !== 200) {
-        return;
-      }
-      const res = result.data['YFC'];
-      const supply = res.supply.split(' ')[0];
-      const t = parseInt(supply / 1000)
-      this.dampingYfc = 1 * Math.pow(0.75, t)
-      this.$store.dispatch('setDampingYfc', this.dampingYfc)
+      this.lpMid.forEach(async v => {
+        const params = {
+          code: v.contract,
+          symbol: v.symbol
+        }
+        const result = await axios.post(`${https}/v1/chain/get_currency_stats`, JSON.stringify(params))
+        if (result.status !== 200) {
+          return;
+        }
+        const res = result.data[v.symbol];
+        const supply = res.supply.split(' ')[0];
+        const t = parseInt(supply / 1000)
+        const dampingYfc = 1 * Math.pow(0.75, t)
+        const lpDamping = this.$store.state.config.lpDamping;
+        lpDamping[v.symbol] = dampingYfc;
+        this.$store.dispatch('setLpDamping', lpDamping)
+      })
     },
   },
 }
