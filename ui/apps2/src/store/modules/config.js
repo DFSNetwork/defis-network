@@ -12,6 +12,17 @@ const config = {
         "sTokenContract": "",
         "sTokenSymbol": "",
         "sTokenPrecision": 4
+      },
+      {
+        mid: 329,
+        duration: 1209600,
+        epoch: 1599796800,
+        maxSupply: 2000,
+        poolContract: "eosdmdpool1a",
+        poolid: 5,
+        sTokenContract: "",
+        sTokenPrecision: 4,
+        sTokenSymbol: "",
       }
   ]
   },
