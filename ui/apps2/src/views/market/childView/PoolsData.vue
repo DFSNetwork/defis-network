@@ -55,7 +55,7 @@
           </div>
         </div>
         <div class="flexa liq">
-          <div>流动池：</div>
+          <div>{{ $t('dex.pools') }}: </div>
           <div>{{ item.reserve0 }} / {{ item.reserve1 }}</div>
         </div>
         <label class="rankImg" v-if="handleGetClass(item.mid)"><img :src="handleGetSrc(item.mid)" alt=""></label>
@@ -177,15 +177,15 @@ export default {
             lists.push(item)
           }
         });
-        // gold = gold.sort((a, b) => {
-        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        // })
-        // silver = silver.sort((a, b) => {
-        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        // })
-        // bronze = bronze.sort((a, b) => {
-        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        // })
+        gold = gold.sort((a, b) => {
+          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        })
+        silver = silver.sort((a, b) => {
+          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        })
+        bronze = bronze.sort((a, b) => {
+          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        })
         lists = lists.sort((a, b) => {
           return parseFloat(b.reserve0) - parseFloat(a.reserve0)
         })
@@ -595,8 +595,16 @@ export default {
         }
       }
       .liq{
+        align-items: flex-start;
+        line-height: 38px;
         margin-top: 15px;
         font-size: 27px;
+        &>div{
+          &:first-child{
+            text-align: left;
+            min-width: 100px;
+          }
+        }
       }
     }
   }
