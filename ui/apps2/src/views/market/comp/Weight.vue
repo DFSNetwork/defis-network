@@ -145,7 +145,8 @@ export default {
       return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr)
     },
     dmdApy() {
-      let dmdRoi = getDmdMinerHourRoi(this.thisMarket, 'year')
+      const dmdPool = this.marketLists.find(v => v.mid === 326)
+      let dmdRoi = getDmdMinerHourRoi(this.thisMarket, 'year', dmdPool)
       if (Number(dmdRoi)) {
         return dmdRoi;
       }

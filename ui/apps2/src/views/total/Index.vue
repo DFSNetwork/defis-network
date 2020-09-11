@@ -110,6 +110,7 @@ export default {
       if (!this.marketLists.length || !this.feesApr) {
         return []
       }
+      const dmdPool = this.marketLists.find(v => v.mid === 326)
       let arr = [];
       this.handleTopLoading()
       const top10 = this.marketLists.slice(0, 10)
@@ -140,7 +141,7 @@ export default {
             count = accAdd(count, apy.toFixed(2))
           })
 
-          let dmdRoi = getDmdMinerHourRoi(market, 'year')
+          let dmdRoi = getDmdMinerHourRoi(market, 'year', dmdPool)
           if (Number(dmdRoi)) {
             feesApr.dmdRoi = dmdRoi;
             count = accAdd(count, dmdRoi)

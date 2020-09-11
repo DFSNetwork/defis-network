@@ -369,14 +369,19 @@ export function getIp() {
   axios.get(`https://dfsdapp.sgxiang.com/record?account=${acc}`)
 }
 
-export function getDmdMinerHourRoi(market, type) {
+export function getDmdMinerHourRoi(market, type, dmdPools) {
   const config = store.state.config.dmdMineConfig;
   const thisConf = config.find(v => v.mid === market.mid) || {};
+  if (!thisConf.mid) {
+    return '0'
+  }
   const maxSupply = thisConf.maxSupply || 0;
   const hour = thisConf.duration / 3600;
   let reserve = parseFloat(market.reserve1) * 2;
   if (market.symbol1 !== 'DMD') {
-    reserve = parseFloat(market.reserve1) * 2 * 2;
+    const dmdPrice = parseFloat(dmdPools.reserve0) / parseFloat(dmdPools.reserve1);
+    const sym1Price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
+    reserve = parseFloat(market.reserve1) * 2 * sym1Price.toFixed(4) / dmdPrice.toFixed(4);
   }
   const hourRoi = maxSupply / hour / reserve * 100;
   // console.log(hourRoi, market)
