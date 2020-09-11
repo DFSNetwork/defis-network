@@ -4,11 +4,11 @@
     <div class="table">
       <div class="flexa">
         <span>{{ $t('info.markerFeesApr') }}：</span>
-        <span>{{ feesApr || '—' }}</span>
+        <span>{{ `${feesApr}%` || '—' }}</span>
       </div>
       <div class="flexa">
         <span>{{ $t('info.dfsMineApr') }}：</span>
-        <span>{{ parseFloat(apr) ? apr : '—' }}</span>
+        <span>{{ parseFloat(apr) ? `${apr}%` : '—' }}</span>
       </div>
       <div class="flexa">
         <span>{{ $t('info.yfcApr') }}：</span>
