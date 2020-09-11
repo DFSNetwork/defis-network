@@ -374,8 +374,12 @@ export function getDmdMinerHourRoi(market, type) {
   const thisConf = config.find(v => v.mid === market.mid) || {};
   const maxSupply = thisConf.maxSupply || 0;
   const hour = thisConf.duration / 3600;
-  const reserve = parseFloat(market.reserve1) * 2;
+  let reserve = parseFloat(market.reserve1) * 2;
+  if (market.symbol1 !== 'DMD') {
+    reserve = parseFloat(market.reserve1) * 2 * 2;
+  }
   const hourRoi = maxSupply / hour / reserve * 100;
+  // console.log(hourRoi, market)
   if (type === 'hour') {
     return toFixed(hourRoi, 3);
   }
