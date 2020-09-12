@@ -46,7 +46,7 @@
           </div>
           <div class="flexb liq">
             <div>{{ $t('dex.pools') }}: </div>
-            <div>{{ item.reserve0 }} / {{ item.reserve1 }}</div>
+            <div>{{ item.reserve0 | numToShot }} / {{ item.reserve1 | numToShot }}</div>
           </div>
           <!-- <div class="flexb total">
             <span>{{ $t('info.totalApr') }}</span>

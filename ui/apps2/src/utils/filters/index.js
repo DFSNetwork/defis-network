@@ -1,8 +1,7 @@
 import Vue from 'vue'
 import moment from 'moment';
 import numeral from 'numeral';
-import { toFixed, accSub, accMul } from "@/utils/public"
-import store from '@/store'
+import { toFixed } from "@/utils/public"
 
 // 位数分割 128,373,883
 Vue.filter('numeralFormat', (value, p) => {
@@ -38,11 +37,19 @@ Vue.filter('dateFormatTYear', (value) => {
 // 截取小数四位数
 Vue.filter('numberTofixed', value => toFixed(value, 4));
 
-// 英文下显示折扣按照百分比
-Vue.filter('englishPercent', value => {
-  if (store.state.app.language === 'en' || store.state.app.language === 'ko') {
-    const data = accSub(10, Number(value));
-    return `${accMul(data, 10)}%`
+// 截取 ’1.0000000 DMD‘ 这类数据为4位小数
+Vue.filter('numToShot', value => {
+  const arr = value.toString().split(' ');
+  if (!arr.length) {
+    return 0
   }
-  return value
+  const numArr = arr[0].split('.');
+  let num = arr[0];
+  if (numArr.length > 1 && numArr[1].length > 4) {
+    num = toFixed(arr[0], 4)
+  }
+  if (arr.length > 1) {
+    return `${num} ${arr[1]}`;
+  }
+  return num;
 })

@@ -76,13 +76,6 @@ const constantRouter = [
       },
     ]
   },
-  // 404
-  {
-    path: '*',
-    name: 'nopage',
-    component: () => import(/* webpackChunkName: "nopage" */ '@/views/error-page/404.vue'),
-    meta: { title: '404 - stable' },
-  },
 ]
 
 export default new Router({

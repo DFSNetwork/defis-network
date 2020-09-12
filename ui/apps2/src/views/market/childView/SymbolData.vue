@@ -87,11 +87,11 @@
         <div :class="`tipDiv ${handleGetClass(thisMarket.mid)}`">
           <div class="">
             <span>{{ $t('dex.pools') }}: </span>
-            <span>{{ thisMarket.reserve0 || '—' }} / {{ thisMarket.reserve1 || '—' }}</span>
+            <span>{{ (thisMarket.reserve0 || '—') | numToShot }} / {{ (thisMarket.reserve1 || '—') | numToShot }}</span>
           </div>
           <div class="tip rewardPerDay allApr">
-            <span>预估24H年化: <b>{{ countApy }}%</b></span>
-            <span class="green" @click.stop="showApyDetail = true">详情></span>
+            <span>{{ $t('apy.title') }}: <b>{{ countApy }}%</b></span>
+            <span class="green" @click.stop="showApyDetail = true">{{ $t('public.detail') }}></span>
           </div>
           <div class="rewardPerDay tip">
             <span>{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</span>
@@ -118,7 +118,7 @@
           </div>
           <div class="flexb">
             <span>{{ $t('dex.pools') }}</span>
-            <span>{{ item.liq_bal0 }} / {{ item.liq_bal1 }}</span>
+            <span>{{ item.liq_bal0 | numToShot }} / {{ item.liq_bal1 | numToShot }}</span>
           </div>
           <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://apps.defis.network/static/rank/rank${index + 1}.png`" alt=""></label>
         </div>

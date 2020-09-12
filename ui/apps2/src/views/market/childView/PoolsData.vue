@@ -56,7 +56,7 @@
         </div>
         <div class="flexa liq">
           <div>{{ $t('dex.pools') }}: </div>
-          <div>{{ item.reserve0 }} / {{ item.reserve1 }}</div>
+          <div>{{ item.reserve0 | numToShot }} / {{ item.reserve1 | numToShot }}</div>
         </div>
         <label class="rankImg" v-if="handleGetClass(item.mid)"><img :src="handleGetSrc(item.mid)" alt=""></label>
       </div>
