@@ -110,8 +110,6 @@ Ebony & Ivory 目前能做的，就是根据实时的收益率比较结果，自
 除了比较快。其他都和YFII差不多:
 
 
-![](https://tva1.sinaimg.cn/large/007S8ZIlly1gip3t9mkvij30u90u0qv5.jpg)
-
-
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1giph11i872j30u80u04qp.jpg)
 
 
