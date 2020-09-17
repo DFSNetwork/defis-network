@@ -82,6 +82,9 @@ class swapRouter {
     const _pathsArr = [];
 
     for (let i = 0; i < this.paths.length; i++) {
+      if (_pathsArr.length) {
+        break
+      }
       let path = this.paths[i];
       let tks = path.split("-");
       if ((tks[0] === newTokenA && tks[tks.length - 1] === newTokenB)) {
@@ -106,7 +109,7 @@ class swapRouter {
       }
       _pathsMids.push(mids + '') // 返回所有Mid路径
     })
-    return _pathsMids;
+    return [_pathsMids[0]];
   }
 
   //  mids = [], token_in = eosio.token:EOS, amount_in = 10000, type = 'pay' | 'get'
