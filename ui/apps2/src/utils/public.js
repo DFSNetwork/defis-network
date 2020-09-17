@@ -375,6 +375,11 @@ export function getDmdMinerHourRoi(market, type, dmdPools) {
   if (!thisConf.mid) {
     return '0'
   }
+  const endDate = (thisConf.duration + thisConf.epoch) * 1000
+  const nowDate = Date.parse(new Date())
+  if (endDate < nowDate) {
+    return '0'
+  }
   const maxSupply = thisConf.maxSupply || 0;
   const hour = thisConf.duration / 3600;
   let reserve = parseFloat(market.reserve1) * 2;
@@ -383,8 +388,14 @@ export function getDmdMinerHourRoi(market, type, dmdPools) {
     const sym1Price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
     reserve = parseFloat(market.reserve1) * 2 * sym1Price.toFixed(4) / dmdPrice.toFixed(4);
   }
-  const hourRoi = maxSupply / hour / reserve * 100;
-  // console.log(hourRoi, market)
+  const hourRoi = (maxSupply / hour) / reserve * 100;
+  console.log('-----------------')
+  console.log(maxSupply, hour, reserve)
+  console.log(hourRoi, market)
+  console.log(hourRoi * 24, 'day')
+  console.log(hourRoi * 24 * 7, 'week')
+  console.log(hourRoi * 24 * 365, 'year')
+  console.log('-----------------')
   if (type === 'hour') {
     return toFixed(hourRoi, 3);
   }

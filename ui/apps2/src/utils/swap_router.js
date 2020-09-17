@@ -12,12 +12,15 @@ class swapRouter {
   }
   init(data) {
     this.markets = data || [];
+    this._pathsArr = [];
+    this.bestPath = '';
+    if (this.paths.length) {
+      return
+    }
+    this.paths = [];
     this.pair_market_map = {};
     this.mid_market_map = {};
     this.tokens = [];
-    this.paths = [];
-    this._pathsArr = [];
-    this.bestPath = '';
     this.markets.map(x => {
       let tokenA = x.contract0 + ":" + x.sym0.split(",")[1];
       let tokenB = x.contract1 + ":" + x.sym1.split(",")[1];
@@ -70,7 +73,7 @@ class swapRouter {
       return a.length - b.length;
     })
 
-    // console.log("paths", this.paths);
+    console.log("paths", this.paths);
     this.isInit = true;
   }
 
