@@ -1,4 +1,6 @@
 import { toFixed, accDiv } from './public';
+// import Worker from './worker'
+// import VueWorker from 'vue-worker'
 class swapRouter {
   constructor() {
     this.markets = [];
@@ -10,13 +12,88 @@ class swapRouter {
     this._pathsArr = [];
     this.bestPath = '';
   }
-  init(data) {
+  init(data, vThis) {
     this.markets = data || [];
     this._pathsArr = [];
     this.bestPath = '';
     if (this.paths.length) {
       return
     }
+    if (window.Worker) {
+      this.workerToInitPath(vThis)
+    } else {
+      this.initPath()
+    }
+  }
+
+  workerToInitPath(vThis) {
+    const dealPath = (markets) => {
+      let paths = [];
+      let pair_market_map = {};
+      let mid_market_map = {};
+      let tokens = [];
+      markets.map(x => {
+        let tokenA = x.contract0 + ":" + x.sym0.split(",")[1];
+        let tokenB = x.contract1 + ":" + x.sym1.split(",")[1];
+        let pair_a = tokenA + "-" + tokenB;
+        let pair_b = tokenB + "-" + tokenA;
+  
+        pair_market_map[pair_a] = x;
+        pair_market_map[pair_b] = x;
+  
+        mid_market_map[x.mid] = x;
+  
+        paths.push(pair_a);
+        paths.push(pair_b);
+  
+        let new_paths = []
+  
+        for (let i = 0; i < paths.length; i++) {
+          let path = paths[i];
+          let tks = path.split("-");
+          if (tks[0] === tokenA && tks[tks.length - 1] !== tokenB) {
+            new_paths.push(tokenB + "-" + path)
+          }
+  
+          if (tks[tks.length - 1] === tokenA && tks[0] !== tokenB) {
+            new_paths.push(path + "-" + tokenB);
+          }
+  
+          if (tks[0] === tokenB && tks[tks.length - 1] !== tokenA) {
+            new_paths.push(tokenA + "-" + path)
+          }
+  
+          if (tks[tks.length - 1] === tokenB && tks[0] !== tokenA) {
+            new_paths.push(path + "-" + tokenA);
+          }
+        }
+  
+        paths = paths.concat(new_paths);
+  
+        if (tokens.indexOf(tokenA) === -1) {
+          tokens.push(tokenA)
+        }
+        if (tokens.indexOf(tokenB) === -1) {
+          tokens.push(tokenB)
+        }
+      })
+      paths = paths.sort((a, b) => {
+        return a.length - b.length;
+      })
+      return {
+        paths, pair_market_map, mid_market_map, tokens
+      }
+    }
+    vThis.$worker.run(dealPath, [this.markets]).then(res => {
+      this.paths = res.paths;
+      this.pair_market_map = res.pair_market_map;
+      this.mid_market_map = res.mid_market_map;
+      this.tokens = res.tokens;
+      this.isInit = true;
+    }).catch(e => console.log(e))
+  }
+
+  initPath() {
     this.paths = [];
     this.pair_market_map = {};
     this.mid_market_map = {};
@@ -66,14 +143,11 @@ class swapRouter {
         this.tokens.push(tokenB)
       }
     })
-
     // console.log("tokens", this.tokens);
-
     this.paths = this.paths.sort((a, b) => {
       return a.length - b.length;
     })
-
-    console.log("paths", this.paths);
+    // console.log("paths", this.paths);
     this.isInit = true;
   }
 

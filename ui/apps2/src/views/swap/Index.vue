@@ -378,7 +378,7 @@ export default {
           return
         }
         const newArr = newVal.filter(v => v.contract1 !== 'autopuptoken' && v.contract0 !== 'autopuptoken')
-        SwapRouter.init(newArr)
+        SwapRouter.init(newArr, this)
         const arr = this.handleDealSymArr(newVal)
         this.coinList = arr;
         if (!arr.length) {
