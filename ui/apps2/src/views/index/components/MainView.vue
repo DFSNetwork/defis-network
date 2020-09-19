@@ -1,6 +1,7 @@
 <template>
   <div class="mainView">
     <swap v-if="routeName === 'index'" :marketLists="marketLists"
+          @listenUpdateList="listenUpdateList"
           @listenShowDrawer="handleShowDrawer"/>
     <market v-else-if="routeName === 'market'"
       :marketLists="marketLists" @listenShowDrawer="handleShowDrawer"/>
@@ -55,6 +56,9 @@ export default {
     },
     handleShowDrawer() {
       this.showMarketList = true;
+    },
+    listenUpdateList() {
+      this.$emit('listenUpdateList', true)
     }
   },
 }

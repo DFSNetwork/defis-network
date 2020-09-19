@@ -55,14 +55,17 @@
         </div>
 
         <div class="rate flexb">
-          <span class="tip">{{ $t('dex.rate') }}</span>
-          <span class="flex">
-            <span v-if="!exRate">1{{ thisMarket1.symbol }} = {{ tradeInfo.aboutPrice || '-' }}{{ thisMarket0.symbol }}</span>
-            <span v-else>1{{ thisMarket0.symbol }} = {{ tradeInfo.aboutPriceSym0 || '-' }}{{ thisMarket1.symbol }}</span>
+          <span class="tip flex">
+            <span>{{ $t('dex.rate') }}</span>
             <span @click="exRate =!exRate">
               <img class="iconImg" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
               <img class="iconImg" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
             </span>
+          </span>
+          <span class="flexa" v-loading="refreshLoading">
+            <span v-if="!exRate">1{{ thisMarket1.symbol }} = {{ tradeInfo.aboutPrice || '-' }}{{ thisMarket0.symbol }}</span>
+            <span v-else>1{{ thisMarket0.symbol }} = {{ tradeInfo.aboutPriceSym0 || '-' }}{{ thisMarket1.symbol }}</span>
+            <img @click="handleDealPrice" class="refresh" src="@/assets/img/dex/refresh.svg" alt="">
           </span>
         </div>
       </div>
@@ -260,6 +263,7 @@ export default {
         symbol: "USDT",
       },
       firstUrl: true,
+      refreshLoading: false,
     }
   },
   props: {
@@ -391,6 +395,7 @@ export default {
         // const market1 = arr[1]
         this.thisMarket1 = market1;
         this.handleInBy(this.tradeInfo.type, 'first')
+        this.refreshLoading = false;
       },
       immediate: true,
       deep: true
@@ -587,6 +592,9 @@ export default {
                          this.payNum = toFixed(outData.payNum, this.thisMarket0.decimal);
       } catch (error) {
         // console.log(error)
+        setTimeout(() => {
+          this.handleInBy(this.tradeInfo.type)
+        }, 200);
         this.tradeInfo = {}
         if (type === 'pay') {
           this.getNum = '';
@@ -754,15 +762,25 @@ export default {
           });
           return
         }
+        this.handleDealPrice()
         this.payNum = '';
         this.getNum = '';
-        this.handleInBy(this.tradeInfo.type, 'first')
-        this.handleBalanTimer();
+        setTimeout(() => {
+          this.handleInBy(this.tradeInfo.type, 'first')
+          this.handleBalanTimer();
+        }, 200);
         this.$message({
           message: this.$t('public.success'),
           type: 'success'
         });
       })
+    },
+    handleDealPrice() {
+      this.refreshLoading = true;
+      setTimeout(() => {
+        // console.log('重新查列表')
+        this.$emit('listenUpdateList', true)
+      }, 500);
     },
     handleExchange() {
       this.direction = !this.direction;
@@ -858,6 +876,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@keyframes turn{
+  0%{-webkit-transform:rotate(0deg);}
+  25%{-webkit-transform:rotate(90deg);}
+  50%{-webkit-transform:rotate(180deg);}
+  75%{-webkit-transform:rotate(270deg);}
+  100%{-webkit-transform:rotate(360deg);}
+}
+.refresh{
+  // font-size: 33px;
+  margin-left: 8px;
+  width: 30px;
+  height: 30px;
+  display: inline-block;
+  border-radius: 30px;
+  // animation:turn 1s linear infinite;
+}
 .mypopper{
   .qusTip{
     padding: 10px;

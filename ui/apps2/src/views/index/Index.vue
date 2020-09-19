@@ -1,6 +1,6 @@
 <template>
   <div>
-    <main-view :marketLists="marketLists"/>
+    <main-view :marketLists="marketLists" @listenUpdateList="listenUpdateList"/>
     <div class="checkOrder tip" v-if="false">
       <span :class="{'act': act === 1}" @click="handleChangeAct(1)">兑换记录</span>
       <span :class="{'act': act === 2}" @click="handleChangeAct(2)">我的订单</span>
@@ -43,6 +43,9 @@ export default {
   methods: {
     handleChangeAct(num) {
       this.act = num;
+    },
+    listenUpdateList() {
+      this.$emit('listenUpdateList', true)
     }
   }
 }

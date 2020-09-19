@@ -3,7 +3,7 @@
     <header-tools v-if="!$route.meta.noFooter" @listenShowNav="handleShowNav" @listenShowTools="handleShowTools"/>
     <acc-login v-if="showAcc && !$route.meta.noFooter"/>
     <transition name="fade" mode="out-in">
-      <router-view class="content" :marketLists="marketLists"/>
+      <router-view class="content" :marketLists="marketLists" @listenUpdateList="listenUpdateList"/>
     </transition>
     <my-footer v-if="!$route.meta.noFooter" :marketLists="marketLists"/>
     <Nav ref="nav" @listenShowComp="handleShowComp"/>
@@ -123,6 +123,10 @@ export default {
         return `https://apps.defis.network/static/coin/${hasPng}.png`;
       }
       return `https://ndi.340wan.com/eos/${inData}.png`
+    },
+    listenUpdateList() {
+      // console.log('Update')
+      this.handleRowsMarket();
     },
     // 获取做市池子
     handleRowsMarket() {
