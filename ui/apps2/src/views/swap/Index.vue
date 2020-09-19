@@ -57,12 +57,12 @@
         <div class="rate flexb">
           <span class="tip flex">
             <span>{{ $t('dex.rate') }}</span>
-            <span @click="exRate =!exRate">
-              <img class="iconImg" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
-              <img class="iconImg" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
+            <span class="flexa" @click="exRate =!exRate">
+              <img class="iconImg small" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
+              <img class="iconImg small" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
             </span>
           </span>
-          <span class="flexa" v-loading="refreshLoading">
+          <span class="flexend" v-loading="refreshLoading">
             <span v-if="!exRate">1{{ thisMarket1.symbol }} = {{ tradeInfo.aboutPrice || '-' }}{{ thisMarket0.symbol }}</span>
             <span v-else>1{{ thisMarket0.symbol }} = {{ tradeInfo.aboutPriceSym0 || '-' }}{{ thisMarket1.symbol }}</span>
             <img @click="handleDealPrice" class="refresh" src="@/assets/img/dex/refresh.svg" alt="">
@@ -1004,8 +1004,11 @@ export default {
     margin-top: 28px;
     font-size: 28px;
     .iconImg{
-      width: 36px;
+      width: 30px;
       margin-left: 12px;
+    }
+    .flexend{
+      line-height: 26px;
     }
   }
   .tabB{

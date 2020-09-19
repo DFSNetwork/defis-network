@@ -32,6 +32,10 @@ $color-tip: #a6a6a6;
   display: flex;
   align-items: center;
 }
+.flexend{
+  display: flex;
+  align-items: flex-end;
+}
 .gold {
   border: 1px solid rgb(238, 198, 4) !important;
   box-shadow: 0 0 5px 0px rgba(238, 198, 4, .5) !important;
