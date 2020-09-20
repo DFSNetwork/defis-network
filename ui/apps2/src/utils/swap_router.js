@@ -16,9 +16,9 @@ class swapRouter {
     this.markets = data || [];
     this._pathsArr = [];
     this.bestPath = '';
-    // if (this.paths.length) {
-    //   return
-    // }
+    if (this.paths.length) {
+      return
+    }
     if (window.Worker) {
       this.workerToInitPath(vThis)
     } else {
@@ -241,7 +241,7 @@ class swapRouter {
 
   swap(mid, token_in, amount_in, type) {
     if (!this.isInit) return;
-    let market = this.mid_market_map[mid];
+    let market = this.markets.find(v => v.mid == mid);
     let tokenA = market.contract0 + ":" + market.sym0.split(",")[1];
     let tokenB = market.contract1 + ":" + market.sym1.split(",")[1];
     let inNum = amount_in;
