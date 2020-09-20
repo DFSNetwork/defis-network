@@ -261,6 +261,10 @@ export default {
         const rate =  total_votes / allVote * 100
         this.$set(this.allList[marketIndex], 'votesRate', rate.toFixed(2))
       })
+
+      this.allList = this.allList.sort((a, b) => {
+        return (b.total_votes || 0) - (a.total_votes || 0);
+      })
     },
     handleToDetail(item) {
       this.$router.push({
