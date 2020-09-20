@@ -2,13 +2,17 @@
   <div class="rulesTip">
     <div class="title">投票规则</div>
     <div class="content">
-      <div>1. 每个dss的用户可以投1～3个池子。最多投3个。</div>
-      <div>2. 票数和权重， 和存款以及存款的pool有关，票数 = 存款数 * 权重 。</div>
+      <div>1. 做市DFS或存入DSS即可获得投票票数.</div>
+      <div>2. 更改做市、存取DSS会自动重新投票</div>
+      <div>3. 投票结果实时反馈最新排行</div>
+      <div>4. 每个账号最多选择3个投票选项</div>
+      <div>5. 随时可以修改重新投票</div>
       <ul class="subRules">
-        <li>1月，加成 {{ handleApr(1) }}%</li>
-        <li>3月，加成 {{ handleApr(2) }}%</li>
-        <li>6月，加成 {{ handleApr(3) }}%</li>
-        <li>1年，加成 {{ handleApr(4) }}%</li>
+        <li>做市: 1DFS = 0.5 票</li>
+        <li>随存随取： 1 DFS = 1票</li>
+        <li>定存1个月、3个月: 1DFS = 1.5票</li>
+        <li>定存6个月: 1 DFS = 2票</li>
+        <li>定存1年: 1 DFS = 3 票</li>
       </ul>
     </div>
   </div>
@@ -48,7 +52,8 @@ export default {
     font-size: 27px;
     text-align: left;
     .subRules{
-      padding-left: 40px;
+      margin-left: 20px;
+      padding-left: 30px;
     }
   }
 }

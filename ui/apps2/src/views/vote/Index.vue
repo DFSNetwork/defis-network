@@ -124,11 +124,29 @@ export default {
       // 处理票数
       dssData: {}, // dss数据
       swapData: {},
+      config: [{
+        "id": 1,
+        "bonus": 1.5,
+      },
+      {
+        "id": 2,
+        "bonus": 1.5,
+      },
+      {
+        "id": 3,
+        "bonus": 2,
+        "refund_delay_sec": 15552000
+      },
+      {
+        "id": 4,
+        "bonus": 3,
+        "refund_delay_sec": 31104000
+      }]
     }
   },
   computed: {
     ...mapState({
-      dsrPools: state => state.sys.dsrPools,
+      // dsrPools: state => state.sys.dsrPools,
       scatter: state => state.app.scatter,
     }),
     checkedLeng() {
@@ -136,7 +154,7 @@ export default {
       return n.length;
     },
     vote_power() {
-      const buff = this.dssData.pool ? Number(this.dsrPools[this.dssData.pool - 1].bonus) : 1;
+      const buff = this.dssData.pool ? Number(config[this.dssData.pool - 1].bonus) : 1;
       const dssCount = Number(this.dssData.balance || 0) * buff;
       const swapCount = parseFloat(this.swapData.liq_bal1 || '0') * 0.5;
       return parseInt(dssCount + swapCount)
@@ -356,7 +374,7 @@ export default {
         }
         const allList = res.rows;
         allList.forEach((v) => {
-          let buff = v.pool ? (this.dsrPools[v.pool - 1].bonus - 1) * 100 : 0;
+          let buff = v.pool ? (config[v.pool - 1].bonus - 1) * 100 : 0;
           this.$set(v, 'buff', buff.toFixed(2));
           this.$set(v, 'balance', v.bal.split(' ')[0]);
         })
