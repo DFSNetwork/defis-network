@@ -52,7 +52,6 @@ export default {
     rankList: {
       handler: function sl(newVal) {
         this.rankLists = newVal;
-        console.log(this.rankLists)
         this.$forceUpdate()
       },
       deep: true,
