@@ -13,7 +13,7 @@
         <img class="tipIcon" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
       </span>
     </div>
-    <div class="info flexb">
+    <div class="info flexb" v-loading="!swapGet || !dssGet">
       <div>
         <div class="votes flexb">
           <span class="flexa">
@@ -21,7 +21,7 @@
             <!-- <img class="refresh" src="@/assets/img/dex/refresh-white.svg" alt=""> -->
           </span>
         </div>
-        <div>我的加成； {{ dssData.buff || '-' }}%</div>
+        <!-- <div>我的加成； {{ dssData.buff || '-' }}%</div> -->
       </div>
       <div>
         <span class="btn" @click="handleToDss">管理</span>
@@ -124,6 +124,8 @@ export default {
       // 处理票数
       dssData: {}, // dss数据
       swapData: {},
+      dssGet: false,
+      swapGet: false,
       config: [{
         "id": 1,
         "bonus": 1.5,
@@ -154,7 +156,10 @@ export default {
       return n.length;
     },
     vote_power() {
-      const buff = this.dssData.pool ? Number(config[this.dssData.pool - 1].bonus) : 1;
+      if (!this.swapGet || !this.dssGet) {
+        return 0
+      }
+      const buff = this.dssData.pool ? Number(this.config[this.dssData.pool - 1].bonus) : 1;
       const dssCount = Number(this.dssData.balance || 0) * buff;
       const swapCount = parseFloat(this.swapData.liq_bal1 || '0') * 0.5;
       return parseInt(dssCount + swapCount)
@@ -171,7 +176,7 @@ export default {
   watch: {
     marketLists: {
       handler: function ml(newVal, oldVal) {
-        if (!newVal.length || !oldVal || newVal.length === oldVal.length) {
+        if (!newVal.length || (oldVal && newVal.length === oldVal.length)) {
           return
         }
         this.allList = newVal;
@@ -261,6 +266,7 @@ export default {
         limit: 10000
       }
       EosModel.getTableRows(params, (res) => {
+        // console.log('get')
         const rows = res.rows || [];
         this.voteList = rows;
         this.handlerDealMlVote()
@@ -268,6 +274,7 @@ export default {
     },
     handlerDealMlVote() {
       if (!this.allList.length) {
+        // console.log('this.allList.length ---  ', this.allList.length)
         return
       }
       let allVote = 0;
@@ -349,6 +356,7 @@ export default {
       }
       EosModel.getTableRows(params, (res) => {
         this.hisLoading = false;
+        // console.log('get')
         const rows = res.rows || [];
         if (!rows.length) {
           return
@@ -368,13 +376,14 @@ export default {
         "json": true,
       }
       EosModel.getTableRows(params, (res) => {
+        this.dssGet = true;
         if (!res.rows.length) {
           this.dssData = {}
           return
         }
         const allList = res.rows;
         allList.forEach((v) => {
-          let buff = v.pool ? (config[v.pool - 1].bonus - 1) * 100 : 0;
+          let buff = v.pool ? (this.config[v.pool - 1].bonus - 1) * 100 : 0;
           this.$set(v, 'buff', buff.toFixed(2));
           this.$set(v, 'balance', v.bal.split(' ')[0]);
         })
@@ -393,6 +402,7 @@ export default {
         "json": true,
       }
       EosModel.getTableRows(params, (res) => {
+        this.swapGet = true;
         const rows = res.rows || [];
         if (!rows.length) {
           return
