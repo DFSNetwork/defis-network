@@ -161,8 +161,9 @@ export default {
         const allList = res.rows;
         const buff = [0, 0.05, 0.1, 0.2, 0.5]
         allList.forEach((v) => {
+          const tBuff = buff[Number(v.pool)] * 100;
+          this.$set(v, 'buff', tBuff.toFixed(2));
           let accApr = accMul(5, buff[Number(v.pool)]);
-          this.$set(v, 'buff', accApr);
           accApr = accAdd(5, accApr);
           this.$set(v, 'accApr', accApr);
           const inTime = toLocalTime(`${v.last_drip}.000+0000`)

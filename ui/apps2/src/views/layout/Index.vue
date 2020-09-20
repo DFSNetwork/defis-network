@@ -1,7 +1,7 @@
 <template>
   <div class="layout">
-    <header-tools v-if="!$route.meta.noFooter" @listenShowNav="handleShowNav" @listenShowTools="handleShowTools"/>
-    <acc-login v-if="showAcc && !$route.meta.noFooter"/>
+    <header-tools v-if="!$route.meta.noHeader" @listenShowNav="handleShowNav" @listenShowTools="handleShowTools"/>
+    <acc-login v-if="showAcc && !$route.meta.noHeader"/>
     <transition name="fade" mode="out-in">
       <router-view class="content" :marketLists="marketLists" @listenUpdateList="listenUpdateList"/>
     </transition>

@@ -63,6 +63,18 @@ const constantRouter = [
         meta: { title: 'DeFis-Network', noAcc: true },
       },
       {
+        path: '/vote',
+        name: 'vote',
+        component: () => import(/* webpackChunkName: "vote" */ '@/views/vote/Index.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noFooter: true },
+      },
+      {
+        path: '/vote/:symbol',
+        name: 'voteDetail',
+        component: () => import(/* webpackChunkName: "voteDetail" */ '@/views/vote/comp/Detail.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noFooter: true },
+      },
+      {
         path: '/total',
         name: 'total',
         component: () => import(/* webpackChunkName: "total" */ '@/views/total/Index.vue'),
@@ -72,7 +84,7 @@ const constantRouter = [
         path: '/create-market',
         name: 'createMarket',
         component: () => import(/* webpackChunkName: "createMarket" */ '@/views/index/childViews/CreateMarket.vue'),
-        meta: { title: 'DeFis-Network', noNav: true, noFooter: true },
+        meta: { title: 'DeFis-Network', noNav: true, noHeader: true, noFooter: true },
       },
     ]
   },
