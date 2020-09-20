@@ -69,7 +69,7 @@ const constantRouter = [
         meta: { title: 'DeFis-Network', noAcc: true, noFooter: true },
       },
       {
-        path: '/vote/:symbol',
+        path: '/vote/:mid',
         name: 'voteDetail',
         component: () => import(/* webpackChunkName: "voteDetail" */ '@/views/vote/comp/Detail.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noFooter: true },

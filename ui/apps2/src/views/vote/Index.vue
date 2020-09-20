@@ -60,7 +60,7 @@
               <div class="num">
                 <span class="el-icon-coin icon"></span>
                 <span>{{ item.total_votes || '0' }}（{{ item.votesRate || '0.00' }}%）</span>
-                <!-- <span class="green" @click.stop="handleToDetail(item)">详细></span> -->
+                <span class="green" @click.stop="handleToDetail(item)">详细></span>
               </div>
             </div>
             <div v-if="act !== 3" class="select flexc" :class="{'active': item.isChecked}">
@@ -297,7 +297,8 @@ export default {
       this.$router.push({
         name: 'voteDetail',
         params: {
-          symbol: `${item.symbol0}-${item.symbol1}`
+          symbol: `${item.symbol0}-${item.symbol1}`,
+          mid: item.mid
         }
       })
     },
