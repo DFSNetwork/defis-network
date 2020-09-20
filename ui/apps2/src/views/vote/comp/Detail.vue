@@ -1,7 +1,7 @@
 <template>
   <div class="voteDetail">
     <div class="title">
-      <span class="act">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span>
+      <span class="act">{{ `${thisMarket.symbol0}-${thisMarket.symbol1} 投票` }}</span>
     </div>
     <div class="mylist" @click="handleJoin(thisMarket)">
       <div class="symbol flexb">
@@ -29,8 +29,8 @@
     <!-- 列表 -->
     <div class="minerLists">
       <div class="title flexb">
-        <span class="act">{{ $t('mine.minersList') }}</span>
-        <span class="totalMiners">{{ $t('mine.totalMiners') }}：{{ allMinersList.length }}</span>
+        <span class="act">投票人</span>
+        <span class="totalMiners">总人数：{{ allMinersList.length }}</span>
       </div>
 
       <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
@@ -87,7 +87,7 @@ export default {
       getMinersList: false,
       minersArr: [],
       page: 1,
-      pageSize: 20,
+      pageSize: 15,
     }
   },
   props: {

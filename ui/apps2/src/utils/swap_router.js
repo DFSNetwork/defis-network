@@ -16,9 +16,9 @@ class swapRouter {
     this.markets = data || [];
     this._pathsArr = [];
     this.bestPath = '';
-    if (this.paths.length) {
-      return
-    }
+    // if (this.paths.length) {
+    //   return
+    // }
     if (window.Worker) {
       this.workerToInitPath(vThis)
     } else {
