@@ -227,8 +227,10 @@ export default {
           message: this.$t('public.success'),
           type: 'success'
         });
+        this.handleCancel()
         setTimeout(() => {
           this.handleGetVotes();
+          this.handleGetMyVotes();
         }, 800);
       })
     },
