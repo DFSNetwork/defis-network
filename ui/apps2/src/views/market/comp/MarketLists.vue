@@ -102,24 +102,30 @@ export default {
     },
     handleGetToken() {
       this.lists = []
-      this.marketLists.forEach(v => {
-        const params = {
-          code: this.baseConfig.toAccountSwap,
-          scope: v.mid,
-          table: 'liquidity',
-          lower_bound: ` ${this.scatter.identity.accounts[0].name}`,
-          upper_bound: ` ${this.scatter.identity.accounts[0].name}`,
-          json: true
+      this.marketLists.forEach((v, index) => {
+        const next = parseInt(index / 10)
+        setTimeout(() => {
+          this.handleGetTable(v)
+        }, next * 1000);
+      })
+    },
+    handleGetTable(v) {
+      const params = {
+        code: this.baseConfig.toAccountSwap,
+        scope: v.mid,
+        table: 'liquidity',
+        lower_bound: ` ${this.scatter.identity.accounts[0].name}`,
+        upper_bound: ` ${this.scatter.identity.accounts[0].name}`,
+        json: true
+      }
+      EosModel.getTableRows(params, (res) => {
+        this.getToken = true;
+        const list = res.rows || [];
+        let token = '0'
+        !list[0] ? token = '0' : token = `${list[0].token}`;
+        if (Number(token)) {
+          this.handleGetCapital(v, token)
         }
-        EosModel.getTableRows(params, (res) => {
-          this.getToken = true;
-          const list = res.rows || [];
-          let token = '0'
-          !list[0] ? token = '0' : token = `${list[0].token}`;
-          if (Number(token)) {
-            this.handleGetCapital(v, token)
-          }
-        })
       })
     },
     handleGetCapital(v, token) {
