@@ -57,15 +57,19 @@
         <div class="rate flexb">
           <span class="tip flex">
             <span>{{ $t('dex.rate') }}</span>
-            <span class="flexa" @click="exRate =!exRate">
+            <!-- <span class="flexa" @click="exRate =!exRate">
               <img class="iconImg small" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
               <img class="iconImg small" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
-            </span>
+            </span> -->
           </span>
           <span class="flexend" v-loading="refreshLoading">
             <span v-if="!exRate">1{{ thisMarket1.symbol }} = {{ tradeInfo.aboutPrice || '-' }}{{ thisMarket0.symbol }}</span>
             <span v-else>1{{ thisMarket0.symbol }} = {{ tradeInfo.aboutPriceSym0 || '-' }}{{ thisMarket1.symbol }}</span>
-            <img @click="handleDealPrice" class="refresh" src="@/assets/img/dex/refresh.svg" alt="">
+            <!-- <img @click="handleDealPrice" class="refresh" src="@/assets/img/dex/refresh.svg" alt=""> -->
+            <span class="flexa" @click="exRate =!exRate">
+              <img class="iconImg small" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
+              <img class="iconImg small" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
+            </span>
           </span>
         </div>
       </div>
