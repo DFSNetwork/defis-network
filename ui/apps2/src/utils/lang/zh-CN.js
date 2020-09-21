@@ -278,6 +278,9 @@ export default {
     voterNum: '总人数',
     maxNum: '最多选择3个',
   },
+  farms: {
+    farms: '农场',
+  },
   voteRules: {
     rules1: '1. 做市DFS或存入DSS即可获得投票票数',
     rules2: '2. 更改做市、存取DSS会自动重新投票',

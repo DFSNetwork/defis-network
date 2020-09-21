@@ -86,6 +86,12 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "createMarket" */ '@/views/index/childViews/CreateMarket.vue'),
         meta: { title: 'DeFis-Network', noNav: true, noHeader: true, noFooter: true },
       },
+      {
+        path: '/farms',
+        name: 'farms',
+        component: () => import(/* webpackChunkName: "farms" */ '@/views/farms/Index.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noFooter: true },
+      },
     ]
   },
 ]
