@@ -5,7 +5,7 @@
         <span class="act" @click="showMarketList = true">{{ thisMarket.symbol0 }}-{{ thisMarket.symbol1 }}</span>
         <img class="iconImg" src="@/assets/img/dex/down.svg" alt="">
       </span>
-      <span class="tip rulesTip">仅最近7日</span>
+      <span class="tip rulesTip">{{ $t('dex.nearSeven') }}</span>
     </div>
     <div class="lists" v-loading="loading">
       <div class="noData tip" v-if="!hisList.length">{{ $t('public.noData') }}</div>
@@ -18,7 +18,7 @@
           </span>
         </div>
         <div class="price flexb">
-          <span class="tip">兑换价格</span>
+          <span class="tip">{{ $t('dex.exchangePrice') }}</span>
           <span class="flexc">
             <span v-if="item.exRate">1{{ item.sym1 }} = {{ item.price0 }} {{ item.sym0 }}</span>
             <span v-else>1{{ item.sym0 }} = {{ item.price1 }} {{ item.sym1 }}</span>
@@ -29,7 +29,7 @@
           </span>
         </div>
         <div class="price flexb tip">
-          <span>兑换时间</span>
+          <span>{{ $t('dex.exchangeTime') }}</span>
           <span>{{ item.time }}</span>
         </div>
       </div>

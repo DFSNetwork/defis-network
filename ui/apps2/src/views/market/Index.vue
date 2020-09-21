@@ -98,7 +98,7 @@
     </div>
 
     <div class="flexa flexe">
-      <span class="create" @click="handleToCreate">创建市场></span>
+      <span class="create" @click="handleToCreate">{{ $t('dex.addMarket') }}></span>
     </div>
 
     <div class="btnDiv" v-loading="loading">

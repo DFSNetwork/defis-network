@@ -134,7 +134,7 @@
     </div>
 
     <div class="flexa flexe" v-if="marketLists.length && bestPath">
-      <span class="history" @click="handleToHistory">交易记录></span>
+      <span class="history" @click="handleToHistory">{{ $t('dex.tradeHistory') }}></span>
     </div>
 
     <div class="btnDiv">

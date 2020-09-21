@@ -97,6 +97,10 @@ export default {
     bankFor: 'BANK SWAP',
     bankForTip: 'This exchange is made through USDD BANK. 0 fee 0 slippage and get DFS mining reward.',
     heightSlip: 'Current price sliding point is too high! Please re-enter',
+    tradeHistory:'Transaction History',
+    nearSeven:'Only the last 7 days',
+    exchangePrice:'Exchange Price',
+    exchangeTime:'Exchange Time',
   },
   createMarket: {
     selectHas: 'Select existing token',
