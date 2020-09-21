@@ -17,7 +17,7 @@
 
 <script>
 import MarketList from '@/components/MarketList';
-import Swap from '@/views/swap/Index'
+import Swap from '@/views/swappage/Index'
 import Market from '@/views/market/Index'
 export default {
   name: 'mainView',

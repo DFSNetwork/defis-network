@@ -27,6 +27,12 @@ const constantRouter = [
         meta: { title: 'DeFis-Network' },
       },
       {
+        path: '/swap/history/:mid',
+        name: 'history',
+        component: () => import(/* webpackChunkName: "history" */ '@/views/swappage/comp/TradeHistory.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noFooter: true },
+      },
+      {
         path: '/market/:mid',
         name: 'market',
         component: () => import(/* webpackChunkName: "market" */ '@/views/index/Index.vue'),
