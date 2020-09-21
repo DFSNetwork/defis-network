@@ -98,6 +98,10 @@ export default {
     bankFor: 'BANK 兑换',
     bankForTip: '本兑换经过USDD BANK 兑换。0手续费，0滑点，还有挖矿奖励。', // This exchange is made through USDD BANK. 0 poundage, 0 slip point, still have dig mine reward.
     heightSlip: '当前价格滑点过高！请重新输入', // Current price sliding point is too high! Please re-enter
+    tradeHistory: '交易记录',
+    nearSeven: '仅最近7日',
+    exchangePrice: '兑换价格',
+    exchangeTime: '兑换时间',
   },
   createMarket: {
     selectHas: '选择已有币种', // Select existing token

@@ -133,6 +133,10 @@
       </el-collapse-transition>
     </div>
 
+    <div class="flexa flexe" v-if="marketLists.length && bestPath">
+      <span class="history" @click="handleToHistory">{{ $t('dex.tradeHistory') }}></span>
+    </div>
+
     <div class="btnDiv">
       <div class="btn flexc" v-loading="loading" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
     </div>
@@ -424,8 +428,6 @@ export default {
     this.handleInBy(this.tradeInfo.type, 'first')
   },
   mounted() {
-    // console.log(this.thisMarket0)
-    // console.log(this.thisMarket1)
     this.handleGetPrice()
     clearInterval(this.priceTimer)
     this.priceTimer = setInterval(() => {
@@ -438,6 +440,14 @@ export default {
     this.handleSetMarkets();
   },
   methods: {
+    handleToHistory() {
+      this.$router.push({
+        name: 'history',
+        params: {
+          mid: this.bestPath.mid
+        }
+      })
+    },
     handleSetMarkets() {
       const swapMarkets = {
         thisMarket0: this.thisMarket0,
@@ -1044,8 +1054,16 @@ export default {
     }
   }
 }
+.flexe{
+  justify-content: flex-end;
+  margin: 17px 0 20px;
+  .history{
+    font-size: 27px;
+    color: #07d79b;
+  }
+}
 .btnDiv{
-  margin: 40px 0;
+  margin: 20px 0 30px;
   font-size: 32px;
   font-weight: 500;
   .btn{

@@ -176,6 +176,7 @@ export default {
 <style lang="scss" scoped>
 .marketList{
   // padding: 40px;
+  text-align: left;
   font-size: 30px;
   box-sizing: border-box;
   .header{

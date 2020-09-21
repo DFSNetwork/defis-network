@@ -97,6 +97,10 @@
       </div>
     </div>
 
+    <div class="flexa flexe">
+      <span class="create" @click="handleToCreate">{{ $t('dex.addMarket') }}></span>
+    </div>
+
     <div class="btnDiv" v-loading="loading">
       <div v-if="act === 1" class="btn flexc" @click="handleAddToken">{{ $t('pools.deposit') }}</div>
       <div v-else class="btn flexc backBtn" @click="handleToSell">{{ $t('pools.withdrawal') }}</div>
@@ -306,6 +310,11 @@ export default {
   beforeDestroy() {
   },
   methods: {
+    handleToCreate() {
+      this.$router.push({
+        name: 'createMarket'
+      })
+    },
     handleChangeMarket(item) {
       document.scrollingElement.scrollTop = 0;
       this.handleMarketChange(item)
@@ -888,9 +897,17 @@ export default {
       margin: 10px 0 20px;
     }
   }
+  .flexe{
+    justify-content: flex-end;
+    margin: 17px 0 20px;
+    .create{
+      font-size: 27px;
+      color: #07d79b;
+    }
+  }
 
   .btnDiv{
-    margin-top: 40px;
+    margin-top: 20px 40px 30px;
     .btn{
       height:88px;
       background:rgba(7,215,155,1);
