@@ -276,6 +276,7 @@ export default {
     allVoteNum: '总票数',
     voter: '投票人',
     voterNum: '总人数',
+    maxNum: '最多选择3个',
   },
   voteRules: {
     rules1: '1. 做市DFS或存入DSS即可获得投票票数',
