@@ -1,18 +1,18 @@
 <template>
   <div class="rulesTip">
-    <div class="title">投票规则</div>
+    <div class="title">{{ $t('vote.voteRules') }}</div>
     <div class="content">
-      <div>1. 做市DFS或存入DSS即可获得投票票数.</div>
-      <div>2. 更改做市、存取DSS会自动重新投票</div>
-      <div>3. 投票结果实时反馈最新排行</div>
-      <div>4. 每个账号最多选择3个投票选项</div>
-      <div>5. 随时可以修改重新投票</div>
+      <div>{{ $t('voteRules.rules1') }}</div>
+      <div>{{ $t('voteRules.rules2') }}</div>
+      <div>{{ $t('voteRules.rules3') }}</div>
+      <div>{{ $t('voteRules.rules4') }}</div>
+      <div>{{ $t('voteRules.rules5') }}</div>
       <ul class="subRules">
-        <li>做市: 1DFS = 0.5 票</li>
-        <li>随存随取： 1 DFS = 1票</li>
-        <li>定存1个月、3个月: 1DFS = 1.5票</li>
-        <li>定存6个月: 1 DFS = 2票</li>
-        <li>定存1年: 1 DFS = 3 票</li>
+        <li>{{ $t('voteRules.rules6') }}</li>
+        <li>{{ $t('voteRules.rules7') }}</li>
+        <li>{{ $t('voteRules.rules8') }}</li>
+        <li>{{ $t('voteRules.rules9') }}</li>
+        <li>{{ $t('voteRules.rules10') }}</li>
       </ul>
     </div>
   </div>

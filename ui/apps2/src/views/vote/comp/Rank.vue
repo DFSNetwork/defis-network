@@ -2,7 +2,7 @@
   <div>
     <!-- <div class="next tip">下次更新时间(08:00:00)</div> -->
     <div class="voteLists">
-      <div class="noData tip" v-if="!rankLists.length">暂无数据</div>
+      <div class="noData tip" v-if="!rankLists.length">{{ $t('public.noData') }}</div>
       <template  v-for="(item, index) in rankLists">
         <div v-if="index < 20" :class="`list flexb ${getClass(index)}`" :key="index">
           <div>

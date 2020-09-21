@@ -7,9 +7,9 @@
       </div>
     </div>
     <div class="mainTitle flexb">
-      <span class="act">投票</span>
+      <span class="act">{{ $t('vote.vote') }}</span>
       <span class="flexa rulesTip tip" @click="showRules = !showRules">
-        <span>投票规则</span>
+        <span>{{ $t('vote.voteRules') }}</span>
         <img class="tipIcon" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
       </span>
     </div>
@@ -17,22 +17,20 @@
       <div>
         <div class="votes flexb">
           <span class="flexa">
-            <span>您的票数：{{ vote_power }}</span>
-            <!-- <img class="refresh" src="@/assets/img/dex/refresh-white.svg" alt=""> -->
+            <span>{{ $t('vote.myVote') }}：{{ vote_power }}</span>
           </span>
         </div>
-        <!-- <div>我的加成； {{ dssData.buff || '-' }}%</div> -->
       </div>
       <div>
-        <span class="btn" @click="handleToDss">管理</span>
+        <span class="btn" @click="handleToDss">{{ $t('market.manage') }}</span>
       </div>
     </div>
     <div class="selectList">
       <div class="tab flexb">
         <div class="nav">
-          <span :class="{'act': act === 1}" @click="handleChangeTab(1)">投票</span>
-          <span :class="{'act': act === 2}" @click="handleChangeTab(2)">排名</span>
-          <span :class="{'act': act === 3}" @click="handleChangeTab(3)">已投</span>
+          <span :class="{'act': act === 1}" @click="handleChangeTab(1)">{{ $t('vote.vote') }}</span>
+          <span :class="{'act': act === 2}" @click="handleChangeTab(2)">{{ $t('vote.rank') }}</span>
+          <span :class="{'act': act === 3}" @click="handleChangeTab(3)">{{ $t('vote.voted') }}</span>
         </div>
         <div class="search">
           <el-input prefix-icon="el-icon-search" @input="handleSearch"
@@ -40,7 +38,7 @@
         </div>
       </div>
       <div v-if="act !== 2" class="voteLists" v-loading="listLoading || hisLoading">
-        <div class="noData tip" v-if="!searchList.length">暂无数据</div>
+        <div class="noData tip" v-if="!searchList.length">{{ $t('public.noData') }}</div>
         <template  v-for="(item, index) in searchList">
           <div class="list flexb" :key="index" @click="handleChecked(item, index)">
             <div>
@@ -60,7 +58,7 @@
               <div class="num">
                 <span class="el-icon-coin icon"></span>
                 <span>{{ item.total_votes || '0' }}（{{ item.votesRate || '0.00' }}%）</span>
-                <span class="green" @click.stop="handleToDetail(item)">详细></span>
+                <span class="green" @click.stop="handleToDetail(item)">{{ $t('public.detail') }}></span>
               </div>
             </div>
             <div v-if="act !== 3" class="select flexc" :class="{'active': item.isChecked}">
@@ -76,10 +74,10 @@
 
     <div class="nullDiv"></div>
     <div class="voteAction flexb">
-      <span>已选 {{ checkedLeng }}/3</span>
+      <span>{{ $t('vote.checked') }} {{ checkedLeng }}/3</span>
       <span>
-        <span v-if="checkedLeng" class="tip" @click="handleCancel">取消勾选</span>
-        <span class="voteBtn" v-loading="voteLoading" @click="handleTovote">去投票</span>
+        <span v-if="checkedLeng" class="tip" @click="handleCancel">{{ $t('vote.cancelChecked') }}</span>
+        <span class="voteBtn" v-loading="voteLoading" @click="handleTovote">{{ $t('vote.toVote') }}</span>
       </span>
     </div>
 
@@ -435,7 +433,7 @@ export default {
     handleChecked(item) {
       const checkedArr = this.allList.filter(v => v.isChecked);
       if (checkedArr.length >= 3 && !item.isChecked) {
-        this.$message.error('最多选择3个')
+        this.$message.error(this.$t('vote.maxNum'))
         return
       }
       const mlIndex = this.allList.findIndex(v => v.mid === item.mid)

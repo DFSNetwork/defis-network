@@ -1,7 +1,7 @@
 <template>
   <div class="voteDetail">
     <div class="title">
-      <span class="act">{{ `${thisMarket.symbol0}-${thisMarket.symbol1} 投票` }}</span>
+      <span class="act">{{ `${thisMarket.symbol0}-${thisMarket.symbol1} ${$t('vote.vote')}` }}</span>
     </div>
     <div class="mylist" @click="handleJoin(thisMarket)">
       <div class="symbol flexb">
@@ -22,15 +22,15 @@
         </div>
       </div>
       <div class="allVotes">
-        <span>总票数：{{ allVotes }}</span>
+        <span>{{ $t('vote.allVoteNum') }}：{{ allVotes }}</span>
       </div>
     </div>
 
     <!-- 列表 -->
     <div class="minerLists">
       <div class="title flexb">
-        <span class="act">投票人</span>
-        <span class="totalMiners">总人数：{{ allMinersList.length }}</span>
+        <span class="act">{{ $t('vote.voter') }}</span>
+        <span class="totalMiners">{{ $t('vote.voterNum') }}：{{ allMinersList.length }}</span>
       </div>
 
       <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
@@ -41,7 +41,7 @@
             <span>{{ item.voteDate }}</span>
           </div>
           <div class="flexb">
-            <span>投票</span>
+            <span>{{ $t('vote.vote') }}</span>
             <span>{{ item.voteNum }}</span>
           </div>
           <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://apps.defis.network/static/rank/rank${index + 1}.png`" alt=""></label>
