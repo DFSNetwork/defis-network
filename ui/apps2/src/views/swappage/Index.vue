@@ -499,9 +499,9 @@ export default {
       })
     },
     handleDealRouteImg(item) {
-      const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
+      const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd', 'whaleextoken-wal'];
       const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb',
-      'yfctokenmain-yfc', 'eossanguotkt-tkt']
+      'yfctokenmain-yfc', 'eossanguotkt-tkt', 'pink.bank-pink', 'dbctokenmain-dbc', 'sars.run-eet']
       const inData = item.toLowerCase().replace(':', '-')
       const has = localeCoin.find(v => v === inData)
       if (has) {
