@@ -14,9 +14,9 @@
           <span>DFS金库</span>
           <span class="claim green">领取</span>
         </div>
-        <div class="reward">
+        <div class="reward flexa">
           <span>收益：</span>
-          <span>10.0000 DFS</span>
+          <span class="flexa"><Dss ref="dss" /> DFS</span>
         </div>
       </div>
       <div class="lists">
@@ -26,7 +26,7 @@
         </div>
         <div class="reward">
           <span>收益：</span>
-          <span>10.0000 DFS</span>
+          <span><DfsMiner :marketLists="marketLists" ref="dfsMiner" /> DFS</span>
         </div>
       </div>
       <div class="lists">
@@ -44,9 +44,29 @@
 </template>
 
 <script>
-  export default {
-    
-  }
+import Dss from './comp/Dss';
+import DfsMiner from './comp/DfsMiner';
+
+export default {
+  name: 'farms',
+  components: {
+    Dss,
+    DfsMiner,
+  },
+  props: {
+    marketLists: {
+      type: Array,
+      default: function lists() {
+        return []
+      }
+    }
+  },
+  methods: {
+    handleClaimDss() {
+      this.$refs.dss.handleGetRewardAction()
+    }
+  },
+}
 </script>
 
 <style lang="scss" scoped>
