@@ -114,7 +114,7 @@ export default {
     },
   },
   beforeDestroy() {
-    clearInterval(this.listsTimer)
+    clearTimeout(this.listsTimer)
     this.timerArr.forEach(v => {
       clearInterval(v)
     })
@@ -190,7 +190,6 @@ export default {
         }
         setTimeout(() => {
           EosModel.getTableRows(params, (res) => {
-            this.loading = false;
             const rows = res.rows || []
             if (!rows.length) {
               this.$set(v, 'minnerData', {})
@@ -209,39 +208,42 @@ export default {
       })
     },
     handleRunReward() {
-      clearInterval(this.listsTimer)
-      this.listsTimer = setInterval(() => {
-        this.lists.forEach((v, index) => {
-          if (this.timerArr[index]) {
-            clearInterval(this.timerArr[index]);
-          }
-          if (!v.minnerData || !Number(v.minnerData.liq)) {
-            this.timerArr[index] = null;
-            return
-          }
-          const reward = dealReward(v.minnerData, v.pool_weight)
-          let showReward = v.reward || '0.00000000';
-          let countReward = showReward;
-          if (!v.showReward) {
-            this.$set(v, 'showReward', reward)
-            showReward = reward;
-            countReward = reward;
-          }
-          this.$set(v, 'reward', reward)
-          let t = accSub(reward, showReward);
-          t = accDiv(t, 20)
-          this.timerArr[index] = setInterval(() => {
-            countReward = accAdd(countReward, t)
-            if (countReward > Number(reward)) {
-              showReward = toFixed(reward, 8);
-              clearInterval(this.timerArr[index])
-            } else {
-              showReward = toFixed(countReward, 8);
-            }
-            this.$set(v, 'showReward', showReward);
-          }, 50);
-        })
+      this.loading = false;
+      clearTimeout(this.listsTimer)
+      this.listsTimer = setTimeout(() => {
+        this.handleRunReward()
       }, 1000);
+  
+      this.lists.forEach((v, index) => {
+        if (this.timerArr[index]) {
+          clearInterval(this.timerArr[index]);
+        }
+        if (!v.minnerData || !Number(v.minnerData.liq)) {
+          this.timerArr[index] = null;
+          return
+        }
+        const reward = dealReward(v.minnerData, v.pool_weight)
+        let showReward = v.reward || '0.00000000';
+        let countReward = showReward;
+        if (!v.showReward) {
+          this.$set(v, 'showReward', reward)
+          showReward = reward;
+          countReward = reward;
+        }
+        this.$set(v, 'reward', reward)
+        let t = accSub(reward, showReward);
+        t = accDiv(t, 20)
+        this.timerArr[index] = setInterval(() => {
+          countReward = accAdd(countReward, t)
+          if (countReward > Number(reward)) {
+            showReward = toFixed(reward, 8);
+            clearInterval(this.timerArr[index])
+          } else {
+            showReward = toFixed(countReward, 8);
+          }
+          this.$set(v, 'showReward', showReward);
+        }, 50);
+      })
     },
     handleDealMineNum(minnerData, weight) {
       // 用户实际数据计算

@@ -125,7 +125,7 @@ export default {
         }
         actions.push(action)
       })
-      console.log(actions)
+      // console.log(actions)
       return actions;
     },
     // //mining_amount = 挖矿池HULU余额的十万分之一 * 做市资金占比 * 做市时间 * 菜地权重 * 暴击因子; 
@@ -139,7 +139,7 @@ export default {
         let bal = toFixed('0.0000000000001', params.decimal);
         (!res || res.length === 0) ? bal : bal = res.split(' ')[0];
         this.loopBal = bal;
-        console.log(bal)
+        // console.log(bal)
       })
     },
     handleGetLoopWeight() {
@@ -156,7 +156,7 @@ export default {
           return
         }
         this.weightList = rows;
-        console.log(rows)
+        // console.log(rows)
         this.handleGetAccMineData()
       })
     },
@@ -171,7 +171,7 @@ export default {
           return
         }
         setTimeout(() => {
-          console.log(v, index)
+          // console.log(v, index)
           const params = {
             "code": "loopminepool",
             "json": true,

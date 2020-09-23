@@ -6,7 +6,7 @@
     </div>
     <div class="farmsTitle flexb">
       <span class="act">每日必做</span>
-      <span class="right green" v-loading="allClaiming" @click="handleAllClaim()">一键领取</span>
+      <span class="right green" v-loading="allClaiming" @click="handleRegLength()">一键领取</span>
     </div>
     <div class="proLists">
       <div @click="handleTo('dss')"><Dss ref="dss" :allClaiming="allClaiming"/></div>
@@ -23,10 +23,19 @@
       <div @click="handleTo('guns')"><Guns ref="guns" :allClaiming="allClaiming"/></div>
       <div @click="handleTo('loop')"><Loop ref="loop" :allClaiming="allClaiming"/></div>
     </div>
+
+    <el-dialog
+      class="myDialog"
+      :show-close="false"
+      :visible="showTip">
+      <MoreActionTip v-if="showTip" :allActions="allActions" :nextPage="nextPage"
+        @listenSure="handleSure" @listenClose="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import MoreActionTip from './dialog/MoreActionTip';
 import Dss from './comp/Dss';
 import DfsMiner from './comp/DfsMiner';
 import Yfc from './comp/Yfc';
@@ -39,6 +48,7 @@ import { EosModel } from '@/utils/eos';
 export default {
   name: 'farms',
   components: {
+    MoreActionTip,
     Dss,
     DfsMiner,
     Yfc,
@@ -58,9 +68,19 @@ export default {
   data() {
     return {
       allClaiming: false,
+      showTip: false,
+      allActions: [],
+      thisPage: 0,
+      nextPage: 0,
     }
   },
   methods: {
+    handleClose(type) {
+      this.showTip = false;
+      if (type || this.nextPage !== 0) {
+        location.reload()
+      }
+    },
     handleTo(name) {
       if (this.$route.name === name)  {
         return;
@@ -88,8 +108,7 @@ export default {
       
       this.$router.push({name: name})
     },
-    handleAllClaim() {
-      this.allClaiming = true;
+    handleRegLength() {
       const dss = this.$refs.dss.handleGetActions()
       const dfsMiner = this.$refs.dfsMiner.handleGetActions()
       const yfc = this.$refs.yfc.handleGetActions()
@@ -97,30 +116,63 @@ export default {
       const dmd = this.$refs.dmd.handleGetActions()
       const guns = this.$refs.guns.handleGetActions()
       const loop = this.$refs.loop.handleGetActions()
-      // const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns];
-      // let pageArr = []
-      // tArr.forEach((v, index) => {
-      //   const page = parseInt(index / 10);
-      //   if (!pageArr[page]) {
-      //     pageArr[page] = []
+      const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop];
+      this.allActions = tArr;
+      if (this.allActions.length <= 10) { // 10条以内
+        console.log(this.allActions.length)
+        // 直接执行
+        this.handleAllClaim(-1)
+        return
+      }
+      this.showTip = true;
+    },
+    handleSure(page) {
+      this.thisPage = page;
+      this.handleAllClaim(page)
+    },
+    handleAllClaim(pageIndex) {
+      this.allClaiming = true;
+      let actions = this.allActions;
+      let pageArr = []
+      if (pageIndex !== -1) {
+        this.allActions.forEach((v, index) => {
+          const page = parseInt(index / 10);
+          if (!pageArr[page]) {
+            pageArr[page] = []
+          }
+          pageArr[page].push(v)
+        })
+        actions = pageArr[pageIndex];
+      }
+      // console.log(actions)
+      // setTimeout(() => {
+      //   this.nextPage = Number(pageIndex) + 1;
+      //   if (pageArr.length - 1 > pageIndex) {
+      //     console.log('执行完成 - ', pageIndex)
+      //     return;
       //   }
-      //   pageArr[page].push(v)
-      // })
-      // const actions = pageArr[pageIndex];
-      // console.log(pageArr)
+      //   console.log('全部完成')
+      // }, 2000);
+
       const params = {
-        actions: [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop]
+        actions: actions
       }
       EosModel.toTransaction(params, (res) => {
-        setTimeout(() => {
-          location.reload()
-        }, 2000);
+        this.allClaiming = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.nextPage = -1;
           this.$message({
             message: res.message,
             type: 'error'
           });
           return
+        }
+        if (pageIndex !== -1) {
+          this.nextPage = Number(pageIndex) + 1;
+        } else {
+          setTimeout(() => {
+            location.reload()
+          }, 2000);
         }
         this.$message({
           message: this.$t('public.success'),
@@ -193,6 +245,18 @@ export default {
           font-weight: 400;
         }
       }
+    }
+  }
+}
+.myDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 590px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
     }
   }
 }
