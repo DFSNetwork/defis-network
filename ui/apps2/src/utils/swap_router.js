@@ -52,7 +52,7 @@ class swapRouter {
           let path = paths[i];
           let tks = path.split("-");
           if (tks.length > 4) {
-            return
+            break
           }
           if (tks[0] === tokenA && tks[tks.length - 1] !== tokenB) {
             new_paths.push(tokenB + "-" + path)
@@ -87,12 +87,15 @@ class swapRouter {
         paths, pair_market_map, mid_market_map, tokens
       }
     }
+    // console.log(Date.parse(new Date()))
     vThis.$worker.run(dealPath, [this.markets]).then(res => {
       this.paths = res.paths;
       this.pair_market_map = res.pair_market_map;
       this.mid_market_map = res.mid_market_map;
       this.tokens = res.tokens;
       this.isInit = true;
+      // console.log(this.paths.length)
+      // console.log(Date.parse(new Date()))
     }).catch(e => console.log(e))
   }
 
@@ -121,7 +124,7 @@ class swapRouter {
         let path = this.paths[i];
         let tks = path.split("-");
         if (tks.length > 4) {
-          return
+          break
         }
         if (tks[0] === tokenA && tks[tks.length - 1] !== tokenB) {
           new_paths.push(tokenB + "-" + path)
