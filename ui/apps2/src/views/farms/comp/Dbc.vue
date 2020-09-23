@@ -2,7 +2,7 @@
   <div class="lists" v-loading="loading">
     <div class="projectName flexb">
       <span>DBC大白菜</span>
-      <span class="claim green" v-loading="claiming || allClaiming" @click="handleClaim">领取</span>
+      <span class="claim green" v-loading="claiming || allClaiming" @click.stop="handleClaim">领取</span>
     </div>
     <div class="reward">
       <span>收益：</span>

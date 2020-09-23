@@ -8,7 +8,7 @@
         <span>{{ scatter.identity.accounts[0].name }}</span>
       </label> -->
       <span class="create flexc" @click="handleToVote">{{ $t('vote.vote') }}</span>
-      <span class="create flexc" @click="handleToVote">{{ $t('farms.farms') }}</span>
+      <span class="create flexc" @click="handleTo('farms')">{{ $t('farms.farms') }}</span>
       <!-- <span class="create" @click="handleToCreate">{{ $t('dex.addMarket') }}</span> -->
       <span class="flexc" @click="listenShowTools"><img class="svgIcon" src="@/assets/img/dex/setup_icon.svg" alt=""></span>
       <span class="flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>
@@ -46,6 +46,12 @@ export default {
     },
     handleToCreate() {
       this.$router.push({name: 'createMarket'})
+    },
+    handleTo(name) {
+      if (this.$route.name === name)  {
+        return;
+      }
+      this.$router.push({name: name})
     },
     handleToVote() {
       if (this.$route.name === 'vote') {

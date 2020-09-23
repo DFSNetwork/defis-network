@@ -9,11 +9,17 @@
       <span class="right green" v-loading="allClaiming" @click="handleAllClaim">一键领取</span>
     </div>
     <div class="proLists">
-      <Dss ref="dss" :allClaiming="allClaiming"/>
-      <DfsMiner ref="dfsMiner" :marketLists="marketLists" :allClaiming="allClaiming"/>
-      <Yfc ref="yfc" :marketLists="marketLists" :allClaiming="allClaiming"/>
-      <Dbc ref="dbc" :marketLists="marketLists" :allClaiming="allClaiming"/>
-      <Dmd  ref="dmd" :allClaiming="allClaiming"/>
+      <div @click="handleTo('dss')"><Dss ref="dss" :allClaiming="allClaiming"/></div>
+      <div @click="handleTo('pools')">
+        <DfsMiner ref="dfsMiner" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
+      <div @click="handleTo('yfc')">
+        <Yfc ref="yfc" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
+      <div @click="handleTo('dbc')">
+        <Dbc ref="dbc" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
+      <div @click="handleTo('dmd')"><Dmd  ref="dmd" :allClaiming="allClaiming"/></div>
     </div>
   </div>
 </template>
@@ -49,6 +55,25 @@ export default {
     }
   },
   methods: {
+    handleTo(name) {
+      if (this.$route.name === name)  {
+        return;
+      }
+      if (name === 'yfc') {
+        location.href = 'https://yfc.one';
+        return
+      }
+      if (name === 'dbc') {
+        location.href = 'https://dbc.yfc.one';
+        return
+      }
+      if (name === 'dmd') {
+        location.href = 'https://dmd.finance/';
+        return
+      }
+      
+      this.$router.push({name: name})
+    },
     handleAllClaim() {
       this.allClaiming = true;
       const dss = this.$refs.dss.handleGetActions()

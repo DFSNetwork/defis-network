@@ -2,7 +2,7 @@
   <div class="lists" v-loading="loading">
     <div class="projectName flexb">
       <span>DFS金库</span>
-      <span class="claim green" v-loading="claiming || allClaiming" @click="handleClaim">领取</span>
+      <span class="claim green" v-loading="claiming || allClaiming" @click.stop="handleClaim">领取</span>
     </div>
     <div class="reward">
       <span>收益：</span>
@@ -73,7 +73,7 @@ export default {
           return
         }
         this.args = res.rows[0];
-        console.log(this.args)
+        // console.log(this.args)
       })
     },
     handleGetAccDssInfo() {
