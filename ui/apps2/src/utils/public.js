@@ -292,6 +292,27 @@ export function getClass(mid) {
 }
 
 export function getMarketTime(startTime) {
+  let t = Date.parse(new Date()) - (Number(startTime) + 8 * 3600) * 1000;
+  const days = Math.floor(t / (1000 * 60 * 60 * 24));
+  let hours = Math.floor((t / (1000 * 60 * 60)) % 24); // 不累加天数的小时
+  // let hours = Math.floor((t / (1000 * 60 * 60))); // 累加天数的小时
+  let minutes = Math.floor((t / 1000 / 60) % 60);
+  let seconds = Math.floor((t / 1000) % 60);
+  hours = hours >= 10 ? hours : `0${hours}`;
+  minutes = minutes >= 10 ? minutes : `0${minutes}`;
+  seconds = seconds >= 10 ? seconds : `0${seconds}`;
+  if (t <= 0) {
+    return {
+      total: t,
+      days: 0,
+      hours: '00',
+      minutes: '00',
+      seconds: '00'
+    };
+  }
+  return { total: t, days, hours, minutes, seconds };
+}
+export function getMarketTimeLp(startTime) {
   let sDate = startTime.toString().indexOf('-') === -1 ? startTime : Date.parse(startTime.replace(/-/g, '/'))
   // console.log(startTime.indexOf('-'))
   let t = Date.parse(new Date()) - sDate;

@@ -14,7 +14,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, toLocalTime, getMarketTime } from '@/utils/public';
+import { toFixed, toLocalTime, getMarketTimeLp } from '@/utils/public';
 
 export default {
   name: 'guns',
@@ -225,7 +225,7 @@ export default {
       const keys = Object.keys(this.accMineData);
       let all = 0;
       keys.forEach(v => {
-        const t = getMarketTime(this.accMineData[v].lastDate)
+        const t = getMarketTimeLp(this.accMineData[v].lastDate)
         let toYfcNum = parseFloat(this.accMineData[v].bal) / this.linkPrice.yfcPrice;
         if (v === 'USDT') {
           toYfcNum = toYfcNum / this.linkPrice.eosPrice;
