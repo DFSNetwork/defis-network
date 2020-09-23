@@ -20,8 +20,8 @@
         <Dbc ref="dbc" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('dmd')"><Dmd  ref="dmd" :allClaiming="allClaiming"/></div>
-      <div><Guns ref="guns" :allClaiming="allClaiming"/></div>
-      <div><Loop ref="loop" :allClaiming="allClaiming"/></div>
+      <div @click="handleTo('guns')"><Guns ref="guns" :allClaiming="allClaiming"/></div>
+      <div @click="handleTo('loop')"><Loop ref="loop" :allClaiming="allClaiming"/></div>
     </div>
   </div>
 </template>
@@ -75,6 +75,14 @@ export default {
       }
       if (name === 'dmd') {
         location.href = 'https://dmd.finance/';
+        return
+      }
+      if (name === 'guns') {
+        location.href = 'https://yfc.one/guns';
+        return
+      }
+      if (name === 'loop') {
+        location.href = 'https://loop.ech.one/index.html';
         return
       }
       
