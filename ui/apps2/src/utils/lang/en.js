@@ -281,6 +281,9 @@ export default {
     voterNum:'Total number of people',
     maxNum:'Select up to 3',
   },
+  farms: {
+    farms: 'Farms',
+  },
   voteRules: {
     rules1: '1. The number of votes can be obtained by making DFS or depositing in DSS',
     rules2: '2. Changes to market making and access to DSS will automatically re-vote',

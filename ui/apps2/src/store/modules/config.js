@@ -2,17 +2,17 @@
 const config = {
   state: {
     dmdMineConfig: [ // 钻石参与LP挖矿配置
-      {
-        mid: 326,
-        "poolid": 5,
-        "epoch": 1599796800,
-        "duration": 1209600,
-        "maxSupply": 2000,
-        "poolContract": "eosdmdpool15",
-        "sTokenContract": "",
-        "sTokenSymbol": "",
-        "sTokenPrecision": 4
-      },
+      // {
+      //   mid: 326,
+      //   "poolid": 5,
+      //   "epoch": 1599796800,
+      //   "duration": 1209600,
+      //   "maxSupply": 2000,
+      //   "poolContract": "eosdmdpool15",
+      //   "sTokenContract": "",
+      //   "sTokenSymbol": "",
+      //   "sTokenPrecision": 4
+      // },
       {
         mid: 329,
         duration: 1209600,
@@ -24,17 +24,17 @@ const config = {
         sTokenPrecision: 4,
         sTokenSymbol: "",
       },
-      {
-        mid: 344,
-        duration: 1209600,
-        epoch: 1599796800,
-        maxSupply: 1000,
-        poolContract: "eosdmdpool1b",
-        poolid: 7,
-        sTokenContract: "",
-        sTokenPrecision: 4,
-        sTokenSymbol: "",
-      }
+      // {
+      //   mid: 344,
+      //   duration: 1209600,
+      //   epoch: 1599796800,
+      //   maxSupply: 1000,
+      //   poolContract: "eosdmdpool1b",
+      //   poolid: 7,
+      //   sTokenContract: "",
+      //   sTokenPrecision: 4,
+      //   sTokenSymbol: "",
+      // }
     ],
     // YFC类型LP挖矿配置
     lpMid: [{
@@ -53,10 +53,12 @@ const config = {
     lpMineList: {}, // 存放格式为 {YFC: [...],}
     lpPoolsBal: {}, // 存放格式为 {YFC: '1.00...'}
     lpDamping: {},  // 存放格式为 {YFC: 0.75, ...}
+    tampList: 0,
   },
   mutations: {
     SET_LpMineList: (state, lpMineList) => {
       state.lpMineList = lpMineList;
+      state.tampList = Math.random() * 1000;
     },
     SET_LpPoolsBal: (state, lpPoolsBal) => {
       state.lpPoolsBal = lpPoolsBal;
