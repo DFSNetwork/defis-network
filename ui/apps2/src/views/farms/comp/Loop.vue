@@ -120,7 +120,7 @@ export default {
           data: {
             user: formName,
             mid: v.mid,
-            ifbonus: 1
+            ifbonus: 0
           }
         }
         actions.push(action)

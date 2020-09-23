@@ -119,7 +119,7 @@ export default {
       const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop];
       this.allActions = tArr;
       if (this.allActions.length <= 10) { // 10条以内
-        console.log(this.allActions.length)
+        // console.log(this.allActions.length)
         // 直接执行
         this.handleAllClaim(-1)
         return
