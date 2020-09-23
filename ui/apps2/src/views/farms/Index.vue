@@ -6,39 +6,14 @@
     </div>
     <div class="farmsTitle flexb">
       <span class="act">每日必做</span>
-      <span class="right green">一键领取</span>
+      <span class="right green" v-loading="allClaiming" @click="handleAllClaim">一键领取</span>
     </div>
     <div class="proLists">
-      <div class="lists">
-        <div class="projectName flexb">
-          <span>DFS金库</span>
-          <span class="claim green">领取</span>
-        </div>
-        <div class="reward flexa">
-          <span>收益：</span>
-          <span class="flexa"><Dss ref="dss" /> DFS</span>
-        </div>
-      </div>
-      <div class="lists">
-        <div class="projectName flexb">
-          <span>DFS矿池</span>
-          <span class="claim green">领取</span>
-        </div>
-        <div class="reward">
-          <span>收益：</span>
-          <span><DfsMiner :marketLists="marketLists" ref="dfsMiner" /> DFS</span>
-        </div>
-      </div>
-      <div class="lists">
-        <div class="projectName flexb">
-          <span>YFC鱼塘</span>
-          <span class="claim green">领取</span>
-        </div>
-        <div class="reward">
-          <span>收益：</span>
-          <span>10.0000 DFS</span>
-        </div>
-      </div>
+      <Dss ref="dss" :allClaiming="allClaiming"/>
+      <DfsMiner ref="dfsMiner" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      <Yfc ref="yfc" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      <Dbc ref="dbc" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      <Dmd  ref="dmd" :allClaiming="allClaiming"/>
     </div>
   </div>
 </template>
@@ -46,12 +21,19 @@
 <script>
 import Dss from './comp/Dss';
 import DfsMiner from './comp/DfsMiner';
+import Yfc from './comp/Yfc';
+import Dbc from './comp/Dbc';
+import Dmd from './comp/Dmd';
+import { EosModel } from '@/utils/eos';
 
 export default {
   name: 'farms',
   components: {
     Dss,
     DfsMiner,
+    Yfc,
+    Dbc,
+    Dmd,
   },
   props: {
     marketLists: {
@@ -61,9 +43,38 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      allClaiming: false,
+    }
+  },
   methods: {
-    handleClaimDss() {
-      this.$refs.dss.handleGetRewardAction()
+    handleAllClaim() {
+      this.allClaiming = true;
+      const dss = this.$refs.dss.handleGetActions()
+      const dfsMiner = this.$refs.dfsMiner.handleGetActions()
+      const yfc = this.$refs.yfc.handleGetActions()
+      const dbc = this.$refs.dbc.handleGetActions()
+      const dmd = this.$refs.dmd.handleGetActions()
+      const params = {
+        actions: [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd]
+      }
+      EosModel.toTransaction(params, (res) => {
+        setTimeout(() => {
+          location.reload()
+        }, 2000);
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
     }
   },
 }

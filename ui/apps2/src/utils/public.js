@@ -340,6 +340,28 @@ export function getYfcReward(mid, type, project = 'YFC') {
   return toFixed(reward, 8)
 }
 
+export function getAccYfcReward(minnerData, data, type) {
+  const rate = accDiv(minnerData.liq || 10000, data.eosBal);
+  const weight = data.weight;
+  const damping = data.damping;
+  const yfcBal = data.yfcBal;
+  let t = 3600;
+  if (minnerData.lastTime) {
+    t = moment().valueOf() - minnerData.lastTime;
+    t = t / 1000;
+  }
+  // console.log(t, yfcBal, damping, weight, rate)
+  // pow(0.9999, time_elapsed * bal_ratio * pool_weight * damping);
+  let reward = yfcBal - yfcBal * Math.pow(0.9999, t * rate * weight * damping);
+  // reward = reward * 0.8;
+  if (type === 'year') {
+    reward = reward * 24;
+    reward = reward * 365;
+  }
+  // console.log(reward)
+  return toFixed(reward, 8)
+}
+
 export function getDbcReward(mid, type) {
   const list = store.state.sys.dbcList.find(v => mid === v.id);
   if (!list || parseFloat(list.max_supply) <= parseFloat(list.supply)) {

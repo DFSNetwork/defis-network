@@ -53,10 +53,12 @@ const config = {
     lpMineList: {}, // 存放格式为 {YFC: [...],}
     lpPoolsBal: {}, // 存放格式为 {YFC: '1.00...'}
     lpDamping: {},  // 存放格式为 {YFC: 0.75, ...}
+    tampList: 0,
   },
   mutations: {
     SET_LpMineList: (state, lpMineList) => {
       state.lpMineList = lpMineList;
+      state.tampList = Math.random() * 1000;
     },
     SET_LpPoolsBal: (state, lpPoolsBal) => {
       state.lpPoolsBal = lpPoolsBal;

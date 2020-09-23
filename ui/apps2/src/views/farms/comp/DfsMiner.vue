@@ -1,6 +1,13 @@
 <template>
-  <div class="num">
-    {{allReward}}
+  <div class="lists" v-loading="loading">
+    <div class="projectName flexb">
+      <span>DFS矿池</span>
+      <span class="claim green" v-loading="claiming || allClaiming" @click="handleClaim">领取</span>
+    </div>
+    <div class="reward">
+      <span>收益：</span>
+      <span>{{ allReward }} DFS</span>
+    </div>
   </div>
 </template>
 
@@ -17,6 +24,10 @@ export default {
       default: function lists() {
         return []
       }
+    },
+    allClaiming: {
+      type: Boolean,
+      default: false,
     }
   },
   data() {
@@ -26,6 +37,8 @@ export default {
       showReward: '0.00000000',
       listsTimer: null,
       timerArr: [],
+      claiming: false,
+      loading: true,
     }
   },
   computed: {
@@ -94,7 +107,7 @@ export default {
         this.lists = [...gold, ...silver, ...bronze, ...lists];
         this.firstGet = true;
         this.handleGetMiners()
-        console.log(this.lists)
+        // console.log(this.lists)
       },
       deep: true,
       immediate: true
@@ -107,6 +120,60 @@ export default {
     })
   },
   methods: {
+    handleClaim() {
+      if (this.allClaiming || this.claiming) {
+        return
+      }
+      const actions = this.handleGetActions()
+      if (!actions.length) {
+        return
+      }
+      this.claiming = true;
+      const params = {
+        actions,
+      }
+      EosModel.toTransaction(params, (res) => {
+        this.claiming = false
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+        setTimeout(() => {
+          this.handleGetUnclaim()
+        }, 1000);
+      })
+    },
+    handleGetActions() {
+      const actions = [];
+      const formName = this.scatter.identity.accounts[0].name;
+      const permission = this.scatter.identity.accounts[0].authority;
+      this.lists.forEach(v => {
+        if (!v.showReward) {
+          return
+        }
+        const action = {
+          account: 'miningpool11',
+          name: 'claim',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            user: formName,
+            mid: v.mid,
+          }
+        }
+        actions.push(action)
+      })
+      return actions;
+    },
     handleGetMiners() {
       if (!this.$store.state.app.scatter || !this.$store.state.app.scatter.identity) {
         return;
@@ -123,6 +190,7 @@ export default {
         }
         setTimeout(() => {
           EosModel.getTableRows(params, (res) => {
+            this.loading = false;
             const rows = res.rows || []
             if (!rows.length) {
               this.$set(v, 'minnerData', {})
@@ -199,7 +267,23 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.num{
-  display: inline-block;
+.lists{
+  text-align: left;
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0px 10px 40px 0px rgba(220,220,220,0.5);
+  .projectName{
+    font-size: 30px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    .claim{
+      font-size: 27px;
+      font-weight: 400;
+    }
+  }
+}
+.green{
+  color: #07D79B;
 }
 </style>

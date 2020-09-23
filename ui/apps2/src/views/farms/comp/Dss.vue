@@ -1,6 +1,13 @@
 <template>
-  <div class="dssNum">
-    {{ myDepositInfo.showReward || '0.00000000' }}
+  <div class="lists" v-loading="loading">
+    <div class="projectName flexb">
+      <span>DFS金库</span>
+      <span class="claim green" v-loading="claiming || allClaiming" @click="handleClaim">领取</span>
+    </div>
+    <div class="reward">
+      <span>收益：</span>
+      <span>{{ myDepositInfo.showReward || '0.00000000' }} DFS</span>
+    </div>
   </div>
 </template>
 
@@ -19,6 +26,14 @@ export default {
       myDepositInfo: {},
       secTimer: null,
       runTimer: null,
+      claiming: false,
+      loading: true,
+    }
+  },
+  props: {
+    allClaiming: {
+      type: Boolean,
+      default: false,
     }
   },
   computed: {
@@ -73,7 +88,8 @@ export default {
         "json": true,
       }
       EosModel.getTableRows(params, (res) => {
-        console.log(res)
+        // console.log(res)
+        this.loading = false;
         if (!res.rows.length) {
           this.myDepositInfo = {}
           return
@@ -137,7 +153,7 @@ export default {
         this.$set(v, 'showReward', showReward);
       }, 50);
     },
-    handleGetRewardAction() {
+    handleGetActions() {
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
       const action = {
@@ -151,16 +167,60 @@ export default {
           user: formName,
         }
       }
-      return action;
+      return [action];
+    },
+    handleClaim() {
+      if (this.allClaiming || this.claiming) {
+        return
+      }
+      const actions = this.handleGetActions()
+      if (!actions.length) {
+        return
+      }
+      this.claiming = true;
+      const params = {
+        actions
+      }
+      EosModel.toTransaction(params, (res) => {
+        this.claiming = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+        setTimeout(() => {
+          this.handleGetAccDssInfo()
+        }, 1000);
+      })
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.dssNum{
-  font-size: 27px;
-  display: inline-block;
-  margin-right: 8px;
+.lists{
+  text-align: left;
+  border-radius: 15px;
+  padding: 30px;
+  margin-bottom: 30px;
+  box-shadow: 0px 10px 40px 0px rgba(220,220,220,0.5);
+  .projectName{
+    font-size: 30px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    .claim{
+      font-size: 27px;
+      font-weight: 400;
+    }
+  }
+}
+.green{
+  color: #07D79B;
 }
 </style>
