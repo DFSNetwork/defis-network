@@ -6,7 +6,7 @@
     </div>
     <div class="farmsTitle flexb">
       <span class="act">每日必做</span>
-      <span class="right green" v-loading="allClaiming" @click="handleAllClaim">一键领取</span>
+      <span class="right green" v-loading="allClaiming" @click="handleAllClaim()">一键领取</span>
     </div>
     <div class="proLists">
       <div @click="handleTo('dss')"><Dss ref="dss" :allClaiming="allClaiming"/></div>
@@ -20,6 +20,8 @@
         <Dbc ref="dbc" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('dmd')"><Dmd  ref="dmd" :allClaiming="allClaiming"/></div>
+      <div><Guns ref="guns" :allClaiming="allClaiming"/></div>
+      <div><Loop ref="loop" :allClaiming="allClaiming"/></div>
     </div>
   </div>
 </template>
@@ -30,6 +32,8 @@ import DfsMiner from './comp/DfsMiner';
 import Yfc from './comp/Yfc';
 import Dbc from './comp/Dbc';
 import Dmd from './comp/Dmd';
+import Guns from './comp/Guns';
+import Loop from './comp/Loop';
 import { EosModel } from '@/utils/eos';
 
 export default {
@@ -40,6 +44,8 @@ export default {
     Yfc,
     Dbc,
     Dmd,
+    Guns,
+    Loop,
   },
   props: {
     marketLists: {
@@ -81,8 +87,21 @@ export default {
       const yfc = this.$refs.yfc.handleGetActions()
       const dbc = this.$refs.dbc.handleGetActions()
       const dmd = this.$refs.dmd.handleGetActions()
+      const guns = this.$refs.guns.handleGetActions()
+      const loop = this.$refs.loop.handleGetActions()
+      // const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns];
+      // let pageArr = []
+      // tArr.forEach((v, index) => {
+      //   const page = parseInt(index / 10);
+      //   if (!pageArr[page]) {
+      //     pageArr[page] = []
+      //   }
+      //   pageArr[page].push(v)
+      // })
+      // const actions = pageArr[pageIndex];
+      // console.log(pageArr)
       const params = {
-        actions: [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd]
+        actions: [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop]
       }
       EosModel.toTransaction(params, (res) => {
         setTimeout(() => {

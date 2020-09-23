@@ -52,6 +52,20 @@ export default {
       deep: true,
       immediate: true,
     },
+    dsrPools: {
+      handler: function listen() {
+        this.handleRunReward()
+      },
+      deep: true,
+      immediate: true,
+    },
+    args: {
+      handler: function listen() {
+        this.handleRunReward()
+      },
+      deep: true,
+      immediate: true,
+    }
   },
   mounted() {
     this.handleGetDssArgs();

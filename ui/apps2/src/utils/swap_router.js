@@ -87,15 +87,15 @@ class swapRouter {
         paths, pair_market_map, mid_market_map, tokens
       }
     }
-    // console.log(Date.parse(new Date()))
+    console.log('开始执行循环 - ', Date.parse(new Date()))
     vThis.$worker.run(dealPath, [this.markets]).then(res => {
       this.paths = res.paths;
       this.pair_market_map = res.pair_market_map;
       this.mid_market_map = res.mid_market_map;
       this.tokens = res.tokens;
       this.isInit = true;
-      // console.log(this.paths.length)
-      // console.log(Date.parse(new Date()))
+      console.log('生成路径长度 - ', this.paths.length)
+      console.log('循环执行结束 - ', Date.parse(new Date()))
     }).catch(e => console.log(e))
   }
 
