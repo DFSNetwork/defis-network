@@ -51,6 +51,9 @@ class swapRouter {
         for (let i = 0; i < paths.length; i++) {
           let path = paths[i];
           let tks = path.split("-");
+          if (tks.length > 4) {
+            return
+          }
           if (tks[0] === tokenA && tks[tks.length - 1] !== tokenB) {
             new_paths.push(tokenB + "-" + path)
           }
@@ -117,6 +120,9 @@ class swapRouter {
       for (let i = 0; i < this.paths.length; i++) {
         let path = this.paths[i];
         let tks = path.split("-");
+        if (tks.length > 4) {
+          return
+        }
         if (tks[0] === tokenA && tks[tks.length - 1] !== tokenB) {
           new_paths.push(tokenB + "-" + path)
         }
