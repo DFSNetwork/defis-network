@@ -5,11 +5,16 @@
       <div class="subTip">每日农活，收益一目了然</div>
     </div>
     <div class="farmsTitle flexb">
-      <span class="act">每日必做</span>
+      <span>
+        <span class="act">每日必做</span>
+        <span class="about tip">预估总收益 ≈ {{ allReward }} EOS</span>
+      </span>
       <span class="right green" v-loading="allClaiming" @click="handleRegLength()">一键领取</span>
     </div>
     <div class="proLists">
-      <div @click="handleTo('dss')"><Dss ref="dss" :allClaiming="allClaiming"/></div>
+      <div @click="handleTo('dss')">
+        <Dss ref="dss" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
       <div @click="handleTo('pools')">
         <DfsMiner ref="dfsMiner" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
@@ -19,9 +24,15 @@
       <div @click="handleTo('dbc')">
         <Dbc ref="dbc" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
-      <div @click="handleTo('dmd')"><Dmd  ref="dmd" :allClaiming="allClaiming"/></div>
-      <div @click="handleTo('guns')"><Guns ref="guns" :allClaiming="allClaiming"/></div>
-      <div @click="handleTo('loop')"><Loop ref="loop" :allClaiming="allClaiming"/></div>
+      <div @click="handleTo('dmd')">
+        <Dmd  ref="dmd" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
+      <div @click="handleTo('guns')">
+        <Guns ref="guns" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
+      <div @click="handleTo('loop')">
+        <Loop ref="loop" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
     </div>
 
     <el-dialog
@@ -72,9 +83,32 @@ export default {
       allActions: [],
       thisPage: 0,
       nextPage: 0,
+      allRewardTimer: null,
+      allReward: '0.0000'
     }
   },
+  computed: {
+  },
+  mounted() {
+    this.handleGetAll()
+  },
   methods: {
+    handleGetAll() {
+      clearTimeout(this.allReward)
+      let n = 0
+      const dss = this.$refs.dss ? Number(this.$refs.dss.aboutEos || 0) : 0;
+      const dfsMiner = this.$refs.dfsMiner ? Number(this.$refs.dfsMiner.aboutEos || 0) : 0;
+      const yfc = this.$refs.yfc ? Number(this.$refs.yfc.aboutEos || 0) : 0;
+      const dbc = this.$refs.dbc ? Number(this.$refs.dbc.aboutEos || 0) : 0;
+      const dmd = this.$refs.dmd ? Number(this.$refs.dmd.aboutEos || 0) : 0;
+      const guns = this.$refs.guns ? Number(this.$refs.guns.aboutEos || 0) : 0;
+      const loop = this.$refs.loop ? Number(this.$refs.loop.aboutEos || 0) : 0;
+      n = dss + dfsMiner + yfc + dbc + dmd + guns + loop + n;
+      this.allReward = n.toFixed(4);
+      this.allRewardTimer = setTimeout(() => {
+        this.handleGetAll()
+      }, 50)
+    },
     handleClose(type) {
       this.showTip = false;
       if (type || this.nextPage !== 0) {
@@ -208,6 +242,10 @@ export default {
     &>span{
       margin-right: 60px;;
     }
+    .about{
+      margin-left: 10px;
+      font-size: 24px;
+    }
     .act{
       color: $color-black;
       position: relative;
@@ -230,22 +268,6 @@ export default {
   .proLists{
     padding: 0 40px 40px;
     font-size: 27px;
-    .lists{
-      text-align: left;
-      border-radius: 15px;
-      padding: 30px;
-      margin-bottom: 30px;
-      box-shadow: 0px 10px 40px 0px rgba(220,220,220,0.5);
-      .projectName{
-        font-size: 30px;
-        font-weight: 500;
-        margin-bottom: 10px;
-        .claim{
-          font-size: 27px;
-          font-weight: 400;
-        }
-      }
-    }
   }
 }
 .myDialog{

@@ -1,12 +1,20 @@
 <template>
-  <div class="lists" v-loading="loading">
-    <div class="projectName flexb">
-      <span>YFC鱼塘</span>
-      <span class="claim green" v-loading="claiming || allClaiming" @click.stop="handleClaim">领取</span>
+  <div class="lists flexa" v-loading="loading">
+    <div class="coinDiv flexc">
+      <img class="coin" src="https://apps.defis.network/static/coin/yfctokenmain-yfc.png" alt="">
     </div>
-    <div class="reward">
-      <span>收益：</span>
-      <span>{{ allClaim }} YFC</span>
+    <div class="f1">
+      <div class="projectName flexb">
+        <span>YFC鱼塘</span>
+        <span class="claim green" v-loading="claiming || allClaiming" @click.stop="handleClaim">领取</span>
+      </div>
+      <div class="reward">
+        <span>收益：</span>
+        <span>{{ allClaim }} YFC</span>
+      </div>
+      <div class="about">
+        <span>≈ {{ aboutEos }} EOS</span>
+      </div>
     </div>
   </div>
 </template>
@@ -49,6 +57,11 @@ export default {
       // console.log(all)
       return toFixed(all, 8)
     },
+    aboutEos() {
+      const price = parseFloat(this.marketData.reserve0) / parseFloat(this.marketData.reserve1) || 0;
+      const num = price * this.allClaim;
+      return toFixed(num, 4)
+    },
   },
   data() {
     return {
@@ -61,6 +74,8 @@ export default {
       timerArr: [],
       newLists: [],
       claiming: false,
+      mid: 329, // dfs: 39 | DMD: 326 | YFC: 329 | DBC: 346 | LOOP: 424
+      marketData: {},
     }
   },
   watch: {
@@ -81,6 +96,7 @@ export default {
     },
     marketLists: {
       handler: function ml(newVal, oldVal) {
+        this.marketData = newVal.find(v => v.mid === this.mid) || {}
         if (!newVal.length || JSON.stringify(newVal) === JSON.stringify(oldVal)) {
           return
         }
@@ -317,23 +333,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.lists{
-  text-align: left;
-  border-radius: 15px;
-  padding: 30px;
-  margin-bottom: 30px;
-  box-shadow: 0px 10px 40px 0px rgba(220,220,220,0.5);
-  .projectName{
-    font-size: 30px;
-    font-weight: 500;
-    margin-bottom: 10px;
-    .claim{
-      font-size: 27px;
-      font-weight: 400;
-    }
-  }
-}
-.green{
-  color: #07D79B;
-}
+@import './comp.scss';
 </style>

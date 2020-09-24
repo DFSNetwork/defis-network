@@ -1,12 +1,20 @@
 <template>
-  <div class="lists" v-loading="loading">
-    <div class="projectName flexb">
-      <span>YFC机枪池</span>
-      <span class="claim green" v-loading="claiming || allClaiming" @click.stop="handleClaim">领取</span>
+  <div class="lists flexa" v-loading="loading">
+    <div class="coinDiv flexc">
+      <img class="coin" src="https://apps.defis.network/static/coin/yfctokenmain-yfc.png" alt="">
     </div>
-    <div class="reward">
-      <span>收益：</span>
-      <span>{{ showRewardAll }} YFC</span>
+    <div class="f1">
+      <div class="projectName flexb">
+        <span>YFC机枪池</span>
+        <span class="claim green" v-loading="claiming || allClaiming" @click.stop="handleClaim">领取</span>
+      </div>
+      <div class="reward">
+        <span>收益：</span>
+        <span>{{ showRewardAll }} YFC</span>
+      </div>
+      <div class="about">
+        <span>≈ {{ aboutEos }} EOS</span>
+      </div>
     </div>
   </div>
 </template>
@@ -53,18 +61,28 @@ export default {
 
       rewardAll: '0.00000000',
       showRewardAll: '0.00000000',
+      mid: 329, // dfs: 39 | DMD: 326 | YFC: 329 | DBC: 346 | LOOP: 424
+      marketData: {},
     }
   },
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
     }),
-    allClaim() {
-      let all = '0.0000000000';
-      return toFixed(all, 8)
+    aboutEos() {
+      const price = parseFloat(this.marketData.reserve0) / parseFloat(this.marketData.reserve1) || 0;
+      const num = price * this.showRewardAll;
+      return toFixed(num, 4)
     },
   },
   watch: {
+    marketLists: {
+      handler: function ml(newVal) {
+        this.marketData = newVal.find(v => v.mid === this.mid) || {}
+      },
+      deep: true,
+      immediate: true,
+    },
     scatter: {
       handler: function listen(newVal) {
         if (newVal.identity) {
@@ -261,23 +279,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.lists{
-  text-align: left;
-  border-radius: 15px;
-  padding: 30px;
-  margin-bottom: 30px;
-  box-shadow: 0px 10px 40px 0px rgba(220,220,220,0.5);
-  .projectName{
-    font-size: 30px;
-    font-weight: 500;
-    margin-bottom: 10px;
-    .claim{
-      font-size: 27px;
-      font-weight: 400;
-    }
-  }
-}
-.green{
-  color: #07D79B;
-}
+@import './comp.scss';
 </style>
