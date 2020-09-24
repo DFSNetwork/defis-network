@@ -27,6 +27,7 @@ export default {
     lastUpdate: 'Last update',
     warnTip: 'Risk Warning',
     detail: 'Detail',
+    marketTip: 'Your market-making amount is too low to generate a market-making voucher, please re-enter!',
   },
   invi: {
     invitation: 'Invitation',
@@ -44,7 +45,8 @@ export default {
     bank: 'Bank',
     dex: 'Swap',
     pools: 'Pools',
-    hyk: 'Subscribe'
+    hyk: 'Subscribe',
+    yfc: 'YFC',
   },
   bank: {
     stake: 'Stake',

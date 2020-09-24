@@ -489,7 +489,7 @@ export default {
       if (!Number(this.getToken)) {
         this.$message({
           type: 'error',
-          message: '您的做市额度过低，无法生成做市凭证，请重新输入！',
+          message: this.$t('public.marketTip'),
         })
         return false;
       }

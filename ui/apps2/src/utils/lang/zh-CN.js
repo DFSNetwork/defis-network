@@ -27,6 +27,7 @@ export default {
     lastUpdate: '最近更新时间', // last update
     warnTip: '风险提示',
     detail: '详情',
+    marketTip: '您的做市额度过低，无法生成做市凭证，请重新输入！',
   },
   invi: {
     invitation: '邀请', // invitation
@@ -45,7 +46,8 @@ export default {
     bank: '金库',
     dex: '兑换',
     pools: '做市',
-    hyk: '认购'
+    hyk: '认购',
+    yfc: '机枪池',
   },
   bank: {
     stake: '抵押',

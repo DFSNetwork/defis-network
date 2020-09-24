@@ -7,6 +7,7 @@
       <div class="navList">
         <div class="list" @click="handleTo('pools')">{{ $t('mine.pools') }}</div>
         <div class="list" @click="handleTo('dss')">DSS</div>
+        <div class="list" @click="handleToOther('yfc')">{{ $t('tab.yfc') }}</div>
         <div class="list" @click="handleTo('total')">{{ $t('info.info') }}</div>
         <div class="list" @click="handleTo('createMarket')">{{ $t('dex.addMarket') }}</div>
         <div class="list" @click="handleTo('tutorial')">{{ $t('public.tutorial') }}</div>
@@ -77,6 +78,12 @@ export default {
         location.reload()
       })
     },
+    handleToOther(name) {
+      if (name === 'yfc') {
+        location.href = 'https://yfc.one/guns'
+        return;
+      }
+    }
   }
 }
 </script>
