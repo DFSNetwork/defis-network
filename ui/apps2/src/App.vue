@@ -368,13 +368,15 @@ export default {
   margin: 0;
   /deep/ .el-message{
     // width: 80% !important;
-    // min-width: 80% !important;
-    // max-width: 80% !important;
+    min-width: 60% !important;
+    max-width: 80% !important;
+    align-items: flex-start !important;
     .el-message__icon{
       font-size: 42px;
     }
     .el-message__content{
-      font-size: 26px !important;
+      font-size: 24px !important;
+      line-height: 30px !important;
     }
   }
   /deep/ .el-loading-spinner .path{

@@ -486,9 +486,13 @@ export default {
       if (!Number(this.payNum1) || !Number(this.payNum2)) {
         return false;
       }
-      // if (!Number(this.getToken)) {
-      //   return false;
-      // }
+      if (!Number(this.getToken)) {
+        this.$message({
+          type: 'error',
+          message: '您的做市额度过低，无法生成做市凭证，请重新输入！',
+        })
+        return false;
+      }
       if (Number(this.payNum1) > Number(this.balanceSym0) || Number(this.payNum2) > Number(this.balanceSym1)) {
         this.$message({
           type: 'error',
