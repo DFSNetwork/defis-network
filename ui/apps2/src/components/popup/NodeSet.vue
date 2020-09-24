@@ -30,7 +30,7 @@ export default {
           area: 'production',
           protocol: 'https',
           host: 'eos.blockeden.cn', // eospush.tokenpocket.pro
-          // port: '443',
+          port: '443',
           url: 'https://eos.blockeden.cn', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
@@ -38,7 +38,7 @@ export default {
           area: 'production',
           protocol: 'https',
           host: 'eospush.tokenpocket.pro',
-          // port: '443',
+          port: '443',
           url: 'https://eospush.tokenpocket.pro',
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
@@ -46,7 +46,7 @@ export default {
           area: 'production',
           protocol: 'https',
           host: 'eos.greymass.com', // eospush.tokenpocket.pro
-          // port: '443',
+          port: '443',
           url: 'https://eos.greymass.com', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
@@ -54,7 +54,7 @@ export default {
           area: 'production',
           protocol: 'https',
           host: 'nodes.get-scatter.com', // eospush.tokenpocket.pro
-          // port: '443',
+          port: '443',
           url: 'https://nodes.get-scatter.com', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
@@ -62,7 +62,7 @@ export default {
           area: 'production',
           protocol: 'https',
           host: 'mainnet.meet.one',
-          // port: '443',
+          port: '443',
           url: 'https://mainnet.meet.one', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
@@ -70,7 +70,7 @@ export default {
           area: 'production',
           protocol: 'https',
           host: 'api.eossweden.se',
-          // port: '443',
+          port: '443',
           url: 'https://api.eossweden.se', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
@@ -78,7 +78,7 @@ export default {
           area: 'production',
           protocol: 'https',
           host: 'api.eoslaomao.com',
-          // port: '443',
+          port: '443',
           url: 'https://api.eoslaomao.com', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         }

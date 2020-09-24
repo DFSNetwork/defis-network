@@ -16,7 +16,7 @@ const sys = {
         area: "test",
         protocol: "https",
         host: "api.testnet.eos.io",
-        // port: "443",
+        port: "443",
         url: "https://api.testnet.eos.io/",
         chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f",
       },
@@ -35,7 +35,7 @@ const sys = {
         area: "dev",
         protocol: "http",
         host: "183.250.89.179",
-        // port: "58888",
+        port: "58888",
         url: "http://183.250.89.179:58888",
         chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f",
       },
@@ -54,7 +54,7 @@ const sys = {
         area: 'production',
         protocol: 'https',
         host: 'eos.blockeden.cn', // eospush.tokenpocket.pro
-        // port: '443',
+        port: '443',
         url: 'https://eos.blockeden.cn', // https://eospush.tokenpocket.pro https://eos.greymass.com
         chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
       },
