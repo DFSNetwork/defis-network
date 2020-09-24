@@ -2,17 +2,28 @@
 const config = {
   state: {
     dmdMineConfig: [ // 钻石参与LP挖矿配置
-      // {
-      //   mid: 326,
-      //   "poolid": 5,
-      //   "epoch": 1599796800,
-      //   "duration": 1209600,
-      //   "maxSupply": 2000,
-      //   "poolContract": "eosdmdpool15",
-      //   "sTokenContract": "",
-      //   "sTokenSymbol": "",
-      //   "sTokenPrecision": 4
-      // },
+      {
+        mid: 39,
+        duration: 31104000,
+        epoch: 1600855200,
+        maxSupply: 500,
+        poolContract: "eosdmdpool1d",
+        poolid: 9,
+        sTokenContract: "",
+        sTokenPrecision: 4,
+        sTokenSymbol: "",
+      },
+      { // hub
+        mif: 344,
+        duration: 1209600,
+        epoch: 1599796800,
+        maxSupply: 2000,
+        poolContract: "eosdmdpool1b",
+        poolid: 7,
+        sTokenContract: "",
+        sTokenPrecision: 4,
+        sTokenSymbol: "",
+      },
       {
         mid: 329,
         duration: 1209600,
@@ -24,17 +35,17 @@ const config = {
         sTokenPrecision: 4,
         sTokenSymbol: "",
       },
-      // {
-      //   mid: 344,
-      //   duration: 1209600,
-      //   epoch: 1599796800,
-      //   maxSupply: 1000,
-      //   poolContract: "eosdmdpool1b",
-      //   poolid: 7,
-      //   sTokenContract: "",
-      //   sTokenPrecision: 4,
-      //   sTokenSymbol: "",
-      // }
+      {
+        mid: 370,
+        duration: 31104000,
+        epoch: 1600855200,
+        maxSupply: 500,
+        poolContract: "eosdmdpool1c",
+        poolid: 8,
+        sTokenContract: "",
+        sTokenPrecision: 4,
+        sTokenSymbol: "",
+      }
     ],
     // YFC类型LP挖矿配置
     lpMid: [{

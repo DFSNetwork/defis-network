@@ -182,6 +182,7 @@ export default {
           }
           EosModel.getTableRows(params, (res) => {
             const rows = res.rows || []
+            this.loading = false;
             if (!rows.length) {
               return
             }
@@ -202,7 +203,6 @@ export default {
       if (!this.weightList.length || !this.accMine.length || !this.loopBal || !this.poolsBal) {
         return
       }
-      this.loading = false;
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
         this.handleDealReward();

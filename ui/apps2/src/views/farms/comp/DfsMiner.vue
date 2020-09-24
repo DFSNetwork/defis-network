@@ -39,6 +39,7 @@ export default {
       timerArr: [],
       claiming: false,
       loading: true,
+      minReward: '0.0001',
     }
   },
   computed: {
@@ -155,7 +156,7 @@ export default {
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
       this.lists.forEach(v => {
-        if (!v.showReward) {
+        if (!v.showReward || Number(this.minReward) > Number(v.showReward)) {
           return
         }
         const action = {

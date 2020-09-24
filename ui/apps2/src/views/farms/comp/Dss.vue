@@ -28,6 +28,7 @@ export default {
       runTimer: null,
       claiming: false,
       loading: true,
+      minReward: '0.0001',
     }
   },
   props: {
@@ -170,6 +171,9 @@ export default {
     handleGetActions() {
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
+      if (Number(this.minReward) > Number(this.myDepositInfo.reward)) {
+        return []
+      }
       const action = {
         account: 'dfsdsrsystem',
         name: 'claim',
