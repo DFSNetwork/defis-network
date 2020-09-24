@@ -378,6 +378,7 @@ export default {
         inData.decimal1 = this.thisMarket.decimal1
       }
       const outData = dealToken(inData)
+      // console.log(outData)
       if ((!Number(this.payNum1) && !Number(this.payNum2))) {
         return
       }
@@ -485,9 +486,9 @@ export default {
       if (!Number(this.payNum1) || !Number(this.payNum2)) {
         return false;
       }
-      if (!Number(this.getToken)) {
-        return false;
-      }
+      // if (!Number(this.getToken)) {
+      //   return false;
+      // }
       if (Number(this.payNum1) > Number(this.balanceSym0) || Number(this.payNum2) > Number(this.balanceSym1)) {
         this.$message({
           type: 'error',
