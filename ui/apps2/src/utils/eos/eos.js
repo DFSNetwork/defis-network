@@ -511,8 +511,79 @@ async getTableRows(obj, callback) {
     this.vthis.$message.error(`Unknow Error!【${res}】`);
   }
 
-  //  catch 错误回调
   errorCall(e, callback) {
+    let back = {
+      code: '0001',
+      message: JSON.stringify(e),
+    };
+    try {
+      if (typeof (e) === 'object') {
+        if (e.code === 402) {
+          back = {
+            code: 402,
+            message: this.vthis.$t('error.cancel'),
+          }
+        }
+      }
+      if (typeof (e) === 'string') {
+        const err = JSON.parse(e);
+        // CPU 不足
+        if (err.error.code === 3080004) {
+          back = {
+            code: 3080004,
+            message: this.vthis.$t('error.insufficient', {res: 'CPU'}),
+          }
+        }
+        // NET 不足
+        if (err.error.code === 3080002) {
+          back = {
+            code: 3080002,
+            message: this.vthis.$t('error.insufficient', {res: 'NET'}),
+          }
+        }
+        // RAM 不足
+        if (err.error.code === 3080001) {
+          back = {
+            code: 3080001,
+            message: this.vthis.$t('error.insufficient', {res: 'RAM'}),
+          }
+        }
+        if (err.error.code === 3050003 || err.error.code === 3010010) {
+          // 滑点过高导致
+          const detail = err.error.details;
+          if (detail[0].message.indexOf('INSUFFICIENT_OUTPUT_AMOUNT') !== -1) {
+            back = {
+              code: 3050003,
+              message: this.vthis.$t('dex.heightSlip'),
+            }
+          } else if (detail[0].message.indexOf('Invalid packed transaction') !== -1) { // 用户取消操作
+            back = {
+              code: 402,
+              message: this.vthis.$t('error.cancel'),
+            }
+          } else {
+            back = {
+              code: err.error.code,
+              message: detail[0].message,
+            }
+          }
+        }
+      }
+      callback(back);
+    } catch (error) {
+      console.log(error)
+      if (e === '操作已取消') {
+        back = {
+          code: 402,
+          message: this.vthis.$t('error.cancel'),
+        }
+      }
+      callback(back);
+    }
+  }
+
+  //  catch 错误回调
+  errorCallOld(e, callback) {
     console.log(e)
     const self = this;
     const scatapp = store.state.app.scatter;

@@ -366,22 +366,6 @@ export default {
 *{
   padding: 0;
   margin: 0;
-  /deep/ .el-message{
-    // width: 80% !important;
-    min-width: 60% !important;
-    max-width: 80% !important;
-    align-items: flex-start !important;
-    .el-message__icon{
-      font-size: 42px;
-    }
-    .el-message__content{
-      font-size: 24px !important;
-      line-height: 30px !important;
-    }
-  }
-  /deep/ .el-loading-spinner .path{
-    stroke: rgba(2,198,152,1);
-  }
 }
 
 #app {

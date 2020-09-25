@@ -29,6 +29,10 @@ export default {
     detail: 'Detail',
     marketTip: 'Your market-making amount is too low to generate a market-making voucher, please re-enter!',
   },
+  error: {
+    insufficient: 'Insufficient {res} resources', // Insufficient {res} resources
+    cancel: 'Operation cancelled', // Operation cancelled
+  },
   invi: {
     invitation: 'Invitation',
     toInviter: 'Become an inviter',

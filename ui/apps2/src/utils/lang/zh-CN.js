@@ -29,6 +29,10 @@ export default {
     detail: '详情',
     marketTip: '您的做市额度过低，无法生成做市凭证，请重新输入！',
   },
+  error: {
+    insufficient: '{res}资源不足', // Insufficient {res} resources
+    cancel: '操作已取消', // Operation cancelled
+  },
   invi: {
     invitation: '邀请', // invitation
     toInviter: '成为邀请人', // Become an inviter

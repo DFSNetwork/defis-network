@@ -48,3 +48,18 @@ $color-tip: #a6a6a6;
   border: 1px solid #8C7853 !important;
   box-shadow: 0 0 5px 0px rgba(#8C7853, .5) !important;
 }
+.el-message{
+  // width: 80% !important;
+  min-width: 60% !important;
+  max-width: 80% !important;
+}
+.el-message__icon{
+  font-size: 36px !important;
+}
+.el-message__content{
+  font-size: 24px !important;
+  line-height: 30px !important;
+}
+.el-loading-spinner .path{
+  stroke: rgba(2,198,152,1) !important;
+}
