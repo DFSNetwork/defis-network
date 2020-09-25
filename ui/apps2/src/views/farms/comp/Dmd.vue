@@ -150,7 +150,7 @@ export default {
       const formName = this.scatter.identity.accounts[0].name;
       this.get = true;
       this.dmdMineConfig.forEach(v => {
-        console.log(v)
+        // console.log(v)
         const params = {
           code: v.poolContract,
           json: true,
@@ -163,7 +163,7 @@ export default {
         EosModel.getTableRows(params, (res) => {
           this.loading = false;
           const rows = res.rows || []
-          console.log(res)
+          // console.log(res)
           if (!rows.length) {
             return
           }
