@@ -1,5 +1,5 @@
 # jin-network
-JIN Network front end.
+DeFis Network front end.
 
 ## Project setup
 ```
