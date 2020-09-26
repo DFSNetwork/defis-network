@@ -146,6 +146,7 @@ export default {
       // console.log(this.node)
       const newConf = this.baseConfig;
       newConf.node = this.node;
+      newConf.type = true;
       localStorage.setItem('proConfig', JSON.stringify(newConf))
       this.$store.dispatch('setBaseConfig', newConf);
       location.reload()

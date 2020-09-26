@@ -49,7 +49,7 @@ const sys = {
       baseCoinContract: 'eosio.token',
       teamFunds: 'jinteamfunds', // 资金账户
     },
-    proConfig: localStorage.getItem('proConfig') ? JSON.parse(localStorage.getItem('proConfig')) : { // 生产环境配置
+    proConfig: localStorage.getItem('proConfig') && JSON.parse(localStorage.getItem('proConfig')).type ? JSON.parse(localStorage.getItem('proConfig')) : { // 生产环境配置
       node: {
         area: 'production',
         protocol: 'https',
@@ -67,6 +67,7 @@ const sys = {
       baseCoin: 'EOS', // 母币
       baseCoinContract: 'eosio.token',
       teamFunds: 'jinteamfunds', // 资金账户
+      type: true,
     },
     aprs: localStorage.getItem('aprs') ? JSON.parse(localStorage.getItem('aprs')) : {}, // 全局aprs
     damping: localStorage.getItem('damping') || 0.75, // DFS流通量计算得出 - Math.pow(0.75, parseInt(dfsCurrent / 1000000))
