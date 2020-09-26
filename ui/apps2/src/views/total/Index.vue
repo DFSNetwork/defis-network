@@ -100,7 +100,6 @@ export default {
       // 箭头函数可使代码更简练
       feesApr: state => state.sys.feesApr,
       eggargs: state => state.sys.eggargs,
-      weightList: state => state.sys.weightList, // 交易对权重列表
       list: state => state.sys.list,
       dfsPrice: state => state.sys.dfsPrice,
       dfsData: state => state.sys.dfsData,
@@ -117,10 +116,7 @@ export default {
       top10.forEach(market => {
         try {
           let count = 0;
-          // const v = this.eggargs.find(vv => vv.mid === market.mid);
-          const wlist = this.weightList.find(vv => vv.mid === market.mid) || {}
-          const weight = wlist.pool_weight || 0;
-          const reward = perDayReward(weight);
+          const reward = perDayReward(market.mid);
           const apr = reward * this.dfsPrice / 20000 * 365 * 100;
           count = accAdd(count, apr.toFixed(2))
 

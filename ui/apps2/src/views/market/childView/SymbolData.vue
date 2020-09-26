@@ -2,7 +2,17 @@
   <div class="symbolData">
     <div class="myPools">
       <!-- <div class="title"><span class="act">{{ $t('mine.myMine') }}</span></div> -->
-      <div class="title"><span class="act">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span></div>
+      <div class="title flexb">
+        <span class="act">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span>
+        <!-- <span class="warntip flexa" v-if="weight <= 0" @click="showRank = true">
+          <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
+          <span>{{ $t('public.warmPrompt') }}</span>
+        </span> -->
+      </div>
+      <div class="rankTip flexb">
+        <span>{{ $t('vote.rankTip') }}</span>
+        <span class="red" @click="handleTo('vote')">{{ $t('vote.challenge') }}</span>
+      </div>
       <div class="data">
         <div class="allClaim flexb">
           <div>
@@ -150,6 +160,11 @@
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="isActual"
                  :apr="apr" :lpApy="lpApy" :dmdApy="dmdApy"/>
     </el-dialog>
+    <!-- <el-dialog
+      class="myDialog"
+      :visible.sync="showRank">
+      <RankTip v-if="showRank"/>
+    </el-dialog> -->
   </div>
 </template>
 
@@ -163,12 +178,14 @@ import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
 import MarketTip from '../popup/MarketTip';
 import MarketApy from '../popup/MarketApy'
+// import RankTip from '../popup/RankTip'
 
 export default {
   components: {
     MinReward,
     MarketTip,
-    MarketApy
+    MarketApy,
+    // RankTip
   },
   data() {
     return {
@@ -177,6 +194,7 @@ export default {
       showReWardTip: false,
       claimLoading: false,
       getAccData: false,
+      // showRank: false,
       thisMarket: {
         symbol0: 'EOS',
         symbol1: 'USDD',
@@ -250,13 +268,13 @@ export default {
     ...mapState({
       // 箭头函数可使代码更简练
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-      weightList: state => state.sys.weightList, // 交易对权重列表
       aprs: state => state.sys.aprs,
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
       storeFeesApr: state => state.sys.feesApr,
       lpMid: state => state.config.lpMid,
+      rankInfo: state => state.sys.rankInfo,
     }),
     dmdApy() {
       const dmdPool = this.marketLists.find(v => v.mid === 326)
@@ -294,14 +312,14 @@ export default {
       return toFixed(min, 4)
     },
     weight() {
-      if (!this.weightList.length || !this.thisMarket.mid) {
+      if (!this.rankInfo.length || !this.thisMarket.mid) {
         return '0'
       }
-      const wData = this.weightList.find(v => v.mid === this.thisMarket.mid) || {}
-      return wData.pool_weight;
+      const wData = this.rankInfo.find(v => v.mid === this.thisMarket.mid) || {}
+      return wData.pool_weight || 0;
     },
     buff() {
-      if (Number(this.weight) <= 1) {
+      if (Number(this.weight || 0) <= 1) {
         return 0
       }
       let t = accSub(this.weight, 1);
@@ -309,10 +327,7 @@ export default {
       return t.toFixed(0)
     },
     dayRewardNum() {
-      if (Number(this.weight) <= 0) {
-        return '0.0000'
-      }
-      return perDayReward(this.weight)
+      return perDayReward(this.thisMarket.mid)
     },
     apr() {
       const apr = this.dayRewardNum * this.dfsPrice / 20000 * 365 * 100;
@@ -322,7 +337,6 @@ export default {
       const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
       const thisPoolApr = getPoolApr(this.thisMarket)
       return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr) ? parseFloat(feesApr.poolsApr) : parseFloat(thisPoolApr)
-      // return getPoolApr(this.thisMarket)
     },
     isActual() {
       const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
@@ -379,6 +393,11 @@ export default {
     })
   },
   methods: {
+    handleTo(name) {
+      this.$router.push({
+        name
+      })
+    },
     handleDealApy(mid = 329, project) {
       let yfcReward = getYfcReward(this.thisMarket.mid, 'year', project);
       if (Number(yfcReward)) {
@@ -574,7 +593,7 @@ export default {
           this.timerArr[index] = null;
           return
         }
-        const reward = dealReward(v, this.weight)
+        const reward = dealReward(v, this.thisMarket.mid)
         let showReward = v.reward || '0.00000000';
         let countReward = showReward;
         if (!v.showReward) {
@@ -606,7 +625,7 @@ export default {
     },
     handleAccRun() {
       // console.log(this.accMineData)
-      const reward = dealReward(this.accMineData, this.weight)
+      const reward = dealReward(this.accMineData, this.thisMarket.mid)
       let showReward = this.accMineData.reward || '0.00000000';
       let countReward = showReward;
       if (!this.accMineData.showReward) {
@@ -710,6 +729,24 @@ export default {
       transform: translateX(-45%);
     }
   }
+  .warntip{
+    color: #f5a623;
+    font-size: 27px;
+    margin-right: 0;
+  }
+  .tipIcon{
+    margin-right: 10px;
+    width: 38px;
+  }
+}
+.rankTip{
+  font-size: 24px;
+  padding: 20px;
+  border: 1px solid rgba(254,183,94,.5);
+  background: rgba(254,183,94,.1);
+  border-radius: 8px;
+  margin-bottom: 25px;
+  color: #f5a623;
 }
 .green{
   color: #07D79B;

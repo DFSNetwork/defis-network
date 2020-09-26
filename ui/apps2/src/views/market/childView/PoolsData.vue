@@ -120,12 +120,12 @@ export default {
     ...mapState({
       // 箭头函数可使代码更简练
       // baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-      weightList: state => state.sys.weightList, // 交易对权重列表
       aprs: state => state.sys.aprs,
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
       sortClass: state => state.sys.sortClass,
+      rankInfo: state => state.sys.rankInfo,
     }),
     minReward() {
       if (!Number(this.dfsPrice)) {
@@ -154,24 +154,21 @@ export default {
   watch: {
     marketLists: {
       handler: function ml(newVal) {
-        if (!newVal.length || !this.weightList.length || this.firstGet) {
+        if (!newVal.length || !this.rankInfo.length || this.firstGet) {
           return
         }
-        const weightList = this.weightList;
+        const rankInfo = this.rankInfo;
         let lists = [];
         let gold = [], silver = [], bronze = [];
-        weightList.sort((a, b) => {
-          return b.pool_weight - a.pool_weight
-        })
-        weightList.forEach(v => {
+        rankInfo.forEach(v => {
           const item = newVal.find(vv => vv.mid === v.mid)
           const weight = Number(v.pool_weight).toFixed(4)
           item.pool_weight = weight;
-          if (weight === '4.1903') {
+          if (v.rank <= 2) {
             gold.push(item)
-          } else if (weight === '2.5468') {
+          } else if (v.rank <= 5) {
             silver.push(item)
-          } else if (weight === '1.4790') {
+          } else if (v.rank <= 10) {
             bronze.push(item)
           } else {
             lists.push(item)
@@ -289,7 +286,7 @@ export default {
             this.timerArr[index] = null;
             return
           }
-          const reward = dealReward(v.minnerData, v.pool_weight)
+          const reward = dealReward(v.minnerData, v.mid)
           let showReward = v.reward || '0.00000000';
           let countReward = showReward;
           if (!v.showReward) {
@@ -312,25 +309,6 @@ export default {
           }, 50);
         })
       }, 1000);
-    },
-    handleDealMineNum(minnerData, weight) {
-      // 用户实际数据计算
-      let minNum = '0';
-      const type = minnerData.lastTime < this.aprs.lastTime; // 用户时间 < 系统时间
-      if (type) {
-        let t = moment().valueOf() - this.aprs.lastTime;
-        t = t / 1000;
-        minNum = minnerData.liq * this.aprs.aprs_accumulator * Math.pow(this.aprs.aprs, t)
-      } else {
-        let t = moment().valueOf() - minnerData.lastTime;
-        t = t / 1000;
-        minNum = minnerData.liq * Math.pow(this.aprs.aprs, t)
-      }
-      minNum = minNum - minnerData.liq;
-      let reward = minNum / this.dfsPrice * this.damping * weight
-      reward *= 0.8
-      reward = toFixed(reward, 8)
-      return reward
     },
     handleGetBuff(item) {
       let t = accSub(item.pool_weight, 1);

@@ -62,25 +62,11 @@ export default {
       // 箭头函数可使代码更简练
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
     }),
-    // lockEos() {
-    //   let count = 0
-    //   this.lists.forEach(v => {
-    //     let poolsEos = 0;
-    //     if (v.symbol0 === 'EOS') {
-    //       poolsEos = v.reserve0.split(' ')[0];
-    //     } else if (v.symbol1 === 'EOS') {
-    //       poolsEos = v.reserve1.split(' ')[0];
-    //     }
-    //     count = accAdd(count, poolsEos)
-    //   });
-    //   count = accMul(count, 2);
-    //   return toFixed(count, 4);
-    // },
     maxPerDayReward() {
       if (!this.lists.length) {
         return '0.0000'
       }
-      const max = perDayReward(this.lists[0].pool_weight)
+      const max = perDayReward(this.lists[0].mid)
       return max
     },
     nextLess() {

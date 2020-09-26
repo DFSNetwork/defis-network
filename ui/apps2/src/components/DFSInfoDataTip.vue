@@ -68,9 +68,10 @@ export default {
   computed: {
     ...mapState({
       // 箭头函数可使代码更简练
-      weightList: state => state.sys.weightList, // 交易对权重列表
+      rankInfo: state => state.sys.rankInfo, // 交易对权重列表
       eggargs: state => state.sys.eggargs,
       dfsPrice: state => state.sys.dfsPrice,
+      rankInfo: state => state.sys.rankInfo,
     }),
     feesData() {
       return this.dfsInfoData && this.dfsInfoData.feesData;
@@ -82,8 +83,10 @@ export default {
       }
       this.eggargs.forEach((item) => {
         const isShowToken = this.marketLists.find(v => v.mid === item.mid);
-        const weight = this.weightList.find(v => v.mid === item.mid).pool_weight;
+        const weight = this.rankInfo.find(v => v.mid === item.mid).pool_weight;
         const reward = perDayReward(weight);
+        const rInfo = this.rankInfo.find(v => v.mid === item.mid) || {};
+        console.log(rInfo)
         const apr = reward * this.dfsPrice / 20000 * 365 * 100;
         const feesDataKeys = Object.keys(this.feesData)
         const key = feesDataKeys.find(v => v === isShowToken.symbol1)

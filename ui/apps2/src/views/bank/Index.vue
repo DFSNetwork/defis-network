@@ -158,8 +158,6 @@ export default {
       scatter: state => state.app.scatter,
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
       dfsPrice: state => state.sys.dfsPrice,
-      // weightList: state => state.sys.weightList, // 交易对权重列表
-      // aprs: state => state.sys.aprs,
       damping: state => state.sys.damping,
     }),
     reward() {

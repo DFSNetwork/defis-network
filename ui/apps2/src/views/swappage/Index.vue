@@ -288,7 +288,7 @@ export default {
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
       dfsPrice: state => state.sys.dfsPrice,
-      weightList: state => state.sys.weightList, // 交易对权重列表
+      rankInfo: state => state.sys.rankInfo, // 交易对权重列表
       // aprs: state => state.sys.aprs,
       damping: state => state.sys.damping,
     }),
@@ -326,10 +326,10 @@ export default {
       return pathArr
     },
     weight() {
-      if (!this.weightList.length || !this.bestPath) {
+      if (!this.rankInfo.length || !this.bestPath) {
         return 0
       }
-      const weiData = this.weightList.find(v => v.mid === this.bestPath.mid);
+      const weiData = this.rankInfo.find(v => v.mid === this.bestPath.mid);
       if (!weiData) {
         return 0
       }
