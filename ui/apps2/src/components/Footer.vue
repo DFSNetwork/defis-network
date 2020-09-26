@@ -5,6 +5,18 @@
       {{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('footer.orderNum') }}
     </div>
     <div class="poolsNum tip">{{ $t('footer.tlv') }}: {{ poolsEos }} EOS</div>
+
+    <div class="help flexc tip">
+      <span>问题反馈请添加客服：</span>
+      <span class="flexa"
+        v-clipboard:copy="'dfsfarmer'"
+        v-clipboard:success="handleCopy"
+        v-clipboard:error="handleCopyError">
+        <span>dfsfarmer</span>
+        <img class="copy" src="@/assets/img/footer/copy.svg" alt="">
+      </span>
+    </div>
+
     <div class="safe">
       <span>{{ $t('public.safeRecord1') }}</span>
       <span class="who" @click="handleToShowReport('slotMist')"> {{ $t('public.safeRecord2') }}</span> &
@@ -88,6 +100,21 @@ export default {
     }
   },
   methods: {
+    // 分享 - 复制文本
+    handleCopy() {
+      this.$message.success({
+        message: 'Copy Success!',
+        position: 'center',
+        duration: 2000
+      });
+    },
+    handleCopyError() {
+      this.$message.error({
+        message: 'Copy Error!',
+        position: 'center',
+        duration: 2000
+      });
+    },
     handleToShowReport(name) {
       if (name === 'peckshield') {
         this.showImg2 = true;
@@ -142,6 +169,10 @@ export default {
     display: block;
   }
 }
+.copy{
+  width: 30px;
+  margin-left: 10px;
+}
 .footer{
   font-size: 28px;
   margin-top: 30px;
@@ -156,6 +187,10 @@ export default {
   .who{
     font-weight: bold;
     color: $color-black;
+  }
+  .help{
+    font-size: 27px;
+    margin: 12px 0 ;
   }
 }
 </style>
