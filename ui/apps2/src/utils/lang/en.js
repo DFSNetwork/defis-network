@@ -286,6 +286,8 @@ export default {
     voter:'voter',
     voterNum:'Total number of people',
     maxNum:'Select up to 3',
+    rankTip: 'The mine pool ranks outside the top 20, with no mining revenue.',
+    challenge: 'Challenge',
   },
   farms: {
     farms: 'Farms',

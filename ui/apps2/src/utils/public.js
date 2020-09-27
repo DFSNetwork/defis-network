@@ -213,10 +213,11 @@ export function getUrlParams(url) {
   return params;
 }
 // 计算收益
-export function dealReward(minnerData, weight) {
+export function dealReward(minnerData, mid) {
   const damping = store.state.sys.damping;
   const dfsPrice = store.state.sys.dfsPrice;
-  const aprs = store.state.sys.aprs;
+  // const aprs = store.state.sys.aprs;
+  const aprs = store.state.sys.rankInfo.find(v => v.mid === mid) || {};
   // 用户实际数据计算
   let minNum = '0';
   const type = minnerData.lastTime < aprs.lastTime; // 用户时间 < 系统时间
@@ -230,19 +231,20 @@ export function dealReward(minnerData, weight) {
     minNum = minnerData.liq * Math.pow(aprs.aprs, t)
   }
   minNum = minNum - minnerData.liq;
-  let reward = minNum / dfsPrice * damping * weight
+  let reward = minNum / dfsPrice * damping
   reward *= 0.8
   reward = toFixed(reward, 8)
   return reward
 }
-export function perDayReward(weight) {
+export function perDayReward(mid) {
   const damping = store.state.sys.damping;
   const dfsPrice = store.state.sys.dfsPrice;
-  const aprs = store.state.sys.aprs;
+  // const aprs = store.state.sys.aprs;
+  const aprs = store.state.sys.rankInfo.find(v => v.mid === mid) || {};
   const t = 86400;
-  let minNum = 10000 * Math.pow(aprs.aprs, t)
+  let minNum = 10000 * Math.pow(aprs.aprs || 1, t)
   minNum -= 10000;
-  let reward = minNum / dfsPrice * damping * weight
+  let reward = minNum / dfsPrice * damping
   reward *= 0.8
   reward = toFixed(reward, 4)
   return reward
@@ -271,21 +273,21 @@ export function getPoolApr(market) {
 }
 
 export function getClass(mid) {
-  const weightList =  store.state.sys.weightList;
+  const rankInfo =  store.state.sys.rankInfo;
   // for (let item in sortClass) {
   //   const has = sortClass[item].find(v => v === mid);
   //   if (has) {
   //     return item
   //   }
   // }
-  const item = weightList.find(v => v.mid === mid) || {}
-  if (Number(item.pool_weight).toFixed(4) === '4.1903') {
+  const item = rankInfo.find(v => v.mid === mid) || {}
+  if (item.rank <= 2) {
     return 'gold';
   }
-  if (Number(item.pool_weight).toFixed(4) === '2.5468') {
+  if (item.rank <= 5) {
     return 'silver';
   }
-  if (Number(item.pool_weight).toFixed(4) === '1.4790') {
+  if (item.rank <= 10) {
     return 'bronze';
   }
   return ''

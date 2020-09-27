@@ -57,6 +57,9 @@ export default {
       this.handleGetDiscount();
       this.handleYfcData();
 
+      // 获取代币token
+      this.handleGetPoolsApr()
+
       clearInterval(this.priceTimer)
       this.handleGetPrice()
       this.priceTimer = setInterval(() => {
@@ -352,6 +355,51 @@ export default {
         this.$store.dispatch('setLpDamping', lpDamping)
       })
     },
+
+    // 获取矿池排行奖励
+    handleGetPoolsApr() {
+      const params = {
+        "code":"dfspoolsvote",
+        "scope":"dfspoolsvote",
+        "table":"pools",
+        "json":true,
+        "index_position": 2,
+        "key_type": "float64",
+        "limit": 1000
+      }
+      EosModel.getTableRows(params, (res) => {
+        const rows = res.rows || [];
+        if (!rows.length) {
+          return
+        }
+        const lists = rows.slice(0, 20);
+        // console.log(lists)
+        this.handleGetRankConfig(lists);
+      })
+    },
+    // 获取排名配置信息
+    handleGetRankConfig(lists) {
+      const params = {
+        "code": "miningpool11",
+        "scope": "miningpool11",
+        "json": true,
+        "table": "poolslots",
+        limit: 1000,
+      }
+      EosModel.getTableRows(params, (res) => {
+        // console.log(res.rows)
+        const rows = res.rows || [];
+        if (!rows.length) {
+          return
+        }
+        const rankInfo = [];
+        rows.forEach((v, index) => {
+          const t = Object.assign({}, v, lists[index])
+          rankInfo.push(t)
+        })
+        this.$store.dispatch('setRankInfo', rankInfo)
+      })
+    }
   },
 }
 </script>

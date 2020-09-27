@@ -97,8 +97,9 @@
       </div>
     </div>
 
-    <div class="flexa flexe">
-      <span class="create" @click="handleToCreate">{{ $t('dex.addMarket') }}></span>
+    <div class="flexb flexe">
+      <span class="create" @click="handleTo('createMarket')">{{ $t('dex.addMarket') }}></span>
+      <span class="create" @click="handleTo('myMarketList')">{{ $t('market.myMarkets') }}></span>
     </div>
 
     <div class="btnDiv" v-loading="loading">
@@ -107,10 +108,12 @@
     </div>
 
     <MarketData v-if="Number(token) !== 0" :thisMarket="thisMarket" :token="token"/>
-    <weight v-if="Number(weight)" :token="token" :thisMarket="thisMarket" :marketLists="marketLists"/>
 
-    <div class="liquidity" v-if="act === 1">
-      <div class="subTitle">{{ $t('dex.poolNum') }}</div>
+    <div :class="`liquidity ${handleGetClass(thisMarket.mid)}`" v-if="act === 1">
+      <div class="subTitle flexb">
+        <span>{{ $t('dex.poolNum') }}</span>
+        <span class="toPool" @click="handleToPools()">前往矿池</span>
+      </div>
       <div class="num">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>
       <div class="subTitle">{{ $t('pools.accRate', {rate: thisRate}) }}</div>
       <div class="num">{{ toFixed(accPools.getNum1, thisMarket.decimal0) }} {{thisMarket.symbol0}}
@@ -119,7 +122,7 @@
       <div class="num">{{ accGetToken }}</div>
     </div>
 
-    <MarketLists :marketLists="marketLists" @listenToMarket="handleChangeMarket"/>
+    <!-- <MarketLists :marketLists="marketLists" @listenToMarket="handleChangeMarket"/> -->
 
     <!-- 弹窗组件 -->
     <el-dialog
@@ -138,20 +141,20 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import MarketList from '@/components/MarketList';
-import { toFixed, accAdd, accDiv, accMul } from '@/utils/public';
+import { toFixed, accAdd, accDiv, accMul, getClass } from '@/utils/public';
 import { dealToken, sellToken } from '@/utils/logic';
 import Tabs from '../index/components/Tabs';
-import Weight from './comp/Weight';
+// import Weight from './comp/Weight';
 import MarketData from './comp/MarketData';
-import MarketLists from './comp/MarketLists';
+// import MarketLists from './comp/MarketLists';
 
 export default {
   components: {
     Tabs,
     MarketList,
-    Weight,
+    // Weight,
     MarketData,
-    MarketLists,
+    // MarketLists,
   },
   data() {
     return {
@@ -188,7 +191,7 @@ export default {
       showMarketList: false,
       first: true,
       loading: false,
-      weight: 0,
+      // weight: 0,
     }
   },
   props: {
@@ -205,7 +208,6 @@ export default {
       scatter: state => state.app.scatter,
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
-      weightList: state => state.sys.weightList, // 交易对权重列表
     }),
     accPools() {
       if (!this.thisMarket.reserve0 || !this.thisMarket.reserve1) {
@@ -267,14 +269,6 @@ export default {
       deep: true,
       immediate: true,
     },
-    weightList: {
-      handler: function wl() {
-        const weightData = this.weightList.find(v => v.mid === this.thisMarket.mid) || {};
-        this.weight = weightData.pool_weight || 0;
-      },
-      deep: true,
-      immediate: true
-    },
     thisMarket(newVal, oldVal) {
       if (newVal.mid === oldVal.mid) {
         return
@@ -283,8 +277,6 @@ export default {
       const reserve1 = newVal.reserve1.split(' ')[0];
       newVal.sym0Rate = toFixed(accDiv(reserve1, reserve0), newVal.decimal1)
       newVal.sym1Rate = toFixed(accDiv(reserve0, reserve1), newVal.decimal0)
-      const weightData = this.weightList.find(v => v.mid === this.thisMarket.mid) || {};
-      this.weight = weightData.pool_weight || 0;
       this.handleGetAccToken();
       this.handleBalanTimer()
     },
@@ -310,9 +302,20 @@ export default {
   beforeDestroy() {
   },
   methods: {
-    handleToCreate() {
+    handleToPools() {
       this.$router.push({
-        name: 'createMarket'
+        name: 'poolsMarket',
+        params: {
+          mid: this.thisMarket.mid
+        }
+      })
+    },
+    handleGetClass(mid) {
+      return getClass(mid)
+    },
+    handleTo(name) {
+      this.$router.push({
+        name,
       })
     },
     handleChangeMarket(item) {
@@ -343,7 +346,6 @@ export default {
       this.showMarketList = false
     },
     listenShowDrawer() {
-      // this.$emit('listenShowDrawer', false)
       this.showMarketList = true
     },
     handleMarketChange(data) {
@@ -388,10 +390,6 @@ export default {
       type === 'sym0' ? this.payNum2 = toFixed(outData.payNum2, this.thisMarket.decimal1) :
                        this.payNum1 = toFixed(outData.payNum1, this.thisMarket.decimal0);
       this.getToken = outData.getToken;
-      // let rate = accAdd(this.thisMarket.liquidity_token, this.getToken)
-      // rate = accDiv(this.getToken, rate);
-      // rate = accMul(rate, 100)
-      // this.rate = toFixed(rate, 2)
     },
     handleFocus(type = 'sym0') {
       if (this.act !== 1) {
@@ -428,17 +426,6 @@ export default {
         return market.sym0Data.imgUrl;
       }
       return market.sym1Data.imgUrl;
-      // const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd'];
-      // const market = this.thisMarket;
-      // let inData = `${market.contract0}-${market.symbol0.toLowerCase()}`
-      // if (type !== 'sym0') {
-      //   inData = `${market.contract1}-${market.symbol1.toLowerCase()}`
-      // }
-      // const has = localeCoin.find(v => v === inData)
-      // if (has) {
-      //   return `/static/coin/${has}.svg`;
-      // }
-      // return `https://ndi.340wan.com/eos/${inData}.png`
     },
     regInit() {
       if (this.scatter.identity && this.marketLists.length) {
@@ -889,21 +876,24 @@ export default {
   .liquidity{
     margin-top: 40px;
     padding: 20px 40px 0;
-    font-size: 28px;
+    font-size: 26px;
     text-align: left;
     border-radius:20px;
     background: #FFF;
     border: 1px solid rgba(224,224,224,1);
     .subTitle{
       color:rgba(166,166,166,1);
-      line-height:34px;
+      // line-height:34px;
     }
     .num{
-      margin: 10px 0 20px;
+      margin: 6px 0 15px;
+    }
+    .toPool{
+      color: #07d79b;
     }
   }
   .flexe{
-    justify-content: flex-end;
+    // justify-content: flex-end;
     margin: 17px 0 20px;
     .create{
       font-size: 27px;

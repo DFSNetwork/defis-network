@@ -287,6 +287,8 @@ export default {
     voter: '投票人',
     voterNum: '总人数',
     maxNum: '最多选择3个',
+    rankTip: '该矿池排名在TOP20之外，暂无挖矿收益。',
+    challenge: '投票挑战',
   },
   farms: {
     farms: '农场',

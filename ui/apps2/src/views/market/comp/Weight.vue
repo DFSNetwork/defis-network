@@ -101,7 +101,7 @@ export default {
     ...mapState({
       // 箭头函数可使代码更简练
       // baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-      weightList: state => state.sys.weightList, // 交易对权重列表
+      rankInfo: state => state.sys.rankInfo, // 交易对权重列表
       aprs: state => state.sys.aprs,
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
@@ -182,7 +182,7 @@ export default {
     token() {
       this.handleGetData();
     },
-    weightList: {
+    rankInfo: {
       handler: function wl(newVal) {
         if (!newVal) {
           return;
@@ -251,7 +251,7 @@ export default {
       this.showReWardTip = false;
     },
     handleGetData() {
-      const weightData = this.weightList.find(v => v.mid === this.thisMarket.mid) || {};
+      const weightData = this.rankInfo.find(v => v.mid === this.thisMarket.mid) || {};
       this.weight = weightData.pool_weight || 0;
       if (!Number(this.weight) || !Number(this.price)) {
         return
@@ -317,12 +317,12 @@ export default {
       try {
         if (status === 'perDay') {
           // 每万EOS一天 
-          const reward = perDayReward(this.weight)
+          const reward = perDayReward(this.thisMarket.mid)
           this.perDayReward = reward;
           return
         }
         // 用户实际数据计算
-        const reward = dealReward(this.minnerData, this.weight)
+        const reward = dealReward(this.minnerData, this.thisMarket.mid)
         this.handleStartAdd(reward)
       } catch (error) {
         console.log(error)

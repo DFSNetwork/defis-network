@@ -69,7 +69,6 @@ const sys = {
       teamFunds: 'jinteamfunds', // 资金账户
       type: true,
     },
-    weightList: localStorage.getItem('weightList') ? JSON.parse(localStorage.getItem('weightList')) : [], // 挖矿权重列表
     aprs: localStorage.getItem('aprs') ? JSON.parse(localStorage.getItem('aprs')) : {}, // 全局aprs
     damping: localStorage.getItem('damping') || 0.75, // DFS流通量计算得出 - Math.pow(0.75, parseInt(dfsCurrent / 1000000))
     dfsPrice: localStorage.getItem('dfsPrice') || '0', // DFS 5分钟均价
@@ -102,6 +101,7 @@ const sys = {
       "bonus": "1.50000000000000000",
       "refund_delay_sec": 31104000
     }],
+    rankInfo: localStorage.getItem('rankInfo') ? JSON.parse(localStorage.getItem('rankInfo')) : [], // 挖矿权重列表,
     dfsData: {},
     poolsBal: '0.0000', // swap EOS数量
 
@@ -114,13 +114,11 @@ const sys = {
     dampingDbc: 1, // DBC挖矿衰减
   },
   mutations: {
+    SET_RANKINFO: (state, rankInfo) => {
+      state.rankInfo = rankInfo;
+    },
     SET_BASECONFIG: (state, baseConfig) => {
       state.baseConfig = baseConfig;
-    },
-    // 挖矿权重列表
-    SET_WEIGHTLIST: (state, weightList) => {
-      state.weightList = weightList;
-      localStorage.setItem('weightList', JSON.stringify(weightList));
     },
     // 全局aprs
     SET_APRS: (state, aprs) => {
@@ -169,12 +167,11 @@ const sys = {
     },
   },
   actions: {
+    setRankInfo({ commit }, rankInfo) {
+      commit('SET_RANKINFO', rankInfo);
+    },
     setBaseConfig({ commit }, baseConfig) {
       commit('SET_BASECONFIG', baseConfig);
-    },
-    // 挖矿权重列表
-    setWeightList({ commit }, weightList) {
-      commit('SET_WEIGHTLIST', weightList);
     },
     // 全局aprs
     setAprs({ commit }, aprs) {

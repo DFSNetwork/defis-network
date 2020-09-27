@@ -57,7 +57,6 @@ export default {
       scatter: state => state.app.scatter,
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
-      weightList: state => state.sys.weightList, // 交易对权重列表
     }),
     dealLists() {
       let dealLists = [];
@@ -170,7 +169,7 @@ export default {
 
 <style lang="scss" scoped>
 .marketLists{
-  margin-top: 40px;
+  margin: 0 40px 40px;
 }
 .title{
   font-size: 32px;
