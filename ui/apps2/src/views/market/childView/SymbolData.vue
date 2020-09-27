@@ -9,7 +9,7 @@
           <span>{{ $t('public.warmPrompt') }}</span>
         </span> -->
       </div>
-      <div class="rankTip flexb">
+      <div class="rankTip flexb" v-if="weight <= 0">
         <span>{{ $t('vote.rankTip') }}</span>
         <span class="red" @click="handleTo('vote')">{{ $t('vote.challenge') }}</span>
       </div>

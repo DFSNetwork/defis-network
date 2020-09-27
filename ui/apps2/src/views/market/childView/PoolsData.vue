@@ -174,18 +174,18 @@ export default {
             lists.push(item)
           }
         });
-        gold = gold.sort((a, b) => {
-          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        })
-        silver = silver.sort((a, b) => {
-          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        })
-        bronze = bronze.sort((a, b) => {
-          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        })
-        lists = lists.sort((a, b) => {
-          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        })
+        // gold = gold.sort((a, b) => {
+        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        // })
+        // silver = silver.sort((a, b) => {
+        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        // })
+        // bronze = bronze.sort((a, b) => {
+        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        // })
+        // lists = lists.sort((a, b) => {
+        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        // })
         this.lists = [...gold, ...silver, ...bronze, ...lists];
         this.firstGet = true;
         this.handleGetMiners()

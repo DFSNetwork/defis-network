@@ -11,6 +11,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { mapState } from 'vuex';
 import { GetUrlPara, login, getUrlParams, toLocalTime, accPow, accDiv, toFixed } from '@/utils/public';
+import { getVotePools } from '@/utils/api';
 import { EosModel } from '@/utils/eos';
 import MyKonami from '@/views/konami/Index';
 
@@ -51,7 +52,7 @@ export default {
       this.handleLogin()
     });
     setTimeout(() => {
-      this.handleGetWeight()
+      // this.handleGetWeight()
       this.handleGetAprs()
       this.handleGetDfsCurrent()
       this.handleGetDiscount();
@@ -176,22 +177,22 @@ export default {
       this.$store.dispatch('setBaseConfig', config)
     },
     // 获取交易对权重 - 全局取一次
-    handleGetWeight() {
-      const params = {
-        code: 'miningpool11',
-        scope: 'miningpool11',
-        table: 'weights',
-        json: true,
-        limit: 100
-      }
-      EosModel.getTableRows(params, (res) => {
-        const rows = res.rows || [];
-        if (!rows.length) {
-          return
-        }
-        this.$store.dispatch('setWeightList', rows)
-      })
-    },
+    // handleGetWeight() {
+    //   const params = {
+    //     code: 'miningpool11',
+    //     scope: 'miningpool11',
+    //     table: 'weights',
+    //     json: true,
+    //     limit: 100
+    //   }
+    //   EosModel.getTableRows(params, (res) => {
+    //     const rows = res.rows || [];
+    //     if (!rows.length) {
+    //       return
+    //     }
+    //     this.$store.dispatch('setWeightList', rows)
+    //   })
+    // },
     // 获取aprs - 全局一次
     handleGetAprs() {
       const params = {
@@ -358,48 +359,8 @@ export default {
 
     // 获取矿池排行奖励
     handleGetPoolsApr() {
-      const params = {
-        "code":"dfspoolsvote",
-        "scope":"dfspoolsvote",
-        "table":"pools",
-        "json":true,
-        "index_position": 2,
-        "key_type": "float64",
-        "limit": 1000
-      }
-      EosModel.getTableRows(params, (res) => {
-        const rows = res.rows || [];
-        if (!rows.length) {
-          return
-        }
-        const lists = rows.slice(0, 20);
-        // console.log(lists)
-        this.handleGetRankConfig(lists);
-      })
+      getVotePools()
     },
-    // 获取排名配置信息
-    handleGetRankConfig(lists) {
-      const params = {
-        "code": "miningpool11",
-        "scope": "miningpool11",
-        "json": true,
-        "table": "poolslots",
-        limit: 1000,
-      }
-      EosModel.getTableRows(params, (res) => {
-        // console.log(res.rows)
-        const rows = res.rows || [];
-        if (!rows.length) {
-          return
-        }
-        const rankInfo = [];
-        rows.forEach((v, index) => {
-          const t = Object.assign({}, v, lists[index])
-          rankInfo.push(t)
-        })
-        this.$store.dispatch('setRankInfo', rankInfo)
-      })
-    }
   },
 }
 </script>

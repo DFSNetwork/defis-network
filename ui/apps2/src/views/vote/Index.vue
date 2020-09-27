@@ -93,6 +93,7 @@
 <script>
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
+import { getVotePools } from '@/utils/api';
 import Rank from './comp/Rank';
 import Rules from './dialog/Rules';
 
@@ -252,6 +253,7 @@ export default {
         setTimeout(() => {
           this.handleGetVotes();
           this.handleGetMyVotes();
+          getVotePools()
         }, 800);
       })
     },

@@ -223,7 +223,7 @@ export default {
   },
   data() {
     return {
-      discount: 0.2, // 配置项 - 后期从合约拿
+      // discount: 0.2, // 配置项 - 后期从合约拿
       loading: false,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       payNum: '',
@@ -334,6 +334,16 @@ export default {
         return 0
       }
       return Number(weiData.pool_weight)
+    },
+    discount() {
+      if (!this.rankInfo.length || !this.bestPath) {
+        return 0
+      }
+      const weiData = this.rankInfo.find(v => v.mid === this.bestPath.mid);
+      if (!weiData) {
+        return 0
+      }
+      return Number(weiData.default_distount)
     },
     reward() {
       if (this.useBank) {
