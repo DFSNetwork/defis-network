@@ -118,7 +118,7 @@ export default {
   },
   methods: {
     handleCurrentChange() {
-      this.handleGetPageArr();
+      this.handleDealPage();
     },
     handleJoin(item) {
       this.$router.push({
