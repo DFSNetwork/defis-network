@@ -216,7 +216,6 @@ export function getUrlParams(url) {
 export function dealReward(minnerData, mid) {
   const damping = store.state.sys.damping;
   const dfsPrice = store.state.sys.dfsPrice;
-  // const aprs = store.state.sys.aprs;
   const aprs = store.state.sys.rankInfo.find(v => v.mid === mid) || {};
   // 用户实际数据计算
   let minNum = '0';
@@ -239,7 +238,6 @@ export function dealReward(minnerData, mid) {
 export function perDayReward(mid) {
   const damping = store.state.sys.damping;
   const dfsPrice = store.state.sys.dfsPrice;
-  // const aprs = store.state.sys.aprs;
   const aprs = store.state.sys.rankInfo.find(v => v.mid === mid) || {};
   const t = 86400;
   let minNum = 10000 * Math.pow(aprs.aprs || 1, t)

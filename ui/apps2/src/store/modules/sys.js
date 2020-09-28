@@ -69,7 +69,6 @@ const sys = {
       teamFunds: 'jinteamfunds', // 资金账户
       type: true,
     },
-    aprs: localStorage.getItem('aprs') ? JSON.parse(localStorage.getItem('aprs')) : {}, // 全局aprs
     damping: localStorage.getItem('damping') || 0.75, // DFS流通量计算得出 - Math.pow(0.75, parseInt(dfsCurrent / 1000000))
     dfsPrice: localStorage.getItem('dfsPrice') || '0', // DFS 5分钟均价
     eggargs: localStorage.getItem('eggargs') ? JSON.parse(localStorage.getItem('eggargs')) : [], // 全局aprs

@@ -120,7 +120,6 @@ export default {
     ...mapState({
       // 箭头函数可使代码更简练
       // baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-      aprs: state => state.sys.aprs,
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
@@ -418,18 +417,6 @@ export default {
         });
       })
     },
-    handleGetWeight() {
-      const params = {
-        code: 'miningpool11',
-        scope: 'miningpool11',
-        table: 'weights',
-        json: true,
-        limit: 100
-      }
-      EosModel.getTableRows(params, (res) => {
-        console.log(res)
-      })
-    }
   },
 }
 </script>

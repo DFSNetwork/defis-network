@@ -102,7 +102,6 @@ export default {
       // 箭头函数可使代码更简练
       // baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
       rankInfo: state => state.sys.rankInfo, // 交易对权重列表
-      aprs: state => state.sys.aprs,
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,

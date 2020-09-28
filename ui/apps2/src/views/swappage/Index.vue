@@ -289,7 +289,6 @@ export default {
       baseConfig: state => state.sys.baseConfig,
       dfsPrice: state => state.sys.dfsPrice,
       rankInfo: state => state.sys.rankInfo, // 交易对权重列表
-      // aprs: state => state.sys.aprs,
       damping: state => state.sys.damping,
     }),
     showDetail() {

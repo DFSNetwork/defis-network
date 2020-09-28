@@ -53,7 +53,7 @@ export default {
     });
     setTimeout(() => {
       // this.handleGetWeight()
-      this.handleGetAprs()
+      // this.handleGetAprs()
       this.handleGetDfsCurrent()
       this.handleGetDiscount();
       this.handleYfcData();
@@ -194,28 +194,28 @@ export default {
     //   })
     // },
     // 获取aprs - 全局一次
-    handleGetAprs() {
-      const params = {
-        code: 'miningpool11',
-        scope: 'miningpool11',
-        table: 'args',
-        lower_bound: 'EOS',
-        upper_bound: 'EOS',
-        // primary_key: 'EOS',
-        json: true,
-      }
-      EosModel.getTableRows(params, (res) => {
-        const rows = res.rows || [];
-        if (!rows.length) {
-          return
-        }
-        const aprs = rows[0];
-        let lastTime = toLocalTime(`${aprs.last_drip}.000+0000`);
-        lastTime = moment(lastTime).valueOf();
-        aprs.lastTime = lastTime;
-        this.$store.dispatch('setAprs', aprs)
-      })
-    },
+    // handleGetAprs() {
+    //   const params = {
+    //     code: 'miningpool11',
+    //     scope: 'miningpool11',
+    //     table: 'args',
+    //     lower_bound: 'EOS',
+    //     upper_bound: 'EOS',
+    //     // primary_key: 'EOS',
+    //     json: true,
+    //   }
+    //   EosModel.getTableRows(params, (res) => {
+    //     const rows = res.rows || [];
+    //     if (!rows.length) {
+    //       return
+    //     }
+    //     const aprs = rows[0];
+    //     let lastTime = toLocalTime(`${aprs.last_drip}.000+0000`);
+    //     lastTime = moment(lastTime).valueOf();
+    //     aprs.lastTime = lastTime;
+    //     this.$store.dispatch('setAprs', aprs)
+    //   })
+    // },
     // 获取DFS流通量 - 全局区一次
     async handleGetDfsCurrent() {
       // console.log(this.baseConfig)
@@ -231,7 +231,7 @@ export default {
       const res = result.data['DFS'];
       const supply = res.supply.split(' ')[0];
       
-      const damping = accPow(0.75, accDiv(supply, 1000000).toFixed(0));
+      const damping = accPow(0.75, parseInt(accDiv(supply, 1000000)));
       this.$store.dispatch('setDamping', damping)
     },
     // DFS价格 - 5分钟一次
@@ -347,9 +347,10 @@ export default {
         if (result.status !== 200) {
           return;
         }
+        let dampNum = v.contract === 'dbctokenmain' ? 100 : 1000;
         const res = result.data[v.symbol];
         const supply = res.supply.split(' ')[0];
-        const t = parseInt(supply / 1000)
+        const t = parseInt(supply / dampNum)
         const dampingYfc = 1 * Math.pow(0.75, t)
         const lpDamping = this.$store.state.config.lpDamping;
         lpDamping[v.symbol] = dampingYfc;
