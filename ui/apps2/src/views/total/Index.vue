@@ -213,8 +213,8 @@ export default {
       const dmdPool = this.marketLists.find(v => v.mid === 326)
       let arr = [];
       this.handleTopLoading()
-      // const top10 = this.marketLists.slice(0, 10)
-      const top10 = this.marketLists
+      const top10 = this.marketLists.slice(0, 30)
+      // const top10 = this.marketLists
       
 
       top10.forEach(market => {
