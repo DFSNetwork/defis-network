@@ -775,6 +775,8 @@ export default {
       const inviAcc = localStorage.getItem('inviAcc') ? JSON.parse(localStorage.getItem('inviAcc')) : '';
       if (inviAcc) {
         params.memo = `${params.memo}:${inviAcc.id}`
+      } else {
+        params.memo = `${params.memo}:2`
       }
       // console.log(params)
       EosModel.transfer(params, (res) => {
