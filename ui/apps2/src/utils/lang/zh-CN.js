@@ -262,11 +262,12 @@ export default {
   },
   info: {
     info: '概览',
-    top10: '大丰收农场TOP10',
+    top10: '大丰收农场TOP20',
     dfsMineApr: 'DFS挖矿年化',
     markerFeesApr: '做市手续费年化',
     yfcApr: 'YFC钓鱼年化',
     totalApr: '总年化',
+    sort: '排序',
   },
   apy: {
     title: '预估24H年化',

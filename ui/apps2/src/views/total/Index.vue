@@ -1,16 +1,32 @@
 <template>
   <div class="totalInfo">
     <div>
-      <div class="title">
+      <div class="title flexb">
         <span class="act">{{ $t('info.top10') }}</span>
-        <span class="date">{{ nowDate }}</span>
+        <!-- <span class="date">{{ nowDate }}</span> -->
+        <span class="sort">
+          <span>{{ $t('info.sort') }}：</span>
+          <span>
+            <el-select v-model="sortValue"
+              class="select"
+              :popper-class="'mySelectItem'"
+              :popper-append-to-body="false">
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value">
+              </el-option>
+            </el-select>
+          </span>
+        </span>
       </div>
       <div class="lists" v-loading="topLoading">
         <div class="noData" v-if="!showArr.length">{{ $t('public.noData') }}</div>
         <div class="list" v-for="(item, index) in showArr" :key="index" @click="handleToMarket(item.mid)">
           <div class="coin flexb">
             <span class="coinName">
-              <img class="coinImg" :src="item.img" alt="">
+              <img class="coinImg" :src="item.img" :onerror="errorCoinImg" alt="">
               <span>{{ item.symbol }}</span>
             </span>
             <span>{{ $t('apy.exchange24') }}: {{ item.countEos || '—' }}</span>
@@ -99,6 +115,25 @@ export default {
       }
     }
   },
+  data() {
+    return {
+      // loading: true,
+      errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
+      topLoading: true,
+      sortValue: '1', // 1 - 年化 ｜ 2 - 深度 ｜ 3 - 成交量
+      options: [{
+        value: '1',
+        label: 'APY'
+      }, {
+        value: '2',
+        label: 'TVL'
+      }, {
+        value: '3',
+        label: 'Volum'
+      }],
+      value: '1'
+    }
+  },
   computed: {
     ...mapState({
       // 箭头函数可使代码更简练
@@ -113,58 +148,24 @@ export default {
       if (!this.marketLists.length || !this.feesApr) {
         return []
       }
-      const dmdPool = this.marketLists.find(v => v.mid === 326)
-      let arr = [];
-      this.handleTopLoading()
-      const top10 = this.marketLists.slice(0, 10)
-      top10.forEach(market => {
-        try {
-          let count = 0;
-          const reward = perDayReward(market.mid);
-          const apr = reward * this.dfsPrice / 20000 * 365 * 100;
-          count = accAdd(count, apr.toFixed(2))
-
-          const feesApr = this.feesApr.find(vv => vv.symbol === market.symbol1) || {};
-          feesApr.value = `${apr.toFixed(2)}%`;
-          feesApr.img = market.sym1Data.imgUrl;
-          feesApr.mid = market.mid;
-          feesApr.reserve0 = market.reserve0;
-          feesApr.reserve1 = market.reserve1;
-          count = accAdd(count, parseFloat(feesApr.poolsApr))
-
-          this.lpMid.forEach(lp => {
-            const yfcReward = getYfcReward(market.mid, 'year', lp.symbol)
-            const YfcPool = this.marketLists.find(vv => vv.mid === lp.mid);
-            const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
-            const apy = yfcReward * price / 20000 * 100;
-            feesApr[`${lp.symbol.toLowerCase()}Apr`] = (apy || 0).toFixed(2);
-            count = accAdd(count, (apy || 0).toFixed(2))
-          })
-
-          let dmdRoi = getDmdMinerHourRoi(market, 'year', dmdPool)
-          if (Number(dmdRoi)) {
-            feesApr.dmdRoi = dmdRoi;
-            count = accAdd(count, dmdRoi)
-          }
-          feesApr.count = count.toFixed(2);
-
-          // 计算24H兑换量
-          if (this.dfsData.tradingVolumeData) {
-            const key = `mid-${market.mid}`;
-            const countData = this.dfsData.tradingVolumeData[key] || {};
-            let countEos = (countData.amountIn.EOS || 0) + (countData.amountOut.EOS || 0);
-            countEos = countEos > 1000 ? `${(countEos / 1000).toFixed(2)}K` : countEos;
-            feesApr.countEos = countEos;
-          }
-          arr.push(feesApr)
-        } catch (error) {
-          console.log(error)
-        }
-      })
-      arr = arr.sort((a, b) => {
-        return b.count - a.count
-      })
-      console.log(arr)
+      let arr = this.handleGetCheckRank()
+      if (this.sortValue === '1') {
+        arr = arr.sort((a, b) => {
+          return b.count - a.count
+        })
+      }
+      if (this.sortValue === '2') {
+        arr = arr.sort((a, b) => {
+          return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        })
+      }
+      if (this.sortValue === '3') {
+        arr = arr.sort((a, b) => {
+          return b.allCount - a.allCount
+        })
+      }
+      arr = arr.slice(0, 20)
+      // console.log(arr)
       return arr;
     },
     dfsTableData() {
@@ -207,13 +208,65 @@ export default {
   },
   watch: {
   },
-  data() {
-    return {
-      // loading: true,
-      topLoading: true,
-    }
-  },
   methods: {
+    handleGetCheckRank() {
+      const dmdPool = this.marketLists.find(v => v.mid === 326)
+      let arr = [];
+      this.handleTopLoading()
+      // const top10 = this.marketLists.slice(0, 10)
+      const top10 = this.marketLists
+      
+
+      top10.forEach(market => {
+        if (market.contract0 !== 'eosio.token') {
+          return
+        }
+        try {
+          let count = 0;
+          const reward = perDayReward(market.mid);
+          const apr = reward * this.dfsPrice / 20000 * 365 * 100;
+          count = accAdd(count, apr.toFixed(2))
+
+          const feesApr = this.feesApr.find(vv => vv.symbol === market.symbol1) || {};
+          feesApr.value = `${apr.toFixed(2)}%`;
+          feesApr.img = market.sym1Data.imgUrl;
+          feesApr.mid = market.mid;
+          feesApr.reserve0 = market.reserve0;
+          feesApr.reserve1 = market.reserve1;
+          count = accAdd(count, parseFloat(feesApr.poolsApr))
+
+          this.lpMid.forEach(lp => {
+            const yfcReward = getYfcReward(market.mid, 'year', lp.symbol)
+            const YfcPool = this.marketLists.find(vv => vv.mid === lp.mid);
+            const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
+            const apy = yfcReward * price / 20000 * 100;
+            feesApr[`${lp.symbol.toLowerCase()}Apr`] = (apy || 0).toFixed(2);
+            count = accAdd(count, (apy || 0).toFixed(2))
+          })
+
+          let dmdRoi = getDmdMinerHourRoi(market, 'year', dmdPool)
+          if (Number(dmdRoi)) {
+            feesApr.dmdRoi = dmdRoi;
+            count = accAdd(count, dmdRoi)
+          }
+          feesApr.count = count.toFixed(2);
+
+          // 计算24H兑换量
+          if (this.dfsData.tradingVolumeData) {
+            const key = `mid-${market.mid}`;
+            const countData = this.dfsData.tradingVolumeData[key] || {};
+            let countEos = (countData.amountIn.EOS || 0) + (countData.amountOut.EOS || 0);
+            let shortCountEos = countEos > 1000 ? `${(countEos / 1000).toFixed(2)}K` : countEos.toFixed(4);
+            feesApr.countEos = shortCountEos;
+            feesApr.allCount = countEos.toFixed(4);
+          }
+          arr.push(feesApr)
+        } catch (error) {
+          console.log(error)
+        }
+      })
+      return arr;
+    },
     handleTopLoading() {
       this.topLoading = false;
     },
@@ -292,6 +345,48 @@ export default {
     font-size: 28px;
     color: #a6a6a6;
     transform: translateY(-50%);
+  }
+  .sort{
+    margin-right: 0;
+    .select{
+      height: 50px;
+      border: 1px solid #e3e3e3;
+      border-radius: 10px;
+    }
+    /deep/ .el-select{
+      border-radius: 10px;
+      .el-input__suffix-inner{
+        display: flex;
+        align-items: center;
+        height: 50px;
+      }
+      .el-input__inner{
+        border-radius: 10px;
+        height: 50px;
+        font-size: 26px;
+        text-align: center;
+        width: 130px;
+        border: 0px;
+        padding-right: 38px;
+        &:focus{
+          border-color: #07d79b;
+        }
+      }
+    }
+    /deep/ .el-scrollbar{
+      .el-select-dropdown__item{
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 26px;
+        font-weight: normal;
+        &.selected{
+          font-weight: bold;
+          color: #07d79b;
+        }
+      }
+    }
   }
 }
 .lists{

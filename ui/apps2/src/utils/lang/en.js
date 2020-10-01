@@ -261,11 +261,12 @@ export default {
   },
   info: {
     info: 'Info',
-    top10: 'DFS Farm TOP10',
+    top10: 'DFS Farm TOP20',
     dfsMineApr: 'DFS Mining Apr',
     markerFeesApr: 'Market Fees Apr',
     yfcApr: 'YFC APR',
     totalApr: 'Total Apr',
+    sort: 'Sort',
   },
   apy: {
     title: 'Forecast 24H ',
