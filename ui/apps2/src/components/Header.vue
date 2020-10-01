@@ -9,9 +9,10 @@
       </label> -->
       <span class="create flexc" @click="handleToVote">{{ $t('vote.vote') }}</span>
       <span class="create flexc" @click="handleTo('farms')">{{ $t('farms.farms') }}</span>
-      <span class="create flexc" @click="handleToPddex('pddex')">Pddex</span>
+      <span class="create flexc" @click="handleToProject('pddex')">Pddex</span>
+      <span class="create flexc" @click="handleToProject('pdd')">养猪</span>
       <!-- <span class="create" @click="handleToCreate">{{ $t('dex.addMarket') }}</span> -->
-      <span class="flexc" @click="listenShowTools"><img class="svgIcon" src="@/assets/img/dex/setup_icon.svg" alt=""></span>
+      <!-- <span class="flexc" @click="listenShowTools"><img class="svgIcon" src="@/assets/img/dex/setup_icon.svg" alt=""></span> -->
       <span class="flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>
     </div>
   </div>
@@ -60,8 +61,14 @@ export default {
       }
       this.$router.push({name: 'vote'})
     },
-    handleToPddex() {
-      location.href = 'https://pddex.defis.network/'
+    handleToProject(name) {
+      if (name === 'pddex') {
+        location.href = 'https://pddex.defis.network/'
+        return
+      }
+      if (name === 'pdd') {
+        location.href = 'https://pddfarm.defis.network/'
+      }
     }
   },
 }

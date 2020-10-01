@@ -96,6 +96,9 @@ export default {
       if (type === 'warn') {
         this.showWarm = true;
       }
+      if (type === 'silderSet') {
+        this.$refs.slipPointTools.showNav = true;
+      }
     },
     handleShowNav() {
       this.$refs.nav.showNav = true;
