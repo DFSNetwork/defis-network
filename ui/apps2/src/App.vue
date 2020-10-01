@@ -274,8 +274,8 @@ export default {
     handleGetPonds() {
       this.lpMid.forEach(v => {
         const params = {
-          "code": v.poolAcc,
-          "scope": v.poolAcc,
+          "code": v.mineAcc,
+          "scope": v.mineAcc,
           "table": "ponds",
           "json": true,
           limit: 100,

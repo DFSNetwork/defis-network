@@ -9,7 +9,7 @@
       </label> -->
       <span class="create flexc" @click="handleToVote">{{ $t('vote.vote') }}</span>
       <span class="create flexc" @click="handleTo('farms')">{{ $t('farms.farms') }}</span>
-      <!-- <span class="create flexc" @click="handleToPddex('pddex')">Pddex</span> -->
+      <span class="create flexc" @click="handleToPddex('pddex')">Pddex</span>
       <!-- <span class="create" @click="handleToCreate">{{ $t('dex.addMarket') }}</span> -->
       <span class="flexc" @click="listenShowTools"><img class="svgIcon" src="@/assets/img/dex/setup_icon.svg" alt=""></span>
       <span class="flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>

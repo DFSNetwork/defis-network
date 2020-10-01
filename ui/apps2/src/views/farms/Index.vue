@@ -24,14 +24,17 @@
       <div @click="handleTo('dbc')">
         <Dbc ref="dbc" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
-      <div @click="handleTo('dmd')">
-        <Dmd  ref="dmd" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      <div @click="handleTo('pdd')">
+        <Pdd ref="pdd" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
+      <div @click="handleTo('loop')">
+        <Loop ref="loop" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('guns')">
         <Guns ref="guns" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
-      <div @click="handleTo('loop')">
-        <Loop ref="loop" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      <div @click="handleTo('dmd')">
+        <Dmd  ref="dmd" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
     </div>
 
@@ -54,6 +57,7 @@ import Dbc from './comp/Dbc';
 import Dmd from './comp/Dmd';
 import Guns from './comp/Guns';
 import Loop from './comp/Loop';
+import Pdd from './comp/Pdd';
 import { EosModel } from '@/utils/eos';
 
 export default {
@@ -67,6 +71,7 @@ export default {
     Dmd,
     Guns,
     Loop,
+    Pdd,
   },
   props: {
     marketLists: {
@@ -103,7 +108,8 @@ export default {
       const dmd = this.$refs.dmd ? Number(this.$refs.dmd.aboutEos || 0) : 0;
       const guns = this.$refs.guns ? Number(this.$refs.guns.aboutEos || 0) : 0;
       const loop = this.$refs.loop ? Number(this.$refs.loop.aboutEos || 0) : 0;
-      n = dss + dfsMiner + yfc + dbc + dmd + guns + loop + n;
+      const pdd = this.$refs.pdd ? Number(this.$refs.pdd.aboutEos || 0) : 0;
+      n = dss + dfsMiner + yfc + dbc + dmd + guns + loop + pdd + n;
       this.allReward = n.toFixed(4);
       this.allRewardTimer = setTimeout(() => {
         this.handleGetAll()
@@ -139,6 +145,10 @@ export default {
         location.href = 'https://loop.ech.one/index.html';
         return
       }
+      if (name === 'pdd') {
+        location.href = 'https://pddex.defis.network/';
+        return
+      }
       
       this.$router.push({name: name})
     },
@@ -150,7 +160,8 @@ export default {
       const dmd = this.$refs.dmd.handleGetActions()
       const guns = this.$refs.guns.handleGetActions()
       const loop = this.$refs.loop.handleGetActions()
-      const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop];
+      const pdd = this.$refs.pdd.handleGetActions()
+      const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop, ...pdd];
       this.allActions = tArr;
       if (this.allActions.length <= 10) { // 10条以内
         // console.log(this.allActions.length)
