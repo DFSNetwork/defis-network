@@ -35,21 +35,21 @@
       <img width="100%" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gieh1hl5i4j30ku112tf3.jpg" />
     </el-dialog>
 
-    <!-- <dfs-info-data-tip
+    <dfs-info-data-tip
       :dfsInfoData="dfsInfoData"
       :close="closeDFSInfoDataTip"
       :marketLists="marketLists"
       @onConfirm="() => {
         this.closeDFSInfoDataTip = true;
       }"
-    /> -->
+    />
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import { mapState } from 'vuex';
-// import DfsInfoDataTip from "@/components/DFSInfoDataTip";
+import DfsInfoDataTip from "@/components/DFSInfoDataTip";
 import { EosModel } from '@/utils/eos';
 import { toFixed, accMul } from '@/utils/public';
 
@@ -77,9 +77,9 @@ export default {
       poolsBal: state => state.sys.poolsBal,
     }),
   },
-  // components: {
-  //   DfsInfoDataTip,
-  // },
+  components: {
+    DfsInfoDataTip,
+  },
   beforeDestroy() {
     clearInterval(this.timer);
   },
