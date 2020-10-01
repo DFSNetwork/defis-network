@@ -22,6 +22,10 @@
         <span>{{ $t('apy.dbcApy') }}：</span>
         <span>{{ parseFloat(lpApy.dbcApy) ? `${lpApy.dbcApy}%` : '—' }}</span>
       </div>
+      <div class="flexa">
+        <span>{{ $t('apy.pddApy') }}：</span>
+        <span>{{ parseFloat(lpApy.pddApy) ? `${lpApy.pddApy}%` : '—' }}</span>
+      </div>
       <div class="flexa total">
         <span>{{ $t('info.totalApr') }}：</span>
         <span>{{ countApy }}%</span>
@@ -58,6 +62,14 @@ export default {
       default: function la() {
         return {}
       }
+    }
+  },
+  watch: {
+    lpApy: {
+      handler: function lp() {
+        console.log(this.lpApy)
+      },
+      immediate: true
     }
   },
 }

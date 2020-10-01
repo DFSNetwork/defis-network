@@ -30,7 +30,7 @@
               <div class="tip">{{ $t('info.yfcApr') }}</div>
             </div>
           </div>
-          <div class="flexb percent">
+          <div class="flexb percent border">
             <div>
               <div class="num">{{ parseFloat(item.dmdRoi) ? `${item.dmdRoi}%` : '—' }}</div>
               <div class="tip">{{ $t('apy.dmdApy') }}</div>
@@ -39,19 +39,23 @@
               <div class="num">{{ parseFloat(item.dbcApr) ? `${item.dbcApr}%` : '—' }}</div>
               <div class="tip">{{ $t('apy.dbcApy') }}</div>
             </div>
-            <div class="total">
+            <div>
+              <div class="num">{{ parseFloat(item.pddApr) ? `${item.pddApr}%` : '—' }}</div>
+              <div class="tip">{{ $t('apy.pddApy') }}</div>
+            </div>
+            <!-- <div class="total">
               <div class="num">{{ item.count }}%</div>
               <div class="tip">{{ $t('info.totalApr') }}</div>
-            </div>
+            </div> -->
+          </div>
+          <div class="flexb total">
+            <span>{{ $t('info.totalApr') }}</span>
+            <span class="num">{{ item.count }}%</span>
           </div>
           <div class="flexb liq">
             <div>{{ $t('dex.pools') }}: </div>
             <div>{{ item.reserve0 | numToShot }} / {{ item.reserve1 | numToShot }}</div>
           </div>
-          <!-- <div class="flexb total">
-            <span>{{ $t('info.totalApr') }}</span>
-            <span class="num">{{ item.count }}%</span>
-          </div> -->
         </div>
       </div>
     </div>
@@ -133,8 +137,8 @@ export default {
             const YfcPool = this.marketLists.find(vv => vv.mid === lp.mid);
             const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
             const apy = yfcReward * price / 20000 * 100;
-            feesApr[`${lp.symbol.toLowerCase()}Apr`] = apy.toFixed(2);
-            count = accAdd(count, apy.toFixed(2))
+            feesApr[`${lp.symbol.toLowerCase()}Apr`] = (apy || 0).toFixed(2);
+            count = accAdd(count, (apy || 0).toFixed(2))
           })
 
           let dmdRoi = getDmdMinerHourRoi(market, 'year', dmdPool)
@@ -160,6 +164,7 @@ export default {
       arr = arr.sort((a, b) => {
         return b.count - a.count
       })
+      console.log(arr)
       return arr;
     },
     dfsTableData() {
@@ -336,11 +341,14 @@ export default {
           text-align: right;
         }
       }
+      &.border{
+        border-bottom: 1px solid #eee;
+        padding-bottom: 10px;
+      }
     }
     .liq{
       font-size: 27px;
-      margin-top: 10px;
-      border-top: 1px solid #eee;
+      // margin-top: 10px;
       padding-top: 10px;
       align-items: flex-start;
       line-height: 40px;
