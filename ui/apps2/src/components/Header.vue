@@ -1,6 +1,6 @@
 <template>
   <div class="header flexb">
-    <div @click="handleToIndex"><img class="logo" src="https://ndi.340wan.com/eos/minedfstoken-dfs.png"></div>
+    <div @click="handleToIndex"><img class="logo" src="@/assets/img/dex/logo.svg"></div>
     <div class="tools flexb">
       <!-- <label v-if="!scatter.identity" class="login" @click="handleLogin">{{ $t('public.login') }}</label>
       <label v-else class="account flexa">
@@ -11,7 +11,6 @@
       <span class="create flexc" @click="handleTo('farms')">{{ $t('farms.farms') }}</span>
       <span class="create flexc" @click="handleToProject('pddex')">Pddex</span>
       <span class="create flexc" @click="handleToProject('pdd')">养猪</span>
-      <span class="create flexc" @click="handleTo('dss')">DSS矿池</span>
       <!-- <span class="create" @click="handleToCreate">{{ $t('dex.addMarket') }}</span> -->
       <!-- <span class="flexc" @click="listenShowTools"><img class="svgIcon" src="@/assets/img/dex/setup_icon.svg" alt=""></span> -->
       <span class="flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>
@@ -84,8 +83,7 @@ export default {
   color: $color-tip;
   margin-bottom: 5px;
   .logo{
-    width: 80px;
-    height: 80px;
+    width: 196px;
   }
   img{
     display: block;
