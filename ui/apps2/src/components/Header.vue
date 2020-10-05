@@ -1,6 +1,6 @@
 <template>
   <div class="header flexb">
-    <div @click="handleToIndex"><img class="logo" src="https://ndi.340wan.com/eos/minedfstoken-dfs.png"></div>
+    <div @click="handleToIndex"><img class="logo" src="@/assets/img/dex/logo.svg"></div>
     <div class="tools flexb">
       <!-- <label v-if="!scatter.identity" class="login" @click="handleLogin">{{ $t('public.login') }}</label>
       <label v-else class="account flexa">
@@ -8,14 +8,41 @@
         <span>{{ scatter.identity.accounts[0].name }}</span>
       </label> -->
       <span class="create flexc" @click="handleToVote">{{ $t('vote.vote') }}</span>
-      <span class="create flexc" @click="handleTo('farms')">{{ $t('farms.farms') }}</span>
-      <span class="create flexc" @click="handleToProject('pddex')">Pddex</span>
-      <span class="create flexc" @click="handleToProject('pdd')">养猪</span>
-      <span class="create flexc" @click="handleTo('dss')">DSS矿池</span>
-      <!-- <span class="create" @click="handleToCreate">{{ $t('dex.addMarket') }}</span> -->
-      <!-- <span class="flexc" @click="listenShowTools"><img class="svgIcon" src="@/assets/img/dex/setup_icon.svg" alt=""></span> -->
+      <!-- <span class="create flexc" @click="handleTo('farms')">{{ $t('farms.farms') }}</span> -->
+      <!-- <span class="create flexc" @click="handleToProject('pddex')">Pddex</span>
+      <span class="create flexc" @click="handleToProject('pdd')">养猪</span> -->
+      <span class="create flexc" @click="handleTo('pools')">{{ $t('mine.pools') }}</span>
+      <span class="create flexc" @click="showDss = true">
+        <span>DSS</span>
+        <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
+      </span>
+      <span class="create flexc" @click="showApps = true">
+        <span>Apps</span>
+        <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
+      </span>
       <span class="flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>
     </div>
+
+    <el-dialog class="mydialog showApps"
+      :modal="false"
+      :show-close="false"
+      :visible.sync="showApps">
+      <div>
+        <div class="create flexc" @click="handleToProject('pddex')">Pddex</div>
+        <div class="create flexc" @click="handleToProject('yfcGuns')">机枪池</div>
+        <div class="create flexc" @click="handleToProject('pdd')">养猪</div>
+        <div class="create flexc" @click="handleTo('farms')">农活大厅</div>
+      </div>
+    </el-dialog>
+    <el-dialog class="mydialog showDss"
+      :modal="false"
+      :show-close="false"
+      :visible.sync="showDss">
+      <div>
+        <div class="create flexc" @click="handleTo('dss')">DFS DSS</div>
+        <div class="create flexc" @click="handleToProject('yfcDss')">YFC DSS</div>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
@@ -24,6 +51,12 @@ import { mapState } from 'vuex';
 import { login } from '@/utils/public';
 export default {
   name: 'headerTools',
+  data() {
+    return {
+      showApps: false,
+      showDss: false,
+    }
+  },
   computed: {
     ...mapState({
       // 箭头函数可使代码更简练
@@ -67,6 +100,10 @@ export default {
         location.href = 'https://pddex.defis.network/'
         return
       }
+      if (name === 'yfcGuns') {
+        location.href = 'https://yfc.one/guns'
+        return
+      }
       if (name === 'pdd') {
         location.href = 'https://pddfarm.defis.network/'
       }
@@ -84,8 +121,8 @@ export default {
   color: $color-tip;
   margin-bottom: 5px;
   .logo{
-    width: 80px;
-    height: 80px;
+    width: 195px;
+    // height: 80px;
   }
   img{
     display: block;
@@ -118,9 +155,47 @@ export default {
       padding: 10px;
       color: #000;
       margin-left: 00px;
+      .downdraw{
+        width: 12px;
+        margin-left: 8px;
+      }
     }
     .svgIcon{
       width: 30px;
+    }
+  }
+}
+.mydialog{
+  /deep/ .el-dialog{
+    border-radius: 10px;
+    width: 150px;
+    margin-top: 90px !important;
+    box-shadow: 0px 0px 15px 0px rgba(230,230,230,0.6);
+    border: 1px solid rgba(230,230,230,0.6);
+    .el-dialog__header{
+      padding: 0;
+    }
+    .el-dialog__body{
+      font-size: 26px;
+      padding: 0 15px;
+    }
+  }
+  &.showApps{
+    /deep/ .el-dialog{
+      margin-right: 120px;
+    }
+  }
+  &.showDss{
+    /deep/ .el-dialog{
+      margin-right: 210px;
+    }
+  }
+  .create{
+    height: 75px;
+    color: #000;
+    border-top: 1px solid #eee;
+    &:first-child{
+      border-top: 0px solid #eee;
     }
   }
 }

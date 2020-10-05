@@ -2,7 +2,7 @@
   <div class="tabs tip flexb">
     <span :class="{'tabAct': act === 1}" @click="handleChangeAct(1)">{{ $t('tab.dex') }}</span>
     <span :class="{'tabAct': act === 2}" @click="handleChangeAct(2)">{{ $t('tab.pools') }}</span>
-    <span :class="{'tabAct': act === 3}" @click="handleChangeAct(3)">{{ $t('tab.bank') }}</span>
+    <!-- <span :class="{'tabAct': act === 3}" @click="handleChangeAct(3)">{{ $t('tab.bank') }}</span> -->
   </div>
 </template>
 
@@ -52,6 +52,10 @@ export default {
 .tabs{
   font-size: 36px;
   margin: 0 60px 30px;
+  &>span{
+    flex: 1;
+    text-align: center;
+  }
   .tabAct{
     color: $color-black;
     font-weight: 500;
