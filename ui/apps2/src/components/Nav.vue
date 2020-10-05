@@ -6,7 +6,7 @@
       :visible.sync="showNav">
       <div class="navList">
         <div class="list" @click="handleTo('pools')">{{ $t('mine.pools') }}</div>
-        <div class="list" @click="handleTo('dss')">DSS</div>
+        <!-- <div class="list" @click="handleTo('dss')">DSS</div> -->
         <div class="list" @click="handleToOther('yfc')">{{ $t('tab.yfc') }}</div>
         <div class="list" @click="handleTo('total')">{{ $t('info.info') }}</div>
         <div class="list" @click="handleShowComp('silderSet')">{{ $t('dex.TradeSet') }}</div>
