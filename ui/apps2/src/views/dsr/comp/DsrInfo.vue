@@ -46,12 +46,12 @@ export default {
     return {
       lockDfs: '0.0000',
       ableUse: '0.0000',
-      ableClaimNum: '0.0000',
+      // ableClaimNum: '0.0000',
       nextTime: 0,
       timer: null,
       lockLoading: true,
       stockLoading: true,
-      claimLoading: true,
+      // claimLoading: true,
       timeObj: {
         days: 0,
         hours: '00',
@@ -71,7 +71,15 @@ export default {
     timesmap: {
       type: Number,
       default: 0,
-    }
+    },
+    ableClaimNum: {
+      type: String,
+      default: '0.0000'
+    },
+    claimLoading: {
+      type: Boolean,
+      default: true
+    },
   },
   computed: {
     ...mapState({
@@ -140,7 +148,7 @@ export default {
     handleTimer() {
       this.handleGetDfsBalance('lock')
       this.handleGetDfsBalance('stock')
-      this.handleGetDfsBalance('claim')
+      // this.handleGetDfsBalance('claim')
       clearTimeout(this.timer);
       this.timer = setTimeout(() => {
         this.handleTimer()
@@ -159,9 +167,9 @@ export default {
       if (type === 'stock') {
         params.account = 'dfsavingpool';
       }
-      if (type === 'claim') {
-        params.account = 'dfsdsrbuffer';
-      }
+      // if (type === 'claim') {
+      //   params.account = 'dfsdsrbuffer';
+      // }
       EosModel.getCurrencyBalance(params, res => {
         let balance = toFixed('0.0000000000001', params.decimal);
         (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
@@ -176,10 +184,10 @@ export default {
           this.ableUse = balance;
           return
         }
-        if (type === 'claim') {
-          this.claimLoading = false;
-          this.ableClaimNum = balance;
-        }
+        // if (type === 'claim') {
+        //   this.claimLoading = false;
+        //   this.ableClaimNum = balance;
+        // }
       })
     },
   },

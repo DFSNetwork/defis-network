@@ -39,6 +39,8 @@ export default {
       minReward: '0.0001',
       mid: 39, // dfs: 39 | DMD: 326 | YFC: 329 | DBC: 346 | LOOP: 424
       marketData: {},
+      sec10Timer: null, // 10秒定时器
+      ableClaimNum: '0.0000',
     }
   },
   props: {
@@ -98,12 +100,30 @@ export default {
   },
   mounted() {
     this.handleGetDssArgs();
+    this.handleGetDfsBalance();
   },
   beforeDestroy() {
     clearInterval(this.secTimer)
     clearInterval(this.runTimer)
+    clearTimeout(this.sec10Timer)
   },
   methods: {
+    handleGetDfsBalance() {
+      const params = {
+        code: 'minedfstoken',
+        coin: 'DFS',
+        decimal: 4,
+        account: 'dfsdsrbuffer'
+      };
+      EosModel.getCurrencyBalance(params, res => {
+        let balance = toFixed('0.0000000000001', params.decimal);
+        (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
+        this.ableClaimNum = balance;
+      })
+      this.sec10Timer = setTimeout(() => {
+        this.handleGetDfsBalance();
+      }, 10000);
+    },
     handleGetDssArgs() {
       const params = {
         "code": "dfsdsrsystem",
@@ -172,6 +192,9 @@ export default {
       if (this.myDepositInfo.pool) {
         const pool = this.dsrPools.find(vv => vv.id === this.myDepositInfo.pool)
         reward = reward * pool.bonus;
+      }
+      if (Number(this.ableClaimNum) < Number(reward)) {
+        reward = this.ableClaimNum;
       }
       reward = toFixed(reward, 8)
       const v = this.myDepositInfo;

@@ -84,7 +84,11 @@ export default {
     allLock: {
       type: String,
       default: '0.0000'
-    }
+    },
+    ableClaimNum: {
+      type: String,
+      default: '0.0000'
+    },
   },
   computed: {
     ...mapState({
@@ -229,6 +233,9 @@ export default {
         if (v.pool) {
           const pool = this.dsrPools.find(vv => vv.id === v.pool)
           reward = reward * pool.bonus;
+        }
+        if (Number(this.ableClaimNum) < Number(reward)) {
+          reward = this.ableClaimNum;
         }
         reward = toFixed(reward, 8)
 

@@ -1,6 +1,7 @@
 <template>
   <div class="dsr">
-    <dsr-info :args="args" :timesmap="timesmap" @listenAllLock="listenAllLock"/>
+    <dsr-info :args="args" :timesmap="timesmap" :claimLoading="claimLoading" :ableClaimNum="ableClaimNum"
+      @listenAllLock="listenAllLock"/>
     <div class="allClaim flexb">
       <div>
         <div class="subTitle flexa">
@@ -15,7 +16,7 @@
     </div>
     <dsr-list :args="args" @listenUpdate="listenUpdate"
               :myDepositInfo="myDepositInfo" :allLock="allLock"/>
-    <dsr-miner-list :args="args" :timesmap="timesmap" :allLock="allLock"/>
+    <dsr-miner-list :args="args" :timesmap="timesmap" :allLock="allLock" :ableClaimNum="ableClaimNum"/>
 
     <el-dialog
       class="myDialog"
@@ -81,6 +82,8 @@ export default {
       allLock: '0.0000',
       timesmap: 0,
       allClaim: false,
+      ableClaimNum: '0.0000',
+      claimLoading: true,
     }
   },
   mounted() {
@@ -104,7 +107,9 @@ export default {
     handleArgsTimer() {
       clearTimeout(this.argsTimer)
       this.handleGetArgs();
+      this.handleGetDfsBalance()
       this.argsTimer = setTimeout(() => {
+        this.handleGetDfsBalance()
         this.handleArgsTimer()
       }, 5000);
     },
@@ -227,6 +232,9 @@ export default {
         const pool = this.dsrPools.find(vv => vv.id === this.myDepositInfo.pool)
         reward = reward * pool.bonus;
       }
+      if (Number(this.ableClaimNum) < Number(reward)) {
+        reward = this.ableClaimNum;
+      }
       reward = toFixed(reward, 8)
       const v = this.myDepositInfo;
       let showReward = v.reward || '0.00000000';
@@ -249,6 +257,20 @@ export default {
           }
           this.$set(v, 'showReward', showReward);
         }, 50);
+    },
+    handleGetDfsBalance() {
+      const params = {
+        code: 'minedfstoken',
+        coin: 'DFS',
+        decimal: 4,
+        account: 'dfsdsrbuffer'
+      };
+      EosModel.getCurrencyBalance(params, res => {
+        let balance = toFixed('0.0000000000001', params.decimal);
+        (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
+        this.claimLoading = false;
+        this.ableClaimNum = balance;
+      })
     },
   }
 }
