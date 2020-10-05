@@ -279,7 +279,13 @@ export default {
       return getClass(mid)
     },
     handleJoin() {
-      this.$emit('listenToMarket', this.thisMarket)
+      // this.$emit('listenToMarket', this.thisMarket)
+      this.$router.push({
+        name: 'market',
+        params: {
+          mid: this.thisMarket.mid
+        }
+      })
     },
   },
 }
