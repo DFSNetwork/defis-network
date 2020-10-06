@@ -7,7 +7,7 @@
       <div class="navList">
         <!-- <div class="list" @click="handleTo('pools')">{{ $t('mine.pools') }}</div> -->
         <!-- <div class="list" @click="handleTo('dss')">DSS</div> -->
-        <div class="list" @click="handleToOther('yfc')">{{ $t('tab.yfc') }}</div>
+        <!-- <div class="list" @click="handleToOther('yfc')">{{ $t('tab.yfc') }}</div> -->
         <div class="list" @click="handleTo('total')">{{ $t('info.info') }}</div>
         <div class="list" @click="handleShowComp('silderSet')">{{ $t('dex.TradeSet') }}</div>
         <div class="list" @click="handleTo('createMarket')">{{ $t('dex.addMarket') }}</div>
@@ -128,6 +128,7 @@ export default {
       border-radius: 8px;
     }
     .out{
+      border-top: 1px solid #e3e3e3;
       color: #C05D5D;
     }
   }
