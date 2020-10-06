@@ -18,7 +18,7 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, getClass } from '@/utils/public';
+import { toFixed, getClass, toLocalTime } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MarketData from './MarketData';
 export default {
@@ -123,7 +123,8 @@ export default {
         let token = '0'
         !list[0] ? token = '0' : token = `${list[0].token}`;
         if (Number(token)) {
-          this.handleGetCapital(v, token)
+          // this.handleGetCapital(v, token)
+          this.handleGetMarketDataByChain(v, token)
         }
       })
     },
@@ -140,6 +141,42 @@ export default {
           token,
           capital: newArr,
           startTime: res.tag_log_utc_block_time
+        }))
+      })
+    },
+    handleGetMarketDataByChain(v, token) {
+      const params = {
+        "code": "defislogsone",
+        "json": true,
+        "scope": v.mid,
+        "table": "records",
+        "lower_bound": ` ${this.scatter.identity.accounts[0].name}`,
+        "upper_bound": ` ${this.scatter.identity.accounts[0].name}`,
+      }
+      EosModel.getTableRows(params, (res) => {
+        const list = res.rows || [];
+        this.sTime = '0'
+        this.marketData = [];
+        if (!list.length) {
+          return
+        }
+        const symbol0 = list[0].bal0.split(' ');
+        const symbol1 = list[0].bal1.split(' ');
+        const newArr = [
+          symbol0[0],
+          symbol1[0]
+        ]
+        if (symbol0[1] === 'EOS') {
+          newArr[0] = symbol0[0];
+          newArr[1] = symbol1[0];
+        } else if (symbol1[1] === 'EOS') {
+          newArr[0] = symbol1[0];
+          newArr[1] = symbol0[0];
+        }
+        this.lists.push(Object.assign(v, {
+          token,
+          capital: newArr,
+          startTime: `${Date.parse(toLocalTime(`${list[0].start}.000+0000`)) / 1000 - 8 * 3600}`
         }))
       })
     },
