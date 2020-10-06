@@ -258,7 +258,7 @@ export default {
       }
       axios.get('https://dfsinfoapi.sgxiang.com/dapi/changelogdata', {params}).then((result) => {
         const res = result.data;
-        console.log(res)
+        // console.log(res)
         this.marketData = [];
         this.sTime = '0'
         if (!result.data.logs.length) {
@@ -276,7 +276,7 @@ export default {
         }
         this.sTime = res.tag_log_utc_block_time
         this.marketData = newArr;
-        console.log(this.marketData, this.sTime)
+        // console.log(this.marketData, this.sTime)
       })
     },
     handleGetMarketDataByChain() {
