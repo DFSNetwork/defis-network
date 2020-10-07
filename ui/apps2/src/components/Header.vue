@@ -27,7 +27,7 @@
       :modal="false"
       :show-close="false"
       :visible.sync="showApps">
-      <div>
+      <div @click="showApps = false">
         <div class="create flexc" @click="handleToProject('pddex')">Pddex</div>
         <div class="create flexc" @click="handleToProject('yfcGuns')">机枪池</div>
         <div class="create flexc" @click="handleToProject('pdd')">养猪</div>
@@ -38,7 +38,7 @@
       :modal="false"
       :show-close="false"
       :visible.sync="showDss">
-      <div>
+      <div @click="showDss = false">
         <div class="create flexc" @click="handleTo('dss')">DFS DSS</div>
         <div class="create flexc" @click="handleToProject('yfcDss')">YFC DSS</div>
       </div>
@@ -106,6 +106,10 @@ export default {
       }
       if (name === 'pdd') {
         location.href = 'https://pddfarm.defis.network/'
+        return;
+      }
+      if (name === 'yfcDss') {
+        location.href = 'https://yfc.one/vault'
       }
     }
   },
