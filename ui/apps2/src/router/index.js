@@ -104,6 +104,12 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "farms" */ '@/views/farms/Index.vue'),
         meta: { title: 'DeFis-Network', noAcc: true },
       },
+      {
+        path: '/large-trade',
+        name: 'largeTrade',
+        component: () => import(/* webpackChunkName: "largeTrade" */ '@/views/largeTrade/Index.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noHeader: true, noFooter: true},
+      },
     ]
   },
 ]
