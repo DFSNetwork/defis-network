@@ -4,13 +4,11 @@
 
 截止10月6日止，完全释放完毕。
 
-池子里剩余的鱼尾巴，因算法缘故，还能持续摸几天。
+池子里剩余的鱼尾巴，因算法缘故，还能持续摸几天。活动时间全部到期后，未钓完的部分，转入DSS金库。
 
 当前YFC持有人数: 7405。
 
-这是一个从0开始，而且没有任何空投的币。每一个持有者手中的YFC，要么是自己去钓鱼收杆获得，要嘛是直接购买获得。
-
-没有一个人手里的YFC是不劳而获的。
+这是一个从0开始，没有任何空投的币。每一个持有者手中的YFC，要么是自己去钓鱼收杆获得，要嘛是直接购买获得。
 
 YFC的分发阶段，正式结束了。
 
@@ -18,15 +16,27 @@ YFC的分发阶段，正式结束了。
 
 ## 代币合约的去中心化
 
-和DFS的代币合约一样。首先把代币合约去中心化了。
+和DFS的代币合约一样的做法，首先把代币合约先去中心化了。
 
 让YFC成为一个真正去中心化的币。
 
-和DFS不一样的是，YFC总量，以后是只减不增的。
+**和DFS不一样的是，YFC总量，以后是只减不增的。**
 
 代币合约有销毁接口，转账YFC给代币合约本身即销毁。
 
 启动回购销毁程序后，将通过此接口，持续的回购销毁通缩。
+
+YFC代币合约的权限废弃链接: https://bloks.io/account/yfctokenmain#keys 
+
+链上部署的合约代码hash: 
+
+```
+a34cefcaa52b5bec6ee6c3d738d02bd10afb781becd8f21887d52cd4a403fdf1
+```
+
+开源的代码地址： https://github.com/defis-net/yfc_token_contract
+
+有兴趣的可以下载代码，检验链上部署的合约和开源的合约的hash一致性。
 
 **执行时间: 10月8号。**
 
@@ -41,9 +51,11 @@ YFC的DSS金库上线后，存入YFC能够无风险收获YFC。
 有关DSS设计文档，参考：[DSS设计文档](https://github.com/defis-net/defis-network/blob/master/docs/dfs_saving_system.md)
 
 
-**启动时间: 10月8号**
+**上线时间: 10月8号**
 
-**YFC金库链接:**
+**YFC金库链接:https://yfc.one/vault**
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gji5fdwo3nj30u01hcdiy.jpg)
 
 ## 安全审计
 
@@ -51,18 +63,17 @@ YFC的DSS金库上线后，存入YFC能够无风险收获YFC。
 
 但为了给大资金的进入保驾护航，YFC策略合约，将提交给专业的安全公司，进行专业的安全审计。
 
-**启动时间: 1～2周**
+**时间: 1～2周**
 
 ## 全面开放
 
 合约的参数上，全面解除封印，收益累积池释放比例上调，存入限额开放。
 
-**启动时间: 1～2周**
+**时间: 1～2周**
 
 ## 新增币种
 
 当前只支持了 USDT / EOS。后续将加入更多价格较为稳定的优良币种。
-
 
 ## 新增策略
 
@@ -93,7 +104,7 @@ YFC的分发和销毁过程，都是华丽而悲壮的，它分发时不求从�
 
 十分感谢大家陪伴YFC度过了这漫长的一个月。
 
-YFC的分发，采用了这个夏天最流行的公正公平的代币分发模式。
+YFC的分发过程，采用了这个夏天最流行的公正公平的代币分发模式。
 
 实现了真正的无私募、无预挖、无预留。
 
@@ -107,17 +118,29 @@ YFC小锦鲤，已经全部释放到了各位参与者手中。
 
 ## 参考资料
 
-
-
 [写给满月的YFC：每一个好币，都曾被看空过](https://bihu.com/article/1286652740)
+
+[YFC必看产品说明](https://github.com/defis-net/defis-network/blob/master/docs/yfc_note.md)
+
+[YFC一号策略上线](https://github.com/defis-net/defis-network/blob/master/docs/yfc_strategy_1.md)
+
+[小锦鲤垂钓大赛](https://github.com/defis-net/defis-network/blob/master/docs/yfc_activity_1.md)
+
+[YFC初始宣发文档](https://github.com/defis-net/defis-network/blob/master/docs/yfc_design.md)
+
+
+day1:
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gjhzxcn02dj30u01hcgr9.jpg)
+
+day30:
+
+![](https://tva1.sinaimg.cn/large/007S8ZIlly1gjhzvuxgnij30u01rctap.jpg)
 
 ## 预告
 
 To be continue..
 
 ![](https://tva1.sinaimg.cn/large/007S8ZIlly1gjfmjjfjorj30rs0ildjc.jpg)
-
-
-x
 
 
