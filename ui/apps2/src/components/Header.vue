@@ -34,7 +34,7 @@
         </div>
         <div class="proClass">
           <div class="create flexc" @click="handleTo('farms')">农活大厅</div>
-          <div class="create flexc" @click="handleTo('total')">{{ $t('info.info') }}</div>
+          <div class="create flexc" @click="handleTo('total')">Top20{{ $t('info.info') }}</div>
         </div>
         <div class="proClass">
           <div class="create flexc" @click="handleToProject('yfc')">YFC钓鱼</div>
