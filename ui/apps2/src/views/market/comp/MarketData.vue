@@ -74,7 +74,8 @@
 <script>
 import axios from "axios";
 import { mapState } from 'vuex';
-import { toFixed, accSub, accMul, accDiv, getClass, getMarketTime } from '@/utils/public';
+import { EosModel } from '@/utils/eos';
+import { toFixed, accSub, accMul, accDiv, getClass, getMarketTime, toLocalTime } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MarketTip from '../popup/MarketTip';
 export default {
@@ -152,7 +153,8 @@ export default {
           this.marketData = this.capital;
           return
         }
-        this.handleGetMarketData()
+        // this.handleGetMarketData()
+        this.handleGetMarketDataByChain();
         this.handleGetNowMarket();
       },
       immediate: true
@@ -256,6 +258,7 @@ export default {
       }
       axios.get('https://dfsinfoapi.sgxiang.com/dapi/changelogdata', {params}).then((result) => {
         const res = result.data;
+        // console.log(res)
         this.marketData = [];
         this.sTime = '0'
         if (!result.data.logs.length) {
@@ -272,6 +275,42 @@ export default {
           }
         }
         this.sTime = res.tag_log_utc_block_time
+        this.marketData = newArr;
+        // console.log(this.marketData, this.sTime)
+      })
+    },
+    handleGetMarketDataByChain() {
+      const params = {
+        "code": "defislogsone",
+        "json": true,
+        "scope": this.thisMarket.mid || this.$route.params.mid,
+        "table": "records",
+        "lower_bound": ` ${this.scatter.identity.accounts[0].name}`,
+        "upper_bound": ` ${this.scatter.identity.accounts[0].name}`,
+      }
+      EosModel.getTableRows(params, (res) => {
+        const list = res.rows || [];
+        this.sTime = '0'
+        this.marketData = [];
+        if (!list.length) {
+          return
+        }
+        console.log(list)
+        const symbol0 = list[0].bal0.split(' ');
+        const symbol1 = list[0].bal1.split(' ');
+        const newArr = [
+          symbol0[0],
+          symbol1[0]
+        ]
+        if (symbol0[1] === 'EOS') {
+          newArr[0] = symbol0[0];
+          newArr[1] = symbol1[0];
+        } else if (symbol1[1] === 'EOS') {
+          newArr[0] = symbol1[0];
+          newArr[1] = symbol0[0];
+        }
+
+        this.sTime = Date.parse(toLocalTime(`${list[0].start}.000+0000`)) / 1000 - 8 * 3600
         this.marketData = newArr;
       })
     },

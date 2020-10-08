@@ -72,7 +72,7 @@ export default {
       if (ve === 'v1') {
         location.href = 'https://app2.defis.network/'
       } else if (ve === 'v2') {
-        location.href = 'https://app.defis.network/'
+        location.href = 'https://v2.defis.network/'
       }
     },
     handleTo(name) {
@@ -137,17 +137,17 @@ export default {
     .login{
       padding: 8px 20px;
       box-sizing: border-box;
-      border: 1px solid #E0E0E0;
+      border: 1px dashed #E0E0E0;
       border-radius: 8px;
     }
     .out{
-      border-top: 1px solid #e3e3e3;
+      border-top: 1px dashed #e3e3e3;
       color: #C05D5D;
     }
     .sameClass{
-      border-top: 1px solid #efefef;
+      border-top: 1px dashed #efefef;
       &:first-child{
-        border-top: 0px solid #e3e3e3;
+        border-top: 0px dashed #e3e3e3;
       }
     }
   }

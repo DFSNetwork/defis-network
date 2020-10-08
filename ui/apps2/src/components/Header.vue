@@ -28,10 +28,19 @@
       :show-close="false"
       :visible.sync="showApps">
       <div @click="showApps = false">
-        <div class="create flexc" @click="handleToProject('pddex')">Pddex</div>
-        <div class="create flexc" @click="handleToProject('yfcGuns')">机枪池</div>
-        <div class="create flexc" @click="handleToProject('pdd')">养猪</div>
-        <div class="create flexc" @click="handleTo('farms')">农活大厅</div>
+        <div class="proClass">
+          <div class="create flexc" @click="handleToProject('pddex')">Pddex</div>
+          <div class="create flexc" @click="handleToProject('yfcGuns')">YFC机枪池</div>
+        </div>
+        <div class="proClass">
+          <div class="create flexc" @click="handleTo('farms')">农活大厅</div>
+          <div class="create flexc" @click="handleTo('total')">{{ $t('info.info') }}</div>
+        </div>
+        <div class="proClass">
+          <div class="create flexc" @click="handleToProject('yfc')">YFC钓鱼</div>
+          <div class="create flexc" @click="handleToProject('pdd')">PDD养猪</div>
+          <div class="create flexc" @click="handleToProject('loop')">LOOP葫芦</div>
+        </div>
       </div>
     </el-dialog>
     <el-dialog class="mydialog showDss"
@@ -100,16 +109,24 @@ export default {
         location.href = 'https://pddex.defis.network/'
         return
       }
-      if (name === 'yfcGuns') {
-        location.href = 'https://yfc.one/guns'
-        return
-      }
       if (name === 'pdd') {
         location.href = 'https://pddfarm.defis.network/'
         return;
       }
+      if (name === 'yfc') {
+        location.href = 'https://yfc.one'
+        return
+      }
+      if (name === 'yfcGuns') {
+        location.href = 'https://yfc.one/guns'
+        return
+      }
       if (name === 'yfcDss') {
         location.href = 'https://yfc.one/vault'
+        return
+      }
+      if (name === 'loop') {
+        location.href = 'https://loop.ech.one/index.html'
       }
     }
   },
@@ -186,7 +203,8 @@ export default {
   }
   &.showApps{
     /deep/ .el-dialog{
-      margin-right: 120px;
+      width: 200px;
+      margin-right: 100px;
     }
   }
   &.showDss{
@@ -194,13 +212,15 @@ export default {
       margin-right: 210px;
     }
   }
+  .proClass{
+    border-top: 1px dashed #e3e3e3;
+    &:first-child{
+      border-top: 0px dashed #e3e3e3;
+    }
+  }
   .create{
     height: 75px;
     color: #000;
-    border-top: 1px solid #eee;
-    &:first-child{
-      border-top: 0px solid #eee;
-    }
   }
 }
 </style>
