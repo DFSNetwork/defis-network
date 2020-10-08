@@ -14,7 +14,7 @@
           <div class="list" @click="handleTo('createMarket')">{{ $t('dex.addMarket') }}</div>
         </div>
         <div class="sameClass">
-          <div class="list" @click="handleTo('total')">{{ $t('info.info') }}</div>
+          <!-- <div class="list" @click="handleTo('total')">{{ $t('info.info') }}</div> -->
           <div class="list" @click="handleShowComp('invi')">{{ $t('invi.invitation') }}</div>
           <div class="list" @click="handleTo('tutorial')">{{ $t('public.tutorial') }}</div>
         </div>
