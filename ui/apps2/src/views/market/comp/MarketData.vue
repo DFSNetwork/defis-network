@@ -75,7 +75,7 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accMul, accDiv, getClass, getMarketTime, toLocalTime } from '@/utils/public';
+import { toFixed, accSub, accMul, accDiv, getClass, getMarketTime } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MarketTip from '../popup/MarketTip';
 export default {
@@ -310,7 +310,7 @@ export default {
           newArr[1] = symbol0[0];
         }
 
-        this.sTime = Date.parse(toLocalTime(`${list[0].start}.000+0000`)) / 1000 - 8 * 3600
+        this.sTime = Date.parse((`${list[0].start}.000+0000`)) / 1000 - 8 * 3600
         this.marketData = newArr;
       })
     },

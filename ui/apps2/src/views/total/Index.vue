@@ -32,30 +32,30 @@
             <span>{{ $t('apy.exchange24') }}: {{ item.countEos || '—' }}</span>
             <!-- <span class="green" @click="handleToMarket(item.mid)">{{ $t('invi.join') }}</span> -->
           </div>
-          <div class="flexb percent">
+          <div class="flexa percent">
             <div>
               <div class="num">{{ item.poolsApr || '—' }}</div>
               <div class="tip">{{ $t('info.markerFeesApr') }}</div>
             </div>
-            <div>
+            <div v-if="parseFloat(item.value)">
               <div class="num">{{ parseFloat(item.value) ? item.value : '—' }}</div>
               <div class="tip">{{ $t('info.dfsMineApr') }}</div>
             </div>
-            <div>
+            <div v-if="parseFloat(item.yfcApr)">
               <div class="num">{{ parseFloat(item.yfcApr) ? `${item.yfcApr}%` : '—' }}</div>
               <div class="tip">{{ $t('info.yfcApr') }}</div>
             </div>
-          </div>
-          <div class="flexb percent border">
-            <div>
+          <!-- </div>
+          <div class="flexb percent border"> -->
+            <div v-if="parseFloat(item.dmdRoi)">
               <div class="num">{{ parseFloat(item.dmdRoi) ? `${item.dmdRoi}%` : '—' }}</div>
               <div class="tip">{{ $t('apy.dmdApy') }}</div>
             </div>
-            <div>
+            <div v-if="parseFloat(item.dbcApr)">
               <div class="num">{{ parseFloat(item.dbcApr) ? `${item.dbcApr}%` : '—' }}</div>
               <div class="tip">{{ $t('apy.dbcApy') }}</div>
             </div>
-            <div>
+            <div v-if="parseFloat(item.pddApr)">
               <div class="num">{{ parseFloat(item.pddApr) ? `${item.pddApr}%` : '—' }}</div>
               <div class="tip">{{ $t('apy.pddApy') }}</div>
             </div>
@@ -424,15 +424,18 @@ export default {
     }
     .percent{
       margin-top: 20px;
+      flex-wrap: wrap;
       &:last-child{
         margin-top: 10px;
       }
       &>div{
         flex: 1;
-        &:nth-child(2){
+        min-width: 30%;
+        max-width: 197px;
+        &:nth-child(3n+2){
           text-align: center;
         }
-        &:last-child{
+        &:nth-child(3n+3){
           text-align: right;
         }
       }

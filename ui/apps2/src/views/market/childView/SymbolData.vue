@@ -172,7 +172,7 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, getMarketTime, toLocalTime,
+import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, getMarketTime,
          dealMinerData, perDayReward, getPoolApr, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
@@ -528,7 +528,7 @@ export default {
           newArr[1] = symbol0[0];
         }
 
-        this.sTime = Date.parse(toLocalTime(`${list[0].start}.000+0000`)) / 1000 - 8 * 3600
+        this.sTime = Date.parse(`${list[0].start}.000+0000`) / 1000 - 8 * 3600
         this.marketData = newArr;
         this.handleGetTime();
       })

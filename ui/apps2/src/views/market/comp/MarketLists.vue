@@ -18,7 +18,7 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, getClass, toLocalTime } from '@/utils/public';
+import { toFixed, getClass } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MarketData from './MarketData';
 export default {
@@ -176,7 +176,7 @@ export default {
         this.lists.push(Object.assign(v, {
           token,
           capital: newArr,
-          startTime: `${Date.parse(toLocalTime(`${list[0].start}.000+0000`)) / 1000 - 8 * 3600}`
+          startTime: `${Date.parse(`${list[0].start}.000+0000`) / 1000 - 8 * 3600}`
         }))
       })
     },
