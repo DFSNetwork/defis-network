@@ -40,6 +40,7 @@
           <div class="create flexc" @click="handleToProject('yfc')">YFC钓鱼</div>
           <div class="create flexc" @click="handleToProject('pdd')">PDD养猪</div>
           <div class="create flexc" @click="handleToProject('loop')">LOOP葫芦</div>
+          <div class="create flexc" @click="handleToProject('dbc')">DBC偷菜</div>
         </div>
       </div>
     </el-dialog>
@@ -123,6 +124,10 @@ export default {
       }
       if (name === 'yfcDss') {
         location.href = 'https://yfc.one/vault'
+        return
+      }
+      if (name === 'dbc') {
+        location.href = 'https://dbc.yfc.one'
         return
       }
       if (name === 'loop') {
