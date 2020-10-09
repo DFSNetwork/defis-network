@@ -222,7 +222,7 @@ export default {
     handleGetActions() {
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
-      if (Number(this.minReward) > Number(this.myDepositInfo.reward)) {
+      if (Number(this.minReward) > Number(this.myDepositInfo.reward || 0)) {
         return []
       }
       const action = {

@@ -12,11 +12,17 @@
       <span class="right green" v-loading="allClaiming" @click="handleRegLength()">一键领取</span>
     </div>
     <div class="proLists">
+      <div @click="handleTo('pools')">
+        <DfsMiner ref="dfsMiner" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
       <div @click="handleTo('dss')">
         <Dss ref="dss" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
-      <div @click="handleTo('pools')">
-        <DfsMiner ref="dfsMiner" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      <div @click="handleTo('yfc')">
+        <Yfc ref="yfc" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
+      <div @click="handleTo('guns')">
+        <Guns ref="guns" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('yfcDss')">
         <YfcDss ref="yfcDss" :marketLists="marketLists" :allClaiming="allClaiming"/>
@@ -27,14 +33,8 @@
       <div @click="handleTo('pdd')">
         <Pdd ref="pdd" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
-      <div @click="handleTo('yfc')">
-        <Yfc ref="yfc" :marketLists="marketLists" :allClaiming="allClaiming"/>
-      </div>
       <div @click="handleTo('loop')">
         <Loop ref="loop" :marketLists="marketLists" :allClaiming="allClaiming"/>
-      </div>
-      <div @click="handleTo('guns')">
-        <Guns ref="guns" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('dmd')">
         <Dmd  ref="dmd" :marketLists="marketLists" :allClaiming="allClaiming"/>
