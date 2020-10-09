@@ -18,14 +18,17 @@
       <div @click="handleTo('pools')">
         <DfsMiner ref="dfsMiner" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
-      <div @click="handleTo('yfc')">
-        <Yfc ref="yfc" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      <div @click="handleTo('yfcDss')">
+        <YfcDss ref="yfcDss" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('dbc')">
         <Dbc ref="dbc" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('pdd')">
         <Pdd ref="pdd" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
+      <div @click="handleTo('yfc')">
+        <Yfc ref="yfc" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('loop')">
         <Loop ref="loop" :marketLists="marketLists" :allClaiming="allClaiming"/>
@@ -58,6 +61,7 @@ import Dmd from './comp/Dmd';
 import Guns from './comp/Guns';
 import Loop from './comp/Loop';
 import Pdd from './comp/Pdd';
+import YfcDss from './comp/YfcDss';
 import { EosModel } from '@/utils/eos';
 
 export default {
@@ -72,6 +76,7 @@ export default {
     Guns,
     Loop,
     Pdd,
+    YfcDss,
   },
   props: {
     marketLists: {
@@ -109,7 +114,8 @@ export default {
       const guns = this.$refs.guns ? Number(this.$refs.guns.aboutEos || 0) : 0;
       const loop = this.$refs.loop ? Number(this.$refs.loop.aboutEos || 0) : 0;
       const pdd = this.$refs.pdd ? Number(this.$refs.pdd.aboutEos || 0) : 0;
-      n = dss + dfsMiner + yfc + dbc + dmd + guns + loop + pdd + n;
+      const yfcDss = this.$refs.yfcDss ? Number(this.$refs.yfcDss.aboutEos || 0) : 0;
+      n = dss + dfsMiner + yfc + dbc + dmd + guns + loop + pdd + yfcDss + n;
       this.allReward = n.toFixed(4);
       this.allRewardTimer = setTimeout(() => {
         this.handleGetAll()
@@ -149,6 +155,10 @@ export default {
         location.href = 'https://pddex.defis.network/';
         return
       }
+      if (name === 'yfcDss') {
+        location.href = 'https://yfc.one/vault';
+        return
+      }
       
       this.$router.push({name: name})
     },
@@ -161,7 +171,8 @@ export default {
       const guns = this.$refs.guns.handleGetActions()
       const loop = this.$refs.loop.handleGetActions()
       const pdd = this.$refs.pdd.handleGetActions()
-      const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop, ...pdd];
+      const yfcDss = this.$refs.yfcDss.handleGetActions()
+      const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop, ...pdd, ...yfcDss];
       this.allActions = tArr;
       if (this.allActions.length <= 10) { // 10条以内
         // console.log(this.allActions.length)
@@ -189,16 +200,6 @@ export default {
         })
         actions = pageArr[pageIndex];
       }
-      // console.log(actions)
-      // setTimeout(() => {
-      //   this.nextPage = Number(pageIndex) + 1;
-      //   if (pageArr.length - 1 > pageIndex) {
-      //     console.log('执行完成 - ', pageIndex)
-      //     return;
-      //   }
-      //   console.log('全部完成')
-      // }, 2000);
-
       const params = {
         actions: actions
       }

@@ -1,16 +1,16 @@
 <template>
   <div class="lists flexa" v-loading="loading">
     <div class="coinDiv flexc">
-      <img class="coin" src="https://ndi.340wan.com/eos/minedfstoken-dfs.png" alt="">
+      <img class="coin" src="https://ndi.340wan.com/eos/yfctokenmain-yfc.png" alt="">
     </div>
     <div class="f1">
       <div class="projectName flexb">
-        <span>DFS金库</span>
+        <span>YFC金库</span>
         <span class="claim green" v-loading="claiming || allClaiming" @click.stop="handleClaim">领取</span>
       </div>
       <div class="reward">
         <span>收益：</span>
-        <span>{{ myDepositInfo.showReward || '0.00000000' }} DFS</span>
+        <span>{{ myDepositInfo.showReward || '0.00000000' }} YFC</span>
       </div>
       <div class="about">
         <span>≈ {{ aboutEos }} EOS</span>
@@ -37,7 +37,7 @@ export default {
       claiming: false,
       loading: true,
       minReward: '0.0001',
-      mid: 39, // dfs: 39 | DMD: 326 | YFC: 329 | DBC: 346 | LOOP: 424
+      mid: 329, // dfs: 39 | DMD: 326 | YFC: 329 | DBC: 346 | LOOP: 424
       marketData: {},
       sec10Timer: null, // 10秒定时器
       ableClaimNum: '0.0000',
@@ -110,10 +110,10 @@ export default {
   methods: {
     handleGetDfsBalance() {
       const params = {
-        code: 'minedfstoken',
-        coin: 'DFS',
+        code: 'yfctokenmain',
+        coin: 'YFC',
         decimal: 4,
-        account: 'dfsdsrbuffer'
+        account: 'yfcdssbuffer'
       };
       EosModel.getCurrencyBalance(params, res => {
         let balance = toFixed('0.0000000000001', params.decimal);
@@ -126,8 +126,8 @@ export default {
     },
     handleGetDssArgs() {
       const params = {
-        "code": "dfsdsrsystem",
-        "scope": "dfsdsrsystem",
+        "code": "yfcdsssystem",
+        "scope": "yfcdsssystem",
         "table": "args",
         "json": true,
       }
@@ -143,8 +143,8 @@ export default {
       this.isGetAccinfo = true;
       const formName = this.scatter.identity.accounts[0].name;
       const params = {
-        "code": "dfsdsrsystem",
-        "scope": "dfsdsrsystem",
+        "code": "yfcdsssystem",
+        "scope": "yfcdsssystem",
         "table": "holders",
         "lower_bound": ` ${formName}`,
         "upper_bound": ` ${formName}`,
@@ -226,7 +226,7 @@ export default {
         return []
       }
       const action = {
-        account: 'dfsdsrsystem',
+        account: 'yfcdsssystem',
         name: 'claim',
         authorization: [{
           actor: formName, // 转账者
