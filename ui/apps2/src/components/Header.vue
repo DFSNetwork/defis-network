@@ -38,9 +38,9 @@
         </div>
         <div class="proClass">
           <div class="create flexc" @click="handleToProject('yfc')">YFC钓鱼</div>
+          <div class="create flexc" @click="handleToProject('dbc')">DBC偷菜</div>
           <div class="create flexc" @click="handleToProject('pdd')">PDD养猪</div>
           <div class="create flexc" @click="handleToProject('loop')">LOOP葫芦</div>
-          <div class="create flexc" @click="handleToProject('dbc')">DBC偷菜</div>
         </div>
       </div>
     </el-dialog>
