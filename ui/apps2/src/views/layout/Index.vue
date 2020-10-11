@@ -116,7 +116,7 @@ export default {
       const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd', 'whaleextoken-wal'];
       const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb',
       'yfctokenmain-yfc', 'eossanguotkt-tkt', 'pink.bank-pink', 'dbctokenmain-dbc', 'sars.run-eet', 'looptoken123-loop',
-      'lootglobcore-loot', 'pddtokenmain-pdd']
+      'lootglobcore-loot', 'pddtokenmain-pdd', 'minedfstoken-dfs']
       const inData = `${contract}-${coin.toLowerCase()}`
       const has = localeCoin.find(v => v === inData)
       if (has) {
@@ -124,7 +124,9 @@ export default {
       }
       const hasPng = localCoinPng.find(v => v === inData);
       if (!has && hasPng) {
-        return `https://apps.defis.network/static/coin/${hasPng}.png?v=1`;
+        console.log(hasPng)
+        // return `https://apps.defis.network/static/coin/${hasPng}.png?v=2`;
+        return `/static/coin/${hasPng}.png?v=2`;
       }
       return `https://ndi.340wan.com/eos/${inData}.png`
     },
