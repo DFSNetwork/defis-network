@@ -6,16 +6,19 @@
         <div class="bannerTip">币种信息，大额交易</div>
       </div>
     </div>
-    <LargeTrade :marketLists="marketLists"/>
+    <CoinData :marketLists="marketLists"/>
+    <!-- <LargeTrade :marketLists="marketLists"/> -->
   </div>
 </template>
 
 <script>
-import LargeTrade from '@/views/largeTrade/Index';
+// import LargeTrade from '@/views/largeTrade/Index';
+import CoinData from './comp/CoinData';
 export default {
   name: 'coinViews', // 币种窗口
   components: {
-    LargeTrade
+    // LargeTrade,
+    CoinData
   },
   data() {
     return {}
