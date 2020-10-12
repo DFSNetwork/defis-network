@@ -1,0 +1,191 @@
+.chart-page {
+  background-color: #ffffff; }
+.chart-page body {
+  color: #9194a4; }
+.chart-page .pane-legend-icon-container svg {
+  fill: #9194a4; }
+.chart-page .tv-side-toolbar .tools-group .button {
+  background-color: #ffffff;
+  border-color: #ffffff; }
+.chart-page .tv-side-toolbar .tools-group .button .main.text-as-icon {
+  color: #9194a4; }
+.chart-page .tv-side-toolbar .tools-group .button svg {
+  fill: #9194a4; }
+.chart-page .tv-side-toolbar .tools-group .button.selected, .chart-page .tv-side-toolbar .tools-group .button:active {
+  color: #9194a4;
+  background-color: #f0f0f0;
+  border-color: #f0f0f0; }
+.chart-page .tv-side-toolbar .tools-group .button.selected svg, .chart-page .tv-side-toolbar .tools-group .button:active svg {
+  /* fill: #ffffff; */}
+.chart-page .tv-side-toolbar .tools-group .button.selected .main.text-as-icon, .main.text-as-icon, .chart-page .tv-side-toolbar .tools-group .button:active .main.text-as-icon {
+  color: #ffffff; }
+.chart-page .tv-side-toolbar .tools-group .button.selected .side, .side, .chart-page .tv-side-toolbar .tools-group .button:active .side {
+  border-left: 1px solid transparent; }
+.chart-page .tv-side-toolbar .tools-group .button:active svg {
+  fill: #9194a4; }
+.chart-page .charts-popup-list {
+  background-color: #ffffff;
+  color: #9194a4;
+  border-color: #9194a4; }
+.chart-page .charts-popup-list .separator {
+  border-top: 1px solid white; }
+.chart-page .charts-popup-list .item {
+  background-color: #ffffff;
+  color: #9194a4; }
+.chart-page .charts-popup-list .item.active {
+  background-color: #9194a4;
+  color: #ffffff; }
+.chart-page .charts-popup-list .icon-wrap svg {
+  fill: #9194a4; }
+.chart-page .list-inner .item {
+  background-color: #ffffff; }
+.chart-page .list-inner .item.active {
+  background-color: #9194a4; }
+.chart-page .list-inner .item.active svg {
+  /* fill: #ffffff; */}
+.chart-page .list-inner .item.active span.title {
+  color: #ffffff; }
+.chart-page .list-inner .item span.title {
+  color: #9194a4; }
+.chart-page .favored-list-container span:hover {
+  background-color: #9194a4; }
+.chart-page .tv-floating-toolbar {
+  background-color: #9194a4;
+  border-color: #ffffff; }
+.chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper .tv-floating-toolbar__drag, .chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper input {
+  background-color: #ffffff; }
+.chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper .tv-floating-toolbar__drag svg, .chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper input svg {
+  fill: #9194a4; }
+.chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper .tv-floating-toolbar__widget {
+  border-color: #ffffff; }
+.chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper .tv-floating-toolbar__widget svg {
+  fill: #9194a4; }
+/* .chart-page .apply-common-tooltip {
+  background-color: #ffffff;
+  border: 1px solid transparent;
+  color: #9194a4; } */
+/* .chart-page .apply-common-tooltip:before {
+  border: 1px solid transparent; } */
+.chart-page .chart-page .layout__area--center .chart-container.active {
+  border: 1px solid #ffffff !important;
+  background: #ffffff;
+  outline: 3px dashed green; }
+.chart-page .chart-controls-bar {
+  background-color: #ffffff; }
+.chart-page .tv-side-toolbar .group,
+.chart-page .header-chart-panel .header-chart-panel-content .group {}
+.chart-page .tv-side-toolbar .group .button,
+.chart-page .header-chart-panel .group .button {
+  font-weight: normal;
+  color: #9194a4; }
+
+  .chart-page .button .caption{
+    display: none;
+  }
+.chart-page .tv-side-toolbar .group .button svg,
+.chart-page .header-chart-panel .group .button svg {
+  fill: #9194a4; }
+.chart-page .tv-side-toolbar .group .button.selected,
+.chart-page .header-chart-panel .group .button.selected {
+  background: #f0f0f0;
+  color: #ffffff; }
+.chart-page .tv-side-toolbar .group .button.selected svg,
+.chart-page .header-chart-panel .group .button.selected svg {
+  /* fill: #ffffff; */}
+.chart-page .tv-side-toolbar .group .button:active,
+.chart-page .header-chart-panel .group .button:active {
+  color: #9194a4; }
+.chart-page .tv-side-toolbar .group .button:active svg,
+.chart-page .header-chart-panel .group .button:active svg {
+  fill: #9194a4; }
+.chart-page .tv-side-toolbar .header-group-fullscreen,
+.chart-page .header-chart-panel .header-group-fullscreen {
+  float: right;
+  padding-right: 5px; }
+.chart-page .tv-side-toolbar .header-group-properties, .chart-page .tv-side-toolbar .header-group-indicators,
+.chart-page .header-chart-panel .header-group-properties,
+.chart-page .header-chart-panel .header-group-indicators {
+  float: none; }
+.chart-page .tv-side-toolbar .tools-group:not(:first-child):not(.no-delimiter):before {
+  background: #9194a4; }
+.chart-page .button svg {
+  fill: #9194a4; }
+.chart-page .tv-side-toolbar {
+  border-right: 1px solid #ffffff;
+  background-color: #ffffff; }
+.chart-page .tv-side-toolbar .tools-group .button.selected .side {
+  border-left: 1px solid transparent; }
+.chart-page .tv-side-toolbar .tools-group .button.selected .side, .chart-page .tv-side-toolbar .tools-group .button.selected .main {
+  background: #9194a4; }
+.chart-page .chart-container {
+  background-color: #ffffff;
+  border: 1px solid transparent; }
+.chart-page .tv-close-panel {
+  background-color: white;
+  border: none; }
+.chart-page .button {
+  background-color: #f0f0f0;
+  border-color: #f0f0f0;
+}
+.chart-page .button.selected, .chart-page .button.active {
+  background-color:rgba(53,116,250,0.12)!important; }
+.chart-page .button.selected svg, .chart-page .button.active svg {
+  /* fill: #ffffff; */}
+.chart-page .header-chart-panel .group .button {
+  color: #999;
+  font-size: 12px;
+  line-height: 30px;
+  padding: 0 5px;
+}
+.chart-page .header-chart-panel .group .button.selected{
+  background-color:#f0f0f0!important;
+  color: #333!important;
+  font-weight: bold;
+}
+.header-chart-panel .button{
+  line-height: 30px;
+  padding: 0 5px;
+  cursor: pointer;
+}
+.header-chart-panel a.button{
+  margin-top: 3px;
+}
+.header-chart-panel .fullscreen.button{
+  margin-top: 2px;
+}
+@media only screen and (max-width: 410px) {
+  .header-chart-panel .group.header-group-indicators {
+      display: inline-block!important;
+  }
+}
+._tv-dialog._tv-dialog-nonmodal,
+.pane-controls,
+.pane-legend-icon-container, .apply-overflow-tooltip,
+.pane-legend-wrap.main .apply-common-tooltip, 
+.study .pane-legend-item-value-container .pane-legend-item-value-wrap:nth-child(2) .pane-legend-item-value.pane-legend-line
+{
+   display: none !important;
+}
+
+.header-chart-panel-sizer {
+  background: #f0f0f0;
+}
+
+.header-chart-panel .group {
+  margin-top: 0 !important;
+}
+
+.chart-page .header-chart-panel .header-chart-panel-content .left {
+  max-width: 88%;
+  overflow: auto;
+  white-space: nowrap;
+  /* // display: flex; */
+}
+
+.chart-page .header-chart-panel .header-chart-panel-content .left .group {
+  /* flex: 1 */
+}
+
+.context-menu-wrapper {
+  display: none!important;
+}

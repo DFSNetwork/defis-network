@@ -1,0 +1,269 @@
+
+.chart-page body {
+  color: #61688A;
+}
+
+.chart-page .pane-legend-icon-container svg {
+  fill: #61688A;
+}
+
+.chart-page .tv-side-toolbar .tools-group .button {
+  background-color: #fff;
+  border-color: #181b2a;
+}
+
+.chart-page .tv-side-toolbar .tools-group .button .main.text-as-icon {
+  color: #4e5b85;
+}
+
+.chart-page .tv-side-toolbar .tools-group .button svg {
+  fill: #4e5b85;
+}
+
+.chart-page .tv-side-toolbar .tools-group .button.selected, .chart-page .tv-side-toolbar .tools-group .button:hover, .chart-page .tv-side-toolbar .tools-group .button:active {
+  background-color: #25B5B0;
+  border-color: #25B5B0;
+}
+
+.chart-page .tv-side-toolbar .tools-group .button.selected svg, .chart-page .tv-side-toolbar .tools-group .button:hover svg, .chart-page .tv-side-toolbar .tools-group .button:active svg {
+  fill: #c7cce6;
+}
+
+.chart-page .tv-side-toolbar .tools-group .button.selected .main.text-as-icon, .chart-page .tv-side-toolbar .tools-group .button:hover .main.text-as-icon, .chart-page .tv-side-toolbar .tools-group .button:active .main.text-as-icon {
+  color: #c7cce6;
+}
+
+.chart-page .tv-side-toolbar .tools-group .button.selected .side, .chart-page .tv-side-toolbar .tools-group .button:hover .side, .chart-page .tv-side-toolbar .tools-group .button:active .side {
+  border-left: 1px solid transparent;
+}
+
+.chart-page .tv-side-toolbar .tools-group .button:active svg {
+  fill: #4e5b85;
+}
+
+.chart-page .charts-popup-list {
+  background-color: #181b2a;
+  color: #4e5b85;
+  border-color: #25B5B0;
+}
+
+.chart-page .charts-popup-list .separator {
+  border-top: 1px solid #c1c8ec;
+}
+
+.chart-page .charts-popup-list .item {
+  background-color: #181b2a;
+  color: #4e5b85;
+}
+
+.chart-page .charts-popup-list .item.active {
+  background-color: #25B5B0;
+  color: #c7cce6;
+}
+
+.chart-page .charts-popup-list .icon-wrap svg {
+  fill: #4e5b85;
+}
+
+.chart-page .list-inner .item {
+  background-color: #181b2a;
+}
+
+.chart-page .list-inner .item.active {
+  background-color: #25B5B0;
+}
+
+.chart-page .list-inner .item.active svg {
+  fill: #c7cce6;
+}
+
+.chart-page .list-inner .item.active span.title {
+  color: #c7cce6;
+}
+
+.chart-page .list-inner .item span.title {
+  color: #4e5b85;
+}
+
+.chart-page .favored-list-container span:hover {
+  background-color: #2C3B59;
+}
+
+.chart-page .tv-floating-toolbar {
+  background-color: #25B5B0;
+  border-color: #c7cce6;
+}
+
+.chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper .tv-floating-toolbar__drag, .chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper input {
+  background-color: #181b2a;
+}
+
+.chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper .tv-floating-toolbar__drag svg, .chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper input svg {
+  fill: #4e5b85;
+}
+
+.chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper .tv-floating-toolbar__widget {
+  border-color: #181b2a;
+}
+
+.chart-page .tv-floating-toolbar .tv-floating-toolbar__widget-wrapper .tv-floating-toolbar__widget svg {
+  fill: #4e5b85;
+}
+
+.chart-page .separator-3cgsM4c1- {
+  background-color: transparent;
+}
+/* .chart-page .apply-common-tooltip {
+  background-color: #152247;
+  border: 1px solid transparent;
+  color: #61688A;
+} */
+
+/* .chart-page .apply-common-tooltip:before {
+  border: 1px solid transparent;
+} */
+
+.chart-page .chart-page .layout__area--center .chart-container.active {
+  border: 1px solid #fff !important;
+  background: #fff;
+  outline: 3px dashed green;
+}
+
+/* .chart-page .chart-controls-bar {
+  background-color: #fff;
+} */
+
+.chart-page .tv-side-toolbar .tools-group .button:hover,
+.chart-page .header-chart-panel .tools-group .button:hover {
+  background-color: #2C3B59;
+}
+
+.chart-page .tv-side-toolbar .button:hover,
+.chart-page .header-chart-panel .button:hover {
+  background: #2C3B59;
+}
+
+.chart-page .tv-side-toolbar .group,
+.chart-page .header-chart-panel .group {
+  float: left;
+}
+
+.chart-page .tv-side-toolbar .group .button,
+.chart-page .header-chart-panel .group .button {
+  font-weight: normal;
+  color: #4e5b85;
+}
+
+.chart-page .tv-side-toolbar .group .button svg,
+.chart-page .header-chart-panel .group .button svg {
+  fill: #4e5b85;
+}
+
+.chart-page .tv-side-toolbar .group .button:hover, .chart-page .tv-side-toolbar .group .button.selected,
+.chart-page .header-chart-panel .group .button:hover,
+.chart-page .header-chart-panel .group .button.selected {
+  background: #0d1939;
+  color: #bdc2d0;
+}
+
+.chart-page .tv-side-toolbar .group .button:hover svg, .chart-page .tv-side-toolbar .group .button.selected svg,
+.chart-page .header-chart-panel .group .button:hover svg,
+.chart-page .header-chart-panel .group .button.selected svg {
+  fill: #25B5B0;
+}
+
+.chart-page .tv-side-toolbar .group .button:active,
+.chart-page .header-chart-panel .group .button:active {
+  color: #25B5B0;
+}
+
+.chart-page .tv-side-toolbar .group .button:active svg,
+.chart-page .header-chart-panel .group .button:active svg {
+  fill: #4e5b85;
+}
+
+.chart-page .tv-side-toolbar .header-group-fullscreen,
+.chart-page .header-chart-panel .header-group-fullscreen {
+  float: right;
+  padding-right: 5px;
+}
+
+.chart-page .tv-side-toolbar .header-group-properties, .chart-page .tv-side-toolbar .header-group-indicators,
+.chart-page .header-chart-panel .header-group-properties,
+.chart-page .header-chart-panel .header-group-indicators {
+  float: none;
+}
+
+.chart-page .tv-side-toolbar .tools-group:not(:first-child):not(.no-delimiter):before {
+  background: #4e5b85;
+}
+
+.chart-page .button svg {
+  fill: #4e5b85;
+}
+
+/* .chart-page .tv-side-toolbar {
+  border-right: 1px solid #fff;
+  background-color: #fff;
+} */
+
+.chart-page .tv-side-toolbar .tools-group .button.selected .side {
+  border-left: 1px solid transparent;
+}
+
+.chart-page .tv-side-toolbar .tools-group .button.selected .side, .chart-page .tv-side-toolbar .tools-group .button.selected .main {
+  background: #2C3B59;
+}
+
+.chart-page .chart-container {
+  border : none;
+  background: none;
+}
+
+.chart-page .tv-close-panel {
+  background-color: #2b304a;
+  border: none;
+}
+
+.chart-page .button {
+  background-color: #152247;
+  border-color: #152247;
+}
+
+.chart-page .button .caption{
+  display: none;
+}
+
+.chart-page .button:hover {
+  background-color: #4e5b85;
+}
+
+.chart-page .button.selected, .chart-page .button.active {
+  background-color: #0d1939 !important;
+}
+
+.chart-page .button.selected svg, .chart-page .button.active svg {
+  fill: #fff;
+}
+
+.feature-no-touch ._tv-dialog .button:not(.disabled):not(.selected):hover:before, .feature-no-touch ._tv-dialog .custom-select .switcher:not(.disabled):not(.selected):hover:before, .feature-no-touch ._tv-dialog .favored-list-container span:not(.disabled):not(.selected):hover:before, .feature-no-touch ._tv-dialog .submenu:not(.disabled):not(.selected):hover:before, .feature-no-touch .bottom-widgetbar-content.backtesting .button:not(.disabled):not(.selected):hover:before, .feature-no-touch .bottom-widgetbar-content.backtesting .custom-select .switcher:not(.disabled):not(.selected):hover:before, .feature-no-touch .bottom-widgetbar-content.backtesting .favored-list-container span:not(.disabled):not(.selected):hover:before, .feature-no-touch .bottom-widgetbar-content.backtesting .submenu:not(.disabled):not(.selected):hover:before, .feature-no-touch .header-chart-panel .button:not(.disabled):not(.selected):hover:before, .feature-no-touch .header-chart-panel .custom-select .switcher:not(.disabled):not(.selected):hover:before, .feature-no-touch .header-chart-panel .favored-list-container span:not(.disabled):not(.selected):hover:before, .feature-no-touch .header-chart-panel .submenu:not(.disabled):not(.selected):hover:before, .feature-no-touch .properties-toolbar .button:not(.disabled):not(.selected):hover:before, .feature-no-touch .properties-toolbar .custom-select .switcher:not(.disabled):not(.selected):hover:before, .feature-no-touch .properties-toolbar .favored-list-container span:not(.disabled):not(.selected):hover:before, .feature-no-touch .properties-toolbar .submenu:not(.disabled):not(.selected):hover:before{
+  border:0px;
+}
+
+.header-chart-panel .button{
+  font-size: 14px;
+  padding: 5px!important;
+  height: 16px!important;
+  cursor: pointer;
+}
+.feature-no-touch .header-chart-panel .button:active{
+  background: none!important;
+}
+.chart-page .header-chart-panel .group .button:active{
+  color: #bdc2d0;
+}
+@media only screen and (max-width: 410px) {
+  .header-chart-panel .group.header-group-indicators {
+      display: inline-block!important;
+  }
+}

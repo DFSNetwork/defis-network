@@ -6,7 +6,7 @@
         <div class="bannerTip">币种信息，大额交易</div>
       </div>
     </div>
-    <CoinData :marketLists="marketLists"/>
+    <CoinData :marketLists="showList"/>
     <!-- <LargeTrade :marketLists="marketLists"/> -->
   </div>
 </template>
@@ -18,10 +18,13 @@ export default {
   name: 'coinViews', // 币种窗口
   components: {
     // LargeTrade,
-    CoinData
+    CoinData,
   },
   data() {
-    return {}
+    return {
+      hasMids: [39, 329], // 支持币种
+      showList: [],
+    }
   },
   props: {
     marketLists: {
@@ -29,6 +32,25 @@ export default {
       default: function mls() {
         return []
       }
+    },
+  },
+  watch: {
+    marketLists: {
+      handler: function flt() {
+        this.handleFilter();
+      },
+      deep: true,
+      immediate: true,
+    }
+  },
+  methods: {
+    handleFilter() {
+      const arr = [];
+      this.hasMids.forEach(v => {
+        const item = this.marketLists.find(vv => vv.mid === v) || {};
+        arr.push(item)
+      })
+      this.showList = arr;
     }
   }
 }
