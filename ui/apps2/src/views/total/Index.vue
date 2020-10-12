@@ -120,18 +120,17 @@ export default {
       // loading: true,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       topLoading: true,
-      sortValue: '1', // 1 - 年化 ｜ 2 - 深度 ｜ 3 - 成交量
+      sortValue: '3', // 1 - 年化 ｜ 2 - 深度 ｜ 3 - 成交量
       options: [{
-        value: '1',
-        label: 'APY'
+        value: '3',
+        label: 'Volum'
       }, {
         value: '2',
         label: 'TVL'
       }, {
-        value: '3',
-        label: 'Volum'
+        value: '1',
+        label: 'APY'
       }],
-      value: '1'
     }
   },
   computed: {
