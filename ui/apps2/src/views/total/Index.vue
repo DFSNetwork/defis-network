@@ -122,14 +122,14 @@ export default {
       topLoading: true,
       sortValue: '3', // 1 - 年化 ｜ 2 - 深度 ｜ 3 - 成交量
       options: [{
-        value: '1',
-        label: 'APY'
+        value: '3',
+        label: 'Volum'
       }, {
         value: '2',
         label: 'TVL'
       }, {
-        value: '3',
-        label: 'Volum'
+        value: '1',
+        label: 'APY'
       }],
     }
   },
