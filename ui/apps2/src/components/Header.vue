@@ -1,7 +1,7 @@
 <template>
   <div class="header flexb">
-    <!-- <div @click="handleToIndex"><img class="logo" src="@/assets/img/dex/logo.svg"></div> -->
-    <div @click="handleToIndex" class="flexa logoMain">
+    <div @click="handleToIndex"><img class="logoOld" src="@/assets/img/dex/logo.svg"></div>
+    <!-- <div @click="handleToIndex" class="flexa logoMain">
       <div class="logoDiv">
         <img class="logo" src="/static/faviconV3.png">
       </div>
@@ -9,7 +9,7 @@
         <div>DeFis</div>
         <div>Network</div>
       </div>
-    </div>
+    </div> -->
     <div class="tools flexb">
       <!-- <label v-if="!scatter.identity" class="login" @click="handleLogin">{{ $t('public.login') }}</label>
       <label v-else class="account flexa">
@@ -155,6 +155,9 @@ export default {
   font-size: 28px;
   color: $color-tip;
   margin-bottom: 5px;
+  .logoOld{
+    width: 196px;
+  }
   .logoMain{
     text-align: left;
     color: #000;
