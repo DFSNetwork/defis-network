@@ -28,13 +28,19 @@
         <div class="tip">总资产</div>
       </div>
     </div>
+
+    <Lists :checkedMarket="checkedMarket"/>
   </div>
 </template>
 
 <script>
 import { accMul } from '@/utils/public';
+import Lists from './comp/Lists';
 export default {
   name: 'largeTrade',
+  components: {
+    Lists,
+  },
   data() {
     return {
       mLists: [39, 329],
