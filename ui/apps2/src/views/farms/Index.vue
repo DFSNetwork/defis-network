@@ -1,8 +1,11 @@
 <template>
   <div class="farms">
-    <div class="banner">
-      <div class="title">农场大厅</div>
-      <div class="subTip">每日农活，收益一目了然</div>
+    <div class="banner flexc">
+      <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
+      <div>
+        <div class="title">农场大厅</div>
+        <div class="subTip">每日农活，收益一目了然</div>
+      </div>
     </div>
     <div class="farmsTitle flexb">
       <span>
@@ -238,9 +241,23 @@ export default {
   .banner{
     color: #FFF;
     background: #07d79b;
-    padding: 80px 0 60px;
+    // padding: 80px 0 60px;
+    height: 2rem;
+    position: relative;
+    overflow: hidden;
+    &>div{
+      z-index: 1;
+    }
+    .bgImg{
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 0;
+    }
+
     .title{
-      font-size: 60px;
+      font-size: 40px;
       font-weight: 500;
     }
     .subTip{
