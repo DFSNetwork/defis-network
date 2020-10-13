@@ -2,13 +2,13 @@
   <div class="history">
     <div class="lists">
       <div class="noData tip" v-if="!pageLists.length">{{ $t('public.noData') }}</div>
-      <div class="list" v-for="(item, index) in pageLists" :key="index">
-        <div class="flexb">
-          <span class="flexc num">
+      <div class="listOld" v-for="(item, index) in pageLists" :key="index" @click="handleToBrowser(item.trx_id)">
+        <div class="flexb name">
+          <!-- <span class="flexc num"> -->
             <span>{{ item.fromx }}</span>
-            <img class="exchange" src="@/assets/img/dex/exchange.svg" alt="">
+            <span class="flexc"><img class="exchange" src="@/assets/img/dex/exchange.svg" alt=""></span>
             <span>{{ item.tox }}</span>
-          </span>
+          <!-- </span> -->
         </div>
         <div class="price flexb">
           <span class="tip">转账数量</span>
@@ -26,7 +26,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import {toLocalTime} from '@/utils/public'
+import {toLocalTime, toBrowser} from '@/utils/public'
 export default {
   name: 'tradeHistory',
   components: {
@@ -59,6 +59,9 @@ export default {
     handleToLocalTime(t) {
       return toLocalTime(t)
     },
+    handleToBrowser(id, type = 'tx') {
+      toBrowser(id, type)
+    }
   },
 }
 </script>
@@ -101,11 +104,18 @@ export default {
   }
 
   .lists{
+    .exchange{
+      margin: 0 8px;
+      width: 30px;
+    }
     .noData{
       padding: 50px 0;
       font-size: 30px;
     }
-    .list{
+    .subTitle{
+      color: #444;
+    }
+    .listOld{
       // margin: 40px;
       padding: 30px;
       border-radius: 15px;
@@ -116,12 +126,21 @@ export default {
           margin-top: 0;
         }
       }
+
+      .name{
+        &>span{
+          text-align: left;
+          flex: 3;
+          &:nth-child(2){
+            flex: 1;
+          }
+          &:nth-child(3){
+            text-align: right;
+          }
+        }
+      }
       .num{
         font-size: 33px;
-        .exchange{
-          margin: 0 8px;
-          width: 30px;
-        }
       }
       .qua{
         font-size: 30px;

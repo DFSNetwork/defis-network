@@ -5,7 +5,8 @@
 </template>
 
 <script>
-import Tv from './index'
+import Tv from './index';
+import {getPriceLen} from '@/utils/public';
 export default {
   data () {
     return {
@@ -28,6 +29,10 @@ export default {
       default: function mls() {
         return {}
       }
+    },
+    price: {
+      type: String,
+      default: '0.000000', // kline、ram、rex
     }
   },
   computed: {
@@ -55,12 +60,16 @@ export default {
   },
   methods: {
     handleLoadTradingView() {
+      if (!Number(this.price)) {
+        return
+      }
       let theme_str = 'white';
       let params = {
         interval: this.interval, // 分辨率（时间周期）
         wgconfig: this.handleGetThemeConfig(theme_str),
         self: this,
       };
+      const priceLen = getPriceLen(this.price) || 4;
       const cmt = this.checkedMarket;
       const name = `${cmt.symbol1}/${cmt.symbol0}`
       const inSymbol = `${this.checkedMarket.symbol1}-${this.checkedMarket.mid}`
@@ -69,7 +78,7 @@ export default {
       params = Object.assign(params, {
         name: name, // k线显示的交易对
         ticker: 'contract', // 后台请求币种对
-        pricescale: 10 ** 6, // 保留小数位位数
+        pricescale: 10 ** priceLen, // 保留小数位位数
         market: this.checkedMarket,
         inSymbol,
         diffDecimal,
@@ -194,7 +203,7 @@ export default {
 }
 .tradeView{
   width: 100%;
-  height: 50vh;
+  // height: 50vh;
 }
 #tv_chart_container {
   width: 100%;

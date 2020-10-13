@@ -77,6 +77,9 @@ class WsIo {
       }
       const dealArr = [];
       wsRes.forEach((v, index) => {
+        // if (v[0] === 1599235200 && v[1] > 20000000) {
+        //   return
+        // }
         const item = {
           open: v[1] * 10 ** decimal / 10000,
           high: v[4] * 10 ** decimal / 10000,

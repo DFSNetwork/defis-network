@@ -13,29 +13,35 @@
           <div class="price">{{ price }}</div>
           <div class="tip">当前价格</div>
         </div>
-        <div class="data">
-          <div class="flexe">
-            <span class="tip">持有人数：</span>
-            <span>{{ holders }}</span>
+        <div class="data flexc">
+          <div class="tip">
+             <div>持有人数：</div>
+             <div>Volum 24H：</div>
+             <div>当前发行量：</div>
+          </div>
+          <div class="num">
+             <div>{{ holders }}</div>
+             <div>{{ parseInt(volume_24h) }}</div>
+             <div>{{ parseInt(supply) || '-' }}</div>
+          </div>
+          <!-- <div class="flexe">
+            <span class="tip">持有人数</span>
+            <span class="num">{{ holders }}</span>
           </div>
           <div class="flexe">
-            <span class="tip">24H笔数：</span>
-            <span>{{ trx_24h }}</span>
+            <span class="tip">24H换手</span>
+            <span class="num">{{ parseInt(volume_24h) }}</span>
           </div>
           <div class="flexe">
-            <span class="tip">24H总量：</span>
-            <span>{{ volume_24h }}</span>
-          </div>
+            <span class="tip">当前发行量</span>
+            <span class="num">{{ parseInt(supply) || '-' }}</span>
+          </div> -->
         </div>
-      </div>
-      <div class="flexa">
-        <span class="tip">当前发行量：</span>
-        <span>{{ supply }}</span>
       </div>
     </div>
 
     <div class="poolsInfo kLine">
-      <KLine :checkedMarket="checkedMarket"/>
+      <KLine :checkedMarket="checkedMarket" :price="price"/>
       <div class="hideDiv"></div>
     </div>
 
@@ -243,6 +249,7 @@ export default {
       if (data.mid === this.checkedMarket.mid) {
         return
       }
+      this.myFilter = '';
       this.changeLoading = true;
       this.checkedMarket = data;
       this.showMarketList = false;
@@ -276,7 +283,6 @@ export default {
       axios.get('https://api.defis.network/history/transfer', {
         params
       }).then(result => {
-        console.log(result)
         this.listLoading = false;
         this.changeLoading = false;
         const res = result.data;
@@ -388,12 +394,22 @@ export default {
   .priceDiv{
     text-align: left;
     .price{
-      font-size: 45px;
+      font-size: 48px;
       font-weight: 500;
     }
   }
   .data{
     text-align: right;
+    .tip{
+      line-height: 35px;
+    }
+    .num{
+      text-align: left;
+      // min-width: 80px;
+      // display: inline-block;
+      // border: 1px solid #000;
+      line-height: 35px;
+    }
   }
 }
 // K line

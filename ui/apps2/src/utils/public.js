@@ -169,11 +169,13 @@ export function crazyCurryingHelper(fn, args) {
 }
 
 // 跳转对应链上的区块浏览器 - id: txid | account , chain: 所属链 , type: 'tx' | 'account' | 'token'
-export function toBrowser(id, chain, type) {
-  let url = `${store.state.sys.blockBrowser.eos[type]}${id}`
-  if (chain && chain !== 'eos') {
-    url = `${store.state.sys.blockBrowser[chain][type]}${id}`;
+export function toBrowser(id, type) {
+  const typeObj = {
+    tx: 'https://bloks.io/transaction/',
+    account: 'https://bloks.io/account/',
+    token: 'https://bloks.io/tokens/',
   }
+  let url = `${typeObj[type]}${id}`
   location.href = url;
 }
 
@@ -452,4 +454,20 @@ export function getDmdMinerHourRoi(market, type, dmdPools) {
     return toFixed(hourRoi * 24 * 7, 3);
   }
   return toFixed(hourRoi * 24 * 365, 3);
+}
+
+export function getPriceLen(price) {
+  let len = 6;
+  if (Number(price) > 1000) {
+    len = 2
+  } else if (Number(price) > 10) {
+    len = 4
+  } else if (Number(price) > 1) {
+    len = 5
+  }
+  return len;
+}
+
+export function dealPrice(price) {
+  return Number(price).toFixed(getPriceLen())
 }
