@@ -133,6 +133,9 @@ export default {
       showMarketList: false,
       timer: null,
       option: [{
+        value: '0',
+        label: '0 YFC'
+      }, {
         value: '1',
         label: '1 YFC'
       }, {
@@ -150,6 +153,9 @@ export default {
       }],
       config: {
         YFC: [{
+          value: '0',
+          label: '0 YFC'
+        }, {
           value: '1',
           label: '1 YFC'
         }, {
@@ -166,6 +172,9 @@ export default {
           label: '100 YFC'
         }],
         DFS: [{
+          value: '0',
+          label: '0 DFS'
+        }, {
           value: '100',
           label: '100 DFS'
         }, {
@@ -245,7 +254,7 @@ export default {
       const newVal = this.checkedMarket;
       this.option = this.config[newVal.symbol1] || []
       if (!this.myFilter) {
-        this.myFilter = this.option[2].value;
+        this.myFilter = this.option[1].value;
         return
       }
     },
