@@ -7,6 +7,7 @@ class WsIo {
     this.socket = null;
   }
   init(cb) {
+    // console.log(cb)
     const self = this;
     self.socket = io('https://api.defis.network');
     self.socket.on('connect', function () {
@@ -14,7 +15,7 @@ class WsIo {
       self.connect = true;
       cb ? cb() : null;
     })
-    console.log(self.connect)
+    // console.log(self.connect)
   }
   /**
    * 获取K线历史数据
@@ -55,8 +56,9 @@ class WsIo {
     this.socket.emit(action, params);
     // 监听数据返回
     const listen = `${params.type}.${params.period}.${params.symbol}`
+    const decimal = params.diffDecimal;
     this.socket.on(listen, function (msg) {
-      console.log(listen, msg)
+      // console.log(listen, msg)
       let wsRes = msg;
       if (!Array.isArray(wsRes)) {
         const item = {
@@ -76,10 +78,10 @@ class WsIo {
       const dealArr = [];
       wsRes.forEach((v, index) => {
         const item = {
-          open: v[1] / 10000,
-          high: v[4] / 10000,
-          low: v[3] / 10000,
-          close: v[2] / 10000,
+          open: v[1] * 10 ** decimal / 10000,
+          high: v[4] * 10 ** decimal / 10000,
+          low: v[3] * 10 ** decimal / 10000,
+          close: v[2] * 10 ** decimal / 10000,
           volume: 0,
           time: v[0] * 1000,
           date: toLocalTime(v[0] * 1000),

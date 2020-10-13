@@ -15,13 +15,19 @@ export default {
       tradName: '', // 交易对 ABC/ECS
       ticker: '', //  请求标示ABC_ECS
       trad: null,
-      interval: '240', // 分辨率，时间
+      interval: '1D', // 分辨率，时间
     }
   },
   props: {
     forwhat: {
       type: String,
       default: 'kline', // kline、ram、rex
+    },
+    checkedMarket: {
+      type: Object,
+      default: function mls() {
+        return {}
+      }
     }
   },
   computed: {
@@ -31,18 +37,15 @@ export default {
       this.lang = this.handleFormatLang(val);
       this.handleLoadTradingView();
     },
+    checkedMarket(newVal, oldVal) {
+      if (newVal.mid !== oldVal.mid) {
+        this.handleLoadTradingView();
+      }
+    }
   },
   created() {
   },
   mounted() {
-    // this.lang = this.handleFormatLang(this.$store.state.app.language);
-    // this.trad = this.$store.state.app.trad;
-    // if (this.forwhat === 'kline') {
-    //   if (!this.loading && this.trad.id) {
-    //     this.handleLoadTradingView();
-    //   }
-    //   return;
-    // }
     if (!this.loading) {
       this.handleLoadTradingView();
     }
@@ -52,24 +55,27 @@ export default {
   },
   methods: {
     handleLoadTradingView() {
-      // this.loading = true;
       let theme_str = 'white';
       let params = {
         interval: this.interval, // 分辨率（时间周期）
         wgconfig: this.handleGetThemeConfig(theme_str),
         self: this,
       };
-      // const trad = this.trad;
-      // this.tradName = `${trad.symbol1}/${trad.symbol2}`;
-      // this.ticker = trad.symbol.toLowerCase();
+      const cmt = this.checkedMarket;
+      const name = `${cmt.symbol1}/${cmt.symbol0}`
+      const inSymbol = `${this.checkedMarket.symbol1}-${this.checkedMarket.mid}`
+      const diffDecimal = this.checkedMarket.decimal1 - this.checkedMarket.decimal0;
+
       params = Object.assign(params, {
-        name: 'DFS/EOS', // k线显示的交易对
+        name: name, // k线显示的交易对
         ticker: 'contract', // 后台请求币种对
         pricescale: 10 ** 6, // 保留小数位位数
+        market: this.checkedMarket,
+        inSymbol,
+        diffDecimal,
       });
       Tv.init(params, () => {
-        console.log(123)
-        this.loading = false;
+        this.loading = true;
         this.handleChartReady();
       });
     },
@@ -138,30 +144,17 @@ export default {
     },
 
     handleChartReady(){
-      const _this = this;
       Tv.widget.onChartReady(() => {
-        Tv.createdDataBtn('1分钟', this.interval === '1', '1');
-        Tv.createdDataBtn('5分钟', this.interval === '5', '5');
-        Tv.createdDataBtn('15分钟', this.interval === '15', '15');
-        Tv.createdDataBtn('30分钟', this.interval === '30', '30');
+        // Tv.createdDataBtn('1分钟', this.interval === '1', '1');
+        // Tv.createdDataBtn('5分钟', this.interval === '5', '5');
+        // Tv.createdDataBtn('15分钟', this.interval === '15', '15');
+        // Tv.createdDataBtn('30分钟', this.interval === '30', '30');
         Tv.createdDataBtn('1小时', this.interval === '60', '60');
         Tv.createdDataBtn('4小时', this.interval === '240', '240');
         Tv.createdDataBtn('1天', this.interval === '1D', '1D');
         Tv.createdDataBtn('1周', this.interval === '1W', '1W');
         Tv.createdDataBtn('1月', this.interval === '1M', '1M');
-        // this.createdToolBtn();
-        // Tv.createdKlineBtn();
-        // Tv.createdDepthBtn(() => this.handleDepthAction());
         Tv.createdFillWinBtn();
-        // Tv.widget.chart().createStudy('volume', false, false);
-        //默认展示MA Cross
-        // Tv.widget.chart().createStudy("MA Cross", false, false, [10, 20]);
-        // Tv.widget.chart().createStudy('macd', false, false);
-        // 图表类型
-        // Tv.widget.chart().setChartType(3);
-        // Tv.widget.chart().onIntervalChanged().subscribe(null, function(resolution, obj) {
-        //   obj.timeframe = Tv.getTimeframe(resolution);
-        // });
         // 退出全屏K线
         Tv.widget.onShortcut('esc', function(){
           const tvid = document.getElementById('tv_chart_container');
@@ -170,7 +163,7 @@ export default {
             const buttonEvent = window.fullscreenBtnEvent;
             const button = buttonEvent[0];
             button.innerHTML = '';
-            button.title = _this.$t('tv.fullScreen');
+            button.title = 'Full';
             buttonEvent.append('<svg width="15" height="15" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 586.09999 586.09996"><path d="M172.6 367.9l-97.7 97.7L0 390.7v195.4h195.4l-74.9-74.9 97.7-97.7-45.6-45.6zM195.4 0H0v195.4l74.9-74.9 97.7 97.7 45.6-45.6-97.7-97.7L195.4 0zm195.3 0l74.9 74.9-97.7 97.7 45.6 45.6 97.7-97.7 74.9 74.9V0H390.7zm22.8 367.9l-45.6 45.6 97.7 97.7-74.9 74.9h195.4V390.7l-74.9 74.9-97.7-97.7z"></path></svg>');
             return;
           }

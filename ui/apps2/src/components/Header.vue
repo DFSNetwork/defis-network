@@ -44,6 +44,7 @@
         <div class="proClass">
           <div class="create flexc" @click="handleTo('farms')">农活大厅</div>
           <div class="create flexc" @click="handleTo('total')">Top20{{ $t('info.info') }}</div>
+          <div class="create flexc" @click="handleTo('coinViews', {mid: 39})">代币观察</div>
         </div>
         <div class="proClass">
           <div class="create flexc" @click="handleToProject('yfc')">YFC钓鱼</div>
@@ -102,11 +103,14 @@ export default {
     handleToCreate() {
       this.$router.push({name: 'createMarket'})
     },
-    handleTo(name) {
+    handleTo(name, params) {
       if (this.$route.name === name)  {
         return;
       }
-      this.$router.push({name: name})
+      this.$router.push({
+        name: name,
+        params,
+      })
     },
     handleToVote() {
       if (this.$route.name === 'vote') {

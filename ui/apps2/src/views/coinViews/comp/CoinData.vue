@@ -3,14 +3,14 @@
     <!-- 交易数据 -->
     <div class="title flexb">
       <div class="flexc" @click="showMarketList = true">
-        <span class="act">DFS-EOS</span>
+        <span class="act">{{ checkedMarket.symbol1 }}-{{ checkedMarket.symbol0 }}</span>
         <img class="iconImg" src="@/assets/img/dex/down.svg" alt="">
       </div>
     </div>
-    <div class="poolsInfo">
+    <div class="poolsInfo" v-loading="listLoading && changeLoading">
       <div class="flexb">
         <div class="priceDiv">
-          <div class="price">1.950001</div>
+          <div class="price">{{ price }}</div>
           <div class="tip">当前价格</div>
         </div>
         <div class="data">
@@ -35,7 +35,7 @@
     </div>
 
     <div class="poolsInfo kLine">
-      <KLine />
+      <KLine :checkedMarket="checkedMarket"/>
       <div class="hideDiv"></div>
     </div>
 
@@ -59,7 +59,7 @@
       </span>
     </div>
 
-    <div class="">
+    <div v-loading="listLoading">
       <Lists :pageLists="pageLists" :checkedMarket="checkedMarket" />
 
       <el-pagination
@@ -78,6 +78,7 @@
       :show-close="false"
       :visible.sync="showMarketList">
       <market-list :marketLists="marketLists"
+        v-if="showMarketList"
         @listenMarketChange="handleMarketChange"
         @listenClose="handleClose"/>
     </el-dialog>
@@ -121,6 +122,8 @@ export default {
       size: 15,
       total: 0,
       pageLists: [],
+      listLoading: true,
+      changeLoading: true,
       showMarketList: false,
       option: [{
         value: '1',
@@ -174,37 +177,83 @@ export default {
       }
     }
   },
+  computed: {
+    price() {
+      if (!this.checkedMarket.reserve1) {
+        return '-'
+      }
+      const t = this.checkedMarket;
+      const price = (parseFloat(t.reserve0) / parseFloat(t.reserve1)) || 0
+      return price.toFixed(6)
+    }
+  },
   watch: {
-    checkedMarket: {
-      handler: function cmt(newVal) {
-        if (!newVal.symbol1) {
-          return
-        }
-        this.option = this.config[newVal.symbol1] || []
-        if (!this.filter) {
-          this.filter = this.option[2].value;
-          return
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
     option: {
       handler: function opt(newVal) {
         if (!newVal.length) {
           return
         }
+        this.listLoading = true;
         this.handleGetList()
       },
       deep: true,
       immediate: true,
     },
-    filter() {
+    myFilter() {
+      // this.pageLists = [];
+      this.listLoading = true;
       this.handleGetList()
+    },
+    '$route': {
+      handler: function rt() {
+        this.handleGetMids()
+      },
+      deep: true,
+      immediate: true,
+    },
+    marketLists: {
+      handler: function opt(newVal) {
+        if (!newVal.length) {
+          return
+        }
+        this.handleGetMids()
+      },
+      deep: true,
+      immediate: true,
     }
   },
   methods: {
-    handleMarketChange() {},
+    handleGetMids() {
+      if (!this.marketLists.length) {
+        return;
+      }
+      this.mid = Number(this.$route.params.mid)
+      this.checkedMarket = this.marketLists.find(v => v.mid === this.mid) || {};
+      this.handleDealFilter()
+    },
+    handleDealFilter() {
+      const newVal = this.checkedMarket;
+      this.option = this.config[newVal.symbol1] || []
+      if (!this.myFilter) {
+        this.myFilter = this.option[2].value;
+        return
+      }
+    },
+    handleMarketChange(data) {
+      if (data.mid === this.checkedMarket.mid) {
+        return
+      }
+      this.changeLoading = true;
+      this.checkedMarket = data;
+      this.showMarketList = false;
+      this.$router.push({
+        name: 'coinViews',
+        params: {
+          mid: this.checkedMarket.mid,
+        }
+      })
+      this.handleDealFilter()
+    },
     handleClose() {
       this.showMarketList = false;
     },
@@ -215,19 +264,21 @@ export default {
       this.handleGetList();
     },
     handleGetList() {
-      if (!this.checkedMarket.symbol1 || !this.filter) {
+      if (!this.checkedMarket.symbol1 || !this.myFilter) {
         return
       }
       const params = {
         token: this.checkedMarket.symbol1.toLowerCase(),
         page: this.page,
         limit: this.size,
-        min: this.filter,
+        min: this.myFilter,
       }
       axios.get('https://api.defis.network/history/transfer', {
         params
       }).then(result => {
         console.log(result)
+        this.listLoading = false;
+        this.changeLoading = false;
         const res = result.data;
         this.total = res.total || 0;
         this.pageLists = res.data || [];
@@ -351,8 +402,8 @@ export default {
   .hideDiv{
     position: absolute;
     width: 180px;
-    height: 100%;
-    top: 0px;
+    height: calc(100% - 100px);
+    top: 100px;
     right: 0px;
   }
 }

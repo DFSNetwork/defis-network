@@ -2,8 +2,8 @@
   <div>
     <div class="banner flexc">
       <div>
-        <div class="bannerTitle">币种信息</div>
-        <div class="bannerTip">币种信息，大额交易</div>
+        <div class="bannerTitle">代币观察</div>
+        <div class="bannerTip">币价走势，大额转账</div>
       </div>
     </div>
     <CoinData :marketLists="showList"/>
@@ -41,13 +41,16 @@ export default {
       },
       deep: true,
       immediate: true,
-    }
+    },
   },
   methods: {
     handleFilter() {
       const arr = [];
       this.hasMids.forEach(v => {
-        const item = this.marketLists.find(vv => vv.mid === v) || {};
+        const item = this.marketLists.find(vv => vv.mid === v);
+        if (!item) {
+          return
+        }
         arr.push(item)
       })
       this.showList = arr;
