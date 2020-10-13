@@ -131,6 +131,7 @@ export default {
       listLoading: true,
       changeLoading: true,
       showMarketList: false,
+      timer: null,
       option: [{
         value: '1',
         label: '1 YFC'
@@ -182,6 +183,9 @@ export default {
         }]
       }
     }
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer)
   },
   computed: {
     price() {
@@ -271,9 +275,13 @@ export default {
       this.handleGetList();
     },
     handleGetList() {
+      clearTimeout(this.timer)
       if (!this.checkedMarket.symbol1 || !this.myFilter) {
         return
       }
+      this.timer = setTimeout(() => {
+        this.handleGetList()
+      }, 5000);
       const params = {
         token: this.checkedMarket.symbol1.toLowerCase(),
         page: this.page,
