@@ -18,7 +18,7 @@ export function timeApy(mid, type, pool) {
     const lamp = Math.pow(0.5,times); // 衰减系数
     const secGet = (parseFloat(li.max_supply) * lamp) / 2 / 604800;
     const dayGet = secGet * 60 * 60 * 24;
-    const apy = dayGet * price / eos * 365 * 100;
+    const apy = dayGet * price / eos * 365 * 100 / 2;
     return apy.toFixed(3)
   }
   return 0

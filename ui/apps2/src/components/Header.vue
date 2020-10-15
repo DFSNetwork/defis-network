@@ -51,6 +51,7 @@
           <div class="create flexc" @click="handleToProject('dbc')">DBC偷菜</div>
           <div class="create flexc" @click="handleToProject('pdd')">PDD养猪</div>
           <div class="create flexc" @click="handleToProject('loop')">LOOP葫芦</div>
+          <div class="create flexc" @click="handleToProject('time')">TIME时砂</div>
         </div>
       </div>
     </el-dialog>
@@ -141,6 +142,10 @@ export default {
       }
       if (name === 'dbc') {
         location.href = 'https://dbc.yfc.one'
+        return
+      }
+      if (name === 'time') {
+        location.href = 'https://timemine.xloot.io/'
         return
       }
       if (name === 'loop') {
