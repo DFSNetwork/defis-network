@@ -6,25 +6,29 @@
         <span>{{ $t('info.markerFeesApr') }}：</span>
         <span>{{ `${feesApr}%` || '—' }}</span>
       </div>
-      <div class="flexa">
+      <div class="flexa" v-if="parseFloat(apr)">
         <span>{{ $t('info.dfsMineApr') }}：</span>
         <span>{{ parseFloat(apr) ? `${apr}%` : '—' }}</span>
       </div>
-      <div class="flexa">
+      <div class="flexa" v-if="parseFloat(lpApy.yfcApy)">
         <span>{{ $t('info.yfcApr') }}：</span>
         <span>{{ parseFloat(lpApy.yfcApy) ? `${lpApy.yfcApy}%` : '—' }}</span>
       </div>
-      <div class="flexa">
+      <div class="flexa" v-if="parseFloat(dmdApy)">
         <span>{{ $t('apy.dmdApy') }}：</span>
         <span>{{ parseFloat(dmdApy) ? `${dmdApy}%` : '—' }}</span>
       </div>
-      <div class="flexa">
+      <div class="flexa" v-if="parseFloat(lpApy.dbcApy)">
         <span>{{ $t('apy.dbcApy') }}：</span>
         <span>{{ parseFloat(lpApy.dbcApy) ? `${lpApy.dbcApy}%` : '—' }}</span>
       </div>
-      <div class="flexa">
+      <div class="flexa" v-if="parseFloat(lpApy.pddApy)">
         <span>{{ $t('apy.pddApy') }}：</span>
         <span>{{ parseFloat(lpApy.pddApy) ? `${lpApy.pddApy}%` : '—' }}</span>
+      </div>
+      <div class="flexa" v-if="parseFloat(timeApy)">
+        <span>{{ $t('apy.timeApy') }}：</span>
+        <span>{{ parseFloat(timeApy) ? `${timeApy}%` : '—' }}</span>
       </div>
       <div class="flexa total">
         <span>{{ $t('info.totalApr') }}：</span>
@@ -54,6 +58,10 @@ export default {
       default: '0.00'
     },
     dmdApy: {
+      type: String,
+      default: '0.00'
+    },
+    timeApy: {
       type: String,
       default: '0.00'
     },

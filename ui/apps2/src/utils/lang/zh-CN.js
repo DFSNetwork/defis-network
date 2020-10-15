@@ -274,6 +274,7 @@ export default {
     dmdApy: 'DMD挖矿年化',
     dbcApy: 'DBC偷菜年化',
     pddApy: 'PDD养猪年化',
+    timeApy: 'TIME年化',
     exchange24: '24H兑换量',
   },
   vote: {

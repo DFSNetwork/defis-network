@@ -74,6 +74,8 @@ const config = {
     lpPoolsBal: {}, // 存放格式为 {YFC: '1.00...'}
     lpDamping: {},  // 存放格式为 {YFC: 0.75, ...}
     tampList: 0,
+    // Time 挖矿列表
+    timeList: [],
   },
   mutations: {
     SET_LpMineList: (state, lpMineList) => {
@@ -86,6 +88,9 @@ const config = {
     SET_LpDamping: (state, lpDamping) => {
       state.lpDamping = lpDamping;
     },
+    SET_TimeList: (state, timeList) => {
+      state.timeList = timeList;
+    },
   },
   actions: {
     setLpMineList({ commit }, baseConfig) {
@@ -96,6 +101,9 @@ const config = {
     },
     setLpDamping({ commit }, lpDamping) {
       commit('SET_LpDamping', lpDamping);
+    },
+    setTimeList({ commit }, timeList) {
+      commit('SET_TimeList', timeList);
     },
   }
 };

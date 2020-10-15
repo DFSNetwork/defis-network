@@ -40,7 +40,7 @@
       class="myDialog apy"
       :visible.sync="showApyDetail">
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="isActual"
-                 :apr="apr" :lpApy="lpApy" :dmdApy="dmdApy"/>
+                 :apr="apr" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
     </el-dialog>
   </div>
 </template>
@@ -52,6 +52,7 @@ import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward,
 perDayReward, getPoolApr, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MarketApy from '../popup/MarketApy'
+import { timeApy } from '@/utils/minerLogic';
 
 export default {
   name: 'Weight',
@@ -151,10 +152,22 @@ export default {
       }
       return '0.000';
     },
+    timeApy() {
+      const pool = this.marketLists.find(v => v.mid === 530)
+      let apy = timeApy(this.thisMarket.mid, 'year', pool)
+      console.log(apy)
+      if (Number(apy)) {
+        return apy;
+      }
+      return '0.000';
+    },
     countApy() {
       let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
       if (this.dmdApy) {
         all = accAdd(all, parseFloat(this.dmdApy))
+      }
+      if (this.timeApy) {
+        all = accAdd(all, parseFloat(this.timeApy))
       }
       this.lpMid.forEach(v => {
         const apy = this.handleDealApy(v.mid, v.symbol);

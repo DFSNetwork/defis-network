@@ -116,7 +116,7 @@ export default {
       const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd', 'whaleextoken-wal'];
       const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb', 'rosedefifarm-rose',
       'yfctokenmain-yfc', 'eossanguotkt-tkt', 'pink.bank-pink', 'dbctokenmain-dbc', 'sars.run-eet', 'looptoken123-loop',
-      'lootglobcore-loot', 'pddtokenmain-pdd',] // 'minedfstoken-dfs'
+      'lootglobcore-loot', 'pddtokenmain-pdd', 'xpettimecore-time',] // 'minedfstoken-dfs'
       const inData = `${contract}-${coin.toLowerCase()}`
       const has = localeCoin.find(v => v === inData)
       if (has) {

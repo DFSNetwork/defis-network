@@ -43,6 +43,7 @@
     <div class="poolsInfo kLine">
       <KLine :checkedMarket="checkedMarket" :price="price"/>
       <div class="hideDiv"></div>
+      <div class="hide2Div"></div>
     </div>
 
     <div class="title flexb">
@@ -438,6 +439,13 @@ export default {
     height: calc(100% - 100px);
     top: 100px;
     right: 0px;
+  }
+  .hide2Div{
+    position: absolute;
+    width: 280px;
+    height: 200px;
+    bottom: 80px;
+    left: 0;
   }
 }
 

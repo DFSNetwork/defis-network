@@ -45,8 +45,6 @@
               <div class="num">{{ parseFloat(item.yfcApr) ? `${item.yfcApr}%` : '—' }}</div>
               <div class="tip">{{ $t('info.yfcApr') }}</div>
             </div>
-          <!-- </div>
-          <div class="flexb percent border"> -->
             <div v-if="parseFloat(item.dmdRoi)">
               <div class="num">{{ parseFloat(item.dmdRoi) ? `${item.dmdRoi}%` : '—' }}</div>
               <div class="tip">{{ $t('apy.dmdApy') }}</div>
@@ -59,10 +57,10 @@
               <div class="num">{{ parseFloat(item.pddApr) ? `${item.pddApr}%` : '—' }}</div>
               <div class="tip">{{ $t('apy.pddApy') }}</div>
             </div>
-            <!-- <div class="total">
-              <div class="num">{{ item.count }}%</div>
-              <div class="tip">{{ $t('info.totalApr') }}</div>
-            </div> -->
+            <div v-if="parseFloat(item.timeApy)">
+              <div class="num">{{ parseFloat(item.timeApy) ? `${item.timeApy}%` : '—' }}</div>
+              <div class="tip">{{ $t('apy.timeApy') }}</div>
+            </div>
           </div>
           <div class="flexb total">
             <span>{{ $t('info.totalApr') }}</span>
@@ -105,6 +103,7 @@
 <script>
 import { mapState } from 'vuex';
 import { perDayReward, getYfcReward, accAdd, toLocalTime, getDmdMinerHourRoi } from '@/utils/public';
+import { timeApy } from '@/utils/minerLogic';
 export default {
   name: 'total',
   props: {
@@ -142,9 +141,10 @@ export default {
       dfsPrice: state => state.sys.dfsPrice,
       dfsData: state => state.sys.dfsData,
       lpMid: state => state.config.lpMid,
+      timeList: state => state.config.timeList,
     }),
     showArr() {
-      if (!this.marketLists.length || !this.feesApr) {
+      if (!this.marketLists.length || !this.feesApr || !this.timeList.length) {
         return []
       }
       let arr = this.handleGetCheckRank()
@@ -205,16 +205,23 @@ export default {
       return true
     },
   },
-  watch: {
-  },
+  // watch: {
+  //   timeList: {
+  //     handler: function tl() {
+
+  //     },
+  //     deep: true,
+  //     immediate: true,
+  //   }
+  // },
   methods: {
     handleGetCheckRank() {
       const dmdPool = this.marketLists.find(v => v.mid === 326)
+      const timePool = this.marketLists.find(v => v.mid === 530)
       let arr = [];
       this.handleTopLoading()
       const top10 = this.marketLists.slice(0, 30)
       // const top10 = this.marketLists
-      
 
       top10.forEach(market => {
         if (market.contract0 !== 'eosio.token') {
@@ -248,6 +255,14 @@ export default {
             feesApr.dmdRoi = dmdRoi;
             count = accAdd(count, dmdRoi)
           }
+
+          // TIME 挖矿年化计算
+          const midTimeApy = timeApy(market.mid, 'year' ,timePool)
+          if (Number(midTimeApy)) {
+            feesApr.timeApy = midTimeApy;
+            count = accAdd(count, midTimeApy)
+          }
+
           feesApr.count = count.toFixed(2);
 
           // 计算24H兑换量

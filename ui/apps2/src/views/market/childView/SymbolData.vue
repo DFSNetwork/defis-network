@@ -158,7 +158,7 @@
       class="myDialog apy"
       :visible.sync="showApyDetail">
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="isActual"
-                 :apr="apr" :lpApy="lpApy" :dmdApy="dmdApy"/>
+                 :apr="apr" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
     </el-dialog>
     <!-- <el-dialog
       class="myDialog"
@@ -179,6 +179,7 @@ import MinReward from '../popup/MinReward'
 import MarketTip from '../popup/MarketTip';
 import MarketApy from '../popup/MarketApy'
 // import RankTip from '../popup/RankTip'
+import { timeApy } from '@/utils/minerLogic';
 
 export default {
   components: {
@@ -284,10 +285,21 @@ export default {
       }
       return '0.000';
     },
+    timeApy() {
+      const pool = this.marketLists.find(v => v.mid === 530)
+      let apy = timeApy(this.thisMarket.mid, 'year', pool)
+      if (Number(apy)) {
+        return apy;
+      }
+      return '0.000';
+    },
     countApy() {
       let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
       if (this.dmdApy) {
         all = accAdd(all, parseFloat(this.dmdApy))
+      }
+      if (this.timeApy) {
+        all = accAdd(all, parseFloat(this.timeApy))
       }
       this.lpMid.forEach(v => {
         const apy = this.handleDealApy(v.mid, v.symbol);

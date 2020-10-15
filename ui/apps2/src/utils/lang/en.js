@@ -273,6 +273,7 @@ export default {
     dmdApy: 'DMD APR',
     dbcApy: 'DBC APR',
     pddApy: 'PDD APR',
+    timeApy: 'PDD APR',
     exchange24: '24H Volume',
   },
   vote: {
