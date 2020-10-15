@@ -2,6 +2,9 @@
 import store from '@/store';
 
 export function timeApy(mid, type, pool) {
+  if (mid) {
+    return 0
+  }
   const timeList = store.state.config.timeList;
   const li = timeList.find(v => v.id == mid) || {};
   const nowTime = Date.parse(new Date()) / 1000;
