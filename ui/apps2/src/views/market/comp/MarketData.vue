@@ -36,15 +36,37 @@
       </div> -->
       <div class="flexa">
         <span>{{ $t('market.marketReward') }}: </span>
-        <span :class="{'green': sym0AndSy1 ? parseFloat(marketRewardSym0) > 0 : parseFloat(marketRewardSym1) > 0,
-                       'red': sym0AndSy1 ? parseFloat(marketRewardSym0) < 0 : parseFloat(marketRewardSym1) < 0}">
-          {{ sym0AndSy1 ? marketRewardSym0 : marketRewardSym1 }}
+        <span v-if="rewardType === 0">
+          <span :class="{'green': sym0AndSy1 ? parseFloat(marketRewardSym0) > 0 : parseFloat(marketRewardSym1) > 0,
+                        'red': sym0AndSy1 ? parseFloat(marketRewardSym0) < 0 : parseFloat(marketRewardSym1) < 0}">
+            {{ sym0AndSy1 ? marketRewardSym0 : marketRewardSym1 }}
+          </span>
+          <span :class="{'green':  sym0AndSy1 ? parseFloat(marketRewardSym1) > 0 : parseFloat(marketRewardSym0) > 0,
+                        'red':  sym0AndSy1 ? parseFloat(marketRewardSym1) < 0 : parseFloat(marketRewardSym0) < 0}">
+            ({{ sym0AndSy1 ? marketRewardSym1 : marketRewardSym0 }})
+          </span>
         </span>
-        <span :class="{'green':  sym0AndSy1 ? parseFloat(marketRewardSym1) > 0 : parseFloat(marketRewardSym0) > 0,
-                       'red':  sym0AndSy1 ? parseFloat(marketRewardSym1) < 0 : parseFloat(marketRewardSym0) < 0}">
-          ({{ sym0AndSy1 ? marketRewardSym1 : marketRewardSym0 }})
+        <span v-else-if="rewardType === 1">
+          <span :class="{'green': parseFloat(sym0Reward) > 0,
+                         'red': parseFloat(sym0Reward) < 0}"
+            >{{ sym0Reward }}</span>
+          <span class="tip">({{ $t('market.pl') }}: 
+            <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
+              {{ percent }}%
+            </span>)
+          </span>
         </span>
-        <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
+        <span v-else>
+          <span :class="{'green': parseFloat(sym1Reward) > 0,
+                         'red': parseFloat(sym1Reward) < 0}"
+            >{{ sym1Reward }}</span>
+          <span class="tip">({{ $t('market.pl') }}: 
+            <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
+              {{ percent }}%
+            </span>)
+          </span>
+        </span>
+        <img  @click="handleChangeRewardType" class="qusTip" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
       </div>
       <div class="flexa">
         <span>{{ $t('market.marketTime') }}: </span>
@@ -54,11 +76,12 @@
             mins: marketTime.minutes,
             secs: marketTime.seconds
           }) }}</span>
-        <span class="tip">（{{ $t('market.pl') }}: 
+        <!-- <span class="tip">({{ $t('market.pl') }}: 
           <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
             {{ percent }}%
-          </span>）
-        </span>
+          </span>)
+        </span> -->
+        <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
         <!-- <span>{{ JSON.stringify(marketTime) }}</span> -->
       </div>
     </div>
@@ -122,6 +145,7 @@ export default {
         minutes: '00',
         seconds: '00'
       },
+      rewardType: 1, // 0 - 两个币种盈亏 ｜ 1 - sym0本位盈亏 ｜ 2 - sym1本位盈亏
       showMarketTip: false
     }
   },
@@ -189,6 +213,27 @@ export default {
     sym0AndSy1() {
       return parseFloat(this.marketRewardSym0) > parseFloat(this.marketRewardSym1)
     },
+    sym0Reward() {
+      const price = accDiv(parseFloat(this.nowMarket.getNum1), parseFloat(this.nowMarket.getNum2));
+      let reward = parseFloat(this.marketRewardSym0) + price * parseFloat(this.marketRewardSym1)
+      reward = toFixed(reward, this.thisMarket.decimal0)
+      console.log(parseFloat(this.marketRewardSym0), price, parseFloat(this.marketRewardSym1))
+      if (Number(reward) > 0) {
+        reward = `+${reward}`
+      }
+      return `${reward} ${this.thisMarket.symbol0}`
+    },
+    sym1Reward() {
+      console.log(this.marketRewardSym0)
+      console.log(this.marketRewardSym1)
+      const price = accDiv(parseFloat(this.nowMarket.getNum1), parseFloat(this.nowMarket.getNum2));
+      let reward = parseFloat(this.marketRewardSym0) / price + parseFloat(this.marketRewardSym1)
+      reward = toFixed(reward, this.thisMarket.decimal1)
+      if (Number(reward) > 0) {
+        reward = `+${reward}`
+      }
+      return  `${reward} ${this.thisMarket.symbol1}`
+    },
     percent() {
       if (!this.marketData.length || !this.nowMarket.getNum1) {
         return '0.0000';
@@ -204,6 +249,9 @@ export default {
     }
   },
   methods: {
+    handleChangeRewardType() {
+      this.rewardType = (this.rewardType + 1) % 3
+    },
     handleDealReward(sym) {
       if (!this.marketData.length || !Number(this.marketData[0])  || !this.nowMarket.getNum1) {
         return `0.0000 ${sym === 'sym1'? this.thisMarket.symbol1 : this.thisMarket.symbol0}`;
@@ -295,7 +343,7 @@ export default {
         if (!list.length) {
           return
         }
-        console.log(list)
+        // console.log(list)
         const symbol0 = list[0].bal0.split(' ');
         const symbol1 = list[0].bal1.split(' ');
         const newArr = [
@@ -344,7 +392,7 @@ export default {
   border: 1px solid #e3e3e3;
   margin-top: 40px;
   border-radius: 20px;
-  padding: 20px 40px;
+  padding: 20px 30px 20px 40px;
   font-size: 26px;
   overflow: hidden;
 }
