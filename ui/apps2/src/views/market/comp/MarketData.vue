@@ -50,7 +50,7 @@
           <span :class="{'green': parseFloat(sym0Reward) > 0,
                          'red': parseFloat(sym0Reward) < 0}"
             >{{ sym0Reward }}</span>
-          <span class="tip">({{ $t('market.pl') }}: 
+          <span class="tip">(
             <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
               {{ percent }}%
             </span>)
@@ -60,13 +60,14 @@
           <span :class="{'green': parseFloat(sym1Reward) > 0,
                          'red': parseFloat(sym1Reward) < 0}"
             >{{ sym1Reward }}</span>
-          <span class="tip">({{ $t('market.pl') }}: 
+          <span class="tip">(
             <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
               {{ percent }}%
             </span>)
           </span>
         </span>
         <img  @click="handleChangeRewardType" class="qusTip" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
+        <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
       </div>
       <div class="flexa">
         <span>{{ $t('market.marketTime') }}: </span>
@@ -81,7 +82,6 @@
             {{ percent }}%
           </span>)
         </span>
-        <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
         <!-- <span>{{ JSON.stringify(marketTime) }}</span> -->
       </div>
     </div>
@@ -145,7 +145,7 @@ export default {
         minutes: '00',
         seconds: '00'
       },
-      rewardType: 1, // 0 - 两个币种盈亏 ｜ 1 - sym0本位盈亏 ｜ 2 - sym1本位盈亏
+      rewardType: 0, // 0 - 两个币种盈亏 ｜ 1 - sym0本位盈亏 ｜ 2 - sym1本位盈亏
       showMarketTip: false
     }
   },
@@ -216,7 +216,8 @@ export default {
     sym0Reward() {
       const price = accDiv(parseFloat(this.nowMarket.getNum1), parseFloat(this.nowMarket.getNum2));
       let reward = parseFloat(this.marketRewardSym0) + price * parseFloat(this.marketRewardSym1)
-      reward = toFixed(reward, this.thisMarket.decimal0)
+      const decimal = this.thisMarket.decimal0 > 4 ? 4 : this.thisMarket.decimal0 ;
+      reward = toFixed(reward, decimal)
       if (Number(reward) > 0) {
         reward = `+${reward}`
       }
@@ -225,7 +226,8 @@ export default {
     sym1Reward() {
       const price = accDiv(parseFloat(this.nowMarket.getNum1), parseFloat(this.nowMarket.getNum2));
       let reward = parseFloat(this.marketRewardSym0) / price + parseFloat(this.marketRewardSym1)
-      reward = toFixed(reward, this.thisMarket.decimal1)
+      const decimal = this.thisMarket.decimal1 > 4 ? 4 : this.thisMarket.decimal1 ;
+      reward = toFixed(reward, decimal)
       if (Number(reward) > 0) {
         reward = `+${reward}`
       }
@@ -256,11 +258,13 @@ export default {
       if (sym === 'sym1') {
         const sym1 = accSub(parseFloat(this.nowMarket.getNum2), this.marketData[1]);
         const t = sym1 > 0 ? '+' : ''
-        return `${t}${toFixed(sym1, this.thisMarket.decimal1)} ${this.thisMarket.symbol1}`
+        const decimal = this.thisMarket.decimal1 > 4 ? 4 : this.thisMarket.decimal1 ;
+        return `${t}${toFixed(sym1, decimal)} ${this.thisMarket.symbol1}`
       }
       const t = sym0 > 0 ? '+' : ''
       const sym0 = accSub(parseFloat(this.nowMarket.getNum1), this.marketData[0]);
-      return `${t}${toFixed(sym0, this.thisMarket.decimal0)} ${this.thisMarket.symbol0}`
+      const decimal = this.thisMarket.decimal0 > 4 ? 4 : this.thisMarket.decimal0 ;
+      return `${t}${toFixed(sym0, decimal)} ${this.thisMarket.symbol0}`
     },
     handleGetTime() {
       clearTimeout(this.timer)

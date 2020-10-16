@@ -25,6 +25,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import { mapState } from 'vuex';
 import {toLocalTime, toBrowser} from '@/utils/public'
 export default {
@@ -56,8 +57,11 @@ export default {
     }
   },
   methods: {
-    handleToLocalTime(t) {
-      return toLocalTime(t)
+    handleToLocalTime(time) {
+      let t = moment(`${time}`).valueOf()
+      t += 3600 * 8 * 1000;
+      const oDate = toLocalTime(t)
+      return oDate
     },
     handleToBrowser(id, type = 'tx') {
       toBrowser(id, type)
