@@ -42,6 +42,9 @@
       <div @click="handleTo('dmd')">
         <Dmd  ref="dmd" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
+      <div @click="handleTo('time')">
+        <Time  ref="time" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
     </div>
 
     <el-dialog
@@ -65,6 +68,7 @@ import Guns from './comp/Guns';
 import Loop from './comp/Loop';
 import Pdd from './comp/Pdd';
 import YfcDss from './comp/YfcDss';
+import Time from './comp/Time';
 import { EosModel } from '@/utils/eos';
 
 export default {
@@ -80,6 +84,7 @@ export default {
     Loop,
     Pdd,
     YfcDss,
+    Time,
   },
   props: {
     marketLists: {
@@ -118,7 +123,8 @@ export default {
       const loop = this.$refs.loop ? Number(this.$refs.loop.aboutEos || 0) : 0;
       const pdd = this.$refs.pdd ? Number(this.$refs.pdd.aboutEos || 0) : 0;
       const yfcDss = this.$refs.yfcDss ? Number(this.$refs.yfcDss.aboutEos || 0) : 0;
-      n = dss + dfsMiner + yfc + dbc + dmd + guns + loop + pdd + yfcDss + n;
+      const time = this.$refs.time ? Number(this.$refs.time.aboutEos || 0) : 0;
+      n = dss + dfsMiner + yfc + dbc + dmd + guns + loop + pdd + yfcDss + time + n;
       this.allReward = n.toFixed(4);
       this.allRewardTimer = setTimeout(() => {
         this.handleGetAll()
@@ -162,6 +168,10 @@ export default {
         location.href = 'https://yfc.one/vault';
         return
       }
+      if (name === 'time') {
+        location.href = 'https://timemine.xloot.io';
+        return
+      }
       
       this.$router.push({name: name})
     },
@@ -175,7 +185,8 @@ export default {
       const loop = this.$refs.loop.handleGetActions()
       const pdd = this.$refs.pdd.handleGetActions()
       const yfcDss = this.$refs.yfcDss.handleGetActions()
-      const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop, ...pdd, ...yfcDss];
+      const time = this.$refs.time.handleGetActions()
+      const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop, ...pdd, ...yfcDss, ...time];
       this.allActions = tArr;
       if (this.allActions.length <= 10) { // 10条以内
         // console.log(this.allActions.length)

@@ -136,6 +136,10 @@ export default {
       }
       this.loading = false;
       const list = result.data || [];
+      let totalBuy = 0;
+      let totalGetBuy = 0;
+      let totalSell = 0;
+      let totalGetSell = 0;
       list.forEach(v => {
         const t = Number(v.utcTime + '000') + 8 * 3600 * 1000;
         const time = toLocalTime(t)
@@ -144,10 +148,20 @@ export default {
         const price1 = parseFloat(v.amountOut) / parseFloat(v.amountIn);
         this.$set(v, 'price0', price0.toFixed(6));
         this.$set(v, 'price1', price1.toFixed(6));
-        this.$set(v, 'exRate', true);
+        this.$set(v, 'exRate', false);
         this.$set(v, 'sym0', v.amountIn.split(' ')[1]);
         this.$set(v, 'sym1', v.amountOut.split(' ')[1]);
+
+        if (this.thisMarket.symbol0 === v.amountIn.split(' ')[1]) {
+          totalBuy += parseFloat(v.amountIn)
+          totalGetBuy += parseFloat(v.amountOut)
+        } else {
+          totalSell += parseFloat(v.amountOut)
+          totalGetSell += parseFloat(v.amountIn)
+        }
       })
+      console.log('买入消耗EOS = ', totalBuy.toFixed(4), '获得TIME = ', totalGetBuy.toFixed(8))
+      console.log('卖出获得EOS = ', totalSell.toFixed(4), '转出TIME = ', totalGetSell.toFixed(8))
       this.hisList = list;
     },
     handleClose() {

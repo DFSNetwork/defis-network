@@ -36,3 +36,47 @@ export function timeApy(market, type, pool) {
   }
   return 0
 }
+
+
+export function timeNum(market, userLP, rankWeight) {
+  const mid = market.mid;
+  const timeList = store.state.config.timeList; // TIME LP挖矿列表
+  const li = timeList.find(v => v.id == mid) || {};
+  const nowTime = Date.parse(new Date()) / 1000;
+  const sT = nowTime - userLP.beginTime; // 持续时间
+  if (!li.id || sT <= 0 || parseFloat(li.max_supply) <= parseFloat(li.supply)) {
+    return 0
+  } // || sT <= 0
+  try {
+    const times = Math.ceil(sT / li.halftime);
+    const lamp = Math.pow(0.5,times); // 衰减系数
+    const secGet = parseFloat(li.max_supply) * lamp / 2 / 604800;
+    const num = secGet * sT * (parseInt(userLP.liq_bal0) / market.liquidity_token) * rankWeight.constant;
+    return num
+
+  } catch (error) {
+    console.log(error)
+  }
+  return 0
+}
+
+
+export function timeDssNum(li, userLP, rankWeight, allStaked) {
+  const nowTime = Date.parse(new Date()) / 1000;
+  const sT = nowTime - userLP.beginTime; // 持续时间
+  if (!li.id || sT <= 0 || parseFloat(li.max_supply) <= parseFloat(li.supply)) {
+    return 0
+  } // || sT <= 0
+  try {
+    const pools = [0.5333,0.7,0.7333,0.8,1];
+    const uPool = pools[userLP.pool]
+    const times = Math.ceil(sT / li.halftime);
+    const lamp = Math.pow(0.5,times); // 衰减系数
+    const secGet = parseFloat(li.max_supply) * lamp / 2 / 604800;
+    const num = secGet * sT * (parseFloat(userLP.liq_bal0) / parseFloat(allStaked.stackasset)) * rankWeight.constant * uPool;
+    return num
+  } catch (error) {
+    console.log(error)
+  }
+  return 0
+}
