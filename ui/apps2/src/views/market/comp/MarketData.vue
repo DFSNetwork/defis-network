@@ -36,14 +36,37 @@
       </div> -->
       <div class="flexa">
         <span>{{ $t('market.marketReward') }}: </span>
-        <span :class="{'green': sym0AndSy1 ? parseFloat(marketRewardSym0) > 0 : parseFloat(marketRewardSym1) > 0,
-                       'red': sym0AndSy1 ? parseFloat(marketRewardSym0) < 0 : parseFloat(marketRewardSym1) < 0}">
-          {{ sym0AndSy1 ? marketRewardSym0 : marketRewardSym1 }}
+        <span v-if="rewardType === 0">
+          <span :class="{'green': sym0AndSy1 ? parseFloat(marketRewardSym0) > 0 : parseFloat(marketRewardSym1) > 0,
+                        'red': sym0AndSy1 ? parseFloat(marketRewardSym0) < 0 : parseFloat(marketRewardSym1) < 0}">
+            {{ sym0AndSy1 ? marketRewardSym0 : marketRewardSym1 }}
+          </span>
+          <span :class="{'green':  sym0AndSy1 ? parseFloat(marketRewardSym1) > 0 : parseFloat(marketRewardSym0) > 0,
+                        'red':  sym0AndSy1 ? parseFloat(marketRewardSym1) < 0 : parseFloat(marketRewardSym0) < 0}">
+            ({{ sym0AndSy1 ? marketRewardSym1 : marketRewardSym0 }})
+          </span>
         </span>
-        <span :class="{'green':  sym0AndSy1 ? parseFloat(marketRewardSym1) > 0 : parseFloat(marketRewardSym0) > 0,
-                       'red':  sym0AndSy1 ? parseFloat(marketRewardSym1) < 0 : parseFloat(marketRewardSym0) < 0}">
-          ({{ sym0AndSy1 ? marketRewardSym1 : marketRewardSym0 }})
+        <span v-else-if="rewardType === 1">
+          <span :class="{'green': parseFloat(sym0Reward) > 0,
+                         'red': parseFloat(sym0Reward) < 0}"
+            >{{ sym0Reward }}</span>
+          <span class="tip">(
+            <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
+              {{ percent }}%
+            </span>)
+          </span>
         </span>
+        <span v-else>
+          <span :class="{'green': parseFloat(sym1Reward) > 0,
+                         'red': parseFloat(sym1Reward) < 0}"
+            >{{ sym1Reward }}</span>
+          <span class="tip">(
+            <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
+              {{ percent }}%
+            </span>)
+          </span>
+        </span>
+        <img  @click="handleChangeRewardType" class="qusTip" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
         <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
       </div>
       <div class="flexa">
@@ -54,10 +77,10 @@
             mins: marketTime.minutes,
             secs: marketTime.seconds
           }) }}</span>
-        <span class="tip">（{{ $t('market.pl') }}: 
+        <span class="tip" v-if="rewardType === 0">({{ $t('market.pl') }}: 
           <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
             {{ percent }}%
-          </span>）
+          </span>)
         </span>
         <!-- <span>{{ JSON.stringify(marketTime) }}</span> -->
       </div>
@@ -122,6 +145,7 @@ export default {
         minutes: '00',
         seconds: '00'
       },
+      rewardType: 0, // 0 - 两个币种盈亏 ｜ 1 - sym0本位盈亏 ｜ 2 - sym1本位盈亏
       showMarketTip: false
     }
   },
@@ -189,6 +213,26 @@ export default {
     sym0AndSy1() {
       return parseFloat(this.marketRewardSym0) > parseFloat(this.marketRewardSym1)
     },
+    sym0Reward() {
+      const price = accDiv(parseFloat(this.nowMarket.getNum1), parseFloat(this.nowMarket.getNum2));
+      let reward = parseFloat(this.marketRewardSym0) + price * parseFloat(this.marketRewardSym1)
+      const decimal = this.thisMarket.decimal0 > 4 ? 4 : this.thisMarket.decimal0 ;
+      reward = toFixed(reward, decimal)
+      if (Number(reward) > 0) {
+        reward = `+${reward}`
+      }
+      return `${reward} ${this.thisMarket.symbol0}`
+    },
+    sym1Reward() {
+      const price = accDiv(parseFloat(this.nowMarket.getNum1), parseFloat(this.nowMarket.getNum2));
+      let reward = parseFloat(this.marketRewardSym0) / price + parseFloat(this.marketRewardSym1)
+      const decimal = this.thisMarket.decimal1 > 4 ? 4 : this.thisMarket.decimal1 ;
+      reward = toFixed(reward, decimal)
+      if (Number(reward) > 0) {
+        reward = `+${reward}`
+      }
+      return  `${reward} ${this.thisMarket.symbol1}`
+    },
     percent() {
       if (!this.marketData.length || !this.nowMarket.getNum1) {
         return '0.0000';
@@ -204,6 +248,9 @@ export default {
     }
   },
   methods: {
+    handleChangeRewardType() {
+      this.rewardType = (this.rewardType + 1) % 3
+    },
     handleDealReward(sym) {
       if (!this.marketData.length || !Number(this.marketData[0])  || !this.nowMarket.getNum1) {
         return `0.0000 ${sym === 'sym1'? this.thisMarket.symbol1 : this.thisMarket.symbol0}`;
@@ -211,11 +258,13 @@ export default {
       if (sym === 'sym1') {
         const sym1 = accSub(parseFloat(this.nowMarket.getNum2), this.marketData[1]);
         const t = sym1 > 0 ? '+' : ''
-        return `${t}${toFixed(sym1, this.thisMarket.decimal1)} ${this.thisMarket.symbol1}`
+        const decimal = this.thisMarket.decimal1 > 4 ? 4 : this.thisMarket.decimal1 ;
+        return `${t}${toFixed(sym1, decimal)} ${this.thisMarket.symbol1}`
       }
       const t = sym0 > 0 ? '+' : ''
       const sym0 = accSub(parseFloat(this.nowMarket.getNum1), this.marketData[0]);
-      return `${t}${toFixed(sym0, this.thisMarket.decimal0)} ${this.thisMarket.symbol0}`
+      const decimal = this.thisMarket.decimal0 > 4 ? 4 : this.thisMarket.decimal0 ;
+      return `${t}${toFixed(sym0, decimal)} ${this.thisMarket.symbol0}`
     },
     handleGetTime() {
       clearTimeout(this.timer)
@@ -295,7 +344,7 @@ export default {
         if (!list.length) {
           return
         }
-        console.log(list)
+        // console.log(list)
         const symbol0 = list[0].bal0.split(' ');
         const symbol1 = list[0].bal1.split(' ');
         const newArr = [
@@ -344,7 +393,7 @@ export default {
   border: 1px solid #e3e3e3;
   margin-top: 40px;
   border-radius: 20px;
-  padding: 20px 40px;
+  padding: 20px 30px 20px 40px;
   font-size: 26px;
   overflow: hidden;
 }
