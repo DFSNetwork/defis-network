@@ -287,7 +287,7 @@ export default {
     },
     timeApy() {
       const pool = this.marketLists.find(v => v.mid === 530)
-      let apy = timeApy(this.thisMarket.mid, 'year', pool)
+      let apy = timeApy(this.thisMarket, 'year', pool)
       if (Number(apy)) {
         return apy;
       }

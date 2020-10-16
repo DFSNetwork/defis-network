@@ -257,7 +257,7 @@ export default {
           }
 
           // TIME 挖矿年化计算
-          const midTimeApy = timeApy(market.mid, 'year' ,timePool)
+          const midTimeApy = timeApy(market, 'year' ,timePool)
           if (Number(midTimeApy)) {
             feesApr.timeApy = midTimeApy;
             count = accAdd(count, midTimeApy)
