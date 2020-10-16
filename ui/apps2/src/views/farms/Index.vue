@@ -53,7 +53,8 @@
       </span>
     </div>
     <div class="proLists">
-      <TimeRank />
+      <TimeRank :marketLists="marketLists"/>
+      <LootRank :marketLists="marketLists"/>
     </div>
 
     <el-dialog
@@ -80,6 +81,7 @@ import YfcDss from './comp/YfcDss';
 import MyTime from './comp/MyTime';
 // tools
 import TimeRank from './toolsComp/TimeRank';
+import LootRank from './toolsComp/LootRank';
 
 import { EosModel } from '@/utils/eos';
 
@@ -100,6 +102,7 @@ export default {
 
     // tools
     TimeRank,
+    LootRank,
   },
   props: {
     marketLists: {

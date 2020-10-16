@@ -2,7 +2,7 @@
   <div class="timeRank">
     <div class="lists flexc">
       <div class="coinDiv flexc">
-        <img class="coin" src="https://apps.defis.network/static/coin/xpettimecore-time.png?v=2" alt="">
+        <img class="coin" src="https://apps.defis.network/static/coin/lootglobcore-loot.png?v=2" alt="">
       </div>
       <div class="f1">
         <div class="projectName flexb">
@@ -14,7 +14,7 @@
           <span></span>
         </div>
         <div class="about">
-          <span>我的Token：{{ userMine['530'] ? parseInt(userMine['530'].liq_bal0) : 0 }}</span>
+          <span>我的Token：{{ userMine['444'] ? parseInt(userMine['444'].liq_bal0) : 0 }}</span>
         </div>
       </div>
     </div>
@@ -27,7 +27,7 @@ import { EosModel } from '@/utils/eos';
 import { toFixed } from '@/utils/public';
 import { dealToken, sellToken } from '@/utils/logic';
 export default {
-  name: 'toolsTimeRank',
+  name: 'toolsLootRank',
   data() {
     return {
       rank: 0,
@@ -82,7 +82,7 @@ export default {
       const params = {
         "json":true,
         "code":"loottimemine",
-        "scope": 530,
+        "scope": 444,
         "table":"miners",
         "index_position":"2",
         "key_type":"i64",
@@ -105,7 +105,7 @@ export default {
       const params = {
         "json":true,
         "code":"loottimemine",
-        "scope": 530,
+        "scope": 444,
         "table":"miners",
         "lower_bound": ` ${name}`,
         "upper_bound": ` ${name}`,
@@ -118,7 +118,8 @@ export default {
         if (!rows.length) {
           return
         }
-        this.userMine[`530`] = rows[0];
+        this.userMine[`444`] = rows[0];
+        // console.log(rows[0])
       })
     },
     // 计算相差多少
@@ -126,10 +127,11 @@ export default {
       if (!this.rankList.length || !this.marketLists.length) {
         return 
       }
-      const market = this.marketLists.find(v => v.mid === 530)
-      const rank75 = this.rankList[74];
-      const uLp = this.userMine['530'] || {};
+      const market = this.marketLists.find(v => v.mid === 444)
+      const rank75 = this.rankList[75];
+      const uLp = this.userMine['444'] || {};
       const tToken = parseInt(rank75.liq_bal0) - parseInt(uLp.liq_bal0 || 0)
+      // console.log(tToken)
       if (tToken < 0) {
         this.handleSell(market, Math.abs(tToken))
         return
@@ -141,6 +143,7 @@ export default {
         sellToken: Math.abs(tToken)
       }
       const out = sellToken(inData)
+      // console.log(out)
       const pay0 = toFixed(out.getNum1, market.decimal0)
       const pay1 = toFixed(out.getNum2, market.decimal1)
       this.handleDeposit(market, pay0, pay1)
