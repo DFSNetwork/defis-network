@@ -95,6 +95,7 @@ export default {
         if (!rows.length) {
           return
         }
+        // console.log(rows)
         this.rankList = rows;
         this.handleGetRank();
       })
@@ -127,7 +128,7 @@ export default {
         return 
       }
       const market = this.marketLists.find(v => v.mid === 530)
-      const rank75 = this.rankList[74];
+      const rank75 = this.rankList[50];
       const uLp = this.userMine['530'] || {};
       const tToken = parseInt(rank75.liq_bal0) - parseInt(uLp.liq_bal0 || 0)
       if (tToken < 0) {
