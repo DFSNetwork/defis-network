@@ -76,11 +76,11 @@
             mins: marketTime.minutes,
             secs: marketTime.seconds
           }) }}</span>
-        <!-- <span class="tip">({{ $t('market.pl') }}: 
+        <span class="tip" v-if="rewardType === 0">({{ $t('market.pl') }}: 
           <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
             {{ percent }}%
           </span>)
-        </span> -->
+        </span>
         <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
         <!-- <span>{{ JSON.stringify(marketTime) }}</span> -->
       </div>
@@ -217,15 +217,12 @@ export default {
       const price = accDiv(parseFloat(this.nowMarket.getNum1), parseFloat(this.nowMarket.getNum2));
       let reward = parseFloat(this.marketRewardSym0) + price * parseFloat(this.marketRewardSym1)
       reward = toFixed(reward, this.thisMarket.decimal0)
-      console.log(parseFloat(this.marketRewardSym0), price, parseFloat(this.marketRewardSym1))
       if (Number(reward) > 0) {
         reward = `+${reward}`
       }
       return `${reward} ${this.thisMarket.symbol0}`
     },
     sym1Reward() {
-      console.log(this.marketRewardSym0)
-      console.log(this.marketRewardSym1)
       const price = accDiv(parseFloat(this.nowMarket.getNum1), parseFloat(this.nowMarket.getNum2));
       let reward = parseFloat(this.marketRewardSym0) / price + parseFloat(this.marketRewardSym1)
       reward = toFixed(reward, this.thisMarket.decimal1)
