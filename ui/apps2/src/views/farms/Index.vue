@@ -15,6 +15,9 @@
       <span class="right green" v-loading="allClaiming" @click="handleRegLength()">一键领取</span>
     </div>
     <div class="proLists">
+      <div @click="handleTo('time')">
+        <Time  ref="time" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      </div>
       <div @click="handleTo('pools')">
         <DfsMiner ref="dfsMiner" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
@@ -41,9 +44,6 @@
       </div>
       <div @click="handleTo('dmd')">
         <Dmd  ref="dmd" :marketLists="marketLists" :allClaiming="allClaiming"/>
-      </div>
-      <div @click="handleTo('time')">
-        <Time  ref="time" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
     </div>
 
