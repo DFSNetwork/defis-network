@@ -128,7 +128,7 @@ export default {
         return 
       }
       const market = this.marketLists.find(v => v.mid === 444)
-      const rank75 = this.rankList[50];
+      const rank75 = this.rankList[74];
       const uLp = this.userMine['444'] || {};
       const tToken = parseInt(rank75.liq_bal0) - parseInt(uLp.liq_bal0 || 0)
       // console.log(tToken)
