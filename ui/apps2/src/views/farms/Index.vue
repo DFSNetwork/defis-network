@@ -15,8 +15,8 @@
       <span class="right green" v-loading="allClaiming" @click="handleRegLength()">一键领取</span>
     </div>
     <div class="proLists">
-      <div @click="handleTo('time')">
-        <MyTime  ref="time" :marketLists="marketLists" :allClaiming="allClaiming"/>
+      <div @click="handleTo('lootTime')">
+        <MyTime  ref="lootTime" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('pools')">
         <DfsMiner ref="dfsMiner" :marketLists="marketLists" :allClaiming="allClaiming"/>
@@ -47,6 +47,15 @@
       </div>
     </div>
 
+    <div class="farmsTitle flexb">
+      <span>
+        <span class="act">快捷工具</span>
+      </span>
+    </div>
+    <div class="proLists">
+      <TimeRank />
+    </div>
+
     <el-dialog
       class="myDialog"
       :show-close="false"
@@ -69,6 +78,9 @@ import Loop from './comp/Loop';
 import Pdd from './comp/Pdd';
 import YfcDss from './comp/YfcDss';
 import MyTime from './comp/MyTime';
+// tools
+import TimeRank from './toolsComp/TimeRank';
+
 import { EosModel } from '@/utils/eos';
 
 export default {
@@ -85,6 +97,9 @@ export default {
     Pdd,
     YfcDss,
     MyTime,
+
+    // tools
+    TimeRank,
   },
   props: {
     marketLists: {
@@ -123,8 +138,8 @@ export default {
       const loop = this.$refs.loop ? Number(this.$refs.loop.aboutEos || 0) : 0;
       const pdd = this.$refs.pdd ? Number(this.$refs.pdd.aboutEos || 0) : 0;
       const yfcDss = this.$refs.yfcDss ? Number(this.$refs.yfcDss.aboutEos || 0) : 0;
-      const time = this.$refs.time ? Number(this.$refs.time.aboutEos || 0) : 0;
-      n = dss + dfsMiner + yfc + dbc + dmd + guns + loop + pdd + yfcDss + time + n;
+      const lootTime = this.$refs.lootTime ? Number(this.$refs.lootTime.aboutEos || 0) : 0;
+      n = dss + dfsMiner + yfc + dbc + dmd + guns + loop + pdd + yfcDss + lootTime + n;
       this.allReward = n.toFixed(4);
       this.allRewardTimer = setTimeout(() => {
         this.handleGetAll()
@@ -168,7 +183,7 @@ export default {
         location.href = 'https://yfc.one/vault';
         return
       }
-      if (name === 'time') {
+      if (name === 'lootTime') {
         location.href = 'https://timemine.xloot.io';
         return
       }
@@ -185,8 +200,8 @@ export default {
       const loop = this.$refs.loop.handleGetActions()
       const pdd = this.$refs.pdd.handleGetActions()
       const yfcDss = this.$refs.yfcDss.handleGetActions()
-      const time = this.$refs.time.handleGetActions()
-      const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop, ...pdd, ...yfcDss, ...time];
+      const lootTime = this.$refs.lootTime.handleGetActions()
+      const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop, ...pdd, ...yfcDss, ...lootTime];
       this.allActions = tArr;
       if (this.allActions.length <= 10) { // 10条以内
         // console.log(this.allActions.length)

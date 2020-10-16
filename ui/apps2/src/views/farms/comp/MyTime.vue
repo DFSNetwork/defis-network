@@ -26,7 +26,7 @@ import { toFixed, toLocalTime, accAdd, accSub, accDiv } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
 import { timeNum, timeDssNum } from '@/utils/minerLogic';
 export default {
-  name: 'time',
+  name: 'lootTime',
   props: {
     marketLists: {
       type: Array,
