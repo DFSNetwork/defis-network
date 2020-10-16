@@ -16,7 +16,7 @@
     </div>
     <div class="proLists">
       <div @click="handleTo('time')">
-        <Time  ref="time" :marketLists="marketLists" :allClaiming="allClaiming"/>
+        <MyTime  ref="time" :marketLists="marketLists" :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('pools')">
         <DfsMiner ref="dfsMiner" :marketLists="marketLists" :allClaiming="allClaiming"/>
@@ -68,7 +68,7 @@ import Guns from './comp/Guns';
 import Loop from './comp/Loop';
 import Pdd from './comp/Pdd';
 import YfcDss from './comp/YfcDss';
-import Time from './comp/Time';
+import MyTime from './comp/MyTime';
 import { EosModel } from '@/utils/eos';
 
 export default {
@@ -84,7 +84,7 @@ export default {
     Loop,
     Pdd,
     YfcDss,
-    Time,
+    MyTime,
   },
   props: {
     marketLists: {
