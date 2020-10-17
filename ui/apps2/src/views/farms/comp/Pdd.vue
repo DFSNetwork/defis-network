@@ -153,7 +153,6 @@ export default {
       const actions = [];
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
-      console.log(this.newLists)
       this.newLists.forEach(v => {
         if (!v.showReward || !Number(v.showReward)) {
           return

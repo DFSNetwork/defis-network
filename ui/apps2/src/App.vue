@@ -278,7 +278,7 @@ export default {
           "scope": v.mineAcc,
           "table": "ponds",
           "json": true,
-          limit: 100,
+          limit: 1000,
         }
         EosModel.getTableRows(params, (res) => {
           const rows = res.rows || []
