@@ -6,7 +6,7 @@
       </div>
       <div class="f1">
         <div class="projectName flexb">
-          <span>TIME/EOS抢座位</span>
+          <span>LOOT/EOS抢座位</span>
           <span class="claim green" @click.stop="handleDealToken">一键抢占</span>
         </div>
         <div class="plan">
