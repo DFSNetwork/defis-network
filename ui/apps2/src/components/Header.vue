@@ -145,7 +145,7 @@ export default {
         return
       }
       if (name === 'time') {
-        location.href = 'https://timemine.xloot.io/'
+        location.href = 'https://xpet-game-1251625178.file.myqcloud.com/timemine/index.html'
         return
       }
       if (name === 'loop') {
