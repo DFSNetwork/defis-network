@@ -81,6 +81,7 @@ export default {
   },
   mounted() {
     this.handleGetTimePoolMiners()
+    this.planRank = localStorage.getItem(`rank_mid_${this.mid}`) ? Number(localStorage.getItem(`rank_mid_${this.mid}`)) : 75;
   },
   beforeDestroy() {
     clearTimeout(this.timer)
@@ -241,6 +242,7 @@ export default {
       this.showSure = true;
     },
     handleSure() {
+      localStorage.setItem(`rank_mid_${this.mid}`, this.planRank)
       setTimeout(() => {
         this.handleGetTimePoolMiners();
         this.handleGetUser();
