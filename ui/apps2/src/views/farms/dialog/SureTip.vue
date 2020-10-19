@@ -93,10 +93,10 @@ export default {
     handleReg() {
       const params = this.params;
       const token = params.token;
+      const market = this.params.market;
+      const pay0 = params.pay0;
+      const pay1 = params.pay1;
       if (token > 0) {
-        const market = this.params.market;
-        const pay0 = params.pay0;
-        const pay1 = params.pay1;
         const bal0 = params.bal0;
         const bal1 = params.bal1;
         if (Number(pay0) > Number(bal0) || Number(pay1) > Number(bal1)) {
@@ -115,6 +115,24 @@ export default {
           return false
         }
         if (!Number(pay1)) {
+          const min = 1 / 10 ** market.decimal1;
+          this.$message({
+            message: `至少${min.toFixed(market.decimal1)} ${market.symbol1}`,
+            type: 'error'
+          });
+          return false
+        }
+      }
+      if (token < 0) {
+        if (!Number(pay0)) {
+          const min = 1 / 10 ** market.decimal0;
+          this.$message({
+            message: `至少${min.toFixed(market.decimal0)} EOS`,
+            type: 'error'
+          });
+          return false
+        }
+        if (Number(pay1)) {
           const min = 1 / 10 ** market.decimal1;
           this.$message({
             message: `至少${min.toFixed(market.decimal1)} ${market.symbol1}`,
