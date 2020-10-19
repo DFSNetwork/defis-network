@@ -55,6 +55,8 @@
     <div class="proLists">
       <TimeRank :marketLists="marketLists"/>
       <LootRank :marketLists="marketLists"/>
+      <DfsRank :marketLists="marketLists"/>
+      <YfcRank :marketLists="marketLists"/>
     </div>
 
     <el-dialog
@@ -82,6 +84,8 @@ import MyTime from './comp/MyTime';
 // tools
 import TimeRank from './toolsComp/TimeRank';
 import LootRank from './toolsComp/LootRank';
+import DfsRank from './toolsComp/DfsRank';
+import YfcRank from './toolsComp/YfcRank';
 
 import { EosModel } from '@/utils/eos';
 
@@ -103,6 +107,8 @@ export default {
     // tools
     TimeRank,
     LootRank,
+    DfsRank,
+    YfcRank,
   },
   props: {
     marketLists: {

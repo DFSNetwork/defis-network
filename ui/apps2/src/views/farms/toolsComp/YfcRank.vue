@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-      mid: '530',
+      mid: '329',
       rank: 0,
       userMine: {},
       rankList: [],

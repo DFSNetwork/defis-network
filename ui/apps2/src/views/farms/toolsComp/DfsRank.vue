@@ -56,7 +56,7 @@ export default {
   },
   data() {
     return {
-      mid: '530',
+      mid: '39',
       rank: 0,
       userMine: {},
       rankList: [],
@@ -178,7 +178,7 @@ export default {
         "table":"miners",
         "index_position":"2",
         "key_type":"i64",
-        "limit":150,
+        "limit": 150,
         "reverse":true,
         "show_payer":false
       }

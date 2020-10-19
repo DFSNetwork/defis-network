@@ -2,23 +2,22 @@
   <div class="timeRank">
     <div class="lists flexs">
       <div class="coinDiv flexc">
-        <img class="coin" src="https://apps.defis.network/static/coin/lootglobcore-loot.png?v=2" alt="">
+        <img class="coin" :src="market.sym1Data.imgUrl" alt="">
       </div>
       <div class="f1">
         <div class="projectName flexb">
-          <span>LOOT/EOS抢座位</span>
+          <span>{{ market.symbol1 }}/{{ market.symbol0 }}抢座位</span>
           <span class="claim green" @click.stop="handleDealToken">一键抢占</span>
         </div>
         <div class="plan">
           <span class="flexa">
             <span>预约排名：</span>
-            <el-input-number v-model="planRank" :min="51" :max="100" label="描述文字"></el-input-number>
-            <!-- <input type="number" min="51" max="100"> -->
+            <el-input-number v-model="planRank" :min="1" :max="150" label="描述文字"></el-input-number>
           </span>
           <span>
             <el-slider
-              :min="51"
-              :max="100"
+              :min="1"
+              :max="150"
               v-model="planRank">
             </el-slider>
           </span>
@@ -62,7 +61,9 @@ export default {
       userMine: {},
       rankList: [],
       planRank: 75,
-      market: {},
+      market: {
+        sym1Data: {}
+      },
       bal0: '0.0000',
       bal1: '0.0000',
 
@@ -99,6 +100,9 @@ export default {
     },
     marketLists: {
       handler: function listen(newVal) {
+        if (!newVal.length) {
+          return
+        }
         this.market = newVal.find(v => v.mid == this.mid) || {}
         if (!this.market.mid) {
           return
@@ -162,7 +166,7 @@ export default {
       if (rankIndex !== -1) {
         this.rank = rankIndex + 1;
       } else {
-        this.rank = '100+'
+        this.rank = '150+'
       }
     },
     // 获取排名
@@ -174,7 +178,7 @@ export default {
         "table":"miners",
         "index_position":"2",
         "key_type":"i64",
-        "limit":100,
+        "limit": 150,
         "reverse":true,
         "show_payer":false
       }
