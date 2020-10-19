@@ -94,22 +94,22 @@
       <div class="users">
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team3.jpeg" alt=""></div>
-          <div class="name">Judy Lee</div>
+          <div class="name">Judy.Q</div>
           <div class="tip">Smart Contract Dev</div>
         </div>
-        <!-- <div class="user">
-          <div class="userImg"><img src="@/assets/img/team/team7.jpeg" alt=""></div>
-          <div class="name">Jay</div>
-          <div class="tip">Marketing</div>
-        </div> -->
         <div class="user">
-          <div class="userImg"><img src="@/assets/img/team/team6.jpeg" alt=""></div>
-          <div class="name">Ayana Lam</div>
-          <div class="tip">Project Manager</div>
+          <div class="userImg"><img src="@/assets/img/team/team7.jpeg" alt=""></div>
+          <div class="name">Jerry.D</div>
+          <div class="tip">Smart Contract Dev</div>
         </div>
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team1.jpeg" alt=""></div>
-          <div class="name">Jaysun Xu</div>
+          <div class="name">Jack.D</div>
+          <div class="tip">Smart Contract Dev</div>
+        </div>
+        <div class="user">
+          <div class="userImg"><img src="@/assets/img/team/team6.jpeg" alt=""></div>
+          <div class="name">Ayana Lam</div>
           <div class="tip">Project Manager</div>
         </div>
         <div class="user">
@@ -127,11 +127,6 @@
           <div class="name">Jennifer.D</div>
           <div class="tip">UI & Marketing</div>
         </div>
-        <!-- <div class="user">
-          <div class="userImg"><img src="@/assets/img/team/team5.jpeg" alt=""></div>
-          <div class="name">Professor Vincent</div>
-          <div class="tip">Consultant</div>
-        </div> -->
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team5.jpeg" alt=""></div>
           <div class="name">Opa</div>
