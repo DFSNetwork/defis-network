@@ -132,7 +132,7 @@ export default {
           });
           return false
         }
-        if (Number(pay1)) {
+        if (!Number(pay1)) {
           const min = 1 / 10 ** market.decimal1;
           this.$message({
             message: `至少${min.toFixed(market.decimal1)} ${market.symbol1}`,
