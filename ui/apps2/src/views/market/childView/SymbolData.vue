@@ -558,7 +558,7 @@ export default {
         "table": "miners",
         // "lower_bound": " dfsdeveloper",
         // "upper_bound": " dfsdeveloper",
-        limit: 2000,
+        limit: 3000,
         "json": true,
       }
       if (type === 'user') {
