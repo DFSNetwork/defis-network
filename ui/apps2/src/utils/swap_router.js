@@ -1,4 +1,5 @@
 import { toFixed, accDiv } from './public';
+import store from '@/store';
 // import Worker from './worker'
 // import VueWorker from 'vue-worker'
 class swapRouter {
@@ -196,7 +197,8 @@ class swapRouter {
       _pathsMids.push(mids + '') // 返回所有Mid路径
     })
     // console.log(_pathsMids)
-    return _pathsMids;
+    return [_pathsMids[0]];
+    // return _pathsMids;
   }
 
   //  mids = [], token_in = eosio.token:EOS, amount_in = 10000, type = 'pay' | 'get'

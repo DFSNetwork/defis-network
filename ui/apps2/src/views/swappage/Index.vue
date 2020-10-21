@@ -387,7 +387,12 @@ export default {
   watch: {
     slipPoint: {
       handler: function sl(newVal) {
-        this.slipPointUser = newVal;
+        if (Number(newVal) > 80) {
+          this.$store.dispatch('setSlipPoint', 80)
+          return
+        }
+        const sr = Number(newVal) > 80 ? 80 : newVal
+        this.slipPointUser = sr;
         this.handleInBy(this.tradeInfo.type)
       },
       immediate: true,
