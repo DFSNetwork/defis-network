@@ -23,7 +23,7 @@
           <div class="flexc" :class="{'act': Number(tipRate) === 10}" @click="handleSetSlipPoint(10)">10%</div>
         </div>
         <div class="iptDiv" :class="{'act': Number(tipRate) !== 1 && Number(tipRate) !== 5 && Number(tipRate) !== 10 }">
-          <el-input class="elIpt" v-model="slipRate" @blur="handleBlur" :placeholder="tipRate">
+          <el-input class="elIpt" type="number" v-model="slipRate" @blur="handleBlur" :placeholder="tipRate">
             <template slot="append">%</template>
           </el-input>
         </div>
@@ -84,6 +84,11 @@ export default {
         localStorage.removeItem('inviAcc')
         this.inviAcc = '';
       }
+    },
+    slipRate(newVal) {
+      if (Number(newVal) > 80) {
+        this.slipRate = 80;
+      }
     }
   },
   mounted() {
@@ -128,8 +133,9 @@ export default {
       if (!Number(this.slipRate)) {
         return
       }
-      this.tipRate = this.slipRate;
-      this.$store.dispatch('setSlipPoint', this.slipRate)
+      const sr = Number(this.slipRate) > 80 ? 80 : this.slipRate;
+      this.tipRate = sr;
+      this.$store.dispatch('setSlipPoint', sr)
     }
   }
 }

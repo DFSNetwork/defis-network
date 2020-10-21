@@ -207,7 +207,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { SwapRouter } from '@/utils/swap_router';
+import { SwapRouter, SwapRouterFilter } from '@/utils/swap_router';
 import Tabs from '../index/components/Tabs';
 import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara, getCoin } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
@@ -274,14 +274,6 @@ export default {
       refreshLoading: false,
     }
   },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    }
-  },
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
@@ -290,6 +282,8 @@ export default {
       dfsPrice: state => state.sys.dfsPrice,
       rankInfo: state => state.sys.rankInfo, // 交易对权重列表
       damping: state => state.sys.damping,
+      filterMkLists: state => state.sys.filterMkLists,
+      marketLists: state => state.sys.marketLists,
     }),
     showDetail() {
       return Number(this.payNum) && Number(this.getNum)
@@ -387,7 +381,12 @@ export default {
   watch: {
     slipPoint: {
       handler: function sl(newVal) {
-        this.slipPointUser = newVal;
+        if (Number(newVal) > 80) {
+          this.$store.dispatch('setSlipPoint', 80)
+          return
+        }
+        const sr = Number(newVal) > 80 ? 80 : newVal
+        this.slipPointUser = sr;
         this.handleInBy(this.tradeInfo.type)
       },
       immediate: true,
@@ -400,6 +399,7 @@ export default {
         }
         const newArr = newVal.filter(v => v.contract1 !== 'autopuptoken' && v.contract0 !== 'autopuptoken')
         SwapRouter.init(newArr, this)
+        SwapRouterFilter.init(this.filterMkLists, this)
         const arr = this.handleDealSymArr(newVal)
         this.coinList = arr;
         if (!arr.length) {
@@ -629,7 +629,10 @@ export default {
       const m1 = this.thisMarket1
       const params0 = `${m0.contract}:${m0.symbol}`
       const params1 = `${m1.contract}:${m1.symbol}`
-      const path = SwapRouter.get_paths(params0, params1, inData.type)
+      let path = SwapRouterFilter.get_paths(params0, params1, inData.type)
+      if (!path.length) {
+        path = SwapRouter.get_paths(params0, params1, inData.type)
+      }
       const params = [
         path,
         inData.type === 'pay' ? params0 : params1,
@@ -640,7 +643,10 @@ export default {
         params.push(accMul(inData.getNum, 10 ** this.thisMarket1.decimal))
         params.push(inData.type)
       }
-      const res = SwapRouter.get_amounts_out(...params)
+      let res = SwapRouterFilter.get_amounts_out(...params)
+      if (!res.mid) {
+        res = SwapRouter.get_amounts_out(...params)
+      }
       // console.log(res)
       const payNum = inData.type === 'pay' ? inData.payNum : res.quantity_out.split(' ')[0];
       const getNum = inData.type === 'pay' ? res.quantity_out.split(' ')[0] : inData.getNum;
