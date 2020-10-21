@@ -52,8 +52,6 @@ export default {
       this.handleLogin()
     });
     setTimeout(() => {
-      // this.handleGetWeight()
-      // this.handleGetAprs()
       this.handleGetDfsCurrent()
       this.handleGetDiscount();
       this.handleYfcData();
@@ -176,49 +174,8 @@ export default {
       }
       this.$store.dispatch('setBaseConfig', config)
     },
-    // 获取交易对权重 - 全局取一次
-    // handleGetWeight() {
-    //   const params = {
-    //     code: 'miningpool11',
-    //     scope: 'miningpool11',
-    //     table: 'weights',
-    //     json: true,
-    //     limit: 100
-    //   }
-    //   EosModel.getTableRows(params, (res) => {
-    //     const rows = res.rows || [];
-    //     if (!rows.length) {
-    //       return
-    //     }
-    //     this.$store.dispatch('setWeightList', rows)
-    //   })
-    // },
-    // 获取aprs - 全局一次
-    // handleGetAprs() {
-    //   const params = {
-    //     code: 'miningpool11',
-    //     scope: 'miningpool11',
-    //     table: 'args',
-    //     lower_bound: 'EOS',
-    //     upper_bound: 'EOS',
-    //     // primary_key: 'EOS',
-    //     json: true,
-    //   }
-    //   EosModel.getTableRows(params, (res) => {
-    //     const rows = res.rows || [];
-    //     if (!rows.length) {
-    //       return
-    //     }
-    //     const aprs = rows[0];
-    //     let lastTime = toLocalTime(`${aprs.last_drip}.000+0000`);
-    //     lastTime = moment(lastTime).valueOf();
-    //     aprs.lastTime = lastTime;
-    //     this.$store.dispatch('setAprs', aprs)
-    //   })
-    // },
     // 获取DFS流通量 - 全局区一次
     async handleGetDfsCurrent() {
-      // console.log(this.baseConfig)
       const https = this.baseConfig.node.url;
       const params = {
         code: 'minedfstoken',

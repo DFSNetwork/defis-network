@@ -19,21 +19,9 @@
         <span>{{ $t('market.capital') }}: </span>
         <span v-if="!marketData.length || !Number(marketData[0])" class="tip maxW">
           <span>{{ $t('market.anthorOne') }}</span>
-          <!-- <span v-if="isList" class="green" @click="handleJoin">立即操作</span> -->
         </span>
         <span v-else>{{ `${marketData[0]} ${thisMarket.symbol0}` }} / {{ `${marketData[1]} ${thisMarket.symbol1}` }}</span>
       </div>
-      <!-- <div class="flexa">
-        <span>{{ $t('market.marketReward') }}: </span>
-        <span :class="{'green': marketReward > 0, 'red': marketReward < 0}">{{ marketReward }} </span>
-        <span @click="direction = !direction" class="flexa ml10">
-          <span>{{ direction ? thisMarket.symbol1 : thisMarket.symbol0 }}</span><span
-            class="small">（{{ $t('market.has', {coin: direction ? thisMarket.symbol0 : thisMarket.symbol1}) }}）</span>
-          <img class="changeImg" v-if="direction" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
-          <img class="changeImg" v-else src="@/assets/img/dex/price_switch_icon_green_right.svg" alt="">
-        </span>
-        <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
-      </div> -->
       <div class="flexa">
         <span>{{ $t('market.marketReward') }}: </span>
         <span v-if="rewardType === 0">

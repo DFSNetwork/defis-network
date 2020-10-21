@@ -5,7 +5,16 @@
         <span class="act" @click="showMarketList = true">{{ thisMarket.symbol0 }}-{{ thisMarket.symbol1 }}</span>
         <img class="iconImg" src="@/assets/img/dex/down.svg" alt="">
       </span>
-      <span class="tip rulesTip">{{ $t('dex.nearSeven') }}</span>
+      <div class="tip rulesTip">
+        <div>{{ $t('dex.nearSeven') }}</div>
+      </div>
+    </div>
+    <div class="total flexb">
+      <div class="flexb totalNum">
+        <div>发送：{{ totalBuy }}</div>
+        <div>收到：{{ totalSell }}</div>
+      </div>
+      <div>盈亏：{{ reward }} {{ thisMarket.symbol0 }}</div>
     </div>
     <div class="lists" v-loading="loading">
       <div class="noData tip" v-if="!hisList.length">{{ $t('public.noData') }}</div>
@@ -68,6 +77,14 @@ export default {
     ...mapState({
       scatter: state => state.app.scatter,
     }),
+    reward() {
+      let t = this.totalSell - this.totalBuy;
+      t = t.toFixed(4)
+      if (t > 0) {
+        t = `+${t}`
+      }
+      return t
+    }
   },
   data() {
     return {
@@ -80,6 +97,11 @@ export default {
         symbol0: 'EOS',
         symbol1: 'DFS',
       },
+      // 统计
+      totalBuy: 0,
+      totalGetBuy: 0,
+      totalSell: 0,
+      totalGetSell: 0,
     }
   },
   watch: {
@@ -160,8 +182,12 @@ export default {
           totalGetSell += parseFloat(v.amountIn)
         }
       })
-      console.log('买入消耗EOS = ', totalBuy.toFixed(4), '获得TIME = ', totalGetBuy.toFixed(8))
-      console.log('卖出获得EOS = ', totalSell.toFixed(4), '转出TIME = ', totalGetSell.toFixed(8))
+      const decimal0 = this.thisMarket.decimal0 > 4 ? 4 : this.thisMarket.decimal0;
+      const decimal1 = this.thisMarket.decimal1 > 4 ? 4 : this.thisMarket.decimal1;
+      this.totalBuy = totalBuy.toFixed(decimal0); // 买入消耗的 token0
+      this.totalSell = totalSell.toFixed(decimal0); // 卖出获取的 token0
+      this.totalGetSell = totalGetSell.toFixed(decimal1); // 卖出的Token1
+      this.totalGetBuy = totalGetBuy.toFixed(decimal1); // 获得的Token1
       this.hisList = list;
     },
     handleClose() {
@@ -187,15 +213,16 @@ export default {
   .title{
     font-size: 32px;
     text-align: left;
-    margin: 40px 0 40px;
+    margin: 0px 0 30px;
     padding: 0 0 0 40px;
     color: #000;
     &>span{
       margin-right: 60px;;
     }
     .rulesTip{
-      font-size: 30px;
+      font-size: 21px;
       margin-right: 40px;
+      text-align: right;
       .tipIcon{
         margin-left: 8px;
       }
@@ -217,6 +244,18 @@ export default {
       }
     }
   }
+  .total{
+    padding: 0 40px;
+    font-size: 21px;
+    line-height: 28px;
+    // justify-content: flex-end;
+    .totalNum>div{
+      margin-left: 10px;
+      &:first-child{
+        margin-left: 0px;
+      }
+    }
+  }
 
   .lists{
     .noData{
@@ -224,7 +263,7 @@ export default {
       font-size: 30px;
     }
     .list{
-      margin: 40px;
+      margin: 30px 40px;
       padding: 30px;
       border-radius: 15px;
       box-shadow: 0px 8px 40px 0px rgba(220,220,220,0.5);

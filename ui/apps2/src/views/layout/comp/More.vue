@@ -23,6 +23,7 @@
         <div class="title flexb">
           <div class="flexa">
             <img class="titleImg" src="https://apps.defis.network/static/faviconV3.png">
+            <span>关于DFS</span>
           </div>
           <img class="right" src="@/assets/navImg/about_right.svg" alt="">
         </div>
@@ -165,6 +166,7 @@ export default {
       margin-bottom: 10px;
       .titleImg{
         width: 60px;
+        margin-right: 10px;
       }
     }
     .list{
