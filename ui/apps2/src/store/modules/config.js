@@ -76,6 +76,22 @@ const config = {
     tampList: 0,
     // Time 挖矿列表
     timeList: [],
+
+
+    // market 过滤配置列表
+    mkFilterConf: [{
+      symbol: 'EOS',
+      sym: '4,EOS',
+      contract: 'eosio.token',
+      minEos: 100, // 最低价值 100 EOS
+      priceMid: 17,
+    }, {
+      symbol: 'USDT',
+      sym: '4,USDT',
+      contract: 'tethertether',
+      minEos: 100, // 最低价值 100 EOS
+      priceMid: 17,
+    }]
   },
   mutations: {
     SET_LpMineList: (state, lpMineList) => {

@@ -111,6 +111,9 @@ const sys = {
     dbcBal: '0.00000000', // YFC池子余额
     dampingYfc: 1, // YFC挖矿衰减
     dampingDbc: 1, // DBC挖矿衰减
+
+    marketLists: [], // 做市列表
+    filterMkLists: [], // 过滤后的做市列表
   },
   mutations: {
     SET_RANKINFO: (state, rankInfo) => {
@@ -164,6 +167,12 @@ const sys = {
     SET_DampingDbc: (state, dampingDbc) => {
       state.dampingDbc = dampingDbc;
     },
+    SET_MarketLists: (state, marketLists) => {
+      state.marketLists = marketLists;
+    },
+    SET_FilterMkLists: (state, filterMkLists) => {
+      state.filterMkLists = filterMkLists;
+    },
   },
   actions: {
     setRankInfo({ commit }, rankInfo) {
@@ -211,6 +220,12 @@ const sys = {
     },
     setDampingDbc({ commit }, poolsBal) {
       commit('SET_DampingDbc', poolsBal);
+    },
+    setMarketLists({ commit }, marketLists) {
+      commit('SET_MarketLists', marketLists);
+    },
+    setFilterMkLists({ commit }, filterMkLists) {
+      commit('SET_FilterMkLists', filterMkLists);
     },
   }
 };

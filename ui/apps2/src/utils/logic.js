@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { toFixed } from '@/utils/public';
+import store from '@/store';
 // import { Decimal } from 'decimal.js';
 
 const config = {
@@ -185,3 +186,37 @@ export function sellToken(inData) {
     getNum2
   }
 }
+// 获取过滤 主币种 价格
+export function getFilterPrice(list) {
+  const mkFlt = store.state.config.mkFilterConf;
+  const priceObj = {};
+  mkFlt.forEach(conf => {
+    const market = list.find(v => v.mid === conf.priceMid)
+    if (!market) {
+      return
+    }
+    if (conf.symbol === 'EOS') {
+      priceObj.EOS = 1;
+      return
+    }
+    let price, r0, r1;
+    if (conf.sym === market.sym0 && conf.contract === market.contract0) {
+      r0 = market.reserve0;
+      r1 = market.reserve1;
+    } else {
+      r1 = market.reserve0;
+      r0 = market.reserve1;
+    }
+    price = parseFloat(r1) / parseFloat(r0);
+    priceObj[conf.symbol] = price;
+  })
+  return priceObj;
+}
+
+// 列表处理 - 非vue数据处理迁移
+// export function dealMarketLists(list) {
+//   const newList = []
+//   const mainList = []; // 存放EOS - token 和 usdt - token 的交易对
+//   let dfsData = {}
+//   const priceObj = getFilterPrice(list)
+// }

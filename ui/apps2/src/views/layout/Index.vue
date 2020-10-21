@@ -37,6 +37,8 @@ import InviAcc from '@/components/InviAcc';
 import NodeSet from '@/components/popup/NodeSet';
 import WarmTip from '@/components/WarmTip';
 
+import { getFilterPrice } from '@/utils/logic';
+
 export default {
   name: 'layout',
   components: {
@@ -66,11 +68,9 @@ export default {
       // 箭头函数可使代码更简练
       scatter: state => state.app.scatter,
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
+      mkFilterConf: state => state.config.mkFilterConf, // 基础配置 - 默认为{}
     }),
     showAcc() {
-      // const noArr = ['tutorial', 'pools', 'poolsMarket'];
-      // const has = noArr.find(v => v === this.$route.name)
-      // return !has
       const showAcc = !this.$route.meta.noAcc;
       return showAcc
     }
@@ -130,7 +130,6 @@ export default {
       return `https://ndi.340wan.com/eos/${inData}.png`
     },
     listenUpdateList() {
-      // console.log('Update')
       this.handleRowsMarket();
     },
     // 获取做市池子
@@ -145,7 +144,9 @@ export default {
       EosModel.getTableRows(params, (res) => {
         const list = res.rows || [];
         const newList = []
+        const mainList = []; // 存放EOS - token 和 usdt - token 的交易对
         let dfsData = {}
+        const priceObj = getFilterPrice(list)
         list.forEach((item) => {
           let v = item;
           if (v.contract1 === 'eosio.token' && v.sym1 === '4,EOS') {
@@ -204,13 +205,21 @@ export default {
             // newList.unshift(v)
             dfsData = v;
           } else {
-            if (v.sym0Data.symbol === 'EOS' && v.sym0Data.contract === 'eosio.token') {
+            // 处理过滤数组
+            this.mkFilterConf.forEach(conf => {
+              if ((v.sym0Data.symbol === conf.symbol && v.sym0Data.contract === conf.contract)
+                || (v.sym1Data.symbol === conf.symbol && v.sym1Data.contract === conf.contract)) {
+                const priceAll = parseFloat(v.sym0Data.reserve) * priceObj[conf.symbol];
+                if (priceAll >= conf.minEos) {
+                  mainList.push(v)
+                }
+              }
+            })
+
+            if ((v.sym0Data.symbol === 'EOS' && v.sym0Data.contract === 'eosio.token') ||
+                (v.sym1Data.symbol === 'EOS' && v.sym1Data.contract === 'eosio.token')) {
               newList.unshift(v)
               return
-            }
-            if (v.sym1Data.symbol === 'EOS' && v.sym1Data.contract === 'eosio.token') {
-              newList.unshift(v)
-              return;
             }
             newList.push(v)
           }
@@ -228,11 +237,30 @@ export default {
           } else if(a.sym1Data.contract === 'eosio.token') {
             bEos = parseInt(b.reserve1)
           }
-
           return bEos - aEos;
         })
         newListSort.splice(1, 0, dfsData)
         this.marketLists = newListSort;
+        this.$store.dispatch('setMarketLists', newListSort)
+
+        // 保存过滤列表
+        const newMainList = mainList.sort((a, b) => {
+          let aEos = 0;
+          if (a.sym0Data.contract === 'eosio.token') {
+            aEos = parseInt(a.reserve0)
+          } else if(a.sym1Data.contract === 'eosio.token') {
+            aEos = parseInt(a.reserve1)
+          }
+          let bEos = 0;
+          if (b.sym0Data.contract === 'eosio.token') {
+            bEos = parseInt(b.reserve0)
+          } else if(a.sym1Data.contract === 'eosio.token') {
+            bEos = parseInt(b.reserve1)
+          }
+          return bEos - aEos;
+        })
+        newMainList.splice(1, 0, dfsData)
+        this.$store.dispatch('setFilterMkLists', newMainList)
       })
     }
   }

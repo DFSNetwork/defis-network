@@ -19,20 +19,7 @@
           </div>
         </div>
       </template>
-    </div>
-    <div class="scroll" v-else-if="type === 'bankStart' || type === 'bankEnd'">
-      <template v-for="(item, i) in searchArr">
-        <div class="item flexb" @click="handleSelectThis(item)" v-if="handleShowBank(item)" :key="i">
-          <div class="left flex">
-            <img class="coinImg" :src="item.imgUrl || errUrl" :onerror="errorCoinImg" alt="">
-            <div>
-              <div class="coin">{{ item.symbol }}</div>
-              <div class="contract tip">{{ item.contract }}</div>
-            </div>
-          </div>
-          <div class="balan">{{ item.balan }}</div>
-        </div>
-      </template>
+      <div v-if="!search" class="searchMore flexc">更多代币请搜索查询</div>
     </div>
     <div class="scroll" v-else>
       <template v-for="(item, i) in searchArr">
@@ -47,11 +34,13 @@
           <div class="balan">{{ item.balan }}</div>
         </div>
       </template>
+      <div v-if="!search" class="searchMore flexc">更多代币请搜索查询</div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import errUrl from '@/assets/img/eosio.token-eos.png'
 export default {
   data() {
@@ -59,17 +48,12 @@ export default {
       search: '',
       searchArr: [],
       coinList: [],
+      filterCoinList: [],
       errUrl,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
     }
   },
   props: {
-    marketLists: {
-      type: Array,
-      defailt: function ml() {
-        return []
-      }
-    },
     thisMarket0: {
       type: Object,
       default: function market() {
@@ -87,24 +71,30 @@ export default {
       default: 'other'
     }
   },
+  computed: {
+    ...mapState({
+      filterMkLists: state => state.sys.filterMkLists,
+      marketLists: state => state.sys.marketLists,
+    }),
+  },
   watch: {
     marketLists: {
-      handler: function mlt(newVal) {
-        if (!newVal.length) {
+      handler: function mlt(newVal, oldVal) {
+        if (!newVal.length || (oldVal && oldVal.length === newVal.length)) {
           return;
         }
         // 筛选出所有币种
         this.coinList = [];
-        if (this.type === 'bankStart' || this.type === 'bankEnd') {
-          this.coinList = newVal;
-        } else if (this.type !== 'other') {
+        this.filterCoinList = [];
+        if (this.type !== 'other') {
           const arr = this.handleDealSymArr(newVal)
           this.coinList = arr;
+          const arr2 = this.handleDealSymArr(this.filterMkLists)
+          this.filterCoinList = arr2;
         } else {
-          this.searchArr = newVal;
+          this.searchArr = this.filterMkLists;
         }
         this.handleSearch();
-        // console.log(this.coinList)
       },
       deep: true,
       immediate: true
@@ -114,9 +104,6 @@ export default {
     }
   },
   mounted() {
-    // console.log(this.marketLists)
-    // console.log(this.thisMarket0)
-    // console.log(this.type)
   },
   methods: {
     handleToCreate() {
@@ -125,8 +112,16 @@ export default {
     handleSearch() {
       const search = this.search.toUpperCase();
       if (this.type === 'other') {
+        if (!search) {
+          this.searchArr = this.filterMkLists;
+          return
+        }
         const searchArr = this.marketLists.filter(v => v.symbol0.indexOf(search) !== -1 || v.symbol1.indexOf(search) !== -1)
         this.searchArr = searchArr;
+        return
+      }
+      if (!search) {
+        this.searchArr = this.filterCoinList;
         return
       }
       const searchArr = this.coinList.filter(v => v.symbol.indexOf(search) !== -1)
@@ -221,6 +216,11 @@ export default {
     height: 600px;
     margin-top: 10px;
     padding: 0px 40px;
+    .searchMore{
+      height: 115px;
+      text-align: center;
+      color: #999;
+    }
     .item{
       color: $color-black;
       height: 115px;

@@ -1,5 +1,4 @@
 import { toFixed, accDiv } from './public';
-import store from '@/store';
 // import Worker from './worker'
 // import VueWorker from 'vue-worker'
 class swapRouter {
@@ -52,7 +51,7 @@ class swapRouter {
         for (let i = 0; i < paths.length; i++) {
           let path = paths[i];
           let tks = path.split("-");
-          if (tks.length > 4) {
+          if (tks.length >= 3) {
             break
           }
           if (tks[0] === tokenA && tks[tks.length - 1] !== tokenB) {
@@ -197,8 +196,8 @@ class swapRouter {
       _pathsMids.push(mids + '') // 返回所有Mid路径
     })
     // console.log(_pathsMids)
-    return [_pathsMids[0]];
-    // return _pathsMids;
+    // return [_pathsMids[0]];
+    return _pathsMids;
   }
 
   //  mids = [], token_in = eosio.token:EOS, amount_in = 10000, type = 'pay' | 'get'
@@ -216,6 +215,10 @@ class swapRouter {
       for (let i = 0; i < mid_arr.length; i++) {
         let mid = mid_arr[i];
         // console.log('mid', mid)
+        let market = this.markets.find(v => v.mid == mid);
+        if (!market) {
+          return
+        }
         let swap_result
         if (!type) {
           swap_result = this.swap(mid, new_token_in, new_amount_in);
@@ -245,6 +248,9 @@ class swapRouter {
       })
     }
     // console.log(amounts_out_arr)
+    if (!amounts_out_arr.length) {
+      return {}
+    }
     this.bestPath = this._pathsArr[amounts_out_arr[0].mIndex]
     amounts_out_arr[0].bestPath = this.bestPath;
     return amounts_out_arr[0]
@@ -253,6 +259,9 @@ class swapRouter {
   swap(mid, token_in, amount_in, type) {
     if (!this.isInit) return;
     let market = this.markets.find(v => v.mid == mid);
+    if (!market) {
+      return
+    }
     let tokenA = market.contract0 + ":" + market.sym0.split(",")[1];
     let tokenB = market.contract1 + ":" + market.sym1.split(",")[1];
     let inNum = amount_in;
@@ -508,3 +517,4 @@ class swapRouter {
 // swapRouter1.get_amounts_out(mids4, "eosio.token:EOS", 100000); // 10 EOS -> 22.8315 NDX -> 2.2896 BG -> 0.2298 KEY
 
 export const SwapRouter = new swapRouter();
+export const SwapRouterFilter = new swapRouter();
