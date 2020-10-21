@@ -14,7 +14,7 @@ export default {
     balanLow: '余额不足',
     tokenLow: '可用凭证数量不足',
     success: '操作成功',
-    tutorial: '教程',
+    tutorial: '教程指南',
     safeRecord: 'DFS智能合约由慢雾提供安全审计',
     safeRecord1: 'DFS智能合约由',
     safeRecord2: '慢雾',
@@ -28,13 +28,14 @@ export default {
     warnTip: '风险提示',
     detail: '详情',
     marketTip: '您的做市额度过低，无法生成做市凭证，请重新输入！',
+    switchLang: 'Switch to DFS English',
   },
   error: {
     insufficient: '{res}资源不足', // Insufficient {res} resources
     cancel: '操作已取消', // Operation cancelled
   },
   invi: {
-    invitation: '邀请', // invitation
+    invitation: '邀请设置', // invitation
     toInviter: '成为邀请人', // Become an inviter
     whatIsInviter: '每当被邀请人通过邀请人链接完成一笔SWAP交易，该笔交易挖矿算力增加5%，其中4%归被邀请人，1%归邀请人。',
     // Whenever the inviter completes a SWAP transaction through the inviter link, the mining calculation power of the transaction increases by 5%, among which 4% belongs to the inviter and 1% to the inviter.

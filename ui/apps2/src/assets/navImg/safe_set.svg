@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="17px" viewBox="0 0 15 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>编组</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 0.3621 14.974 0.3621 14.974 17 0 17"></polygon>
+    </defs>
+    <g id="v3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="未登录" transform="translate(-20.000000, -630.000000)">
+            <rect id="矩形" fill-opacity="0.6" fill="#333333" x="0" y="0" width="375" height="812"></rect>
+            <rect id="矩形" fill="#FFFFFF" x="0" y="0" width="285" height="812"></rect>
+            <g id="风险指示" transform="translate(20.000000, 627.000000)">
+                <g id="编组" transform="translate(0.000000, 2.000000)">
+                    <g transform="translate(0.000000, 0.637800)">
+                        <mask id="mask-2" fill="white">
+                            <use xlink:href="#path-1"></use>
+                        </mask>
+                        <g id="Clip-2"></g>
+                        <path d="M-0.0002,3.6121 C2.3488,3.4341 4.5158,2.6061 6.3208,1.3071 C6.7218,1.0231 7.1108,0.7081 7.4868,0.3621 C8.0478,0.8831 8.6368,1.3331 9.2558,1.7151 C10.9328,2.7791 12.8818,3.4531 14.9748,3.6121 L14.9748,7.1501 C14.9748,11.7421 11.9118,15.7711 7.4868,17.0001 C3.0628,15.7711 -0.0002,11.7421 -0.0002,7.1501 L-0.0002,3.6121 Z" id="Fill-1" fill="#C5CFD5" mask="url(#mask-2)"></path>
+                    </g>
+                    <path d="M3.6379,9.3188 C3.6379,10.6938 4.3719,11.9648 5.5629,12.6518 C6.7539,13.3398 8.2209,13.3398 9.4119,12.6518 C10.6019,11.9648 11.3359,10.6938 11.3359,9.3188 C11.3359,7.1938 9.6129,5.4698 7.4869,5.4698 C5.3609,5.4698 3.6379,7.1938 3.6379,9.3188" id="Fill-3" fill="#FFFFFF"></path>
+                    <polygon id="Fill-5" fill="#C5CFD5" points="6.9153 7.1025 8.9643 7.1025 8.1963 8.5585 9.2713 8.5585 6.6773 12.1765 7.0273 9.7105 5.7023 9.7105"></polygon>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

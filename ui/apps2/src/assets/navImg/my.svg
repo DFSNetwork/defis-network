@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="14px" viewBox="0 0 14 14" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>my</title>
+    <desc>Created with Sketch.</desc>
+    <g id="v3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="未登录" transform="translate(-21.000000, -468.000000)">
+            <rect id="矩形" fill-opacity="0.6" fill="#333333" x="0" y="0" width="375" height="812"></rect>
+            <rect id="矩形" fill="#FFFFFF" x="0" y="0" width="285" height="812"></rect>
+            <g id="邀请好友" transform="translate(21.000000, 464.000000)" fill="#C5CFD5">
+                <g id="my" transform="translate(0.000000, 4.000000)">
+                    <circle id="椭圆形" cx="7.3" cy="3.3" r="3.3"></circle>
+                    <path d="M9.8,8 C12.1195959,8 14,9.79070952 14,11.9996617 L14,13.3328822 C14,13.5632452 13.9693242,13.7867853 13.9116505,14 L0.0883494648,14 C0.0306757596,13.7867853 0,13.5632452 0,13.3328822 L0,11.9996617 C0,9.79070952 1.88040405,8 4.2,8 L9.8,8 Z" id="路径"></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

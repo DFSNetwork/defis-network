@@ -1,25 +1,10 @@
 <template>
   <div class="header flexb">
-    <div @click="handleToIndex"><img class="logoOld" src="@/assets/img/dex/logo.svg"></div>
-    <!-- <div @click="handleToIndex" class="flexa logoMain">
-      <div class="logoDiv">
+    <div class="tools flexb">
+      <div class="logoDiv" :class="{'ani': ani}" @click="handleToIndex">
         <img class="logo" src="/static/faviconV3.png">
       </div>
-      <div class="name">
-        <div>DeFis</div>
-        <div>Network</div>
-      </div>
-    </div> -->
-    <div class="tools flexb">
-      <!-- <label v-if="!scatter.identity" class="login" @click="handleLogin">{{ $t('public.login') }}</label>
-      <label v-else class="account flexa">
-        <span class="flexc iconSpan"><img width="100%" src="@/assets/img/dex/user_icon.svg" alt=""></span>
-        <span>{{ scatter.identity.accounts[0].name }}</span>
-      </label> -->
       <span class="create flexc" @click="handleToVote">{{ $t('vote.vote') }}</span>
-      <!-- <span class="create flexc" @click="handleTo('farms')">{{ $t('farms.farms') }}</span> -->
-      <!-- <span class="create flexc" @click="handleToProject('pddex')">Pddex</span>
-      <span class="create flexc" @click="handleToProject('pdd')">养猪</span> -->
       <span class="create flexc" @click="handleTo('pools')">{{ $t('mine.pools') }}</span>
       <span class="create flexc" @click="showDss = true">
         <span>DSS</span>
@@ -29,7 +14,8 @@
         <span>Apps</span>
         <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
       </span>
-      <span class="flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>
+      <span class="create flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/navImg/my_1.svg" alt=""></span>
+      <!-- <span class="flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span> -->
     </div>
 
     <el-dialog class="mydialog showApps"
@@ -64,18 +50,32 @@
         <div class="create flexc" @click="handleToProject('yfcDss')">YFC DSS</div>
       </div>
     </el-dialog>
+
+    <el-dialog
+      class="showEggCss"
+      :show-close="false"
+      :visible.sync="showEgg">
+      <Msg v-if="showEgg"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import { login } from '@/utils/public';
+import Msg from '@/views/konami/dialog/Msg'
 export default {
   name: 'headerTools',
+  components: {
+    Msg
+  },
   data() {
     return {
       showApps: false,
       showDss: false,
+      ani: false,
+      aniTimer: null,
+      showEgg: false,
     }
   },
   computed: {
@@ -90,10 +90,16 @@ export default {
       login(this, () => {})
     },
     handleToIndex() {
-      if (this.$route.name === 'index') {
-        return
-      }
-      this.$router.push({name: 'index'})
+      this.showEgg = true;
+      clearTimeout(this.aniTimer)
+      this.ani = true;
+      this.aniTimer = setTimeout(() => {
+        this.ani = false;
+      }, 200);
+      // if (this.$route.name === 'index') {
+      //   return
+      // }
+      // this.$router.push({name: 'index'})
     },
     handleShowNav() {
       this.$emit('listenShowNav', false)
@@ -160,7 +166,7 @@ export default {
 .header{
   background: $color-bgcolor;
   height: 120px;
-  padding: 0 40px;
+  padding: 0 30px 0 40px;
   font-size: 28px;
   color: $color-tip;
   margin-bottom: 5px;
@@ -179,16 +185,7 @@ export default {
         position: absolute;
         height: 80px;
         width: 80px;
-      }
-    }
-    .name{
-      &>div:first-child{
-        font-size: 30px;
-        font-weight: 500;;
-      }
-      &>div:last-child{
-        font-size: 25px;
-        // font-weight: 300;
+        
       }
     }
   }
@@ -196,6 +193,23 @@ export default {
     display: block;
   }
   .tools{
+    width: 100%;
+    .logoDiv{
+      position: relative;
+      height: 72px;
+      width: 72px;
+      margin-right: 10px;
+      transition: .3s all;
+      transform: scale(1);
+      &.ani{
+        transform: scale(1.2) !important;
+      }
+      .logo{
+        position: absolute;
+        height: 80px;
+        width: 80px;
+      }
+    }
     .login{
       padding-right: 10px;
       color: $color-main;
@@ -229,7 +243,7 @@ export default {
       }
     }
     .svgIcon{
-      width: 30px;
+      width: 40px;
     }
   }
 }
@@ -268,6 +282,18 @@ export default {
   .create{
     height: 75px;
     color: #000;
+  }
+}
+.showEggCss{
+  /deep/ .el-dialog{
+    width: 564px;
+    border-radius: 16px;
+    .el-dialog__header{
+      padding: 0;
+    }
+    .el-dialog__body{
+      padding: 0px;
+    }
   }
 }
 </style>

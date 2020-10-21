@@ -28,6 +28,7 @@ export default {
     warnTip: 'Risk Warning',
     detail: 'Detail',
     marketTip: 'Your market-making amount is too low to generate a market-making voucher, please re-enter!',
+    switchLang: '切换到 DFS 中文版',
   },
   error: {
     insufficient: 'Insufficient {res} resources', // Insufficient {res} resources

@@ -471,3 +471,23 @@ export function getPriceLen(price) {
 export function dealPrice(price) {
   return Number(price).toFixed(getPriceLen())
 }
+
+
+// 返回币种图片地址
+export function getCoin(contract, coin) {
+  const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd', 'whaleextoken-wal'];
+  const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb', 'rosedefifarm-rose',
+  'yfctokenmain-yfc', 'eossanguotkt-tkt', 'pink.bank-pink', 'dbctokenmain-dbc', 'sars.run-eet', 'looptoken123-loop',
+  'lootglobcore-loot', 'pddtokenmain-pdd', 'xpettimecore-time', 'sars.run-sars', 'minedfstoken-dfs']
+  const inData = `${contract.toLowerCase()}-${coin.toLowerCase()}`
+  const has = localeCoin.find(v => v === inData)
+  if (has) {
+    return `https://apps.defis.network/static/coin/${has}.svg`;
+  }
+  const hasPng = localCoinPng.find(v => v === inData);
+  if (!has && hasPng) {
+    return `/static/coin/${hasPng}.png`;
+    // return `https://apps.defis.network/static/coin/${hasPng}.png`;
+  }
+  return `https://ndi.340wan.com/eos/${inData}.png`
+}

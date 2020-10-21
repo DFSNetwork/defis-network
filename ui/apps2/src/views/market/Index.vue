@@ -703,14 +703,14 @@ export default {
     box-sizing: border-box;
     box-shadow: 0 0 1px 1px #F3F3F3;
     // border: 1px solid #F3F3F3;
-    border-radius: 30px;
+    border-radius: 12px;
     margin-bottom: 32px;
 
     &>span{
       height: 100%;
       flex: 1;
       border: 1px solid transparent;
-      border-radius: 30px;
+      border-radius: 12px;
       font-weight: 500;
     }
 
@@ -725,16 +725,15 @@ export default {
   }
 
   .marketData{
-    border-radius:30px;
     border: 1px solid rgba(224,224,224,1);
     background: #FFF;
-    border-radius: 25px;
+    border-radius: 12px;
     position: relative;
     padding: 32px 20px 28px;
   }
   .sym0Data{
     padding: 26px 40px 52px;
-    border-radius:30px;
+    border-radius: 12px;
     border: 1px solid #F3F3F3;
     &.focus{
       border:1px solid rgba(7,215,155,1);
@@ -830,7 +829,7 @@ export default {
   .marketChecked{
     margin: 20px 0;
     padding: 20px 40px;
-    border-radius:30px;
+    border-radius: 12px;
     border:2px solid rgba(243,243,243,1);
     .symbols{
       font-size:36px;
@@ -839,7 +838,6 @@ export default {
     .contracts{
       margin-top: 6px;
       font-size: 24px;
-      // font-weight: 300;
     }
     .more{
       font-weight: bold;
@@ -848,7 +846,7 @@ export default {
   }
   .backData{
     padding: 42px 36px 28px;
-    border-radius:30px;
+    border-radius: 12px;
     border: 1px solid rgba(243,243,243,1);
     &.focus{
       border: 1px solid rgba(192,93,93,1);
@@ -886,7 +884,7 @@ export default {
     padding: 20px 40px 0;
     font-size: 26px;
     text-align: left;
-    border-radius:20px;
+    border-radius: 12px;
     background: #FFF;
     border: 1px solid rgba(224,224,224,1);
     .subTitle{
@@ -914,7 +912,7 @@ export default {
     .btn{
       height:88px;
       background:rgba(7,215,155,1);
-      border-radius:30px;
+      border-radius: 12px;
       font-size:32px;
       color: #FFF;
 
@@ -938,7 +936,7 @@ export default {
     bottom: 0px;
     margin: 0px;
     width: 100%;
-    border-radius:30px 30px 0px 0px;
+    border-radius:12px 12px 0px 0px;
     .el-dialog__body,
     .el-dialog__header{
       padding: 0;
@@ -949,7 +947,7 @@ export default {
       position: relative;
       margin: auto;
       width: 670px;
-      border-radius:30px;
+      border-radius:12px;
     }
   }
 }

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="17px" viewBox="0 0 15 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>set up</title>
+    <desc>Created with Sketch.</desc>
+    <g id="v3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="未登录" transform="translate(-20.000000, -304.000000)">
+            <g id="节点设置" transform="translate(19.000000, 300.000000)">
+                <g id="set-up" transform="translate(0.000000, 4.000000)">
+                    <path d="M9,0.288675135 L15.3612159,3.96132487 C15.670617,4.13995766 15.8612159,4.47008468 15.8612159,4.82735027 L15.8612159,12.1726497 C15.8612159,12.5299153 15.670617,12.8600423 15.3612159,13.0386751 L9,16.7113249 C8.69059892,16.8899577 8.30940108,16.8899577 8,16.7113249 L1.63878407,13.0386751 C1.32938299,12.8600423 1.13878407,12.5299153 1.13878407,12.1726497 L1.13878407,4.82735027 C1.13878407,4.47008468 1.32938299,4.13995766 1.63878407,3.96132487 L8,0.288675135 C8.30940108,0.11004234 8.69059892,0.11004234 9,0.288675135 Z" id="多边形" fill="#C5CFD5"></path>
+                    <circle id="椭圆形" fill="#FFFFFF" cx="8.5" cy="8.5" r="2.5"></circle>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

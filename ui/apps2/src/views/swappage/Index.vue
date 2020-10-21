@@ -209,7 +209,7 @@
 import { mapState } from 'vuex';
 import { SwapRouter } from '@/utils/swap_router';
 import Tabs from '../index/components/Tabs';
-import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara } from '@/utils/public';
+import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara, getCoin } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
 import MarketList from '@/components/MarketList';
 import UsddTip from '@/components/UsddTip';
@@ -508,20 +508,8 @@ export default {
       })
     },
     handleDealRouteImg(item) {
-      const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd', 'whaleextoken-wal'];
-      const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb', 'rosedefifarm-rose',
-      'yfctokenmain-yfc', 'eossanguotkt-tkt', 'pink.bank-pink', 'dbctokenmain-dbc', 'sars.run-eet', 'looptoken123-loop',
-      'lootglobcore-loot', 'pddtokenmain-pdd', 'xpettimecore-time', 'sars.run-sars']
-      const inData = item.toLowerCase().replace(':', '-')
-      const has = localeCoin.find(v => v === inData)
-      if (has) {
-        return `https://apps.defis.network/static/coin/${has}.svg`;
-      }
-      const hasPng = localCoinPng.find(v => v === inData);
-      if (!has && hasPng) {
-        return `https://apps.defis.network/static/coin/${hasPng}.png?v=1`;
-      }
-      return `https://ndi.340wan.com/eos/${inData}.png`
+      const inData = item.toLowerCase().split(':')
+      return getCoin(...inData)
     },
     handleClickBalan(type) {
       if (type === 'pay') {
@@ -927,23 +915,20 @@ export default {
 }
 .tabView{
   background: #FAFAFA;
-  border-radius:30px;
+  border-radius: 12px;
   font-size: 24px;;
   .tabC{
     background:rgba(255,255,255,1);
-    border-radius:30px;
+    border-radius: 12px;
     border:2px solid rgba(224,224,224,1);
     padding: 32px 20px;
   }
   .sym0Data{
     padding: 26px 40px 52px;
-    border-radius:30px;
+    border-radius: 12px;
     border: 1px solid #F3F3F3;
     &.focus{
       border:1px solid rgba(7,215,155,1);
-      // /deep/ .el-input__inner{
-      //   color: #07D79B !important;
-      // }
     }
     &.pdb10{
       padding-bottom: 28px;
@@ -1070,8 +1055,9 @@ export default {
   justify-content: flex-end;
   margin: 17px 0 20px;
   .history{
-    font-size: 27px;
-    color: #07d79b;
+    font-size: 25px;
+    // color: #07d79b;
+    color: rgba(235, 103, 101, 1)
   }
 }
 .btnDiv{
@@ -1081,7 +1067,7 @@ export default {
   .btn{
     height: 88px;
     background:rgba(7,215,155,1);
-    border-radius:30px;
+    border-radius: 12px;
     color: #fff;
     &:active{
       background:rgba(2,198,152,1);
@@ -1102,7 +1088,7 @@ export default {
   text-align: left;
   padding: 20px 40px;
   background:rgba(255,255,255,1);
-  border-radius:20px;
+  border-radius: 12px;
   border:2px solid rgba(224,224,224,1);
   .marketNow{
     margin-left: 20px;
@@ -1118,7 +1104,7 @@ export default {
   text-align: left;
   padding: 20px 40px;
   background:rgba(255,255,255,1);
-  border-radius:20px;
+  border-radius: 12px;
   border:2px solid rgba(224,224,224,1);
   .bankTip{
     margin-top: 10px;
@@ -1152,7 +1138,7 @@ export default {
     bottom: 0px;
     margin: 0px;
     width: 100%;
-    border-radius:30px 30px 0px 0px;
+    border-radius:12px 12px 0px 0px;
     .el-dialog__body,
     .el-dialog__header{
       padding: 0;
@@ -1163,7 +1149,7 @@ export default {
       position: relative;
       margin: auto;
       width: 670px;
-      border-radius:30px;
+      border-radius:12px;
     }
   }
 }

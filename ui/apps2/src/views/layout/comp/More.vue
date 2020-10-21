@@ -1,0 +1,215 @@
+<template>
+  <!-- more -->
+  <el-drawer
+    class="drawerCss"
+    size="80%"
+    :show-close="false"
+    :visible.sync="showNav"
+    direction="ltr">
+    <div class="morePop">
+      <div class="acc flexb">
+        <div>
+          <div @click="handleLogin" v-if="!scatter || !scatter.identity"
+            class="login">点击登陆</div>
+          <div v-else class="login">{{ scatter.identity.accounts[0].name }}</div>
+          <div class="tip">欢迎来到DFS</div>
+        </div>
+        <img v-if="!scatter || !scatter.identity" @click="handleLogin"
+          class="right" src="@/assets/navImg/acc_right.svg" alt="">
+        <span v-else class="red" @click="handleLoginOut">Exit</span>
+      </div>
+      <!-- list -->
+      <div class="lists">
+        <div class="title flexb">
+          <div class="flexa">
+            <img class="titleImg" src="https://apps.defis.network/static/faviconV3.png">
+          </div>
+          <img class="right" src="@/assets/navImg/about_right.svg" alt="">
+        </div>
+        <div class="list flexa" @click="handleShowComp('silderSet')">
+          <img class="listImg" src="@/assets/navImg/swap_set.svg">
+          <span>{{ $t('dex.TradeSet') }}</span>
+        </div>
+        <div class="list flexa" @click="handleShowNode">
+          <img class="listImg" src="@/assets/navImg/node_set.svg">
+          <span>{{ $t('node.nodeSet') }}</span>
+        </div>
+        <div class="list flexa" @click="handleTo('createMarket')">
+          <img class="listImg" src="@/assets/navImg/create_set.svg">
+          <span>{{ $t('dex.addMarket') }}</span>
+        </div>
+        <div class="list flexa" @click="handleShowComp('invi')">
+          <img class="listImg" src="@/assets/navImg/invi_set.svg">
+          <span>{{ $t('invi.invitation') }}</span>
+        </div>
+        <div class="list flexa" @click="handleTo('tutorial')">
+          <img class="listImg" src="@/assets/navImg/tutorial_set.svg">
+          <span>{{ $t('public.tutorial') }}</span>
+        </div>
+        <div class="list flexa" @click="handleShowComp('warn')">
+          <img class="listImg" src="@/assets/navImg/safe_set.svg">
+          <span>{{ $t('public.warnTip') }}</span>
+        </div>
+      </div>
+
+      <!-- 切换语言 -->
+      <div class="lang flexb" @click="handleChangeLang()">
+        <span v-if="language === 'zh-CN'">{{ $t('public.switchLang') }}</span>
+        <span v-else>{{ $t('public.switchLang') }}</span>
+        <img class="langImg" src="@/assets/navImg/lang.svg">
+      </div>
+      <!-- versions -->
+      <div class="flexa version">
+        <span class="flexc" @click="handleToV1('v1')">V1</span>
+        <span class="flexc" @click="handleToV1('v2')">V2</span>
+        <span class="flexc" @click="handleToV1('v3')">V3</span>
+      </div>
+    </div>
+  </el-drawer>
+</template>
+
+<script>
+import { EosModel } from '@/utils/eos';
+import { mapState } from 'vuex'
+import { login } from '@/utils/public';
+
+export default {
+  name: 'more',
+  data() {
+    return {
+      showNav: false,
+    }
+  },
+  computed: {
+    ...mapState({
+      language: state => state.app.language,
+      scatter: state => state.app.scatter,
+    }),
+  },
+  methods: {
+    handleChangeLang() {
+      let type;
+      this.language === 'en' ? type = 'zh-CN' : type = 'en'
+      this.showNav = false;
+      this.$i18n.locale = type;
+      this.$store.dispatch('setLanguage', type);
+    },
+    // 登录
+    handleLogin() {
+      login(this, () => {
+        this.showNav = false;
+      })
+    },
+    handleShowNode() {
+      this.$emit('listenShowComp', 'node')
+      this.showNav = false;
+    },
+    handleToV1(ve) {
+      if (ve === 'v1') {
+        location.href = 'https://app2.defis.network/'
+      } else if (ve === 'v2') {
+        location.href = 'https://v2.defis.network/'
+      } else if (ve === 'v3') {
+        location.href = 'https://apps.defis.network/'
+      }
+    },
+    handleTo(name) {
+      if (this.$route.name === name)  {
+        this.showNav = false;
+        return;
+      }
+      this.$router.push({name: name})
+      this.showNav = false;
+    },
+    handleShowComp(type) {
+      this.$emit('listenShowComp', type)
+      this.showNav = false;
+    },
+    handleLoginOut() {
+      EosModel.accountLoginOut(() => {
+        location.reload()
+      })
+    },
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.morePop{
+  font-size: 27px;
+  .right{
+    width: 20px;
+  }
+  .red{
+    color: #EB6765;
+  }
+  .acc{
+    padding: 30px 60px 30px 30px;
+    text-align: left;
+    .login{
+      font-size: 50px;
+      font-weight: 500;
+      margin-bottom: 10px;
+      color: #333;
+    }
+  }
+  .lists{
+    margin: 0 30px 30px;
+    .title{
+      color: #FFF;
+      background: #57DBBF;
+      height: 100px;
+      border-radius: 20px 20px 0px 0px;
+      padding: 30px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      .titleImg{
+        width: 60px;
+      }
+    }
+    .list{
+      color: #333;
+      height: 100px;
+      padding-right: 30px;
+      box-sizing: border-box;
+      margin-bottom: 10px;
+      &:last-child{
+        margin-bottom: 0px;
+      }
+      .listImg{
+        width: 33px;
+        margin-right: 10px;
+      }
+    }
+  }
+  .lang{
+    color: #39C8C1;
+    padding: 30px;
+    background: rgba(#57DBBF, .08);
+  }
+  .version{
+    font-size: 30px;
+    color: #333;
+    padding: 30px;
+    &>span{
+      width: 50px;
+      height: 50px;
+      margin-right: 50px;
+      &:last-child{
+        margin-right: 0px;
+      }
+    }
+  }
+}
+
+.drawerCss{
+  /deep/ .el-drawer__header{
+    margin-bottom: 0;
+    padding: 0;
+  }
+  /deep/ .el-drawer__body,
+  /deep/ .el-drawer{
+    outline: none !important;
+  }
+}
+</style>

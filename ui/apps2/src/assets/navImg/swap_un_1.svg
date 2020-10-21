@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="15px" height="17px" viewBox="0 0 15 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>transaction_icon</title>
+    <desc>Created with Sketch.</desc>
+    <g id="v3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="未登录" transform="translate(-20.000000, -220.000000)">
+            <g id="交易设置" transform="translate(19.000000, 219.000000)">
+                <g id="transaction_icon" transform="translate(0.000000, 1.000000)">
+                    <path d="M9.5,0.577350269 L14.8612159,3.67264973 C15.4800181,4.02991532 15.8612159,4.69016936 15.8612159,5.40470054 L15.8612159,11.5952995 C15.8612159,12.3098306 15.4800181,12.9700847 14.8612159,13.3273503 L9.5,16.4226497 C8.88119785,16.7799153 8.11880215,16.7799153 7.5,16.4226497 L2.13878407,13.3273503 C1.51998191,12.9700847 1.13878407,12.3098306 1.13878407,11.5952995 L1.13878407,5.40470054 C1.13878407,4.69016936 1.51998191,4.02991532 2.13878407,3.67264973 L7.5,0.577350269 C8.11880215,0.220084679 8.88119785,0.220084679 9.5,0.577350269 Z" id="多边形" fill="#C5CFD5"></path>
+                    <circle id="椭圆形" fill="#FFFFFF" cx="6.25" cy="6.25" r="1.25"></circle>
+                    <circle id="椭圆形" fill="#FFFFFF" cx="10.25" cy="11.25" r="1.25"></circle>
+                    <rect id="矩形" fill="#FFFFFF" transform="translate(8.000000, 8.800000) scale(1, -1) rotate(45.000000) translate(-8.000000, -8.800000) " x="3" y="8" width="10" height="1.6" rx="0.8"></rect>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

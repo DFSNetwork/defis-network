@@ -1,20 +1,22 @@
 <template>
   <div class="layout">
     <header-tools v-if="!$route.meta.noHeader" @listenShowNav="handleShowNav" @listenShowTools="handleShowTools"/>
-    <acc-login v-if="showAcc && !$route.meta.noHeader"/>
+    <!-- <acc-login v-if="showAcc && !$route.meta.noHeader"/> -->
     <transition name="fade" mode="out-in">
       <router-view class="content" :marketLists="marketLists" @listenUpdateList="listenUpdateList"/>
     </transition>
     <my-footer v-if="!$route.meta.noFooter" :marketLists="marketLists"/>
+
+    <Tabbar v-if="!$route.meta.noTab"/>
+
+    <!-- 弹窗 -->
     <Nav ref="nav" @listenShowComp="handleShowComp"/>
     <SlipPointTools ref="slipPointTools"/>
-
     <el-dialog
       class="mydialog"
       :visible.sync="showInvi">
       <invi-acc v-if="showInvi" />
     </el-dialog>
-
     <el-dialog
       class="nodeDialog"
       :visible.sync="showNode">
@@ -29,25 +31,29 @@
 import { mapState } from 'vuex'
 import { EosModel } from '@/utils/eos';
 import HeaderTools from '@/components/Header';
-import AccLogin from '@/components/AccLogin';
+// import AccLogin from '@/components/AccLogin';
 import MyFooter from '@/components/Footer';
-import Nav from '@/components/Nav';
+// import Nav from '@/components/Nav';
+import Nav from '@/views/layout/comp/More';
 import SlipPointTools from '@/components/SlipPointTools';
 import InviAcc from '@/components/InviAcc';
 import NodeSet from '@/components/popup/NodeSet';
 import WarmTip from '@/components/WarmTip';
+import Tabbar from './comp/Tabbar';
+import { getCoin } from '@/utils/public'
 
 export default {
   name: 'layout',
   components: {
     HeaderTools,
-    AccLogin,
+    // AccLogin,
     MyFooter,
     Nav,
     SlipPointTools,
     InviAcc,
     NodeSet,
     WarmTip,
+    Tabbar,
   },
   data() {
     return {
@@ -112,23 +118,6 @@ export default {
         this.handleRowsMarket();
       }, 5000);
     },
-    handleDealCoinImg(contract, coin) {
-      const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd', 'whaleextoken-wal'];
-      const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb', 'rosedefifarm-rose',
-      'yfctokenmain-yfc', 'eossanguotkt-tkt', 'pink.bank-pink', 'dbctokenmain-dbc', 'sars.run-eet', 'looptoken123-loop',
-      'lootglobcore-loot', 'pddtokenmain-pdd', 'xpettimecore-time', 'sars.run-sars'] // 'minedfstoken-dfs'
-      const inData = `${contract}-${coin.toLowerCase()}`
-      const has = localeCoin.find(v => v === inData)
-      if (has) {
-        return `https://apps.defis.network/static/coin/${has}.svg`;
-      }
-      const hasPng = localCoinPng.find(v => v === inData);
-      if (!has && hasPng) {
-        return `https://apps.defis.network/static/coin/${hasPng}.png?v=2`;
-        // return `/static/coin/${hasPng}.png?v=2`;
-      }
-      return `https://ndi.340wan.com/eos/${inData}.png`
-    },
     listenUpdateList() {
       // console.log('Update')
       this.handleRowsMarket();
@@ -184,7 +173,7 @@ export default {
             reserve: v.reserve0,
             sym: v.sym0,
             symbol: v.symbol0,
-            imgUrl: this.handleDealCoinImg(v.contract0, v.symbol0.toLowerCase()),
+            imgUrl: getCoin(v.contract0, v.symbol0.toLowerCase()),
           }
           v.sym1Data = {
             mid: v.mid,
@@ -197,7 +186,7 @@ export default {
             reserve: v.reserve1,
             sym: v.sym1,
             symbol: v.symbol1,
-            imgUrl: this.handleDealCoinImg(v.contract1, v.symbol1.toLowerCase()),
+            imgUrl: getCoin(v.contract1, v.symbol1.toLowerCase()),
           }
           const i = this.topLists.find(vv => vv === v.mid)
           if (i) {
@@ -259,10 +248,7 @@ export default {
   box-sizing: border-box;
   .mydialog,.nodeDialog{
     /deep/ .el-dialog{
-      // position: absolute;
-      border-radius: 30px;
-      // right: 150px;
-      // top: 120px;
+      border-radius: 12px;
       width: 480px;
       margin-top: 15vh !important;
       .el-dialog__header{
