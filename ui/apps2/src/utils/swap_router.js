@@ -51,7 +51,7 @@ class swapRouter {
         for (let i = 0; i < paths.length; i++) {
           let path = paths[i];
           let tks = path.split("-");
-          if (tks.length >= 3) {
+          if (tks.length > 3) {
             break
           }
           if (tks[0] === tokenA && tks[tks.length - 1] !== tokenB) {
@@ -195,7 +195,7 @@ class swapRouter {
       }
       _pathsMids.push(mids + '') // 返回所有Mid路径
     })
-    // console.log(_pathsMids)
+    console.log(_pathsMids)
     // return [_pathsMids[0]];
     return _pathsMids;
   }
