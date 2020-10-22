@@ -110,7 +110,7 @@
               {{ tradeInfo.priceRate }}%
             </span>
           </div>
-          <div class="flexb" :class="{'fee': !(weight || useBank)}">
+          <div class="flexb">
             <span class="flex">
               <span class="tip">{{ $t('public.fee') }}</span>
               <el-popover 
@@ -125,7 +125,7 @@
             </span>
             <span>{{fees}} {{ thisMarket0.symbol }}</span>
           </div>
-          <div class="flexb fee" v-if="(weight && Number(reward)) || useBank">
+          <div class="flexb" v-if="Number(reward)">
             <span class="tip">{{ $t('mine.mineBonus') }}</span>
             <span>{{ reward }} DFS</span>
           </div>
@@ -141,19 +141,7 @@
       <div class="btn flexc" v-loading="loading" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
     </div>
 
-    <div class="routePath" v-if="useBank">
-      <div class="flexb">
-        <div>
-          <span>{{ $t('dex.bankFor') }}</span>
-        </div>
-        <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
-          <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
-          <span>{{ $t('public.warmPrompt') }}</span>
-        </div>
-      </div>
-      <div class="tip bankTip">{{ $t('dex.bankForTip') }}</div>
-    </div>
-    <div class="pool" v-else-if="marketLists.length && bestPath">
+    <div class="pool" v-if="marketLists.length && bestPath">
       <div class="flexb">
         <div>
           <span>{{ $t('dex.poolNum') }}</span>
@@ -223,7 +211,7 @@ export default {
   },
   data() {
     return {
-      // discount: 0.2, // 配置项 - 后期从合约拿
+      discount: 0.1, // 配置项 - 后期从合约拿
       loading: false,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       payNum: '',
@@ -289,9 +277,6 @@ export default {
       return Number(this.payNum) && Number(this.getNum)
     },
     fees() {
-      if (this.useBank) {
-        return 0
-      }
       let fee = accMul(Number(this.payNum), 0.003);
       if (Number(fee) < Number(accDiv(1, 10 ** this.thisMarket0.decimal))) {
         fee = 0;
@@ -306,52 +291,45 @@ export default {
         return ''
       }
       const haspool = this.marketLists.find(v => (v.mid === Number(path)))
-      // console.log(haspool)
       return haspool;
     },
     routePath() {
       const path = this.thisCoinsPath;
-      // console.log(path)
       if(!path) {
         return false
       }
       const pathArr = path.split('-')
       return pathArr
     },
-    weight() {
-      if (!this.rankInfo.length || !this.bestPath) {
-        return 0
-      }
-      const weiData = this.rankInfo.find(v => v.mid === this.bestPath.mid);
-      if (!weiData) {
-        return 0
-      }
-      return Number(weiData.pool_weight)
-    },
-    discount() {
-      if (!this.rankInfo.length || !this.bestPath) {
-        return 0
-      }
-      const weiData = this.rankInfo.find(v => v.mid === this.bestPath.mid);
-      if (!weiData) {
-        return 0
-      }
-      return Number(weiData.default_distount)
-    },
+    // weight() {
+    //   if (!this.rankInfo.length || !this.bestPath) {
+    //     return 0
+    //   }
+    //   const weiData = this.rankInfo.find(v => v.mid === this.bestPath.mid);
+    //   if (!weiData) {
+    //     return 0
+    //   }
+    //   return Number(weiData.pool_weight)
+    // },
+    // discount() {
+    //   if (!this.rankInfo.length || !this.bestPath) {
+    //     return 0
+    //   }
+    //   const weiData = this.rankInfo.find(v => v.mid === this.bestPath.mid);
+    //   if (!weiData) {
+    //     return 0
+    //   }
+    //   return Number(weiData.default_distount)
+    // },
     reward() {
-      if (this.useBank) {
-        if (this.thisMarket1.symbol !== 'USDD' || this.thisMarket1.contract !== 'bankofusddv1') {
-          return '0'
-        }
-        let amount = accMul(this.getNum, 3);
-        amount = accDiv(amount, 1000);
-        amount = accDiv(amount, this.price);
-        let reward = amount / this.dfsPrice * this.discount * this.damping;
-        reward = accMul(reward, 0.8)
-        return toFixed(reward, 4)
+      // 排名没查到 || 不是单独池子
+      if (!this.rankInfo.length || !this.bestPath) {
+        return '0'
       }
-      if (!this.bestPath) {
-        return '0.0000';
+      // 不在排名里 - return
+      const rankItem = this.rankInfo.find(v => v.mid === this.bestPath.mid);
+      if (!rankItem) {
+        return '0'
       }
       let amount = '0'
       if (!(this.thisMarket0.symbol === 'EOS' && this.thisMarket0.contract === 'eosio.token')) {
@@ -360,7 +338,7 @@ export default {
       amount = this.payNum;
       amount = accMul(amount, 3);
       amount = accDiv(amount, 1000)
-      let reward = amount / this.dfsPrice * this.discount * this.damping * this.weight;
+      let reward = amount / this.dfsPrice * this.discount;
       reward = accMul(reward, 0.8);
       return toFixed(reward, 4)
     },
@@ -370,13 +348,6 @@ export default {
       }
       return false
     },
-    useBank() {
-      if ((this.thisMarket0.contract === 'tethertether' && this.thisMarket0.symbol === 'USDT') &&
-          (this.thisMarket1.contract === 'bankofusddv1' && this.thisMarket1.symbol === 'USDD')) {
-        return true
-      }
-      return false
-    }
   },
   watch: {
     slipPoint: {
@@ -393,7 +364,6 @@ export default {
     },
     marketLists: {
       handler: function marketList(newVal) {
-        // console.log(newVal)
         if (!newVal.length) {
           return
         }
@@ -560,22 +530,6 @@ export default {
       } else {
         inData.getNum = this.getNum || `${toFixed(1, this.thisMarket1.decimal)}`;
       }
-      if (this.useBank) {
-        if (status === 'first') {
-          return;
-        }
-        (type === 'pay') ? this.getNum = toFixed(this.payNum, this.thisMarket1.decimal)
-                            : this.payNum = toFixed(this.getNum, this.thisMarket0.decimal)
-        this.tradeInfo = {
-          aboutPrice: '1.000000',
-          aboutPriceSym0: '1.000000',
-          type,
-          minOut: toFixed(this.getNum, this.thisMarket0.decimal),
-          price: '1.000000',
-          priceRate: '0.00',
-        }
-        return
-      }
       try {
         // console.log(inData)
         const outData = this.handleDealAmountOut(inData);
@@ -708,51 +662,12 @@ export default {
       }
       return true
     },
-    handleToBank() {
-      if (this.useBank) {
-        this.handleTransfer()
-        return false
-      }
-      return true
-    },
-    // 铸币
-    handleTransfer() {
-      this.loading = true;
-      const memo = this.thisMarket0.symbol === 'USDD' ? 'burn' : 'mint';
-      const params = {
-        code: this.thisMarket0.contract,
-        toAccount: this.baseConfig.toAccountJin,
-        memo,
-        quantity: `${this.payNum} ${this.thisMarket0.symbol}`
-      }
-      EosModel.transfer(params, (res) => {
-        this.loading = false;
-        if(res.code && JSON.stringify(res.code) !== '{}') {
-          this.$message({
-            message: res.message,
-            type: 'error'
-          });
-          return
-        }
-        this.payNum = '';
-        this.getNum = '';
-        this.handleInBy(this.tradeInfo.type, 'first')
-        this.handleBalanTimer();
-        this.$message({
-          message: this.$t('public.success'),
-          type: 'success'
-        });
-      })
-    },
     // swap交易
     handleSwapTrade() {
       if (this.loading) {
         return
       }
       if (!this.handleReg()) {
-        return
-      }
-      if (!this.handleToBank()) {
         return
       }
       this.loading = true;
@@ -1030,7 +945,7 @@ export default {
   }
   .tabB{
     margin: 24px 0;
-    padding: 0 40px;
+    padding: 0 40px 20px;
     font-size: 26px;
     color: $color-black;
     .flexb{
