@@ -52,7 +52,7 @@ class swapRouter {
           let path = paths[i];
           let tks = path.split("-");
           if (tks.length >= 3) {
-            break
+            continue
           }
           if (tks[0] === tokenA && tks[tks.length - 1] !== tokenB) {
             new_paths.push(tokenB + "-" + path)
@@ -94,6 +94,7 @@ class swapRouter {
       this.mid_market_map = res.mid_market_map;
       this.tokens = res.tokens;
       this.isInit = true;
+      // console.log('生成路径长度 - ', this.paths)
       console.log('生成路径长度 - ', this.paths.length)
       console.log('循环执行结束 - ', Date.parse(new Date()))
     }).catch(e => console.log(e))
@@ -123,8 +124,8 @@ class swapRouter {
       for (let i = 0; i < this.paths.length; i++) {
         let path = this.paths[i];
         let tks = path.split("-");
-        if (tks.length > 4) {
-          break
+        if (tks.length >= 3) {
+          continue
         }
         if (tks[0] === tokenA && tks[tks.length - 1] !== tokenB) {
           new_paths.push(tokenB + "-" + path)

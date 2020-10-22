@@ -123,7 +123,7 @@
       <template v-for="(item, index) in minersArr">
         <div class="list" :class="{'page1': page === 1}" :key="index">
           <div class="flexb mb10">
-            <span>{{ item.miner }}</span>
+            <span>{{ handleDealAccountHide(item.miner) }}</span>
             <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
           </div>
           <div class="flexb">
@@ -172,7 +172,7 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, getMarketTime,
+import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, getMarketTime, dealAccountHide,
          dealMinerData, perDayReward, getPoolApr, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
@@ -405,6 +405,9 @@ export default {
     })
   },
   methods: {
+    handleDealAccountHide(str) {
+      return dealAccountHide(str)
+    },
     handleTo(name) {
       this.$router.push({
         name
