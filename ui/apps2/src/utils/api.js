@@ -44,3 +44,24 @@ export function getVoteRankConf(lists) {
     store.dispatch('setRankInfo', rankInfo)
   })
 }
+
+// 获取交易挖矿投票前21名
+export function getVoteTradeRank(cb) {
+  const params = {
+    "code": "dfspoolsvote",
+    "scope": "dfspoolsvote",
+    "json": true,
+    "table": "pools",
+    limit: 21,
+    "index_position": 2,
+    "key_type": "float64",
+  }
+  EosModel.getTableRows(params, (res) => {
+    const rows = res.rows || [];
+    if (!rows.length) {
+      return
+    }
+    store.dispatch('setRankTrade', rows)
+    cb ? cb(rows) : null
+  })
+}

@@ -101,6 +101,7 @@ const sys = {
       "refund_delay_sec": 31104000
     }],
     rankInfo: localStorage.getItem('rankInfo') ? JSON.parse(localStorage.getItem('rankInfo')) : [], // 挖矿权重列表,
+    rankTrade: localStorage.getItem('rankTrade') ? JSON.parse(localStorage.getItem('rankTrade')) : [], // 挖矿权重列表,
     dfsData: {},
     poolsBal: '0.0000', // swap EOS数量
 
@@ -118,6 +119,9 @@ const sys = {
   mutations: {
     SET_RANKINFO: (state, rankInfo) => {
       state.rankInfo = rankInfo;
+    },
+    SET_RANKTRADE: (state, rankTrade) => {
+      state.rankTrade = rankTrade;
     },
     SET_BASECONFIG: (state, baseConfig) => {
       state.baseConfig = baseConfig;
@@ -177,6 +181,9 @@ const sys = {
   actions: {
     setRankInfo({ commit }, rankInfo) {
       commit('SET_RANKINFO', rankInfo);
+    },
+    setRankTrade({ commit }, rankTrade) {
+      commit('SET_RANKTRADE', rankTrade);
     },
     setBaseConfig({ commit }, baseConfig) {
       commit('SET_BASECONFIG', baseConfig);

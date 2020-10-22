@@ -110,7 +110,7 @@
               {{ tradeInfo.priceRate }}%
             </span>
           </div>
-          <div class="flexb" :class="{'fee': !(weight || useBank)}">
+          <div class="flexb">
             <span class="flex">
               <span class="tip">{{ $t('public.fee') }}</span>
               <el-popover 
@@ -125,7 +125,7 @@
             </span>
             <span>{{fees}} {{ thisMarket0.symbol }}</span>
           </div>
-          <div class="flexb fee" v-if="(weight && Number(reward)) || useBank">
+          <div class="flexb" v-if="Number(reward) || useBank">
             <span class="tip">{{ $t('mine.mineBonus') }}</span>
             <span>{{ reward }} DFS</span>
           </div>
@@ -211,6 +211,7 @@ import { SwapRouter, SwapRouterFilter } from '@/utils/swap_router';
 import Tabs from '../index/components/Tabs';
 import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
+import {getVoteTradeRank} from '@/utils/api';
 import MarketList from '@/components/MarketList';
 import UsddTip from '@/components/UsddTip';
 
@@ -223,7 +224,7 @@ export default {
   },
   data() {
     return {
-      // discount: 0.2, // 配置项 - 后期从合约拿
+      discount: 0.2, // 固定
       loading: false,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       payNum: '',
@@ -280,8 +281,7 @@ export default {
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
       dfsPrice: state => state.sys.dfsPrice,
-      rankInfo: state => state.sys.rankInfo, // 交易对权重列表
-      damping: state => state.sys.damping,
+      rankTrade: state => state.sys.rankTrade, // 排名前21的交易对
       filterMkLists: state => state.sys.filterMkLists,
       marketLists: state => state.sys.marketLists,
     }),
@@ -318,40 +318,15 @@ export default {
       const pathArr = path.split('-')
       return pathArr
     },
-    weight() {
-      if (!this.rankInfo.length || !this.bestPath) {
-        return 0
-      }
-      const weiData = this.rankInfo.find(v => v.mid === this.bestPath.mid);
-      if (!weiData) {
-        return 0
-      }
-      return Number(weiData.pool_weight)
-    },
-    discount() {
-      if (!this.rankInfo.length || !this.bestPath) {
-        return 0
-      }
-      const weiData = this.rankInfo.find(v => v.mid === this.bestPath.mid);
-      if (!weiData) {
-        return 0
-      }
-      return Number(weiData.default_distount)
-    },
     reward() {
-      if (this.useBank) {
-        if (this.thisMarket1.symbol !== 'USDD' || this.thisMarket1.contract !== 'bankofusddv1') {
-          return '0'
-        }
-        let amount = accMul(this.getNum, 3);
-        amount = accDiv(amount, 1000);
-        amount = accDiv(amount, this.price);
-        let reward = amount / this.dfsPrice * this.discount * this.damping;
-        reward = accMul(reward, 0.8)
-        return toFixed(reward, 4)
+      // 排名没查到 || 不是单独池子
+      if (!this.rankTrade.length || !this.bestPath) {
+        return '0.0000'
       }
-      if (!this.bestPath) {
-        return '0.0000';
+      // 不在排名里 - return
+      const rankItem = this.rankTrade.find(v => v.mid === this.bestPath.mid);
+      if (!rankItem) {
+        return '0.0000'
       }
       let amount = '0'
       if (!(this.thisMarket0.symbol === 'EOS' && this.thisMarket0.contract === 'eosio.token')) {
@@ -360,7 +335,7 @@ export default {
       amount = this.payNum;
       amount = accMul(amount, 3);
       amount = accDiv(amount, 1000)
-      let reward = amount / this.dfsPrice * this.discount * this.damping * this.weight;
+      let reward = amount / this.dfsPrice * this.discount;
       reward = accMul(reward, 0.8);
       return toFixed(reward, 4)
     },
@@ -435,6 +410,7 @@ export default {
   created() {
     this.handleGetUrlInAndOut()
     this.handleInBy(this.tradeInfo.type, 'first')
+    getVoteTradeRank()
   },
   mounted() {
     this.handleGetPrice()
@@ -1045,7 +1021,7 @@ export default {
   }
   .tabB{
     margin: 24px 0;
-    padding: 0 40px;
+    padding: 0 40px 30px;
     font-size: 26px;
     color: $color-black;
     .flexb{
