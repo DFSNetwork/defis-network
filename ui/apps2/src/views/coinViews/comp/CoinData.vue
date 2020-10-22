@@ -24,18 +24,6 @@
              <div>{{ parseInt(volume_24h) }}</div>
              <div>{{ parseInt(supply) || '-' }}</div>
           </div>
-          <!-- <div class="flexe">
-            <span class="tip">持有人数</span>
-            <span class="num">{{ holders }}</span>
-          </div>
-          <div class="flexe">
-            <span class="tip">24H换手</span>
-            <span class="num">{{ parseInt(volume_24h) }}</span>
-          </div>
-          <div class="flexe">
-            <span class="tip">当前发行量</span>
-            <span class="num">{{ parseInt(supply) || '-' }}</span>
-          </div> -->
         </div>
       </div>
     </div>
@@ -85,6 +73,7 @@
       :show-close="false"
       :visible.sync="showMarketList">
       <market-list :marketLists="marketLists"
+        :type="`kline`"
         v-if="showMarketList"
         @listenMarketChange="handleMarketChange"
         @listenClose="handleClose"/>

@@ -508,11 +508,10 @@ export function dealSymArr(lists = []) {
   const stringify = {};
   resArr.forEach(v => {
     const str = `${v.contract}:${v.symbol}`;
-    if (!stringify.hasOwnProperty(str)) {
+    if (!stringify[str]) {
       uniques.push(v);
       stringify[str] = true;
     }
   })
-  console.log(uniques)
   return uniques;
 }

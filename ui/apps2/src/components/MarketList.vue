@@ -10,7 +10,17 @@
     <div class="iptSearch" :class="{'other': type === 'other'}">
       <el-input v-model="search" clearable :placeholder="`${$t('pools.searchMarket')}..`"></el-input>
     </div>
-    <div class="scroll" v-if="type === 'other'">
+    <div class="scroll" v-if="type === 'kline'">
+      <template v-for="(item, i) in searchArr">
+        <div class="item flexb" :key="i" @click="handleSelectThis(item)">
+          <div>
+            <div class="coin">{{item.symbol0}} / {{item.symbol1}}</div>
+            <div class="contract tip">{{item.contract0}} / {{item.contract1}}</div>
+          </div>
+        </div>
+      </template>
+    </div>
+    <div class="scroll" v-else-if="type === 'other'">
       <template v-for="(item, i) in searchArr">
         <div class="item flexb" :key="i" @click="handleSelectThis(item)">
           <div>
@@ -55,6 +65,12 @@ export default {
     }
   },
   props: {
+    marketLists: {
+      type: Array,
+      default: function market() {
+        return []
+      }
+    },
     thisMarket0: {
       type: Object,
       default: function market() {
@@ -75,7 +91,6 @@ export default {
   computed: {
     ...mapState({
       filterMkLists: state => state.sys.filterMkLists,
-      marketLists: state => state.sys.marketLists,
     }),
   },
   watch: {
@@ -87,7 +102,9 @@ export default {
         // 筛选出所有币种
         this.coinList = [];
         this.filterCoinList = [];
-        if (this.type !== 'other') {
+        if (this.type === 'kline') {
+          this.searchArr = this.marketLists;
+        } else if (this.type !== 'other') {
           const arr = dealSymArr(newVal)
           this.coinList = arr;
           const arr2 = dealSymArr(this.filterMkLists)
@@ -112,6 +129,11 @@ export default {
     },
     handleSearch() {
       const search = this.search.toUpperCase();
+      if (this.type === 'kline') {
+        const searchArr = this.marketLists.filter(v => v.symbol0.indexOf(search) !== -1 || v.symbol1.indexOf(search) !== -1)
+        this.searchArr = searchArr;
+        return
+      }
       if (this.type === 'other') {
         if (!search) {
           this.searchArr = this.filterMkLists;
