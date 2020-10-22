@@ -496,3 +496,23 @@ export function dealAccountHide(str) {
     return str1 + str2 + str3;
   }
 }
+
+// 数组对象去重
+export function dealSymArr(lists = []) {
+  const resArr = [];
+  lists.forEach((v) => {
+    resArr.push(v.sym0Data, v.sym1Data)
+  })
+  // 删除重复项
+  const uniques = [];
+  const stringify = {};
+  resArr.forEach(v => {
+    const str = `${v.contract}:${v.symbol}`;
+    if (!stringify.hasOwnProperty(str)) {
+      uniques.push(v);
+      stringify[str] = true;
+    }
+  })
+  console.log(uniques)
+  return uniques;
+}

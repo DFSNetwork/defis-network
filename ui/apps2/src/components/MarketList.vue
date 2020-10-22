@@ -41,6 +41,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import {dealSymArr} from '@/utils/public';
 import errUrl from '@/assets/img/eosio.token-eos.png'
 export default {
   data() {
@@ -87,9 +88,9 @@ export default {
         this.coinList = [];
         this.filterCoinList = [];
         if (this.type !== 'other') {
-          const arr = this.handleDealSymArr(newVal)
+          const arr = dealSymArr(newVal)
           this.coinList = arr;
-          const arr2 = this.handleDealSymArr(this.filterMkLists)
+          const arr2 = dealSymArr(this.filterMkLists)
           this.filterCoinList = arr2;
         } else {
           this.searchArr = this.filterMkLists;
@@ -143,22 +144,6 @@ export default {
     },
     handleClose() {
       this.$emit('listenClose', false)
-    },
-    handleDealSymArr(lists = []) {
-      const resArr = [];
-      lists.forEach((v) => {
-        // const imgUrl0 = `https://ndi.340wan.com/eos/${v.sym0Data.contract}-${v.sym0Data.symbol.toLowerCase()}.png`;
-        // v.sym0Data.imgUrl = imgUrl0;
-        // const imgUrl1 = `https://ndi.340wan.com/eos/${v.sym1Data.contract}-${v.sym1Data.symbol.toLowerCase()}.png`;
-        // v.sym1Data.imgUrl = imgUrl1;
-        resArr.push(v.sym0Data, v.sym1Data)
-      })
-      // 删除重复项
-      const newArr = resArr.filter((item, index, self) => {
-        const i = self.findIndex(v => v.contract === item.contract && v.symbol === item.symbol);
-        return self.indexOf(item) === i;
-      })
-      return newArr
     },
     // 选择当前市场
     handleSelectThis(item) {
