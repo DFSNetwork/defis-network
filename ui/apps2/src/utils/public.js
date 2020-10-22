@@ -471,3 +471,28 @@ export function getPriceLen(price) {
 export function dealPrice(price) {
   return Number(price).toFixed(getPriceLen())
 }
+
+// 处理账号缩略 < 12 隐藏后半部分 | === 12 隐藏中间部分 | 自己账户不处理
+export function dealAccountHide(str) {
+  const scatter = store.state.app.scatter;
+  if (scatter && scatter.identity && scatter.identity.accounts[0].name === str) {
+    return str
+  }
+  let newStr = '';
+  if (str.length < 12) {
+    const n = (str.length / 2).toFixed(0);
+    newStr = str.substr(0, n);
+    const m = str.substring(n).split('');
+    let end = '';
+    m.forEach(() => {
+      end += '*';
+    });
+    return newStr + end;
+  }
+  if (str.length === 12) {
+    const str1 = str.substr(0, 4);
+    const str2 = '****';
+    const str3 = str.substring(8);
+    return str1 + str2 + str3;
+  }
+}

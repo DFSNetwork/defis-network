@@ -8,7 +8,7 @@
     <template v-for="(item, index) in minersArr">
       <div class="list" :key="index" @click="handleCheckItem(item)">
         <div class="flexb mb10">
-          <span>{{ item.holder }}</span>
+          <span>{{ handleDealAccountHide(item.holder) }}</span>
           <span class="flexc">
             <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
             <span class="addition flexa" v-if="Number(item.buff)">
@@ -49,7 +49,7 @@
 import { mapState } from 'vuex';
 import moment from 'moment';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accAdd, accSub, accMul, accDiv, toLocalTime, countdown } from '@/utils/public';
+import { toFixed, accAdd, accSub, accMul, accDiv, toLocalTime, countdown, dealAccountHide } from '@/utils/public';
 import Mock from 'mockjs';
 import MyDeposit from '../dialog/MyDeposit';
 export default {
@@ -117,6 +117,9 @@ export default {
     this.handleGetList()
   },
   methods: {
+    handleDealAccountHide(str) {
+      return dealAccountHide(str)
+    },
     handleCheckItem(item) {
       this.checkItem = item;
       this.showMyDeposit = true
