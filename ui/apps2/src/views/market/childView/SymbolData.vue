@@ -123,7 +123,7 @@
       <template v-for="(item, index) in minersArr">
         <div class="list" :class="{'page1': page === 1}" :key="index">
           <div class="flexb mb10">
-            <span>{{ handleDealAccountHide(item.miner) }}</span>
+            <span>{{ (item.miner) }}</span>
             <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
           </div>
           <div class="flexb">

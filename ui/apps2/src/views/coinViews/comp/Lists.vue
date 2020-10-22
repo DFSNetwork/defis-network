@@ -5,9 +5,9 @@
       <div class="listOld" v-for="(item, index) in pageLists" :key="index" @click="handleToBrowser(item.trx_id)">
         <div class="flexb name">
           <!-- <span class="flexc num"> -->
-            <span>{{ handleDealAccountHide(item.fromx) }}</span>
+            <span>{{ (item.fromx) }}</span>
             <span class="flexc"><img class="exchange" src="@/assets/img/dex/exchange.svg" alt=""></span>
-            <span>{{ handleDealAccountHide(item.tox) }}</span>
+            <span>{{ (item.tox) }}</span>
           <!-- </span> -->
         </div>
         <div class="price flexb">
