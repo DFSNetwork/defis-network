@@ -1,15 +1,10 @@
 <template>
   <div class="symbolData">
     <div class="myPools">
-      <!-- <div class="title"><span class="act">{{ $t('mine.myMine') }}</span></div> -->
       <div class="title flexb">
         <span class="act">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span>
-        <!-- <span class="warntip flexa" v-if="weight <= 0" @click="showRank = true">
-          <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
-          <span>{{ $t('public.warmPrompt') }}</span>
-        </span> -->
       </div>
-      <div class="rankTip flexb" v-if="weight <= 0">
+      <div class="rankTip flexb" v-if="!isRank">
         <span>{{ $t('vote.rankTip') }}</span>
         <span class="red" @click="handleTo('vote')">{{ $t('vote.challenge') }}</span>
       </div>
@@ -28,13 +23,7 @@
             @click="handleJoin(thisMarket)">{{ $t('mine.join') }}</div>
         </div>
         <div :class="`mylist ${handleGetClass(thisMarket.mid)}`" @click="handleJoin(thisMarket)">
-          <div class="flexb">
-            <span class="flexa" v-if="handleGetClass(thisMarket.mid) === '' && Number(buff)">
-              <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
-              <span class="addition">{{ $t('mine.buff') }}：{{ buff }}%</span>
-            </span>
-          </div>
-          <div class="symbol flexb" :class="{'noTop': !(handleGetClass(thisMarket.mid) === '' && Number(buff))}">
+          <div class="symbol flexb noTop">
             <div class="coinInfo flex">
               <div class="coinImg"><img width="100%" :src="thisMarket.sym0Data.imgUrl" :onerror="errorCoinImg"></div>
               <div>
@@ -106,10 +95,6 @@
           <div class="rewardPerDay tip">
             <span>{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</span>
           </div>
-          <!-- <div class="rewardPerDay tip"><span>{{ $t('mine.mineApr') }}: {{ apr }}%</span></div>
-          <div class="rewardPerDay tip" v-if="!isActual && Number(feesApr)"><span>{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</span></div>
-          <div class="rewardPerDay tip" v-if="isActual && Number(feesApr)"><span>{{ $t('mine.marketApr24H') }}: {{ feesApr }} %</span></div>
-          <div class="rewardPerDay tip" v-if="Number(yfcApy)">YFC钓鱼年化: {{ yfcApy }}%</div> -->
         </div>
       </div>
     </div>
@@ -157,7 +142,7 @@
     <el-dialog
       class="myDialog apy"
       :visible.sync="showApyDetail">
-      <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="isActual"
+      <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
                  :apr="apr" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
     </el-dialog>
     <!-- <el-dialog
@@ -173,7 +158,7 @@ import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, getMarketTime, dealAccountHide,
-         dealMinerData, perDayReward, getPoolApr, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
+         dealMinerData, perDayReward, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
 import MarketTip from '../popup/MarketTip';
@@ -323,20 +308,12 @@ export default {
       }
       return toFixed(min, 4)
     },
-    weight() {
+    isRank() {
       if (!this.rankInfo.length || !this.thisMarket.mid) {
         return '0'
       }
-      const wData = this.rankInfo.find(v => v.mid === this.thisMarket.mid) || {}
-      return wData.pool_weight || 0;
-    },
-    buff() {
-      if (Number(this.weight || 0) <= 1) {
-        return 0
-      }
-      let t = accSub(this.weight, 1);
-      t = accMul(t, 100);
-      return t.toFixed(0)
+      const wData = this.rankInfo.find(v => v.mid === this.thisMarket.mid)
+      return wData
     },
     dayRewardNum() {
       return perDayReward(this.thisMarket.mid)
@@ -347,13 +324,7 @@ export default {
     },
     feesApr() {
       const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
-      const thisPoolApr = getPoolApr(this.thisMarket)
-      return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr) ? parseFloat(feesApr.poolsApr) : parseFloat(thisPoolApr)
-    },
-    isActual() {
-      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
-      const thisPoolApr = getPoolApr(this.thisMarket)
-      return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr)
+      return parseFloat(feesApr.poolsApr)
     },
     marketReward() {
       if (!this.marketData.length || !Number(this.nowMarket.getNum1)) {

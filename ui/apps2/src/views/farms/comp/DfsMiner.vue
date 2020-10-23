@@ -93,8 +93,6 @@ export default {
         let gold = [], silver = [], bronze = [];
         rankInfo.forEach(v => {
           const item = newVal.find(vv => vv.mid === v.mid)
-          const weight = Number(v.pool_weight).toFixed(4)
-          item.pool_weight = weight;
           if (v.rank <= 2) {
             gold.push(item)
           } else if (v.rank <= 5) {

@@ -136,7 +136,6 @@ export default {
     ...mapState({
       // 箭头函数可使代码更简练
       feesApr: state => state.sys.feesApr,
-      eggargs: state => state.sys.eggargs,
       list: state => state.sys.list,
       dfsPrice: state => state.sys.dfsPrice,
       dfsData: state => state.sys.dfsData,

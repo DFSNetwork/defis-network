@@ -35,23 +35,23 @@
       <img width="100%" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gieh1hl5i4j30ku112tf3.jpg" />
     </el-dialog>
 
-    <dfs-info-data-tip
+    <!-- <dfs-info-data-tip
       :dfsInfoData="dfsInfoData"
       :close="closeDFSInfoDataTip"
       :marketLists="marketLists"
       @onConfirm="() => {
         this.closeDFSInfoDataTip = true;
       }"
-    />
+    /> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import { mapState } from 'vuex';
-import DfsInfoDataTip from "@/components/DFSInfoDataTip";
+// import DfsInfoDataTip from "@/components/DFSInfoDataTip";
 import { EosModel } from '@/utils/eos';
-import { toFixed, accMul } from '@/utils/public';
+import { toFixed, accMul, dealSymArr } from '@/utils/public';
 
 export default {
   data() {
@@ -77,9 +77,9 @@ export default {
       poolsBal: state => state.sys.poolsBal,
     }),
   },
-  components: {
-    DfsInfoDataTip,
-  },
+  // components: {
+  //   DfsInfoDataTip,
+  // },
   beforeDestroy() {
     clearInterval(this.timer);
   },
@@ -100,6 +100,23 @@ export default {
     }
   },
   methods: {
+    handleSetAllRes() {
+      const feesData = this.dfsInfoData.feesData || {};
+      const allResult = [];
+      const feesDataKeys = Object.keys(feesData)
+      const coinArr = dealSymArr(this.marketLists);
+      feesDataKeys.forEach((key) => {
+        const isShowToken = coinArr.find(v => v.symbol === key);
+        const value = feesData[key];
+        const sym1Liq = isShowToken.reserve.split(' ')[0];
+        const poolsApr = value / (sym1Liq - value) * 365 * 100;
+        allResult.push({
+          symbol: isShowToken.symbol,
+          poolsApr: `${poolsApr.toFixed(3)}%`
+        });
+      })
+      this.$store.dispatch('setFeesApr', allResult);
+    },
     // 分享 - 复制文本
     handleCopy() {
       this.$message.success({
@@ -136,6 +153,7 @@ export default {
       }
       this.dfsInfoData = result.data;
       this.$store.dispatch('setDfsData', this.dfsInfoData)
+      this.handleSetAllRes()
     },
     // 获取账户余额
     async handleGetBalance() {
