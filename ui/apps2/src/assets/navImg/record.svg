@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="14px" height="17px" viewBox="0 0 14 17" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>record_icon</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="0.0%" y="0.0%" width="100.0%" height="100.0%" filterUnits="objectBoundingBox" id="filter-1">
+            <feGaussianBlur stdDeviation="0" in="SourceGraphic"></feGaussianBlur>
+        </filter>
+        <linearGradient x1="36.4616992%" y1="14.2118566%" x2="69.3203936%" y2="100%" id="linearGradient-2">
+            <stop stop-color="#47D5B7" offset="0%"></stop>
+            <stop stop-color="#12C19C" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="v3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="兑换" transform="translate(-228.000000, -529.000000)">
+            <rect fill="#FFFFFF" x="0" y="0" width="375" height="812"></rect>
+            <rect id="矩形" x="0" y="71" width="375" height="721"></rect>
+            <g id="兑换展示" transform="translate(14.000000, 133.000000)">
+                <rect id="q" stroke="#E0E0E0" fill="#FFFFFF" filter="url(#filter-1)" x="0.5" y="0.5" width="345" height="428" rx="10"></rect>
+                <g id="交易" transform="translate(214.000000, 394.000000)">
+                    <g id="record_icon" transform="translate(0.000000, 2.000000)">
+                        <path d="M4.5,0 C4.77614237,0 5,0.223857625 5,0.5 L5,2 L9,2 L9,0.5 C9,0.223857625 9.22385763,0 9.5,0 L10.5,0 C10.7761424,0 11,0.223857625 11,0.5 L11,2 L12,2 C13.1045695,2 14,2.8954305 14,4 L14,14.426721 C14,15.4431521 13.2376198,16.2979317 12.2278037,16.413705 L7.11393229,17 L1.77940282,16.4079968 C0.766420847,16.2955804 0,15.4394004 0,14.4201998 L0,4 C0,2.8954305 0.8954305,2 2,2 L3,2 L3,0.5 C3,0.223857625 3.22385763,0 3.5,0 L4.5,0 Z" id="路径" fill="url(#linearGradient-2)"></path>
+                        <path d="M8.25,10 C8.66421356,10 9,10.2686292 9,10.6 C9,10.9313708 8.66421356,11.2 8.25,11.2 L4.75,11.2 C4.33578644,11.2 4,10.9313708 4,10.6 C4,10.2686292 4.33578644,10 4.75,10 L8.25,10 Z M9.25,6 C9.66421356,6 10,6.26862915 10,6.6 C10,6.93137085 9.66421356,7.2 9.25,7.2 L4.75,7.2 C4.33578644,7.2 4,6.93137085 4,6.6 C4,6.26862915 4.33578644,6 4.75,6 L9.25,6 Z" id="形状" fill="#FFFFFF"></path>
+                    </g>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

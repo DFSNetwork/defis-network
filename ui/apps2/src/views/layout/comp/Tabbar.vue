@@ -48,34 +48,33 @@ export default {
 
 <style lang="scss" scoped>
 /*iphone Xs Max*/
-@media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio:3){
+@media only screen and (device-width: 414px) and (device-height: 896px) {
   .tabbar{
-    bottom: 30px !important;
+    padding-bottom: 30px !important;
   }
 }
 /*iphoneX、iphoneXs*/
 @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
   .tabbar{
-    bottom: 30px !important;
+    padding-bottom: 30px !important;
   }
 }
 .tabbarComp{
   position: relative;
   .nullDiv{
-    height: 110px;
+    height: 100px;
     width: 100%;
   }
   .tabbar{
     z-index: 1002;
-    box-sizing: border-box;
     position: fixed;
     bottom: 0px;
     width: 100%;
     background: #FFF;
     font-size: 18px;
-    padding: 10px 0 20px;
+    padding: 5px 0;
     border-top: 1px solid #eee;
-    height: 110px;
+    height: 100px;
     &>div{
       flex: 1;
       text-align: center;

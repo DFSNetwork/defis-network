@@ -26,12 +26,6 @@ import { toFixed, accAdd } from '@/utils/public';
 export default {
   name: 'loop',
   props: {
-    marketLists: {
-      type: Array,
-      default: function mlt() {
-        return []
-      }
-    },
     allClaiming: {
       type: Boolean,
       default: false,
@@ -64,6 +58,7 @@ export default {
     ...mapState({
       scatter: state => state.app.scatter,
       poolsBal: state => state.sys.poolsBal,
+      marketLists: state => state.sys.marketLists,
     }),
     allClaim() {
       if (!this.accMine.length) {

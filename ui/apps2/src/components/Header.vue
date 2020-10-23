@@ -1,7 +1,7 @@
 <template>
   <div class="header flexb">
     <div class="tools flexb">
-      <div class="logoDiv" :class="{'ani': ani}" @click="handleToIndex">
+      <div class="logoDiv" :class="{'ani': ani}" @click="handleToIndex" @dblclick="handleDbClick">
         <img class="logo" src="/static/faviconV3.png">
       </div>
       <span class="create flexc" @click="handleToVote">{{ $t('vote.vote') }}</span>
@@ -14,7 +14,7 @@
         <span>Apps</span>
         <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
       </span>
-      <span class="create flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/navImg/my_1.svg" alt=""></span>
+      <span class="create flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>
       <!-- <span class="flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span> -->
     </div>
 
@@ -90,16 +90,18 @@ export default {
       login(this, () => {})
     },
     handleToIndex() {
-      this.showEgg = true;
       clearTimeout(this.aniTimer)
       this.ani = true;
       this.aniTimer = setTimeout(() => {
         this.ani = false;
       }, 200);
-      // if (this.$route.name === 'index') {
-      //   return
-      // }
-      // this.$router.push({name: 'index'})
+      if (this.$route.name === 'index') {
+        return
+      }
+      this.$router.push({name: 'index'})
+    },
+    handleDbClick() {
+      this.showEgg = true;
     },
     handleShowNav() {
       this.$emit('listenShowNav', false)
@@ -243,7 +245,7 @@ export default {
       }
     }
     .svgIcon{
-      width: 40px;
+      width: 35px;
     }
   }
 }

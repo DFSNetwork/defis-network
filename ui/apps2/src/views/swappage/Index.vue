@@ -3,74 +3,87 @@
     <div class="tabView">
       <div class="tabC">
         <tabs />
-        <div class="symData">
-          <div class="sym0Data" :class="{'focus': payIptFocus}">
+        <div class="tabD">
+          <div class="symData">
+            <div class="sym0Data" :class="{'focus': payIptFocus}">
+              <div class="info flexb">
+                <span @click="handleClickBalan('pay')">{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket0.symbol }}</span>
+                <span class="type">{{ $t('dex.pay') }}</span>
+              </div>
+              <div class="iptDiv flexb">
+                <div class="coinInfo flex" @click="listenShowDrawer('start')">
+                  <div class="coinImg"><img width="100%" :src="thisMarket0.imgUrl" :onerror="errorCoinImg" alt=""></div>
+                  <div>
+                    <div class="coin">{{ thisMarket0.symbol }} <i class="el-icon-arrow-down"></i></div>
+                    <div class="contract tip">{{ thisMarket0.contract }}</div>
+                  </div>
+                </div>
+                <div class="inputDiv">
+                  <el-input class="elIpt" type="number" v-model="payNum" placeholder="0.0"
+                    @input="handleInBy('pay')"
+                    @focus="handleFocus('pay')"
+                    @blur="handleBlur('pay')"></el-input>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="exchange">
+            <div class="border flexc" :class="{'payFocus': payIptFocus, 'getFocus': getIptFocus}" @click="handleExchange">
+              <img class="iconImg" v-if="!direction" src="@/assets/img/dex/switch_down.svg">
+              <img class="iconImg" v-else src="@/assets/img/dex/switch_up.svg">
+            </div>
+          </div>
+          <div class="sym0Data pdb10" :class="{'focus': getIptFocus}">
             <div class="info flexb">
-              <span @click="handleClickBalan('pay')">{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket0.symbol }}</span>
-              <span class="type">{{ $t('dex.pay') }}</span>
+              <span class="ableGet" @click="handleClickBalan('get')">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket1.symbol }}</span>
+              <span class="type">{{ $t('dex.obtain') }}</span>
             </div>
             <div class="iptDiv flexb">
-              <div class="coinInfo flex" @click="listenShowDrawer('start')">
-                <div class="coinImg"><img width="100%" :src="thisMarket0.imgUrl" :onerror="errorCoinImg" alt=""></div>
+              <div class="coinInfo flex" @click="listenShowDrawer('end')">
+                <div class="coinImg"><img width="100%" :src="thisMarket1.imgUrl" :onerror="errorCoinImg" alt=""></div>
                 <div>
-                  <div class="coin">{{ thisMarket0.symbol }} <i class="el-icon-arrow-down"></i></div>
-                  <div class="contract tip">{{ thisMarket0.contract }}</div>
+                  <div class="coin">{{ thisMarket1.symbol }} <i class="el-icon-arrow-down"></i></div>
+                  <div class="contract tip">{{ thisMarket1.contract }}</div>
                 </div>
               </div>
               <div class="inputDiv">
-                <el-input class="elIpt" type="number" v-model="payNum" placeholder="0.0"
-                  @input="handleInBy('pay')"
-                  @focus="handleFocus('pay')"
-                  @blur="handleBlur('pay')"></el-input>
+                <el-input class="elIpt" type="number" v-model="getNum" placeholder="0.0"
+                  @input="handleInBy('get')"
+                  @focus="handleFocus('get')"
+                  @blur="handleBlur('get')"></el-input>
               </div>
             </div>
           </div>
-        </div>
-        <div class="exchange">
-          <div class="border flexc" :class="{'payFocus': payIptFocus, 'getFocus': getIptFocus}" @click="handleExchange">
-            <img class="iconImg" v-if="!direction" src="@/assets/img/dex/switch_down.svg">
-            <img class="iconImg" v-else src="@/assets/img/dex/switch_up.svg">
-          </div>
-        </div>
-        <div class="sym0Data pdb10" :class="{'focus': getIptFocus}">
-          <div class="info flexb">
-            <span class="ableGet" @click="handleClickBalan('get')">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket1.symbol }}</span>
-            <span class="type">{{ $t('dex.obtain') }}</span>
-          </div>
-          <div class="iptDiv flexb">
-            <div class="coinInfo flex" @click="listenShowDrawer('end')">
-              <div class="coinImg"><img width="100%" :src="thisMarket1.imgUrl" :onerror="errorCoinImg" alt=""></div>
-              <div>
-                <div class="coin">{{ thisMarket1.symbol }} <i class="el-icon-arrow-down"></i></div>
-                <div class="contract tip">{{ thisMarket1.contract }}</div>
-              </div>
-            </div>
-            <div class="inputDiv">
-              <el-input class="elIpt" type="number" v-model="getNum" placeholder="0.0"
-                @input="handleInBy('get')"
-                @focus="handleFocus('get')"
-                @blur="handleBlur('get')"></el-input>
-            </div>
-          </div>
-        </div>
 
-        <div class="rate flexb">
-          <span class="tip flex">
-            <span>{{ $t('dex.rate') }}</span>
-            <!-- <span class="flexa" @click="exRate =!exRate">
-              <img class="iconImg small" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
-              <img class="iconImg small" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
-            </span> -->
-          </span>
-          <span class="flexend" v-loading="refreshLoading">
-            <span v-if="!exRate">1{{ thisMarket1.symbol }} = {{ tradeInfo.aboutPrice || '-' }}{{ thisMarket0.symbol }}</span>
-            <span v-else>1{{ thisMarket0.symbol }} = {{ tradeInfo.aboutPriceSym0 || '-' }}{{ thisMarket1.symbol }}</span>
-            <!-- <img @click="handleDealPrice" class="refresh" src="@/assets/img/dex/refresh.svg" alt=""> -->
-            <span class="flexa" @click="exRate =!exRate">
-              <img class="iconImg small" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
-              <img class="iconImg small" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
+          <div class="rate flexb">
+            <span class="tip flex">
+              <span>{{ $t('dex.rate') }}</span>
             </span>
-          </span>
+            <span class="flexend" v-loading="refreshLoading">
+              <span v-if="!exRate">1{{ thisMarket1.symbol }} = {{ tradeInfo.aboutPrice || '-' }}{{ thisMarket0.symbol }}</span>
+              <span v-else>1{{ thisMarket0.symbol }} = {{ tradeInfo.aboutPriceSym0 || '-' }}{{ thisMarket1.symbol }}</span>
+              <span class="flexa" @click="exRate =!exRate">
+                <img class="iconImg small" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
+                <img class="iconImg small" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
+              </span>
+            </span>
+          </div>
+          <div class="btnDiv">
+            <div class="btn flexc" v-loading="loading" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
+          </div>
+
+          <div class="linkTo flexb">
+            <span class="flexc">
+              <img src="@/assets/navImg/market.svg">
+              <span @click="handleTo('myMarketList')">{{ $t('market.myMarkets') }}</span>
+              <i class="el-icon-arrow-right"></i>
+            </span>
+            <span class="flexc">
+              <img src="@/assets/navImg/record.svg">
+              <span @click="handleToHistory">{{ $t('dex.tradeHistory') }}</span>
+              <i class="el-icon-arrow-right"></i>
+            </span>
+          </div>
         </div>
       </div>
       <!-- 价格滑点等 -->
@@ -104,10 +117,13 @@
                 <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
-            <span class="green"
-              :class="{'yellow': Number(tradeInfo.priceRate) > 5,
-                       'red': Number(tradeInfo.priceRate) > 10}">
-              {{ tradeInfo.priceRate }}%
+            <span class="flexa">
+              <span class="green"
+                :class="{'yellow': Number(tradeInfo.priceRate) > 5,
+                          'red': Number(tradeInfo.priceRate) > 10}">
+                {{ tradeInfo.priceRate }}%
+              </span>
+              <img class="tradeSet" @click="handleShowTools" src="@/assets/navImg/swapSet.svg" alt="">
             </span>
           </div>
           <div class="flexb">
@@ -131,21 +147,15 @@
           </div>
         </div>
       </el-collapse-transition>
-    </div>
 
-    <div class="flexa flexe" v-if="marketLists.length && bestPath">
-      <span class="history" @click="handleToHistory">{{ $t('dex.tradeHistory') }}></span>
-    </div>
-
-    <div class="btnDiv">
-      <div class="btn flexc" v-loading="loading" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
     </div>
 
     <div class="pool" v-if="marketLists.length && bestPath">
       <div class="flexb">
         <div>
           <span>{{ $t('dex.poolNum') }}</span>
-          <span class="marketNow" @click="handleToMarketNow">{{ $t('dex.marketNow') }} ></span>
+          <!-- <span class="marketNow" @click="handleTo('market')">{{ $t('dex.marketNow') }} ></span> -->
+          <span class="marketNow" @click="handleTo('poolsMarket')">前往矿池 ></span>
         </div>
         <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
           <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
@@ -190,6 +200,8 @@
       :visible.sync="showUsddTip">
       <usdd-tip />
     </el-dialog>
+
+    <SlipPointTools ref="slipPointTools"/>
   </div>
 </template>
 
@@ -201,13 +213,15 @@ import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara, getCoin } from '
 import { EosModel } from '@/utils/eos';
 import MarketList from '@/components/MarketList';
 import UsddTip from '@/components/UsddTip';
+import SlipPointTools from '@/components/SlipPointTools';
 
 export default {
   name: 'swap',
   components: {
     Tabs,
     MarketList,
-    UsddTip
+    UsddTip,
+    SlipPointTools,
   },
   data() {
     return {
@@ -398,6 +412,9 @@ export default {
     this.handleSetMarkets();
   },
   methods: {
+    handleShowTools() {
+      this.$refs.slipPointTools.showNav = true;
+    },
     handleToHistory() {
       this.$router.push({
         name: 'history',
@@ -469,9 +486,9 @@ export default {
       this.getNum = this.balanceSym1;
       this.handleInBy('get')
     },
-    handleToMarketNow() {
+    handleTo(name) {
       this.$router.push({
-        name: 'market',
+        name,
         params: {
           mid: this.bestPath.mid
         }
@@ -817,11 +834,16 @@ export default {
   background: #FAFAFA;
   border-radius: 12px;
   font-size: 24px;;
+  color: #333;
+  margin-bottom: 30px;
   .tabC{
     background:rgba(255,255,255,1);
     border-radius: 12px;
     border:2px solid rgba(224,224,224,1);
-    padding: 32px 20px;
+    // padding: 32px 26px;
+    .tabD{
+      padding: 8px 26px 32px;
+    }
   }
   .sym0Data{
     padding: 26px 40px 52px;
@@ -924,8 +946,8 @@ export default {
   }
   .tabB{
     margin: 24px 0;
-    padding: 0 40px 20px;
-    font-size: 26px;
+    padding: 0 26px 20px;
+    font-size: 24px;
     color: $color-black;
     .flexb{
       margin-top: 10px;
@@ -949,6 +971,10 @@ export default {
     .red{
       color: rgb(255, 104, 113);;
     }
+    .tradeSet{
+      width: 30px;
+      margin-left: 8px;
+    }
   }
 }
 .flexe{
@@ -966,12 +992,30 @@ export default {
   font-weight: 500;
   .btn{
     height: 88px;
-    background:rgba(7,215,155,1);
-    border-radius: 12px;
+    // background:rgba(7,215,155,1);
+    background: #29D4B0;
+    border-radius: 48px;
     color: #fff;
     &:active{
       background:rgba(2,198,152,1);
     }
+  }
+}
+.linkTo{
+  font-size: 27px;
+  &>span{
+    flex: 1;
+    height: 40px;
+    &:last-child{
+      border-left: 1px solid #E4E6E9;
+    }
+  }
+  img{
+    height: 36px;
+    margin-right: 10px;
+  }
+  i{
+    font-size: 28px;
   }
 }
 .usddTip{
@@ -986,13 +1030,13 @@ export default {
 .pool{
   font-size: 28px;
   text-align: left;
-  padding: 20px 40px;
+  padding: 20px 26px;
   background:rgba(255,255,255,1);
   border-radius: 12px;
   border:2px solid rgba(224,224,224,1);
   .marketNow{
     margin-left: 20px;
-    color: #02C698;
+    color: #29D4B0;
   }
   .poolsNum{
     margin-top: 12px;

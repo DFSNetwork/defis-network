@@ -1,12 +1,12 @@
 <template>
   <div class="footer">
-    <div class="tip" @click="clickOnDFSInfoData">
+    <div class="" @click="clickOnDFSInfoData">
       24H{{ $t('footer.swapNum') }}: {{ dfsInfoData.eos_volume ? dfsInfoData.eos_volume : "0.00" }}
       {{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('footer.orderNum') }}
     </div>
-    <div class="poolsNum tip">{{ $t('footer.tlv') }}: {{ poolsEos }} EOS</div>
+    <div class="poolsNum">{{ $t('footer.tlv') }}: {{ poolsEos }} EOS</div>
 
-    <div class="help flexc tip">
+    <!-- <div class="help flexc tip">
       <span>问题反馈请添加客服：</span>
       <span class="flexa"
         v-clipboard:copy="'dfsfarmer'"
@@ -15,9 +15,9 @@
         <span>dfsfarmer</span>
         <img class="copy" src="@/assets/img/footer/copy.svg" alt="">
       </span>
-    </div>
+    </div> -->
 
-    <div class="safe">
+    <div class="safe tip">
       <span>{{ $t('public.safeRecord1') }}</span>
       <span class="who" @click="handleToShowReport('slotMist')"> {{ $t('public.safeRecord2') }}</span> &
       <span class="who" @click="handleToShowReport('peckshield')">{{ $t('public.safeRecord4') }} </span>
@@ -34,22 +34,12 @@
       :visible.sync="showImg2">
       <img width="100%" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gieh1hl5i4j30ku112tf3.jpg" />
     </el-dialog>
-
-    <!-- <dfs-info-data-tip
-      :dfsInfoData="dfsInfoData"
-      :close="closeDFSInfoDataTip"
-      :marketLists="marketLists"
-      @onConfirm="() => {
-        this.closeDFSInfoDataTip = true;
-      }"
-    /> -->
   </div>
 </template>
 
 <script>
 import axios from "axios";
 import { mapState } from 'vuex';
-// import DfsInfoDataTip from "@/components/DFSInfoDataTip";
 import { EosModel } from '@/utils/eos';
 import { toFixed, accMul, dealSymArr } from '@/utils/public';
 
@@ -64,22 +54,12 @@ export default {
       poolsEos: '0.0000 EOS',
     }
   },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    }
-  },
   computed: {
     ...mapState({
       poolsBal: state => state.sys.poolsBal,
+      marketLists: state => state.sys.marketLists,
     }),
   },
-  // components: {
-  //   DfsInfoDataTip,
-  // },
   beforeDestroy() {
     clearInterval(this.timer);
   },
@@ -192,15 +172,16 @@ export default {
   margin-left: 10px;
 }
 .footer{
-  font-size: 28px;
+  font-size: 26px;
   margin-top: 30px;
+  color: #333;
   .poolsNum{
     margin-top: 8px;
   }
   .safe{
-    margin: 12px 0 80px;
+    margin: 12px 0 30px;
     font-size: 24px;
-    font-weight: 300;
+    // font-weight: 300;
   }
   .who{
     font-weight: bold;

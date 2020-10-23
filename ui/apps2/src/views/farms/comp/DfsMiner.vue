@@ -27,12 +27,6 @@ import { toFixed, toLocalTime, accSub, accAdd, accDiv, dealReward } from '@/util
 export default {
   name: 'dfsMiner',
   props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    },
     allClaiming: {
       type: Boolean,
       default: false,
@@ -61,6 +55,7 @@ export default {
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
       sortClass: state => state.sys.sortClass,
+      marketLists: state => state.sys.marketLists,
     }),
     allReward() {
       if (!this.lists.length) {

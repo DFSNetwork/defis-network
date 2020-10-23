@@ -62,6 +62,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toLocalTime } from '@/utils/public';
 export default {
@@ -90,13 +91,10 @@ export default {
       pageSize: 15,
     }
   },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    }
+  computed: {
+    ...mapState({
+      marketLists: state => state.sys.marketLists,
+    }),
   },
   watch: {
     marketLists: {

@@ -23,38 +23,43 @@
       </div>
       <div class="noData" v-loading="!firstGet" v-if="!lists.length">{{ $t('public.noData') }}</div>
       <div :class="`list ${handleGetClass(item.mid)}`" v-for="(item, index) in lists" :key="index" @click="handleToMarket(item)">
-        <div class="flexb">
-          <span class="flexa">
-            <span>{{ $t('mine.earnings') }}：</span>
-            <!-- <span v-if="!item.minnerData || !Number(item.minnerData.liq)">0.00000000 DFS </span> -->
-            <span>{{ item.showReward || '0.00000000' }} DFS </span>
-          </span>
-          <span class="green" v-if="item.minnerData && !Number(item.minnerData.liq)" @click.stop="handleJoin(item)">{{ $t('mine.join') }}</span>
-          <span class="green" v-if="item.minnerData && Number(item.minnerData.liq)" v-loading="item.loading"
-            @click.stop="handleClaim(item)">{{ $t('bonus.claim') }}</span>
-        </div>
-        <div class="symbol flexa">
-          <div class="coinInfo flex">
-            <div class="coinImg"><img width="100%" :src="item.sym0Data.imgUrl" :onerror="errorCoinImg"></div>
-            <div>
-              <div class="coin">{{ item.symbol0 }}</div>
-              <div class="contract tip">{{ item.contract0 }}</div>
+        <div class="bgShadow" v-if="rankInfoV3[index].isRainbow"></div>
+        <div class="content">
+          <div class="flexb reward">
+            <span class="flexa">
+              <span>{{ $t('mine.earnings') }}：</span>
+              <span>{{ item.showReward || '0.00000000' }} DFS </span>
+            </span>
+            <span class="green" v-if="item.minnerData && !Number(item.minnerData.liq)" @click.stop="handleJoin(item)">{{ $t('mine.join') }}</span>
+            <span class="green" v-if="item.minnerData && Number(item.minnerData.liq)" v-loading="item.loading"
+              @click.stop="handleClaim(item)">{{ $t('bonus.claim') }}</span>
+          </div>
+          <div class="symbol flexa">
+            <div class="coinInfo flex">
+              <div class="coinImg"><img width="100%" :src="item.sym0Data.imgUrl" :onerror="errorCoinImg"></div>
+              <div>
+                <div class="coin">{{ item.symbol0 }}</div>
+                <div class="contract tip">{{ item.contract0 }}</div>
+              </div>
+            </div>
+            <div class="add">+</div>
+            <div class="coinInfo flex">
+              <div class="coinImg"><img width="100%" :src="item.sym1Data.imgUrl" :onerror="errorCoinImg"></div>
+              <div>
+                <div class="coin">{{ item.symbol1 }}</div>
+                <div class="contract tip">{{ item.contract1 }}</div>
+              </div>
             </div>
           </div>
-          <div class="add">+</div>
-          <div class="coinInfo flex">
-            <div class="coinImg"><img width="100%" :src="item.sym1Data.imgUrl" :onerror="errorCoinImg"></div>
-            <div>
-              <div class="coin">{{ item.symbol1 }}</div>
-              <div class="contract tip">{{ item.contract1 }}</div>
-            </div>
+          <div class="flexa liq">
+            <div>{{ $t('dex.pools') }}: </div>
+            <div>{{ item.reserve0 | numToShot }} / {{ item.reserve1 | numToShot }}</div>
           </div>
+          <label class="rankImg" v-if="handleGetClass(item.mid)">
+            <img :src="handleGetSrc(item.mid)" alt="">
+            <span class="rankNum">{{ index + 1}}</span>
+          </label>
         </div>
-        <div class="flexa liq">
-          <div>{{ $t('dex.pools') }}: </div>
-          <div>{{ item.reserve0 | numToShot }} / {{ item.reserve1 | numToShot }}</div>
-        </div>
-        <label class="rankImg" v-if="handleGetClass(item.mid)"><img :src="handleGetSrc(item.mid)" alt=""></label>
       </div>
     </div>
 
@@ -76,10 +81,11 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
-import { toFixed, toLocalTime, accSub, accAdd, accDiv, dealReward, getClass } from '@/utils/public';
+import { toFixed, toLocalTime, accSub, accAdd, accDiv, dealReward } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MiningRules from '../popup/MiningRules'
 import PoolsInfo from '../comp/PoolsInfo'
+import { getV3PoolsClass } from '@/utils/logic';
 
 export default {
   name: 'poolsData',
@@ -104,14 +110,6 @@ export default {
       timerArr: [],
     }
   },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    }
-  },
   computed: {
     ...mapState({
       // 箭头函数可使代码更简练
@@ -121,6 +119,8 @@ export default {
       dfsPrice: state => state.sys.dfsPrice,
       sortClass: state => state.sys.sortClass,
       rankInfo: state => state.sys.rankInfo,
+      rankInfoV3: state => state.sys.rankInfoV3,
+      marketLists: state => state.sys.marketLists,
     }),
     minReward() {
       if (!Number(this.dfsPrice)) {
@@ -153,6 +153,7 @@ export default {
           return
         }
         const rankInfo = this.rankInfo;
+        // console.log(rankInfo)
         let lists = [];
         rankInfo.forEach(v => {
           const item = newVal.find(vv => vv.mid === v.mid)
@@ -186,19 +187,16 @@ export default {
   methods: {
     handleGetSrc(mid) {
         // '/static/rank/rank${index + 1}.png'
-      const myclass = getClass(mid);
-      if (myclass === 'gold') {
-        return 'https://apps.defis.network/static/rank/rank1.png'
-      } else if (myclass === 'silver') {
-        return 'https://apps.defis.network/static/rank/rank2.png'
-      } else if (myclass === 'bronze') {
-        return 'https://apps.defis.network/static/rank/rank3.png'
+      const myclass = getV3PoolsClass(mid);
+      if (myclass) {
+        // return `https://apps.defis.network/static/rank/${myclass}.svg`
+        return `/static/rank/${myclass}.svg`
       } else {
         return ''
       }
     },
     handleGetClass(mid) {
-      return getClass(mid)
+      return getV3PoolsClass(mid)
     },
     handleJoin(item) {
       this.$router.push({
@@ -460,30 +458,34 @@ export default {
     }
     .list{
       margin-top: 20px;
-      padding: 20px;
       border: 1px solid #e0e0e0;
       border-radius: 20px;
       position: relative;
-      &.gold {
-        border: 1px solid rgb(238, 198, 4);
-        box-shadow: 0 0 5px 0px rgba(238, 198, 4, .5);
-      }
-      &.silver {
-        border: 1px solid #c0c0c0;
-        box-shadow: 0 0 5px 0px rgba(#c0c0c0, .5);
-      }
-      &.bronze {
-        border: 1px solid #8C7853;
-        box-shadow: 0 0 5px 0px rgba(#8C7853, .5);
+      .content{
+        border-radius: 20px;
+        padding: 20px;
+        position: relative;
+        background: #fff;
+        z-index: 2;
+        .reward{
+          padding-left: 70px;
+        }
       }
       .rankImg{
         position: absolute;
         top: -0px;
-        left: -0px;
-        width: 72px;
-        transform: translate(-47%, -47%) rotate(-45deg);
+        left: 25px;
+        width: 50px;
         img{
           width: 100%;
+        }
+        .rankNum{
+          position: absolute;
+          bottom: 18px;
+          left: 50%;
+          font-size: 21px;
+          transform: translateX(-55%);
+          color: #FFF;
         }
       }
       .addition{

@@ -44,12 +44,6 @@ export default {
     }
   },
   props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    },
     allClaiming: {
       type: Boolean,
       default: false,
@@ -59,6 +53,7 @@ export default {
     ...mapState({
       scatter: state => state.app.scatter,
       dsrPools: state => state.sys.dsrPools,
+      marketLists: state => state.sys.marketLists,
     }),
     aboutEos() {
       const price = parseFloat(this.marketData.reserve0) / parseFloat(this.marketData.reserve1) || 0;

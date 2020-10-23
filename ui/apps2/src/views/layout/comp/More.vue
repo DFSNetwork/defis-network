@@ -14,9 +14,9 @@
           <div v-else class="login">{{ scatter.identity.accounts[0].name }}</div>
           <div class="tip">欢迎来到DFS</div>
         </div>
-        <img v-if="!scatter || !scatter.identity" @click="handleLogin"
+        <img @click="handleLogin"
           class="right" src="@/assets/navImg/acc_right.svg" alt="">
-        <span v-else class="red" @click="handleLoginOut">Exit</span>
+        <!-- <span v-else class="red" @click="handleLoginOut">Exit</span> -->
       </div>
       <!-- list -->
       <div class="lists">

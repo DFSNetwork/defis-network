@@ -16,34 +16,34 @@
     </div>
     <div class="proLists">
       <div @click="handleTo('lootTime')">
-        <MyTime  ref="lootTime" :marketLists="marketLists" :allClaiming="allClaiming"/>
+        <MyTime  ref="lootTime"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('pools')">
-        <DfsMiner ref="dfsMiner" :marketLists="marketLists" :allClaiming="allClaiming"/>
+        <DfsMiner ref="dfsMiner"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('dss')">
-        <Dss ref="dss" :marketLists="marketLists" :allClaiming="allClaiming"/>
+        <Dss ref="dss"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('yfc')">
-        <Yfc ref="yfc" :marketLists="marketLists" :allClaiming="allClaiming"/>
+        <Yfc ref="yfc"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('guns')">
-        <Guns ref="guns" :marketLists="marketLists" :allClaiming="allClaiming"/>
+        <Guns ref="guns"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('yfcDss')">
-        <YfcDss ref="yfcDss" :marketLists="marketLists" :allClaiming="allClaiming"/>
+        <YfcDss ref="yfcDss"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('dbc')">
-        <Dbc ref="dbc" :marketLists="marketLists" :allClaiming="allClaiming"/>
+        <Dbc ref="dbc"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('pdd')">
-        <Pdd ref="pdd" :marketLists="marketLists" :allClaiming="allClaiming"/>
+        <Pdd ref="pdd"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('loop')">
-        <Loop ref="loop" :marketLists="marketLists" :allClaiming="allClaiming"/>
+        <Loop ref="loop"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('dmd')">
-        <Dmd  ref="dmd" :marketLists="marketLists" :allClaiming="allClaiming"/>
+        <Dmd  ref="dmd"  :allClaiming="allClaiming"/>
       </div>
     </div>
 
@@ -53,10 +53,10 @@
       </span>
     </div>
     <div class="proLists">
-      <TimeRank :marketLists="marketLists"/>
-      <LootRank :marketLists="marketLists"/>
-      <DfsRank :marketLists="marketLists"/>
-      <YfcRank :marketLists="marketLists"/>
+      <TimeRank />
+      <LootRank />
+      <DfsRank />
+      <YfcRank />
     </div>
 
     <el-dialog
@@ -109,14 +109,6 @@ export default {
     LootRank,
     DfsRank,
     YfcRank,
-  },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    }
   },
   data() {
     return {

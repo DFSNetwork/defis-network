@@ -94,6 +94,7 @@
           </div>
           <div class="rewardPerDay tip">
             <span>{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</span>
+            <span>(V3: {{dayRewardNumV3}} DFS)</span>
           </div>
         </div>
       </div>
@@ -143,7 +144,7 @@
       class="myDialog apy"
       :visible.sync="showApyDetail">
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
-                 :apr="apr" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
+                 :apr="apr" :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
     </el-dialog>
     <!-- <el-dialog
       class="myDialog"
@@ -165,6 +166,7 @@ import MarketTip from '../popup/MarketTip';
 import MarketApy from '../popup/MarketApy'
 // import RankTip from '../popup/RankTip'
 import { timeApy } from '@/utils/minerLogic';
+import { perDayRewardV3 } from '@/utils/logic';
 
 export default {
   components: {
@@ -219,14 +221,6 @@ export default {
       lpApy: {},
     }
   },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    }
-  },
   watch: {
     marketLists: {
       handler: function ml(newVal) {
@@ -261,6 +255,7 @@ export default {
       storeFeesApr: state => state.sys.feesApr,
       lpMid: state => state.config.lpMid,
       rankInfo: state => state.sys.rankInfo,
+      marketLists: state => state.sys.marketLists,
     }),
     dmdApy() {
       const dmdPool = this.marketLists.find(v => v.mid === 326)
@@ -318,8 +313,15 @@ export default {
     dayRewardNum() {
       return perDayReward(this.thisMarket.mid)
     },
+    dayRewardNumV3() {
+      return perDayRewardV3(this.thisMarket.mid)
+    },
     apr() {
       const apr = this.dayRewardNum * this.dfsPrice / 20000 * 365 * 100;
+      return apr.toFixed(2)
+    },
+    aprV3() {
+      const apr = this.dayRewardNumV3 * this.dfsPrice / 20000 * 365 * 100;
       return apr.toFixed(2)
     },
     feesApr() {

@@ -98,14 +98,6 @@ export default {
       }
     }
   },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    }
-  },
   components: {
     MarketList
   },
@@ -114,6 +106,7 @@ export default {
       // 箭头函数可使代码更简练
       scatter: state => state.app.scatter,
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
+      marketLists: state => state.sys.marketLists,
     })
   },
   methods: {

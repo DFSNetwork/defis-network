@@ -16,6 +16,7 @@
       </div>
       <div class="tip minePerDay">
         <span>{{ $t('mine.poolsMine2', {perDayReward}) }}</span>
+        <span>(V3: {{perDayRewardV3}} DFS)</span>
       </div>
     </div>
 
@@ -28,7 +29,7 @@
       class="myDialog apy"
       :visible.sync="showApyDetail">
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
-                 :apr="apr" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
+                 :apr="apr" :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
     </el-dialog>
   </div>
 </template>
@@ -37,10 +38,11 @@
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
 import { toFixed, accAdd, accDiv, dealMinerData, dealReward,
-perDayReward, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
+perDayReward, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MarketApy from '../popup/MarketApy'
 import { timeApy } from '@/utils/minerLogic';
+import { perDayRewardV3, getV3PoolsClass } from '@/utils/logic';
 
 export default {
   name: 'Weight',
@@ -57,6 +59,7 @@ export default {
       cliamNum: '0.00000000',
       reward: '0.0000',
       perDayReward: '0.0000',
+      perDayRewardV3: '0.0000',
       changeReWard: '0.00000000',
       dealTimer: null, // 定时器 - 每秒重新计算收益
       addTimer: null, // 定时器 - 收益数字滚动累加
@@ -79,12 +82,6 @@ export default {
         return {}
       }
     },
-    marketLists: {
-      type: Array,
-      default: function tmt() {
-        return []
-      }
-    },
   },
   computed: {
     ...mapState({
@@ -96,6 +93,8 @@ export default {
       dfsPrice: state => state.sys.dfsPrice,
       storeFeesApr: state => state.sys.feesApr,
       lpMid: state => state.config.lpMid,
+      rankInfoV3: state => state.sys.rankInfoV3,
+      marketLists: state => state.sys.marketLists,
     }),
     minReward() {
       let min = accDiv(0.0001, this.price)
@@ -106,6 +105,10 @@ export default {
     },
     apr() {
       const apr = this.perDayReward * this.dfsPrice / 20000 * 365 * 100;
+      return apr.toFixed(2)
+    },
+    aprV3() {
+      const apr = this.perDayRewardV3 * this.dfsPrice / 20000 * 365 * 100;
       return apr.toFixed(2)
     },
     feesApr() {
@@ -170,6 +173,15 @@ export default {
       },
       deep: true,
     },
+    rankInfoV3: {
+      handler: function wl(newVal) {
+        if (!newVal) {
+          return;
+        }
+        this.handleGetData();
+      },
+      deep: true,
+    },
     thisMarket: {
       handler: function tm(newVal, oldVal = {}) {
         if (newVal.mid === oldVal.mid) {
@@ -213,7 +225,7 @@ export default {
       return yfcReward || '0.00';
     },
     handleGetClass(mid) {
-      return getClass(mid)
+      return getV3PoolsClass(mid)
     },
     handleToSymbolPools() {
       this.$router.push({
@@ -298,6 +310,8 @@ export default {
           // 每万EOS一天 
           const reward = perDayReward(this.thisMarket.mid)
           this.perDayReward = reward;
+          const rewardV3 = perDayRewardV3(this.thisMarket.mid)
+          this.perDayRewardV3 = rewardV3
           return
         }
         // 用户实际数据计算
@@ -410,10 +424,10 @@ export default {
 <style lang="scss" scoped>
 .weight{
   background: #FFF;
-  padding: 20px 40px;
+  padding: 20px;
   margin-top: 40px;
   border: 1px solid #e0e0e0;
-  border-radius: 20px;
+  border-radius: 10px;
   .allApr{
     color: #000;
   }

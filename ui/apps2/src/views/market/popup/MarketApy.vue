@@ -8,7 +8,7 @@
       </div>
       <div class="flexa" v-if="parseFloat(apr)">
         <span>{{ $t('info.dfsMineApr') }}：</span>
-        <span>{{ parseFloat(apr) ? `${apr}%` : '—' }}</span>
+        <span>{{ parseFloat(apr) ? `${apr}%` : '—' }}({{ `V3: ${aprV3}%` }})</span>
       </div>
       <div class="flexa" v-if="parseFloat(lpApy.yfcApy)">
         <span>{{ $t('info.yfcApr') }}：</span>
@@ -57,6 +57,10 @@ export default {
       type: String,
       default: '0.00'
     },
+    aprV3: {
+      type: String,
+      default: '0.00'
+    },
     dmdApy: {
       type: String,
       default: '0.00'
@@ -85,7 +89,7 @@ export default {
 
 <style lang="scss" scoped>
 .marketApy{
-  padding: 40px;
+  padding: 40px 30px;
   color: #000;
   font-size: 27px;
 }

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="168px" height="55px" viewBox="0 0 168 55" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 60.1 (88133) - https://sketch.com -->
+    <title>形状结合</title>
+    <desc>Created with Sketch.</desc>
+    <g id="v3" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="做市" transform="translate(-16.000000, -132.000000)" fill="#F7F7F7">
+            <g id="兑换展示" transform="translate(14.000000, 131.000000)">
+                <g id="兑换/做市" transform="translate(2.000000, 1.000000)">
+                    <path d="M168,55 C166.163997,50.6173518 163.678997,48.2840185 160.545,48 L160.545,48 L26.5830202,48 C16.8344441,47.9999983 8.85756457,40.239282 8.58981254,30.4943836 C8.37280412,22.5963111 7.92619994,14.9165166 7.25,7.455 C6.96598149,4.32100267 4.54931482,1.83600267 0,0 L159,0 C163.970563,-9.13077564e-16 168,4.02943725 168,9 Z" id="形状结合" transform="translate(84.000000, 27.500000) scale(-1, 1) translate(-84.000000, -27.500000) "></path>
+                </g>
+            </g>
+        </g>
+    </g>
+</svg>

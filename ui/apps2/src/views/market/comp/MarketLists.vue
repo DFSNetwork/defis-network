@@ -18,8 +18,8 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, getClass } from '@/utils/public';
-import { sellToken } from '@/utils/logic';
+import { toFixed } from '@/utils/public';
+import { sellToken, getV3PoolsClass } from '@/utils/logic';
 import MarketData from './MarketData';
 export default {
   components: {
@@ -30,14 +30,6 @@ export default {
       getToken: false,
       getCapital: false,
       lists: [],
-    }
-  },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
     }
   },
   watch: {
@@ -57,6 +49,7 @@ export default {
       scatter: state => state.app.scatter,
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
+      marketLists: state => state.sys.marketLists,
     }),
     dealLists() {
       let dealLists = [];
@@ -65,7 +58,7 @@ export default {
         const curr = this.handleGetNowMarket(v)
         const newV = v;
         newV.nowMarket = curr;
-        const myclass = getClass(v.mid)
+        const myclass = getV3PoolsClass(v.mid)
         if (myclass === 'gold') {
           gold.push(newV)
           return
@@ -99,15 +92,31 @@ export default {
     handleToMarket(mid) {
       this.$emit('listenToMarket', mid)
     },
-    handleGetToken() {
+    async handleGetToken() {
       this.lists = []
-      this.marketLists.forEach((v, index) => {
-        const next = parseInt(index / 10)
-        setTimeout(() => {
-          this.handleGetTable(v)
-        }, next * 1000);
+      // this.marketLists.forEach((v, index) => {
+      //   const next = parseInt(index / 10)
+      //   setTimeout(() => {
+      //     this.handleGetTable(v)
+      //   }, next * 1000);
+      // })
+      // https://api.defis.network/swap/deposit?user=wangruixiwww
+      const params = {
+        user: this.scatter.identity.accounts[0].name,
+      }
+      axios.get('https://api.defis.network/swap/deposit', {params}).then((result) => {
+        this.getToken = true;
+        const res = result.data.data;
+        res.forEach((v, index) => {
+          const item = this.marketLists.find(vv => vv.mid == v.mid)
+          const next = parseInt(index / 10)
+          setTimeout(() => {
+            this.handleGetTable(item)
+          }, next * 1000);
+        })
       })
     },
+
     handleGetTable(v) {
       const params = {
         code: this.baseConfig.toAccountSwap,
@@ -118,7 +127,6 @@ export default {
         json: true
       }
       EosModel.getTableRows(params, (res) => {
-        this.getToken = true;
         const list = res.rows || [];
         let token = '0'
         !list[0] ? token = '0' : token = `${list[0].token}`;

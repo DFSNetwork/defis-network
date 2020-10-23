@@ -2,109 +2,118 @@
   <div class="tabView">
     <div class="marketData">
       <tabs />
-      <div class="direction flexb">
-        <span class="flexc" :class="{'act': act === 1}" @click="handleChange(1)">{{ $t('pools.deposit') }}</span>
-        <span class="flexc" :class="{'act actBack': act === 2}" @click="handleChange(2)">{{ $t('pools.withdrawal') }}</span>
-      </div>
-      <div v-if="act === 1">
-        <div class="sym0Data" :class="{'focus': ipt1Focus}">
-          <div class="info flexb">
-            <span @click="handleClickBalan('payNum1')">{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket.symbol0 }}</span>
-            <span class="type"></span>
-          </div>
-          <div class="iptDiv flexb">
-            <div class="coinInfo flex" @click="listenShowDrawer()">
-              <div class="coinImg"><img width="100%" :src="handleGetCoinImg('sym0')" :onerror="errorCoinImg" alt=""></div>
-              <div>
-                <div class="coin">{{ thisMarket.symbol0 }} <i class="el-icon-arrow-down"></i></div>
-                <div class="contract tip">{{ thisMarket.contract0 }}</div>
+      <div class="tabD">
+        <div class="direction flexb">
+          <span class="flexc" :class="{'act': act === 1}" @click="handleChange(1)">{{ $t('pools.deposit') }}</span>
+          <span class="flexc" :class="{'act actBack': act === 2}" @click="handleChange(2)">{{ $t('pools.withdrawal') }}</span>
+        </div>
+        <div v-if="act === 1">
+          <div class="sym0Data" :class="{'focus': ipt1Focus}">
+            <div class="info flexb">
+              <span @click="handleClickBalan('payNum1')">{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket.symbol0 }}</span>
+              <span class="type"></span>
+            </div>
+            <div class="iptDiv flexb">
+              <div class="coinInfo flex" @click="listenShowDrawer()">
+                <div class="coinImg"><img width="100%" :src="handleGetCoinImg('sym0')" :onerror="errorCoinImg" alt=""></div>
+                <div>
+                  <div class="coin">{{ thisMarket.symbol0 }} <i class="el-icon-arrow-down"></i></div>
+                  <div class="contract tip">{{ thisMarket.contract0 }}</div>
+                </div>
+              </div>
+              <div class="inputDiv">
+                <el-input class="elIpt" type="number" v-model="payNum1" placeholder="0.0"
+                  @input="handleInBy('sym0')"
+                  @focus="handleFocus('sym0')"
+                  @blur="handleBlur('sym0')"></el-input>
               </div>
             </div>
-            <div class="inputDiv">
-              <el-input class="elIpt" type="number" v-model="payNum1" placeholder="0.0"
-                @input="handleInBy('sym0')"
-                @focus="handleFocus('sym0')"
-                @blur="handleBlur('sym0')"></el-input>
+          </div>
+          <div class="exchange">
+            <div class="border flexc" :class="{'payFocus': ipt1Focus, 'getFocus': ipt2Focus}"
+              @click="handleAddToken">
+              <img class="iconImg" src="@/assets/img/market/switch_add.svg">
             </div>
           </div>
-        </div>
-        <div class="exchange">
-          <div class="border flexc" :class="{'payFocus': ipt1Focus, 'getFocus': ipt2Focus}"
-            @click="handleAddToken">
-            <img class="iconImg" src="@/assets/img/market/switch_add.svg">
-          </div>
-        </div>
-        <div class="sym0Data pdb10" :class="{'focus': ipt2Focus}">
-          <div class="info flexb">
-            <span class="ableGet" @click="handleClickBalan('payNum2')">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket.symbol1 }}</span>
-            <span class="type"></span>
-          </div>
-          <div class="iptDiv flexb">
-            <div class="coinInfo flex" @click="listenShowDrawer()">
-              <div class="coinImg"><img width="100%" :src="handleGetCoinImg('sym1')" :onerror="errorCoinImg" alt=""></div>
-              <div>
-                <div class="coin">{{ thisMarket.symbol1 }} <i class="el-icon-arrow-down"></i></div>
-                <div class="contract tip">{{ thisMarket.contract1 }}</div>
+          <div class="sym0Data pdb10" :class="{'focus': ipt2Focus}">
+            <div class="info flexb">
+              <span class="ableGet" @click="handleClickBalan('payNum2')">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket.symbol1 }}</span>
+              <span class="type"></span>
+            </div>
+            <div class="iptDiv flexb">
+              <div class="coinInfo flex" @click="listenShowDrawer()">
+                <div class="coinImg"><img width="100%" :src="handleGetCoinImg('sym1')" :onerror="errorCoinImg" alt=""></div>
+                <div>
+                  <div class="coin">{{ thisMarket.symbol1 }} <i class="el-icon-arrow-down"></i></div>
+                  <div class="contract tip">{{ thisMarket.contract1 }}</div>
+                </div>
+              </div>
+              <div class="inputDiv">
+                <el-input class="elIpt" type="number" v-model="payNum2" placeholder="0.0"
+                  @input="handleInBy('sym1')"
+                  @focus="handleFocus('sym1')"
+                  @blur="handleBlur('sym1')"></el-input>
               </div>
             </div>
-            <div class="inputDiv">
-              <el-input class="elIpt" type="number" v-model="payNum2" placeholder="0.0"
-                @input="handleInBy('sym1')"
-                @focus="handleFocus('sym1')"
-                @blur="handleBlur('sym1')"></el-input>
-            </div>
           </div>
-        </div>
-        <div class="rate flexb">
-          <span class="tip">{{ $t('dex.rate') }}</span>
-          <span class="flex">
-            <span v-if="!exRate">1{{ thisMarket.symbol0 }} = {{ thisMarket.sym0Rate || '-' }}{{ thisMarket.symbol1 }}</span>
-            <span v-else>1{{ thisMarket.symbol1 }} = {{ thisMarket.sym1Rate || '-' }}{{ thisMarket.symbol0 }}</span>
-            <span @click="exRate =!exRate">
-              <img class="iconImg" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
-              <img class="iconImg" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
+          <div class="rate flexb">
+            <span class="tip">{{ $t('dex.rate') }}</span>
+            <span class="flex">
+              <span v-if="!exRate">1{{ thisMarket.symbol0 }} = {{ thisMarket.sym0Rate || '-' }}{{ thisMarket.symbol1 }}</span>
+              <span v-else>1{{ thisMarket.symbol1 }} = {{ thisMarket.sym1Rate || '-' }}{{ thisMarket.symbol0 }}</span>
+              <span @click="exRate =!exRate">
+                <img class="iconImg" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
+                <img class="iconImg" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
+              </span>
             </span>
+          </div>
+        </div>
+
+        <div v-else>
+          <div class="marketChecked flexb" @click="listenShowDrawer()">
+            <div class="checkedData">
+              <div class="symbols">{{ thisMarket.symbol0 }} / {{ thisMarket.symbol1 }}</div>
+              <div class="contracts tip">{{ thisMarket.contract0 }} / {{ thisMarket.contract1 }}</div>
+            </div>
+            <div class="flexc">
+              <span class="el-icon-arrow-down more"></span>
+            </div>
+          </div>
+          <div class="backData" :class="{'focus': tokenFocus}">
+            <div class="flexb token">
+              <span>{{ $t('pools.token') }}</span>
+              <span @click="handleClickBalan('token')">{{ $t('pools.ableToken') }}: {{ token }}</span>
+            </div>
+            <div class="inputDiv">
+              <el-input class="elIpt" type="number" v-model="sellToken" placeholder="0"
+                @input="handleSellToken()"
+                @focus="handleFocus()"
+                @blur="handleBlur()"></el-input>
+            </div>
+          </div>
+          <div class="backNum flex">
+            <span class="tip">{{ $t('pools.withdrawal') }}</span>
+            <span>{{ getNum1 }} {{thisMarket.symbol0}} + {{ getNum2 }} {{ thisMarket.symbol1 }}</span>
+          </div>
+        </div>
+
+        <div class="btnDiv" v-loading="loading">
+          <div v-if="act === 1" class="btn flexc" @click="handleAddToken">{{ $t('pools.deposit') }}</div>
+          <div v-else class="btn flexc backBtn" @click="handleToSell">{{ $t('pools.withdrawal') }}</div>
+        </div>
+        <div class="linkTo flexb">
+          <span class="flexc">
+            <img src="@/assets/navImg/record.svg">
+            <span @click="handleTo('createMarket')">{{ $t('dex.addMarket') }}</span>
+            <i class="el-icon-arrow-right"></i>
+          </span>
+          <span class="flexc">
+            <img src="@/assets/navImg/market.svg">
+            <span @click="handleTo('myMarketList')">{{ $t('market.myMarkets') }}</span>
+            <i class="el-icon-arrow-right"></i>
           </span>
         </div>
       </div>
-
-      <div v-else>
-        <div class="marketChecked flexb" @click="listenShowDrawer()">
-          <div class="checkedData">
-            <div class="symbols">{{ thisMarket.symbol0 }} / {{ thisMarket.symbol1 }}</div>
-            <div class="contracts tip">{{ thisMarket.contract0 }} / {{ thisMarket.contract1 }}</div>
-          </div>
-          <div class="flexc">
-            <span class="el-icon-arrow-down more"></span>
-          </div>
-        </div>
-        <div class="backData" :class="{'focus': tokenFocus}">
-          <div class="flexb token">
-            <span>{{ $t('pools.token') }}</span>
-            <span @click="handleClickBalan('token')">{{ $t('pools.ableToken') }}: {{ token }}</span>
-          </div>
-          <div class="inputDiv">
-            <el-input class="elIpt" type="number" v-model="sellToken" placeholder="0"
-              @input="handleSellToken()"
-              @focus="handleFocus()"
-              @blur="handleBlur()"></el-input>
-          </div>
-        </div>
-        <div class="backNum flex">
-          <span class="tip">{{ $t('pools.withdrawal') }}</span>
-          <span>{{ getNum1 }} {{thisMarket.symbol0}} + {{ getNum2 }} {{ thisMarket.symbol1 }}</span>
-        </div>
-      </div>
-    </div>
-
-    <div class="flexb flexe">
-      <span class="create" @click="handleTo('createMarket')">{{ $t('dex.addMarket') }}></span>
-      <span class="create" @click="handleTo('myMarketList')">{{ $t('market.myMarkets') }}></span>
-    </div>
-
-    <div class="btnDiv" v-loading="loading">
-      <div v-if="act === 1" class="btn flexc" @click="handleAddToken">{{ $t('pools.deposit') }}</div>
-      <div v-else class="btn flexc backBtn" @click="handleToSell">{{ $t('pools.withdrawal') }}</div>
     </div>
 
     <MarketData v-if="Number(token) !== 0" :thisMarket="thisMarket" :token="token"/>
@@ -123,8 +132,6 @@
       <div class="num">{{ accGetToken }}</div>
     </div>
 
-    <!-- <MarketLists :marketLists="marketLists" @listenToMarket="handleChangeMarket"/> -->
-
     <!-- 弹窗组件 -->
     <el-dialog
       class="mkListDia"
@@ -142,12 +149,11 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import MarketList from '@/components/MarketList';
-import { toFixed, accAdd, accDiv, accMul, getClass } from '@/utils/public';
-import { dealToken, sellToken } from '@/utils/logic';
+import { toFixed, accAdd, accDiv, accMul } from '@/utils/public';
+import { dealToken, sellToken, getV3PoolsClass } from '@/utils/logic';
 import Tabs from '../index/components/Tabs';
 import Weight from './comp/Weight';
 import MarketData from './comp/MarketData';
-// import MarketLists from './comp/MarketLists';
 
 export default {
   components: {
@@ -155,7 +161,6 @@ export default {
     MarketList,
     Weight,
     MarketData,
-    // MarketLists,
   },
   data() {
     return {
@@ -194,20 +199,13 @@ export default {
       loading: false,
     }
   },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    }
-  },
   computed: {
     ...mapState({
       minScreen: state => state.app.minScreen,
       scatter: state => state.app.scatter,
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
+      marketLists: state => state.sys.marketLists,
     }),
     accPools() {
       if (!this.thisMarket.reserve0 || !this.thisMarket.reserve1) {
@@ -311,7 +309,7 @@ export default {
       })
     },
     handleGetClass(mid) {
-      return getClass(mid)
+      return getV3PoolsClass(mid)
     },
     handleTo(name) {
       this.$router.push({
@@ -721,7 +719,9 @@ export default {
     background: #FFF;
     border-radius: 12px;
     position: relative;
-    padding: 32px 20px 28px;
+    .tabD{
+      padding: 8px 26px 32px;
+    }
   }
   .sym0Data{
     padding: 26px 40px 52px;
@@ -873,7 +873,7 @@ export default {
 
   .liquidity{
     margin-top: 40px;
-    padding: 20px 40px 0;
+    padding: 20px;
     font-size: 26px;
     text-align: left;
     border-radius: 12px;
@@ -885,6 +885,9 @@ export default {
     }
     .num{
       margin: 6px 0 15px;
+      &:last-child{
+        margin-bottom: 0;
+      }
     }
     .toPool{
       color: #07d79b;
@@ -900,11 +903,11 @@ export default {
   }
 
   .btnDiv{
-    margin-top: 20px 40px 30px;
+    margin: 30px 0;
     .btn{
       height:88px;
-      background:rgba(7,215,155,1);
-      border-radius: 12px;
+      background:#29D4B0;
+      border-radius: 48px;
       font-size:32px;
       color: #FFF;
 
@@ -918,6 +921,23 @@ export default {
           background:rgba(185,78,90,1);
         }
       }
+    }
+  }
+  .linkTo{
+    font-size: 27px;
+    &>span{
+      flex: 1;
+      height: 40px;
+      &:last-child{
+        border-left: 1px solid #E4E6E9;
+      }
+    }
+    img{
+      height: 36px;
+      margin-right: 10px;
+    }
+    i{
+      font-size: 28px;
     }
   }
 }

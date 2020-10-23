@@ -27,12 +27,6 @@ import { EosModel } from '@/utils/eos';
 export default {
   name: 'pdd',
   props: {
-    marketLists: {
-      type: Array,
-      default: function mlt() {
-        return []
-      }
-    },
     allClaiming: {
       type: Boolean,
       default: false,
@@ -45,6 +39,7 @@ export default {
       lpPoolsBal: state => state.config.lpPoolsBal,
       lpDamping: state => state.config.lpDamping,
       lpMineList: state => state.config.lpMineList,
+      marketLists: state => state.sys.marketLists,
     }),
     allClaim() {
       let all = '0.0000000000';

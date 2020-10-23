@@ -8,17 +8,15 @@
       </div>
     </div>
     <CoinData :marketLists="showList"/>
-    <!-- <LargeTrade :marketLists="marketLists"/> -->
   </div>
 </template>
 
 <script>
-// import LargeTrade from '@/views/largeTrade/Index';
+import { mapState } from 'vuex';
 import CoinData from './comp/CoinData';
 export default {
   name: 'coinViews', // 币种窗口
   components: {
-    // LargeTrade,
     CoinData,
   },
   data() {
@@ -27,13 +25,10 @@ export default {
       showList: [],
     }
   },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function mls() {
-        return []
-      }
-    },
+  computed: {
+    ...mapState({
+      marketLists: state => state.sys.marketLists,
+    }),
   },
   watch: {
     marketLists: {

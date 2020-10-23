@@ -106,14 +106,6 @@ import { perDayReward, getYfcReward, accAdd, toLocalTime, getDmdMinerHourRoi } f
 import { timeApy } from '@/utils/minerLogic';
 export default {
   name: 'total',
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    }
-  },
   data() {
     return {
       // loading: true,
@@ -141,6 +133,7 @@ export default {
       dfsData: state => state.sys.dfsData,
       lpMid: state => state.config.lpMid,
       timeList: state => state.config.timeList,
+      marketLists: state => state.sys.marketLists,
     }),
     showArr() {
       if (!this.marketLists.length || !this.feesApr || !this.timeList.length) {

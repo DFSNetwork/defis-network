@@ -1,0 +1,42 @@
+<svg 
+ xmlns="http://www.w3.org/2000/svg"
+ xmlns:xlink="http://www.w3.org/1999/xlink"
+ width="52px" height="62px">
+<defs>
+<filter id="Filter_0">
+    <feFlood flood-color="rgb(131, 223, 107)" flood-opacity="1" result="floodOut" />
+    <feComposite operator="atop" in="floodOut" in2="SourceGraphic" result="compOut" />
+    <feBlend mode="normal" in="compOut" in2="SourceGraphic" />
+</filter>
+<linearGradient id="PSgrad_0" x1="0%" x2="0%" y1="100%" y2="0%">
+  <stop offset="0%" stop-color="rgb(49,203,67)" stop-opacity="1" />
+  <stop offset="100%" stop-color="rgb(141,226,112)" stop-opacity="1" />
+</linearGradient>
+<filter id="Filter_1">
+    <feOffset in="SourceAlpha" dx="0" dy="3" />
+    <feGaussianBlur result="blurOut" stdDeviation="2.646" />
+    <feFlood flood-color="rgb(50, 196, 0)" result="floodOut" />
+    <feComposite operator="out" in="floodOut" in2="blurOut" result="compOut" />
+    <feComposite operator="in" in="compOut" in2="SourceAlpha" />
+    <feComponentTransfer><feFuncA type="linear" slope="0.35"/></feComponentTransfer>
+    <feBlend mode="multiply" in2="SourceGraphic" />
+</filter>
+
+</defs>
+<g filter="url(#Filter_0)">
+<path fill-rule="evenodd"  fill="rgb(253, 134, 126)"
+ d="M15.750,0.059 L18.625,0.059 L18.625,22.715 L15.750,22.715 C14.093,22.715 12.750,21.372 12.750,19.715 L12.750,3.059 C12.750,1.402 14.093,0.059 15.750,0.059 Z"/>
+<path fill-rule="evenodd"  fill="rgb(253, 134, 126)"
+ d="M23.438,0.059 L29.312,0.059 L29.312,22.715 L26.438,22.715 C24.781,22.715 23.438,21.372 23.438,19.715 L23.438,0.059 Z"/>
+<path fill-rule="evenodd"  fill="rgb(253, 134, 126)"
+ d="M34.094,0.059 L36.969,0.059 C38.626,0.059 39.969,1.402 39.969,3.059 L39.969,22.715 L37.094,22.715 C35.437,22.715 34.094,21.372 34.094,19.715 L34.094,0.059 Z"/>
+</g>
+<path fill-rule="evenodd"  fill="rgb(255, 233, 5)"
+ d="M26.094,10.715 C40.091,10.715 51.438,22.062 51.438,36.059 C51.438,50.056 40.091,61.402 26.094,61.402 C12.097,61.402 0.750,50.056 0.750,36.059 C0.750,22.062 12.097,10.715 26.094,10.715 Z"/>
+<path fill="url(#PSgrad_0)"
+ d="M26.094,10.715 C40.091,10.715 51.438,22.062 51.438,36.059 C51.438,50.056 40.091,61.402 26.094,61.402 C12.097,61.402 0.750,50.056 0.750,36.059 C0.750,22.062 12.097,10.715 26.094,10.715 Z"/>
+<g filter="url(#Filter_1)">
+<path fill-rule="evenodd"  fill="rgb(66, 196, 21)"
+ d="M26.094,17.402 C36.415,17.402 44.781,25.762 44.781,36.074 C44.781,46.386 36.415,54.746 26.094,54.746 C15.773,54.746 7.406,46.386 7.406,36.074 C7.406,25.762 15.773,17.402 26.094,17.402 Z"/>
+</g>
+</svg>

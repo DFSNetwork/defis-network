@@ -1,7 +1,11 @@
 <template>
   <div class="tabs tip flexb">
-    <span :class="{'tabAct': act === 1}" @click="handleChangeAct(1)">{{ $t('tab.dex') }}</span>
-    <span :class="{'tabAct': act === 2}" @click="handleChangeAct(2)">{{ $t('tab.pools') }}</span>
+    <span class="" :class="{'tabAct': act === 1}" @click="handleChangeAct(1)">
+      <span class="tabName flexc">{{ $t('tab.dex') }}</span>
+    </span>
+    <span class="" :class="{'tabAct': act === 2}" @click="handleChangeAct(2)">
+      <span class="tabName flexc">{{ $t('tab.pools') }}</span>
+    </span>
     <!-- <span :class="{'tabAct': act === 3}" @click="handleChangeAct(3)">{{ $t('tab.bank') }}</span> -->
   </div>
 </template>
@@ -50,26 +54,44 @@ export default {
 
 <style lang="scss" scoped>
 .tabs{
-  font-size: 36px;
-  margin: 0 60px 30px;
+  font-size: 33px;
+  height: 110px;
   &>span{
     flex: 1;
+    height: 100%;
     text-align: center;
+    color: #333333;
+    &:first-child{
+      background-image: url('../../../assets/navImg/swap_tab_un.svg');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    &:last-child{
+      background-image: url('../../../assets/navImg/market_un.svg');
+      background-size: cover;
+      background-repeat: no-repeat;
+    }
+    .tabName{
+      height: 96px;
+    }
   }
   .tabAct{
-    color: $color-black;
+    color: #29D4B0;
     font-weight: 500;
     position: relative;
+    background-image: none !important;
     &::before{
       content: '';
+      background-image: url('../../../assets/navImg/checked.svg');
+      background-repeat: no-repeat;
+      background-size: cover;
       position: absolute;
-      width:72px;
+      width:68px;
       height:12px;
-      background:rgba(7,215,155,1);
       border-radius:0px 0px 6px 6px;
-      top: -32px;
+      bottom: 16px;
       left: 50%;
-      transform: translateX(-45%);
+      transform: translateX(-50%);
     }
   }
 }

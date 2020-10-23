@@ -1,5 +1,6 @@
 import { EosModel } from '@/utils/eos';
 import store from '@/store';
+import { getV3Apr } from '@/utils/logic';
 
 // 获取投票矿池排名
 export function getVotePools() {
@@ -18,7 +19,7 @@ export function getVotePools() {
       return
     }
     store.dispatch('setRankTrade', rows)
-    console.log(rows)
+    // console.log(rows)
     const lists = rows.slice(0, 21);
     getVoteRankConf(lists);
     getVoteRankConfV3(lists);
@@ -39,13 +40,13 @@ export function getVoteRankConf(lists) {
     if (!rows.length) {
       return
     }
-    console.log(rows)
+    // console.log(rows)
     const rankInfo = [];
     lists.forEach((v, index) => {
       const t = Object.assign({}, v, rows[index])
       rankInfo.push(t)
     })
-    console.log(rankInfo)
+    // console.log(rankInfo)
     store.dispatch('setRankInfo', rankInfo)
   })
 }
@@ -65,10 +66,11 @@ export function getVoteRankConfV3(lists) {
     if (!rows.length) {
       return
     }
-    console.log(rows)
+    // console.log(rows)
     const rankInfo = [];
     lists.forEach((v, index) => {
-      const t = Object.assign({}, v, rows[index])
+      const deal = getV3Apr(v.mid, rows[index])
+      const t = Object.assign({}, v, rows[index], deal)
       rankInfo.push(t)
     })
     console.log(rankInfo)

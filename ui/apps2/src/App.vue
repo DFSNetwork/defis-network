@@ -44,6 +44,7 @@ export default {
   created() {
     this.handleSetLang();
     this.handleResize();
+    // alert(window.screen.availHeight + ' --- ' +  window.screen.availWidth)
   },
   mounted(){
     this.handleEnvReLoad();
@@ -338,15 +339,15 @@ export default {
 
 <style lang="scss">
 /*iphone Xs Max*/
-@media only screen and (device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio:3){
+@media only screen and (device-width: 414px) and (device-height: 896px) {
   #app{
-    margin-bottom: 50px !important;
+    padding-bottom: 30px !important;
   }
 }
 /*iphoneX、iphoneXs*/
 @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
   #app{
-    margin-bottom: 50px !important;
+    padding-bottom: 30px !important;
   }
 }
 *{

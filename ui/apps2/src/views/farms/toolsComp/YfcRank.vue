@@ -72,14 +72,6 @@ export default {
       params: {},
     }
   },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function mlt() {
-        return []
-      }
-    },
-  },
   mounted() {
     this.handleGetTimePoolMiners()
     this.planRank = localStorage.getItem(`rank_mid_${this.mid}`) ? Number(localStorage.getItem(`rank_mid_${this.mid}`)) : 75;
@@ -121,6 +113,7 @@ export default {
       scatter: state => state.app.scatter,
       timeList: state => state.config.timeList,
       baseConfig: state => state.sys.baseConfig,
+      marketLists: state => state.sys.marketLists,
     }),
   },
   methods: {

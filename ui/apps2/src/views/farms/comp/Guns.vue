@@ -27,12 +27,6 @@ import { toFixed, toLocalTime, getMarketTimeLp } from '@/utils/public';
 export default {
   name: 'guns',
   props: {
-    marketLists: {
-      type: Array,
-      default: function mlt() {
-        return []
-      }
-    },
     allClaiming: {
       type: Boolean,
       default: false,
@@ -68,6 +62,7 @@ export default {
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
+      marketLists: state => state.sys.marketLists,
     }),
     aboutEos() {
       const price = parseFloat(this.marketData.reserve0) / parseFloat(this.marketData.reserve1) || 0;

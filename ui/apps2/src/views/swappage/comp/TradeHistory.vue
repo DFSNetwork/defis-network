@@ -65,17 +65,10 @@ export default {
   components: {
     MarketList,
   },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    }
-  },
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
+      marketLists: state => state.sys.marketLists,
     }),
     reward() {
       let t = this.totalSell - this.totalBuy;

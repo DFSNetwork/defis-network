@@ -1,10 +1,10 @@
 <template>
   <div class="mainView">
-    <swap v-if="routeName === 'index'" :marketLists="marketLists"
+    <swap v-if="routeName === 'index'"
           @listenUpdateList="listenUpdateList"
           @listenShowDrawer="handleShowDrawer"/>
     <market v-else-if="routeName === 'market'"
-      :marketLists="marketLists" @listenShowDrawer="handleShowDrawer"/>
+      @listenShowDrawer="handleShowDrawer"/>
     <!-- 弹窗组件 -->
     <el-dialog
       class="mkListDia pcList"
@@ -16,6 +16,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import MarketList from '@/components/MarketList';
 import Swap from '@/views/swappage/Index'
 import Market from '@/views/market/Index'
@@ -42,13 +43,10 @@ export default {
     // console.log(this.$route.name)
     this.routeName = this.$route.name
   },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
-    }
+  computed: {
+    ...mapState({
+      marketLists: state => state.sys.marketLists,
+    }),
   },
   methods: {
     handleClose() {

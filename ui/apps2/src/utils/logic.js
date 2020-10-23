@@ -330,3 +330,74 @@ export function dealMarketLists(list, topLists) {
     filterLists: newMainList,
   }
 }
+
+// V3版本做市收益计算
+// 1. 计算使用固定APR 还是 动态利率
+export function getV3Apr(mid, rankAprs) {
+  const rankInfo = store.state.sys.rankInfoV3;
+  const aprs = rankAprs ? rankAprs : rankInfo.find(v => v.mid === mid);
+  if (!aprs) {
+    return {
+      isRainbow: false,
+      cur_apy: 0
+    };
+  }
+  let poolEos = getPoolEosBal(mid);
+  poolEos = poolEos * 2;
+  const damping = store.state.sys.damping;
+  const dfsPrice = store.state.sys.dfsPrice;
+  // console.log(aprs);
+  const aprs_s = aprs.aprs;
+  const max = parseFloat(aprs.daily_max_supply) * damping;
+  const apr_d = (max * 0.8 * dfsPrice * 365 / poolEos) * 100;
+  const aprs_d = Math.pow((apr_d / 100 * 20000 / ( 0.8 * 365) + 10000) / 10000, 1 / 86400);
+  // console.log(max, dfsPrice, poolEos, apr_d, aprs_d)
+  return {
+    isRainbow: Number(aprs_s) > Number(aprs_d),
+    cur_apy: Number(aprs_s) < Number(aprs_d) ? aprs_s : aprs_d,
+  }
+}
+// 获取池子EOS余额
+function getPoolEosBal(mid) {
+  const marketLists = store.state.sys.marketLists;
+  const market = marketLists.find(v => v.mid === mid);
+  let eosBal = 0;
+  if (market.symbol0 === 'EOS' && market.contract0 === 'eosio.token') {
+    eosBal = parseFloat(market.reserve0)
+  } else if (market.symbol1 === 'EOS' && market.contract1 === 'eosio.token') {
+    eosBal = parseFloat(market.reserve1)
+  }
+  return eosBal;
+}
+// 计算v3版本1W EOS 一天挖出多少
+export function perDayRewardV3(mid) {
+  const dfsPrice = store.state.sys.dfsPrice;
+  const aprs = getV3Apr(mid)
+  // console.log(aprs)
+  const t = 86400;
+  let minNum = 10000 * Math.pow(aprs.cur_apy || 1, t)
+  minNum -= 10000;
+  let reward = minNum / dfsPrice
+  reward *= 0.8
+  reward = toFixed(reward, 4)
+  return reward
+}
+
+export function getV3PoolsClass(mid) {
+  const rankInfo = store.state.sys.rankInfoV3;
+  const tRank = rankInfo.find(v => v.mid === mid) || {};
+  if (tRank.rank <= 1) {
+    return 'poolslv6'
+  } else if (tRank.rank <= 3) {
+    return 'poolslv5'
+  } else if (tRank.rank <= 6) {
+    return 'poolslv4'
+  } else if (tRank.rank <= 10) {
+    return 'poolslv3'
+  } else if (tRank.rank <= 15) {
+    return 'poolslv2'
+  } else if (tRank.rank <= 21) {
+    return 'poolslv1'
+  }
+  return ''
+}

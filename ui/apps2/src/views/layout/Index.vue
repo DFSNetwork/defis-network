@@ -3,9 +3,9 @@
     <header-tools v-if="!$route.meta.noHeader" @listenShowNav="handleShowNav" @listenShowTools="handleShowTools"/>
     <!-- <acc-login v-if="showAcc && !$route.meta.noHeader"/> -->
     <transition name="fade" mode="out-in">
-      <router-view class="content" :marketLists="marketLists" @listenUpdateList="listenUpdateList"/>
+      <router-view class="content" @listenUpdateList="listenUpdateList"/>
     </transition>
-    <my-footer v-if="!$route.meta.noFooter" :marketLists="marketLists"/>
+    <my-footer v-show="$route.name === 'index' || $route.name === 'market'"/>
 
     <Tabbar v-if="!$route.meta.noTab"/>
 

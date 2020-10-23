@@ -157,7 +157,7 @@ export default {
   }
   /deep/ .el-dialog{
     position: absolute;
-    border-radius: 30px 0px 30px 30px;
+    border-radius: 10px;
     right: 150px;
     top: 120px;
     width: 480px;
@@ -167,7 +167,7 @@ export default {
     }
     .el-dialog__body{
       font-size: 26px;
-      padding: 35px;
+      padding: 30px;
     }
   }
   .navList{

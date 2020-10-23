@@ -28,12 +28,6 @@ import { EosModel } from '@/utils/eos';
 export default {
   name: 'dmd',
   props: {
-    marketLists: {
-      type: Array,
-      default: function mlt() {
-        return []
-      }
-    },
     allClaiming: {
       type: Boolean,
       default: false,
@@ -43,6 +37,7 @@ export default {
     ...mapState({
       scatter: state => state.app.scatter,
       dmdMineConfig: state => state.config.dmdMineConfig,
+      marketLists: state => state.sys.marketLists,
     }),
     allClaim() {
       let all = '0.0000000000';

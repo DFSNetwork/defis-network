@@ -86,8 +86,8 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accMul, accDiv, getClass, getMarketTime } from '@/utils/public';
-import { sellToken } from '@/utils/logic';
+import { toFixed, accSub, accMul, accDiv, getMarketTime } from '@/utils/public';
+import { sellToken, getV3PoolsClass } from '@/utils/logic';
 import MarketTip from '../popup/MarketTip';
 export default {
   components: {
@@ -352,7 +352,7 @@ export default {
       })
     },
     handleGetClass(mid) {
-      return getClass(mid)
+      return getV3PoolsClass(mid)
     },
     handleJoin() {
       // this.$emit('listenToMarket', this.thisMarket)
@@ -380,8 +380,8 @@ export default {
 .tipDiv{
   border: 1px solid #e3e3e3;
   margin-top: 40px;
-  border-radius: 20px;
-  padding: 20px 30px 20px 40px;
+  border-radius: 10px;
+  padding: 20px 20px;
   font-size: 26px;
   overflow: hidden;
 }

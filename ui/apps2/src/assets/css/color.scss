@@ -80,6 +80,7 @@ $color-tip: #a6a6a6;
   }
 }
 .bgShadow{
+  border-radius: 10px;
   &::before{
     content: '';
     filter: blur(9px);
@@ -91,6 +92,31 @@ $color-tip: #a6a6a6;
     z-index: 1;
     background: linear-gradient(45deg, rgb(255, 0, 0) 0%, rgb(255, 154, 0) 10%, rgb(208, 222, 33) 20%, rgb(79, 220, 74) 30%, rgb(63, 218, 216) 40%, rgb(47, 201, 226) 50%, rgb(28, 127, 238) 60%, rgb(95, 21, 242) 70%, rgb(186, 12, 248) 80%, rgb(251, 7, 217) 90%, rgb(255, 0, 0) 100%) 0% 0% / 300% 300%;
     animation: 2s linear 0s infinite normal none running changeBgShadow;
-    border-radius: 12px;
+    border-radius: 20px !important;
   }
+}
+
+.poolslv1{
+  border: 1px solid #B56DD9 !important;
+  box-shadow: 0 0 5px 0px rgba(#B56DD9, .5) !important;
+}
+.poolslv2{
+  border: 1px solid #5D5552 !important;
+  box-shadow: 0 0 5px 0px rgba(#5D5552, .5) !important;
+}
+.poolslv3{
+  border: 1px solid #E0786D !important;
+  box-shadow: 0 0 5px 0px rgba(#E0786D, .5) !important;
+}
+.poolslv4{
+  border: 1px solid #AAB5BD !important;
+  box-shadow: 0 0 5px 0px rgba(#AAB5BD, .5) !important;
+}
+.poolslv5{
+  border: 1px solid #FFBD23 !important;
+  box-shadow: 0 0 5px 0px rgba(#FFBD23, .5) !important;
+}
+.poolslv6{
+  border: 1px solid #42C415 !important;
+  box-shadow: 0 0 5px 0px rgba(#42C415, .5) !important;
 }

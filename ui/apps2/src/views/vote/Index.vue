@@ -149,6 +149,7 @@ export default {
     ...mapState({
       // dsrPools: state => state.sys.dsrPools,
       scatter: state => state.app.scatter,
+      marketLists: state => state.sys.marketLists,
     }),
     checkedLeng() {
       const n = this.allList.filter(v => v.isChecked)
@@ -162,14 +163,6 @@ export default {
       const dssCount = Number(this.dssData.balance || 0) * buff;
       const swapCount = parseFloat(this.swapData.liq_bal1 || '0') * 0.5;
       return parseInt(dssCount + swapCount)
-    }
-  },
-  props: {
-    marketLists: {
-      type: Array,
-      default: function lists() {
-        return []
-      }
     }
   },
   watch: {
