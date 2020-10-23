@@ -70,6 +70,7 @@ export default {
     position: fixed;
     bottom: 0px;
     width: 100%;
+    max-width: 750px;
     background: #FFF;
     font-size: 18px;
     padding: 5px 0;

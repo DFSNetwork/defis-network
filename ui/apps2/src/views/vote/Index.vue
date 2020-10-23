@@ -690,6 +690,7 @@ export default {
   position: fixed;
   bottom: 0px;
   width: 100%;
+  max-width: 750px;
   height: 150px;
   background: #fff;
   padding: 0 40px;

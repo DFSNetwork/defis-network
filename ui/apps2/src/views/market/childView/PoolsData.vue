@@ -42,7 +42,7 @@
                 <div class="contract tip">{{ item.contract0 }}</div>
               </div>
             </div>
-            <div class="add">+</div>
+            <!-- <div class="add">+</div> -->
             <div class="coinInfo flex">
               <div class="coinImg"><img width="100%" :src="item.sym1Data.imgUrl" :onerror="errorCoinImg"></div>
               <div>
