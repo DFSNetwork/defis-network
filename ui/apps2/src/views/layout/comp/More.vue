@@ -20,7 +20,7 @@
       </div>
       <!-- list -->
       <div class="lists">
-        <div class="title flexb">
+        <div class="title flexb" @click="handleToBP">
           <div class="flexa">
             <img class="titleImg" src="https://apps.defis.network/static/faviconV3.png">
             <span>关于DFS</span>
@@ -51,6 +51,16 @@
           <img class="listImg" src="@/assets/navImg/safe_set.svg">
           <span>{{ $t('public.warnTip') }}</span>
         </div>
+        <!-- <div class="list flexa">
+          <img class="listImg" src="@/assets/navImg/bug.svg">
+          <span
+            v-clipboard:copy="'dfsfarmer'"
+            v-clipboard:success="handleCopy"
+            v-clipboard:error="handleCopyError">
+            <span>问题反馈 </span>
+            <span class="tip">(wx: dfsfarmer)</span>
+          </span>
+        </div> -->
       </div>
 
       <!-- 切换语言 -->
@@ -88,6 +98,9 @@ export default {
     }),
   },
   methods: {
+    handleToBP() {
+      location.href = 'https://defis.network/'
+    },
     handleChangeLang() {
       let type;
       this.language === 'en' ? type = 'zh-CN' : type = 'en'
@@ -130,6 +143,21 @@ export default {
       EosModel.accountLoginOut(() => {
         location.reload()
       })
+    },
+    // 分享 - 复制文本
+    handleCopy() {
+      this.$message.success({
+        message: 'Copy Success!',
+        position: 'center',
+        duration: 2000
+      });
+    },
+    handleCopyError() {
+      this.$message.error({
+        message: 'Copy Error!',
+        position: 'center',
+        duration: 2000
+      });
     },
   }
 }

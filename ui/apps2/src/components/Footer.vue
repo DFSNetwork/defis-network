@@ -32,7 +32,7 @@
     <el-dialog
       class="dialog"
       :visible.sync="showImg2">
-      <img width="100%" src="https://tva1.sinaimg.cn/large/007S8ZIlgy1gieh1hl5i4j30ku112tf3.jpg" />
+      <img width="100%" src="https://tva1.sinaimg.cn/large/0081Kckwly1gjzkya7bllj30ku112abv.jpg" />
     </el-dialog>
   </div>
 </template>

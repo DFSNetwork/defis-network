@@ -1,6 +1,6 @@
 <template>
   <div class="tutorial">
-    <div class="list">
+    <!-- <div class="list">
       <div class="title">{{ $t('tutorial.title1') }} </div>
       <div class="content">
         <div class="label">{{ $t('tutorial.label1') }}</div>
@@ -13,8 +13,8 @@
         </ul>
         <div class="end">{{ $t('tutorial.done') }}</div>
       </div>
-    </div>
-    <div class="list">
+    </div> -->
+    <!-- <div class="list">
       <div class="title">{{ $t('tutorial.title2') }}</div>
       <div class="content">
         <div class="label">{{ $t('tutorial.label2') }}</div>
@@ -27,7 +27,7 @@
         </ul>
         <div class="end">{{ $t('tutorial.done') }}</div>
       </div>
-    </div>
+    </div> -->
     <div class="list">
       <div class="title">{{ $t('tutorial.title3') }}</div>
       <div class="content">
@@ -98,16 +98,15 @@
         <!-- <div class="end">{{ $t('tutorial.done') }}</div> -->
       </div>
     </div>
-    <div class="list">
+    <!-- <div class="list">
       <div class="title">{{ $t('miningRules.bankRules') }}</div>
       <div class="content">
         <ul class="ul">
           <li>{{ $t('miningRules.bankRule1') }}</li>
           <li>{{ $t('miningRules.tradeRule2') }}</li>
         </ul>
-        <!-- <div class="end">{{ $t('tutorial.done') }}</div> -->
       </div>
-    </div>
+    </div> -->
     <div class="list">
       <div class="title">{{ $t('miningRules.marketRules') }}</div>
       <div class="content">

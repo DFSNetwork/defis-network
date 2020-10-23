@@ -8,13 +8,13 @@
           <li class="rule1">{{ $t('miningRules.tradeRule2') }}</li>
         </ul>
       </div>
-      <div class="ruleDiv">
+      <!-- <div class="ruleDiv">
         <div class="subTitle">{{ $t('miningRules.bankRules') }}</div>
         <ul class="ul">
           <li class="rule1">{{ $t('miningRules.bankRule1') }}</li>
           <li class="rule1">{{ $t('miningRules.tradeRule2') }}</li>
         </ul>
-      </div>
+      </div> -->
       <div class="ruleDiv">
         <div class="subTitle">{{ $t('miningRules.marketRules') }}</div>
         <ul class="ul">

@@ -6,7 +6,7 @@
         <span>{{ $t('info.markerFeesApr') }}：</span>
         <span>{{ `${feesApr}%` || '—' }}</span>
       </div>
-      <div class="flexa" v-if="parseFloat(apr)">
+      <div class="flexa" v-if="parseFloat(apr) || parseFloat(aprV3)">
         <span>{{ $t('info.dfsMineApr') }}：</span>
         <span>{{ parseFloat(apr) ? `${apr}%` : '—' }}({{ `V3: ${aprV3}%` }})</span>
       </div>

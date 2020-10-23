@@ -73,7 +73,7 @@ export function getVoteRankConfV3(lists) {
       const t = Object.assign({}, v, rows[index], deal)
       rankInfo.push(t)
     })
-    console.log(rankInfo)
+    // console.log(rankInfo)
     store.dispatch('setRankInfoV3', rankInfo)
   })
 }
