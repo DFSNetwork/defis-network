@@ -1,16 +1,9 @@
 <template>
   <div :class="`weight ${handleGetClass(thisMarket.mid)}` ">
     <div class="noPools" @click="handleToSymbolPools">
-      <div class="flexb mb10" v-if="Number(buff) && showAddPools">
-        <div class="green" v-loading="joinLoading" v-if="showAddPools" @click.stop="handleJoin">{{ $t('mine.joinNow') }}</div>
-      </div>
       <div class="hasPools flexb mb10">
         <div class="flexa">
           <span>{{ $t('mine.earnings') }}： {{ changeReWard || '0.00000000' }} DFS</span>
-          <span class="flexa red" v-if="handleGetClass(thisMarket.mid) === '' && Number(buff)">
-            <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
-            <span>{{ buff }}%</span>
-          </span>
           <img class="tipIcom" src="@/assets/img/dex/tips_icon_btn.svg" @click.stop="handleShowReWard">
         </div>
         <div v-if="getMinerData && Number(reward)" v-loading="claimLoading"
@@ -23,12 +16,7 @@
       </div>
       <div class="tip minePerDay">
         <span>{{ $t('mine.poolsMine2', {perDayReward}) }}</span>
-        <span class="green" v-if="!Number(buff) && showAddPools">{{ $t('mine.joinNow') }}></span>
       </div>
-      <!-- <div class="tip" v-if="!isActual && Number(feesApr)">{{ $t('mine.marketFeesApr') }}: {{ feesApr }} %</div>
-      <div class="tip" v-if="isActual && Number(feesApr)">{{ $t('mine.marketApr24H') }}: {{ feesApr }} %</div> -->
-      <!-- <div class="tip">{{ $t('mine.mineApr') }}: {{ apr }}%</div>
-      <div class="tip">{{ $t('info.yfcApr') }}: {{ yfcApy }}%</div> -->
     </div>
 
     <el-dialog
@@ -39,7 +27,7 @@
     <el-dialog
       class="myDialog apy"
       :visible.sync="showApyDetail">
-      <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="isActual"
+      <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
                  :apr="apr" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
     </el-dialog>
   </div>
@@ -48,8 +36,8 @@
 <script>
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealMinerData, dealReward,
-perDayReward, getPoolApr, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
+import { toFixed, accAdd, accDiv, dealMinerData, dealReward,
+perDayReward, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MarketApy from '../popup/MarketApy'
 import { timeApy } from '@/utils/minerLogic';
@@ -62,7 +50,7 @@ export default {
   },
   data() {
     return {
-      weight: 1,
+      rankData: null,
       price: '0.0001',
       getMinerData: false,
       minnerData: {},
@@ -109,20 +97,6 @@ export default {
       storeFeesApr: state => state.sys.feesApr,
       lpMid: state => state.config.lpMid,
     }),
-    showAddPools() {
-      if (Number(this.token) && !Number(this.minnerData.liq) && this.getMinerData) {
-        return true;
-      }
-      return false
-    },
-    buff() {
-      let t = accSub(this.weight, 1);
-      t = accMul(t, 100);
-      if (Number(t) < 0) {
-        return '0'
-      }
-      return t.toFixed(0)
-    },
     minReward() {
       let min = accDiv(0.0001, this.price)
       if (Number(toFixed(min, 4)) < min) {
@@ -136,13 +110,7 @@ export default {
     },
     feesApr() {
       const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {};
-      const thisPoolApr = getPoolApr(this.thisMarket)
-      return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr) ? parseFloat(feesApr.poolsApr) : parseFloat(thisPoolApr)
-    },
-    isActual() {
-      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
-      const thisPoolApr = getPoolApr(this.thisMarket)
-      return parseFloat(feesApr.poolsApr) > parseFloat(thisPoolApr)
+      return parseFloat(feesApr.poolsApr)
     },
     dmdApy() {
       const dmdPool = this.marketLists.find(v => v.mid === 326)
@@ -262,9 +230,9 @@ export default {
       this.showReWardTip = false;
     },
     handleGetData() {
-      const weightData = this.rankInfo.find(v => v.mid === this.thisMarket.mid) || {};
-      this.weight = weightData.pool_weight || 0;
-      if (!Number(this.weight) || !Number(this.price)) {
+      const rankData = this.rankInfo.find(v => v.mid === this.thisMarket.mid);
+      this.rankData = rankData
+      if (!this.rankData || !Number(this.price)) {
         return
       }
       this.handleGetMinNum('perDay')
@@ -330,6 +298,7 @@ export default {
           // 每万EOS一天 
           const reward = perDayReward(this.thisMarket.mid)
           this.perDayReward = reward;
+          console.log(reward)
           return
         }
         // 用户实际数据计算

@@ -28,10 +28,6 @@
             <span>{{ $t('mine.earnings') }}：</span>
             <!-- <span v-if="!item.minnerData || !Number(item.minnerData.liq)">0.00000000 DFS </span> -->
             <span>{{ item.showReward || '0.00000000' }} DFS </span>
-            <span class="addition flexa" v-if="handleGetClass(item.mid) === '' && Number(handleGetBuff(item))">
-              <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
-              <span>{{ handleGetBuff(item) }}%</span>
-            </span>
           </span>
           <span class="green" v-if="item.minnerData && !Number(item.minnerData.liq)" @click.stop="handleJoin(item)">{{ $t('mine.join') }}</span>
           <span class="green" v-if="item.minnerData && Number(item.minnerData.liq)" v-loading="item.loading"
@@ -80,7 +76,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
-import { toFixed, toLocalTime, accSub, accAdd, accMul, accDiv, dealReward, getClass } from '@/utils/public';
+import { toFixed, toLocalTime, accSub, accAdd, accDiv, dealReward, getClass } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MiningRules from '../popup/MiningRules'
 import PoolsInfo from '../comp/PoolsInfo'
@@ -158,37 +154,14 @@ export default {
         }
         const rankInfo = this.rankInfo;
         let lists = [];
-        let gold = [], silver = [], bronze = [];
         rankInfo.forEach(v => {
           const item = newVal.find(vv => vv.mid === v.mid)
-          const weight = Number(v.pool_weight).toFixed(4)
-          item.pool_weight = weight;
-          if (v.rank <= 2) {
-            gold.push(item)
-          } else if (v.rank <= 5) {
-            silver.push(item)
-          } else if (v.rank <= 10) {
-            bronze.push(item)
-          } else {
-            lists.push(item)
-          }
+          lists.push(item)
         });
-        // gold = gold.sort((a, b) => {
-        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        // })
-        // silver = silver.sort((a, b) => {
-        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        // })
-        // bronze = bronze.sort((a, b) => {
-        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        // })
-        // lists = lists.sort((a, b) => {
-        //   return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-        // })
-        this.lists = [...gold, ...silver, ...bronze, ...lists];
+
+        this.lists = lists;
         this.firstGet = true;
         this.handleGetMiners()
-        // console.log(this.lists)
       },
       deep: true,
       immediate: true
@@ -308,14 +281,6 @@ export default {
           }, 50);
         })
       }, 1000);
-    },
-    handleGetBuff(item) {
-      let t = accSub(item.pool_weight, 1);
-      t = accMul(t, 100);
-      if (Number(t) < 0) {
-        return '0'
-      }
-      return t.toFixed(0)
     },
     handleClaim(item) {
       if (item.loading) {

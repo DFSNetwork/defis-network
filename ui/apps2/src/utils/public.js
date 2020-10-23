@@ -221,16 +221,9 @@ export function dealReward(minnerData, mid) {
   const aprs = store.state.sys.rankInfo.find(v => v.mid === mid) || {};
   // 用户实际数据计算
   let minNum = '0';
-  const type = minnerData.lastTime < aprs.lastTime; // 用户时间 < 系统时间
-  if (type) {
-    let t = moment().valueOf() - aprs.lastTime;
-    t = t / 1000;
-    minNum = minnerData.liq * aprs.aprs_accumulator * Math.pow(aprs.aprs, t)
-  } else {
-    let t = moment().valueOf() - minnerData.lastTime;
-    t = t / 1000;
-    minNum = minnerData.liq * Math.pow(aprs.aprs, t)
-  }
+  let t = moment().valueOf() - minnerData.lastTime;
+  t = t / 1000;
+  minNum = minnerData.liq * Math.pow(aprs.aprs, t)
   minNum = minNum - minnerData.liq;
   let reward = minNum / dfsPrice * damping
   reward *= 0.8
@@ -274,20 +267,23 @@ export function getPoolApr(market) {
 
 export function getClass(mid) {
   const rankInfo =  store.state.sys.rankInfo;
-  // for (let item in sortClass) {
-  //   const has = sortClass[item].find(v => v === mid);
-  //   if (has) {
-  //     return item
-  //   }
-  // }
   const item = rankInfo.find(v => v.mid === mid) || {}
-  if (item.rank <= 2) {
+  if (item.rank <= 1) {
     return 'gold';
   }
-  if (item.rank <= 5) {
+  if (item.rank <= 3) {
     return 'silver';
   }
+  if (item.rank <= 6) {
+    return 'bronze';
+  }
   if (item.rank <= 10) {
+    return 'gold';
+  }
+  if (item.rank <= 15) {
+    return 'silver';
+  }
+  if (item.rank <= 21) {
     return 'bronze';
   }
   return ''

@@ -10,15 +10,18 @@ export function getVotePools() {
     "json":true,
     "index_position": 2,
     "key_type": "float64",
-    "limit": 20
+    "limit": 21
   }
   EosModel.getTableRows(params, (res) => {
     const rows = res.rows || [];
     if (!rows.length) {
       return
     }
-    const lists = rows.slice(0, 20);
+    store.dispatch('setRankTrade', rows)
+    console.log(rows)
+    const lists = rows.slice(0, 21);
     getVoteRankConf(lists);
+    getVoteRankConfV3(lists);
   })
 }
 
@@ -29,39 +32,46 @@ export function getVoteRankConf(lists) {
     "scope": "miningpool11",
     "json": true,
     "table": "poolslots",
-    limit: 20,
+    limit: 21,
   }
   EosModel.getTableRows(params, (res) => {
     const rows = res.rows || [];
     if (!rows.length) {
       return
     }
+    console.log(rows)
     const rankInfo = [];
-    rows.forEach((v, index) => {
-      const t = Object.assign({}, v, lists[index])
+    lists.forEach((v, index) => {
+      const t = Object.assign({}, v, rows[index])
       rankInfo.push(t)
     })
+    console.log(rankInfo)
     store.dispatch('setRankInfo', rankInfo)
   })
 }
 
-// 获取交易挖矿投票前21名
-export function getVoteTradeRank(cb) {
+
+// 获取矿池排名配置
+export function getVoteRankConfV3(lists) {
   const params = {
-    "code": "dfspoolsvote",
-    "scope": "dfspoolsvote",
+    "code": "miningpool11",
+    "scope": "miningpool11",
     "json": true,
-    "table": "pools",
+    "table": "poolslots2",
     limit: 21,
-    "index_position": 2,
-    "key_type": "float64",
   }
   EosModel.getTableRows(params, (res) => {
     const rows = res.rows || [];
     if (!rows.length) {
       return
     }
-    store.dispatch('setRankTrade', rows)
-    cb ? cb(rows) : null
+    console.log(rows)
+    const rankInfo = [];
+    lists.forEach((v, index) => {
+      const t = Object.assign({}, v, rows[index])
+      rankInfo.push(t)
+    })
+    console.log(rankInfo)
+    store.dispatch('setRankInfoV3', rankInfo)
   })
 }

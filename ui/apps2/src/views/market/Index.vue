@@ -108,7 +108,7 @@
     </div>
 
     <MarketData v-if="Number(token) !== 0" :thisMarket="thisMarket" :token="token"/>
-    <weight v-if="Number(weight)" :token="token" :thisMarket="thisMarket" :marketLists="marketLists"/>
+    <weight :token="token" :thisMarket="thisMarket" :marketLists="marketLists"/>
 
     <div :class="`liquidity ${handleGetClass(thisMarket.mid)}`" v-if="act === 1">
       <div class="subTitle flexb">
@@ -208,15 +208,7 @@ export default {
       scatter: state => state.app.scatter,
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
-      rankInfo: state => state.sys.rankInfo, // 交易对权重列表
     }),
-    weight() {
-      if (!this.rankInfo.length) {
-        return 0
-      }
-      const rank = this.rankInfo.find(v => v.mid === this.thisMarket.mid) || {};
-      return rank.pool_weight || 0;
-    },
     accPools() {
       if (!this.thisMarket.reserve0 || !this.thisMarket.reserve1) {
         return {}

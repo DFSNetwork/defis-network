@@ -54,8 +54,8 @@ export default {
     setTimeout(() => {
       // this.handleGetWeight()
       // this.handleGetAprs()
+      // this.handleGetDiscount();
       this.handleGetDfsCurrent()
-      this.handleGetDiscount();
       this.handleYfcData();
 
       // 获取代币token
@@ -251,23 +251,6 @@ export default {
         const price = rows.find(v => v.key === 300) || {};
         const price5min = accDiv(price.price1_avg_price, 10000) || 0;
         this.$store.dispatch('setDfsPrice', price5min)
-      })
-    },
-    // 获取交易对权重discount - 全局取一次
-    handleGetDiscount() {
-      const params = {
-        code: "miningpool11",
-        scope: "miningpool11",
-        table: "eggargs",
-        json: true,
-        limit: 1000,
-      }
-      EosModel.getTableRows(params, (res) => {
-        const rows = res.rows || [];
-        if (!rows.length) {
-          return
-        }
-        this.$store.dispatch('setEggargs', rows)
       })
     },
     // 获取YFC矿池列表 - 执行一次

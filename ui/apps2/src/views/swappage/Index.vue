@@ -211,7 +211,6 @@ import { SwapRouter, SwapRouterFilter } from '@/utils/swap_router';
 import Tabs from '../index/components/Tabs';
 import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
-import {getVoteTradeRank} from '@/utils/api';
 import MarketList from '@/components/MarketList';
 import UsddTip from '@/components/UsddTip';
 
@@ -410,7 +409,6 @@ export default {
   created() {
     this.handleGetUrlInAndOut()
     this.handleInBy(this.tradeInfo.type, 'first')
-    getVoteTradeRank()
   },
   mounted() {
     this.handleGetPrice()
