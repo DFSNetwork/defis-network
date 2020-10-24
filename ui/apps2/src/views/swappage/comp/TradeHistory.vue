@@ -5,9 +5,9 @@
         <span class="act" @click="showMarketList = true">{{ thisMarket.symbol0 }}-{{ thisMarket.symbol1 }}</span>
         <img class="iconImg" src="@/assets/img/dex/down.svg" alt="">
       </span>
-      <div class="tip rulesTip">
+      <!-- <div class="tip rulesTip">
         <div>{{ $t('dex.nearSeven') }}</div>
-      </div>
+      </div> -->
     </div>
     <div class="lists">
       <van-list
@@ -43,16 +43,6 @@
       </van-list>
       <!-- <div class="noData tip" v-if="!hisList.length">{{ $t('public.noData') }}</div> -->
     </div>
-
-    <!-- <el-pagination
-      v-if="hisList.length"
-      class="pagination"
-      layout="prev, pager, next"
-      @current-change="handleCurrentChange"
-      :current-page.sync="page"
-      :page-size="pageSize"
-      :total="hisList.length">
-    </el-pagination> -->
 
     <el-dialog
       class="mkListDia pcList"
@@ -109,12 +99,15 @@ export default {
       totalSell: 0,
       totalGetSell: 0,
       pageSize: 20,
-      page: 0,
+      page: 1,
     }
   },
   watch: {
     '$route': {
       handler: function rt() {
+        this.page = 1;
+        this.loadingMore = true;
+        this.pageList = []
         this.handlerGetMarket()
       },
       deep: true,
@@ -142,25 +135,14 @@ export default {
   },
   methods: {
     handleCurrentChange() {
-      if (!this.hisList.length) {
-        this.page = 1
-        this.handlerGetMarket()
-        return
-      }
-      const end = this.page * this.pageSize;
-      this.pageList = this.hisList.slice(0, end)
-      this.loadingMore = false;
-      this.page += 1
-      // 数据全部加载完成
-      if (this.pageList.length >= this.hisList.length) {
-        this.finished = true;
-      }
+      console.log(this.page)
+      this.handlerGetMarket();
     },
     handleExchange(index) {
       this.$set(this.hisList[index], 'exRate', !this.hisList[index].exRate);
     },
     handlerGetMarket() {
-      if (!this.marketLists.length || !this.scatter || !this.scatter.identity) {
+      if (!this.marketLists.length || !this.scatter || !this.scatter.identity || this.loading) {
         return
       }
       const mid = this.$route.params.mid || 39;
@@ -171,48 +153,48 @@ export default {
     async handleGetHistory(mid) {
       this.loading = true;
       const user = this.scatter.identity.accounts[0].name;
-      const result = await axios.get(`https://dfsinfoapi.sgxiang.com/dapi/trademining?mid=${mid}&user=${user}`);
+      const params = {
+        user,
+        mid,
+        page: this.page,
+        limit: this.pageSize,
+      }
+      const result = await axios.get('https://api.defis.network/swap/tradelog', {params});
+      this.loading = false;
       if (result.status !== 200) {
         this.hisList = [];
+        this.pageList = [];
+        this.handleCurrentChange();
         return;
       }
-      this.loading = false;
-      const list = result.data || [];
-      let totalBuy = 0;
-      let totalGetBuy = 0;
-      let totalSell = 0;
-      let totalGetSell = 0;
+      const list = result.data.data || [];
+      console.log(list)
       list.forEach(v => {
-        const t = Number(v.utcTime + '000') + 8 * 3600 * 1000;
+        let t = toLocalTime(v.create_time);
+        t = Date.parse(t) + 8 * 3600 * 1000;
         const time = toLocalTime(t)
         this.$set(v, 'time', time);
-        const isBuy = v.amountIn.split(' ')[1] === this.thisMarket.symbol0;
+        const isBuy = v.bal0.split(' ')[1] === this.thisMarket.symbol0;
         this.$set(v, 'isBuy', isBuy);
-        const amt = isBuy ? v.amountIn.split(' ')[0] : v.amountOut.split(' ')[0];
+        const amt = isBuy ? v.bal0.split(' ')[0] : v.bal1.split(' ')[0];
         this.$set(v, 'amt', amt);
-        const buyNum = isBuy ? v.amountOut.split(' ')[0] : v.amountIn.split(' ')[0];
+        const buyNum = isBuy ? v.bal1.split(' ')[0] : v.bal0.split(' ')[0];
         this.$set(v, 'buyNum', buyNum);
         const price = parseFloat(amt) / parseFloat(buyNum); // 成交均价
         this.$set(v, 'price', dealPrice(price));
-        if (this.thisMarket.symbol0 === v.amountIn.split(' ')[1]) {
-          totalBuy += parseFloat(v.amountIn)
-          totalGetBuy += parseFloat(v.amountOut)
-        } else {
-          totalSell += parseFloat(v.amountOut)
-          totalGetSell += parseFloat(v.amountIn)
-        }
       })
-      const decimal0 = this.thisMarket.decimal0 > 4 ? 4 : this.thisMarket.decimal0;
-      const decimal1 = this.thisMarket.decimal1 > 4 ? 4 : this.thisMarket.decimal1;
-      this.totalBuy = totalBuy.toFixed(decimal0); // 买入消耗的 token0
-      this.totalSell = totalSell.toFixed(decimal0); // 卖出获取的 token0
-      this.totalGetSell = totalGetSell.toFixed(decimal1); // 卖出的Token1
-      this.totalGetBuy = totalGetBuy.toFixed(decimal1); // 获得的Token1
-      console.log('buy: ' + this.totalBuy + ', sell: ' + this.totalSell)
       this.hisList = list;
-      this.pageList = []
-      // this.pageList = this.hisList.slice(0, this.pageSize)
-      this.handleCurrentChange()
+      if (this.page === 1) {
+        this.pageList = list;
+      } else {
+        this.pageList.push(...list)
+      }
+      this.loadingMore = false;
+      this.page += 1;
+      // 数据全部加载完成
+      if (this.pageList.length >= result.data.total) {
+        this.finished = true;
+      }
     },
     handleClose() {
       this.showMarketList = false;
