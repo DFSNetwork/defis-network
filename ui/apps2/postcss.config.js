@@ -1,13 +1,22 @@
-module.exports = {
-  plugins: {
-    autoprefixer: {
-      overrideBrowserslist: ["Android >= 4.0", "iOS >= 7"]
-    },
-    "postcss-pxtorem": {
-      rootValue: 75,
-      propList: ["*"],
-      // selectorBlackList: ["#app"],
-      minPixelValue: 1.0001 //忽略 1px转rem
-    }
+const AutoPrefixer = require('autoprefixer');
+const pxtorem = require('postcss-pxtorem');
+module.exports = ({ file }) => {
+  let remUnit;
+  if (file && file.dirname && file.dirname.indexOf('vant') > -1) {
+    remUnit = 37.5;
+  } else {
+    remUnit = 75;
   }
+  return {
+    plugins: [
+      AutoPrefixer({
+        overrideBrowserslist: ['iOS >= 7', 'android >= 4.0'],
+      }),
+      pxtorem({
+        rootValue: remUnit,
+        propList: ['*'],
+        minPixelValue: 1.0001,
+      }),
+    ],
+  };
 };

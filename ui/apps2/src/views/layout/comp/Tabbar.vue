@@ -64,6 +64,7 @@ export default {
   .nullDiv{
     height: 100px;
     width: 100%;
+    padding: 5px 0;
   }
   .tabbar{
     z-index: 1002;

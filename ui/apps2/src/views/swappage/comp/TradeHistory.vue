@@ -9,40 +9,50 @@
         <div>{{ $t('dex.nearSeven') }}</div>
       </div>
     </div>
-    <!-- <div class="total flexb">
-      <div class="flexb totalNum">
-        <div>发送：{{ totalBuy }} {{ thisMarket.symbol0 }}</div>
-      </div>
-      <div>收到：{{ totalSell }} {{ thisMarket.symbol0 }}</div>
-      <div>盈亏：{{ reward }} {{ thisMarket.symbol0 }}</div>
-    </div> -->
-    <div class="lists" v-loading="loading">
-      <div class="noData tip" v-if="!hisList.length">{{ $t('public.noData') }}</div>
-      <div class="list" v-for="(item, index) in hisList" :key="index">
-        <div class="flexb">
-          <span class="flexc num">
-            <span>{{ item.amountIn }}</span>
-            <img class="exchange" src="@/assets/img/dex/exchange.svg" alt="">
-            <span>{{ item.amountOut }}</span>
-          </span>
-        </div>
-        <div class="price flexb">
-          <span class="tip">{{ $t('dex.exchangePrice') }}</span>
-          <span class="flexc">
-            <span v-if="item.exRate">1{{ item.sym1 }} = {{ item.price0 }} {{ item.sym0 }}</span>
-            <span v-else>1{{ item.sym0 }} = {{ item.price1 }} {{ item.sym1 }}</span>
-            <span class="flexa" @click="handleExchange(index)">
-              <img class="iconImg small" v-if="!item.exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
-              <img class="iconImg small" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
+    <div class="lists">
+      <van-list
+        v-model="loadingMore"
+        :finished="finished"
+        finished-text="没有更多了"
+        @load="handleCurrentChange"
+      >
+        <div class="list" v-for="(item, index) in pageList" :key="index">
+          <div class="flexa">
+            <span class="tradeType green_p" v-if="item.isBuy">买</span>
+            <span class="tradeType red_p" v-else>卖</span>
+            <span class="flexc">
+              <span>{{ thisMarket.symbol1 }}</span>/<span>{{ thisMarket.symbol0 }}</span>
             </span>
-          </span>
+            <span class="tip time">（{{ item.time }}）</span>
+          </div>
+          <div class="flexb dataInfo tip">
+            <div>
+              <div>成交总额({{ thisMarket.symbol0 }})</div>
+              <div class="num">{{ item.amt }}</div>
+            </div>
+            <div>
+              <div>成交均价({{ thisMarket.symbol0 }})</div>
+              <div class="num">{{ item.price }}</div>
+            </div>
+            <div>
+              <div>成交量({{ thisMarket.symbol1 }})</div>
+              <div class="num">{{ item.buyNum }}</div>
+            </div>
+          </div>
         </div>
-        <div class="price flexb tip">
-          <span>{{ $t('dex.exchangeTime') }}</span>
-          <span>{{ item.time }}</span>
-        </div>
-      </div>
+      </van-list>
+      <!-- <div class="noData tip" v-if="!hisList.length">{{ $t('public.noData') }}</div> -->
     </div>
+
+    <!-- <el-pagination
+      v-if="hisList.length"
+      class="pagination"
+      layout="prev, pager, next"
+      @current-change="handleCurrentChange"
+      :current-page.sync="page"
+      :page-size="pageSize"
+      :total="hisList.length">
+    </el-pagination> -->
 
     <el-dialog
       class="mkListDia pcList"
@@ -59,7 +69,7 @@
 import { mapState } from 'vuex';
 import axios from "axios";
 import MarketList from '@/components/MarketList';
-import {toLocalTime} from '@/utils/public'
+import {toLocalTime, dealPrice} from '@/utils/public'
 export default {
   name: 'tradeHistory',
   components: {
@@ -82,9 +92,12 @@ export default {
   data() {
     return {
       loading: false,
+      loadingMore: false,
+      finished: false,
       exRate: false,
       showMarketList: false,
       hisList: [],
+      pageList: [],
       thisMarket: {
         mid: 39,
         symbol0: 'EOS',
@@ -95,6 +108,8 @@ export default {
       totalGetBuy: 0,
       totalSell: 0,
       totalGetSell: 0,
+      pageSize: 20,
+      page: 0,
     }
   },
   watch: {
@@ -126,11 +141,26 @@ export default {
     }
   },
   methods: {
+    handleCurrentChange() {
+      if (!this.hisList.length) {
+        this.page = 1
+        this.handlerGetMarket()
+        return
+      }
+      const end = this.page * this.pageSize;
+      this.pageList = this.hisList.slice(0, end)
+      this.loadingMore = false;
+      this.page += 1
+      // 数据全部加载完成
+      if (this.pageList.length >= this.hisList.length) {
+        this.finished = true;
+      }
+    },
     handleExchange(index) {
       this.$set(this.hisList[index], 'exRate', !this.hisList[index].exRate);
     },
     handlerGetMarket() {
-      if (!this.marketLists.length) {
+      if (!this.marketLists.length || !this.scatter || !this.scatter.identity) {
         return
       }
       const mid = this.$route.params.mid || 39;
@@ -140,9 +170,6 @@ export default {
     },
     async handleGetHistory(mid) {
       this.loading = true;
-      if (!this.scatter || !this.scatter.identity) {
-        return
-      }
       const user = this.scatter.identity.accounts[0].name;
       const result = await axios.get(`https://dfsinfoapi.sgxiang.com/dapi/trademining?mid=${mid}&user=${user}`);
       if (result.status !== 200) {
@@ -159,14 +186,14 @@ export default {
         const t = Number(v.utcTime + '000') + 8 * 3600 * 1000;
         const time = toLocalTime(t)
         this.$set(v, 'time', time);
-        const price0 = parseFloat(v.amountIn) / parseFloat(v.amountOut);
-        const price1 = parseFloat(v.amountOut) / parseFloat(v.amountIn);
-        this.$set(v, 'price0', price0.toFixed(6));
-        this.$set(v, 'price1', price1.toFixed(6));
-        this.$set(v, 'exRate', false);
-        this.$set(v, 'sym0', v.amountIn.split(' ')[1]);
-        this.$set(v, 'sym1', v.amountOut.split(' ')[1]);
-
+        const isBuy = v.amountIn.split(' ')[1] === this.thisMarket.symbol0;
+        this.$set(v, 'isBuy', isBuy);
+        const amt = isBuy ? v.amountIn.split(' ')[0] : v.amountOut.split(' ')[0];
+        this.$set(v, 'amt', amt);
+        const buyNum = isBuy ? v.amountOut.split(' ')[0] : v.amountIn.split(' ')[0];
+        this.$set(v, 'buyNum', buyNum);
+        const price = parseFloat(amt) / parseFloat(buyNum); // 成交均价
+        this.$set(v, 'price', dealPrice(price));
         if (this.thisMarket.symbol0 === v.amountIn.split(' ')[1]) {
           totalBuy += parseFloat(v.amountIn)
           totalGetBuy += parseFloat(v.amountOut)
@@ -181,7 +208,11 @@ export default {
       this.totalSell = totalSell.toFixed(decimal0); // 卖出获取的 token0
       this.totalGetSell = totalGetSell.toFixed(decimal1); // 卖出的Token1
       this.totalGetBuy = totalGetBuy.toFixed(decimal1); // 获得的Token1
+      console.log('buy: ' + this.totalBuy + ', sell: ' + this.totalSell)
       this.hisList = list;
+      this.pageList = []
+      // this.pageList = this.hisList.slice(0, this.pageSize)
+      this.handleCurrentChange()
     },
     handleClose() {
       this.showMarketList = false;
@@ -259,6 +290,7 @@ export default {
       margin: 30px 40px;
       padding: 30px;
       border-radius: 15px;
+      font-size: 30px;
       box-shadow: 0px 8px 40px 0px rgba(220,220,220,0.5);
       &>div{
         margin-top: 10px;
@@ -266,11 +298,29 @@ export default {
           margin-top: 0;
         }
       }
-      .num{
-        font-size: 33px;
-        .exchange{
-          margin: 0 8px;
-          width: 30px;
+      .tradeType{
+        font-size: 30px;
+        font-weight: 500;
+        margin-right: 10px;
+      }
+      .time{
+        margin-left: -8px;
+      }
+      .dataInfo{
+        font-size: 24px;
+        text-align: center;
+        &>div{
+          flex: 1;
+          &:first-child{
+            text-align: left;
+          }
+          &:last-child{
+            text-align: right;
+          }
+        }
+        .num{
+          font-size: 30px;
+          color: #333;
         }
       }
     }
@@ -301,6 +351,33 @@ export default {
       margin: auto;
       width: 670px;
       border-radius:30px;
+    }
+  }
+}
+
+.pagination{
+  text-align: right;
+  margin-top: 20px;
+  margin-bottom: 30px;
+  font-size: 26px;
+  padding-right: 30px;
+  /deep/ .el-pager{
+    li.active{
+      color: #07D79B;
+    }
+    li:hover{
+      color: #07D79B;
+    }
+    li{
+      font-size: 26px;
+    }
+  }
+  /deep/ .btn-prev, /deep/ .btn-next{
+    &:hover {
+      color: #07D79B;
+    }
+    .el-icon-arrow-left, .el-icon-arrow-right{
+      font-size: 26px;
     }
   }
 }

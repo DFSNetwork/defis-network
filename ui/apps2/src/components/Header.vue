@@ -14,7 +14,7 @@
         <span>Apps</span>
         <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
       </span>
-      <span class="create flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>
+      <span class="create flexc more" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>
       <!-- <span class="flexc" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span> -->
     </div>
 
@@ -167,8 +167,8 @@ export default {
 <style lang="scss" scoped>
 .header{
   background: $color-bgcolor;
-  height: 120px;
-  padding: 0 30px 0 40px;
+  height: 110px;
+  padding: 0 18px 0 40px;
   font-size: 28px;
   color: $color-tip;
   margin-bottom: 5px;
