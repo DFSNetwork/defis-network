@@ -159,14 +159,14 @@ import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, getMarketTime, dealAccountHide,
-         dealMinerData, perDayReward, getClass, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
+         dealMinerData, perDayReward, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
 import MarketTip from '../popup/MarketTip';
 import MarketApy from '../popup/MarketApy'
 // import RankTip from '../popup/RankTip'
 import { timeApy } from '@/utils/minerLogic';
-import { perDayRewardV3 } from '@/utils/logic';
+import { perDayRewardV3, getV3PoolsClass } from '@/utils/logic';
 
 export default {
   components: {
@@ -522,7 +522,7 @@ export default {
       })
     },
     handleGetClass(mid) {
-      return getClass(mid)
+      return getV3PoolsClass(mid)
     },
     handleCurrentChange() {
       this.handleGetPageArr();

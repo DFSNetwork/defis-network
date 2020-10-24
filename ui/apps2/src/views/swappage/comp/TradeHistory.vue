@@ -9,13 +9,13 @@
         <div>{{ $t('dex.nearSeven') }}</div>
       </div>
     </div>
-    <div class="total flexb">
+    <!-- <div class="total flexb">
       <div class="flexb totalNum">
-        <div>发送：{{ totalBuy }}</div>
-        <div>收到：{{ totalSell }}</div>
+        <div>发送：{{ totalBuy }} {{ thisMarket.symbol0 }}</div>
       </div>
+      <div>收到：{{ totalSell }} {{ thisMarket.symbol0 }}</div>
       <div>盈亏：{{ reward }} {{ thisMarket.symbol0 }}</div>
-    </div>
+    </div> -->
     <div class="lists" v-loading="loading">
       <div class="noData tip" v-if="!hisList.length">{{ $t('public.noData') }}</div>
       <div class="list" v-for="(item, index) in hisList" :key="index">
