@@ -14,9 +14,9 @@
           <div v-else class="login">{{ scatter.identity.accounts[0].name }}</div>
           <div class="tip">欢迎来到DFS</div>
         </div>
-        <img @click="handleLogin"
+        <img v-if="!scatter || !scatter.identity" @click="handleLogin"
           class="right" src="@/assets/navImg/acc_right.svg" alt="">
-        <!-- <span v-else class="red" @click="handleLoginOut">Exit</span> -->
+        <span v-else class="red exit" @click="handleLoginOut">{{ $t('public.loginOut') }}</span>
       </div>
       <!-- list -->
       <div class="lists">
@@ -164,6 +164,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/*iphoneX、iphoneXs*/
+@media only screen and (max-width: 750px) {
+  .exit{
+    display: none !important;
+  }
+}
 .morePop{
   font-size: 27px;
   .right{
