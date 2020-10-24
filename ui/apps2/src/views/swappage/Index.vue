@@ -931,7 +931,7 @@ export default {
   .rate{
     color: $color-black;
     padding: 0 20px;
-    margin-top: 28px;
+    margin-top: 18px;
     font-size: 28px;
     .iconImg{
       width: 30px;
@@ -984,7 +984,7 @@ export default {
   }
 }
 .btnDiv{
-  margin: 20px 0 30px;
+  margin: 20px 0 20px;
   font-size: 32px;
   font-weight: 500;
   .btn{
