@@ -33,7 +33,7 @@
               <img class="iconImg" v-else src="@/assets/img/dex/switch_up.svg">
             </div>
           </div>
-          <div class="sym0Data pdb10" :class="{'focus': getIptFocus}">
+          <div class="sym0Data" :class="{'focus': getIptFocus}">
             <div class="info flexb">
               <span class="ableGet" @click="handleClickBalan('get')">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket1.symbol }}</span>
               <span class="type">{{ $t('dex.obtain') }}</span>
@@ -846,14 +846,11 @@ export default {
     }
   }
   .sym0Data{
-    padding: 26px 40px 52px;
+    padding: 26px 40px 26px;
     border-radius: 12px;
     border: 1px solid #F3F3F3;
     &.focus{
       border:1px solid rgba(7,215,155,1);
-    }
-    &.pdb10{
-      padding-bottom: 28px;
     }
     .info{
       font-size: 24px;

@@ -2,7 +2,6 @@
   <!-- more -->
   <el-drawer
     class="drawerCss"
-    size="80%"
     :show-close="false"
     :visible.sync="showNav"
     direction="ltr">
@@ -239,6 +238,9 @@ export default {
 }
 
 .drawerCss{
+  /deep/ .el-drawer{
+    width: 550px !important;
+  }
   /deep/ .el-drawer__header{
     margin-bottom: 0;
     padding: 0;
