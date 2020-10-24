@@ -142,7 +142,18 @@
             <span>{{fees}} {{ thisMarket0.symbol }}</span>
           </div>
           <div class="flexb" v-if="Number(reward)">
-            <span class="tip">{{ $t('mine.mineBonus') }}</span>
+            <span class="flex">
+              <span class="tip">{{ $t('mine.mineBonus') }}</span>
+              <el-popover 
+                class="flexc"
+                popper-class="mypopper"
+                placement="top-start"
+                trigger="click">
+                <!-- 每笔交易的（0.30%）会给到流动性提供者 -->
+                <div class="qusTip">{{ $t('dex.qusTip4') }}</div>
+                <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+              </el-popover>
+            </span>
             <span>{{ reward }} DFS</span>
           </div>
         </div>

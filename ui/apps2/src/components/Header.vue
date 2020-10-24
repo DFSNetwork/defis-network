@@ -11,7 +11,7 @@
         <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
       </span>
       <span class="create flexc" @click="showApps = true">
-        <span>Apps</span>
+        <span>APPS</span>
         <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
       </span>
       <span class="create flexc more" @click="handleShowNav"><img class="svgIcon" src="@/assets/img/dex/menu_icon.svg" alt=""></span>
@@ -24,13 +24,14 @@
       :visible.sync="showApps">
       <div @click="showApps = false">
         <div class="proClass">
-          <div class="create flexc" @click="handleToProject('pddex')">Pddex</div>
+          <div class="create flexc" @click="handleToProject('pddex')">PDDEX</div>
           <div class="create flexc" @click="handleToProject('yfcGuns')">YFC机枪池</div>
         </div>
         <div class="proClass">
           <div class="create flexc" @click="handleTo('farms')">农活大厅</div>
-          <div class="create flexc" @click="handleTo('total')">Top20{{ $t('info.info') }}</div>
+          <div class="create flexc" @click="handleTo('total')">TOP20{{ $t('info.info') }}</div>
           <div class="create flexc" @click="handleTo('coinViews', {mid: 39})">代币观察</div>
+          <div class="create flexc" @click="handleToProject('eosdefi')">EOS DeFi</div>
         </div>
         <div class="proClass">
           <div class="create flexc" @click="handleToProject('yfc')">YFC钓鱼</div>
@@ -154,6 +155,10 @@ export default {
       }
       if (name === 'time') {
         location.href = 'https://timemine.xloot.io/'
+        return
+      }
+      if (name === 'eosdefi') {
+        location.href = 'http://eos-defi.sgxiang.com/'
         return
       }
       if (name === 'loop') {

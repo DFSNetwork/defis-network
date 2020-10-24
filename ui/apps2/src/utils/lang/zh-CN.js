@@ -101,7 +101,8 @@ export default {
     inviter: '邀请人',
     qusTip1: '你的交易将会回滚，如果在确认前有很大的价格变化',
     qusTip2: '根据交易量的多少，成交价与市价的差异',
-    qusTip3: '每笔交易的（0.30%）会给到流动性提供者',
+    qusTip3: '每笔交易额的0.3%',
+    qusTip4: '手续费 / DFS价格 x 0.2 x 0.8',
     bankFor: 'BANK 兑换',
     bankForTip: '本兑换经过USDD BANK 兑换。0手续费，0滑点，还有挖矿奖励。', // This exchange is made through USDD BANK. 0 poundage, 0 slip point, still have dig mine reward.
     heightSlip: '当前价格滑点过高！请重新输入', // Current price sliding point is too high! Please re-enter

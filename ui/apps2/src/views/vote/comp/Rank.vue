@@ -4,7 +4,11 @@
     <div class="voteLists">
       <div class="noData tip" v-if="!rankLists.length">{{ $t('public.noData') }}</div>
       <template  v-for="(item, index) in rankLists">
-        <div v-if="index < 20" :class="`list flexb ${getClass(index)}`" :key="index">
+        <div v-if="index < 21" :class="`list flexs ${handleGetClass(item.mid)}`" :key="index">
+          <!-- <label class="rankImg" v-if="index < 10">
+            <img :src="handleGetSrc(item.mid)" alt="">
+            <span class="rankNum">{{ index + 1}}</span>
+          </label> -->
           <div>
             <div class="poolName">
               <span class="coinImg flexa">
@@ -24,7 +28,6 @@
               <span>{{ item.total_votes || '0' }}（{{ item.votesRate || '0.00' }}%）</span>
             </div>
           </div>
-          <label class="rankImg" v-if="index < 10"><img :src="handleGetSrc(index)" alt=""></label>
         </div>
       </template>
     </div>
@@ -32,6 +35,7 @@
 </template>
 
 <script>
+import { getV3PoolsClass } from '@/utils/logic';
 export default {
   name: 'voteList',
   props: {
@@ -77,28 +81,17 @@ export default {
     }
   },
   methods: {
-    handleGetSrc(index) {
-      if (index < 2) {
-        return 'https://apps.defis.network/static/rank/rank1.png'
-      } else if (index < 5) {
-        return 'https://apps.defis.network/static/rank/rank2.png'
-      } else if (index < 10) {
-        return 'https://apps.defis.network/static/rank/rank3.png'
+    handleGetSrc(mid) {
+      const myclass = getV3PoolsClass(mid);
+      if (myclass) {
+        return `/static/rank/${myclass}.svg`
       } else {
         return ''
       }
     },
-    getClass(index) {
-      if (index < 2) {
-        return 'gold'
-      } else if (index < 5) {
-        return 'silver'
-      } else if (index < 10) {
-        return 'bronze'
-      } else {
-        return ''
-      }
-    }
+    handleGetClass(mid) {
+      return getV3PoolsClass(mid)
+    },
   }
 }
 </script>
@@ -149,14 +142,33 @@ export default {
     }
   }
 }
+// .rankImg{
+//   position: absolute;
+//   top: 0px;
+//   left: 0px;
+//   width: 72px;
+//   transform: translate(-47%, -47%) rotate(-45deg);
+//   img{
+//     width: 100%;
+//   }
+// }
 .rankImg{
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 72px;
-  transform: translate(-47%, -47%) rotate(-45deg);
+  // position: absolute;
+  // top: 0px;
+  // left: 25px;
+  position: relative;
+  width: 80px;
+  margin-right: 10px;
   img{
     width: 100%;
+  }
+  .rankNum{
+    position: absolute;
+    bottom: 28px;
+    left: 50%;
+    font-size: 27px;
+    transform: translateX(-55%);
+    color: #FFF;
   }
 }
 </style>

@@ -323,7 +323,7 @@ export default {
       const newArr = allList.sort((a, b) => {
         return parseInt(b.total_votes || 0) - parseInt(a.total_votes || 0)
       });
-      this.rankList = newArr.slice(0, 20);
+      this.rankList = newArr.slice(0, 21);
       this.$forceUpdate()
     },
     // 查询我的投票
