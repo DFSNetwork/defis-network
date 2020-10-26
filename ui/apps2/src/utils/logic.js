@@ -360,7 +360,7 @@ export function getV3Apr(mid, rankAprs) {
 // 获取池子EOS余额
 function getPoolEosBal(mid) {
   const marketLists = store.state.sys.marketLists;
-  const market = marketLists.find(v => v.mid === mid);
+  const market = marketLists.find(v => v.mid === mid) || {};
   let eosBal = 0;
   if (market.symbol0 === 'EOS' && market.contract0 === 'eosio.token') {
     eosBal = parseFloat(market.reserve0)

@@ -103,6 +103,7 @@ export default {
     line-height: 50px;
     &>span{
       flex: 1;
+      text-align: left;
       &:first-child{
         text-align: right;
       }

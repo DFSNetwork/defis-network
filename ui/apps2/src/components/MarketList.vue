@@ -1,35 +1,41 @@
 <template>
   <div class="marketList">
-    <div class="header flexb">
+    <div class="header">
       <span>{{ $t('pools.chooseMarket') }}</span>
       <span>
-        <span class="create" v-if="$route.name === 'market'" @click="handleToCreate">{{ $t('dex.addMarket') }}</span>
         <img class="closeSvg" @click="handleClose" src="@/assets/img/dialog/sd_icon_btn.svg" alt="">
       </span>
     </div>
-    <div class="iptSearch" :class="{'other': type === 'other'}">
+    <div class="iptSearch">
       <el-input v-model="search" clearable :placeholder="`${$t('pools.searchMarket')}..`"></el-input>
     </div>
-    <div class="scroll" v-if="type === 'kline'">
+    <div class="scroll" v-if="type === 'other' || type === 'kline'">
       <template v-for="(item, i) in searchArr">
         <div class="item flexb" :key="i" @click="handleSelectThis(item)">
-          <div>
-            <div class="coin">{{item.symbol0}} / {{item.symbol1}}</div>
-            <div class="contract tip">{{item.contract0}} / {{item.contract1}}</div>
+          <div class="symbolInfo flexb">
+            <div class="flexa">
+              <img class="coinImg" :onerror="errorCoinImg" :src="item.sym0Data.imgUrl" alt="">
+              <div>
+                <div class="flexa">
+                  <span>{{item.symbol0}}</span>
+                </div>
+                <div class="tip">{{item.contract0}}</div>
+              </div>
+            </div>
+            <img class="addImg" src="@/assets/navImg/add.svg">
+            <div class="flexa">
+              <img class="coinImg" :onerror="errorCoinImg" :src="item.sym1Data.imgUrl">
+              <div>
+                <div class="flexa">
+                  <span>{{item.symbol1}}</span>
+                </div>
+                <div class="tip">{{item.contract1}}</div>
+              </div>
+            </div>
           </div>
         </div>
       </template>
-    </div>
-    <div class="scroll" v-else-if="type === 'other'">
-      <template v-for="(item, i) in searchArr">
-        <div class="item flexb" :key="i" @click="handleSelectThis(item)">
-          <div>
-            <div class="coin">{{item.symbol0}} / {{item.symbol1}}</div>
-            <div class="contract tip">{{item.contract0}} / {{item.contract1}}</div>
-          </div>
-        </div>
-      </template>
-      <div v-if="!search" class="searchMore flexc">更多代币请搜索查询</div>
+      <div v-if="!search && type === 'other'" class="searchMore flexc">更多代币请搜索查询</div>
     </div>
     <div class="scroll" v-else>
       <template v-for="(item, i) in searchArr">
@@ -182,11 +188,17 @@ export default {
   font-size: 30px;
   box-sizing: border-box;
   .header{
-    font-size: 32px;
+    font-size: 38px;
     margin-bottom: 42px;
     padding: 40px 40px 0;
+    text-align: center;
+    position: relative;
+    font-weight: 500;
+    color: #333333;
     .closeSvg{
       width: 24px;
+      position: absolute;
+      right: 40px;
     }
     .create{
       font-size: 26px;
@@ -251,6 +263,32 @@ export default {
           font-weight: 300;
         }
       }
+    }
+  }
+  .symbolInfo{
+    width: 100%;
+    height: 150px;
+    padding: 42px 14px;
+    box-sizing: border-box;
+    border-radius: 12px;
+    &>div{
+      flex: 3;
+    }
+    .addImg{
+      margin: 0 46px 0 36px;
+      width: 28px;
+    }
+    .coinImg{
+      height: 60px;
+      width: 60px;
+      margin-right: 10px;
+      border-radius: 60px;
+      overflow: hidden;
+      display: flex;
+    }
+    .tip{
+      font-size: 24px;
+      margin-top: -5px;
     }
   }
 }

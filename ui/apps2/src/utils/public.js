@@ -416,7 +416,7 @@ export function getIp() {
 export function getDmdMinerHourRoi(market, type, dmdPools) {
   const config = store.state.config.dmdMineConfig;
   const thisConf = config.find(v => v.mid === market.mid) || {};
-  if (!thisConf.mid) {
+  if (!thisConf.mid || !dmdPools) {
     return '0'
   }
   const endDate = (thisConf.duration + thisConf.epoch) * 1000

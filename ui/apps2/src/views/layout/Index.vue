@@ -5,7 +5,7 @@
     <transition name="fade" mode="out-in">
       <router-view class="content" @listenUpdateList="listenUpdateList"/>
     </transition>
-    <my-footer v-show="$route.name === 'index' || $route.name === 'market'"/>
+    <my-footer v-show="$route.name === 'index'"/>
 
     <Tabbar v-if="!$route.meta.noTab"/>
 

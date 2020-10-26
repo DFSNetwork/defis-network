@@ -1,145 +1,107 @@
 <template>
-  <div class="tabView">
-    <div class="marketData">
-      <tabs />
-      <div class="tabD">
-        <div class="direction flexb">
-          <span class="flexc" :class="{'act': act === 1}" @click="handleChange(1)">{{ $t('pools.deposit') }}</span>
-          <span class="flexc" :class="{'act actBack': act === 2}" @click="handleChange(2)">{{ $t('pools.withdrawal') }}</span>
+  <div class="">
+    <div class="marketMain">
+      <Tabs />
+      <div class="infoData">
+        <!-- 交易对信息 -->
+        <div class="symbolInfo flexb" @click="showMarketList = true">
+          <div class="flexa">
+            <img class="coinImg" :onerror="errorCoinImg" :src="thisMarket.sym0Data.imgUrl" >
+            <div>
+              <div class="flexa">
+                <span>{{ thisMarket.symbol0 }} <i class="el-icon-arrow-down"></i></span>
+              </div>
+              <div class="tip">{{ thisMarket.contract0 }}</div>
+            </div>
+          </div>
+          <img class="addImg" src="@/assets/navImg/add.svg">
+          <div class="flexa">
+            <img class="coinImg" :onerror="errorCoinImg" :src="thisMarket.sym1Data.imgUrl" >
+            <div>
+              <div class="flexa">
+                <span>{{ thisMarket.symbol1 }} <i class="el-icon-arrow-down"></i></span>
+              </div>
+              <div class="tip">{{ thisMarket.contract1 }}</div>
+            </div>
+          </div>
         </div>
-        <div v-if="act === 1">
-          <div class="sym0Data" :class="{'focus': ipt1Focus}">
-            <div class="info flexb">
-              <span @click="handleClickBalan('payNum1')">{{ $t('public.balance') }}: {{ balanceSym0 }} {{ thisMarket.symbol0 }}</span>
-              <span class="type"></span>
-            </div>
-            <div class="iptDiv flexb">
-              <div class="coinInfo flex" @click="listenShowDrawer()">
-                <div class="coinImg"><img width="100%" :src="handleGetCoinImg('sym0')" :onerror="errorCoinImg" alt=""></div>
-                <div>
-                  <div class="coin">{{ thisMarket.symbol0 }} <i class="el-icon-arrow-down"></i></div>
-                  <div class="contract tip">{{ thisMarket.contract0 }}</div>
-                </div>
-              </div>
-              <div class="inputDiv">
-                <el-input class="elIpt" type="number" v-model="payNum1" placeholder="0.0"
-                  @input="handleInBy('sym0')"
-                  @focus="handleFocus('sym0')"
-                  @blur="handleBlur('sym0')"></el-input>
-              </div>
+        <!-- 矿池信息 -->
+        <div class="poolsInfo">
+          <div class="item">
+            <div class="subTitle tip">预估24H年化收益率</div>
+            <div class="num">
+              <span>{{ countApy }}%</span>
+              <span class="green_p" @click.stop="showApyDetail = true">详情></span>
             </div>
           </div>
-          <div class="exchange">
-            <div class="border flexc" :class="{'payFocus': ipt1Focus, 'getFocus': ipt2Focus}"
-              @click="handleAddToken">
-              <img class="iconImg" src="@/assets/img/market/switch_add.svg">
-            </div>
-          </div>
-          <div class="sym0Data pdb10" :class="{'focus': ipt2Focus}">
-            <div class="info flexb">
-              <span class="ableGet" @click="handleClickBalan('payNum2')">{{ $t('public.balance') }}: {{ balanceSym1 }} {{ thisMarket.symbol1 }}</span>
-              <span class="type"></span>
-            </div>
-            <div class="iptDiv flexb">
-              <div class="coinInfo flex" @click="listenShowDrawer()">
-                <div class="coinImg"><img width="100%" :src="handleGetCoinImg('sym1')" :onerror="errorCoinImg" alt=""></div>
-                <div>
-                  <div class="coin">{{ thisMarket.symbol1 }} <i class="el-icon-arrow-down"></i></div>
-                  <div class="contract tip">{{ thisMarket.contract1 }}</div>
-                </div>
-              </div>
-              <div class="inputDiv">
-                <el-input class="elIpt" type="number" v-model="payNum2" placeholder="0.0"
-                  @input="handleInBy('sym1')"
-                  @focus="handleFocus('sym1')"
-                  @blur="handleBlur('sym1')"></el-input>
-              </div>
-            </div>
-          </div>
-          <div class="rate flexb">
-            <span class="tip">{{ $t('dex.rate') }}</span>
-            <span class="flex">
+          <div class="item">
+            <div class="subTitle tip">兑换价格</div>
+            <div class="num flexa" @click="exRate = !exRate">
               <span v-if="!exRate">1{{ thisMarket.symbol0 }} = {{ thisMarket.sym0Rate || '-' }}{{ thisMarket.symbol1 }}</span>
               <span v-else>1{{ thisMarket.symbol1 }} = {{ thisMarket.sym1Rate || '-' }}{{ thisMarket.symbol0 }}</span>
-              <span @click="exRate =!exRate">
-                <img class="iconImg" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
-                <img class="iconImg" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
-              </span>
-            </span>
+              <img class="iconImg" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
+              <img class="iconImg" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
+            </div>
+          </div>
+          <div class="item">
+            <div class="subTitle tip">
+              <span>流动池数量</span>
+              <span class="green_p" @click="handleTo('poolsMarket')">前往矿池></span>
+            </div>
+            <div class="num">
+              <span>{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</span>
+            </div>
+          </div>
+          <div class="tip flexa">
+            <span>成为做市商可赚取交易手续费</span>
+            <img class="iconImg" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
           </div>
         </div>
-
-        <div v-else>
-          <div class="marketChecked flexb" @click="listenShowDrawer()">
-            <div class="checkedData">
-              <div class="symbols">{{ thisMarket.symbol0 }} / {{ thisMarket.symbol1 }}</div>
-              <div class="contracts tip">{{ thisMarket.contract0 }} / {{ thisMarket.contract1 }}</div>
-            </div>
-            <div class="flexc">
-              <span class="el-icon-arrow-down more"></span>
-            </div>
-          </div>
-          <div class="backData" :class="{'focus': tokenFocus}">
-            <div class="flexb token">
-              <span>{{ $t('pools.token') }}</span>
-              <span @click="handleClickBalan('token')">{{ $t('pools.ableToken') }}: {{ token }}</span>
-            </div>
-            <div class="inputDiv">
-              <el-input class="elIpt" type="number" v-model="sellToken" placeholder="0"
-                @input="handleSellToken()"
-                @focus="handleFocus()"
-                @blur="handleBlur()"></el-input>
-            </div>
-          </div>
-          <div class="backNum flex">
-            <span class="tip">{{ $t('pools.withdrawal') }}</span>
-            <span>{{ getNum1 }} {{thisMarket.symbol0}} + {{ getNum2 }} {{ thisMarket.symbol1 }}</span>
-          </div>
+        <!-- 按钮事件 -->
+        <div class="btnDiv">
+          <div class="btn flexc" @click="showAdd = true">加入</div>
         </div>
-
-        <div class="btnDiv" v-loading="loading">
-          <div v-if="act === 1" class="btn flexc" @click="handleAddToken">{{ $t('pools.deposit') }}</div>
-          <div v-else class="btn flexc backBtn" @click="handleToSell">{{ $t('pools.withdrawal') }}</div>
-        </div>
+        <!-- 跳转连接 -->
         <div class="linkTo flexb">
           <span class="flexc">
-            <img src="@/assets/navImg/record.svg">
+            <img src="@/assets/navImg/create_icon.svg">
             <span @click="handleTo('createMarket')">{{ $t('dex.addMarket') }}</span>
             <i class="el-icon-arrow-right"></i>
           </span>
           <span class="flexc">
-            <img src="@/assets/navImg/market.svg">
-            <span @click="handleTo('myMarketList')">{{ $t('market.myMarkets') }}</span>
+            <img src="@/assets/navImg/record.svg">
+            <span @click="handleTo('myMarketList')">做市记录</span>
             <i class="el-icon-arrow-right"></i>
           </span>
         </div>
       </div>
     </div>
 
-    <MarketData v-if="Number(token) !== 0" :thisMarket="thisMarket" :token="token"/>
-    <weight :token="token" :thisMarket="thisMarket" :marketLists="marketLists"/>
-
-    <div :class="`liquidity ${handleGetClass(thisMarket.mid)}`" v-if="act === 1">
-      <div class="subTitle flexb">
-        <span>{{ $t('dex.poolNum') }}</span>
-        <span class="toPool" @click="handleToPools()">前往矿池</span>
-      </div>
-      <div class="num">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>
-      <div class="subTitle">{{ $t('pools.accRate', {rate: thisRate}) }}</div>
-      <div class="num">{{ toFixed(accPools.getNum1, thisMarket.decimal0) }} {{thisMarket.symbol0}}
-        / {{ toFixed(accPools.getNum2, thisMarket.decimal1) }} {{thisMarket.symbol1}}</div>
-      <div class="subTitle">{{ $t('pools.myToken') }}</div>
-      <div class="num">{{ accGetToken }}</div>
-    </div>
+    <MyMarketLists />
 
     <!-- 弹窗组件 -->
     <el-dialog
       class="mkListDia"
-      :class="{'pcList': !this.minScreen}"
       :show-close="false"
       :visible.sync="showMarketList">
       <market-list :marketLists="marketLists"
         @listenMarketChange="handleMarketChange"
+        @listenClose="handleClose"/>
+    </el-dialog>
+    <!-- 年化详情 -->
+    <el-dialog
+      class="myDialog apy"
+      :visible.sync="showApyDetail">
+      <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
+                 :apr="apr" :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
+    </el-dialog>
+    <!-- 加入做市 -->
+    <el-dialog
+      class="mkListDia"
+      :show-close="false"
+      :visible.sync="showAdd">
+      <AddMarket v-if="showAdd"
+        :thisMarket="thisMarket"
         @listenClose="handleClose"/>
     </el-dialog>
   </div>
@@ -147,91 +109,118 @@
 
 <script>
 import { mapState } from 'vuex';
-import { EosModel } from '@/utils/eos';
 import MarketList from '@/components/MarketList';
-import { toFixed, accAdd, accDiv, accMul } from '@/utils/public';
-import { dealToken, sellToken, getV3PoolsClass } from '@/utils/logic';
 import Tabs from '../index/components/Tabs';
-import Weight from './comp/Weight';
-import MarketData from './comp/MarketData';
+import MarketApy from './popup/MarketApy'
+import AddMarket from './popup/AddMarket'
+import MyMarketLists from './comp/MarketLists'
+// 公用方法
+import { perDayReward, getDmdMinerHourRoi, getYfcReward,
+  toFixed, accAdd, accDiv } from '@/utils/public';
+import { perDayRewardV3 } from '@/utils/logic';
+import { timeApy } from '@/utils/minerLogic';
 
 export default {
+  name: 'market',
   components: {
     Tabs,
     MarketList,
-    Weight,
-    MarketData,
+    MarketApy,
+    AddMarket,
+    MyMarketLists,
   },
   data() {
     return {
+      first: true,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
-      act: 1,
-      ipt1Focus: false,
-      ipt2Focus: false,
-      payNum1: '',
-      payNum2: '',
-      getToken: '0',
-      // rate: '0.00',
-      balanceSym0: '0.0000',
-      balanceSym1: '0.0000',
-      exRate: false,
-      tokenFocus: false,
-      timer: null,
+      exRate: true,
+      showMarketList: false,
+      showApyDetail: false,
+      showAdd: false,
       thisMarket: {
-        mid: 17,
+        mid: 39,
         symbol0: 'EOS',
         contract0: 'eosio.token',
-        symbol1: 'USDT',
-        contract1: 'tethertether',
+        symbol1: 'DFS',
+        contract1: 'minedfstoken',
         sym0Data:{
           imgUrl: 'https://apps.defis.network/static/coin/eosio.token-eos.svg'
         },
         sym1Data:{
-          imgUrl: 'https://apps.defis.network/static/coin/tethertether-usdt.svg'
+          imgUrl: 'https://apps.defis.network/static/coin/minedfstoken-dfs.png'
         }
       },
-      sellToken: '',
-      getNum1: '0.0000',
-      getNum2: '0.0000',
-      token: '0',
-      showMarketList: false,
-      first: true,
-      loading: false,
+      lpApy: {},
     }
   },
   computed: {
     ...mapState({
-      minScreen: state => state.app.minScreen,
       scatter: state => state.app.scatter,
       slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
       marketLists: state => state.sys.marketLists,
+      dfsPrice: state => state.sys.dfsPrice,
+      storeFeesApr: state => state.sys.feesApr,
+      lpMid: state => state.config.lpMid,
+      rankInfoV3: state => state.sys.rankInfoV3,
     }),
-    accPools() {
-      if (!this.thisMarket.reserve0 || !this.thisMarket.reserve1) {
-        return {}
-      }
-      const inData = {
-        poolSym0: this.thisMarket.reserve0.split(' ')[0],
-        poolSym1: this.thisMarket.reserve1.split(' ')[0],
-        poolToken: this.thisMarket.liquidity_token,
-        sellToken: accAdd(this.getToken || 0, this.token)
-      }
-      const outData = sellToken(inData);
-      return outData
+    // 每万每日挖矿
+    perDayReward() {
+      const reward = perDayReward(this.thisMarket.mid)
+      return reward
     },
-    accGetToken() {
-      const accToken = accAdd(this.token, this.getToken)
-      return accToken
+    perDayRewardV3() {
+      const rewardV3 = perDayRewardV3(this.thisMarket.mid)
+      return rewardV3
     },
-    thisRate() {
-      if (!this.thisMarket.liquidity_token) {
-        return '0.00'
+    // 手续费年化
+    feesApr() {
+      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {};
+      return parseFloat(feesApr.poolsApr)
+    },
+    apr() {
+      const apr = this.perDayReward * this.dfsPrice / 20000 * 365 * 100;
+      return apr.toFixed(2)
+    },
+    aprV3() {
+      const apr = this.perDayRewardV3 * this.dfsPrice / 20000 * 365 * 100;
+      return apr.toFixed(2)
+    },
+    dmdApy() {
+      const dmdPool = this.marketLists.find(v => v.mid === 326)
+      let dmdRoi = getDmdMinerHourRoi(this.thisMarket, 'year', dmdPool)
+      if (Number(dmdRoi)) {
+        return dmdRoi;
       }
-      let rate = accAdd(this.thisMarket.liquidity_token, this.getToken)
-      rate = accDiv(this.accGetToken, rate);
-      rate = accMul(rate, 100)
-      return toFixed(rate, 2)
+      return '0.000';
+    },
+    timeApy() {
+      const pool = this.marketLists.find(v => v.mid === 530) || {}
+      let apy = timeApy(this.thisMarket, 'year', pool)
+      if (Number(apy)) {
+        return apy;
+      }
+      return '0.000';
+    },
+    countApy() {
+      let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
+      if (this.dmdApy) {
+        all = accAdd(all, parseFloat(this.dmdApy))
+      }
+      if (this.timeApy) {
+        all = accAdd(all, parseFloat(this.timeApy))
+      }
+      this.lpMid.forEach(v => {
+        const apy = this.handleDealApy(v.mid, v.symbol);
+        this.lpApy[`${v.symbol.toLowerCase()}Apy`] = apy;
+        if (apy) {
+          all = accAdd(all, Number(apy))
+        }
+      })
+      if (isNaN(all)) {
+        return '—'
+      }
+      return all.toFixed(2)
     }
   },
   watch: {
@@ -241,7 +230,7 @@ export default {
           return
         }
         if (this.first) {
-          this.thisMarket.mid = this.$route.params.mid || 7;
+          this.thisMarket.mid = this.$route.params.mid || 39;
         }
         this.first = false;
         const thisMarket = newVal.find(v => v.mid === Number(this.thisMarket.mid)) || newVal[0];
@@ -251,74 +240,40 @@ export default {
         thisMarket.sym0Rate = toFixed(accDiv(reserve1, reserve0), thisMarket.decimal1)
         thisMarket.sym1Rate = toFixed(accDiv(reserve0, reserve1), thisMarket.decimal0)
         this.thisMarket = thisMarket;
-        this.handleInBy(this.dealType)
         this.handleBeforeDestroy()
       },
       deep: true,
       immediate: true
     },
-    scatter: {
-      handler: function listen(newVal) {
-        if (newVal.identity) {
-          this.handleGetAccToken();
-          this.handleBalanTimer();
-        }
-      },
-      deep: true,
-      immediate: true,
-    },
-    thisMarket(newVal, oldVal) {
-      if (newVal.mid === oldVal.mid) {
-        return
-      }
-      const reserve0 = newVal.reserve0.split(' ')[0];
-      const reserve1 = newVal.reserve1.split(' ')[0];
-      newVal.sym0Rate = toFixed(accDiv(reserve1, reserve0), newVal.decimal1)
-      newVal.sym1Rate = toFixed(accDiv(reserve0, reserve1), newVal.decimal0)
-      this.handleGetAccToken();
-      this.handleBalanTimer()
-    },
-    payNum1(val) {
-      if (val === toFixed(0, this.thisMarket.decimal0)) {
-        this.payNum1 = ''
-      }
-    },
-    payNum2(val) {
-      if (val === toFixed(0, this.thisMarket.decimal1)) {
-        this.payNum2 = ''
-      }
-    },
-    sellToken(val) {
-      if (!Number(val)) {
-        this.sellToken = ''
-      }
-    },
-  },
-  mounted() {
-    // console.log(this.$route)
-  },
-  beforeDestroy() {
   },
   methods: {
-    handleToPools() {
+    handleClose() {
+      this.showMarketList = false;
+      this.showAdd = false;
+    },
+    handleMarketChange(data) {
+      this.thisMarket = data;
+      this.showMarketList = false;
+
+      this.handleBeforeDestroy();
+    },
+    handleTo(name) {
       this.$router.push({
-        name: 'poolsMarket',
+        name,
         params: {
           mid: this.thisMarket.mid
         }
       })
     },
-    handleGetClass(mid) {
-      return getV3PoolsClass(mid)
-    },
-    handleTo(name) {
-      this.$router.push({
-        name,
-      })
-    },
-    handleChangeMarket(item) {
-      document.scrollingElement.scrollTop = 0;
-      this.handleMarketChange(item)
+    handleDealApy(mid = 329, project) {
+      let yfcReward = getYfcReward(this.thisMarket.mid, 'year', project);
+      if (Number(yfcReward)) {
+        const YfcPool = this.marketLists.find(vv => vv.mid === mid);
+        const price = parseFloat(YfcPool.reserve0 || 0) / parseFloat(YfcPool.reserve1 || 1)
+        yfcReward = yfcReward * price / 20000 * 100;
+        yfcReward = yfcReward.toFixed(2);
+      }
+      return yfcReward || '0.00';
     },
     handleBeforeDestroy() {
       const localData = localStorage.getItem('swapMarkets') ? JSON.parse(localStorage.getItem('swapMarkets')) : null;
@@ -333,598 +288,81 @@ export default {
       }
       localStorage.setItem('swapMarkets', JSON.stringify(swapMarkets))
     },
-    handleChange(act) {
-      this.act = act;
-      this.loading = false;
-      this.payNum1 = '';
-      this.payNum2 = '';
-      this.sellToken = '';
-    },
-    handleClose() {
-      this.showMarketList = false
-    },
-    listenShowDrawer() {
-      this.showMarketList = true
-    },
-    handleMarketChange(data) {
-      this.thisMarket = data;
-      this.loading = false;
-      this.payNum1 = '';
-      this.payNum2 = '';
-      this.sellToken = '';
-      this.getToken = 0;
-      this.token = '0'
-      this.showMarketList = false;
-
-      this.handleBeforeDestroy();
-    },
-    // 计算存币获取凭证
-    handleInBy(type = 'sym0') {
-      this.dealType = type;
-      const inData = {
-        poolSym0: this.thisMarket.reserve0.split(' ')[0],
-        poolSym1: this.thisMarket.reserve1.split(' ')[0],
-        poolToken: this.thisMarket.liquidity_token
-      }
-      if (type === 'sym0') {
-        inData.payNum1 = this.payNum1;
-      } else {
-        inData.payNum2 = this.payNum2;
-      }
-      if (!this.thisMarket.liquidity_token) {
-        inData.payNum1 = this.payNum1;
-        inData.payNum2 = this.payNum2;
-        inData.decimal0 = this.thisMarket.decimal0;
-        inData.decimal1 = this.thisMarket.decimal1
-      }
-      const outData = dealToken(inData)
-      // console.log(outData)
-      if ((!Number(this.payNum1) && !Number(this.payNum2))) {
-        return
-      }
-      if (!this.thisMarket.liquidity_token && (!Number(this.payNum1) || !Number(this.payNum2))) {
-        return;
-      }
-      type === 'sym0' ? this.payNum2 = toFixed(outData.payNum2, this.thisMarket.decimal1) :
-                       this.payNum1 = toFixed(outData.payNum1, this.thisMarket.decimal0);
-      this.getToken = outData.getToken;
-    },
-    handleFocus(type = 'sym0') {
-      if (this.act !== 1) {
-        this.tokenFocus = true;
-        const n = Number(this.sellToken);
-        if (!n) {
-          this.sellToken = '';
-          return
-        }
-        this.sellToken = n;
-        return
-      }
-      type === 'sym0' ? this.ipt1Focus = true : this.ipt2Focus = true;
-      const n = type === 'sym0' ? Number(this.payNum1) : Number(this.payNum2);
-      if (!n) {
-        type === 'sym0' ? this.payNum1 = '' : this.payNum2 = '';
-        return
-      }
-      type === 'sym0' ? this.payNum1 = Number(this.payNum1) : this.payNum2 = Number(this.payNum2);
-    },
-    handleBlur(type = 'sym0') {
-      if (this.act !== 1) {
-        this.tokenFocus = false;
-        this.sellToken = parseInt(this.sellToken);
-        return
-      }
-      type === 'sym0' ? this.ipt1Focus = false : this.ipt2Focus = false;
-      type === 'sym0' ? this.payNum1 = toFixed(this.payNum1, this.thisMarket.decimal0)
-                      : this.payNum2 = toFixed(this.payNum2, this.thisMarket.decimal1);
-    },
-    handleGetCoinImg(type = 'sym0') {
-      const market = this.thisMarket;
-      if (type === 'sym0') {
-        return market.sym0Data.imgUrl;
-      }
-      return market.sym1Data.imgUrl;
-    },
-    regInit() {
-      if (this.scatter.identity && this.marketLists.length) {
-        return true;
-      }
-      return false;
-    },
-    // 重启余额定时器
-    handleBalanTimer() {
-      clearInterval(this.timer);
-      if (!this.regInit()) {
-        return;
-      }
-      this.handleGetBalance();
-      this.handleGetBalance('next');
-      this.timer = setInterval(() => {
-        this.handleGetBalance();
-        this.handleGetBalance('next');
-      }, 20000)
-    },
-    // 获取账户余额
-    async handleGetBalance(next) {
-      const params = {
-        code: this.thisMarket.contract0,
-        coin: this.thisMarket.symbol0,
-        decimal: this.thisMarket.decimal0
-      };
-      if (next) {
-        params.code = this.thisMarket.contract1;
-        params.coin = this.thisMarket.symbol1;
-        params.decimal = this.thisMarket.decimal1;
-      }
-      await EosModel.getCurrencyBalance(params, res => {
-        let balance = '0.0000';
-        (!res || res.length === 0) ? balance = '0.0000' : balance = res.split(' ')[0];
-        if (next) {
-          this.balanceSym1 = balance;
-          return;
-        }
-        this.balanceSym0 = balance;
-      })
-    },
-
-    handleRegAdd() {
-      if (!Number(this.payNum1) || !Number(this.payNum2)) {
-        return false;
-      }
-      if (!Number(this.getToken)) {
-        this.$message({
-          type: 'error',
-          message: this.$t('public.marketTip'),
-        })
-        return false;
-      }
-      if (Number(this.payNum1) > Number(this.balanceSym0) || Number(this.payNum2) > Number(this.balanceSym1)) {
-        this.$message({
-          type: 'error',
-          message: this.$t('public.balanLow')
-        })
-        return false
-      }
-      return true
-    },
-    // 存币做市
-    handleAddToken() {
-      if (this.loading) {
-        return
-      }
-      if (!this.handleRegAdd()) {
-        return
-      }
-      this.loading = true;
-      const obj = this.thisMarket;
-      const formName = this.scatter.identity.accounts[0].name;
-      const permission = this.scatter.identity.accounts[0].authority;
-      const params = {
-        actions: [
-          {
-            account: this.baseConfig.toAccountSwap,
-            name: 'deposit',
-            authorization: [{
-              actor: formName, // 转账者
-              permission,
-            }],
-            data: {
-              user: formName,
-              mid: obj.mid
-            }
-          },
-          {
-            account: obj.contract0,
-            name: 'transfer',
-            authorization: [{
-              actor: formName, // 转账者
-              permission,
-            }],
-            data: {
-              from: formName,
-              to: this.baseConfig.toAccountSwap,
-              quantity: `${this.payNum1} ${obj.symbol0}`,
-              memo: `deposit`
-            }
-          },
-          {
-            account: obj.contract1,
-            name: 'transfer',
-            authorization: [{
-              actor: formName, // 转账者
-              permission,
-            }],
-            data: {
-              from: formName,
-              to: this.baseConfig.toAccountSwap,
-              quantity: `${this.payNum2} ${obj.symbol1}`,
-              memo: `deposit`
-            }
-          }
-        ]
-      }
-      EosModel.toTransaction(params, (res) => {
-        this.loading = false;
-        if(res.code && JSON.stringify(res.code) !== '{}') {
-          this.$message({
-            message: res.message,
-            type: 'error'
-          });
-          return
-        }
-        setTimeout(() => {
-          this.handleBalanTimer();
-          this.handleGetAccToken();
-        }, 1000);
-        this.$message({
-          message: this.$t('public.success'),
-          type: 'success'
-        });
-      })
-    },
-
-    // 计算卖出凭证
-    handleSellToken() {
-      const inData = {
-        poolSym0: this.thisMarket.reserve0.split(' ')[0],
-        poolSym1: this.thisMarket.reserve1.split(' ')[0],
-        poolToken: this.thisMarket.liquidity_token,
-        sellToken: this.sellToken
-      }
-      const outData = sellToken(inData);
-      this.getNum1 = toFixed(outData.getNum1, this.thisMarket.decimal0);
-      this.getNum2 = toFixed(outData.getNum2, this.thisMarket.decimal1);
-    },
-    handleClickToken() {
-      this.sellToken = this.token;
-      this.handleSellToken();
-    },
-    // 获取账户当前交易对凭证数量
-    handleGetAccToken() {
-      if (!this.regInit()) {
-        return;
-      }
-      const params = {
-        code: this.baseConfig.toAccountSwap,
-        scope: this.thisMarket.mid,
-        table: 'liquidity',
-        lower_bound: ` ${this.scatter.identity.accounts[0].name}`,
-        upper_bound: ` ${this.scatter.identity.accounts[0].name}`,
-        json: true
-      }
-      EosModel.getTableRows(params, (res) => {
-        const list = res.rows || [];
-        !list[0] ? this.token = '0' : this.token = `${list[0].token}`;
-      })
-    },
-    handleRegSell() {
-      if (!Number(this.sellToken)) {
-        return false;
-      }
-      if (Number(this.sellToken) > Number(this.token)) {
-        this.$message({
-          type: 'error',
-          message: this.$t('public.tokenLow')
-        })
-        return false;
-      }
-      return true;
-    },
-    // 卖出Token
-    handleToSell() {
-      if (this.loading) {
-        return
-      }
-      if (!this.handleRegSell()) {
-        return
-      }
-      this.loading = true;
-      const obj = this.thisMarket;
-      const formName = this.$store.state.app.scatter.identity.accounts[0].name;
-      const permission = this.$store.state.app.scatter.identity.accounts[0].authority;
-      const params = {
-        actions: [
-          {
-            account: this.baseConfig.toAccountSwap,
-            name: 'withdraw',
-            authorization: [{
-              actor: formName, // 转账者
-              permission,
-            }],
-            data: {
-              user: formName,
-              mid: obj.mid,
-              amount: this.sellToken
-            }
-          },
-        ]
-      }
-      EosModel.toTransaction(params, (res) => {
-        this.loading = false
-        if(res.code && JSON.stringify(res.code) !== '{}') {
-          this.$message({
-            message: res.message,
-            type: 'error'
-          });
-          return
-        }
-        setTimeout(() => {
-          this.handleBalanTimer();
-          this.handleGetAccToken();
-        }, 1000);
-        this.$message({
-          message: this.$t('public.success'),
-          type: 'success'
-        });
-      })
-    },
-    toFixed(n, l) {
-      return toFixed(n, l)
-    },
-    handleClickBalan(type) {
-      if (type === 'token') {
-        this.sellToken = this.token;
-        this.handleSellToken();
-        return
-      }
-      if (type === 'payNum1') {
-        this.payNum1 = this.balanceSym0;
-        this.handleInBy('sym0');
-        return
-      }
-      this.payNum2 = this.balanceSym1;
-      this.handleInBy('sym1')
-    }
-  },
+  }
 }
 </script>
 
 <style lang="scss" scoped>
-.tabView{
-  background: #FFF;
-  // font-size: 24px;
-  text-align: left;
-  position: relative;
-  color: #000;
-  font-family: 'Sarasa';
-  .direction{
-    font-size: 28px;
-    height: 84px;
+.marketMain{
+  border: 1px solid rgba(224,224,224,1);
+  border-radius: 12px;
+  font-size: 28px;
+  .symbolInfo{
+    padding: 34px 30px;
+    margin: 5px 22px 20px;
+    border: 1px solid #eee;
     box-sizing: border-box;
-    box-shadow: 0 0 1px 1px #F3F3F3;
-    // border: 1px solid #F3F3F3;
     border-radius: 12px;
-    margin-bottom: 32px;
-
-    &>span{
-      height: 100%;
-      flex: 1;
-      border: 1px solid transparent;
-      border-radius: 12px;
-      font-weight: 500;
+    &>div{
+      flex: 3;
     }
-
-    .act{
-      border: 1px solid #07D79B;
-      color: #07D79B;
+    .addImg{
+      margin: 0 46px;
+      width: 28px;
     }
-    .actBack{
-      border: 1px solid #C05D5D;
-      color: #C05D5D;
+    .coinImg{
+      height: 60px;
+      width: 60px;
+      margin-right: 10px;
+      border-radius: 60px;
+      overflow: hidden;
+      display: flex;
     }
-  }
-
-  .marketData{
-    border: 1px solid rgba(224,224,224,1);
-    background: #FFF;
-    border-radius: 12px;
-    position: relative;
-    .tabD{
-      padding: 8px 26px 32px;
-    }
-  }
-  .sym0Data{
-    padding: 26px 40px 52px;
-    border-radius: 12px;
-    border: 1px solid #F3F3F3;
-    &.focus{
-      border:1px solid rgba(7,215,155,1);
-    }
-    &.pdb10{
-      padding-bottom: 28px;
-    }
-    .info{
+    .tip{
       font-size: 24px;
-      margin-bottom: 24px;
-      .type{
-        font-size: 28px;
-      }
-    }
-    .iptDiv{
-      .coinInfo{
-        text-align: left;
-        flex: 1;
-        .coinImg{
-          width: 60px;
-          height: 60px;
-          margin-right: 10px;
-          border-radius: 60px;
-          overflow: hidden;
-        }
-        .coin{
-          font-size: 28px;
-          font-weight: 500;;
-          line-height: 30px;
-        }
-        .contract{
-          line-height: 30px;
-        }
-        .ableGet{
-          color: #2F3F52;
-        }
-      }
-      .inputDiv{
-        flex: 2;;
-        .elIpt{
-          /deep/ .el-input__inner{
-            color: $color-black;
-            border: 0px;text-align: right;
-            font-size: 52px;
-            padding: 0 0 0 20px;
-            height: 62px;
-          }
-        }
-      }
+      margin-top: -5px;
     }
   }
-  .exchange{
-    height: 20px;
-    position: relative;
-    .border{
-      width: 100px;
-      height: 100px;
-      border-radius: 50px;
-      // border: 1px solid #07D79B;
-      position: absolute;
-      background: $color-bgcolor;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-image: url('../../assets/img/dex/enter_solid_default.svg');
-      background-repeat: no-repeat;
-      background-size: cover;
-      &.payFocus{
-        background-image: url('../../assets/img/dex/enter_solid_up.svg');
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
-      &.getFocus{
-        background-image: url('../../assets/img/dex/enter_solid_down.svg');
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
-      .iconImg{
-        width: 72px;
+  .poolsInfo{
+    border: 1px solid #eee;
+    padding: 30px;
+    margin: 20px 20px;
+    border-radius: 12px;
+    text-align: left;
+    .item{
+      margin-bottom: 10px;
+      .subTitle{
+        margin-bottom: 4px;
       }
     }
-  }
-  .rate{
-    color: $color-black;
-    padding: 0 20px;
-    margin-top: 28px;
-    font-size: 28px;
+    .green_p{
+      margin-left: 20px;
+    }
     .iconImg{
-      width: 36px;
+      width: 30px;
       margin-left: 12px;
     }
   }
-  .marketChecked{
-    margin: 20px 0;
-    padding: 20px 40px;
-    border-radius: 12px;
-    border:2px solid rgba(243,243,243,1);
-    .symbols{
-      font-size:36px;
-      font-weight: 500;
-    }
-    .contracts{
-      margin-top: 6px;
-      font-size: 24px;
-    }
-    .more{
-      font-weight: bold;
-      font-size: 32px;
-    }
-  }
-  .backData{
-    padding: 42px 36px 28px;
-    border-radius: 12px;
-    border: 1px solid rgba(243,243,243,1);
-    &.focus{
-      border: 1px solid rgba(192,93,93,1);
-    }
-    .token{
-      font-size: 24px;
-      margin-bottom: 32px;
-    }
-    .inputDiv{
-      flex: 2;
-      .elIpt{
-        /deep/ .el-input__inner{
-          color: $color-black;
-          border: 0px;text-align: right;
-          font-size: 52px;
-          padding: 0 20px 0 0px;
-          height: 62px;
-          text-align: left;
-        }
-      }
-    }
-  }
-  .backNum{
-    font-size: 28px;
-    margin: 28px 20px 0;
-    align-items: center;
-    .tip{
-      margin-right: 20px;
-      line-height: 32px;
-    }
-  }
-
-  .liquidity{
-    margin-top: 40px;
-    padding: 20px;
-    font-size: 26px;
-    text-align: left;
-    border-radius: 12px;
-    background: #FFF;
-    border: 1px solid rgba(224,224,224,1);
-    .subTitle{
-      color:rgba(166,166,166,1);
-      // line-height:34px;
-    }
-    .num{
-      margin: 6px 0 15px;
-      &:last-child{
-        margin-bottom: 0;
-      }
-    }
-    .toPool{
-      color: #07d79b;
-    }
-  }
-  .flexe{
-    // justify-content: flex-end;
-    margin: 17px 0 20px;
-    .create{
-      font-size: 27px;
-      color: #07d79b;
-    }
-  }
-
   .btnDiv{
-    margin: 30px 0;
+    margin: 30px 20px;
+    font-size: 32px;
+    font-weight: 500;
     .btn{
-      height:88px;
-      background:#29D4B0;
+      height: 88px;
+      // background:rgba(7,215,155,1);
+      background: #29D4B0;
       border-radius: 48px;
-      font-size:32px;
-      color: #FFF;
-
+      color: #fff;
       &:active{
         background:rgba(2,198,152,1);
-      }
-
-      &.backBtn{
-        background:rgba(192,93,93,1);
-        &:active{
-          background:rgba(185,78,90,1);
-        }
       }
     }
   }
   .linkTo{
     font-size: 27px;
+    padding: 28px;
+    margin: 0 20px;
+    border-top: 1px solid #eee;
     &>span{
       flex: 1;
       height: 40px;
@@ -941,25 +379,35 @@ export default {
     }
   }
 }
+
 .mkListDia{
   // animation: none;
   /deep/ .el-dialog{
-    position: absolute;
-    bottom: 0px;
-    margin: 0px;
-    width: 100%;
     border-radius:12px 12px 0px 0px;
+    position: relative;
+    margin: auto;
+    width: 690px;
+    border-radius:12px;
     .el-dialog__body,
     .el-dialog__header{
       padding: 0;
     }
   }
-  &.pcList{
+}
+.myDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 570px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+    }
+  }
+  &.apy{
     /deep/ .el-dialog{
-      position: relative;
-      margin: auto;
-      width: 670px;
-      border-radius:12px;
+      width: 620px;
     }
   }
 }

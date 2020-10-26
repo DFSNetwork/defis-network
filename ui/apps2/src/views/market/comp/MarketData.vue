@@ -5,11 +5,14 @@
         <div class="flexa symbolInfo">
           <img class="imgCoin" :src="thisMarket.sym0Data.imgUrl" :onerror="errorCoinImg"/>
           <span>{{ thisMarket.symbol0 }}</span>
-          <span class="and">+</span>
+          <span class="and"><img src="@/assets/navImg/add.svg" alt=""></span>
           <img class="imgCoin" :src="thisMarket.sym1Data.imgUrl" :onerror="errorCoinImg"/>
           <span>{{ thisMarket.symbol1 }}</span>
         </div>
-        <span @click="handleJoin" class="green">{{ $t('market.manage') }}</span>
+        <div class="flexa">
+          <div class="btn flexc" @click="handleShowAdd">{{ $t('pools.deposit') }}</div>
+          <div class="btn backBtn flexc">{{ $t('dsr.retrieve') }}</div>
+        </div>
       </div>
       <div class="flex">
         <span>{{ $t('mine.accPools') }}: </span>
@@ -236,6 +239,9 @@ export default {
     }
   },
   methods: {
+    handleShowAdd() {
+      this.$emit('listenShowAdd', this.thisMarket)
+    },
     handleChangeRewardType() {
       this.rewardType = (this.rewardType + 1) % 3
     },
@@ -384,6 +390,23 @@ export default {
   padding: 20px 20px;
   font-size: 26px;
   overflow: hidden;
+  .btn{
+    font-size: 24px;
+    background:#29D4B0;
+    border-radius: 30px;
+    color: #fff;
+    padding: 10px 35px;
+    &:active{
+      background:rgba(#29D4B0, .8);
+    }
+    &.backBtn{
+      background: #E9574F;
+      margin-left: 15px;
+      &:active{
+        background:rgba(#E9574F, .8);
+      }
+    }
+  }
 }
 .marketReward{
   &>div{
@@ -422,6 +445,7 @@ export default {
     }
     .and{
       margin: 0 20px;
+      width: 30px;
     }
   }
 }

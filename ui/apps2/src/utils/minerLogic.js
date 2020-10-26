@@ -29,6 +29,7 @@ export function timeApy(market, type, pool) {
       // const apy = dayGet * price / eos * 365 * 100 / 2;
       const dayGet = parseFloat(li.max_supply) * lamp / 7;
       const apy = dayGet * price / eos * 365 * 100 ;
+      // console.log(li.max_supply, lamp, price, eos)
       return apy.toFixed(3)
     }
   } catch (error) {

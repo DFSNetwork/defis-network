@@ -50,16 +50,6 @@
           <img class="listImg" src="@/assets/navImg/safe_set.svg">
           <span>{{ $t('public.warnTip') }}</span>
         </div>
-        <!-- <div class="list flexa">
-          <img class="listImg" src="@/assets/navImg/bug.svg">
-          <span
-            v-clipboard:copy="'dfsfarmer'"
-            v-clipboard:success="handleCopy"
-            v-clipboard:error="handleCopyError">
-            <span>问题反馈 </span>
-            <span class="tip">(wx: dfsfarmer)</span>
-          </span>
-        </div> -->
       </div>
 
       <!-- 切换语言 -->
@@ -73,6 +63,15 @@
         <span class="flexc" @click="handleToV1('v1')">V1</span>
         <span class="flexc" @click="handleToV1('v2')">V2</span>
         <span class="flexc" @click="handleToV1('v3')">V3</span>
+      </div>
+      <!-- 合作 -->
+      <div class="flexb par">
+        <img src="@/assets/img/par/GitHub_icon.svg" alt="">
+        <img src="@/assets/img/par/bihu_icon.svg" alt="">
+        <img src="@/assets/img/par/twitter_icon.svg" alt="">
+        <img src="@/assets/img/par/telegram_icon.svg" alt="">
+        <img src="@/assets/img/par/WeChat_icon.svg" alt="">
+        <img src="@/assets/img/par/medium_icon.svg" alt="">
       </div>
     </div>
   </el-drawer>
@@ -233,6 +232,12 @@ export default {
       &:last-child{
         margin-right: 0px;
       }
+    }
+  }
+  .par{
+    padding: 10px 30px;
+    img{
+      width: 72px;
     }
   }
 }

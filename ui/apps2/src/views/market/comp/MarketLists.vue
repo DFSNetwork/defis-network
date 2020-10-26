@@ -1,16 +1,27 @@
 <template>
   <div class="marketLists">
-    <div class="title">
+    <!-- <div class="title">
       <span class="act">{{ $t('market.myMarkets') }}</span>
-    </div>
+    </div> -->
     <div>
       <div class="noData" v-loading="!getToken" v-if="!dealLists.length">{{ $t('public.noData') }}</div>
       <div v-for="(item, index) in dealLists" :key="index">
         <MarketData :thisMarket="item" :token="item.token" :capital="item.capital" :isList="true"
           :startTime="item.startTime"
-          @listenToMarket="handleToMarket"/>
+          @listenToMarket="handleToMarket"
+          @listenShowAdd="handleShowAdd"/>
       </div>
     </div>
+
+    <!-- 加入做市 -->
+    <el-dialog
+      class="mkListDia"
+      :show-close="false"
+      :visible.sync="showAdd">
+      <AddMarket v-if="showAdd"
+        :thisMarket="menageMarket"
+        @listenClose="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -18,22 +29,35 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed } from '@/utils/public';
-import { sellToken, getV3PoolsClass } from '@/utils/logic';
+import { toFixed, accDiv } from '@/utils/public';
+import { sellToken } from '@/utils/logic';
 import MarketData from './MarketData';
+import AddMarket from '../popup/AddMarket'
 export default {
   components: {
     MarketData,
+    AddMarket,
   },
   data() {
     return {
       getToken: false,
       getCapital: false,
+      showAdd: false,
       lists: [],
+      menageMarket: {}
     }
   },
   watch: {
     marketLists: {
+      handler: function mlt() {
+        if (!this.getToken) {
+          this.handleGetToken()
+          return
+        }
+        this.handleDealLists();
+      }
+    },
+    scatter: {
       handler: function mlt() {
         if (!this.getToken) {
           this.handleGetToken()
@@ -53,59 +77,44 @@ export default {
     }),
     dealLists() {
       let dealLists = [];
-      let gold = [], silver = [], bronze = [];
       this.lists.forEach(v => {
         const curr = this.handleGetNowMarket(v)
         const newV = v;
         newV.nowMarket = curr;
-        const myclass = getV3PoolsClass(v.mid)
-        if (myclass === 'gold') {
-          gold.push(newV)
-          return
-        }
-        if (myclass === 'silver') {
-          silver.push(newV)
-          return
-        }
-        if (myclass === 'bronze') {
-          bronze.push(newV)
-          return
-        }
+        // const myclass = getV3PoolsClass(v.mid)
+        const reserve0 = v.reserve0.split(' ')[0];
+        const reserve1 = v.reserve1.split(' ')[0];
+        newV.sym0Rate = toFixed(accDiv(reserve1, reserve0), v.decimal1)
+        newV.sym1Rate = toFixed(accDiv(reserve0, reserve1), v.decimal0)
         dealLists.push(newV)
-      })
-      gold = gold.sort((a, b) => {
-        return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-      })
-      silver = silver.sort((a, b) => {
-        return parseFloat(b.reserve0) - parseFloat(a.reserve0)
-      })
-      bronze = bronze.sort((a, b) => {
-        return parseFloat(b.reserve0) - parseFloat(a.reserve0)
       })
       dealLists = dealLists.sort((a, b) => {
         return parseFloat(b.reserve0) - parseFloat(a.reserve0)
       })
-      return [...gold, ...silver, ...bronze, ...dealLists]
+      return [...dealLists]
     }
   },
   methods: {
+    handleClose() {
+      this.showAdd = false;
+    },
+    handleShowAdd(item) {
+      this.menageMarket = item;
+      this.showAdd = true;
+    },
     handleToMarket(mid) {
       this.$emit('listenToMarket', mid)
     },
     async handleGetToken() {
+      if (!this.scatter || !this.scatter.identity || !this.marketLists.length) {
+        return
+      }
+      this.getToken = true;
       this.lists = []
-      // this.marketLists.forEach((v, index) => {
-      //   const next = parseInt(index / 10)
-      //   setTimeout(() => {
-      //     this.handleGetTable(v)
-      //   }, next * 1000);
-      // })
-      // https://api.defis.network/swap/deposit?user=wangruixiwww
       const params = {
         user: this.scatter.identity.accounts[0].name,
       }
       axios.get('https://api.defis.network/swap/deposit', {params}).then((result) => {
-        this.getToken = true;
         const res = result.data.data;
         res.forEach((v, index) => {
           const item = this.marketLists.find(vv => vv.mid == v.mid)
@@ -131,25 +140,8 @@ export default {
         let token = '0'
         !list[0] ? token = '0' : token = `${list[0].token}`;
         if (Number(token)) {
-          // this.handleGetCapital(v, token)
           this.handleGetMarketDataByChain(v, token)
         }
-      })
-    },
-    handleGetCapital(v, token) {
-      const params = {
-        user: this.scatter.identity.accounts[0].name,
-        // user: 'dfsdevloper',
-        mid: v.mid,
-      }
-      axios.get('https://dfsinfoapi.sgxiang.com/dapi/changelogdata', {params}).then((result) => {
-        const res = result.data;
-        const newArr = [toFixed(res[v.symbol0], v.decimal0), toFixed(res[v.symbol1], v.decimal1)];
-        this.lists.push(Object.assign(v, {
-          token,
-          capital: newArr,
-          startTime: res.tag_log_utc_block_time
-        }))
       })
     },
     handleGetMarketDataByChain(v, token) {
@@ -214,7 +206,7 @@ export default {
 
 <style lang="scss" scoped>
 .marketLists{
-  margin: 0 40px 40px;
+  margin-bottom: 40px;
 }
 .title{
   font-size: 32px;
@@ -244,5 +236,19 @@ export default {
   margin: 100px 0;
   color: #A6A6A6;
   font-size: 24px;
+}
+.mkListDia{
+  // animation: none;
+  /deep/ .el-dialog{
+    border-radius:12px 12px 0px 0px;
+    position: relative;
+    margin: auto;
+    width: 690px;
+    border-radius:12px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+    }
+  }
 }
 </style>
