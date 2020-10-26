@@ -23,7 +23,7 @@
       </div>
       <div class="noData" v-loading="!firstGet" v-if="!lists.length">{{ $t('public.noData') }}</div>
       <div :class="`list ${handleGetClass(item.mid)}`" v-for="(item, index) in lists" :key="index" @click="handleToMarket(item)">
-        <div class="bgShadow" v-if="rankInfoV3[index].isRainbow"></div>
+        <div class="bgShadow" v-if="rankInfoV3.length && rankInfoV3[index].isRainbow"></div>
         <div class="content">
           <div class="flexa">
             <label class="rankImg" v-if="handleGetClass(item.mid)">
