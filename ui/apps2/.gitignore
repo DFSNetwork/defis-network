@@ -2,6 +2,7 @@
 .well-known/
 node_modules/
 dist/
+gitee/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
