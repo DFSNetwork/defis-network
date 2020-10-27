@@ -2,7 +2,7 @@
   <div class="marketLists" :class="{'page': $route.name === 'myMarketList'}">
     <div class="title flexb" v-if="$route.name === 'myMarketList'">
       <span class="act">{{ $t('market.myMarkets') }}</span>
-      <!-- <span class="mkhis tip">{{ $t('more.mkHis') }}></span> -->
+      <span class="green_p mkhis" @click="handleTo('MarketHis')">{{ $t('more.mkHis') }}></span>
     </div>
     <div>
       <div class="noData" v-loading="loading" v-if="!dealLists.length">{{ $t('public.noData') }}</div>
@@ -97,6 +97,15 @@ export default {
     }
   },
   methods: {
+    handleTo(name) {
+      const mid = this.dealLists.length ? this.dealLists[0].mid : 39;
+      this.$router.push({
+        name,
+        params: {
+          mid
+        }
+      })
+    },
     handleClose() {
       this.showAdd = false;
     },

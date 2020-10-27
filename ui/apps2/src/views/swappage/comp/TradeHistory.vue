@@ -6,7 +6,8 @@
         <img class="iconImg" src="@/assets/img/dex/down.svg" alt="">
       </span>
     </div>
-    <div class="lists">
+    <div class="tip noData">链上数据重新同步中。一天后恢复查询。</div>
+    <div class="lists" v-if="false">
       <van-list
         v-model="loadingMore"
         :finished="finished"
@@ -260,11 +261,12 @@ export default {
     }
   }
 
+  .noData{
+    padding: 50px 0;
+    font-size: 30px;
+  }
+
   .lists{
-    .noData{
-      padding: 50px 0;
-      font-size: 30px;
-    }
     .list{
       margin: 30px 40px;
       padding: 30px;
