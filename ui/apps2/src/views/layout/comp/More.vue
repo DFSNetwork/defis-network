@@ -9,9 +9,9 @@
       <div class="acc flexb">
         <div>
           <div @click="handleLogin" v-if="!scatter || !scatter.identity"
-            class="login">点击登陆</div>
+            class="login">{{ $t('more.login') }}</div>
           <div v-else class="login">{{ scatter.identity.accounts[0].name }}</div>
-          <div class="tip">欢迎来到DFS</div>
+          <div class="tip">{{ $t('more.wel') }}</div>
         </div>
         <img v-if="!scatter || !scatter.identity" @click="handleLogin"
           class="right" src="@/assets/navImg/acc_right.svg" alt="">
@@ -22,7 +22,7 @@
         <div class="title flexb" @click="handleToBP">
           <div class="flexa">
             <img class="titleImg" src="https://apps.defis.network/static/faviconV3.png">
-            <span>关于DFS</span>
+            <span>{{ $t('more.aboutDfs') }}</span>
           </div>
           <img class="right" src="@/assets/navImg/about_right.svg" alt="">
         </div>
@@ -42,9 +42,9 @@
           <img class="listImg" src="@/assets/navImg/invi_set.svg">
           <span>{{ $t('invi.invitation') }}</span>
         </div>
-        <div class="list flexa" @click="handleTo('tutorial')">
+        <div class="list flexa" @click="handleToPro('docs')">
           <img class="listImg" src="@/assets/navImg/tutorial_set.svg">
-          <span>{{ $t('public.tutorial') }}</span>
+          <span>{{ $t('more.faq') }}</span>
         </div>
         <div class="list flexa" @click="handleShowComp('warn')">
           <img class="listImg" src="@/assets/navImg/safe_set.svg">
@@ -66,12 +66,26 @@
       </div>
       <!-- 合作 -->
       <div class="flexb par">
-        <img src="@/assets/img/par/GitHub_icon.svg" alt="">
-        <img src="@/assets/img/par/bihu_icon.svg" alt="">
-        <img src="@/assets/img/par/twitter_icon.svg" alt="">
-        <img src="@/assets/img/par/telegram_icon.svg" alt="">
-        <img src="@/assets/img/par/WeChat_icon.svg" alt="">
-        <img src="@/assets/img/par/medium_icon.svg" alt="">
+        <a href="https://github.com/defis-net" target="_blank">
+          <img src="@/assets/img/par/GitHub_icon.svg" alt="">
+        </a>
+        <a href="https://bihu.com/people/1511717747" target="_blank">
+          <img src="@/assets/img/par/bihu_icon.svg" alt="">
+        </a>
+        <a href="https://twitter.com/DFSnetworks" target="_blank">
+          <img src="@/assets/img/par/twitter_icon.svg" alt="">
+        </a>
+        <a href="https://t.me/dfsnet" target="_blank">
+          <img src="@/assets/img/par/telegram_icon.svg" alt="">
+        </a>
+        <a v-clipboard:copy="'dfsfarmer'"
+          v-clipboard:success="handleCopy"
+          v-clipboard:error="handleCopyError">
+          <img src="@/assets/img/par/WeChat_icon.svg" alt="">
+        </a>
+        <a href="https://dfsofficial.medium.com/" target="_blank">
+          <img src="@/assets/img/par/medium_icon.svg" alt="">
+        </a>
       </div>
     </div>
   </el-drawer>
@@ -125,6 +139,11 @@ export default {
         location.href = 'https://apps.defis.network/'
       }
     },
+    handleToPro(type) {
+      if (type === 'docs') {
+        location.href = 'https://dfscommunity.baklib.com/'
+      }
+    },
     handleTo(name) {
       if (this.$route.name === name)  {
         this.showNav = false;
@@ -145,14 +164,14 @@ export default {
     // 分享 - 复制文本
     handleCopy() {
       this.$message.success({
-        message: 'Copy Success!',
+        message: this.$t('public.copySuccess'),
         position: 'center',
         duration: 2000
       });
     },
     handleCopyError() {
       this.$message.error({
-        message: 'Copy Error!',
+        message: this.$t('public.copyFail'),
         position: 'center',
         duration: 2000
       });

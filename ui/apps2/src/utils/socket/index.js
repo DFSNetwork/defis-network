@@ -82,8 +82,8 @@ class WsIo {
         // }
         const item = {
           open: v[1] * 10 ** decimal / 10000,
-          high: v[4] * 10 ** decimal / 10000,
-          low: v[3] * 10 ** decimal / 10000,
+          high: v[3] * 10 ** decimal / 10000,
+          low: v[4] * 10 ** decimal / 10000,
           close: v[2] * 10 ** decimal / 10000,
           volume: 0,
           time: v[0] * 1000,

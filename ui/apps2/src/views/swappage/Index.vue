@@ -166,7 +166,7 @@
         <div>
           <span>{{ $t('dex.poolNum') }}</span>
           <!-- <span class="marketNow" @click="handleTo('market')">{{ $t('dex.marketNow') }} ></span> -->
-          <span class="marketNow" @click="handleTo('poolsMarket')">前往矿池 ></span>
+          <span class="marketNow" @click="handleTo('poolsMarket')">{{ $t('pools.toPool') }} ></span>
         </div>
         <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
           <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">

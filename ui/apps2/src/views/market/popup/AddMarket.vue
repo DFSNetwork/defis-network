@@ -1,14 +1,14 @@
 <template>
   <div class="addMarket">
     <div class="title">
-      <span>加入市场</span>
+      <span>{{ $t('more.addMarket') }}</span>
       <img class="closeSvg" @click="handleClose" src="@/assets/img/dialog/sd_icon_btn.svg" alt="">
     </div>
     <div class="content">
       <!-- 币种1 -->
       <div class="symInfo flexb">
         <div>
-          <div class="bal" @click="handleClickBalan('payNum1')">余额：{{ balanceSym0 }} {{ thisMarket.symbol0 }}</div>
+          <div class="bal" @click="handleClickBalan('payNum1')">{{ $t('public.balance') }}：{{ balanceSym0 }} {{ thisMarket.symbol0 }}</div>
           <div class="coinInfo flexa">
             <img class="coinImg" :src="thisMarket.sym0Data.imgUrl" :onerror="errorCoinImg">
             <div class="coin">
@@ -31,7 +31,7 @@
       <!-- 币种2 -->
       <div class="symInfo flexb">
         <div>
-          <div class="bal" @click="handleClickBalan('payNum2')">余额：{{ balanceSym1 }} {{ thisMarket.symbol1 }}</div>
+          <div class="bal" @click="handleClickBalan('payNum2')">{{ $t('public.balance') }}：{{ balanceSym1 }} {{ thisMarket.symbol1 }}</div>
           <div class="coinInfo flexa">
             <img class="coinImg" :src="thisMarket.sym1Data.imgUrl" :onerror="errorCoinImg">
             <div class="coin">
@@ -52,16 +52,16 @@
     </div>
     <!-- 其他信息 -->
     <div class="otherTip">
-      <div class="tip">兑换价格</div>
+      <div class="tip">{{ $t('dex.exchangePrice') }}</div>
       <div class="flexa num" @click="exRate =!exRate">
         <span v-if="!exRate">1{{ thisMarket.symbol0 }} = {{ thisMarket.sym0Rate || '-' }}{{ thisMarket.symbol1 }}</span>
         <span v-else>1{{ thisMarket.symbol1 }} = {{ thisMarket.sym1Rate || '-' }}{{ thisMarket.symbol0 }}</span>
         <img class="iconImg" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
         <img class="iconImg" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
       </div>
-      <div class="tip">流动池数量</div>
+      <div class="tip">{{ $t('dex.poolNum') }}</div>
       <div class="num">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>
-      <div class="tip">*做市存入的资产可以随时退出</div>
+      <div class="tip">*{{ $t('more.exitMarket') }}</div>
     </div>
     <!-- 按钮 -->
     <div class="btnDiv" v-loading="loading">
@@ -130,14 +130,14 @@ export default {
       if (Number(this.payNum1) > Number(this.balanceSym0)) {
         return {
           type: false,
-          msg: `${this.thisMarket.symbol0} 余额不足`
+          msg: this.$t('more.lowBal', {sym: this.thisMarket.symbol0})
         }
       }
       // 验证sym1余额
       if (Number(this.payNum2) > Number(this.balanceSym1)) {
         return {
           type: false,
-          msg: `${this.thisMarket.symbol1} 余额不足`
+          msg: this.$t('more.lowBal', {sym: this.thisMarket.symbol1})
         }
       }
       // 验证存入获取的Token

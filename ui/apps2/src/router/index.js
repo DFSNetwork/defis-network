@@ -41,8 +41,20 @@ const constantRouter = [
       {
         path: '/market-list',
         name: 'myMarketList',
-        component: () => import(/* webpackChunkName: "market" */ '@/views/market/comp/MarketLists.vue'),
+        component: () => import(/* webpackChunkName: "myMarketList" */ '@/views/market/comp/MarketLists.vue'),
         meta: { title: 'DeFis-Network', noAcc: true },
+      },
+      {
+        path: '/market-record/:mid',
+        name: 'MarketHis',
+        component: () => import(/* webpackChunkName: "MarketHis" */ '@/views/market/comp/MarketHis.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noFooter: true },
+      },
+      {
+        path: 'withdraw/:mid',
+        name: 'withdraw',
+        component: () => import(/* webpackChunkName: "withdraw" */ '@/views/market/comp/Withdraw.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noTab: true },
       },
       {
         path: '/pools',

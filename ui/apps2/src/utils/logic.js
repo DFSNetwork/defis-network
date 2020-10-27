@@ -297,12 +297,17 @@ export function dealMarketLists(list, topLists) {
       dfsData = v;
     } else {
       // 处理过滤数组
+      let isPush = false;
       mkFlt.forEach(conf => {
+        if (isPush) {
+          return
+        }
         if ((v.sym0Data.symbol === conf.symbol && v.sym0Data.contract === conf.contract)
           || (v.sym1Data.symbol === conf.symbol && v.sym1Data.contract === conf.contract)) {
           const priceAll = parseFloat(v.sym0Data.reserve) * priceObj[conf.symbol];
           if (priceAll >= conf.minEos) {
             mainList.push(v)
+            isPush = true;
           }
         }
       })

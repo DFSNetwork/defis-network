@@ -116,10 +116,10 @@ export default {
       })
     },
     onCopy() {
-      this.$message.success(this.$t('Copy Success'));
+      this.$message.success(this.$t('public.copySuccess'));
     },
     onError() {
-      this.$message.error(this.$t('Copy Error'));
+      this.$message.error(this.$t('public.copyFail'));
     },
     handleRedeem() {
       this.unstakeLoading = true;

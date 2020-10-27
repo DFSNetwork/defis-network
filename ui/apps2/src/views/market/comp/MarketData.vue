@@ -10,8 +10,8 @@
           <span>{{ thisMarket.symbol1 }}</span>
         </div>
         <div class="flexa">
-          <div class="btn flexc" @click="handleShowAdd">{{ $t('pools.deposit') }}</div>
-          <div class="btn backBtn flexc">{{ $t('dsr.retrieve') }}</div>
+          <div class="btn flexc" @click="handleShowAdd">{{ $t('more.add') }}</div>
+          <div class="btn backBtn flexc" @click="handleTo('withdraw')">{{ $t('more.remove') }}</div>
         </div>
       </div>
       <div class="flex">
@@ -239,6 +239,14 @@ export default {
     }
   },
   methods: {
+    handleTo(name = 'withdraw') {
+      this.$router.push({
+        name,
+        params: {
+          mid: this.thisMarket.mid
+        }
+      })
+    },
     handleShowAdd() {
       this.$emit('listenShowAdd', this.thisMarket)
     },

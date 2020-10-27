@@ -6,17 +6,6 @@
     </div>
     <div class="poolsNum">{{ $t('footer.tlv') }}: {{ poolsEos }} EOS</div>
 
-    <!-- <div class="help flexc tip">
-      <span>问题反馈请添加客服：</span>
-      <span class="flexa"
-        v-clipboard:copy="'dfsfarmer'"
-        v-clipboard:success="handleCopy"
-        v-clipboard:error="handleCopyError">
-        <span>dfsfarmer</span>
-        <img class="copy" src="@/assets/img/footer/copy.svg" alt="">
-      </span>
-    </div> -->
-
     <div class="safe tip">
       <span>{{ $t('public.safeRecord1') }}</span>
       <span class="who" @click="handleToShowReport('slotMist')"> {{ $t('public.safeRecord2') }}</span> &
@@ -96,21 +85,6 @@ export default {
         });
       })
       this.$store.dispatch('setFeesApr', allResult);
-    },
-    // 分享 - 复制文本
-    handleCopy() {
-      this.$message.success({
-        message: 'Copy Success!',
-        position: 'center',
-        duration: 2000
-      });
-    },
-    handleCopyError() {
-      this.$message.error({
-        message: 'Copy Error!',
-        position: 'center',
-        duration: 2000
-      });
     },
     handleToShowReport(name) {
       if (name === 'peckshield') {

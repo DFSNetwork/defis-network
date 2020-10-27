@@ -1,10 +1,11 @@
 <template>
-  <div class="marketLists">
-    <!-- <div class="title">
+  <div class="marketLists" :class="{'page': $route.name === 'myMarketList'}">
+    <div class="title flexb" v-if="$route.name === 'myMarketList'">
       <span class="act">{{ $t('market.myMarkets') }}</span>
-    </div> -->
+      <!-- <span class="mkhis tip">{{ $t('more.mkHis') }}></span> -->
+    </div>
     <div>
-      <div class="noData" v-loading="!getToken" v-if="!dealLists.length">{{ $t('public.noData') }}</div>
+      <div class="noData" v-loading="loading" v-if="!dealLists.length">{{ $t('public.noData') }}</div>
       <div v-for="(item, index) in dealLists" :key="index">
         <MarketData :thisMarket="item" :token="item.token" :capital="item.capital" :isList="true"
           :startTime="item.startTime"
@@ -40,6 +41,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       getToken: false,
       getCapital: false,
       showAdd: false,
@@ -115,6 +117,7 @@ export default {
         user: this.scatter.identity.accounts[0].name,
       }
       axios.get('https://api.defis.network/swap/deposit', {params}).then((result) => {
+        this.loading = false;
         const res = result.data.data;
         res.forEach((v, index) => {
           const item = this.marketLists.find(vv => vv.mid == v.mid)
@@ -206,7 +209,10 @@ export default {
 
 <style lang="scss" scoped>
 .marketLists{
-  margin-bottom: 40px;
+  margin: 0 0 40px;
+  &.page{
+    margin: 0 40px 40px;
+  }
 }
 .title{
   font-size: 32px;
@@ -229,6 +235,10 @@ export default {
       left: 50%;
       transform: translateX(-45%);
     }
+  }
+  .mkhis{
+    margin-right: 0px;
+    font-size: 26px;
   }
 }
 .noData{

@@ -28,14 +28,14 @@
         <!-- 矿池信息 -->
         <div class="poolsInfo">
           <div class="item">
-            <div class="subTitle tip">预估24H年化收益率</div>
+            <div class="subTitle tip">{{ $t('more.about24Apy') }}</div>
             <div class="num">
               <span>{{ countApy }}%</span>
-              <span class="green_p" @click.stop="showApyDetail = true">详情></span>
+              <span class="green_p" @click.stop="showApyDetail = true">{{ $t('public.detail') }}></span>
             </div>
           </div>
           <div class="item">
-            <div class="subTitle tip">兑换价格</div>
+            <div class="subTitle tip">{{ $t('dex.exchangePrice') }}</div>
             <div class="num flexa" @click="exRate = !exRate">
               <span v-if="!exRate">1{{ thisMarket.symbol0 }} = {{ thisMarket.sym0Rate || '-' }}{{ thisMarket.symbol1 }}</span>
               <span v-else>1{{ thisMarket.symbol1 }} = {{ thisMarket.sym1Rate || '-' }}{{ thisMarket.symbol0 }}</span>
@@ -45,21 +45,21 @@
           </div>
           <div class="item">
             <div class="subTitle tip">
-              <span>流动池数量</span>
-              <span class="green_p" @click="handleTo('poolsMarket')">前往矿池></span>
+              <span>{{ $t('dex.poolNum') }}</span>
+              <span class="green_p" @click="handleTo('poolsMarket')">{{ $t('pools.toPool') }}></span>
             </div>
             <div class="num">
               <span>{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</span>
             </div>
           </div>
-          <div class="tip flexa">
-            <span>成为做市商可赚取交易手续费</span>
+          <div class="tip flexa" @click="showAboutMarket = true">
+            <span>{{ $t('pools.spcTip') }}</span>
             <img class="iconImg" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
           </div>
         </div>
         <!-- 按钮事件 -->
         <div class="btnDiv">
-          <div class="btn flexc" @click="showAdd = true">加入</div>
+          <div class="btn flexc" @click="showAdd = true">{{ $t('invi.join') }}</div>
         </div>
         <!-- 跳转连接 -->
         <div class="linkTo flexb">
@@ -70,7 +70,7 @@
           </span>
           <span class="flexc">
             <img src="@/assets/navImg/record.svg">
-            <span @click="handleTo('myMarketList')">做市记录</span>
+            <span @click="handleTo('MarketHis')">{{ $t('more.mkHis') }}</span>
             <i class="el-icon-arrow-right"></i>
           </span>
         </div>
@@ -104,6 +104,13 @@
         :thisMarket="thisMarket"
         @listenClose="handleClose"/>
     </el-dialog>
+    <!-- 关于做市 -->
+    <el-dialog
+      class="myDialog apy"
+      :show-close="false"
+      :visible.sync="showAboutMarket">
+      <AboutMarket />
+    </el-dialog>
   </div>
 </template>
 
@@ -114,6 +121,7 @@ import Tabs from '../index/components/Tabs';
 import MarketApy from './popup/MarketApy'
 import AddMarket from './popup/AddMarket'
 import MyMarketLists from './comp/MarketLists'
+import AboutMarket from './popup/AboutMarket'
 // 公用方法
 import { perDayReward, getDmdMinerHourRoi, getYfcReward,
   toFixed, accAdd, accDiv } from '@/utils/public';
@@ -128,6 +136,7 @@ export default {
     MarketApy,
     AddMarket,
     MyMarketLists,
+    AboutMarket,
   },
   data() {
     return {
@@ -137,6 +146,7 @@ export default {
       showMarketList: false,
       showApyDetail: false,
       showAdd: false,
+      showAboutMarket: true,
       thisMarket: {
         mid: 39,
         symbol0: 'EOS',

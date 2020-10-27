@@ -5,6 +5,9 @@
         <span class="act" @click="showMarketList = true">{{ thisMarket.symbol0 }}-{{ thisMarket.symbol1 }}</span>
         <img class="iconImg" src="@/assets/img/dex/down.svg" alt="">
       </span>
+      <!-- <div class="tip rulesTip">
+        <div>{{ $t('dex.nearSeven') }}</div>
+      </div> -->
     </div>
     <div class="lists">
       <van-list
@@ -14,10 +17,11 @@
         :finished-text="$t('public.noMore')"
         @load="handleCurrentChange"
       >
-        <div class="list" v-for="(item, index) in pageList" :key="index">
+        <div class="list" v-for="(item, index) in pageList" :key="index"
+          @click="handleToBrowser(item.trx_id)">
           <div class="flexa">
-            <span class="tradeType green_p" v-if="item.isBuy">{{ $t('more.buy') }}</span>
-            <span class="tradeType red_p" v-else>{{ $t('more.sell') }}</span>
+            <span class="tradeType green_p" v-if="item.isBuy">{{ $t('more.deposit') }}</span>
+            <span class="tradeType red_p" v-else>{{ $t('more.withdraw') }}</span>
             <span class="flexc">
               <span>{{ thisMarket.symbol1 }}</span>/<span>{{ thisMarket.symbol0 }}</span>
             </span>
@@ -25,16 +29,12 @@
           </div>
           <div class="flexb dataInfo tip">
             <div>
-              <div>{{ $t('more.amt') }}({{ thisMarket.symbol0 }})</div>
-              <div class="num">{{ item.amt }}</div>
+              <div>{{ $t('more.num') }}({{ item.sym0 }})</div>
+              <div class="num">{{ item.num0 }}</div>
             </div>
             <div>
-              <div>{{ $t('more.price') }}({{ thisMarket.symbol0 }})</div>
-              <div class="num">{{ item.price }}</div>
-            </div>
-            <div>
-              <div>{{ $t('more.vol') }}({{ thisMarket.symbol1 }})</div>
-              <div class="num">{{ item.buyNum }}</div>
+              <div>{{ $t('more.num') }}({{ item.sym1 }})</div>
+              <div class="num">{{ item.num1 }}</div>
             </div>
           </div>
         </div>
@@ -57,7 +57,7 @@
 import { mapState } from 'vuex';
 import axios from "axios";
 import MarketList from '@/components/MarketList';
-import {toLocalTime, dealPrice} from '@/utils/public'
+import {toLocalTime, toBrowser} from '@/utils/public'
 export default {
   name: 'tradeHistory',
   components: {
@@ -132,8 +132,10 @@ export default {
     }
   },
   methods: {
+    handleToBrowser(id) {
+      toBrowser(id, 'tx')
+    },
     handleCurrentChange() {
-      console.log(this.page)
       this.handlerGetMarket();
     },
     handleExchange(index) {
@@ -157,7 +159,8 @@ export default {
         page: this.page,
         limit: this.pageSize,
       }
-      const result = await axios.get('https://api.defis.network/swap/tradelog', {params});
+      // https://api.defis.network/swap/depositlog\?user\=dfsdeveloper\&mid\=39\&page\=1\&limit\=15
+      const result = await axios.get('https://api.defis.network/swap/depositlog', {params});
       this.loading = false;
       if (result.status !== 200) {
         this.hisList = [];
@@ -171,14 +174,16 @@ export default {
         t = Date.parse(t) + 8 * 3600 * 1000;
         const time = toLocalTime(t)
         this.$set(v, 'time', time);
-        const isBuy = v.bal0.split(' ')[1] === this.thisMarket.symbol0;
+        const isBuy = v.namex === 'depositlog';
         this.$set(v, 'isBuy', isBuy);
-        const amt = isBuy ? v.bal0.split(' ')[0] : v.bal1.split(' ')[0];
-        this.$set(v, 'amt', amt);
-        const buyNum = isBuy ? v.bal1.split(' ')[0] : v.bal0.split(' ')[0];
-        this.$set(v, 'buyNum', buyNum);
-        const price = parseFloat(amt) / parseFloat(buyNum); // 成交均价
-        this.$set(v, 'price', dealPrice(price));
+        const num0 = v.bal0.split(' ')[0].replace(/-/g, '');
+        const num1 = v.bal1.split(' ')[0].replace(/-/g, '');
+        const sym0 = v.bal0.split(' ')[1]
+        const sym1 = v.bal1.split(' ')[1]
+        this.$set(v, 'num0', num0);
+        this.$set(v, 'num1', num1);
+        this.$set(v, 'sym0', sym0);
+        this.$set(v, 'sym1', sym1);
       })
       this.hisList = list;
       if (this.page === 1) {
@@ -200,7 +205,7 @@ export default {
       this.thisMarket = item;
       this.handleClose();
       this.$router.push({
-        name: 'history',
+        name: 'MarketHis',
         params: {
           mid: item.mid
         }
@@ -287,15 +292,9 @@ export default {
       }
       .dataInfo{
         font-size: 24px;
-        text-align: center;
+        text-align: left;
         &>div{
           flex: 1;
-          &:first-child{
-            text-align: left;
-          }
-          &:last-child{
-            text-align: right;
-          }
         }
         .num{
           font-size: 30px;

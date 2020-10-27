@@ -31,14 +31,9 @@
           <div class="create flexc" @click="handleTo('farms')">农活大厅</div>
           <div class="create flexc" @click="handleTo('total')">TOP20{{ $t('info.info') }}</div>
           <div class="create flexc" @click="handleTo('coinViews', {mid: 39})">代币观察</div>
-          <div class="create flexc" @click="handleToProject('eosdefi')">EOS DeFi</div>
         </div>
         <div class="proClass">
-          <div class="create flexc" @click="handleToProject('yfc')">YFC钓鱼</div>
-          <div class="create flexc" @click="handleToProject('dbc')">DBC偷菜</div>
-          <div class="create flexc" @click="handleToProject('pdd')">PDD养猪</div>
-          <div class="create flexc" @click="handleToProject('loop')">LOOP葫芦</div>
-          <div class="create flexc" @click="handleToProject('time')">TIME时砂</div>
+          <div class="create flexc" @click="handleToProject('eosdefi')">EOS DeFis</div>
         </div>
       </div>
     </el-dialog>

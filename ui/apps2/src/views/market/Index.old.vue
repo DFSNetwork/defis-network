@@ -122,7 +122,7 @@
     <div :class="`liquidity ${handleGetClass(thisMarket.mid)}`" v-if="act === 1">
       <div class="subTitle flexb">
         <span>{{ $t('dex.poolNum') }}</span>
-        <span class="toPool" @click="handleToPools()">前往矿池</span>
+        <span class="toPool" @click="handleToPools()">{{ $t('pools.toPool') }}</span>
       </div>
       <div class="num">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>
       <div class="subTitle">{{ $t('pools.accRate', {rate: thisRate}) }}</div>
