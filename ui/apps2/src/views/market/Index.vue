@@ -146,7 +146,7 @@ export default {
       showMarketList: false,
       showApyDetail: false,
       showAdd: false,
-      showAboutMarket: true,
+      showAboutMarket: false,
       thisMarket: {
         mid: 39,
         symbol0: 'EOS',
