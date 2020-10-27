@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <div class="removeMarket">
+    <div class="title">
+      <span>{{ $t('more.remove') }}</span>
+      <img class="closeSvg" @click="handleClose" src="@/assets/img/dialog/sd_icon_btn.svg" alt="">
+    </div>
     <!-- 输入数据 -->
     <div class="iptDiv">
       <div class="token">
@@ -64,24 +68,32 @@ import { sellToken } from '@/utils/logic';
 
 export default {
   name: 'withdraw',
+  props: {
+    thisMarket: {
+      type: Object,
+      default: function tm() {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       sToken: '',
       token: 0,
-      thisMarket: {
-        mid: 17,
-        symbol0: 'EOS',
-        contract0: 'eosio.token',
-        symbol1: 'USDT',
-        contract1: 'tethertether',
-        sym0Data:{
-          imgUrl: 'https://apps.defis.network/static/coin/eosio.token-eos.svg'
-        },
-        sym1Data:{
-          imgUrl: 'https://apps.defis.network/static/coin/tethertether-usdt.svg'
-        }
-      },
+      // thisMarket: {
+      //   mid: 17,
+      //   symbol0: 'EOS',
+      //   contract0: 'eosio.token',
+      //   symbol1: 'USDT',
+      //   contract1: 'tethertether',
+      //   sym0Data:{
+      //     imgUrl: 'https://apps.defis.network/static/coin/eosio.token-eos.svg'
+      //   },
+      //   sym1Data:{
+      //     imgUrl: 'https://apps.defis.network/static/coin/tethertether-usdt.svg'
+      //   }
+      // },
       getNum1: '0.0000',
       getNum2: '0.0000',
       loading: false,
@@ -113,14 +125,14 @@ export default {
         if (!newVal.length) {
           return
         }
-        this.thisMarket.mid = this.$route.params.mid || 39;
+        // this.thisMarket.mid = this.$route.params.mid || 39;
         const thisMarket = newVal.find(v => v.mid === Number(this.thisMarket.mid)) || newVal[0];
         // const thisMarket = newVal[0];
         const reserve0 = thisMarket.reserve0.split(' ')[0];
         const reserve1 = thisMarket.reserve1.split(' ')[0];
-        thisMarket.sym0Rate = toFixed(accDiv(reserve1, reserve0), thisMarket.decimal1)
-        thisMarket.sym1Rate = toFixed(accDiv(reserve0, reserve1), thisMarket.decimal0)
-        this.thisMarket = thisMarket;
+        this.thisMarket.sym0Rate = toFixed(accDiv(reserve1, reserve0), thisMarket.decimal1)
+        this.thisMarket.sym1Rate = toFixed(accDiv(reserve0, reserve1), thisMarket.decimal0)
+        // this.thisMarket = thisMarket;
         this.handleGetAccToken();
       },
       deep: true,
@@ -142,6 +154,9 @@ export default {
     },
   },
   methods: {
+    handleClose() {
+      this.$emit('listenClose', false)
+    },
     handlePercent(num) {
       const n = accMul(this.token, num);
       this.sToken = n.toFixed(0)
@@ -263,8 +278,24 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.removeMarket{
+  padding: 30px 26px;
+}
+.title{
+  font-size: 38px;
+  font-weight: 500;
+  color: #333;
+  text-align: center;
+  position: relative;
+  margin-bottom: 40px;
+  .closeSvg{
+    position: absolute;
+    width: 24px;
+    right: 0;
+  }
+}
 .iptDiv{
-  margin: 30px;
+  margin: 30px 0;
   border: 1px solid #eee;
   border-radius: 12px;
   padding: 26px;
@@ -301,7 +332,7 @@ export default {
   }
 }
 .dataDiv{
-  padding: 0 30px 30px;
+  padding: 0 0px 30px;
   font-size: 26px;
   color: #333;
   text-align: left;
@@ -323,7 +354,7 @@ export default {
   }
 }
 .btnDiv{
-  margin: 30px;
+  // margin: 30px;
   .btn{
     height:88px;
     background:#29D4B0;

@@ -18,11 +18,12 @@
                     <div class="contract tip">{{ thisMarket0.contract }}</div>
                   </div>
                 </div>
-                <div class="inputDiv">
+                <div class="inputDiv flexb">
                   <el-input class="elIpt" type="number" v-model="payNum" placeholder="0.0"
                     @input="handleInBy('pay')"
                     @focus="handleFocus('pay')"
                     @blur="handleBlur('pay')"></el-input>
+                  <!-- <span v-if="showMax0" @click="handleClickBalan('pay')" class="max flexc">Max</span> -->
                 </div>
               </div>
             </div>
@@ -46,11 +47,12 @@
                   <div class="contract tip">{{ thisMarket1.contract }}</div>
                 </div>
               </div>
-              <div class="inputDiv">
+              <div class="inputDiv flexb">
                 <el-input class="elIpt" type="number" v-model="getNum" placeholder="0.0"
                   @input="handleInBy('get')"
                   @focus="handleFocus('get')"
                   @blur="handleBlur('get')"></el-input>
+                  <!-- <span v-if="showMax1" @click="handleClickBalan('get')" class="max flexc">Max</span> -->
               </div>
             </div>
           </div>
@@ -297,6 +299,12 @@ export default {
       filterMkLists: state => state.sys.filterMkLists,
       marketLists: state => state.sys.marketLists,
     }),
+    // showMax0() {
+    //   return Number(this.payNum) !== Number(this.balanceSym0)
+    // },
+    // showMax1() {
+    //   return Number(this.getNum) !== Number(this.balanceSym1)
+    // },
     showDetail() {
       return Number(this.payNum) && Number(this.getNum)
     },
@@ -904,6 +912,15 @@ export default {
             padding: 0 0 0 20px;
             height: 62px;
           }
+        }
+        .max{
+          height: 54px;
+          width: 86px;
+          background: rgba(#29D4B0, .2);
+          font-size: 26px;
+          border-radius: 2px;
+          color: #29D4B0;
+          margin-left: 10px;
         }
       }
     }

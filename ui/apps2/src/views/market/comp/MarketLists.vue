@@ -10,6 +10,7 @@
         <MarketData :thisMarket="item" :token="item.token" :capital="item.capital" :isList="true"
           :startTime="item.startTime"
           @listenToMarket="handleToMarket"
+          @listenShowRemove="handleShowRemove"
           @listenShowAdd="handleShowAdd"/>
       </div>
     </div>
@@ -20,6 +21,15 @@
       :show-close="false"
       :visible.sync="showAdd">
       <AddMarket v-if="showAdd"
+        :thisMarket="menageMarket"
+        @listenClose="handleClose"/>
+    </el-dialog>
+    <!-- 取回做市 -->
+    <el-dialog
+      class="mkListDia"
+      :show-close="false"
+      :visible.sync="showRemove">
+      <Withdraw v-if="showRemove"
         :thisMarket="menageMarket"
         @listenClose="handleClose"/>
     </el-dialog>
@@ -34,10 +44,12 @@ import { toFixed, accDiv } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MarketData from './MarketData';
 import AddMarket from '../popup/AddMarket'
+import Withdraw from './Withdraw'
 export default {
   components: {
     MarketData,
     AddMarket,
+    Withdraw,
   },
   data() {
     return {
@@ -45,6 +57,7 @@ export default {
       getToken: false,
       getCapital: false,
       showAdd: false,
+      showRemove: false,
       lists: [],
       menageMarket: {}
     }
@@ -108,10 +121,15 @@ export default {
     },
     handleClose() {
       this.showAdd = false;
+      this.showRemove = false;
     },
     handleShowAdd(item) {
       this.menageMarket = item;
       this.showAdd = true;
+    },
+    handleShowRemove(item) {
+      this.menageMarket = item;
+      this.showRemove = true;
     },
     handleToMarket(mid) {
       this.$emit('listenToMarket', mid)

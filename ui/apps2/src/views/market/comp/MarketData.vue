@@ -11,7 +11,8 @@
         </div>
         <div class="flexa">
           <div class="btn flexc" @click="handleShowAdd">{{ $t('more.add') }}</div>
-          <div class="btn backBtn flexc" @click="handleTo('withdraw')">{{ $t('more.remove') }}</div>
+          <div class="btn backBtn flexc" @click="handleShowRemove">{{ $t('more.remove') }}</div>
+          <!-- <div class="btn backBtn flexc" @click="handleTo('withdraw')">{{ $t('more.remove') }}</div> -->
         </div>
       </div>
       <div class="flex">
@@ -249,6 +250,9 @@ export default {
     },
     handleShowAdd() {
       this.$emit('listenShowAdd', this.thisMarket)
+    },
+    handleShowRemove() {
+      this.$emit('listenShowRemove', this.thisMarket)
     },
     handleChangeRewardType() {
       this.rewardType = (this.rewardType + 1) % 3
