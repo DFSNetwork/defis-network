@@ -263,6 +263,7 @@ export default {
           });
           return
         }
+        this.handleClose()
         setTimeout(() => {
           this.handleBalanTimer();
           this.handleGetAccToken();
