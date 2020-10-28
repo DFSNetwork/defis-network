@@ -61,6 +61,9 @@
       </div>
       <div class="tip">{{ $t('dex.poolNum') }}</div>
       <div class="num">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>
+      <div class="tip">{{ $t('pools.accRate', {rate: thisRate}) }}</div>
+      <div class="num">{{ toFixed(accPools.getNum1, thisMarket.decimal0) }} {{thisMarket.symbol0}}
+          / {{ toFixed(accPools.getNum2, thisMarket.decimal1) }} {{thisMarket.symbol1}}</div>
       <div class="tip">*{{ $t('more.exitMarket') }}</div>
     </div>
     <!-- 按钮 -->
@@ -75,8 +78,8 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed } from '@/utils/public';
-import { dealToken } from '@/utils/logic';
+import { toFixed, accAdd, accDiv, accMul } from '@/utils/public';
+import { dealToken, sellToken } from '@/utils/logic';
 
 export default {
   name: 'addMarket',
@@ -99,6 +102,7 @@ export default {
       loading: false,
       
       getToken: 0,
+      token: 0,
     }
   },
   beforeDestroy() {
@@ -148,6 +152,37 @@ export default {
         };
       }
       return {type: true}
+    },
+    // 获取用户做市
+    accPools() {
+      if (!this.thisMarket.reserve0 || !this.thisMarket.reserve1) {
+        return {}
+      }
+      const inData = {
+        poolSym0: this.thisMarket.reserve0.split(' ')[0],
+        poolSym1: this.thisMarket.reserve1.split(' ')[0],
+        poolToken: this.thisMarket.liquidity_token,
+        sellToken: accAdd(this.token, this.getToken)
+      }
+      const outData = sellToken(inData);
+      return outData
+    },
+    rate() {
+      if (!parseFloat(this.thisMarket.reserve0)) {
+        return '0.00'
+      }
+      const rate = parseFloat(this.accPools.getNum1) / parseFloat(this.thisMarket.reserve0)
+      return rate
+    },
+    thisRate() {
+      if (!this.thisMarket.liquidity_token) {
+        return '0.00'
+      }
+      const accToken = accAdd(this.token, this.getToken)
+      let rate = accAdd(this.thisMarket.liquidity_token, this.getToken)
+      rate = accDiv(accToken, rate);
+      rate = accMul(rate, 100)
+      return toFixed(rate, 2)
     }
   },
   watch: {
@@ -155,6 +190,7 @@ export default {
       handler: function listen(newVal) {
         if (newVal.identity) {
           this.handleBalanTimer();
+          this.handleGetAccToken()
         }
       },
       deep: true,
@@ -164,6 +200,28 @@ export default {
   methods: {
     handleClose() {
       this.$emit('listenClose', false)
+    },
+    toFixed(n, l) {
+      return toFixed(n, l)
+    },
+    // 获取账户当前交易对凭证数量
+    handleGetAccToken() {
+      if (!this.regInit()) {
+        return;
+      }
+      const params = {
+        code: this.baseConfig.toAccountSwap,
+        scope: this.thisMarket.mid,
+        table: 'liquidity',
+        lower_bound: ` ${this.scatter.identity.accounts[0].name}`,
+        upper_bound: ` ${this.scatter.identity.accounts[0].name}`,
+        json: true
+      }
+      EosModel.getTableRows(params, (res) => {
+        const list = res.rows || [];
+        !list[0] ? this.token = '0' : this.token = `${list[0].token}`;
+        console.log(this.token)
+      })
     },
     // 存币做市
     handleAddToken() {
