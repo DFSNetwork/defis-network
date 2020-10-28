@@ -33,6 +33,8 @@
           <div class="create flexc" @click="handleTo('coinViews', {mid: 39})">代币观察</div>
         </div>
         <div class="proClass">
+          <div class="create flexc" @click="handleToProject('pdd')">PDD养猪</div>
+          <div class="create flexc" @click="handleToProject('time')">TIME时砂</div>
           <div class="create flexc" @click="handleToProject('eosdefi')">EOS DeFis</div>
         </div>
       </div>
@@ -125,7 +127,7 @@ export default {
     },
     handleToProject(name) {
       if (name === 'pddex') {
-        location.href = 'https://pddex.defis.network/'
+        location.href = 'https://pddex.gitee.io/'
         return
       }
       if (name === 'pdd') {
@@ -137,11 +139,11 @@ export default {
         return
       }
       if (name === 'yfcGuns') {
-        location.href = 'https://yfc.one/guns'
+        location.href = 'https://yfcone.gitee.io/guns'
         return
       }
       if (name === 'yfcDss') {
-        location.href = 'https://yfc.one/vault'
+        location.href = 'https://yfcone.gitee.io/vault'
         return
       }
       if (name === 'dbc') {

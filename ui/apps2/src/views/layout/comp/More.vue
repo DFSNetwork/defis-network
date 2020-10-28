@@ -136,7 +136,7 @@ export default {
       } else if (ve === 'v2') {
         location.href = 'https://v2.defis.network/'
       } else if (ve === 'v3') {
-        location.href = 'https://apps.defis.network/'
+        location.href = 'https://dfsswap.gitee.io/'
       }
     },
     handleToPro(type) {
