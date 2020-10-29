@@ -7,7 +7,8 @@
     <div>
       <div class="noData" v-loading="loading" v-if="!dealLists.length">{{ $t('public.noData') }}</div>
       <div v-for="(item, index) in dealLists" :key="index">
-        <MarketData :thisMarket="item" :token="item.token" :capital="item.capital" :isList="true"
+        <MarketData v-if="item.mid !== thisMarket.mid"
+          :thisMarket="item" :token="item.token" :capital="item.capital" :isList="true"
           :startTime="item.startTime"
           @listenToMarket="handleToMarket"
           @listenShowRemove="handleShowRemove"
@@ -50,6 +51,14 @@ export default {
     MarketData,
     AddMarket,
     Withdraw,
+  },
+  props: {
+    thisMarket: {
+      type: Object,
+      default: function tmt() {
+        return {}
+      }
+    },
   },
   data() {
     return {
@@ -155,7 +164,6 @@ export default {
         })
       })
     },
-
     handleGetTable(v) {
       const params = {
         code: this.baseConfig.toAccountSwap,
@@ -188,6 +196,10 @@ export default {
         this.sTime = '0'
         this.marketData = [];
         if (!list.length) {
+          this.lists.push(Object.assign(v, {
+            token,
+            capital: [],
+          }))
           return
         }
         const symbol0 = list[0].bal0.split(' ');

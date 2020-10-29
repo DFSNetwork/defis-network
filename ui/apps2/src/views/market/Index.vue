@@ -77,7 +77,9 @@
       </div>
     </div>
 
-    <MyMarketLists />
+    <MarketData v-if="Number(token) !== 0" :thisMarket="thisMarket" :token="token"/>
+
+    <MyMarketLists :thisMarket="thisMarket"/>
 
     <!-- 弹窗组件 -->
     <el-dialog
@@ -116,12 +118,15 @@
 
 <script>
 import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
 import MarketList from '@/components/MarketList';
 import Tabs from '../index/components/Tabs';
 import MarketApy from './popup/MarketApy'
 import AddMarket from './popup/AddMarket'
 import MyMarketLists from './comp/MarketLists'
 import AboutMarket from './popup/AboutMarket'
+import MarketData from './comp/MarketData';
+
 // 公用方法
 import { perDayReward, getDmdMinerHourRoi, getYfcReward,
   toFixed, accAdd, accDiv } from '@/utils/public';
@@ -137,6 +142,7 @@ export default {
     AddMarket,
     MyMarketLists,
     AboutMarket,
+    MarketData,
   },
   data() {
     return {
@@ -161,6 +167,7 @@ export default {
         }
       },
       lpApy: {},
+      token: '0',
     }
   },
   computed: {
@@ -231,7 +238,7 @@ export default {
         return '—'
       }
       return all.toFixed(2)
-    }
+    },
   },
   watch: {
     marketLists: {
@@ -255,6 +262,15 @@ export default {
       deep: true,
       immediate: true
     },
+    scatter: {
+      handler: function listen(newVal) {
+        if (newVal.identity) {
+          this.handleGetAccToken();
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
   },
   methods: {
     handleClose() {
@@ -264,7 +280,9 @@ export default {
     handleMarketChange(data) {
       this.thisMarket = data;
       this.showMarketList = false;
+      this.token = '0';
 
+      this.handleGetAccToken();
       this.handleBeforeDestroy();
     },
     handleTo(name) {
@@ -297,6 +315,30 @@ export default {
         thisMidsPath: `${this.thisMarket.mid}`,
       }
       localStorage.setItem('swapMarkets', JSON.stringify(swapMarkets))
+    },
+    regInit() {
+      if (this.scatter.identity && this.marketLists.length) {
+        return true;
+      }
+      return false;
+    },
+    // 获取账户当前交易对凭证数量
+    handleGetAccToken() {
+      if (!this.regInit()) {
+        return;
+      }
+      const params = {
+        code: this.baseConfig.toAccountSwap,
+        scope: this.thisMarket.mid,
+        table: 'liquidity',
+        lower_bound: ` ${this.scatter.identity.accounts[0].name}`,
+        upper_bound: ` ${this.scatter.identity.accounts[0].name}`,
+        json: true
+      }
+      EosModel.getTableRows(params, (res) => {
+        const list = res.rows || [];
+        !list[0] ? this.token = '0' : this.token = `${list[0].token}`;
+      })
     },
   }
 }
