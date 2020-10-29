@@ -51,28 +51,21 @@ export function getVoteRankConf(lists) {
   })
 }
 
-
 // 获取矿池排名配置
-export function getVoteRankConfV3(lists) {
+export function getVoteRankConfV3() {
   const params = {
-    "code": "miningpool11",
-    "scope": "miningpool11",
+    "code": "eosio",
+    "scope": "eosio",
     "json": true,
-    "table": "poolslots2",
-    limit: 21,
+    "table": "producers",
+    limit: 100,
   }
   EosModel.getTableRows(params, (res) => {
     const rows = res.rows || [];
     if (!rows.length) {
       return
     }
-    // console.log(rows)
-    const rankInfo = [];
-    lists.forEach((v, index) => {
-      const deal = getV3Apr(v.mid, rows[index])
-      const t = Object.assign({}, v, rows[index], deal)
-      rankInfo.push(t)
-    })
+    console.log(rows)
     // console.log(rankInfo)
     store.dispatch('setRankInfoV3', rankInfo)
   })
