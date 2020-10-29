@@ -292,6 +292,10 @@ export default {
     pl: '盈亏',
     marketTip: '做市本金数据可能延迟1 - 3分钟，请稍后查看。', //The market-making principal data may be delayed by 1-3 minutes, please check later.
   },
+  tabbar: {
+    swap: '闪兑',
+    order: '挂单',
+  },
   info: {
     info: '概览',
     top10: '大丰收农场TOP20',

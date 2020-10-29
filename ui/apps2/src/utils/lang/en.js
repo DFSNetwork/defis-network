@@ -291,6 +291,10 @@ export default {
     pl: 'P&L',
     marketTip: 'The market-making principal data may be delayed by 1-3 minutes, please check later.',
   },
+  tabbar: {
+    swap: 'Swap',
+    order: 'Orders',
+  },
   info: {
     info: 'Info',
     top10: 'DFS Farm TOP20',
