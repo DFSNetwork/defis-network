@@ -122,6 +122,12 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "largeTrade" */ '@/views/coinViews/Index.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true},
       },
+      { // 节点投票
+        path: '/node-vote',
+        name: 'nodeVote',
+        component: () => import(/* webpackChunkName: "nodeVote" */ '@/views/nodeVote/Index.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
+      },
     ]
   },
 ]

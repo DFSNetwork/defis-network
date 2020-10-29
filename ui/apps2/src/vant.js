@@ -3,15 +3,15 @@ import Vue from 'vue'
 // import { Button, Toast, Tabbar, TabbarItem, Swipe, SwipeItem,
 //   Icon, Grid, GridItem, Tab, Tabs, Sticky, Switch, DropdownMenu,
 //   DropdownItem, PullRefresh, List, Popup, Stepper, Field,
-//   Slider, CellGroup, Notify } from 'vant';
-import { List } from 'vant';
+//   Slider, CellGroup, Notify, Checkbox } from 'vant';
+import { List, Icon } from 'vant';
 // Vue.use(Button)
 // Vue.use(Toast);
 // Vue.use(Tabbar);
 // Vue.use(TabbarItem);
 // Vue.use(Swipe);
 // Vue.use(SwipeItem);
-// Vue.use(Icon);
+Vue.use(Icon);
 // Vue.use(Grid);
 // Vue.use(GridItem);
 // Vue.use(Tab);
@@ -28,3 +28,4 @@ Vue.use(List);
 // Vue.use(Slider);
 // Vue.use(CellGroup);
 // Vue.use(Notify);
+// Vue.use(Checkbox);
