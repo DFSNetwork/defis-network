@@ -25,16 +25,16 @@
       <div @click="showApps = false">
         <div class="proClass">
           <div class="create flexc" @click="handleToProject('pddex')">PDDEX</div>
-          <div class="create flexc" @click="handleToProject('yfcGuns')">YFC机枪池</div>
+          <div class="create flexc" @click="handleToProject('yfcGuns')">YFC {{ $t('farms.yfcGun') }}</div>
         </div>
         <div class="proClass">
-          <div class="create flexc" @click="handleTo('farms')">农活大厅</div>
-          <div class="create flexc" @click="handleTo('total')">TOP20{{ $t('info.info') }}</div>
-          <div class="create flexc" @click="handleTo('coinViews', {mid: 39})">代币观察</div>
+          <div class="create flexc" @click="handleTo('farms')">{{ $t('farms.Lobby') }}</div>
+          <div class="create flexc" @click="handleTo('total')">TOP20 {{ $t('info.info') }}</div>
+          <div class="create flexc" @click="handleTo('coinViews', {mid: 39})">{{ $t('farms.coinView') }}</div>
         </div>
         <div class="proClass">
-          <div class="create flexc" @click="handleToProject('pdd')">PDD养猪</div>
-          <div class="create flexc" @click="handleToProject('time')">TIME时砂</div>
+          <div class="create flexc" @click="handleToProject('pdd')">PDD {{ $t('farms.pdd') }}</div>
+          <div class="create flexc" @click="handleToProject('time')">TIME {{ $t('farms.time') }}</div>
           <div class="create flexc" @click="handleToProject('eosdefi')">EOS DeFis</div>
         </div>
       </div>

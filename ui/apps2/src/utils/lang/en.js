@@ -326,6 +326,11 @@ export default {
   },
   farms: {
     farms: 'Farms',
+    yfcGun: 'GunPool',
+    Lobby: 'Farm List',
+    coinView: 'Token Datas',
+    pdd: ' ',
+    time: ' ',
   },
   voteRules: {
     rules1: '1. The number of votes can be obtained by making DFS or depositing in DSS',
@@ -333,11 +338,11 @@ export default {
     rules3: '3. Real-time feedback of voting results for the latest ranking',
     rules4: '4. Choose up to 3 voting options for each account',
     rules5: '5. You can modify and vote again at any time',
-    rules6:'Market making: 1DFS = 0.5 votes',
-    rules7:'Save as you go: 1 DFS = 1 vote',
-    rules8:'Fixed deposit for 1 month, 3 months: 1DFS = 1.5 votes',
-    rules9:'Fixed deposit for 6 months: 1 DFS = 2 votes',
-    rules10:'Deposit for 1 year: 1 DFS = 3 votes',
+    rules6: 'Market making: 1DFS = 0.5 votes',
+    rules7: 'Save as you go: 1 DFS = 1 vote',
+    rules8: 'Fixed deposit for 1 month, 3 months: 1DFS = 1.5 votes',
+    rules9: 'Fixed deposit for 6 months: 1 DFS = 2 votes',
+    rules10: 'Deposit for 1 year: 1 DFS = 3 votes',
   },
   miningRules: {
     rules: 'Mining rules',

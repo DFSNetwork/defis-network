@@ -327,6 +327,11 @@ export default {
   },
   farms: {
     farms: '农场',
+    yfcGun: '机枪池',
+    Lobby: '农活大厅',
+    coinView: '代币观察',
+    pdd: '养猪',
+    time: '时砂',
   },
   voteRules: {
     rules1: '1. 做市DFS或存入DSS即可获得投票票数',
