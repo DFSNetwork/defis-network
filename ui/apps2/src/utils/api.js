@@ -77,3 +77,16 @@ export function getVoteRankConfV3(lists) {
     store.dispatch('setRankInfoV3', rankInfo)
   })
 }
+
+// 获取节点排名
+export function getNodeList() {
+  const params = {}
+  EosModel.getTableRows(params, (res) => {
+    const rows = res.rows || [];
+    if (!rows.length) {
+      return
+    }
+    console.log(rows)
+    // console.log(rankInfo)
+  })
+}
