@@ -68,7 +68,7 @@ export default {
     way1Tip: 'Consume 100 DFS to become inviter.',
     join: 'Join',
     way2: 'Methods Two',
-    way2Tip: 'Mortgage 5000DFS becomes inviter, after redemptive disqualification.',
+    way2Tip: 'Mortgage 5000 DFS to become inviter, after the redemptive disqualification.',
     myLink: 'My invitation link',
     copy: 'Copy',
   },
@@ -155,7 +155,7 @@ export default {
     toPool: 'To Pool',
     spcTip: 'Earn fees by becoming market maker',
     spcTip_1: 'About liquidity',
-    spcTip_2: 'Becoming a market maker to provide liquidity doesn\'t require paying any additional fees, and can earn 0.2% fees paid by trading users based on the market-making proportion. 0.2% transaction fees will be in the liquidity pool and are distributed to each liquidity provider in real time.',
+    spcTip_2: 'Becoming a market maker to provide liquidity doesn\'t require paying any additional fees and can earn 0.2% fees paid by trading users based on the market-making proportion. 0.2% transaction fees will be in the liquidity pool and are distributed to each liquidity provider in real-time.'
   },
   hyk: {
     stock: 'Dividends Pool',
