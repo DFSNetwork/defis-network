@@ -130,7 +130,7 @@ export default {
     qusTip4: 'fees / (DFS price) x 0.2 x 0.8',
     bankFor: 'BANK SWAP',
     bankForTip: 'This exchange is made through USDD BANK. 0 fee 0 slippage and get DFS mining reward.',
-    heightSlip: 'Current price sliding point is too high! Please re-enter',
+    heightSlip: 'Current price slippage is too high! Please re-enter',
     tradeHistory:'Transaction History',
     nearSeven:'Only the last 7 days',
     exchangePrice:'Exchange Price',
