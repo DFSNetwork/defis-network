@@ -6,11 +6,11 @@
         @click="handleTo('index')">
         <img v-if="$route.name !== 'index' && $route.name !== 'market'" src="@/assets/navImg/swap_un.svg">
         <img v-else src="@/assets/navImg/swap_select.svg">
-        <div>闪兑</div>
+        <div>{{ $t('tabbar.swap') }}</div>
       </div>
       <div class="bar" @click="handleToPro('pddex')">
         <img src="@/assets/navImg/pddex_un.svg">
-        <div>挂单</div>
+        <div>{{ $t('tabbar.order') }}</div>
       </div>
       <!-- <div class="bar" @click="showMore = true;">
         <img src="@/assets/navImg/more_un.svg">
