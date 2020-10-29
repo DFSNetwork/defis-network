@@ -77,7 +77,9 @@
       </div>
     </div>
 
-    <MarketData v-if="Number(token) !== 0" :thisMarket="thisMarket" :token="token"/>
+    <MarketData v-if="Number(token) !== 0" :thisMarket="thisMarket" :token="token"
+      @listenShowRemove="handleShowRemove"
+      @listenShowAdd="handleShowAdd"/>
 
     <MyMarketLists :thisMarket="thisMarket"/>
 
@@ -106,6 +108,15 @@
         :thisMarket="thisMarket"
         @listenClose="handleClose"/>
     </el-dialog>
+    <!-- 取回做市 -->
+    <el-dialog
+      class="mkListDia"
+      :show-close="false"
+      :visible.sync="showRemove">
+      <Withdraw v-if="showRemove"
+        :thisMarket="thisMarket"
+        @listenClose="handleClose"/>
+    </el-dialog>
     <!-- 关于做市 -->
     <el-dialog
       class="myDialog apy"
@@ -126,6 +137,7 @@ import AddMarket from './popup/AddMarket'
 import MyMarketLists from './comp/MarketLists'
 import AboutMarket from './popup/AboutMarket'
 import MarketData from './comp/MarketData';
+import Withdraw from './comp/Withdraw'
 
 // 公用方法
 import { perDayReward, getDmdMinerHourRoi, getYfcReward,
@@ -143,6 +155,7 @@ export default {
     MyMarketLists,
     AboutMarket,
     MarketData,
+    Withdraw,
   },
   data() {
     return {
@@ -152,6 +165,7 @@ export default {
       showMarketList: false,
       showApyDetail: false,
       showAdd: false,
+      showRemove: false,
       showAboutMarket: false,
       thisMarket: {
         mid: 39,
@@ -276,6 +290,15 @@ export default {
     handleClose() {
       this.showMarketList = false;
       this.showAdd = false;
+      this.showRemove = false;
+    },
+    handleShowAdd(item) {
+      this.menageMarket = item;
+      this.showAdd = true;
+    },
+    handleShowRemove(item) {
+      this.menageMarket = item;
+      this.showRemove = true;
     },
     handleMarketChange(data) {
       this.thisMarket = data;
