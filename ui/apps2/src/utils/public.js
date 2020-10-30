@@ -493,35 +493,37 @@ export function dealAccountHide(str) {
   if (scatter && scatter.identity && scatter.identity.accounts[0].name === str) {
     return str
   }
-  let newStr = '';
-  if (str.length < 12) {
-    const n = (str.length / 2).toFixed(0);
-    newStr = str.substr(0, n);
-    const m = str.substring(n).split('');
-    let end = '';
-    m.forEach(() => {
-      end += '*';
-    });
-    return newStr + end;
-  }
-  if (str.length === 12) {
-    const str1 = str.substr(0, 4);
-    const str2 = '****';
-    const str3 = str.substring(8);
-    return str1 + str2 + str3;
-  }
-
-  // const t = str.length % 3;
-  // const len1 = Math.ceil(str.length/3);
-  // let len2 = len1;
-  // let len3 = len1;
-  // if (t === 2) {
-  //   len3 = len1 - 1;
-  // } else if (t === 1) {
-  //   len2 = len1 - 1;
-  //   len3 = len1 - 1;
+  // let newStr = '';
+  // if (str.length < 12) {
+  //   const n = (str.length / 2).toFixed(0);
+  //   newStr = str.substr(0, n);
+  //   const m = str.substring(n).split('');
+  //   let end = '';
+  //   m.forEach(() => {
+  //     end += '*';
+  //   });
+  //   return newStr + end;
   // }
-  // console.log(len1, len2, len3)
+  // if (str.length === 12) {
+  //   const str1 = str.substr(0, 4);
+  //   const str2 = '****';
+  //   const str3 = str.substring(8);
+  //   return str1 + str2 + str3;
+  // }
+  const t = str.length % 3;
+  const len1 = Math.ceil(str.length/3);
+  let len2 = len1;
+  let len3 = len1;
+  if (t === 2) {
+    len3 = len1 - 1;
+  } else if (t === 1) {
+    len2 = len1 - 1;
+    len3 = len1 - 1;
+  }
+  const s1 = str.substr(0, len1)
+  const s2 = '****'.substr(0, len2)
+  const s3 = str.substr(len2+len1, len3)
+  return s1 + s2 + s3;
 }
 
 // 数组对象去重
