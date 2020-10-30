@@ -1,6 +1,12 @@
 import { EosModel } from '@/utils/eos';
 import store from '@/store';
 import { getV3Apr } from '@/utils/logic';
+import axios from 'axios';
+function getHost() {
+  const baseConfig = store.state.sys.baseConfig;
+  console.log(baseConfig)
+  return baseConfig.node.url;
+}
 
 // 获取投票矿池排名
 export function getVotePools() {
@@ -51,35 +57,54 @@ export function getVoteRankConf(lists) {
   })
 }
 
+
 // 获取矿池排名配置
-export function getVoteRankConfV3() {
+export function getVoteRankConfV3(lists) {
   const params = {
-    "code": "eosio",
-    "scope": "eosio",
+    "code": "miningpool11",
+    "scope": "miningpool11",
     "json": true,
-    "table": "producers",
-    limit: 100,
+    "table": "poolslots2",
+    limit: 21,
   }
   EosModel.getTableRows(params, (res) => {
     const rows = res.rows || [];
     if (!rows.length) {
       return
     }
-    console.log(rows)
+    // console.log(rows)
+    const rankInfo = [];
+    lists.forEach((v, index) => {
+      const deal = getV3Apr(v.mid, rows[index])
+      const t = Object.assign({}, v, rows[index], deal)
+      rankInfo.push(t)
+    })
     // console.log(rankInfo)
     store.dispatch('setRankInfoV3', rankInfo)
   })
 }
 
-// 获取节点排名
-export function getNodeList() {
-  const params = {}
-  EosModel.getTableRows(params, (res) => {
-    const rows = res.rows || [];
-    if (!rows.length) {
-      return
-    }
-    console.log(rows)
-    // console.log(rankInfo)
+// 链上查表
+export function get_table_rows(params) {
+  return new Promise((resolve, reject) => {
+    const host = getHost()
+    axios.post(`${host}/v1/chain/get_table_rows`, JSON.stringify(params)).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+
+// 获取代理
+export function get_producers() {
+  return new Promise((resolve, reject) => {
+    axios.get('https://www.api.bloks.io/producers?pageNum=1&perPage=500').then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
   })
 }

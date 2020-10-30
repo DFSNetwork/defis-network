@@ -14,6 +14,8 @@
         <img class="tipIcon" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
       </span>
     </div>
+    <!-- 代理账户信息 -->
+    <ProxyAcc :voteWeight="voteWeight"/>
     <!-- 用户票数统计数据 -->
     <AccInfo />
     <!-- tab数据 -->
@@ -30,14 +32,14 @@
         </div>
       </div>
       <div class="lsContent">
-        <NodeList :act="act"/>
+        <NodeList :act="act" :nodeLists="nodeLists" :getLoading="getLoading"/>
       </div>
     </div>
 
     <!-- 悬浮按钮 -->
     <div class="nullDiv"></div>
     <div class="voteAction flexb">
-      <span>{{ $t('vote.checked') }} {{ checkedLeng }}/3</span>
+      <span>{{ $t('vote.checked') }} {{ checkedLeng }}/10</span>
       <span>
         <span v-if="checkedLeng" class="tip" @click="handleCancel">{{ $t('vote.cancelChecked') }}</span>
         <span class="voteBtn" v-loading="voteLoading" @click="handleTovote">{{ $t('vote.toVote') }}</span>
@@ -47,11 +49,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
+
+import ProxyAcc from './comp/ProxyAcc';
 import AccInfo from './comp/AccInfo';
 import NodeList from './comp/NodeList';
+
+import { get_producers, get_table_rows } from '@/utils/api';
 export default {
   name: 'nodeVote',
   components: {
+    ProxyAcc,
     AccInfo,
     NodeList,
   },
@@ -60,17 +69,153 @@ export default {
       showRules: false,
       act: 1,
       search: '',
-      checkedLeng: 0,
       voteLoading: false,
+      nodeLists: [], // 总节点列表
+      voteLists: [], // DFS投票列表
+      getLoading: true,
+      voteWeight: 0,
+    }
+  },
+  mounted() {
+    this.handleGetNodeLists()
+    this.handleGetVoteList();
+  },
+  computed: {
+    ...mapState({
+      scatter: state => state.app.scatter,
+    }),
+    checkedLeng() {
+      const list = this.nodeLists.filter(v => v.isChecked)
+      return list.length;
+    }
+  },
+  watch: {
+    act() {
+      // if (newVal !== 3) {
+      //   return
+      // }
+      this.handleCancel()
     }
   },
   methods: {
     handleSearch() {},
-    handleCancel() {},
-    handleTovote() {},
+    handleCancel() {
+      this.nodeLists.forEach(v => {
+        this.$set(v, 'isChecked', false)
+      })
+    },
+    handleTovote() {
+      this.voteLoading = true;
+      const formName = this.scatter.identity.accounts[0].name;
+      const permission = this.scatter.identity.accounts[0].authority;
+      const checkedArr = this.nodeLists.filter(v => v.isChecked);
+      const producers = []
+      checkedArr.forEach(v => {
+        producers.push(v.owner);
+      })
+      const params = {
+        actions: [{
+          account: 'dfsbpsvoters',
+          name: 'vote',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            voter: formName,
+            producers,
+          }
+        }]
+      }
+      EosModel.toTransaction(params, (res) => {
+        this.voteLoading = false
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        setTimeout(() => {
+          
+        }, 2000);
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
+    },
+    async handleGetNodeLists() {
+      const {status, result} = await get_producers()
+      this.getLoading = false;
+      if (!status) {
+        return
+      }
+      const rows = result.producers || []
+      this.nodeLists = rows;
+      this.handleDealData()
+      console.log(result)
+      // 计算权重值
+      this.handleGetWeight()
+    },
+    // 获取DFS 投票列表
+    async handleGetVoteList() {
+      const params = {
+        "code":"dfsbpsvoters",
+        "scope":"dfsbpsvoters",
+        "table":"producers",
+        "json":true,
+        "limit": 1000
+      }
+      const { status, result } = await get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const rows = result.rows || [];
+      this.voteLists = rows;
+      console.log(result)
+      this.handleDealData()
+    },
+    handleDealData() {
+      if (!this.nodeLists.length || !this.voteLists.length) {
+        return;
+      }
+      this.voteLists.forEach(v => {
+        const index = this.nodeLists.findIndex(vv => vv.owner === v.bp)
+        if (index === -1) {
+          return
+        }
+        this.$set(this.nodeLists[index], 'dfsRank', v.rank)
+        const tVote = parseInt(v.total_votes / 10000)
+        this.$set(this.nodeLists[index], 'dfsVote', tVote)
+      })
+    },
+    // 获取账户已投列表
+    handleGetAccVoteLists() {
+
+    },
+    // 获取全网权重加成
+    async handleGetWeight() {
+      const params = {
+        "code": "eosio",
+        "scope": "eosio",
+        "json": true,
+        "table": "producers",
+        "index_position": 2,
+        "key_type": "float64",
+        limit: 1,
+      }
+      const {status, result} = await get_table_rows(params)
+      if (!status) {
+        return
+      }
+      const row = result.rows[0];
+      const weight = parseFloat(row.total_votes) / parseFloat(this.nodeLists[0].num_votes)
+      this.voteWeight = weight;
+    },
     handleChangeTab(num) {
       this.act = num
-    }
+    },
   }
 }
 </script>
