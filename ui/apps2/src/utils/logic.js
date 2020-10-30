@@ -1,5 +1,6 @@
 /* eslint-disable */
 import { toFixed, getCoin } from '@/utils/public';
+import moment from 'moment';
 import store from '@/store';
 // import { Decimal } from 'decimal.js';
 
@@ -385,6 +386,23 @@ export function perDayRewardV3(mid) {
   let reward = minNum / dfsPrice
   reward *= 0.8
   reward = toFixed(reward, 4)
+  return reward
+}
+
+// V3计算收益
+export function dealRewardV3(minnerData, mid) {
+  const dfsPrice = store.state.sys.dfsPrice;
+  const aprs = getV3Apr(mid)
+  // console.log(minnerData)
+  let t = moment().valueOf() - minnerData.lastTime;
+  t = t / 1000;
+  // console.log(t)
+  // 用户实际数据计算
+  let minNum = minnerData.liq * Math.pow(aprs.cur_apy || 1, t)
+  minNum -= minnerData.liq;
+  let reward = minNum / dfsPrice
+  reward *= 0.8
+  reward = toFixed(reward, 8)
   return reward
 }
 

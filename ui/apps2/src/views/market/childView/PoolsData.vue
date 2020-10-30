@@ -83,11 +83,11 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
-import { toFixed, toLocalTime, accSub, accAdd, accDiv, dealReward } from '@/utils/public';
+import { toFixed, toLocalTime, accSub, accAdd, accDiv } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MiningRules from '../popup/MiningRules'
 import PoolsInfo from '../comp/PoolsInfo'
-import { getV3PoolsClass } from '@/utils/logic';
+import { getV3PoolsClass, dealRewardV3 } from '@/utils/logic';
 
 export default {
   name: 'poolsData',
@@ -263,7 +263,7 @@ export default {
             this.timerArr[index] = null;
             return
           }
-          const reward = dealReward(v.minnerData, v.mid)
+          const reward = dealRewardV3(v.minnerData, v.mid)
           let showReward = v.reward || '0.00000000';
           let countReward = showReward;
           if (!v.showReward) {

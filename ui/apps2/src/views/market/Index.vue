@@ -97,7 +97,7 @@
       class="myDialog apy"
       :visible.sync="showApyDetail">
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
-                 :apr="apr" :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
+                 :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
     </el-dialog>
     <!-- 加入做市 -->
     <el-dialog
@@ -209,13 +209,9 @@ export default {
       const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {};
       return parseFloat(feesApr.poolsApr)
     },
-    apr() {
-      const apr = this.perDayReward * this.dfsPrice / 20000 * 365 * 100;
-      return apr.toFixed(2)
-    },
     aprV3() {
-      const apr = this.perDayRewardV3 * this.dfsPrice / 20000 * 365 * 100;
-      return apr.toFixed(2)
+      const aprV3 = this.perDayRewardV3 * this.dfsPrice / 20000 * 365 * 100;
+      return aprV3.toFixed(2)
     },
     dmdApy() {
       const dmdPool = this.marketLists.find(v => v.mid === 326)
@@ -234,7 +230,7 @@ export default {
       return '0.000';
     },
     countApy() {
-      let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
+      let all = accAdd(parseFloat(this.aprV3), parseFloat(this.feesApr))
       if (this.dmdApy) {
         all = accAdd(all, parseFloat(this.dmdApy))
       }

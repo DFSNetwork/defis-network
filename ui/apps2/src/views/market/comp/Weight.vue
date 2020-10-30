@@ -29,7 +29,7 @@
       class="myDialog apy"
       :visible.sync="showApyDetail">
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
-                 :apr="apr" :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
+                 :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
     </el-dialog>
   </div>
 </template>
@@ -37,12 +37,12 @@
 <script>
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
-import { toFixed, accAdd, accDiv, dealMinerData, dealReward,
+import { toFixed, accAdd, accDiv, dealMinerData,
 perDayReward, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MarketApy from '../popup/MarketApy'
 import { timeApy } from '@/utils/minerLogic';
-import { perDayRewardV3, getV3PoolsClass } from '@/utils/logic';
+import { perDayRewardV3, getV3PoolsClass, dealRewardV3 } from '@/utils/logic';
 
 export default {
   name: 'Weight',
@@ -103,13 +103,9 @@ export default {
       }
       return toFixed(min, 4)
     },
-    apr() {
-      const apr = this.perDayReward * this.dfsPrice / 20000 * 365 * 100;
-      return apr.toFixed(2)
-    },
     aprV3() {
-      const apr = this.perDayRewardV3 * this.dfsPrice / 20000 * 365 * 100;
-      return apr.toFixed(2)
+      const aprV3 = this.perDayRewardV3 * this.dfsPrice / 20000 * 365 * 100;
+      return aprV3.toFixed(2)
     },
     feesApr() {
       const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {};
@@ -132,7 +128,7 @@ export default {
       return '0.000';
     },
     countApy() {
-      let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
+      let all = accAdd(parseFloat(this.aprV3), parseFloat(this.feesApr))
       if (this.dmdApy) {
         all = accAdd(all, parseFloat(this.dmdApy))
       }
@@ -315,7 +311,7 @@ export default {
           return
         }
         // 用户实际数据计算
-        const reward = dealReward(this.minnerData, this.thisMarket.mid)
+        const reward = dealRewardV3(this.minnerData, this.thisMarket.mid)
         this.handleStartAdd(reward)
       } catch (error) {
         console.log(error)
