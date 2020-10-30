@@ -247,10 +247,34 @@ export function dealMinerData(minnerData) {
   let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
   lastTime = moment(lastTime).valueOf();
   minnerData.lastTime = lastTime;
-  // const liq = thisMarket.symbol0 === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
-  const liq = minnerData.liq_bal0.split(' ')[1] === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
+  // console.log(minnerData)
+  const liq_bal0Arr = minnerData.liq_bal0.split(' ');
+  const liq_bal1Arr = minnerData.liq_bal1.split(' ');
+  let liq = 0;
+  if (liq_bal0Arr[1] === 'EOS') {
+    liq = liq_bal0Arr[0];
+  } else if (liq_bal1Arr[1] === 'EOS') {
+    liq = liq_bal1Arr[0];
+  } else if (liq_bal0Arr[1] === 'USDT') {
+    const eosPrice = getEosPrice()
+    liq = liq_bal0Arr[0] / eosPrice;
+  } else if (liq_bal1Arr[1] === 'USDT') {
+    const eosPrice = getEosPrice()
+    liq = liq_bal1Arr[0] / eosPrice;
+  }
   minnerData.liq = liq;
   return minnerData
+}
+
+export function getEosPrice() {
+  const marketLists = store.state.sys.marketLists;
+  const eosMarket = marketLists.find(v => v.mid === 17)
+  if (!eosMarket) {
+    return 2.65
+  }
+  const price = parseFloat(eosMarket.reserve1) / parseFloat(eosMarket.reserve0)
+  // console.log(price)
+  return price;
 }
 
 // 计算池子手续费年化

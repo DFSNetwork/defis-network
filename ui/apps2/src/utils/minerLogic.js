@@ -21,7 +21,6 @@ export function timeApy(market, type, pool) {
   // const price = 0.001
   // const eos = 10000
   try {
-    console.log(li)
     if (type === 'year') {
       const times = Math.ceil(sT / li.halftime);
       const lamp = Math.pow(2,times); // 衰减系数

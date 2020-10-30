@@ -4,7 +4,10 @@
       <div class="title flexb">
         <span class="act">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span>
       </div>
-      <div class="rankTip flexb" v-if="!isRank">
+      <div class="rankTip flexb" v-if="!isAbled">
+        <span>暂不支持 非EOS 或 非USDT矿池挖矿</span>
+      </div>
+      <div class="rankTip flexb" v-else-if="!isRank">
         <span>{{ $t('vote.rankTip') }}</span>
         <span class="red" @click="handleTo('vote')">{{ $t('vote.challenge') }}</span>
       </div>
@@ -109,7 +112,7 @@
       <template v-for="(item, index) in minersArr">
         <div class="list" :class="{'page1': page === 1}" :key="index">
           <div class="flexb mb10">
-            <span>{{ handleDealAccountHide(item.miner) }}</span>
+            <span>{{ (item.miner) }}</span>
             <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
           </div>
           <div class="flexb">
@@ -257,6 +260,13 @@ export default {
       rankInfo: state => state.sys.rankInfo,
       marketLists: state => state.sys.marketLists,
     }),
+    isAbled() {
+      if (this.thisMarket.contract0 === 'eosio.token' || this.thisMarket.contract0 === 'tethertether' ||
+          this.thisMarket.contract1 === 'tethertether') {
+        return true
+      }
+      return false;
+    },
     dmdApy() {
       const dmdPool = this.marketLists.find(v => v.mid === 326)
       let dmdRoi = getDmdMinerHourRoi(this.thisMarket, 'year', dmdPool)
