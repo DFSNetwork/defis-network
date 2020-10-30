@@ -4,7 +4,7 @@ import { getV3Apr } from '@/utils/logic';
 import axios from 'axios';
 function getHost() {
   const baseConfig = store.state.sys.baseConfig;
-  console.log(baseConfig)
+  // console.log(baseConfig)
   return baseConfig.node.url;
 }
 

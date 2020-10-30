@@ -1,44 +1,52 @@
 <template>
   <div class="lists" v-loading="getLoading">
-    <div class="noData tip" v-if="!lists.length">{{ $t('public.noData') }}</div>
-    <div class="list flexa" v-for="(item, index) in lists" :key="index"
-      @click="handleCheckedNode(item)">
-      <div class="main">
-        <div class="flexa">
-          <span class="rank flexc">{{ index+1 }}</span>
-          <img class="logo" :src="item.logo || voteDefaultImg" :onerror="defaultImg">
-          <span class="nodeName">{{ item.owner }}</span>
+    <van-list
+        v-model="loadingMore"
+        :finished="finished"
+        :loading-text="$t('public.loading')"
+        :finished-text="$t('public.noMore')"
+        @load="handleCurrentChange()"
+      >
+      <!-- <div class="noData tip" v-if="!lists.length">{{ $t('public.noData') }}</div> -->
+      <div class="list flexa" v-for="(item, index) in lists" :key="index"
+        @click="handleCheckedNode(item)">
+        <div class="main">
+          <div class="flexa">
+            <span class="rank flexc" v-if="act !== 3">{{ index+1 }}</span>
+            <img class="logo" :src="item.owner !== 'bp.dfs' ? item.logo : voteDefaultImg" :onerror="errorCoinImg">
+            <span class="nodeName">{{ item.owner }}</span>
+          </div>
+          <div class="tip data flexb">
+            <div class="flexa">
+              <van-icon class="coin rotate" name="coupon-o" />
+              <span>{{ parseInt(item.num_votes) }} EOS</span>
+            </div>
+            <div class="flexa">
+              <img class="coin" src="@/assets/navImg/earth.svg">
+              <a class="tip websize" :href="item.url" target="_blank" rel="noopener noreferrer">
+                {{ handleDealUrl(item.url) }}
+              </a>
+            </div>
+            <!-- <div class="flexa">
+              <img class="coin" src="@/assets/navImg/percent.svg">
+              <span>{{ item.percentage_votes }}%</span>
+            </div> -->
+          </div>
+          <div class="tip data flexb">
+            <div class="flexa">
+              <i class="el-icon-coin coin"></i>
+              <span>{{ item.dfsVote || '0' }}</span>
+              <span class="green_p" @click="handleToDetail(item)">{{ $t('public.detail') }}></span>
+            </div>
+          </div>
         </div>
-        <div class="tip data flexb">
-          <div class="flexa">
-            <van-icon class="coin rotate" name="coupon-o" />
-            <span>{{ parseInt(item.num_votes) }} EOS</span>
-          </div>
-          <div class="flexa">
-            <img class="coin" src="@/assets/navImg/percent.svg">
-            <span>{{ item.percentage_votes }}%</span>
-          </div>
-        </div>
-        <div class="tip data flexb">
-          <div class="flexa">
-            <img class="coin" src="@/assets/navImg/earth.svg">
-            <a class="tip websize" :href="item.url" target="_blank" rel="noopener noreferrer">
-              {{ handleDealUrl(item.url) }}
-            </a>
-          </div>
-          <div class="flexa">
-            <i class="el-icon-coin coin"></i>
-            <span>{{ item.dfsVote || '-' }}</span>
-            <span class="green_p">详情></span>
+        <div class="checkBoxDiv flexc">
+          <div class="checkBox flexc" :class="{'isChecked': item.isChecked}">
+            <van-icon v-if="item.isChecked" name="checked"/>
           </div>
         </div>
       </div>
-      <div class="checkBoxDiv flexc">
-        <div class="checkBox flexc" :class="{'isChecked': item.isChecked}">
-          <van-icon v-if="item.isChecked" name="checked"/>
-        </div>
-      </div>
-    </div>
+    </van-list>
   </div>
 </template>
 
@@ -60,40 +68,151 @@ export default {
     getLoading: {
       type: Boolean,
       default: true
+    },
+    myVote: {
+      type: Array,
+      default: function nl () {
+        return []
+      }
+    },
+    search: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
       voteDefaultImg,
       defaultImg: 'this.src="/static/default/voteImg.png"',
+      errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       isChecked: false,
-      lists: []
+      lists: [],
+      rankLists: [],
+      myVoteList: [],
+      searchArr: [],
+
+      // 加载更多
+      loadingMore: false,
+      finished: false,
+      page: 1,
+      pageSize: 30,
     }
   },
   watch: {
     nodeLists: {
-      handler: function nls(newVal) {
-        if (!newVal.length) {
+      handler: function nls(newVal, oldVal) {
+        if (!newVal.length || (oldVal && oldVal.length === newVal.length)) {
           return
         }
         this.handleDealLists()
       }
     },
     act() {
+      this.page = 1;
+      this.lists = []
+      this.finished = false;
       this.handleDealLists()
+    },
+    myVote: {
+      handler: function nls(newVal) {
+        if (!newVal.length) {
+          return
+        }
+        this.handleGetMyLists()
+      }
+    },
+    search() {
+      this.page = 1;
+      this.lists = []
+      this.loadingMore = true;
+      this.finished = false;
+      this.handleSearch()
     }
   },
   methods: {
+    handleToDetail(item) {
+      this.$router.push({
+        name: 'nodeDetail',
+        params: {
+          owner: item.owner
+        }
+      })
+    },
+    handleCurrentChange() {
+      if (!this.nodeLists.length) {
+        return
+      }
+      setTimeout(() => {
+        let tArr = this.nodeLists;
+        if (this.search) {
+          tArr = this.searchArr;
+        } else if (this.act === 2) {
+          tArr = this.rankLists;
+        } else if (this.act === 3) {
+          tArr = this.myVoteList;
+        }
+        const start = (this.page - 1) * this.pageSize;
+        const end = this.page * this.pageSize;
+        const pageLists = tArr.slice(start, end);
+        // console.log(pageLists, this.page)
+        this.lists.push(...pageLists)
+        this.loadingMore = false;
+        this.page += 1;
+        if (this.lists.length >= tArr.length) {
+          this.finished = true;
+        }
+      }, 200);
+    },
+    handleSearch() {
+      const search = this.search.toLowerCase();
+      if (!search) {
+        this.handleDealLists()
+        return
+      }
+      let tArr = this.nodeLists;
+      if (this.act === 2) {
+        tArr = this.rankLists;
+      } else if (this.act === 3) {
+        tArr = this.myVoteList;
+      }
+      const arr = tArr.filter(v => {
+        const index = v.owner.indexOf(search);
+        return index !== -1
+      })
+      this.searchArr = arr;
+      // this.lists = arr;
+      this.handleCurrentChange()
+    },
+    handleGetMyLists() {
+      if (!this.nodeLists.length || !this.myVote.length) {
+        return
+      }
+      const list = []
+      this.myVote.forEach(v => {
+        const node = this.nodeLists.find(vv => vv.owner === v);
+        list.push(node);
+      })
+      this.myVoteList = list
+      // this.act === 3 ? this.lists = this.myVoteList : '';
+    },
     handleDealLists() {
       // const lists = JSON.parse(JSON.stringify(this.nodeLists));
       const lists = this.nodeLists;
-      if (this.act === 1) {
-        this.lists = lists
-        return
-      }
-      let rank = lists.filter(v => v.dfsRank <= 10)
-      rank = rank.slice(0, 10)
-      this.lists = rank;
+      // act === 1
+      // this.act === 1 ? this.lists = lists : '';
+      // act === 2
+      let rank = lists.filter(v => v.dfsRank <= 21)
+      rank.sort((a, b) => {
+        return a.dfsRank - b.dfsRank
+      })
+      rank = rank.slice(0, 21)
+      this.rankLists = rank;
+      // this.act === 2 ? this.lists = rank : '';
+      // act === 3
+      this.handleGetMyLists();
+
+      // lists 赋值
+      this.handleCurrentChange();
     },
     handleDealUrl(url) {
       let nUrl = url.replace(/(http|https):\/\//, '')
@@ -102,10 +221,14 @@ export default {
       return arr[0]
     },
     handleCheckedNode(item) {
+      const checkedArr = this.nodeLists.filter(v => v.isChecked)
       const index = this.nodeLists.findIndex(v => v.owner === item.owner);
       const isChecked = this.nodeLists[index].isChecked || false;
+      if (checkedArr.length >= 10 && !isChecked) {
+        return
+      }
       this.$set(this.nodeLists[index], 'isChecked', !isChecked)
-    }
+    },
   }
 }
 </script>

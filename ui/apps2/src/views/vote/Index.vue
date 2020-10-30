@@ -4,7 +4,7 @@
       <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
       <div class="title">DFS Governance</div>
       <div class="titleTip">
-        DFS tokens represent voting shares in DFS governance. You can vote on each proposal yourself.
+        DFS tokens represent voting shares in DFS governance.
       </div>
     </div>
     <div class="mainTitle flexb">
@@ -518,17 +518,18 @@ export default {
   color: #fff;
   position: relative;
   background: #07D79B;
-  padding: 60px 40px 60px;
+  padding: 30px 40px;
   overflow: hidden;
   .title{
     position: relative;
-    font-size: 54px;
+    font-size: 36px;
     margin-bottom: 10px;
     z-index: 2;
   }
   .titleTip{
     position: relative;
     z-index: 2;
+    font-weight: 300;
   }
   .bgImg{
     position: absolute;

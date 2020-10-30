@@ -128,6 +128,12 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "nodeVote" */ '@/views/nodeVote/Index.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
       },
+      { // 节点DFS投票详情
+        path: '/node-detail/:owner',
+        name: 'nodeDetail',
+        component: () => import(/* webpackChunkName: "nodeDetail" */ '@/views/nodeVote/comp/NodeDetail.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
+      },
     ]
   },
 ]

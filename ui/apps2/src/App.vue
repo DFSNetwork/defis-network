@@ -360,7 +360,7 @@ export default {
 }
 
 #app {
-  font-family: 'Sarasa', Helvetica, Arial, sans-serif !important;
+  font-family: 'Monospace', 'Sarasa', Helvetica, Arial, sans-serif !important;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;

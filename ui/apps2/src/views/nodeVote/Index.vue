@@ -15,7 +15,7 @@
       </span>
     </div>
     <!-- 代理账户信息 -->
-    <ProxyAcc :voteWeight="voteWeight"/>
+    <ProxyAcc :voteWeight="voteWeight" :getLoading="getLoading"/>
     <!-- 用户票数统计数据 -->
     <AccInfo />
     <!-- tab数据 -->
@@ -32,7 +32,9 @@
         </div>
       </div>
       <div class="lsContent">
-        <NodeList :act="act" :nodeLists="nodeLists" :getLoading="getLoading"/>
+        <NodeList :act="act" :nodeLists="nodeLists"
+          :search="search"
+          :getLoading="getLoading" :myVote="myVote"/>
       </div>
     </div>
 
@@ -74,6 +76,8 @@ export default {
       voteLists: [], // DFS投票列表
       getLoading: true,
       voteWeight: 0,
+      myVote: [], // 我的投票列表
+      myVoteLoading: true,
     }
   },
   mounted() {
@@ -91,10 +95,17 @@ export default {
   },
   watch: {
     act() {
-      // if (newVal !== 3) {
-      //   return
-      // }
+      this.search = ''
       this.handleCancel()
+    },
+    scatter: {
+      handler: function listen(newVal) {
+        if (newVal.identity) {
+          this.handleGetAccVoteLists();
+        }
+      },
+      deep: true,
+      immediate: true,
     }
   },
   methods: {
@@ -137,7 +148,8 @@ export default {
           return
         }
         setTimeout(() => {
-          
+          this.handleGetAccVoteLists();
+          this.handleGetVoteList()
         }, 2000);
         this.$message({
           message: this.$t('public.success'),
@@ -152,9 +164,10 @@ export default {
         return
       }
       const rows = result.producers || []
+      this.$store.dispatch('setNodeLists', JSON.parse(JSON.stringify(rows)))
       this.nodeLists = rows;
       this.handleDealData()
-      console.log(result)
+      // console.log(result)
       // 计算权重值
       this.handleGetWeight()
     },
@@ -173,7 +186,7 @@ export default {
       }
       const rows = result.rows || [];
       this.voteLists = rows;
-      console.log(result)
+      // console.log(result)
       this.handleDealData()
     },
     handleDealData() {
@@ -191,8 +204,31 @@ export default {
       })
     },
     // 获取账户已投列表
-    handleGetAccVoteLists() {
-
+    async handleGetAccVoteLists() {
+      if (!this.scatter || !this.scatter.identity) {
+        return
+      }
+      const formName = this.scatter.identity.accounts[0].name;
+      const params = {
+        "code":"dfsbpsvoters",
+        "scope":"dfsbpsvoters",
+        "table":"voters",
+        "json":true,
+        "lower_bound": ` ${formName}`,
+        "upper_bound": ` ${formName}`,
+      }
+      const { status, result } = await get_table_rows(params);
+      this.myVoteLoading = false;
+      if (!status) {
+        return
+      }
+      const rows = result.rows || [];
+      if (!rows.length) {
+        this.myVote = []
+      } else {
+        this.myVote = rows[0].last_vote;
+      }
+      // console.log(this.myVote)
     },
     // 获取全网权重加成
     async handleGetWeight() {
@@ -227,16 +263,17 @@ export default {
     color: #fff;
     position: relative;
     background: #07D79B;
-    padding: 60px 40px 60px;
+    padding: 30px 40px;
     overflow: hidden;
     .title{
       position: relative;
-      font-size: 54px;
+      font-size: 36px;
       margin-bottom: 10px;
       z-index: 2;
     }
     .titleTip{
       position: relative;
+      font-weight: 300;
       z-index: 2;
     }
     .bgImg{

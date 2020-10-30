@@ -6,14 +6,17 @@
         <span @click="handleProxy">投票给TA</span>
       </div>
     </div>
-    <div class="content flexb">
+    <div class="content flexb" v-loading="getLoading" @click="handleToBro">
       <div class="item">
         <div class="subTitle">代理账户</div>
         <div>dfsbpsproxy1</div>
       </div>
-      <div class="item">
-        <div class="subTitle">代理票数</div>
-        <div>1000.0000 EOS</div>
+      <div class="item flexb">
+        <div>
+          <div class="subTitle">代理票数</div>
+          <div>{{ proxyData.eosNum || '-' }} EOS</div>
+        </div>
+        <i class="el-icon-arrow-right"></i>
       </div>
     </div>
   </div>
@@ -22,20 +25,43 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-// import { get_table_row, get_producers } from '@/utils/api';
+import { get_table_rows } from '@/utils/api';
 
 export default {
   name: 'proxyAcc',
+  props: {
+    voteWeight: {
+      type: Number,
+      default: 0
+    },
+    getLoading: {
+      type: Boolean,
+      default: true
+    }
+  },
+  data() {
+    return {
+      proxyData: {}
+    }
+  },
+  mounted() {
+    this.handleGetProxy();
+  },
   computed: {
     ...mapState({
       dsrPools: state => state.sys.dsrPools,
       scatter: state => state.app.scatter,
     }),
   },
-  mounted() {
-    this.handleGetProxy()
+  watch: {
+    voteWeight() {
+      this.hanldeDealNum()
+    }
   },
   methods: {
+    handleToBro() {
+      location.href = "https://bloks.io/account/dfsbpsproxy1#votes"
+    },
     // 执行代理委托
     handleProxy() {
       if (!this.scatter || !this.scatter.identity || this.loading) {
@@ -80,9 +106,29 @@ export default {
     },
     // 获取代理账户信息
     async handleGetProxy() {
-      // const res = await get_producers()
-      // console.log(res)
-      // https://www.api.bloks.io/producers?pageNum=1&perPage=100
+      const params = {
+        "code":"eosio",
+        "scope":"eosio",
+        "table":"voters",
+        "json":true,
+        "lower_bound": "dfsbpsproxy1",
+        "upper_bound": "dfsbpsproxy1",
+      }
+      const { status, result } = await get_table_rows(params);
+      if (!status) {
+        return
+      }
+      this.proxyData = result.rows[0]
+      this.hanldeDealNum();
+    },
+    // 计算票数
+    hanldeDealNum() {
+      if (!this.voteWeight || !Number(this.proxyData.last_vote_weight)) {
+        return
+      }
+      const num = Number(this.proxyData.last_vote_weight) / this.voteWeight;
+      this.$set(this.proxyData, 'eosNum', Math.ceil(num));
+      console.log(this.proxyData)
     }
   }
 }

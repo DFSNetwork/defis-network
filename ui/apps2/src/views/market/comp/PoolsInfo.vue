@@ -157,7 +157,7 @@ export default {
 .banner{
   position: relative;
   background: #07D79B;
-  padding: 80px 40px 30px;
+  padding: 30px 40px 30px;
   color: #FFF;
   text-align: center;
   overflow: hidden;
@@ -183,7 +183,7 @@ export default {
     font-weight: 300;
   }
   .floatDiv{
-    margin-top: 60px;
+    margin-top: 30px;
     z-index: 1;
     position: relative;
     text-align: left;

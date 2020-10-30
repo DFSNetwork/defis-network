@@ -116,8 +116,13 @@ const sys = {
 
     marketLists: [], // 做市列表
     filterMkLists: [], // 过滤后的做市列表
+
+    nodeLists: [],
   },
   mutations: {
+    SET_NodeLists: (state, nodeLists) => {
+      state.nodeLists = nodeLists;
+    },
     SET_RANKINFO: (state, rankInfo) => {
       state.rankInfo = rankInfo;
     },
@@ -183,6 +188,9 @@ const sys = {
     },
   },
   actions: {
+    setNodeLists({ commit }, nodeLists) {
+      commit('SET_NodeLists', nodeLists);
+    },
     setRankInfo({ commit }, rankInfo) {
       commit('SET_RANKINFO', rankInfo);
     },
