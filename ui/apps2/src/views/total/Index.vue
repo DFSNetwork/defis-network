@@ -102,8 +102,9 @@
 
 <script>
 import { mapState } from 'vuex';
-import { perDayReward, getYfcReward, accAdd, toLocalTime, getDmdMinerHourRoi } from '@/utils/public';
+import { getYfcReward, accAdd, toLocalTime, getDmdMinerHourRoi } from '@/utils/public';
 import { timeApy } from '@/utils/minerLogic';
+import { perDayRewardV3 } from '@/utils/logic' 
 export default {
   name: 'total',
   data() {
@@ -221,7 +222,7 @@ export default {
         }
         try {
           let count = 0;
-          const reward = perDayReward(market.mid);
+          const reward = perDayRewardV3(market.mid);
           const apr = reward * this.dfsPrice / 20000 * 365 * 100;
           count = accAdd(count, apr.toFixed(2))
 

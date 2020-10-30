@@ -23,7 +23,8 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
-import { toFixed, toLocalTime, accSub, accAdd, accDiv, dealReward } from '@/utils/public';
+import { toFixed, toLocalTime, accSub, accAdd, accDiv } from '@/utils/public';
+import { dealRewardV3 } from '@/utils/logic';
 export default {
   name: 'dfsMiner',
   props: {
@@ -228,7 +229,7 @@ export default {
           this.timerArr[index] = null;
           return
         }
-        const reward = dealReward(v.minnerData, v.mid)
+        const reward = dealRewardV3(v.minnerData, v.mid)
         let showReward = v.reward || '0.00000000';
         let countReward = showReward;
         if (!v.showReward) {

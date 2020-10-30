@@ -36,7 +36,8 @@
 import { EosModel } from '@/utils/eos';
 import axios from 'axios';
 import { mapState } from 'vuex';
-import { toFixed, accSub, accAdd, accMul, perDayReward } from '@/utils/public';
+import { toFixed, accSub, accAdd, accMul } from '@/utils/public';
+import { perDayRewardV3 } from '@/utils/logic'
 
 export default {
   data() {
@@ -66,7 +67,7 @@ export default {
       if (!this.lists.length) {
         return '0.0000'
       }
-      const max = perDayReward(this.lists[0].mid)
+      const max = perDayRewardV3(this.lists[0].mid)
       return max
     },
     nextLess() {

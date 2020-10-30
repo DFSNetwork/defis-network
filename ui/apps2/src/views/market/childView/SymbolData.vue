@@ -93,8 +93,8 @@
             <span class="green" @click.stop="showApyDetail = true">{{ $t('public.detail') }}></span>
           </div>
           <div class="rewardPerDay tip">
-            <span>{{ $t('mine.poolsMine2', {perDayReward: dayRewardNum}) }}</span>
-            <span>(V3: {{dayRewardNumV3}} DFS)</span>
+            <span>{{ $t('mine.poolsMine2', {perDayReward: dayRewardNumV3}) }}</span>
+            <!-- <span>(V3: {{dayRewardNumV3}} DFS)</span> -->
           </div>
         </div>
       </div>
@@ -144,7 +144,7 @@
       class="myDialog apy"
       :visible.sync="showApyDetail">
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
-                 :apr="apr" :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
+                 :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
     </el-dialog>
     <!-- <el-dialog
       class="myDialog"
@@ -158,7 +158,7 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accAdd, accMul, accDiv, dealReward, getMarketTime, dealAccountHide,
+import { toFixed, accSub, accAdd, accMul, accDiv, getMarketTime, dealAccountHide,
          dealMinerData, perDayReward, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
@@ -166,7 +166,7 @@ import MarketTip from '../popup/MarketTip';
 import MarketApy from '../popup/MarketApy'
 // import RankTip from '../popup/RankTip'
 import { timeApy } from '@/utils/minerLogic';
-import { perDayRewardV3, getV3PoolsClass } from '@/utils/logic';
+import { perDayRewardV3, getV3PoolsClass, dealRewardV3 } from '@/utils/logic';
 
 export default {
   components: {
@@ -274,7 +274,7 @@ export default {
       return '0.000';
     },
     countApy() {
-      let all = accAdd(parseFloat(this.apr), parseFloat(this.feesApr))
+      let all = accAdd(parseFloat(this.aprV3), parseFloat(this.feesApr))
       if (this.dmdApy) {
         all = accAdd(all, parseFloat(this.dmdApy))
       }
@@ -316,13 +316,9 @@ export default {
     dayRewardNumV3() {
       return perDayRewardV3(this.thisMarket.mid)
     },
-    apr() {
-      const apr = this.dayRewardNum * this.dfsPrice / 20000 * 365 * 100;
-      return apr.toFixed(2)
-    },
     aprV3() {
-      const apr = this.dayRewardNumV3 * this.dfsPrice / 20000 * 365 * 100;
-      return apr.toFixed(2)
+      const aprV3 = this.dayRewardNumV3 * this.dfsPrice / 20000 * 365 * 100;
+      return aprV3.toFixed(2)
     },
     feesApr() {
       const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
@@ -616,7 +612,7 @@ export default {
           this.timerArr[index] = null;
           return
         }
-        const reward = dealReward(v, this.thisMarket.mid)
+        const reward = dealRewardV3(v, this.thisMarket.mid)
         let showReward = v.reward || '0.00000000';
         let countReward = showReward;
         if (!v.showReward) {
@@ -648,7 +644,7 @@ export default {
     },
     handleAccRun() {
       // console.log(this.accMineData)
-      const reward = dealReward(this.accMineData, this.thisMarket.mid)
+      const reward = dealRewardV3(this.accMineData, this.thisMarket.mid)
       let showReward = this.accMineData.reward || '0.00000000';
       let countReward = showReward;
       if (!this.accMineData.showReward) {
