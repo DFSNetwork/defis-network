@@ -21,13 +21,13 @@ export function timeApy(market, type, pool) {
   // const price = 0.001
   // const eos = 10000
   try {
+    console.log(li)
     if (type === 'year') {
       const times = Math.ceil(sT / li.halftime);
-      const lamp = Math.pow(0.5,times); // 衰减系数
-      // const secGet = (parseFloat(li.max_supply) * lamp / 7) / 2 / 604800;
-      // const dayGet = secGet * 60 * 60 * 24;
-      // const apy = dayGet * price / eos * 365 * 100 / 2;
-      const dayGet = parseFloat(li.max_supply) * lamp / 7;
+      const lamp = Math.pow(2,times); // 衰减系数
+      const tNum = parseFloat(li.max_supply) - parseFloat(li.supply); // 池子剩余数量
+      const secGet = tNum / lamp / li.halftime;
+      const dayGet = secGet * 60 * 60 * 24;
       const apy = dayGet * price / eos * 365 * 100 ;
       // console.log(li.max_supply, lamp, price, eos)
       return apy.toFixed(3)
@@ -50,11 +50,11 @@ export function timeNum(market, userLP, rankWeight) {
   } // || sT <= 0
   try {
     const times = Math.ceil(sT / li.halftime);
-    const lamp = Math.pow(0.5,times); // 衰减系数
-    const secGet = parseFloat(li.max_supply) * lamp / 2 / 604800;
+    const lamp = Math.pow(2, times); // 衰减系数
+    const tNum = parseFloat(li.max_supply) - parseFloat(li.supply); // 池子剩余数量
+    const secGet = tNum / lamp / 2 / li.halftime;
     const num = secGet * sT * (parseInt(userLP.liq_bal0) / market.liquidity_token) * rankWeight.constant;
     return num
-
   } catch (error) {
     console.log(error)
   }
@@ -72,8 +72,9 @@ export function timeDssNum(li, userLP, rankWeight, allStaked) {
     const pools = [0.5333,0.7,0.7333,0.8,1];
     const uPool = pools[userLP.pool]
     const times = Math.ceil(sT / li.halftime);
-    const lamp = Math.pow(0.5,times); // 衰减系数
-    const secGet = parseFloat(li.max_supply) * lamp / 2 / 604800;
+    const lamp = Math.pow(2,times); // 衰减系数
+    const tNum = parseFloat(li.max_supply) - parseFloat(li.supply); // 池子剩余数量
+    const secGet = tNum / lamp / 2 / 604800;
     const num = secGet * sT * (parseFloat(userLP.liq_bal0) / parseFloat(allStaked.stackasset)) * rankWeight.constant * uPool;
     return num
   } catch (error) {
