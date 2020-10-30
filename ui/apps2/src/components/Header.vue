@@ -4,7 +4,10 @@
       <div class="logoDiv" :class="{'ani': ani}" @click="handleToIndex" @dblclick="handleDbClick">
         <img class="logo" src="/static/faviconV3.png">
       </div>
-      <span class="create flexc" @click="handleToVote">{{ $t('vote.vote') }}</span>
+      <span class="create flexc" @click="showVote = true">
+        <span>{{ $t('vote.vote') }}</span>
+        <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
+      </span>
       <span class="create flexc" @click="handleTo('pools')">{{ $t('mine.pools') }}</span>
       <span class="create flexc" @click="showDss = true">
         <span>DSS</span>
@@ -49,6 +52,16 @@
       </div>
     </el-dialog>
 
+    <el-dialog class="mydialog showVote"
+      :modal="false"
+      :show-close="false"
+      :visible.sync="showVote">
+      <div @click="showVote = false">
+        <div class="create flexc" @click="handleTo('vote')">Pool Vote</div>
+        <div class="create flexc" @click="handleTo('nodeVote')">Node Vote</div>
+      </div>
+    </el-dialog>
+
     <el-dialog
       class="showEggCss"
       :show-close="false"
@@ -69,6 +82,7 @@ export default {
   },
   data() {
     return {
+      showVote: false,
       showApps: false,
       showDss: false,
       ani: false,
@@ -277,6 +291,14 @@ export default {
       margin-right: 210px;
     }
   }
+
+  &.showVote{
+    /deep/ .el-dialog{
+      width: 170px;
+      margin-left: 110px;
+    }
+  }
+  
   .proClass{
     border-top: 1px dashed #e3e3e3;
     &:first-child{
