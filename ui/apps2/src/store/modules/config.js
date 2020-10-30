@@ -35,17 +35,6 @@ const config = {
         sTokenPrecision: 4,
         sTokenSymbol: "",
       },
-      {
-        mid: 370,
-        duration: 31104000,
-        epoch: 1600855200,
-        maxSupply: 500,
-        poolContract: "eosdmdpool1c",
-        poolid: 8,
-        sTokenContract: "",
-        sTokenPrecision: 4,
-        sTokenSymbol: "",
-      }
     ],
     // YFC类型LP挖矿配置
     lpMid: [{
