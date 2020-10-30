@@ -2,9 +2,9 @@
   <div class="nodeVote">
     <div class="banner">
       <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
-      <div class="title">Node Vote</div>
+      <div class="title">DFS Governance</div>
       <div class="titleTip">
-        Node Vote
+        DFS tokens represent voting shares in DFS governance.
       </div>
     </div>
     <div class="mainTitle flexb">
@@ -47,6 +47,13 @@
         <span class="voteBtn" v-loading="voteLoading" @click="handleTovote">{{ $t('vote.toVote') }}</span>
       </span>
     </div>
+
+    <el-dialog
+      class="mkListDia pcList"
+      :show-close="false"
+      :visible.sync="showRules">
+      <Rules/>
+    </el-dialog>
   </div>
 </template>
 
@@ -57,6 +64,7 @@ import { EosModel } from '@/utils/eos';
 import ProxyAcc from './comp/ProxyAcc';
 import AccInfo from './comp/AccInfo';
 import NodeList from './comp/NodeList';
+import Rules from './dialog/Rules';
 
 import { get_producers, get_table_rows } from '@/utils/api';
 export default {
@@ -65,6 +73,7 @@ export default {
     ProxyAcc,
     AccInfo,
     NodeList,
+    Rules,
   },
   data() {
     return {
@@ -394,6 +403,24 @@ export default {
     color: #FFF;
     padding: 12px 40px;
     border-radius: 30px;
+  }
+}
+
+.mkListDia{
+  // animation: none;
+  /deep/ .el-dialog{
+    width: 600px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+      box-sizing: border-box;
+    }
+  }
+  &.pcList{
+    /deep/ .el-dialog{
+      position: relative;
+      border-radius:30px;
+    }
   }
 }
 </style>
