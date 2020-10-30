@@ -510,6 +510,18 @@ export function dealAccountHide(str) {
     const str3 = str.substring(8);
     return str1 + str2 + str3;
   }
+
+  // const t = str.length % 3;
+  // const len1 = Math.ceil(str.length/3);
+  // let len2 = len1;
+  // let len3 = len1;
+  // if (t === 2) {
+  //   len3 = len1 - 1;
+  // } else if (t === 1) {
+  //   len2 = len1 - 1;
+  //   len3 = len1 - 1;
+  // }
+  // console.log(len1, len2, len3)
 }
 
 // 数组对象去重
