@@ -8,6 +8,10 @@ $color-border: #f3f3f3;
 $color-shadow: #e0e0e0;
 $color-tip: #a6a6a6;
 
+.fontFamily{
+  font-family: 'Monospace' 'Sarasa', Helvetica, Arial, sans-serif !important;
+}
+
 .tip{
   color: $color-tip;
 }
