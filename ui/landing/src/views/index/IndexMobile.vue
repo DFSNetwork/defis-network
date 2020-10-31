@@ -108,11 +108,6 @@
           <div class="tip">Smart Contract Dev</div>
         </div>
         <div class="user">
-          <div class="userImg"><img src="@/assets/img/team/team6.jpeg" alt=""></div>
-          <div class="name">Ayana Lam</div>
-          <div class="tip">Project Manager</div>
-        </div>
-        <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team4.jpeg" alt=""></div>
           <div class="name">Allen Yang</div>
           <div class="tip">Front-end Developer</div>
@@ -121,6 +116,21 @@
           <div class="userImg"><img src="@/assets/img/team/team2.jpeg" alt=""></div>
           <div class="name">BB 8</div>
           <div class="tip">Back-end Developer</div>
+        </div>
+         <div class="user">
+          <div class="userImg"><img src="@/assets/img/team/team10.png" alt="" /></div>
+          <div class="name">Jream.D</div>
+          <div class="tip">Dreamer</div>
+        </div>
+        <div class="user">
+          <div class="userImg"><img src="@/assets/img/team/team11.png" alt="" /></div>
+          <div class="name">Jare.D</div>
+          <div class="tip">Researcher</div>
+        </div>
+        <div class="user">
+          <div class="userImg"><img src="@/assets/img/team/team12.png" alt="" /></div>
+          <div class="name">Ayana Lam</div>
+          <div class="tip">Project Manager</div>
         </div>
         <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team8.jpeg" alt=""></div>
@@ -133,9 +143,14 @@
           <div class="tip">Marketing </div>
         </div>
         <div class="user">
+          <div class="userImg"><img src="@/assets/img/team/team6.jpeg" alt=""></div>
+          <div class="name">Jia</div>
+          <div class="tip"> Financial Consultant</div>
+        </div>
+        <div class="user">
           <div class="userImg"><img src="@/assets/img/team/team9.jpeg" alt=""></div>
           <div class="name">Joe</div>
-          <div class="tip">Consultant </div>
+          <div class="tip">Technical Consultant</div>
         </div>
       </div>
     </div>
