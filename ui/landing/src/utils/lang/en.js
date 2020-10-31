@@ -7,7 +7,7 @@ export default {
     project: 'Projects',
     faq: 'FAQ',
     partners: 'Partners',
-    team: 'TEAM',
+    team: 'Contributors',
     report: 'Audit Report',
     slowMist: 'Slow Mist',
     peckshield: 'Peckshield',
