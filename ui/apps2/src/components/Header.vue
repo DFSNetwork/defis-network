@@ -57,8 +57,8 @@
       :show-close="false"
       :visible.sync="showVote">
       <div @click="showVote = false">
-        <div class="create flexc" @click="handleTo('vote')">Pool Vote</div>
-        <div class="create flexc" @click="handleTo('nodeVote')">Node Vote</div>
+        <div class="create flexc" @click="handleTo('vote')">{{ $t('tab.poolVote') }}</div>
+        <div class="create flexc" @click="handleTo('nodeVote')">{{ $t('tab.nodeVote') }}</div>
       </div>
     </el-dialog>
 

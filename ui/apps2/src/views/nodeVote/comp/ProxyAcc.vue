@@ -128,7 +128,7 @@ export default {
       }
       const num = Number(this.proxyData.last_vote_weight) / this.voteWeight;
       this.$set(this.proxyData, 'eosNum', Math.ceil(num));
-      console.log(this.proxyData)
+      // console.log(this.proxyData)
     }
   }
 }

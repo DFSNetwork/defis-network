@@ -78,6 +78,8 @@ export default {
     pools: 'Pools',
     hyk: 'Subscribe',
     yfc: 'YFC',
+    poolVote: 'Pool Vote',
+    nodeVote: 'Node Vote',
   },
   bank: {
     stake: 'Stake',

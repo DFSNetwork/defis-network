@@ -12,7 +12,7 @@
         @click="handleCheckedNode(item)">
         <div class="main">
           <div class="flexa">
-            <span class="rank flexc" v-if="act !== 3">{{ index+1 }}</span>
+            <span class="rank flexc" v-if="act !== 3">{{ item.rank }}</span>
             <img class="logo" :src="item.owner !== 'bp.dfs' ? item.logo : voteDefaultImg" :onerror="errorCoinImg">
             <span class="nodeName">{{ item.owner }}</span>
           </div>

@@ -79,6 +79,8 @@ export default {
     pools: '做市',
     hyk: '认购',
     yfc: '机枪池',
+    poolVote: '矿池投票',
+    nodeVote: '节点投票',
   },
   bank: {
     stake: '抵押',

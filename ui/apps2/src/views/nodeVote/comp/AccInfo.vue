@@ -26,6 +26,24 @@ export default {
       dssGet: false,
       dssData: {},
       swapData: {},
+      config: [{
+        "id": 1,
+        "bonus": 1.5,
+      },
+      {
+        "id": 2,
+        "bonus": 1.5,
+      },
+      {
+        "id": 3,
+        "bonus": 2,
+        "refund_delay_sec": 15552000
+      },
+      {
+        "id": 4,
+        "bonus": 3,
+        "refund_delay_sec": 31104000
+      }]
     }
   },
   computed: {
@@ -82,17 +100,17 @@ export default {
           this.$set(v, 'buff', buff.toFixed(2));
           this.$set(v, 'balance', v.bal.split(' ')[0]);
         })
-        // console.log(allList)
         this.dssData = allList[0];
       })
     },
     handleGetSwapData() {
+      const formName = this.scatter.identity.accounts[0].name;
       const params = {
         "code": "miningpool11",
         "scope": 39,
         "table": "miners",
-        "lower_bound": ` ${this.scatter.identity.accounts[0].name}`,
-        "upper_bound": ` ${this.scatter.identity.accounts[0].name}`,
+        "lower_bound": ` ${formName}`,
+        "upper_bound": ` ${formName}`,
         limit: 2000,
         "json": true,
       }
@@ -103,7 +121,6 @@ export default {
           return
         }
         this.swapData = rows[0];
-        // console.log(rows)
       })
     },
   }
