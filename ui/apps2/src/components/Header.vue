@@ -153,11 +153,13 @@ export default {
         return
       }
       if (name === 'yfcGuns') {
-        location.href = 'https://yfcone.gitee.io'
+        // location.href = 'https://yfcone.gitee.io'
+        location.href = 'https://yfc.one/guns'
         return
       }
       if (name === 'yfcDss') {
-        location.href = 'https://yfcone.gitee.io'
+        // location.href = 'https://yfcone.gitee.io'
+        location.href = 'https://yfc.one/vault'
         return
       }
       if (name === 'dbc') {
