@@ -15,7 +15,7 @@
         <span class="green" @click.stop="showApyDetail = true">{{ $t('public.detail') }}></span>
       </div>
       <div class="tip minePerDay">
-        <span>{{ $t('mine.poolsMine2', {perDayReward}) }}</span>
+        <span>{{ $t('mine.poolsMine2', {perDayReward: perDayRewardV3}) }}</span>
         <span>(V3: {{perDayRewardV3}} DFS)</span>
       </div>
     </div>
@@ -38,7 +38,7 @@
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
 import { toFixed, accAdd, accDiv, dealMinerData,
-perDayReward, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
+getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MarketApy from '../popup/MarketApy'
 import { timeApy } from '@/utils/minerLogic';
@@ -58,7 +58,6 @@ export default {
       minnerData: {},
       cliamNum: '0.00000000',
       reward: '0.0000',
-      perDayReward: '0.0000',
       perDayRewardV3: '0.0000',
       changeReWard: '0.00000000',
       dealTimer: null, // 定时器 - 每秒重新计算收益
@@ -87,7 +86,6 @@ export default {
     ...mapState({
       // 箭头函数可使代码更简练
       // baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-      rankInfo: state => state.sys.rankInfo, // 交易对权重列表
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
@@ -160,15 +158,6 @@ export default {
     token() {
       this.handleGetData();
     },
-    rankInfo: {
-      handler: function wl(newVal) {
-        if (!newVal) {
-          return;
-        }
-        this.handleGetData();
-      },
-      deep: true,
-    },
     rankInfoV3: {
       handler: function wl(newVal) {
         if (!newVal) {
@@ -238,7 +227,7 @@ export default {
       this.showReWardTip = false;
     },
     handleGetData() {
-      const rankData = this.rankInfo.find(v => v.mid === this.thisMarket.mid);
+      const rankData = this.rankInfoV3.find(v => v.mid === this.thisMarket.mid);
       this.rankData = rankData
       if (!this.rankData || !Number(this.price)) {
         return
@@ -304,8 +293,6 @@ export default {
       try {
         if (status === 'perDay') {
           // 每万EOS一天 
-          const reward = perDayReward(this.thisMarket.mid)
-          this.perDayReward = reward;
           const rewardV3 = perDayRewardV3(this.thisMarket.mid)
           this.perDayRewardV3 = rewardV3
           return

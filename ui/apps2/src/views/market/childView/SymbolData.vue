@@ -162,7 +162,7 @@ import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accSub, accAdd, accMul, accDiv, getMarketTime, dealAccountHide,
-         dealMinerData, perDayReward, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
+         dealMinerData, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
 import MarketTip from '../popup/MarketTip';
@@ -257,7 +257,7 @@ export default {
       dfsPrice: state => state.sys.dfsPrice,
       storeFeesApr: state => state.sys.feesApr,
       lpMid: state => state.config.lpMid,
-      rankInfo: state => state.sys.rankInfo,
+      rankInfoV3: state => state.sys.rankInfoV3,
       marketLists: state => state.sys.marketLists,
     }),
     isAbled() {
@@ -314,14 +314,11 @@ export default {
       return toFixed(min, 4)
     },
     isRank() {
-      if (!this.rankInfo.length || !this.thisMarket.mid) {
+      if (!this.rankInfoV3.length || !this.thisMarket.mid) {
         return '0'
       }
-      const wData = this.rankInfo.find(v => v.mid === this.thisMarket.mid)
+      const wData = this.rankInfoV3.find(v => v.mid === this.thisMarket.mid)
       return wData
-    },
-    dayRewardNum() {
-      return perDayReward(this.thisMarket.mid)
     },
     dayRewardNumV3() {
       return perDayRewardV3(this.thisMarket.mid)

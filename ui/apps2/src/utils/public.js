@@ -214,34 +214,6 @@ export function getUrlParams(url) {
   });
   return params;
 }
-// 计算收益
-export function dealReward(minnerData, mid) {
-  const damping = store.state.sys.damping;
-  const dfsPrice = store.state.sys.dfsPrice;
-  const aprs = store.state.sys.rankInfo.find(v => v.mid === mid) || {};
-  // 用户实际数据计算
-  let minNum = '0';
-  let t = moment().valueOf() - minnerData.lastTime;
-  t = t / 1000;
-  minNum = minnerData.liq * Math.pow(aprs.aprs, t)
-  minNum = minNum - minnerData.liq;
-  let reward = minNum / dfsPrice * damping
-  reward *= 0.8
-  reward = toFixed(reward, 8)
-  return reward
-}
-export function perDayReward(mid) {
-  const damping = store.state.sys.damping;
-  const dfsPrice = store.state.sys.dfsPrice;
-  const aprs = store.state.sys.rankInfo.find(v => v.mid === mid) || {};
-  const t = 86400;
-  let minNum = 10000 * Math.pow(aprs.aprs || 1, t)
-  minNum -= 10000;
-  let reward = minNum / dfsPrice * damping
-  reward *= 0.8
-  reward = toFixed(reward, 4)
-  return reward
-}
 // 处理用户挖矿数据
 export function dealMinerData(minnerData) {
   let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
@@ -287,30 +259,6 @@ export function getPoolApr(market) {
   let fee_eos = parseFloat(egg.trigger_value_max) * 6 * 24 * 0.002;
   let apr = (fee_eos * 365 / parseFloat(market.reserve0) * 100).toFixed(3)
   return apr
-}
-
-export function getClass(mid) {
-  const rankInfo =  store.state.sys.rankInfo;
-  const item = rankInfo.find(v => v.mid === mid) || {}
-  if (item.rank <= 1) {
-    return 'gold';
-  }
-  if (item.rank <= 3) {
-    return 'silver';
-  }
-  if (item.rank <= 6) {
-    return 'bronze';
-  }
-  if (item.rank <= 10) {
-    return 'gold';
-  }
-  if (item.rank <= 15) {
-    return 'silver';
-  }
-  if (item.rank <= 21) {
-    return 'bronze';
-  }
-  return ''
 }
 
 export function getMarketTime(startTime) {

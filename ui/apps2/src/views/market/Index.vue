@@ -140,7 +140,7 @@ import MarketData from './comp/MarketData';
 import Withdraw from './comp/Withdraw'
 
 // 公用方法
-import { perDayReward, getDmdMinerHourRoi, getYfcReward,
+import { getDmdMinerHourRoi, getYfcReward,
   toFixed, accAdd, accDiv } from '@/utils/public';
 import { perDayRewardV3 } from '@/utils/logic';
 import { timeApy } from '@/utils/minerLogic';
@@ -193,13 +193,8 @@ export default {
       dfsPrice: state => state.sys.dfsPrice,
       storeFeesApr: state => state.sys.feesApr,
       lpMid: state => state.config.lpMid,
-      rankInfoV3: state => state.sys.rankInfoV3,
     }),
     // 每万每日挖矿
-    perDayReward() {
-      const reward = perDayReward(this.thisMarket.mid)
-      return reward
-    },
     perDayRewardV3() {
       const rewardV3 = perDayRewardV3(this.thisMarket.mid)
       return rewardV3

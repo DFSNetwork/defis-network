@@ -340,8 +340,8 @@ export function dealMarketLists(list, topLists) {
 // V3版本做市收益计算
 // 1. 计算使用固定APR 还是 动态利率
 export function getV3Apr(mid, rankAprs) {
-  const rankInfo = store.state.sys.rankInfoV3;
-  const aprs = rankAprs ? rankAprs : rankInfo.find(v => v.mid === mid);
+  const rankInfoV3 = store.state.sys.rankInfoV3;
+  const aprs = rankAprs ? rankAprs : rankInfoV3.find(v => v.mid === mid);
   if (!aprs) {
     return {
       isRainbow: false,
@@ -407,8 +407,8 @@ export function dealRewardV3(minnerData, mid) {
 }
 
 export function getV3PoolsClass(mid) {
-  const rankInfo = store.state.sys.rankInfoV3;
-  const tRank = rankInfo.find(v => v.mid === mid) || {};
+  const rankInfoV3 = store.state.sys.rankInfoV3;
+  const tRank = rankInfoV3.find(v => v.mid === mid) || {};
   if (tRank.rank <= 1) {
     return 'poolslv6'
   } else if (tRank.rank <= 3) {

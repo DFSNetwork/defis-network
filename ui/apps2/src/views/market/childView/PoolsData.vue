@@ -120,7 +120,6 @@ export default {
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
       sortClass: state => state.sys.sortClass,
-      rankInfo: state => state.sys.rankInfo,
       rankInfoV3: state => state.sys.rankInfoV3,
       marketLists: state => state.sys.marketLists,
     }),
@@ -151,13 +150,13 @@ export default {
   watch: {
     marketLists: {
       handler: function ml(newVal) {
-        if (!newVal.length || !this.rankInfo.length || this.firstGet) {
+        if (!newVal.length || !this.rankInfoV3.length || this.firstGet) {
           return
         }
-        const rankInfo = this.rankInfo;
-        // console.log(rankInfo)
+        const rankInfoV3 = this.rankInfoV3;
+        // console.log(rankInfoV3)
         let lists = [];
-        rankInfo.forEach(v => {
+        rankInfoV3.forEach(v => {
           const item = newVal.find(vv => vv.mid === v.mid)
           lists.push(item)
         });

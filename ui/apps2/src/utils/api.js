@@ -27,36 +27,9 @@ export function getVotePools() {
     store.dispatch('setRankTrade', rows)
     // console.log(rows)
     const lists = rows.slice(0, 21);
-    getVoteRankConf(lists);
     getVoteRankConfV3(lists);
   })
 }
-
-// 获取矿池排名配置
-export function getVoteRankConf(lists) {
-  const params = {
-    "code": "miningpool11",
-    "scope": "miningpool11",
-    "json": true,
-    "table": "poolslots",
-    limit: 21,
-  }
-  EosModel.getTableRows(params, (res) => {
-    const rows = res.rows || [];
-    if (!rows.length) {
-      return
-    }
-    // console.log(rows)
-    const rankInfo = [];
-    lists.forEach((v, index) => {
-      const t = Object.assign({}, v, rows[index])
-      rankInfo.push(t)
-    })
-    // console.log(rankInfo)
-    store.dispatch('setRankInfo', rankInfo)
-  })
-}
-
 
 // 获取矿池排名配置
 export function getVoteRankConfV3(lists) {
@@ -73,14 +46,14 @@ export function getVoteRankConfV3(lists) {
       return
     }
     // console.log(rows)
-    const rankInfo = [];
+    const rankInfoV3 = [];
     lists.forEach((v, index) => {
       const deal = getV3Apr(v.mid, rows[index])
       const t = Object.assign({}, v, rows[index], deal)
-      rankInfo.push(t)
+      rankInfoV3.push(t)
     })
-    // console.log(rankInfo)
-    store.dispatch('setRankInfoV3', rankInfo)
+    // console.log(rankInfoV3)
+    store.dispatch('setRankInfoV3', rankInfoV3)
   })
 }
 

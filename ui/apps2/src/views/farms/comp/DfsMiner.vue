@@ -51,7 +51,7 @@ export default {
     ...mapState({
       // 箭头函数可使代码更简练
       // baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-      rankInfo: state => state.sys.rankInfo, // 交易对权重列表
+      rankInfoV3: state => state.sys.rankInfoV3, // 交易对权重列表
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
@@ -81,13 +81,13 @@ export default {
     marketLists: {
       handler: function ml(newVal) {
         this.marketData = newVal.find(v => v.mid === this.mid) || {}
-        if (!newVal.length || !this.rankInfo.length || this.firstGet) {
+        if (!newVal.length || !this.rankInfoV3.length || this.firstGet) {
           return
         }
-        const rankInfo = this.rankInfo;
+        const rankInfoV3 = this.rankInfoV3;
         let lists = [];
         let gold = [], silver = [], bronze = [];
-        rankInfo.forEach(v => {
+        rankInfoV3.forEach(v => {
           const item = newVal.find(vv => vv.mid === v.mid)
           if (v.rank <= 2) {
             gold.push(item)
