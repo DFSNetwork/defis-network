@@ -4,7 +4,7 @@
       <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
       <div class="title">DFS Governance</div>
       <div class="titleTip">
-        DFS tokens represent voting shares in DFS governance.
+        DFS tokens represent voting shares.
       </div>
     </div>
     <div class="mainTitle flexb">

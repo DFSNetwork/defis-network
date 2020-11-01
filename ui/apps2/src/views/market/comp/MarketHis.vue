@@ -6,8 +6,8 @@
         <img class="iconImg" src="@/assets/img/dex/down.svg" alt="">
       </span>
     </div>
-    <div class="tip noData">链上数据重新同步中。一天后恢复查询。</div>
-    <div class="lists" v-if="false">
+    <!-- <div class="tip noData">链上数据重新同步中。一天后恢复查询。</div> -->
+    <div class="lists" >
       <van-list
         v-model="loadingMore"
         :finished="finished"
