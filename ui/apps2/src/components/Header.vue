@@ -27,6 +27,10 @@
       :visible.sync="showApps">
       <div @click="showApps = false">
         <div class="proClass">
+          <div class="create flexc" @click="handleTo('fundation')">
+            <span>{{ $t('fundation.nav') }}</span>
+            <span class="newPro">NEW</span>
+          </div>
           <div class="create flexc" @click="handleToProject('pddex')">PDDEX</div>
           <div class="create flexc" @click="handleToProject('yfcGuns')">YFC {{ $t('farms.yfcGun') }}</div>
         </div>
@@ -34,7 +38,6 @@
           <div class="create flexc" @click="handleTo('farms')">{{ $t('farms.Lobby') }}</div>
           <div class="create flexc" @click="handleTo('total')">TOP20 {{ $t('info.info') }}</div>
           <div class="create flexc" @click="handleTo('coinViews', {mid: 39})">{{ $t('farms.coinView') }}</div>
-          <div class="create flexc" @click="handleTo('fundation')">{{ $t('fundation.nav') }}</div>
         </div>
         <div class="proClass">
           <div class="create flexc" @click="handleToProject('pdd')">PDD {{ $t('farms.pdd') }}</div>
@@ -311,6 +314,20 @@ export default {
   .create{
     height: 75px;
     color: #000;
+    position: relative;
+
+    .newPro{
+      position: absolute;
+      color: #ff3100;
+      font-size: 18px;
+      transform: scale(.6);
+      right: -25px;
+      top: 5px;
+      background: #FFF;
+      border: 1px solid #ff3100;
+      padding: 3px;
+      border-radius: 3px;
+    }
   }
 }
 .showEggCss{
