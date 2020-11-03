@@ -22,7 +22,7 @@
     <div class="tabDiv">
       <div class="tab flexb">
         <div class="nav">
-          <span :class="{'act': act === 1}" @click="handleChangeTab(1)">默认</span>
+          <span :class="{'act': act === 1}" @click="handleChangeTab(1)">{{ $t('vote.vote') }}</span>
           <span :class="{'act': act === 2}" @click="handleChangeTab(2)">{{ $t('vote.rank') }}</span>
           <span :class="{'act': act === 3}" @click="handleChangeTab(3)">{{ $t('vote.voted') }}</span>
         </div>
@@ -187,6 +187,8 @@ export default {
         "scope":"dfsbpsvoters",
         "table":"producers",
         "json":true,
+        "index_position": 2,
+        "key_type": "float64",
         "limit": 1000
       }
       const { status, result } = await get_table_rows(params);
@@ -202,6 +204,9 @@ export default {
       if (!this.nodeLists.length || !this.voteLists.length) {
         return;
       }
+      let dfsRankArr = [];
+      let otherArr = [];
+
       this.voteLists.forEach(v => {
         const index = this.nodeLists.findIndex(vv => vv.owner === v.bp)
         if (index === -1) {
@@ -210,6 +215,9 @@ export default {
         this.$set(this.nodeLists[index], 'dfsRank', v.rank)
         const tVote = parseInt(v.total_votes / 10000)
         this.$set(this.nodeLists[index], 'dfsVote', tVote)
+      })
+      this.nodeLists.sort((a, b) => {
+        return Number(b.dfsVote || 0) - Number(a.dfsVote || 0)
       })
     },
     // 获取账户已投列表
