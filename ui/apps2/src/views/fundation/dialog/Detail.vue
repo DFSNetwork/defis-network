@@ -1,11 +1,11 @@
 <template>
   <div class="detail">
-    <div class="title">捐款详情</div>
+    <div class="title">乐捐详情</div>
     <div class="tables">
       <div class="liTitle flexb">
         <div>币种</div>
-        <div>捐款总量</div>
-        <div>捐款人次</div>
+        <div>乐捐总量</div>
+        <div>乐捐人次</div>
       </div>
       <div class="licontent">
         <div class="li flexb" v-for="(item, index) in summaryLists" :key="index">
@@ -49,6 +49,7 @@ export default {
     font-size: 33px;
     color: #333;
     margin-bottom: 10px;
+    text-align: center;
   }
   .tables{
     .liTitle,.li{
@@ -57,7 +58,7 @@ export default {
         height: 60px;
         display: flex;
         align-items: center;
-        justify-content: flex-end;
+        justify-content: flex-start;
         &:first-child{
           text-align: left;
           justify-content: flex-start;

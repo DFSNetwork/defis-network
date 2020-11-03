@@ -30,6 +30,15 @@
         <span @click="handlePercent(0.75)">75%</span>
         <span @click="handlePercent(1)">MAX</span>
       </div>
+
+      <!-- memo -->
+      <div class="memoDiv">
+        <div class="info">留言</div>
+        <div class="iptDiv flexb">
+          <input class="input" type="text" v-model="memo" placeholder="请输入留言">
+          <span class="randomSpan" @click="handleRandom">随机</span>
+        </div>
+      </div>
     </div>
     <!-- 按钮 -->
     <div class="btn flexc" @click="handleFundation">确认</div>
@@ -55,6 +64,8 @@ import { toFixed } from '@/utils/public';
 
 import MarketList from '@/components/MarketList';
 
+import memes from '@/views/konami/js/memes.js';
+
 export default {
   name: 'toFundation',
   components: {
@@ -65,6 +76,7 @@ export default {
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       bal: '0',
       payNum: '',
+      memo: '',
       thisMarket0: {
         contract: "eosio.token",
         decimal: "4",
@@ -97,6 +109,12 @@ export default {
     },
   },
   methods: {
+    handleRandom() {
+      let random = (Math.random() * 9999) % memes.length;
+      random = parseInt(random);
+      let picked_meme = memes[random];
+      this.memo = picked_meme;
+    },
     handleClose(type) {
       this.$emit('listenClose', type || false)
     },
@@ -168,7 +186,7 @@ export default {
       const params = {
         code: this.thisMarket0.contract,
         toAccount: 'dfsfundation',
-        memo: `Fundation to Dfs`,
+        memo: this.memo,
         quantity: `${this.payNum} ${this.thisMarket0.symbol}`
       }
       EosModel.transfer(params, (res) => {
@@ -217,6 +235,32 @@ export default {
       background: #000;
       background: rgba(41,212,176,.2);
       border-radius: 6px;
+    }
+  }
+  .memoDiv{
+    margin-top: 20px;
+    text-align: left;
+    .info{
+      margin-bottom: 10px;
+    }
+    .iptDiv{
+      font-size: 30px;
+      outline: none;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+      .input{
+        border: 0px;
+        font-size: 30px;
+        height: 38px;
+        width: 450px;
+      }
+      .randomSpan{
+        padding: 4px 8px;
+        border-radius: 3px;
+        font-size: 21px;
+        color: #ff3100;
+        border: 1px solid #ff3100;
+      }
     }
   }
   .btn{
