@@ -81,3 +81,16 @@ export function get_producers() {
     })
   })
 }
+
+// 获取乐捐数据
+export function get_fundation(params) {
+  // https://api.defis.network/history/fundation?page=1&limit=15
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/history/fundation', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}

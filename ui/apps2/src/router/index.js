@@ -134,6 +134,12 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "nodeDetail" */ '@/views/nodeVote/comp/NodeDetail.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
       },
+      { // 乐捐系统
+        path: '/fundation',
+        name: 'fundation',
+        component: () => import(/* webpackChunkName: "fundation" */ '@/views/fundation/Index.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
+      },
     ]
   },
 ]
