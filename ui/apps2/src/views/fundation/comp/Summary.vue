@@ -34,6 +34,7 @@
     <el-dialog
       class="mydialog"
       :show-close="false"
+      :append-to-body="true"
       :visible.sync="showDetail">
       <Detail :summaryLists="summaryLists"/>
     </el-dialog>

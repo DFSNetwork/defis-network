@@ -34,7 +34,6 @@
     <!-- 按钮 -->
     <div class="btn flexc" @click="handleFundation">确认</div>
 
-
     <!-- 弹窗组件 -->
     <el-dialog
       class="mkListDia pcList"
