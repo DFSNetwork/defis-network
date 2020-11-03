@@ -204,9 +204,6 @@ export default {
       if (!this.nodeLists.length || !this.voteLists.length) {
         return;
       }
-      let dfsRankArr = [];
-      let otherArr = [];
-
       this.voteLists.forEach(v => {
         const index = this.nodeLists.findIndex(vv => vv.owner === v.bp)
         if (index === -1) {

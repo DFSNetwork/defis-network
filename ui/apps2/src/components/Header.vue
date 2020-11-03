@@ -34,6 +34,7 @@
           <div class="create flexc" @click="handleTo('farms')">{{ $t('farms.Lobby') }}</div>
           <div class="create flexc" @click="handleTo('total')">TOP20 {{ $t('info.info') }}</div>
           <div class="create flexc" @click="handleTo('coinViews', {mid: 39})">{{ $t('farms.coinView') }}</div>
+          <div class="create flexc" @click="handleTo('fundation')">{{ $t('fundation.nav') }}</div>
         </div>
         <div class="proClass">
           <div class="create flexc" @click="handleToProject('pdd')">PDD {{ $t('farms.pdd') }}</div>

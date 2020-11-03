@@ -12,7 +12,8 @@
     <Summary :totalNum="totalNum" :amtNum="amtNum" :summaryLists="summaryLists"/>
 
     <!-- 捐款记录 -->
-    <FundationLists :pageLists="hisLists"/>
+    <FundationLists :pageLists="hisLists" :finished="finished"
+      @listenCurrentChange="handleCurrentChange"/>
   </div>
 </template>
 
@@ -42,10 +43,13 @@ export default {
       summaryLists: [], // 捐款统计 - 计算出总估值
       amtNum: '0.0000', // 捐款总额 - EOS为单位
       timer: null,
+
+      // 上拉加载更多
+      finished: false,
     }
   },
   mounted() {
-    this.handleGetFundation()
+    // this.handleGetFundation()
   },
   beforeDestroy() {
     clearTimeout(this.timer)
@@ -74,10 +78,26 @@ export default {
       if (!status) {
         return;
       }
-      this.hisLists = result.data || [];
       this.summaryLists = result.summary || [];
-      this.totalNum = result.total;
-      this.handleDealAmtNum()
+      if (this.page === 1) {
+        this.totalNum = result.total;
+        this.handleDealAmtNum()
+      }
+      // 分页数据处理
+      const list = result.data || [];
+      if (this.page === 1) {
+        this.hisLists = list;
+      } else {
+        this.hisLists.push(...list)
+      }
+      this.page += 1;
+      // 数据全部加载完成
+      if (this.hisLists.length >= result.data.total) {
+        this.finished = true;
+      }
+    },
+    handleCurrentChange() {
+      this.handleGetFundation()
     },
     // 计算捐款总额
     handleDealAmtNum() {

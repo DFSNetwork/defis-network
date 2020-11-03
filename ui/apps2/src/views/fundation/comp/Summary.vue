@@ -52,7 +52,7 @@ import Detail from '../dialog/Detail';
 import ToFundation from '../dialog/ToFundation';
 
 export default {
-  name: 'summary',
+  name: 'summaryPage',
   components: {
     Detail,
     ToFundation,

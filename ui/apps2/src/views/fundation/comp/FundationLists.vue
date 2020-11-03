@@ -6,21 +6,29 @@
     </div>
 
     <div class="lists">
-      <div class="noData tip" v-if="!pageLists.length">{{ $t('public.noData') }}</div>
-      <div class="listOld" v-for="(item, index) in pageLists" :key="index" @click="handleToBrowser(item.trx_id)">
-        <div class="flexb name">
-          <span>{{ (item.fromx) }}</span>
-          <span class="tip">{{ handleToLocalTime(item.create_time) }}</span>
+      <van-list
+        v-model="loadingMore"
+        :finished="finished"
+        :loading-text="$t('public.loading')"
+        :finished-text="$t('public.noMore')"
+        @load="handleCurrentChange"
+      >
+        <!-- <div class="noData tip" v-if="!pageLists.length">{{ $t('public.noData') }}</div> -->
+        <div class="listOld" v-for="(item, index) in pageLists" :key="index" @click="handleToBrowser(item.trx_id)">
+          <div class="flexb name">
+            <span>{{ (item.fromx) }}</span>
+            <span class="tip">{{ handleToLocalTime(item.create_time) }}</span>
+          </div>
+          <div class="price flexb">
+            <span class="tip">转账数量</span>
+            <span class="flexc qua">{{ item.quantity }}</span>
+          </div>
+          <div class="price flexb">
+            <span class="tip">留言</span>
+            <span class="hideText">{{ item.memo }}</span>
+          </div>
         </div>
-        <div class="price flexb">
-          <span class="tip">转账数量</span>
-          <span class="flexc qua">{{ item.quantity }}</span>
-        </div>
-        <div class="price flexb">
-          <span class="tip">留言</span>
-          <span class="hideText">{{ item.memo }}</span>
-        </div>
-      </div>
+      </van-list>
     </div>
   </div>
 </template>
@@ -37,9 +45,23 @@ export default {
         return []
       }
     },
+    finished: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
-    return {}
+    return {
+      loadingMore: false,
+      toTx: false
+    }
+  },
+  watch: {
+    pageLists: {
+      handler: function pls() {
+        this.loadingMore = false;
+      }
+    }
   },
   methods: {
     handleToLocalTime(time) {
@@ -49,7 +71,13 @@ export default {
       return oDate
     },
     handleToBrowser(id, type = 'tx') {
+      if (!this.toTx) {
+        return
+      }
       toBrowser(id, type)
+    },
+    handleCurrentChange() {
+      this.$emit('listenCurrentChange', false)
     }
   }
 }
