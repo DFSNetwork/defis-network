@@ -2,7 +2,7 @@
   <div class="myDeposit">
     <div class="title">
       <span v-if="isMe">{{ $t('dsr.myDeposit') }}</span>
-      <span v-else>{{ $t('dsr.whoDeposit', {acc: myDepositInfo.holder}) }}</span>
+      <span v-else>{{ $t('dsr.whoDeposit', {acc: handleDealAccountHide(myDepositInfo.holder)}) }}</span>
     </div>
     <div class="content">
       <div class="item">
@@ -27,6 +27,8 @@
 </template>
 
 <script>
+import { dealAccountHide } from '@/utils/public';
+
 export default {
   name: 'myDeposit',
   props: {
@@ -48,6 +50,11 @@ export default {
       type: Boolean,
       default: false,
     }
+  },
+  methods: {
+    handleDealAccountHide(str) {
+      return dealAccountHide(str)
+    },
   }
 }
 </script>
