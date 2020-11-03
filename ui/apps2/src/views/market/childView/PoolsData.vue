@@ -83,7 +83,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
-import { toFixed, toLocalTime, accSub, accAdd, accDiv } from '@/utils/public';
+import { toFixed, toLocalTime, accSub, accAdd, accDiv, dealMinerData } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MiningRules from '../popup/MiningRules'
 import PoolsInfo from '../comp/PoolsInfo'
@@ -240,12 +240,15 @@ export default {
             this.$set(v, 'minnerData', {})
             return
           }
-          const minnerData = rows[0];
-          let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
-          lastTime = moment(lastTime).valueOf();
-          minnerData.lastTime = lastTime;
-          const liq = minnerData.liq_bal0.split(' ')[1] === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
-          minnerData.liq = liq;
+          // const minnerData = rows[0];
+          // let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
+          // lastTime = moment(lastTime).valueOf();
+          // minnerData.lastTime = lastTime;
+          // const liq = minnerData.liq_bal0.split(' ')[1] === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
+          // minnerData.liq = liq;
+
+          const minnerData = dealMinerData(rows[0], v)
+
           this.$set(v, 'minnerData', minnerData)
         })
         this.handleRunReward()

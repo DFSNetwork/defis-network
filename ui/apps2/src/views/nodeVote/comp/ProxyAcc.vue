@@ -126,7 +126,7 @@ export default {
       if (!this.voteWeight || !Number(this.proxyData.last_vote_weight)) {
         return
       }
-      const num = Number(this.proxyData.last_vote_weight) / this.voteWeight;
+      const num = Number(this.proxyData.last_vote_weight) * this.voteWeight;
       this.$set(this.proxyData, 'eosNum', Math.ceil(num));
       // console.log(this.proxyData)
     }
