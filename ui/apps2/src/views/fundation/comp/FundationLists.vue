@@ -18,6 +18,19 @@
             </el-option>
           </el-select>
         </span>
+        <span>
+          <el-select v-model="minFilter"
+            class="select mr0"
+            :popper-class="'mySelectItem'"
+            :popper-append-to-body="false">
+            <el-option
+              v-for="item in minOption"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </span>
       </span>
     </div>
 
@@ -77,6 +90,14 @@ export default {
       loadingMore: false,
       toTx: false,
       myFilter: '',
+      minFilter: '0.1',
+      minOption: [{
+        value: '0',
+        label: '全部'
+      }, {
+        value: '0.1',
+        label: '0.1'
+      }]
     }
   },
   computed: {
@@ -107,6 +128,9 @@ export default {
     },
     myFilter(newVal) {
       this.$emit('listenFilter', newVal)
+    },
+    minFilter(newVal) {
+      this.$emit('listenFilterMin', newVal)
     },
   },
   methods: {
@@ -147,7 +171,7 @@ export default {
 .title{
   font-size: 32px;
   text-align: left;
-  margin: 10px 40px 30px;
+  margin: 10px 32px 30px;
   &>span{
     padding-left: 20px;
   }
@@ -237,6 +261,10 @@ export default {
     height: 50px;
     border: 1px solid #e3e3e3;
     border-radius: 10px;
+    margin-right: 10px;
+  }
+  .mr0{
+    margin-right: 0px;
   }
   /deep/ .el-select{
     border-radius: 10px;
@@ -250,7 +278,7 @@ export default {
       height: 50px;
       font-size: 26px;
       text-align: center;
-      width: 180px;
+      width: 120px;
       border: 0px;
       padding-right: 38px;
       &:focus{

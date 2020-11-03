@@ -11,6 +11,7 @@
     <FundationLists :pageLists="hisLists" :finished="finished"
       :summaryLists="summaryLists"
       @listenCurrentChange="handleCurrentChange"
+      @listenFilterMin="handleFilterMin"
       @listenFilter="handleFilter"/>
   
     <div class="nullDiv"></div>
@@ -57,6 +58,7 @@ export default {
       timer: null,
       showToFundation: false,
       filter: '', // 过滤条件
+      min: '0.1',
 
       // 上拉加载更多
       finished: false,
@@ -91,11 +93,20 @@ export default {
       this.page = 1;
       this.handleGetFundation()
     },
+    handleFilterMin(min) {
+      this.finished = false;
+      this.hisLists = [];
+      this.$forceUpdate()
+      this.min = min;
+      this.page = 1;
+      this.handleGetFundation()
+    },
     handleClose() {
       this.showToFundation = false;
     },
     async handleGetFundation() {
       const params = {
+        min: this.min,
         page: this.page,
         limit: this.pagesize
       }
