@@ -3,6 +3,22 @@
     <!-- 币种统计 -->
     <div class="title flexb">
       <span class="act">捐款记录</span>
+      <span class="sort">
+        <span>过滤：</span>
+        <span>
+          <el-select v-model="myFilter"
+            class="select"
+            :popper-class="'mySelectItem'"
+            :popper-append-to-body="false">
+            <el-option
+              v-for="item in option"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </span>
+      </span>
     </div>
 
     <div class="lists">
@@ -48,12 +64,39 @@ export default {
     finished: {
       type: Boolean,
       default: false
+    },
+    summaryLists: {
+      type: Array,
+      default: function lists() {
+        return []
+      }
     }
   },
   data() {
     return {
       loadingMore: false,
-      toTx: false
+      toTx: false,
+      myFilter: '',
+    }
+  },
+  computed: {
+    option() {
+      const newOp = [{
+        value: '',
+        label: '全部'
+      }]
+      this.summaryLists.forEach(v => {
+        // const has = newOp.find(vv => vv.value === v.account)
+        // if (has) {
+        //   return
+        // }
+        const op = {
+          value: `${v.account}:${v.symbol}`,
+          label: v.symbol
+        }
+        newOp.push(op)
+      });
+      return newOp;
     }
   },
   watch: {
@@ -61,9 +104,26 @@ export default {
       handler: function pls() {
         this.loadingMore = false;
       }
-    }
+    },
+    myFilter(newVal) {
+      this.$emit('listenFilter', newVal)
+    },
   },
   methods: {
+    handleDealOption(newVal) {
+      const newOp = [{
+        value: '',
+        label: '全部'
+      }]
+      newVal.forEach(v => {
+        const op = {
+          value: v.account,
+          label: v.symbol
+        }
+        newOp.push(op)
+      });
+      this.option = newOp;
+    },
     handleToLocalTime(time) {
       let t = moment(`${time}`).valueOf()
       t += 3600 * 8 * 1000;
@@ -167,6 +227,49 @@ export default {
     .qua{
       font-size: 26px;
       font-weight: 500;
+    }
+  }
+}
+.sort{
+  margin-right: 0;
+  font-size: 27px;
+  .select{
+    height: 50px;
+    border: 1px solid #e3e3e3;
+    border-radius: 10px;
+  }
+  /deep/ .el-select{
+    border-radius: 10px;
+    .el-input__suffix-inner{
+      display: flex;
+      align-items: center;
+      height: 50px;
+    }
+    .el-input__inner{
+      border-radius: 10px;
+      height: 50px;
+      font-size: 26px;
+      text-align: center;
+      width: 180px;
+      border: 0px;
+      padding-right: 38px;
+      &:focus{
+        border-color: #07d79b;
+      }
+    }
+  }
+  /deep/ .el-scrollbar{
+    .el-select-dropdown__item{
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 26px;
+      font-weight: normal;
+      &.selected{
+        font-weight: bold;
+        color: #07d79b;
+      }
     }
   }
 }

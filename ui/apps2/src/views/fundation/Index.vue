@@ -9,7 +9,9 @@
 
     <!-- 捐款记录 -->
     <FundationLists :pageLists="hisLists" :finished="finished"
-      @listenCurrentChange="handleCurrentChange"/>
+      :summaryLists="summaryLists"
+      @listenCurrentChange="handleCurrentChange"
+      @listenFilter="handleFilter"/>
   
     <div class="nullDiv"></div>
     <div class="btnDiv">
@@ -54,6 +56,7 @@ export default {
       amtNum: '0.0000', // 捐款总额 - EOS为单位
       timer: null,
       showToFundation: false,
+      filter: '', // 过滤条件
 
       // 上拉加载更多
       finished: false,
@@ -80,6 +83,14 @@ export default {
     }
   },
   methods: {
+    handleFilter(filter) {
+      this.finished = false;
+      this.hisLists = [];
+      this.$forceUpdate()
+      this.filter = filter;
+      this.page = 1;
+      this.handleGetFundation()
+    },
     handleClose() {
       this.showToFundation = false;
     },
@@ -87,6 +98,11 @@ export default {
       const params = {
         page: this.page,
         limit: this.pagesize
+      }
+      if (this.filter) {
+        const arr = this.filter.split(':');
+        params.contract = arr[0];
+        params.sym = arr[1];
       }
       const {status, result} = await get_fundation(params)
       if (!status) {

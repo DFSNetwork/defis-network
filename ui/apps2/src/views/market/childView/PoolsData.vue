@@ -82,8 +82,8 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import moment from 'moment';
-import { toFixed, toLocalTime, accSub, accAdd, accDiv, dealMinerData } from '@/utils/public';
+// import moment from 'moment';
+import { toFixed, accSub, accAdd, accDiv, dealMinerData } from '@/utils/public';
 import MinReward from '../popup/MinReward'
 import MiningRules from '../popup/MiningRules'
 import PoolsInfo from '../comp/PoolsInfo'
