@@ -11,6 +11,7 @@ import "amfe-flexible";
 import VueClipboard from 'vue-clipboard2';
 import VueWorker from 'vue-worker';
 import './vant'
+import './assets/font/font.css'
 
 // 复制文本插件
 Vue.use(VueClipboard)

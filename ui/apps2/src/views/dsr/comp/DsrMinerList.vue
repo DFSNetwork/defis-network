@@ -2,7 +2,7 @@
   <div class="poolsLists">
     <div class="title flexb">
       <span class="act">{{ $t('dsr.dfsHolders') }}</span>
-      <span class="totalMiners">{{ $t('dsr.total') }}：{{ allMinersList.length }}</span>
+      <span class="totalMiners tip">{{ $t('dsr.total') }}：{{ allMinersList.length }}</span>
     </div>
     <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
     <template v-for="(item, index) in minersArr">
@@ -270,25 +270,27 @@ export default {
 
 <style lang="scss" scoped>
 .poolsLists{
-  margin: 40px;
+  margin: 32px;
   font-size: 28px;
+  color: #333;
   .title{
     font-size: 32px;
     text-align: left;
-    margin: 0 0 40px;
+    margin: 0 0 30px;
     .act{
-      color: $color-black;
+      color: #333;
       position: relative;
+      padding-left: 28px;
       &::before{
         content: '';
         position: absolute;
-        width:60px;
-        height:8px;
+        width: 8px;
+        height: 30px;
         background:rgba(2,198,152,1);
         border-radius:4px;
-        bottom: -20px;
-        left: 50%;
-        transform: translateX(-45%);
+        top: 50%;
+        left: 0;
+        transform: translateY(-45%);
       }
     }
   }
@@ -303,8 +305,8 @@ export default {
   .list{
     margin-top: 20px;
     border: 1px solid #e0e0e0;
-    border-radius: 20px;
-    padding: 20px;
+    border-radius: 12px;
+    padding: 20px 28px;
     .mb10{
       margin-bottom: 10px;
     }

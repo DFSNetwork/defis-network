@@ -3,12 +3,13 @@
     <dsr-info :args="args" :timesmap="timesmap" :claimLoading="claimLoading" :ableClaimNum="ableClaimNum"
       @listenAllLock="listenAllLock"/>
     <div class="allClaim flexb">
+      <img class="bgImg" src="@/assets/navImg/myReward.png" alt="">
       <div>
-        <div class="subTitle flexa">
+        <div class="subTitle flexa tip">
           <span>{{ $t('mine.waitClaim') }}</span>
           <img class="tipIcon ml10" @click="showReWardTip = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
         </div>
-        <div class="claimNum">{{myDepositInfo.showReward || '0.00000000'}} DFS</div>
+        <div class="claimNum dinBold">{{myDepositInfo.showReward || '0.00000000'}} DFS</div>
       </div>
       <div class="flexb">
         <div class="allClaimBtn" v-loading="allClaim" @click="handleClaimAll">{{ $t('bonus.claim') }}</div>
@@ -279,12 +280,22 @@ export default {
 <style lang="scss" scoped>
 .dsr{
   .allClaim{
-    margin: 0 40px 40px;
-    background: #07D79B;
-    border-radius: 20px;
-    color: #FFF;
-    padding: 40px;
-    box-shadow: 0px 20px 40px 0px rgba(220,220,220,0.5);
+    position: relative;
+    margin: 30px 32px;
+    height: 160px;
+    border-radius: 12px;
+    color: #333;
+    padding: 28px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 8px 4px rgba(220,220,220,0.5);
+    .bgImg{
+      position: absolute;
+      left: -10px;
+      top: -10;
+      width: 103%;
+      // height: 170px;
+      z-index: -1;
+    }
     .ml10{
       margin-left: 10px;
     }
@@ -297,11 +308,11 @@ export default {
       margin-top: 8px;
     }
     .allClaimBtn{
-      background: #FFF;
-      border-radius: 8px;
-      color: #07D79B;
+      background: #29D4B0;
+      border-radius: 30px;
+      color: #FFF;
       font-size: 28px;
-      padding: 10px 30px;
+      padding: 10px 36px;
     }
   }
 }

@@ -122,11 +122,12 @@ export default {
 }
 .dsrList{
   font-size: 28px;
-  margin: 40px;
+  margin: 20px 32px;
   .list{
-    padding: 40px;
-    border-radius: 20px;
-    box-shadow: 0px 20px 40px 0px rgba(220,220,220,0.5);
+    color: #333;
+    padding: 30px 28px;
+    border-radius: 12px;
+    box-shadow: 0px 4px 8px 4px rgba(220,220,220,0.5);
     .header,.content{
       margin-bottom: 10px;
       text-align: left;
@@ -145,22 +146,22 @@ export default {
       .coinName{
         font-size: 40px;
         font-weight: 500;
-        color: rgba(2,198,152,1);
+        color: #29D4B0;
       }
       .btn{
         font-size: 24px;
-        background:rgba(7,215,155,1);
+        background: #29D4B0;
         border-radius: 30px;
         color: #fff;
-        padding: 14px 25px;
+        padding: 14px 36px;
         &:active{
-          background:rgba(2,198,152,1);
+          background:rgba(#29D4B0,1);
         }
         &.backBtn{
-          background:rgba(192,93,93,1);
+          background:#FE3B37;
           margin-left: 15px;
           &:active{
-            background:rgba(185,78,90,1);
+            background:rgba(#FE3B37, 1);
           }
         }
       }
