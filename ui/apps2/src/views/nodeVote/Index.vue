@@ -254,8 +254,8 @@ export default {
         "scope": "eosio",
         "json": true,
         "table": "producers",
-        "index_position": 2,
-        "key_type": "float64",
+        "lower_bound": "bp.dfs",
+        "upper_bound": "bp.dfs",
         limit: 1,
       }
       const {status, result} = await get_table_rows(params)
@@ -263,7 +263,10 @@ export default {
         return
       }
       const row = result.rows[0];
-      const weight = parseFloat(row.total_votes) / parseFloat(this.nodeLists[0].num_votes)
+      const node = this.nodeLists.find(v => v.owner === row.owner)
+      // console.log(node)
+      // console.log(row)
+      const weight = parseFloat(node.num_votes) / parseFloat(row.total_votes)
       this.voteWeight = weight;
     },
     handleChangeTab(num) {
