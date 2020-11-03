@@ -36,7 +36,7 @@
             <div class="flexa">
               <i class="el-icon-coin coin"></i>
               <span>{{ item.dfsVote || '0' }}</span>
-              <span class="green_p" @click="handleToDetail(item)">{{ $t('public.detail') }}></span>
+              <span class="green_p" @click.stop="handleToDetail(item)">{{ $t('public.detail') }}></span>
             </div>
           </div>
         </div>
@@ -203,9 +203,9 @@ export default {
       // act === 2
       let rank = lists.filter(v => v.dfsRank <= 21)
       rank.sort((a, b) => {
-        return a.dfsRank - b.dfsRank
+        return b.dfsVote - a.dfsVote
       })
-      rank = rank.slice(0, 21)
+      rank = rank.slice(0, 10)
       this.rankLists = rank;
       // this.act === 2 ? this.lists = rank : '';
       // act === 3
