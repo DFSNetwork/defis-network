@@ -1,6 +1,10 @@
-
-
+/* 加粗字体 */
 @font-face {
   font-family: 'DinBold';
   src: url('./DIN-Bold.otf');
+}
+/* 正常字体 */
+@font-face {
+  font-family: 'Din';
+  src: url('./DIN-Medium.otf');
 }

@@ -1,28 +1,29 @@
 <template>
-  <div>
+  <div class="accData">
     <!-- 币种统计 -->
-    <div class="title flexb">
+    <!-- <div class="title flexb">
       <span class="act">概览</span>
-    </div>
+    </div> -->
     <div class="lists">
       <div class="list">
         <div class="coin flexb">
           <div class="flexa">
-            <!-- <img class="coinImg" src="https://ndi.340wan.com/eos/minedfstoken-dfs.png"> -->
-            <span>捐款账户：dfsfundation</span>
+            <span>乐捐账户：dfsfundation</span>
           </div>
-          <div class="btn green_p" @click="showToFundation = !showToFundation">去捐款</div>
+          <!-- <div class="btn green_p" @click="showToFundation = !showToFundation">去捐款</div> -->
         </div>
         <div class="flexb totalDiv">
           <div>
-            <div class="tip">捐款总额（EOS）</div>
-            <div class="num">{{ amtNum }}</div>
+            <div class="num dinBold">{{ amtNum }}</div>
+            <div class="tip">乐捐总额（EOS）</div>
           </div>
           <div>
-            <div class="tip">捐款人次</div>
             <div>
-              <span class="num">{{ totalNum }}</span>
-              <span class="green_p detail" @click="showDetail = !showDetail">查看详情></span>
+              <span class="num dinBold">{{ totalNum }}</span>
+              <span class="detail" @click="showDetail = !showDetail">查看详情></span>
+            </div>
+            <div class="tip">
+              <span>乐捐人次</span>
             </div>
           </div>
         </div>
@@ -89,49 +90,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.title{
-  font-size: 32px;
-  text-align: left;
-  margin: 20px 40px 40px;
-  &>span{
-    margin-right: 60px;;
-  }
-  .about{
-    margin-left: 10px;
-    font-size: 24px;
-  }
-  .act{
-    color: $color-black;
-    position: relative;
-    &::before{
-      content: '';
-      position: absolute;
-      width:60px;
-      height:8px;
-      background:rgba(2,198,152,1);
-      border-radius:4px;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-45%);
-    }
-  }
-  .right{
-    margin-right: 0
-  }
+.accData{
+  position: relative;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0px 4px 8px 4px rgba(237,237,237,0.5);
+  margin: -45px 30px 30px;
+  background: #FFF;
+  z-index: 1;
 }
 .lists{
-  margin: 30px;
   text-align: left;
+  color: #333333;
   .list{
-    box-shadow: 0px 10px 40px 0px rgba(220,220,220,0.5);
-    border-radius: 10px;
-    padding: 20px;
+    // box-shadow: 0px 10px 40px 0px rgba(220,220,220,0.5);
+    padding: 26px;
     .coin{
-      .coinImg{
-        width: 50px;
-        height: 50px;
-        margin-right: 10px;
-      }
+      margin-bottom: 20px;
     }
     .totalDiv{
       margin-top: 10px;
@@ -139,11 +113,16 @@ export default {
         flex: 1;
       }
       .num{
-        font-size: 33px;
-        color: #000;
+        font-size: 34px;
+        color: #333;
+      }
+      .tip{
+        margin-top: 10px;
       }
       .detail{
         margin-left: 10px;
+        color: #29D4B0;
+        font-size: 21px;
       }
     }
   }

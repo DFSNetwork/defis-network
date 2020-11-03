@@ -12,13 +12,13 @@
           <span class="green">{{ $t('pools.ableToken') }}：{{ token }}</span>
         </div>
         <div>
-          <el-input class="ipt" v-model="sToken" placeholder="0"
+          <el-input class="ipt dinBold" v-model="sToken" placeholder="0"
             @input="handleSellToken"
             @focus="handleFocus()"
             @blur="handleBlur()"></el-input>
         </div>
       </div>
-      <div class="percent flexb green">
+      <div class="percent flexb green dinBold">
         <span class="flexc" @click="handlePercent(0)">0%</span>
         <span class="flexc" @click="handlePercent(0.25)">25%</span>
         <span class="flexc" @click="handlePercent(0.5)">50%</span>
@@ -30,7 +30,7 @@
     <div class="dataDiv">
       <div class="myMarket">
         <div class="tip">{{ $t('mine.accPools') }}</div>
-        <div class="num">{{ toFixed(accPools.getNum1, thisMarket.decimal0) }} {{thisMarket.symbol0}}
+        <div class="num din">{{ toFixed(accPools.getNum1, thisMarket.decimal0) }} {{thisMarket.symbol0}}
           / {{ toFixed(accPools.getNum2, thisMarket.decimal1) }} {{thisMarket.symbol1}}</div>
       </div>
       <div class="myMarket">
@@ -40,14 +40,14 @@
             <img class="coinImg" :onerror="errorCoinImg" :src="thisMarket.sym0Data.imgUrl" >
             <span>{{ thisMarket.symbol0 }}</span>
           </div>
-          <div>{{ getNum1 }} {{ thisMarket.symbol0 }}</div>
+          <div class="din">{{ getNum1 }} {{ thisMarket.symbol0 }}</div>
         </div>
         <div class="coinData flexb">
           <div class="flexa">
             <img class="coinImg" :onerror="errorCoinImg" :src="thisMarket.sym1Data.imgUrl" >
             <span>{{ thisMarket.symbol1 }}</span>
           </div>
-          <div>{{ getNum2 }} {{ thisMarket.symbol1 }}</div>
+          <div class="din">{{ getNum2 }} {{ thisMarket.symbol1 }}</div>
         </div>
       </div>
     </div>

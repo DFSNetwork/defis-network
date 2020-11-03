@@ -1,11 +1,7 @@
 <template>
   <div class="fundation">
-    <div class="banner flexc">
-      <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
-      <div>
-        <div class="title">{{ $t('fundation.title') }}</div>
-        <div class="subTitle">{{ $t('fundation.subTitle') }}</div>
-      </div>
+    <div class="banner">
+      <img class="bgImg" src="@/assets/fundation/banner.png" alt="">
     </div>
 
     <!-- 币种统计 -->
@@ -14,6 +10,18 @@
     <!-- 捐款记录 -->
     <FundationLists :pageLists="hisLists" :finished="finished"
       @listenCurrentChange="handleCurrentChange"/>
+  
+    <div class="nullDiv"></div>
+    <div class="btnDiv">
+      <div class="btn flexc" @click="showToFundation=!showToFundation">乐捐一下</div>
+    </div>
+    <!-- 去捐款 -->
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible="showToFundation">
+      <ToFundation v-if="showToFundation" @listenClose="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -23,6 +31,7 @@ import { mapState } from 'vuex';
 // 组件
 import Summary from './comp/Summary'
 import FundationLists from './comp/FundationLists'
+import ToFundation from './dialog/ToFundation';
 
 // api
 import { get_fundation } from '@/utils/api';
@@ -33,6 +42,7 @@ export default {
   components: {
     Summary,
     FundationLists,
+    ToFundation,
   },
   data() {
     return {
@@ -43,6 +53,7 @@ export default {
       summaryLists: [], // 捐款统计 - 计算出总估值
       amtNum: '0.0000', // 捐款总额 - EOS为单位
       timer: null,
+      showToFundation: false,
 
       // 上拉加载更多
       finished: false,
@@ -69,6 +80,9 @@ export default {
     }
   },
   methods: {
+    handleClose() {
+      this.showToFundation = false;
+    },
     async handleGetFundation() {
       const params = {
         page: this.page,
@@ -141,18 +155,12 @@ export default {
   font-size: 27px;
   .banner{
     color: #FFF;
-    background: #07d79b;
-    // padding: 80px 0 60px;
-    height: 2rem;
     position: relative;
-    overflow: hidden;
     &>div{
       z-index: 1;
     }
     .bgImg{
-      position: absolute;
-      top: 0;
-      left: 0;
+      height: 300px;
       width: 100%;
       z-index: 0;
     }
@@ -163,6 +171,44 @@ export default {
     }
     .subTitle{
       font-size: 33px;
+    }
+  }
+}
+.nullDiv{
+  height: 160px;
+  width: 100%;
+}
+.btnDiv{
+  position: fixed;
+  bottom: 0px;
+  height: 160px;
+  width: 100%;
+  background: #fFF;
+  padding: 36px;
+  box-sizing: border-box;
+  border-top: 1px solid #EAEAEA;
+  .btn{
+    background: #29D4B0;
+    height: 90px;
+    border-radius: 45px;
+    color: #fFF;
+  }
+}
+
+.mydialog{
+  /deep/ .el-dialog{
+    border-radius: 12px;
+    width: 650px;
+    margin-top: 15vh !important;
+    .el-dialog__header{
+      padding: 0;
+    }
+    .el-dialog__body{
+      padding: 0;
+    }
+    .el-dialog__headerbtn{
+      font-size: 40px;
+      z-index: 1;
     }
   }
 }

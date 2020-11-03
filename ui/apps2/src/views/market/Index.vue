@@ -30,13 +30,13 @@
           <div class="item">
             <div class="subTitle tip">{{ $t('more.about24Apy') }}</div>
             <div class="num">
-              <span>{{ countApy }}%</span>
+              <span class="din">{{ countApy }}%</span>
               <span class="green_p" @click.stop="showApyDetail = true">{{ $t('public.detail') }}></span>
             </div>
           </div>
           <div class="item">
             <div class="subTitle tip">{{ $t('dex.exchangePrice') }}</div>
-            <div class="num flexa" @click="exRate = !exRate">
+            <div class="num flexa din" @click="exRate = !exRate">
               <span v-if="!exRate">1{{ thisMarket.symbol0 }} = {{ thisMarket.sym0Rate || '-' }}{{ thisMarket.symbol1 }}</span>
               <span v-else>1{{ thisMarket.symbol1 }} = {{ thisMarket.sym1Rate || '-' }}{{ thisMarket.symbol0 }}</span>
               <img class="iconImg" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
@@ -48,7 +48,7 @@
               <span>{{ $t('dex.poolNum') }}</span>
               <span class="green_p" @click="handleTo('poolsMarket')">{{ $t('pools.toPool') }}></span>
             </div>
-            <div class="num">
+            <div class="num din">
               <span>{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</span>
             </div>
           </div>

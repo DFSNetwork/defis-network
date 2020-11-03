@@ -17,14 +17,14 @@
         <div class="listOld" v-for="(item, index) in pageLists" :key="index" @click="handleToBrowser(item.trx_id)">
           <div class="flexb name">
             <span>{{ (item.fromx) }}</span>
-            <span class="tip">{{ handleToLocalTime(item.create_time) }}</span>
+            <span class="tip time">{{ handleToLocalTime(item.create_time) }}</span>
           </div>
-          <div class="price flexb">
-            <span class="tip">转账数量</span>
-            <span class="flexc qua">{{ item.quantity }}</span>
+          <div class="price flexa">
+            <span class="tip">转账数量：</span>
+            <span class="flexc qua din">{{ item.quantity }}</span>
           </div>
-          <div class="price flexb">
-            <span class="tip">留言</span>
+          <div class="price flexa">
+            <span class="tip">用户留言：</span>
             <span class="hideText">{{ item.memo }}</span>
           </div>
         </div>
@@ -87,13 +87,9 @@ export default {
 .title{
   font-size: 32px;
   text-align: left;
-  margin: 20px 40px 40px;
+  margin: 10px 40px 30px;
   &>span{
-    margin-right: 60px;;
-  }
-  .about{
-    margin-left: 10px;
-    font-size: 24px;
+    padding-left: 20px;
   }
   .act{
     color: $color-black;
@@ -101,13 +97,13 @@ export default {
     &::before{
       content: '';
       position: absolute;
-      width:60px;
-      height:8px;
-      background:rgba(2,198,152,1);
+      width: 8px;
+      height: 30px;
+      background:#02C698;
       border-radius:4px;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-45%);
+      left: 0%;
+      top: 50%;
+      transform: translateY(-45%);
     }
   }
   .right{
@@ -116,6 +112,7 @@ export default {
 }
 .lists{
   margin: 30px;
+  color: #333;
   .exchange{
     margin: 0 8px;
     width: 30px;
@@ -128,10 +125,12 @@ export default {
     color: #444;
   }
   .listOld{
-    // margin: 40px;
-    padding: 30px;
-    border-radius: 15px;
-    box-shadow: 0px 8px 40px 0px rgba(220,220,220,0.5);
+    font-size: 26px;
+    margin: 20px 0 24px;
+    padding: 26px;
+    border-radius: 10px;
+    border: 1px solid #eee;
+    // box-shadow: 0px 8px 40px 0px rgba(220,220,220,0.5);
     &>div{
       margin-top: 10px;
       &:first-child{
@@ -139,6 +138,7 @@ export default {
       }
     }
     .hideText{
+      font-size: 24px;
       max-width: 600px;
       overflow: hidden;
       text-overflow:ellipsis; //溢出用省略号显示
@@ -146,22 +146,26 @@ export default {
     }
     .price{
       text-align: left;
-      &>span:first-child{
-        width: 120px;
-        min-width: 120px;
-      }
+      // &>span:first-child{
+      //   width: 150px;
+      //   min-width: 150px;
+      // }
     }
 
     .name{
+      font-size: 30px;
       &>span{
         text-align: left;
       }
+      .time{
+        font-size: 24px;
+      }
     }
     .num{
-      font-size: 33px;
+      font-size: 26px;
     }
     .qua{
-      font-size: 30px;
+      font-size: 26px;
       font-weight: 500;
     }
   }

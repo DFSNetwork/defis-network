@@ -19,7 +19,7 @@
                   </div>
                 </div>
                 <div class="inputDiv flexb">
-                  <el-input class="elIpt" type="number" v-model="payNum" placeholder="0.0"
+                  <el-input class="elIpt dinBold" type="number" v-model="payNum" placeholder="0.0"
                     @input="handleInBy('pay')"
                     @focus="handleFocus('pay')"
                     @blur="handleBlur('pay')"></el-input>
@@ -48,7 +48,7 @@
                 </div>
               </div>
               <div class="inputDiv flexb">
-                <el-input class="elIpt" type="number" v-model="getNum" placeholder="0.0"
+                <el-input class="elIpt dinBold" type="number" v-model="getNum" placeholder="0.0"
                   @input="handleInBy('get')"
                   @focus="handleFocus('get')"
                   @blur="handleBlur('get')"></el-input>
@@ -61,7 +61,7 @@
             <span class="tip flex">
               <span>{{ $t('dex.rate') }}</span>
             </span>
-            <span class="flexend" v-loading="refreshLoading">
+            <span class="flexend din" v-loading="refreshLoading">
               <span v-if="!exRate">1{{ thisMarket1.symbol }} = {{ tradeInfo.aboutPrice || '-' }}{{ thisMarket0.symbol }}</span>
               <span v-else>1{{ thisMarket0.symbol }} = {{ tradeInfo.aboutPriceSym0 || '-' }}{{ thisMarket1.symbol }}</span>
               <span class="flexa" @click="exRate =!exRate">
@@ -104,7 +104,7 @@
                 <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
-            <span>{{ tradeInfo.minOut }}</span>
+            <span class="din">{{ tradeInfo.minOut }}</span>
           </div>
           <div class="flexb">
             <span class="flex">
@@ -120,7 +120,7 @@
               </el-popover>
             </span>
             <span class="flexa">
-              <span class="green"
+              <span class="green din"
                 :class="{'yellow': Number(tradeInfo.priceRate) > 5,
                           'red': Number(tradeInfo.priceRate) > 10}">
                 {{ tradeInfo.priceRate }}%
@@ -141,7 +141,7 @@
                 <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
-            <span>{{fees}} {{ thisMarket0.symbol }}</span>
+            <span class="din">{{fees}} {{ thisMarket0.symbol }}</span>
           </div>
           <div class="flexb" v-if="Number(reward)">
             <span class="flex">
@@ -156,7 +156,7 @@
                 <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
-            <span>{{ reward }} DFS</span>
+            <span class="din">{{ reward }} DFS</span>
           </div>
         </div>
       </el-collapse-transition>
@@ -175,7 +175,7 @@
           <span>{{ $t('public.warmPrompt') }}</span>
         </div>
       </div>
-      <div class="poolsNum">
+      <div class="poolsNum din">
         {{ bestPath.reserve0 }} / {{ bestPath.reserve1 }}
       </div>
     </div>
@@ -869,7 +869,7 @@ export default {
     border-radius: 12px;
     border: 1px solid #F3F3F3;
     &.focus{
-      border:1px solid rgba(7,215,155,1);
+      border:1px solid #29D4B0;
     }
     .info{
       font-size: 24px;

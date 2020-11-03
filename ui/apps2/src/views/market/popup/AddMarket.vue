@@ -18,7 +18,7 @@
           </div>
         </div>
         <div class="iptDiv flexb">
-          <el-input class="elIpt" v-model="payNum1" type="number"
+          <el-input class="elIpt dinBold" v-model="payNum1" type="number"
             @input="handleInBy('sym0')"
             @focus="handleFocus('sym0')"
             @blur="handleBlur('sym0')"
@@ -41,7 +41,7 @@
           </div>
         </div>
         <div class="iptDiv flexb">
-          <el-input class="elIpt" v-model="payNum2" type="number"
+          <el-input class="elIpt dinBold" v-model="payNum2" type="number"
             @input="handleInBy('sym1')"
             @focus="handleFocus('sym1')"
             @blur="handleBlur('sym1')"
@@ -53,16 +53,16 @@
     <!-- 其他信息 -->
     <div class="otherTip">
       <div class="tip">{{ $t('dex.exchangePrice') }}</div>
-      <div class="flexa num" @click="exRate =!exRate">
+      <div class="flexa num din" @click="exRate =!exRate">
         <span v-if="!exRate">1{{ thisMarket.symbol0 }} = {{ thisMarket.sym0Rate || '-' }}{{ thisMarket.symbol1 }}</span>
         <span v-else>1{{ thisMarket.symbol1 }} = {{ thisMarket.sym1Rate || '-' }}{{ thisMarket.symbol0 }}</span>
         <img class="iconImg" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
         <img class="iconImg" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
       </div>
       <div class="tip">{{ $t('dex.poolNum') }}</div>
-      <div class="num">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>
+      <div class="num din">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>
       <div class="tip">{{ $t('pools.accRate', {rate: thisRate}) }}</div>
-      <div class="num">{{ toFixed(accPools.getNum1, thisMarket.decimal0) }} {{thisMarket.symbol0}}
+      <div class="num din">{{ toFixed(accPools.getNum1, thisMarket.decimal0) }} {{thisMarket.symbol0}}
           / {{ toFixed(accPools.getNum2, thisMarket.decimal1) }} {{thisMarket.symbol1}}</div>
       <div class="tip">*{{ $t('more.exitMarket') }}</div>
     </div>
