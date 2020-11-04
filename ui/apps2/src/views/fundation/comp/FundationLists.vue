@@ -2,7 +2,7 @@
   <div>
     <!-- 币种统计 -->
     <div class="title flexb">
-      <span class="act">捐款记录</span>
+      <span class="act">乐捐记录</span>
       <span class="sort">
         <span>过滤：</span>
         <span>
@@ -95,8 +95,20 @@ export default {
         value: '0',
         label: '全部'
       }, {
+        value: '0.01',
+        label: '0.01'
+      }, {
         value: '0.1',
         label: '0.1'
+      }, {
+        value: '1',
+        label: '1'
+      }, {
+        value: '10',
+        label: '10'
+      }, {
+        value: '100',
+        label: '100'
       }]
     }
   },
