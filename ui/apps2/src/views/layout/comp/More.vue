@@ -188,6 +188,8 @@ export default {
   }
 }
 .morePop{
+  max-height: 100vh;
+  overflow: auto;
   font-size: 27px;
   .right{
     width: 20px;
@@ -210,7 +212,7 @@ export default {
     .title{
       color: #FFF;
       background: #57DBBF;
-      height: 100px;
+      height: 80px;
       border-radius: 20px 20px 0px 0px;
       padding: 30px;
       box-sizing: border-box;
@@ -222,7 +224,7 @@ export default {
     }
     .list{
       color: #333;
-      height: 100px;
+      height: 80px;
       padding-right: 30px;
       box-sizing: border-box;
       margin-bottom: 10px;
