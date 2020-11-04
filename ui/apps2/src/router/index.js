@@ -140,6 +140,12 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "fundation" */ '@/views/fundation/Index.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
       },
+      { // 节点挖矿
+        path: '/node-pools',
+        name: 'nodePools',
+        component: () => import(/* webpackChunkName: "nodePools" */ '@/views/nodePools/Index.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
+      },
     ]
   },
 ]

@@ -2,8 +2,6 @@
   <div v-loading="loading">
     <div class="banner">
       <img class="bannerImg" src="@/assets/navImg/dssBanner.png" alt="">
-      <!-- <div class="bannerTitle">DFS Saving System</div>
-      <div class="bannerSubTitle">HOLD DFS Get More DFS</div> -->
     </div>
     <div class="dataInfo">
       <div class="flexb floatDiv">
