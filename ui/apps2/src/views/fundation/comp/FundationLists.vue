@@ -3,7 +3,7 @@
     <!-- 币种统计 -->
     <div class="title flexb">
       <span class="act">捐款记录</span>
-      <span class="sort">
+      <span class="sort flexa">
         <span>过滤：</span>
         <span>
           <el-select v-model="myFilter"
@@ -52,7 +52,7 @@
             <span class="tip">转账数量：</span>
             <span class="flexc qua din">{{ item.quantity }}</span>
           </div>
-          <div class="price flexa">
+          <div class="price flexs">
             <span class="tip">用户留言：</span>
             <span class="hideText">{{ item.memo }}</span>
           </div>
@@ -88,7 +88,7 @@ export default {
   data() {
     return {
       loadingMore: false,
-      toTx: false,
+      toTx: true,
       myFilter: '',
       minFilter: '0.1',
       minOption: [{
@@ -223,17 +223,17 @@ export default {
     }
     .hideText{
       font-size: 24px;
-      max-width: 600px;
+      max-width: 500px;
       overflow: hidden;
-      text-overflow:ellipsis; //溢出用省略号显示
-      white-space:nowrap; //溢出不换行
+      text-overflow: ellipsis; //溢出用省略号显示
+      // white-space: nowrap; //溢出不换行
+      display:-webkit-box;
+      -webkit-box-orient:vertical;
+      -webkit-line-clamp:2;
     }
     .price{
       text-align: left;
-      // &>span:first-child{
-      //   width: 150px;
-      //   min-width: 150px;
-      // }
+      font-size: 24px;
     }
 
     .name{

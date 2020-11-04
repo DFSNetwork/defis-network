@@ -33,10 +33,20 @@
 
       <!-- memo -->
       <div class="memoDiv">
-        <div class="info">留言</div>
-        <div class="iptDiv flexb">
-          <input class="input" type="text" v-model="memo" placeholder="请输入留言">
+        <div class="info flexb">
+          <span>留言</span>
           <span class="randomSpan" @click="handleRandom">随机</span>
+        </div>
+        <div class="iptDiv">
+          <van-field
+            class="input"
+            v-model="memo"
+            rows="1"
+            autosize
+            type="textarea"
+            placeholder="请输入留言"
+          />
+          <div class="iptlen">{{sizeof}}/256</div>
         </div>
       </div>
     </div>
@@ -96,6 +106,26 @@ export default {
       filterMkLists: state => state.sys.filterMkLists,
       marketLists: state => state.sys.marketLists,
     }),
+    sizeof(){
+      const str = this.memo;
+      let total = 0,
+          charCode,
+          i,
+          len;
+      for(i = 0, len = str.length; i < len; i++){
+          charCode = str.charCodeAt(i);
+          if(charCode <= 0x007f) {
+              total += 1;
+          }else if(charCode <= 0x07ff){
+              total += 2;
+          }else if(charCode <= 0xffff){
+              total += 3;
+          }else{
+              total += 4;
+          }
+      }
+      return total;
+    },
   },
   watch: {
     scatter: {
@@ -107,12 +137,21 @@ export default {
       deep: true,
       immediate: true,
     },
+    memo(newVal, oldVal) {
+      if (this.sizeof > 256) {
+        this.memo = oldVal
+      }
+    },
   },
   methods: {
     handleRandom() {
       let random = (Math.random() * 9999) % memes.length;
       random = parseInt(random);
       let picked_meme = memes[random];
+      if(picked_meme.length > 100) {
+        this.handleRandom()
+        return
+      }
       this.memo = picked_meme;
     },
     handleClose(type) {
@@ -242,24 +281,33 @@ export default {
     text-align: left;
     .info{
       margin-bottom: 10px;
-    }
-    .iptDiv{
-      font-size: 30px;
-      outline: none;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 8px;
-      .input{
-        border: 0px;
-        font-size: 30px;
-        height: 38px;
-        width: 450px;
-      }
       .randomSpan{
         padding: 4px 8px;
         border-radius: 3px;
         font-size: 21px;
         color: #ff3100;
         border: 1px solid #ff3100;
+      }
+    }
+    .iptDiv{
+      font-size: 30px;
+      outline: none;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 8px;
+      /deep/ .van-cell::after{
+        border: 0;
+      }
+      .input{
+        padding: 0;
+        border: 0px;
+        font-size: 30px;
+      }
+      .iptlen{
+        text-align: right;
+        font-size: 24px;
+        color: #666;
+        right: 0px;
+        bottom: 5px;
       }
     }
   }

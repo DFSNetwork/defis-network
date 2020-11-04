@@ -210,6 +210,7 @@ export default {
   bottom: 0px;
   height: 160px;
   width: 100%;
+  max-width: 750px;
   background: #fFF;
   padding: 36px;
   box-sizing: border-box;

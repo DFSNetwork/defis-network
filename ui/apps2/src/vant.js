@@ -4,7 +4,7 @@ import Vue from 'vue'
 //   Icon, Grid, GridItem, Tab, Tabs, Sticky, Switch, DropdownMenu,
 //   DropdownItem, PullRefresh, List, Popup, Stepper, Field,
 //   Slider, CellGroup, Notify, Checkbox } from 'vant';
-import { List, Icon } from 'vant';
+import { List, Icon, Field } from 'vant';
 // Vue.use(Button)
 // Vue.use(Toast);
 // Vue.use(Tabbar);
@@ -24,7 +24,7 @@ Vue.use(Icon);
 Vue.use(List);
 // Vue.use(Popup);
 // Vue.use(Stepper);
-// Vue.use(Field);
+Vue.use(Field);
 // Vue.use(Slider);
 // Vue.use(CellGroup);
 // Vue.use(Notify);
