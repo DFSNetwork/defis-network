@@ -214,6 +214,8 @@ class model {
     scatterItem.wallet = wallet;
     scatterItem.chain = chain;
     scatterItem.online = online;
+    // test 账户
+    // scatterItem.identity.accounts[0].name = 'thisthenthat';
     store.dispatch('setScatter', scatterItem);
     localStorage.setItem('Frontend-Token', '');
     callback()
