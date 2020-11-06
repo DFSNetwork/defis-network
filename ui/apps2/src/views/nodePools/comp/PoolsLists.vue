@@ -3,18 +3,33 @@
     <div class="title flexb">
       <span class="act">矿池列表</span>
     </div>
-    <div class="list">
+    <div class="lpList">
+      <div class="list">
+        <div class="poolInfo flexa">
+          <img class="coinImg" src="">
+          <div class="bal">
+            <div class="flexb">
+              <span>EOS/DFS LP 挖矿</span>
+              <span class="apy">年化：{{ `0.00` }}%</span>
+            </div>
+            <div class="num din">{{ '0.00000000' }}</div>
+          </div>
+        </div>
+        <div class="reward">做市资金：100EOS/1DFS</div>
+      </div>
+    </div>
+    <div class="list" v-for="(item, index) in poolsLists" :key="index">
       <div class="poolInfo flexa">
-        <img class="coinImg" src="https://apps.defis.network/static/coin/minedfstoken-dfs.png">
+        <img class="coinImg" :src="item.imgUrl">
         <div class="bal">
           <div class="flexb">
-            <span>DFS矿池收益</span>
-            <span class="apy">年化：12.00%</span>
+            <span>{{ item.sym }}矿池收益</span>
+            <span class="apy">年化：{{ poolsData[item.sym] ? poolsData[item.sym].apy || '0.00' : `0.00` }}%</span>
           </div>
-          <div class="num din">0.12340000</div>
+          <div class="num din">{{ poolsData[item.sym] ? poolsData[item.sym].accReward || '0.00000000' : '0.00000000' }}</div>
         </div>
       </div>
-      <div class="reward">池子余额：2000.0000 DFS</div>
+      <div class="reward">池子余额：{{ poolsData[item.sym] ? poolsData[item.sym].bal : `0.0000 ${item.sym}` }}</div>
     </div>
   </div>
 </template>
@@ -22,6 +37,20 @@
 <script>
 export default {
   name: 'poolsLists',
+  props: {
+    poolsLists: {
+      type: Array,
+      default: function pls() {
+        return []
+      }
+    },
+    poolsData: {
+      type: Object,
+      default: function pls() {
+        return {}
+      }
+    }
+  },
   data() {
     return {}
   }
@@ -60,6 +89,7 @@ export default {
   padding: 20px 26px;
   border-radius: 12px;
   text-align: left;
+  margin-bottom: 20px;
   .poolInfo{
     margin-bottom: 10px;
     padding-bottom: 10px;

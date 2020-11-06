@@ -237,11 +237,13 @@ export default {
       font-size: 24px;
       max-width: 500px;
       overflow: hidden;
-      text-overflow: ellipsis; //溢出用省略号显示
+      word-break: break-all;
+      white-space: pre-wrap;
+      // text-overflow: ellipsis; //溢出用省略号显示
       // white-space: nowrap; //溢出不换行
-      display:-webkit-box;
-      -webkit-box-orient:vertical;
-      -webkit-line-clamp:2;
+      // display:-webkit-box;
+      // -webkit-box-orient:vertical;
+      // -webkit-line-clamp:2;
     }
     .price{
       text-align: left;

@@ -6,10 +6,9 @@
         <span>{{ $t('mine.waitClaim') }}</span>
         <img class="tipIcon ml10" @click="showReWardTip = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
       </div>
-      <div class="claimNum dinBold">0.11111111 DFS</div>
-      <div class="claimNum dinBold">0.22222222 EOS</div>
-      <div class="claimNum dinBold">0.33333333 YFC</div>
-      <div class="claimNum dinBold">0.44444444 PDD</div>
+      <div class="claimNum dinBold" v-for="(v, index) in nKeys" :key="index">
+        {{ poolsData[v].accReward || '0.00000000' }} {{ poolsData[v].sym }}
+      </div>
     </div>
     <div class="flexb">
       <div class="allClaimBtn" v-loading="claim" @click="handleClaimAll">{{ $t('bonus.claim') }}</div>
@@ -20,6 +19,31 @@
 <script>
 export default {
   name: 'claim',
+  props: {
+    poolsData: {
+      type: Object,
+      default: function pd() {
+        return {}
+      }
+    }
+  },
+  data() {
+    return {
+      claim: false,
+      nKeys: []
+    }
+  },
+  watch: {
+    poolsData: {
+      handler: function psd() {
+        this.nKeys = Object.keys(this.poolsData)
+        // console.log(this.nKeys)
+        // this.$forceUpdate()
+      },
+      deep: true,
+      immediate: true
+    }
+  },
   methods: {
     handleClaimAll() {
     }
