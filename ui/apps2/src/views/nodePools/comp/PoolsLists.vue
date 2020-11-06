@@ -4,18 +4,18 @@
       <span class="act">矿池列表</span>
     </div>
     <div class="lpList">
-      <div class="list">
+      <div class="list" v-for="(v, i) in lpLists" :key="`lp${i}`">
         <div class="poolInfo flexa">
-          <img class="coinImg" src="">
+          <img class="coinImg" :src="v.sym1Data.imgUrl">
           <div class="bal">
             <div class="flexb">
-              <span>EOS/DFS LP 挖矿</span>
+              <span>{{ v.symbol0 }}/{{ v.symbol1 }} LP 挖矿</span>
               <span class="apy">年化：{{ `0.00` }}%</span>
             </div>
             <div class="num din">{{ '0.00000000' }}</div>
           </div>
         </div>
-        <div class="reward">做市资金：100EOS/1DFS</div>
+        <div class="reward">做市资金：{{ v.reserve0 }}/{{ v.reserve1 }}</div>
       </div>
     </div>
     <div class="list" v-for="(item, index) in poolsLists" :key="index">
@@ -48,6 +48,12 @@ export default {
       type: Object,
       default: function pls() {
         return {}
+      }
+    },
+    lpLists: {
+      type: Array,
+      default: function lps() {
+        return []
       }
     }
   },

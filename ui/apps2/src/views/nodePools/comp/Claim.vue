@@ -76,6 +76,7 @@ export default {
     font-size: 26px;
   }
   .claimNum{
+    text-align: left;
     font-size: 30px;
     font-weight: 500;
     margin-top: 8px;

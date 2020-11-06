@@ -24,7 +24,8 @@
     <!-- 待领取收益 -->
     <MyClaim :poolsData="poolsData"/>
     <!-- 矿池列表 -->
-    <PoolsLists :poolsLists="poolsLists" :poolsData="poolsData"/>
+    <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists"
+      :poolsData="poolsData"/>
   </div>
 </template>
 
@@ -37,7 +38,7 @@ import MyClaim from './comp/Claim';
 
 import { getCoin } from '@/utils/public';
 import {get_table_rows, get_balance} from '@/utils/api'
-import { getNodeLists } from './js/nodePools'
+import { getVoteWeight, getAccVote, getReward } from './js/nodePools'
 
 export default {
   name: 'nodePools',
@@ -89,6 +90,7 @@ export default {
     marketLists: {
       handler: function mls() {
         this.handleDealAccReward(this.accVoteData)
+        this.handleGetLpPoolsLists()
       }
     },
     scatter: {
@@ -111,10 +113,10 @@ export default {
     },
     // 获取节点列表
     handleGetNodeLists() {
-      getNodeLists((weight) => {
-        this.voteWeight = weight;
-        this.hanldeDealNum();
-      })
+      const weight = getVoteWeight()
+      this.voteWeight = weight;
+      console.log(weight)
+      this.hanldeDealNum();
     },
     // 获取代理账户信息
     async handleGetProxy() {
@@ -148,36 +150,10 @@ export default {
       if (!this.scatter || !this.scatter.identity) {
         return
       }
-      const formName = this.scatter.identity.accounts[0].name;
-      const params = {
-        "code":"eosio",
-        "scope":"eosio",
-        "table":"voters",
-        "json":true,
-        "lower_bound": ` ${formName}`,
-        "upper_bound": ` ${formName}`,
-      }
-      const {status, result} = await get_table_rows(params)
-      if (!status) {
-        return
-      }
-      const rows = result.rows || [];
-      // 没有抵押数据
-      if (!rows.length) {
-        this.accVoteData = {};
-        return
-      }
-      // 代理不是dfsbpsproxy1
-      const accVoteData = rows[0];
-      if (accVoteData.proxy !== "dfsbpsproxy1") {
-        this.accVoteData = {};
-        return
-      }
-      // 挖矿用户
-      const eosNum = accVoteData.staked / 10000;
-      accVoteData.eosNum = eosNum.toFixed(4);
-      this.accVoteData = accVoteData;
-      this.handleDealAccReward(this.accVoteData)
+      getAccVote((accVoteData) => {
+        this.accVoteData = accVoteData;
+        this.handleDealAccReward(this.accVoteData)
+      })
     },
     // 计算用户收益
     handleDealAccReward(accVoteData) {
@@ -197,7 +173,7 @@ export default {
         const accData = {
           accNum: accVoteData.eosNum,
         }
-        const reward = this.handleDealReward(baseData, accData)
+        const reward = getReward(baseData, accData)
         this.$set(this.poolsData[v], 'accReward', reward.toFixed(8));
       })
       this.$forceUpdate()
@@ -247,33 +223,6 @@ export default {
         this.handleDealApy();
       })
     },
-    // baseData = {poolBal,allEos,type}
-    handleDealReward(baseData, userData) {
-      // console.log(baseData, userData)
-      // 基础数据
-      const poolBal = baseData.poolBal,
-            allEos = baseData.allEos,
-            type = baseData.type;
-      // 用户数据
-      const accNum = userData.accNum;
-      let t = 86400; // 默认一天时间
-      if (type !== 'year') {
-        t = 1; // 用户挖矿持续时间
-      }
-      let reward = poolBal - poolBal * Math.pow(0.9999, t * accNum / allEos); // 日收益
-      // console.log(poolBal,  poolBal * Math.pow(0.9999, t * accNum / allEos))
-      if (type === 'year') {
-        let yReward = reward * 365;
-        if (yReward > poolBal) {
-          yReward = poolBal;
-        }
-        return yReward
-      }
-      if (reward > poolBal) {
-        reward = poolBal;
-      }
-      return reward
-    },
     // 计算年化 & 收益
     handleDealApy() {
       const keys = Object.keys(this.poolsData)
@@ -302,7 +251,7 @@ export default {
         const accData = {
           accNum: 1,
         }
-        const reward = this.handleDealReward(baseData, accData)
+        const reward = getReward(baseData, accData)
         console.log(reward)
         const apy = reward * price * 100 / accData.accNum;
         this.$set(this.poolsData[v], 'apy', apy.toFixed(2));
