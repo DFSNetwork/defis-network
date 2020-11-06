@@ -246,25 +246,10 @@ export default {
     },
     // 获取全网权重加成
     async handleGetWeight() {
-      const params = {
-        "code": "eosio",
-        "scope": "eosio",
-        "json": true,
-        "table": "producers",
-        "lower_bound": "bp.dfs",
-        "upper_bound": "bp.dfs",
-        limit: 1,
-      }
-      const {status, result} = await get_table_rows(params)
-      if (!status) {
-        return
-      }
-      const row = result.rows[0];
-      const node = this.nodeLists.find(v => v.owner === row.owner)
-      // console.log(node)
-      // console.log(row)
-      const weight = parseFloat(node.num_votes) / parseFloat(row.total_votes)
-      this.voteWeight = weight;
+      let sec_since_lanch = 946684800;
+      let weight_1 = parseInt((Date.parse(new Date()) / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
+      weight_1 = 1 / Math.pow(2, weight_1) / 10000
+      this.voteWeight = weight_1;
     },
     handleChangeTab(num) {
       this.act = num
