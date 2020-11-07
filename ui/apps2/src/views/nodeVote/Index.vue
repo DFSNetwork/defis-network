@@ -246,8 +246,19 @@ export default {
     },
     // 获取全网权重加成
     async handleGetWeight() {
+      const params = {
+        "code":"eosio",
+        "scope":"eosio",
+        "table":"global",
+        "json":true,
+      }
+      const { status, result } = await get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const gTime = result.rows[0].last_pervote_bucket_fill
       let sec_since_lanch = 946684800;
-      let weight_1 = parseInt((Date.parse(new Date()) / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
+      let weight_1 = parseInt((Date.parse(new Date(gTime)) / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
       weight_1 = 1 / Math.pow(2, weight_1) / 10000
       this.voteWeight = weight_1;
     },
