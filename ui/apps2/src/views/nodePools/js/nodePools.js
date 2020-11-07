@@ -12,11 +12,24 @@ export async function getNodeLists() {
   store.dispatch('setNodeLists', JSON.parse(JSON.stringify(rows)))
 }
 // 获取全网权重加成
-export function getVoteWeight() {
+export async function getVoteWeight(cb) {
+  const params = {
+    "code":"eosio",
+    "scope":"eosio",
+    "table":"global",
+    "json":true,
+  }
+  const { status, result } = await get_table_rows(params);
+  if (!status) {
+    return
+  }
+  const gTime = result.rows[0].last_pervote_bucket_fill
   let sec_since_lanch = 946684800;
-  let weight_1 = parseInt((Date.parse(new Date()) / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
+  let weight_1 = parseInt((Date.parse(new Date(gTime)) / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
+  console.log(weight_1)
+  console.log(Math.pow(2, weight_1))
   weight_1 = 1 / Math.pow(2, weight_1) / 10000
-  return weight_1;
+  cb(weight_1)
 }
 // 用户票数统计
 export async function getAccVote(cb) {
@@ -68,7 +81,7 @@ export function getReward(baseData, userData) {
   if (type !== 'year') {
     t = 1; // 用户挖矿持续时间
   }
-  let reward = poolBal - poolBal * Math.pow(0.9999, t * accNum / allEos); // 日收益
+  let reward = poolBal * Math.pow(1.000001, t) - poolBal; // 日收益
   // console.log(poolBal,  poolBal * Math.pow(0.9999, t * accNum / allEos))
   if (type === 'year') {
     let yReward = reward * 365;

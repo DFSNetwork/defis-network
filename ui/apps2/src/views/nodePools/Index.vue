@@ -112,11 +112,12 @@ export default {
       }
     },
     // 获取节点列表
-    handleGetNodeLists() {
-      const weight = getVoteWeight()
-      this.voteWeight = weight;
-      console.log(weight)
-      this.hanldeDealNum();
+    handleGetNodeLists(cb) {
+      const weight = getVoteWeight((weight) => {
+        this.voteWeight = weight;
+        console.log(weight)
+        this.hanldeDealNum();
+      })
     },
     // 获取代理账户信息
     async handleGetProxy() {
