@@ -10,9 +10,9 @@
           <div class="bal">
             <div class="flexb">
               <span>{{ v.symbol0 }}/{{ v.symbol1 }} LP 挖矿</span>
-              <span class="apy">年化：{{ `0.00` }}%</span>
+              <span class="apy">实时年化：{{ v.apy }}%</span>
             </div>
-            <div class="num din">{{ '0.00000000' }}</div>
+            <div class="num din">{{ accLpData.showReward || '0.00000000' }}</div>
           </div>
         </div>
         <div class="reward">做市资金：{{ v.reserve0 }}/{{ v.reserve1 }}</div>
@@ -24,9 +24,9 @@
         <div class="bal">
           <div class="flexb">
             <span>{{ item.sym }}矿池收益</span>
-            <span class="apy">年化：{{ poolsData[item.sym] ? poolsData[item.sym].apy || '0.00' : `0.00` }}%</span>
+            <span class="apy">年化：{{ item.apy || '0.00' }}%</span>
           </div>
-          <div class="num din">{{ poolsData[item.sym] ? poolsData[item.sym].accReward || '0.00000000' : '0.00000000' }}</div>
+          <div class="num din">{{ poolsData[item.sym] ? poolsData[item.sym].showReward || '0.00000000' : '0.00000000' }}</div>
         </div>
       </div>
       <div class="reward">池子余额：{{ poolsData[item.sym] ? poolsData[item.sym].bal : `0.0000 ${item.sym}` }}</div>
@@ -54,6 +54,12 @@ export default {
       type: Array,
       default: function lps() {
         return []
+      }
+    },
+    accLpData: {
+      type: Object,
+      default: function ald() {
+        return {}
       }
     }
   },

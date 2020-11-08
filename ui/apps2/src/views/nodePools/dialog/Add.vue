@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="btnDiv">
-      <div class="btn flexc" @click="handleRexAction">确认</div>
+      <div class="btn flexc" v-loading="loading" @click="handleRexAction">确认</div>
     </div>
   </div>
 </template>
@@ -32,7 +32,7 @@ import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 
 import { toFixed } from '@/utils/public';
-// import {get_table_rows} from '@/utils/api'
+import { getRexActions } from '../js/nodePools'
 
 export default {
   name: 'addVote',
@@ -40,12 +40,19 @@ export default {
     rexPrice: {
       type: Number,
       default: 0.0001,
+    },
+    accVoteData: {
+      type: Object,
+      default: function avd() {
+        return {}
+      }
     }
   },
   data() {
     return {
       buy: '',
       bal: '0.0000',
+      loading: false,
     }
   },
   computed: {
@@ -99,11 +106,12 @@ export default {
         });
         return
       }
-      const params = {
+      this.loading = true;
+      const params = getRexActions(this.accVoteData, {
         amount: `${toFixed(this.buy, 4)} EOS`,
         type: 'buyRex'
-      }
-      EosModel.rexActions(params, (res) => {
+      })
+      EosModel.toTransaction(params, (res) => {
         this.loading = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
@@ -116,6 +124,7 @@ export default {
           message: this.$t('public.success'),
           type: 'success'
         });
+        this.$emit('listenUpdata', 'acc')
       })
     },
   }

@@ -22,9 +22,9 @@
     <!-- 票数管理 -->
     <VoteNum :accVoteData="accVoteData" @listenUpdata="handleUpdata"/>
     <!-- 待领取收益 -->
-    <MyClaim :poolsData="poolsData"/>
+    <MyClaim :poolsData="poolsData" :accVoteData="accVoteData" :accLpData="accLpData"/>
     <!-- 矿池列表 -->
-    <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists"
+    <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists" :accLpData="accLpData"
       :poolsData="poolsData"/>
   </div>
 </template>
@@ -36,7 +36,7 @@ import PoolsLists from './comp/PoolsLists';
 import VoteNum from './comp/VoteNum';
 import MyClaim from './comp/Claim';
 
-import { getCoin } from '@/utils/public';
+import { getCoin, toLocalTime } from '@/utils/public';
 import {get_table_rows, get_balance} from '@/utils/api'
 import { getVoteWeight, getAccVote, getReward } from './js/nodePools'
 
@@ -62,12 +62,22 @@ export default {
       // LP 挖矿
       lpPoolsMid: [39],
       lpLists: [],
+      accLpData: {},
+      lpRankWeight: 0,
+
+      // 定时器
+      poolsTimer: null,
+      rewardTimer: null,
+      runTimer: null,
+      lpTimer: null,
+      lpRunTimer: null,
     }
   },
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
       marketLists: state => state.sys.marketLists,
+      baseConfig: state => state.sys.baseConfig,
     }),
     yearApr() {
       let apy = 0;
@@ -85,6 +95,13 @@ export default {
     this.handleGetNodeLists();
 
     this.handleGetPools()
+  },
+  beforeDestroy() {
+    clearTimeout(this.poolsTimer)
+    clearTimeout(this.rewardTimer)
+    clearInterval(this.runTimer)
+    clearTimeout(this.lpTimer)
+    clearInterval(this.lpRunTimer)
   },
   watch: {
     marketLists: {
@@ -107,17 +124,16 @@ export default {
   methods: {
     // 监听更新操作
     handleUpdata(type) {
+      console.log('数据更新', type)
       if (type === 'acc') {
         this.handleGetAccVote()
       }
     },
     // 获取节点列表
-    handleGetNodeLists(cb) {
-      const weight = getVoteWeight((weight) => {
-        this.voteWeight = weight;
-        console.log(weight)
-        this.hanldeDealNum();
-      })
+    handleGetNodeLists() {
+      const weight = getVoteWeight()
+      this.voteWeight = weight;
+      this.hanldeDealNum();
     },
     // 获取代理账户信息
     async handleGetProxy() {
@@ -143,7 +159,6 @@ export default {
       }
       const num = Number(this.proxyData.last_vote_weight) * this.voteWeight;
       this.$set(this.proxyData, 'eosNum', Math.ceil(num));
-      this.handleDealApy();
     },
 
     // 用户票数统计
@@ -159,33 +174,66 @@ export default {
     // 计算用户收益
     handleDealAccReward(accVoteData) {
       const keys = Object.keys(this.poolsData)
-      if (!this.marketLists.length || !keys.length || !this.proxyData.eosNum || !accVoteData.isDfsProxy) {
+      if (!this.marketLists.length || !keys.length || !this.proxyData.eosNum || !accVoteData.isfarmer) {
         return;
       }
       const allEos = this.proxyData.eosNum; // 总票数
       const pools = this.poolsData;
+      // console.log(pools)
       keys.forEach((v) => {
         // 计算年化
         const poolBal = parseFloat(pools[v].bal);
-        const baseData = {
-          poolBal,
+        const list = this.poolsLists.find(vv => vv.sym === v);
+        const baseData = Object.assign({}, list, {
           allEos,
-        }
+          poolBal,
+        })
         const accData = {
           accNum: accVoteData.eosNum,
+          last_drip: accVoteData.last_drip,
         }
         const reward = getReward(baseData, accData)
         this.$set(this.poolsData[v], 'accReward', reward.toFixed(8));
       })
+      this.handleRun()
+      clearTimeout(this.rewardTimer)
+      this.rewardTimer = setTimeout(() => {
+        this.handleDealAccReward(accVoteData)
+      }, 1000);
       this.$forceUpdate()
+    },
+    // 数据滚动
+    handleRun() {
+      clearInterval(this.runTimer)
+      this.runTimer = setInterval(() => {
+        const keys = Object.keys(this.poolsData)
+        keys.forEach(v => {
+          const accReward = this.poolsData[v].accReward || 0;
+          const showReward = this.poolsData[v].showReward || accReward;
+          let tReward = this.poolsData[v].tReward || showReward;
+          const t = (accReward - showReward) / 50
+          tReward = Number(tReward) + Number(t);
+          if (tReward > accReward) {
+            tReward = accReward
+          }
+          // console.log(tReward)
+          this.$set(this.poolsData[v], 'showReward', Number(tReward).toFixed(8))
+          this.$set(this.poolsData[v], 'tReward', Number(tReward))
+          // this.$set(this.poolsData[v], 't', t)
+        })
+      }, 20);
     },
 
     // 获取矿池列表
     async handleGetPools() {
+      clearTimeout(this.poolsTimer)
+      this.poolsTimer = setTimeout(() => {
+        this.handleGetPools();
+      }, 10000)
       const params = {
-        "code":"tagtokenmine",
-        "scope":"tagtokenmine",
-        "table":"pools",
+        "code": this.baseConfig.nodeMiner,
+        "scope": this.baseConfig.nodeMiner,
+        "table": "pools",
         "json":true,
         "limit": 1000
       }
@@ -204,72 +252,184 @@ export default {
         v.imgUrl = imgUrl;
       });
       this.poolsLists = lists;
+      this.handleDealApy()
       this.handleGetBal()
     },
     handleGetBal() {
       this.poolsLists.forEach(async (v) => {
+        if (this.poolsData[v.sym]) {
+          return
+        }
         const params = {
           code: v.contract,
           symbol: v.sym,
           decimal: v.decimal,
-          account: 'dfsfundation'
+          account: this.baseConfig.fundation,
         }
         const {status, result} = await get_balance(params);
         if (!status) {
           return
         }
-        this.$set(this.poolsData, v.sym, Object.assign({}, v , {bal: result}))
-        // this.poolsData[v.sym] = {bal: result}
-        console.log(result)
-        this.handleDealApy();
+        this.$set(this.poolsData, v.sym, Object.assign({}, (this.poolsData[v.sym] || v) , {bal: result}))
       })
     },
-    // 计算年化 & 收益
+    // 计算年化
     handleDealApy() {
-      const keys = Object.keys(this.poolsData)
-      if (!this.marketLists.length || !keys.length || !this.proxyData.eosNum) {
+      if (!this.poolsLists.length) {
         return;
       }
-      const allEos = this.proxyData.eosNum; // 总票数
-      const pools = this.poolsData;
-      keys.forEach((v) => {
-        const market = this.marketLists.find(vv => {
-          return vv.contract0 === 'eosio.token'
-              && vv.contract1 === pools[v].contract && vv.symbol1 === pools[v].sym;
-        }) || { // EOS
-          reserve0: 1,
-          reserve1: 1,
-        }
-        // 计算币种价格
-        const price = parseFloat(market.reserve0) / parseFloat(market.reserve1)
-        // 计算年化
-        const poolBal = parseFloat(pools[v].bal);
-        const baseData = {
-          poolBal,
-          allEos,
-          type: 'year'
-        }
-        const accData = {
-          accNum: 1,
-        }
-        const reward = getReward(baseData, accData)
-        console.log(reward)
-        const apy = reward * price * 100 / accData.accNum;
-        this.$set(this.poolsData[v], 'apy', apy.toFixed(2));
+      this.poolsLists.forEach((list) => {
+        const apy = (Math.pow(list.aprs, 86400 * 365) - 1) * 100;
+        this.$set(list, 'apy', apy.toFixed(2));
       })
     },
 
     // Lp 矿池
     handleGetLpPoolsLists() {
-      if (!this.marketLists.length) {
+      if (!this.marketLists.length || this.lpLists.length) {
         return
       }
       const lpLists = []
       this.lpPoolsMid.forEach(mid => {
         const market = this.marketLists.find(v => v.mid === mid);
         lpLists.push(market)
+        this.handleGetLpRank(mid);
       })
       this.lpLists = lpLists;
+      this.handleGetLpPoolsBal()
+      this.handleGetAccLpMinerData();
+    },
+    // 获取LP 挖矿排名
+    async handleGetLpRank(mid) {
+      if (!this.scatter || !this.scatter.identity) {
+        return
+      }
+      const formName = this.scatter.identity.accounts[0].name;
+      const params = {
+        "code":"tagtokenmine",
+        "scope": mid,
+        "table":"miners",
+        "json":true,
+        "index_position": 2,
+        "key_type": "i64",
+        "limit": 100,
+        "reverse": false
+      }
+      const { status, result } = await get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const rows = result.rows || [];
+      const index = rows.findIndex(v => formName === v.miner);
+      let weight;
+      if (index === -1) {
+        weight = 1;
+      } else if (index < 25) {
+        weight = 1.3;
+      } else if (index < 50) {
+        weight = 1.5;
+      } else {
+        weight = 1.1;
+      }
+      this.lpRankWeight = weight;
+      this.handleGetLpReward()
+    },
+    // 获取LP矿池余额
+    async handleGetLpPoolsBal() {
+      const params = {
+        code: this.baseConfig.nodeToken,
+        symbol: 'TAG',
+        decimal: 8,
+        account: this.baseConfig.lpPools,
+      }
+      const {status, result} = await get_balance(params);
+      if (!status) {
+        return
+      }
+      this.$set(this.lpLists[0], 'lpBal', parseFloat(result))
+      this.handleGetLpReward()
+      this.handleGetLpApy();
+    },
+    // 获取用户LP挖矿数据
+    async handleGetAccLpMinerData() {
+      const formName = this.scatter.identity.accounts[0].name;
+      const params = {
+        "code": this.baseConfig.nodeMiner,
+        "scope": this.lpPoolsMid[0],
+        "table": "miners",
+        "json":true,
+        "lower_bound": ` ${formName}`,
+        "upper_bound": ` ${formName}`,
+      }
+      const {status, result} = await get_table_rows(params)
+      if (!status) {
+        return
+      }
+      if (!result.rows.length) {
+        return
+      }
+      // console.log(result.rows[0])
+      this.accLpData = result.rows[0]
+      this.handleGetLpReward()
+    },
+    // 计算LP池子收益
+    handleGetLpReward() {
+      if (!this.accLpData.token || !this.lpLists[0].lpBal || !this.lpRankWeight) {
+        return
+      }
+      const rate = this.accLpData.token / this.lpLists[0].liquidity_token;
+      const lpBal = this.lpLists[0].lpBal;
+      const weight = this.lpRankWeight;
+      const nowT = Date.parse(new Date())
+      let lastT = toLocalTime(`${this.accLpData.last_drip}.000+0000`).replace(/-/g, '/')
+      lastT = Date.parse(lastT)
+      let t = (nowT - lastT) / 1000 ;
+      const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
+      this.$set(this.accLpData, 'accLpReward', reward.toFixed(8))
+
+      // 定时器
+      clearTimeout(this.lpTimer)
+      this.lpTimer = setTimeout(() => {
+        this.handleGetLpReward();
+      }, 1000);
+      // LP数据滚动
+      this.handleRunLp()
+    },
+    handleRunLp() {
+      clearInterval(this.lpRunTimer)
+      this.lpRunTimer = setInterval(() => {
+        const accLpReward = this.accLpData.accLpReward || 0;
+        const showReward = this.accLpData.showReward || accLpReward;
+        
+        let tReward = this.accLpData.tReward || showReward;
+        const t = this.accLpData.t  || ((accLpReward - showReward) / 50)
+        tReward = Number(tReward) + Number(t);
+        if (tReward > accLpReward) {
+          tReward = accLpReward
+        }
+        // console.log(tReward, accLpReward, t)
+        this.$set(this.accLpData, 'showReward', Number(tReward).toFixed(8))
+        this.$set(this.accLpData, 'tReward', Number(tReward))
+        this.$set(this.accLpData, 't', t)
+      }, 20);
+    },
+    // 计算LP年化
+    handleGetLpApy() {
+      if (!this.lpLists[0].lpBal) {
+        return
+      }
+      const num = 1;
+      const rate = num / parseFloat(this.lpLists[0].reserve0);
+      const lpBal = this.lpLists[0].lpBal;
+      const weight = 1.5;
+      const t = 86400 * 365;
+      const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
+      // console.log(reward)
+      const price = parseFloat(this.lpLists[0].reserve0) / parseFloat(this.lpLists[0].reserve1);
+      // console.log('price:', price)
+      const apy = reward * price / num * 100;
+      // console.log(apy.toFixed(2))
+      this.$set(this.lpLists[0], 'apy', apy.toFixed(2))
     }
   }
 }

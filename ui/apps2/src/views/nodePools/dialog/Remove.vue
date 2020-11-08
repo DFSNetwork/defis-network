@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="btnDiv">
-      <div class="btn flexc" @click="handlerSellRex">确认</div>
+      <div class="btn flexc" v-loading="loading" @click="handlerSellRex">确认</div>
     </div>
   </div>
 </template>
@@ -40,6 +40,7 @@ import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import {toLocalTime, toFixed} from '@/utils/public'
 import {get_table_rows} from '@/utils/api'
+import { getRexActions } from '../js/nodePools'
 
 export default {
   name: 'removeRex',
@@ -47,6 +48,12 @@ export default {
     rexPrice: {
       type: Number,
       default: 0.0001,
+    },
+    accVoteData: {
+      type: Object,
+      default: function avd() {
+        return {}
+      }
     }
   },
   data() {
@@ -54,6 +61,7 @@ export default {
       bal: '0.0000',
       ableSell: '0.0000',
       buy: '',
+      loading: false,
     }
   },
   mounted() {
@@ -87,11 +95,11 @@ export default {
         code: "eosio",
         json: true,
         limit: 1,
-        lower_bound: formName,
+        lower_bound: ` ${formName}`,
         scope: "eosio",
         table: "rexbal",
         table_key: "",
-        upper_bound: formName,
+        upper_bound: ` ${formName}`,
       }
       const {status, result} = await get_table_rows(params);
       if (!status) {
@@ -121,12 +129,35 @@ export default {
       this.buy = t.toFixed(4)
     },
     handlerSellRex() {
-      const params = {
+      if (!Number(this.buy)) {
+        return;
+      }
+      if (Number(this.buy) > Number(this.ableSell)) {
+        this.$message({
+          message: this.$t('public.balanLow'),
+          type: 'error'
+        });
+        return
+      }
+      this.loading = true;
+      const params = getRexActions(this.accVoteData, {
         rex: `${toFixed(this.buy, 4)} REX`,
         getEos: `${this.aboutEosNum} EOS`
-      };
-      EosModel.rexActions(params, (res) => {
-        console.log(res)
+      })
+      EosModel.toTransaction(params, (res) => {
+        this.loading = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+        this.$emit('listenUpdata', 'acc')
       })
     },
   }

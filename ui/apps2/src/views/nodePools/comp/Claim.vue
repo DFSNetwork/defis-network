@@ -6,8 +6,12 @@
         <span>{{ $t('mine.waitClaim') }}</span>
         <img class="tipIcon ml10" @click="showReWardTip = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
       </div>
+      <div class="claimNum ">
+        <span class="dinBold">{{ accLpData.showReward || '0.00000000' }} TAG</span>
+        <span class="tip">(LP)</span>
+      </div>
       <div class="claimNum dinBold" v-for="(v, index) in nKeys" :key="index">
-        {{ poolsData[v].accReward || '0.00000000' }} {{ poolsData[v].sym }}
+        {{ poolsData[v].showReward || '0.00000000' }} {{ poolsData[v].sym }}
       </div>
     </div>
     <div class="flexb">
@@ -17,12 +21,29 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
+
+import { getClaimActions } from '../js/nodePools';
+
 export default {
   name: 'claim',
   props: {
     poolsData: {
       type: Object,
       default: function pd() {
+        return {}
+      }
+    },
+    accVoteData: {
+      type: Object,
+      default: function avd() {
+        return {}
+      }
+    },
+    accLpData: {
+      type: Object,
+      default: function avd() {
         return {}
       }
     }
@@ -33,12 +54,16 @@ export default {
       nKeys: []
     }
   },
+  computed: {
+    ...mapState({
+      scatter: state => state.app.scatter,
+      baseConfig: state => state.sys.baseConfig,
+    }),
+  },
   watch: {
     poolsData: {
       handler: function psd() {
         this.nKeys = Object.keys(this.poolsData)
-        // console.log(this.nKeys)
-        // this.$forceUpdate()
       },
       deep: true,
       immediate: true
@@ -46,6 +71,44 @@ export default {
   },
   methods: {
     handleClaimAll() {
+      if (!this.scatter || !this.scatter.identity || this.loadingProxy) {
+        return
+      }
+      this.loadingProxy = true;
+      const formName = this.scatter.identity.accounts[0].name;
+      const permission = this.scatter.identity.accounts[0].authority;
+      const params = getClaimActions(this.accVoteData)
+      params.actions.push({
+        account: this.baseConfig.nodeMiner,
+        name: 'claim',
+        authorization: [{ 
+          actor: formName,
+          permission,
+        }],
+        data: {
+          user: formName,
+          mid: 39
+        },
+      })
+      console.log(params)
+      EosModel.toTransaction(params, (res) => {
+        this.loadingProxy = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+        setTimeout(() => {
+          // 查询代理账户数据
+          this.$emit('listenUpdata', 'acc')
+        }, 1500);
+      })
     }
   }
 }

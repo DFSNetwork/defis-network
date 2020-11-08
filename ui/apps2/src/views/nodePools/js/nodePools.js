@@ -1,6 +1,7 @@
 // nodePools 逻辑处理
 import store from '@/store';
 
+import { toLocalTime } from '@/utils/public'
 import {get_table_rows, get_producers} from '@/utils/api'
 
 export async function getNodeLists() {
@@ -12,24 +13,12 @@ export async function getNodeLists() {
   store.dispatch('setNodeLists', JSON.parse(JSON.stringify(rows)))
 }
 // 获取全网权重加成
-export async function getVoteWeight(cb) {
-  const params = {
-    "code":"eosio",
-    "scope":"eosio",
-    "table":"global",
-    "json":true,
-  }
-  const { status, result } = await get_table_rows(params);
-  if (!status) {
-    return
-  }
-  const gTime = result.rows[0].last_pervote_bucket_fill
+export function getVoteWeight() {
   let sec_since_lanch = 946684800;
-  let weight_1 = parseInt((Date.parse(new Date(gTime)) / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
-  console.log(weight_1)
-  console.log(Math.pow(2, weight_1))
+  let weight_1 = parseInt((Date.parse(new Date()) / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
   weight_1 = 1 / Math.pow(2, weight_1) / 10000
-  cb(weight_1)
+  // console.log(weight_1)
+  return weight_1;
 }
 // 用户票数统计
 export async function getAccVote(cb) {
@@ -58,40 +47,238 @@ export async function getAccVote(cb) {
   const eosNum = accVoteData.staked / 10000;
   accVoteData.eosNum = eosNum.toFixed(4);
   accVoteData.isDfsProxy = accVoteData.proxy === "dfsbpsproxy1";
+  accVoteData.isfarmer = false; // 默认非挖矿账户
+  const kweight = getVoteWeight();
+  const uweight = accVoteData.staked / accVoteData.last_vote_weight;
+  const percent = kweight * 10000 / uweight * 100;
+  // console.log(kweight, uweight)
+  accVoteData.percent = percent.toFixed(2)
+  // cb(accVoteData)
+  getAccFarmerData(accVoteData, cb)
+}
+// 获取farmer挖矿数据
+export async function getAccFarmerData(accVoteData, cb) {
+  const formName = store.state.app.scatter.identity.accounts[0].name;
+  const params = {
+    "code":"tagtokenmine",
+    "scope":"tagtokenmine",
+    "table":"farmers",
+    "json":true,
+    "lower_bound": ` ${formName}`,
+    "upper_bound": ` ${formName}`,
+  }
+  const {status, result} = await get_table_rows(params)
+  if (!status) {
+    return
+  }
+  const rows = result.rows || [];
+  // console.log(result)
+  // console.log(accVoteData)
+  if (!rows.length) {
+    cb(accVoteData)
+    return
+  }
+  const row = rows[0];
+  if (accVoteData.last_vote_weight !== row.last_vote_weight) {
+    cb(accVoteData)
+    return;
+  }
+  accVoteData.isfarmer = true;
+  accVoteData.last_drip = row.last_drip;
   cb(accVoteData)
 }
 
 // 计算node pools 年化
 export function getPoolsApy() {
-  const marketLists = store.state.sys.marketLists;
+  // const marketLists = store.state.sys.marketLists;
 
 }
 
 // 计算收益
-// baseData = {poolBal,allEos,type}
+// baseData = {aprs}
 export function getReward(baseData, userData) {
   // console.log(baseData, userData)
+  const marketLists = store.state.sys.marketLists;
+  const market = marketLists.find(v => v.mid == baseData.mid)
+  let price = parseFloat(market.reserve0) / parseFloat(market.reserve1)
+  if (baseData.mid === 17) {
+    price = 1;
+  }
+  // console.log(price)
   // 基础数据
-  const poolBal = baseData.poolBal,
-        allEos = baseData.allEos,
-        type = baseData.type;
+  const aprs = baseData.aprs;
   // 用户数据
   const accNum = userData.accNum;
-  let t = 86400; // 默认一天时间
-  if (type !== 'year') {
-    t = 1; // 用户挖矿持续时间
+  const nowT = Date.parse(new Date())
+  let lastT = toLocalTime(`${userData.last_drip}.000+0000`).replace(/-/g, '/')
+  // console.log(lastT)
+  lastT = Date.parse(lastT)
+  let t = (nowT - lastT) / 1000 ; // 默认一天时间
+  // console.log(t)
+
+  let rewardEos = accNum * Math.pow(aprs, t) - accNum; // 日收益 EOS
+  let rewardToken = rewardEos / price;
+  return rewardToken
+}
+
+// 获取领取操作Actions
+export function getClaimActions(accVoteData) {
+  const baseConfig = store.state.sys.baseConfig;
+  const scatter = store.state.app.scatter;
+  const formName = scatter.identity.accounts[0].name;
+  const permission = scatter.identity.accounts[0].authority;
+  const harvest = {
+    account: baseConfig.nodeMiner,
+    name: 'harvest',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      farmer: formName,
+    },
   }
-  let reward = poolBal * Math.pow(1.000001, t) - poolBal; // 日收益
-  // console.log(poolBal,  poolBal * Math.pow(0.9999, t * accNum / allEos))
-  if (type === 'year') {
-    let yReward = reward * 365;
-    if (yReward > poolBal) {
-      yReward = poolBal;
-    }
-    return yReward
+  const join = {
+    account: baseConfig.nodeMiner,
+    name: 'join',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      farmer: formName,
+    },
   }
-  if (reward > poolBal) {
-    reward = poolBal;
+  const params = {
+    actions: [harvest, {
+      account: 'eosio',
+      name: 'voteproducer',
+      authorization: [{ 
+        actor: formName,
+        permission,
+      }],
+      data: {
+        voter: formName,
+        proxy: 'dfsbpsproxy1', // 投票的节点名称
+        producers: [],
+      },
+    }]
   }
-  return reward
+  if (accVoteData.isfarmer) {
+    params.actions.push(harvest)
+  } else {
+    params.actions.push(join)
+  }
+  return params;
+}
+
+// 获取REX操作Actions
+export function getRexActions(accVoteData, obj) {
+  const baseConfig = store.state.sys.baseConfig;
+  const scatter = store.state.app.scatter;
+  const formName = scatter.identity.accounts[0].name;
+  const permission = scatter.identity.accounts[0].authority;
+  let amount = obj.amount;
+
+  const harvest = { // 收获
+    account: baseConfig.nodeMiner,
+    name: 'harvest',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      farmer: formName,
+    },
+  }
+  const join = { // 加入
+    account: baseConfig.nodeMiner,
+    name: 'join',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      farmer: formName,
+    },
+  }
+  const voteproducer = { // 投票
+    account: 'eosio',
+    name: 'voteproducer',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      voter: formName,
+      proxy: 'dfsbpsproxy1', // 投票的节点名称
+      producers: [],
+    },
+  }
+  const buyRex = [{ // 充值
+    account: 'eosio',
+    name: 'deposit',
+    authorization: [{
+      actor: formName,
+      permission,
+    }],
+    data: {
+      owner: formName,
+      amount, // eos 数量
+    },
+  }, { // 买入：buyrex
+    account: 'eosio',
+    name: 'buyrex',
+    authorization: [{
+      actor: formName,
+      permission,
+    }],
+    data: {
+      from: formName,
+      amount, // eos 数量
+    },
+  }]
+  const sellRex = [{ // 卖出：sellrex
+    account: 'eosio',
+    name: 'sellrex',
+    authorization: [{
+      actor: formName,
+      permission,
+    }],
+    data: {
+      from: formName,
+      rex: obj.rex
+    },
+  },
+  { // 提现
+    account: 'eosio',
+    name: 'withdraw',
+    authorization: [{
+      actor: formName,
+      permission,
+    }],
+    data: {
+      owner: formName,
+      amount: obj.getEos
+    },
+  }]
+  const params = {
+    actions: [harvest]
+  };
+  // REX操作处理
+  if (obj.type === 'buyRex') {
+    params.actions.push(...buyRex)
+  } else {
+    params.actions.push(...sellRex)
+  }
+  // 添加投票操作
+  params.actions.push(voteproducer)
+  // 加入 ｜ 收获
+  console.log(accVoteData)
+  if (accVoteData.isfarmer) {
+    params.actions.push(harvest)
+  } else {
+    params.actions.push(join)
+  }
+  return params;
 }

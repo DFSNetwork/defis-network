@@ -5,8 +5,10 @@
       <span class="flexc" :class="{'buy': tab === 1}" @click="tab = 1">增加票数</span>
       <span class="flexc" :class="{'sell': tab === 2}" @click="tab = 2">减少票数</span>
     </div>
-    <AddVote v-if="tab === 1" :rexPrice="rexPrice"/>
-    <Remove v-else :rexPrice="rexPrice"/>
+    <AddVote v-if="tab === 1" :rexPrice="rexPrice" :accVoteData="accVoteData"
+      @listenUpdata="listenUpdata"/>
+    <Remove v-else :rexPrice="rexPrice" :accVoteData="accVoteData"
+      @listenUpdata="listenUpdata"/>
   </div>
 </template>
 
@@ -18,6 +20,14 @@ import {get_table_rows} from '@/utils/api'
 
 export default {
   name: 'manageVote',
+  props: {
+    accVoteData: {
+      type: Object,
+      default: function avd() {
+        return {}
+      }
+    }
+  },
   components: {
     AddVote,
     Remove,
@@ -32,6 +42,9 @@ export default {
     this.handleGetRexData()
   },
   methods: {
+    listenUpdata() {
+      this.$emit('listenUpdata', 'acc')
+    },
     // 获取REX数据
     async handleGetRexData() {
       const params = {

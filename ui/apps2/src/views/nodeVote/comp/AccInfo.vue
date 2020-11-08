@@ -19,6 +19,12 @@ import { EosModel } from '@/utils/eos';
 
 export default {
   name: 'accInfo',
+  props: {
+    voteWeight: {
+      type: Number,
+      default: 0.000001
+    }
+  },
   data() {
     return {
       isVoted: true,

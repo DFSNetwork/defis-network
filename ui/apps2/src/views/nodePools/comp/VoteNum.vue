@@ -1,16 +1,23 @@
 <template>
-  <div class="voteNum flexb">
-    <span>您的EOS票数: {{ accVoteData.isDfsProxy ? accVoteData.eosNum || 0 : 0 }}</span>
-    <span v-if="!accVoteData.eosNum" class="proxy btn"
-      v-loading="loadingProxy"
-      @click="handleProxy">投票给TA</span>
-    <span class="btn" @click="showManage = !showManage">管理票数</span>
+  <div class="voteNum">
+    <div class="flexb">
+      <div>
+        <span>EOS票数：{{ accVoteData.eosNum }}</span>
+      </div>
+      <span v-if="!accVoteData.isfarmer" class="proxy btn"
+        v-loading="loadingProxy"
+        @click="handleProxy">投票给TA</span>
+      <span class="flexa" v-else>
+        <span class="btn" @click="showManage = !showManage">管理票数</span>
+      </span>
+    </div>
 
     <el-dialog
       class="myDialog"
       :show-close="false"
       :visible.sync="showManage">
-      <ManageVote />
+      <ManageVote v-if="showManage" :accVoteData="accVoteData"
+        @listenUpdata="listenUpdata"/>
       <!-- <Remove /> -->
     </el-dialog>
   </div>
@@ -19,6 +26,8 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
+
+import { getClaimActions } from '../js/nodePools';
 
 import ManageVote from '../dialog/ManageVote'
 // import Remove from '../dialog/Remove'
@@ -49,29 +58,19 @@ export default {
     }),
   },
   methods: {
+    listenUpdata() {
+      setTimeout(() => {
+        // 查询代理账户数据
+        this.$emit('listenUpdata', 'acc')
+      }, 1500);
+    },
     // 执行代理委托
     handleProxy() {
       if (!this.scatter || !this.scatter.identity || this.loadingProxy) {
         return
       }
       this.loadingProxy = true;
-      const formName = this.scatter.identity.accounts[0].name;
-      const permission = this.scatter.identity.accounts[0].authority;
-      const params = {
-        actions: [{
-          account: 'eosio',
-          name: 'voteproducer',
-          authorization: [{ 
-            actor: formName,
-            permission,
-          }],
-          data: {
-            voter: formName,
-            proxy: 'dfsbpsproxy1', // 投票的节点名称
-            producers: [],
-          },
-        }]
-      }
+      const params = getClaimActions(this.accVoteData)
       EosModel.toTransaction(params, (res) => {
         this.loadingProxy = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
@@ -85,10 +84,7 @@ export default {
           message: this.$t('public.success'),
           type: 'success'
         });
-        setTimeout(() => {
-          // 查询代理账户数据
-          this.$emit('listenUpdata', 'acc')
-        }, 1500);
+        this.listenUpdata();
       })
     },
   }
@@ -97,6 +93,7 @@ export default {
 
 <style lang="scss" scoped>
 .voteNum{
+  text-align: left;
   margin: 30px 32px;
   padding: 20px 26px;
   font-size: 27px;
@@ -107,6 +104,19 @@ export default {
     border-radius: 40px;
     padding: 10px 36px;
     color: #FFF;
+  }
+  .weight{
+    .updata{
+      font-size: 24px;
+      margin-left: 10px;
+      color: #29D4B0;
+    }
+    .yellow{
+      color: #fec50a;
+    }
+    .red{
+      color: #e9574f;
+    }
   }
 }
 .myDialog{

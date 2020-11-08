@@ -597,6 +597,7 @@ async getTableRows(obj, callback) {
       code: '0001',
       message: JSON.stringify(e),
     };
+    console.log(e)
     try {
       if (typeof (e) === 'object') {
         if (e.code === 402) {
