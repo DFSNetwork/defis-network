@@ -8,7 +8,7 @@
         <div class="left">
           <div class="dinBold">{{ proxyData.eosNum || '0.0000' }}</div>
           <div class="tip bonus">
-            <span>总票数（EOS）</span>
+            <span>{{ $t('nodePools.allVote') }}（EOS）</span>
           </div>
         </div>
         <div class="right">
@@ -22,7 +22,7 @@
     <!-- 票数管理 -->
     <VoteNum :accVoteData="accVoteData" @listenUpdata="handleUpdata"/>
     <!-- 待领取收益 -->
-    <MyClaim :poolsData="poolsData" :accVoteData="accVoteData" :accLpData="accLpData"/>
+    <MyClaim :poolsData="poolsData" :accVoteData="accVoteData" :accLpData="accLpData" @listenUpdata="handleUpdata"/>
     <!-- 矿池列表 -->
     <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists" :accLpData="accLpData"
       :poolsData="poolsData" :rank="rank" :rankList="rankList" :lpRankWeight="lpRankWeight"/>
@@ -129,6 +129,7 @@ export default {
       console.log('数据更新', type)
       if (type === 'acc') {
         this.handleGetAccVote()
+        this.handleGetAccLpMinerData()
       }
     },
     // 获取节点列表

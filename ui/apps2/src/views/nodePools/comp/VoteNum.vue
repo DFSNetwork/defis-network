@@ -2,13 +2,13 @@
   <div class="voteNum">
     <div class="flexb">
       <div>
-        <span>EOS票数：{{ accVoteData.eosNum }}</span>
+        <span>{{ $t('nodePools.voteNum', {token: 'EOS'}) }}：{{ accVoteData.eosNum }}</span>
       </div>
       <span v-if="!accVoteData.isfarmer" class="proxy btn"
         v-loading="loadingProxy"
-        @click="handleProxy">投票给TA</span>
+        @click="handleProxy">{{ $t('nodePools.proxyToHis') }}</span>
       <span class="flexa" v-else>
-        <span class="btn" @click="showManage = !showManage">管理票数</span>
+        <span class="btn" @click="showManage = !showManage">{{ $t('nodePools.manage') }}</span>
       </span>
     </div>
 

@@ -1,9 +1,9 @@
 <template>
   <div class="manageVote">
-    <div class="title">票数管理</div>
+    <div class="title">{{ $t('nodePools.manage') }}</div>
     <div class="tab flexb">
-      <span class="flexc" :class="{'buy': tab === 1}" @click="tab = 1">增加票数</span>
-      <span class="flexc" :class="{'sell': tab === 2}" @click="tab = 2">减少票数</span>
+      <span class="flexc" :class="{'buy': tab === 1}" @click="tab = 1">{{ $t('nodePools.addVote') }}</span>
+      <span class="flexc" :class="{'sell': tab === 2}" @click="tab = 2">{{ $t('nodePools.desVote') }}</span>
     </div>
     <AddVote v-if="tab === 1" :rexPrice="rexPrice" :accVoteData="accVoteData"
       @listenUpdata="listenUpdata"/>

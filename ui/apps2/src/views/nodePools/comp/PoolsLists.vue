@@ -1,8 +1,8 @@
 <template>
   <div class="poolsLists">
     <div class="title flexb">
-      <span class="act">矿池列表</span>
-      <span class="mineRule flexa">
+      <span class="act">{{ $t('nodePools.poolsLists') }}</span>
+      <span class="mineRule flexa" @click="showRules = true">
         <span>{{ $t('miningRules.rules') }}</span>
         <img class="tipIcon" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
       </span>
@@ -10,15 +10,18 @@
     <div class="lpList">
       <div class="bgShadow"></div>
       <div class="list" v-for="(v, i) in lpLists" :key="`lp${i}`">
-        <div class="lpCutDown flexc">
-          LP 矿池开放倒计时：{{ lpCutDown.hours }}:{{ lpCutDown.minutes }}:{{ lpCutDown.seconds }}
+        <div class="lpCutDown flexc" v-if="lpCutDown.total > 0">
+          <div>
+            <div>{{ $t('nodePools.cutDown', {type: 'LP'}) }}</div>
+            <div>{{ lpCutDown.hours }}:{{ lpCutDown.minutes }}:{{ lpCutDown.seconds }}</div>
+          </div>
         </div>
         <div class="poolInfo flexa">
           <img class="coinImg" :src="v.sym1Data.imgUrl">
           <div class="bal">
             <div class="flexb">
-              <span>{{ v.symbol0 }}/{{ v.symbol1 }} LP 挖矿</span>
-              <span class="apy">实时年化：{{ v.apy }}%</span>
+              <span>{{ v.symbol0 }}/{{ v.symbol1 }} {{ $t('nodePools.lpMine') }}</span>
+              <span class="apy">{{ $t('nodePools.apy') }}：{{ v.apy }}%</span>
             </div>
             <div class="flexend">
               <span class="num din">{{ accLpData.showReward || '0.00000000' }}</span>
@@ -28,15 +31,15 @@
             </div>
           </div>
         </div>
-        <div class="reward">做市资金：{{ v.reserve0 }}/{{ v.reserve1 }}</div>
+        <div class="reward">{{ $t('nodePools.marketNum') }}：{{ v.reserve0 }}/{{ v.reserve1 }}</div>
 
         <div class="myRank plan">
           <div class="flexb">
             <span class="flexa">
-              <span>预约排名：</span>
-              <el-input-number v-model="planRank" :min="1" :max="150" label="描述文字"></el-input-number>
+              <span>{{ $t('nodePools.planRank') }}：</span>
+              <el-input-number v-model="planRank" :min="1" :max="150"></el-input-number>
             </span>
-            <span class="green_p" @click="handleDealToken">一键抢占</span>
+            <span class="green_p" @click="handleDealToken">{{ $t('nodePools.doing') }}</span>
           </div>
           <span>
             <el-slider
@@ -47,25 +50,26 @@
           </span>
         </div>
         <div class="flexb">
-          <span>您的排名：{{ rank }}</span>
+          <span>{{ $t('nodePools.myRank') }}：{{ rank }}</span>
         </div>
       </div>
     </div>
-    <div class="rexCutDown">
-      REX 矿池开放倒计时：{{ rexCutDown.hours }}:{{ rexCutDown.minutes }}:{{ rexCutDown.seconds }}
+    <div class="rexCutDown" v-if="rexCutDown.total > 0">
+      <div>{{ $t('nodePools.cutDown', {type: 'REX'}) }}</div>
+      <div>{{ rexCutDown.hours }}:{{ rexCutDown.minutes }}:{{ rexCutDown.seconds }}</div>
     </div>
     <div class="list" v-for="(item, index) in poolsLists" :key="index">
       <div class="poolInfo flexa">
         <img class="coinImg" :src="item.imgUrl">
         <div class="bal">
           <div class="flexb">
-            <span>{{ item.sym }}矿池收益</span>
-            <span class="apy">年化：{{ item.apy || '0.00' }}%</span>
+            <span>{{ $t('nodePools.poolsReward', {token:item.sym}) }}</span>
+            <span class="apy">{{ $t('nodePools.apyShort') }}：{{ item.apy || '0.00' }}%</span>
           </div>
           <div class="num din">{{ poolsData[item.sym] ? poolsData[item.sym].showReward || '0.00000000' : '0.00000000' }}</div>
         </div>
       </div>
-      <div class="reward">池子余额：{{ poolsData[item.sym] ? poolsData[item.sym].bal : `0.0000 ${item.sym}` }}</div>
+      <div class="reward">{{ $t('nodePools.poolsBal') }}：{{ poolsData[item.sym] ? poolsData[item.sym].bal : `0.0000 ${item.sym}` }}</div>
     </div>
 
     <el-dialog
@@ -74,6 +78,12 @@
       :visible.sync="showSure">
       <SureTip v-if="showSure" :params="params"
         @handleSure="handleSure" @handleClose="handleClose"/>
+    </el-dialog>
+
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showRules">
+      <MineRules v-if="showRules"/>
     </el-dialog>
   </div>
 </template>
@@ -85,11 +95,13 @@ import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 
 import SureTip from '@/views/farms/dialog/SureTip';
+import MineRules from '../dialog/MineRules';
 
 export default {
   name: 'poolsLists',
   components: {
-    SureTip
+    SureTip,
+    MineRules,
   },
   props: {
     poolsLists: {
@@ -144,6 +156,8 @@ export default {
       rexTime: 1604980800,
       lpCutDown: {},
       rexCutDown: {},
+
+      showRules: false,
     }
   },
   mounted() {
@@ -317,6 +331,7 @@ export default {
   }
 }
 .lpCutDown{
+  text-align: center;
   color: #f5a623;
   position: absolute;
   left: 0;
@@ -329,6 +344,7 @@ export default {
   border-radius: 12px;
 }
 .rexCutDown{
+  text-align: center;
   margin: 20px;
   color: #f5a623;
   font-size: 33px;

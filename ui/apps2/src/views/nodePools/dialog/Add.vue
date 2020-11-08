@@ -1,16 +1,16 @@
 <template>
   <div class="addVote">
     <div class="rules">
-      REX介绍
+      {{ $t('nodePools.rexInfo') }}
     </div>
     <div class="iptDiv">
-      <div class="subTitle">买入REX</div>
+      <div class="subTitle">{{ $t('nodePools.buyRex') }}</div>
       <div class="flexend">
         <input class="ipt dinBold" v-model="buy" type="number">
         <span class="coin">EOS</span>
       </div>
       <div class="info flexb">
-        <div class="bal" @click="handleIn(1)">余额: {{ bal }} EOS</div>
+        <div class="bal" @click="handleIn(1)">{{ $t('public.balance') }}: {{ bal }} EOS</div>
         <div class="about tip">≈ {{ aboutRexNum }}REX</div>
       </div>
       <div class="percent flexb dingBold">
@@ -22,7 +22,7 @@
       </div>
     </div>
     <div class="btnDiv">
-      <div class="btn flexc" v-loading="loading" @click="handleRexAction">确认</div>
+      <div class="btn flexc" v-loading="loading" @click="handleRexAction">{{ $t('public.confirm') }}</div>
     </div>
   </div>
 </template>

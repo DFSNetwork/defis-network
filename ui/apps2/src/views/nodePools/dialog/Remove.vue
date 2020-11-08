@@ -3,16 +3,16 @@
     <!-- <div class="title">减少票数</div> -->
     <div class="rexData rules">
       <div class="allRex flexa">
-        <span>我的REX：</span>
+        <span>{{ $t('nodePools.myRex') }}：</span>
         <span class="dinBold"> {{ bal }}</span>
       </div>
       <div class="able flexa">
-        <span>可卖REX：</span>
+        <span>{{ $t('nodePools.ableSell') }}：</span>
         <span class="dinBold"> {{ ableSell }}</span>
       </div>
     </div>
     <div class="iptDiv">
-      <div class="subTitle">卖出REX</div>
+      <div class="subTitle">{{ $t('nodePools.sellRex') }}</div>
       <div class="flexend">
         <input class="ipt dinBold" v-model="buy" type="number">
         <span class="coin">REX</span>
@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="btnDiv">
-      <div class="btn flexc" v-loading="loading" @click="handlerSellRex">确认</div>
+      <div class="btn flexc" v-loading="loading" @click="handlerSellRex">{{ $t('public.confirm') }}</div>
     </div>
   </div>
 </template>

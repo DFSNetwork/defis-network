@@ -4,7 +4,7 @@
     <div>
       <div class="subTitle flexa tip">
         <span>{{ $t('mine.waitClaim') }}</span>
-        <img class="tipIcon ml10" @click="showReWardTip = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+        <img class="tipIcon ml10" @click="showRules = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
       </div>
       <div class="claimNum ">
         <span class="dinBold">{{ accLpData.showReward || '0.00000000' }} TAG</span>
@@ -17,17 +17,27 @@
     <div class="flexb">
       <div class="allClaimBtn" v-loading="claim" @click="handleClaimAll">{{ $t('bonus.claim') }}</div>
     </div>
+
+    <el-dialog
+      class="myDialog"
+      :visible.sync="showRules">
+      <ClaimRules />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
+import ClaimRules from '@/views/nodePools/dialog/ClaimRules' 
 
-import { getClaimActions } from '../js/nodePools';
+// import { getClaimActions } from '../js/nodePools';
 
 export default {
   name: 'claim',
+  components: {
+    ClaimRules
+  },
   props: {
     poolsData: {
       type: Object,
@@ -51,7 +61,8 @@ export default {
   data() {
     return {
       claim: false,
-      nKeys: []
+      nKeys: [],
+      showRules: false,
     }
   },
   computed: {
@@ -77,19 +88,34 @@ export default {
       this.loadingProxy = true;
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
-      const params = getClaimActions(this.accVoteData)
-      params.actions.push({
-        account: this.baseConfig.nodeMiner,
-        name: 'claim',
-        authorization: [{ 
-          actor: formName,
-          permission,
-        }],
-        data: {
-          user: formName,
-          mid: 39
-        },
-      })
+      // const params = getClaimActions(this.accVoteData)
+      const params = {
+        actions: [
+          { // 收获
+            account: this.baseConfig.nodeMiner,
+            name: 'harvest',
+            authorization: [{ 
+              actor: formName,
+              permission,
+            }],
+            data: {
+              farmer: formName,
+            },
+          },
+          {
+            account: this.baseConfig.nodeMiner,
+            name: 'claim',
+            authorization: [{ 
+              actor: formName,
+              permission,
+            }],
+            data: {
+              user: formName,
+              mid: 39
+            },
+          }
+        ]
+      }
       // console.log(params)
       EosModel.toTransaction(params, (res) => {
         this.loadingProxy = false;
@@ -105,6 +131,7 @@ export default {
           type: 'success'
         });
         setTimeout(() => {
+          console.log('12345')
           // 查询代理账户数据
           this.$emit('listenUpdata', 'acc')
         }, 1500);
@@ -150,6 +177,18 @@ export default {
     color: #FFF;
     font-size: 28px;
     padding: 10px 36px;
+  }
+}
+.myDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 590px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+    }
   }
 }
 </style>
