@@ -54,7 +54,7 @@ export default {
       poolsReward:'{token} Mining Pool',
       apyShort:'APY',
       poolsBal:'Pool balance',
-      addVote:'Increase the number of votes',
+      addVote:'Increase votes',
       desVote:'Reduce votes',
       rexInfo:'REX introduction',
       buyRex:'Buy REX',
