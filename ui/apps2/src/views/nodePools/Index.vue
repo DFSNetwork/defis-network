@@ -306,7 +306,7 @@ export default {
       }
       const formName = this.scatter.identity.accounts[0].name;
       const params = {
-        "code":"tagtokenmine",
+        "code": this.baseConfig.nodeMiner,
         "scope": mid,
         "table":"miners",
         "json":true,

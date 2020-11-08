@@ -58,10 +58,11 @@ export async function getAccVote(cb) {
 }
 // 获取farmer挖矿数据
 export async function getAccFarmerData(accVoteData, cb) {
+  const baseConfig = store.state.sys.baseConfig;
   const formName = store.state.app.scatter.identity.accounts[0].name;
   const params = {
-    "code":"tagtokenmine",
-    "scope":"tagtokenmine",
+    "code": baseConfig.nodeMiner,
+    "scope": baseConfig.nodeMiner,
     "table":"farmers",
     "json":true,
     "lower_bound": ` ${formName}`,

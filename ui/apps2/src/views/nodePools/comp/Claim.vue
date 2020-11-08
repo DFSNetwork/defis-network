@@ -90,7 +90,7 @@ export default {
           mid: 39
         },
       })
-      console.log(params)
+      // console.log(params)
       EosModel.toTransaction(params, (res) => {
         this.loadingProxy = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
