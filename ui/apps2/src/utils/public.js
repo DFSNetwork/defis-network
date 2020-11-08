@@ -176,7 +176,7 @@ export function toBrowser(id, type) {
 }
 
 // 倒计时
-export function countdown(endtime, istamp) {
+export function countdown(endtime, istamp, type) {
   let t;
   if (!istamp) {
     t = Date.parse(endtime.replace(/-/g, '/')) - Date.parse(new Date());
@@ -185,7 +185,9 @@ export function countdown(endtime, istamp) {
   }
   const days = Math.floor(t / (1000 * 60 * 60 * 24));
   let hours = Math.floor((t / (1000 * 60 * 60)) % 24); // 不累加天数的小时
-  // let hours = Math.floor((t / (1000 * 60 * 60))); // 累加天数的小时
+  if (type === 'hours') {
+    hours = Math.floor((t / (1000 * 60 * 60))); // 累加天数的小时
+  }
   let minutes = Math.floor((t / 1000 / 60) % 60);
   let seconds = Math.floor((t / 1000) % 60);
   hours = hours >= 10 ? hours : `0${hours}`;

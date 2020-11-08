@@ -1,7 +1,7 @@
 <template>
   <div class="nodePools">
     <div class="banner">
-      <img class="bannerImg" src="@/assets/navImg/dssBanner.png" alt="">
+      <img class="bannerImg" src="@/assets/navImg/nodePoolsBanner.png" alt="">
     </div>
     <div class="dataInfo">
       <div class="flexb floatDiv">
@@ -25,7 +25,7 @@
     <MyClaim :poolsData="poolsData" :accVoteData="accVoteData" :accLpData="accLpData"/>
     <!-- 矿池列表 -->
     <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists" :accLpData="accLpData"
-      :poolsData="poolsData"/>
+      :poolsData="poolsData" :rank="rank" :rankList="rankList" :lpRankWeight="lpRankWeight"/>
   </div>
 </template>
 
@@ -64,6 +64,8 @@ export default {
       lpLists: [],
       accLpData: {},
       lpRankWeight: 0,
+      rank: '0',
+      rankList: [],
 
       // 定时器
       poolsTimer: null,
@@ -320,8 +322,10 @@ export default {
         return
       }
       const rows = result.rows || [];
+      this.rankList = rows;
       const index = rows.findIndex(v => formName === v.miner);
       let weight;
+      let rank;
       if (index === -1) {
         weight = 1;
       } else if (index < 25) {
@@ -331,6 +335,8 @@ export default {
       } else {
         weight = 1.1;
       }
+      rank = `${index + 1 ? index + 1 : '100+'}`
+      this.rank = rank;
       this.lpRankWeight = weight;
       this.handleGetLpReward()
     },

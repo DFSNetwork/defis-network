@@ -105,7 +105,7 @@ export function getReward(baseData, userData) {
   if (baseData.mid === 17) {
     price = 1;
   }
-  // console.log(price)
+  // console.log(baseData.mid, price)
   // 基础数据
   const aprs = baseData.aprs;
   // 用户数据

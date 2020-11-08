@@ -8,7 +8,10 @@
         <span>{{ $t('vote.vote') }}</span>
         <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
       </span>
-      <span class="create flexc" @click="handleTo('pools')">{{ $t('mine.pools') }}</span>
+      <span class="create flexc" @click="showPools = true">
+        <span>{{ $t('mine.pools') }}</span>
+        <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
+      </span>
       <span class="create flexc" @click="showDss = true">
         <span>DSS</span>
         <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
@@ -56,6 +59,16 @@
       </div>
     </el-dialog>
 
+    <el-dialog class="mydialog showPools"
+      :modal="false"
+      :show-close="false"
+      :visible.sync="showPools">
+      <div @click="showDss = false">
+        <div class="create flexc" @click="handleTo('pools')">DFS 矿池</div>
+        <div class="create flexc" @click="handleTo('nodePools')">节点矿池</div>
+      </div>
+    </el-dialog>
+
     <el-dialog class="mydialog showVote"
       :modal="false"
       :show-close="false"
@@ -89,6 +102,7 @@ export default {
       showVote: false,
       showApps: false,
       showDss: false,
+      showPools: false,
       ani: false,
       aniTimer: null,
       showEgg: false,
@@ -295,6 +309,11 @@ export default {
   &.showDss{
     /deep/ .el-dialog{
       margin-right: 210px;
+    }
+  }
+  &.showPools{
+    /deep/ .el-dialog{
+      margin-left: 230px;
     }
   }
 
