@@ -19,7 +19,7 @@
           <div class="tip data flexb">
             <div class="flexa">
               <van-icon class="coin rotate" name="coupon-o" />
-              <span>{{ parseInt(item.num_votes) }} EOS</span>
+              <span>{{ parseInt(item.num_votes) | numeralFormat }} EOS</span>
             </div>
             <div class="flexa">
               <img class="coin" src="@/assets/navImg/earth.svg">
@@ -51,7 +51,6 @@
 </template>
 
 <script>
-import voteDefaultImg from '@/assets/img/poolspage/voteDefaultImg.png'
 export default {
   name: 'nodeLists',
   props: {
@@ -82,8 +81,7 @@ export default {
   },
   data() {
     return {
-      voteDefaultImg,
-      defaultImg: 'this.src="/static/default/voteImg.png"',
+      voteDefaultImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png',
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       isChecked: false,
       lists: [],
