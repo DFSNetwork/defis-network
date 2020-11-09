@@ -101,6 +101,9 @@ export function getReward(baseData, userData) {
   // console.log(baseData, userData)
   const marketLists = store.state.sys.marketLists;
   const market = marketLists.find(v => v.mid == baseData.mid)
+  if (!market) {
+    return 0
+  }
   let price = parseFloat(market.reserve0) / parseFloat(market.reserve1)
   if (baseData.mid === 17) {
     price = 1;
@@ -282,4 +285,17 @@ export function getRexActions(accVoteData, obj) {
     params.actions.push(join)
   }
   return params;
+}
+
+// 获取LPreward
+export function getLpReward(baseData, accData) {
+  const rate = accData.token / baseData.liquidity_token;
+  const lpBal = baseData.bal;
+  const weight = accData.weight || 1;
+  const nowT = Date.parse(new Date())
+  let lastT = toLocalTime(`${accData.last_drip}.000+0000`).replace(/-/g, '/')
+  lastT = Date.parse(lastT)
+  let t = (nowT - lastT) / 1000 ;
+  const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
+  return reward.toFixed(8)
 }

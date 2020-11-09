@@ -7,15 +7,15 @@
         <img class="tipIcon" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
       </span>
     </div>
-    <div class="lpList">
+    <div class="lpList" v-if="lpLists.length">
       <div class="bgShadow"></div>
-      <div class="list" v-for="(v, i) in lpLists" :key="`lp${i}`">
-        <div class="lpCutDown flexc" v-if="lpCutDown.total > 0">
-          <div>
-            <div>{{ $t('nodePools.cutDown', {type: 'LP'}) }}</div>
-            <div>{{ lpCutDown.hours }}:{{ lpCutDown.minutes }}:{{ lpCutDown.seconds }}</div>
-          </div>
+      <!-- <div class="lpCutDown flexc" v-if="lpCutDown.total > 0">
+        <div>
+          <div>{{ $t('nodePools.cutDown', {type: 'LP'}) }}</div>
+          <div>{{ lpCutDown.hours }}:{{ lpCutDown.minutes }}:{{ lpCutDown.seconds }}</div>
         </div>
+      </div> -->
+      <div class="list" v-for="(v, i) in lpLists" :key="`lp${i}`" @click="handleToDetailLists(v, 'lp')">
         <div class="poolInfo flexa">
           <img class="coinImg" :src="v.sym1Data.imgUrl">
           <div class="bal">
@@ -33,7 +33,7 @@
         </div>
         <div class="reward">{{ $t('nodePools.marketNum') }}：{{ v.reserve0 }}/{{ v.reserve1 }}</div>
 
-        <div class="myRank plan">
+        <div class="myRank plan" @click.stop="''">
           <div class="flexb">
             <span class="flexa">
               <span>{{ $t('nodePools.planRank') }}：</span>
@@ -49,7 +49,7 @@
             </el-slider>
           </span>
         </div>
-        <div class="flexb">
+        <div class="flexb" @click.stop="''">
           <span>{{ $t('nodePools.myRank') }}：{{ rank }}</span>
         </div>
       </div>
@@ -58,7 +58,7 @@
       <div>{{ $t('nodePools.cutDown', {type: 'REX'}) }}</div>
       <div>{{ rexCutDown.hours }}:{{ rexCutDown.minutes }}:{{ rexCutDown.seconds }}</div>
     </div>
-    <div class="list" v-for="(item, index) in poolsLists" :key="index">
+    <div class="list" v-for="(item, index) in poolsLists" :key="index"  @click="handleToDetailLists(item, 'rex')">
       <div class="poolInfo flexa">
         <img class="coinImg" :src="item.imgUrl">
         <div class="bal">
@@ -284,6 +284,22 @@ export default {
       setTimeout(() => {
       }, 3000);
     },
+    // 去矿工列表
+    handleToDetailLists(item, type) {
+      let sym;
+      if (type === 'rex') {
+        sym = `${item.contract}-${item.sym}`
+      } else {
+        sym = item.mid;
+      }
+      this.$router.push({
+        name: 'poolDetail',
+        params: {
+          type,
+          sym
+        }
+      })
+    }
   }
 }
 </script>

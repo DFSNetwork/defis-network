@@ -437,7 +437,7 @@ export default {
       const apy = reward * price / num * 100;
       // console.log(apy.toFixed(2))
       this.$set(this.lpLists[0], 'apy', apy.toFixed(2))
-    }
+    },
   }
 }
 </script>
