@@ -105,7 +105,6 @@ export default {
         const curr = this.handleGetNowMarket(v)
         const newV = v;
         newV.nowMarket = curr;
-        // const myclass = getV3PoolsClass(v.mid)
         const reserve0 = v.reserve0.split(' ')[0];
         const reserve1 = v.reserve1.split(' ')[0];
         newV.sym0Rate = toFixed(accDiv(reserve1, reserve0), v.decimal1)

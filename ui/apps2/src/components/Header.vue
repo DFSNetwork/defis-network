@@ -63,7 +63,7 @@
       :modal="false"
       :show-close="false"
       :visible.sync="showPools">
-      <div @click="showDss = false">
+      <div @click="showPools = false">
         <div class="create flexc" @click="handleTo('pools')">DFS 矿池</div>
         <div class="create flexc" @click="handleTo('nodePools')">节点矿池</div>
       </div>
