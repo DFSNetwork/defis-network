@@ -9,12 +9,12 @@
     </div>
     <div class="lpList" v-if="lpLists.length">
       <div class="bgShadow"></div>
-      <!-- <div class="lpCutDown flexc" v-if="lpCutDown.total > 0">
+      <div class="lpCutDown flexc" v-if="lpCutDown.total > 0">
         <div>
           <div>{{ $t('nodePools.cutDown', {type: 'LP'}) }}</div>
           <div>{{ lpCutDown.hours }}:{{ lpCutDown.minutes }}:{{ lpCutDown.seconds }}</div>
         </div>
-      </div> -->
+      </div>
       <div class="list" v-for="(v, i) in lpLists" :key="`lp${i}`" @click="handleToDetailLists(v, 'lp')">
         <div class="poolInfo flexa">
           <img class="coinImg" :src="v.sym1Data.imgUrl">
