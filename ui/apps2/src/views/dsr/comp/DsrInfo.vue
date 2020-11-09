@@ -1,7 +1,7 @@
 <template>
   <div v-loading="loading">
     <div class="banner">
-      <img class="bannerImg" src="@/assets/navImg/dssBanner.png" alt="">
+      <img class="bannerImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/dss.png" alt="">
     </div>
     <div class="dataInfo">
       <div class="flexb floatDiv">
@@ -211,7 +211,7 @@ export default {
   }
   .bannerImg{
     display: block;
-    height: 334px;
+    height: 320px;
     width: 100%;
   }
   .bannerTitle{
@@ -233,7 +233,7 @@ export default {
   box-shadow: 0px 4px 8px 4px rgba(227,227,227,0.5);
   border-radius: 20px 20px 0px 0px;
   padding: 28px 28px;
-  margin: -70px 32px 20px;
+  margin: -40px 32px 20px;
   background: #FFF;
   position: relative;
   color: #333;

@@ -1,7 +1,7 @@
 <template>
   <div class="lists flexa" v-loading="loading">
     <div class="coinDiv flexc">
-      <img class="coin" src="https://apps.defis.network/static/coin/yfctokenmain-yfc.png" alt="">
+      <img class="coin" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/yfctokenmain-yfc.png" alt="">
     </div>
     <div class="f1">
       <div class="projectName flexb">

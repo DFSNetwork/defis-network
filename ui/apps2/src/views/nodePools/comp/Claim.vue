@@ -150,6 +150,7 @@ export default {
   color: #333;
   padding: 28px;
   box-sizing: border-box;
+  background: #FFF;
   box-shadow: 0px 4px 8px 4px rgba(220,220,220,0.5);
   .bgImg{
     position: absolute;

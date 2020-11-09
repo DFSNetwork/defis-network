@@ -1,7 +1,7 @@
 <template>
   <div class="fundation">
     <div class="banner">
-      <img class="bgImg" src="@/assets/fundation/banner.png" alt="">
+      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/fundation.png" alt="">
     </div>
 
     <!-- 币种统计 -->

@@ -1,31 +1,33 @@
 <template>
   <div class="nodePools">
-    <div class="banner">
-      <img class="bannerImg" src="@/assets/navImg/nodePoolsBanner.png" alt="">
-    </div>
-    <div class="dataInfo">
-      <div class="flexb floatDiv">
-        <div class="left">
-          <div class="dinBold">{{ proxyData.eosNum || '0.0000' }}</div>
-          <div class="tip bonus">
-            <span>{{ $t('nodePools.allVote') }}（EOS）</span>
+    <div class="bg">
+      <div class="banner">
+        <img class="bannerImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/nodePools.png" alt="">
+      </div>
+      <div class="dataInfo">
+        <div class="flexb floatDiv">
+          <div class="left">
+            <div class="dinBold">{{ proxyData.eosNum || '0.0000' }}</div>
+            <div class="tip bonus">
+              <span>{{ $t('nodePools.allVote') }}（EOS）</span>
+            </div>
           </div>
-        </div>
-        <div class="right">
-          <div class="dinBold">{{ yearApr }}%</div>
-          <div class="tip bonus">
-            <span>{{ $t('dsr.nowApy') }}</span>
+          <div class="right">
+            <div class="dinBold">{{ yearApr }}%</div>
+            <div class="tip bonus">
+              <span>{{ $t('dsr.nowApy') }}</span>
+            </div>
           </div>
         </div>
       </div>
+      <!-- 票数管理 -->
+      <VoteNum :accVoteData="accVoteData" @listenUpdata="handleUpdata"/>
+      <!-- 待领取收益 -->
+      <MyClaim :poolsData="poolsData" :accVoteData="accVoteData" :accLpData="accLpData" @listenUpdata="handleUpdata"/>
+      <!-- 矿池列表 -->
+      <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists" :accLpData="accLpData"
+        :poolsData="poolsData" :rank="rank" :rankList="rankList" :lpRankWeight="lpRankWeight"/>
     </div>
-    <!-- 票数管理 -->
-    <VoteNum :accVoteData="accVoteData" @listenUpdata="handleUpdata"/>
-    <!-- 待领取收益 -->
-    <MyClaim :poolsData="poolsData" :accVoteData="accVoteData" :accLpData="accLpData" @listenUpdata="handleUpdata"/>
-    <!-- 矿池列表 -->
-    <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists" :accLpData="accLpData"
-      :poolsData="poolsData" :rank="rank" :rankList="rankList" :lpRankWeight="lpRankWeight"/>
   </div>
 </template>
 
@@ -443,6 +445,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.bg{
+  padding-bottom: 30px;
+  background-image: linear-gradient(to bottom, #FFF1DE , rgba(#FFF1DE, .3));
+}
 .banner{
   position: relative;
   color: #FFF;
@@ -450,7 +456,7 @@ export default {
   overflow: hidden;
   .bannerImg{
     display: block;
-    height: 334px;
+    height: 320px;
     width: 100%;
   }
 }
@@ -458,7 +464,7 @@ export default {
   box-shadow: 0px 4px 8px 4px rgba(227,227,227,0.5);
   border-radius: 20px 20px 0px 0px;
   padding: 28px 28px;
-  margin: -70px 32px 20px;
+  margin: -40px 32px 20px;
   background: #FFF;
   position: relative;
   color: #333;

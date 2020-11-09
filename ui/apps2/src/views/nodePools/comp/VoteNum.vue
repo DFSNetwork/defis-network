@@ -97,6 +97,7 @@ export default {
   margin: 30px 32px;
   padding: 20px 26px;
   font-size: 27px;
+  background: #FFF;
   border: 8px;
   box-shadow: 0px 4px 8px 4px rgba(220,220,220,0.5);
   .btn{
