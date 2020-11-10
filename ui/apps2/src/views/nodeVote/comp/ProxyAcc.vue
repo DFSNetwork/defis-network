@@ -3,7 +3,7 @@
     <div class="flexb title">
       <div>Proxy</div>
       <div class="proxyBtn">
-        <span @click="handleProxy">投票给TA</span>
+        <span @click="handleTo('nodePools')">投票给TA</span>
       </div>
     </div>
     <div class="content flexb" v-loading="getLoading" @click="handleToBro">
@@ -61,6 +61,11 @@ export default {
   methods: {
     handleToBro() {
       location.href = "https://bloks.io/account/dfsbpsproxy1#votes"
+    },
+    handleTo(name) {
+      this.$router.push({
+        name
+      })
     },
     // 执行代理委托
     handleProxy() {

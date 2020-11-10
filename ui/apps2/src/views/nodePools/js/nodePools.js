@@ -53,6 +53,7 @@ export async function getAccVote(cb) {
   const percent = kweight * 10000 / uweight * 100;
   // console.log(kweight, uweight)
   accVoteData.percent = percent.toFixed(2)
+  accVoteData.rexBegin = Date.parse(new Date()) / 1000 - 1605096000 >= 0;
   // cb(accVoteData)
   getAccFarmerData(accVoteData, cb)
 }

@@ -39,6 +39,12 @@ export default {
     ClaimRules
   },
   props: {
+    lpPoolsMid: {
+      type: Array,
+      default: function avd() {
+        return []
+      }
+    },
     poolsData: {
       type: Object,
       default: function pd() {
@@ -101,20 +107,23 @@ export default {
             data: {
               farmer: formName,
             },
-          },
-          {
-            account: this.baseConfig.nodeMiner,
-            name: 'claim',
-            authorization: [{ 
-              actor: formName,
-              permission,
-            }],
-            data: {
-              user: formName,
-              mid: 39
-            },
           }
         ]
+      }
+      const lpAction = {
+        account: this.baseConfig.nodeMiner,
+        name: 'claim',
+        authorization: [{ 
+          actor: formName,
+          permission,
+        }],
+        data: {
+          user: formName,
+          mid: this.lpPoolsMid[0]
+        },
+      }
+      if (Number(this.accLpData.showReward)) {
+        params.actions.push(lpAction)
       }
       // console.log(params)
       EosModel.toTransaction(params, (res) => {

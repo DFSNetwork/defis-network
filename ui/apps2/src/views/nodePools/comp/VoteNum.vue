@@ -7,7 +7,7 @@
       <span v-if="!accVoteData.isfarmer" class="proxy btn"
         v-loading="loadingProxy"
         @click="handleProxy">{{ $t('nodePools.proxyToHis') }}</span>
-      <span class="flexa" v-else>
+      <span class="flexa">
         <span class="btn" @click="showManage = !showManage">{{ $t('nodePools.manage') }}</span>
       </span>
     </div>
@@ -103,7 +103,7 @@ export default {
   .btn{
     background: #29D4B0;
     border-radius: 40px;
-    padding: 10px 36px;
+    padding: 10px 26px;
     color: #FFF;
   }
   .weight{

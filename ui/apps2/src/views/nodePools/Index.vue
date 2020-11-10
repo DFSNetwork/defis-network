@@ -23,7 +23,8 @@
       <!-- 票数管理 -->
       <VoteNum :accVoteData="accVoteData" @listenUpdata="handleUpdata"/>
       <!-- 待领取收益 -->
-      <MyClaim :poolsData="poolsData" :accVoteData="accVoteData" :accLpData="accLpData" @listenUpdata="handleUpdata"/>
+      <MyClaim :poolsData="poolsData" :accVoteData="accVoteData" :lpPoolsMid="lpPoolsMid"
+        :accLpData="accLpData" @listenUpdata="handleUpdata"/>
       <!-- 矿池列表 -->
       <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists" :accLpData="accLpData"
         :poolsData="poolsData" :rank="rank" :rankList="rankList" :lpRankWeight="lpRankWeight"/>
