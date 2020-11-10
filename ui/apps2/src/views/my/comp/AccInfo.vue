@@ -50,7 +50,8 @@ export default {
           this.id = newVal.identity.accounts[0].name;
         }
       },
-      deep: true
+      deep: true,
+      immediate: true
     }
   },
   methods: {
