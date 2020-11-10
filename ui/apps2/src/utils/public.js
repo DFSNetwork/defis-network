@@ -13,6 +13,12 @@ async function getCdnImgJson() {
   cdnImgJson = result;
 }
 getCdnImgJson();
+export function getPngLen() {
+  return cdnImgJson.png.length
+}
+export function getPng(index) {
+  return cdnImgJson.png[index]
+}
 /*
  ** 加法函数，用来得到精确的加法结果
  ** 返回值：arg1 + arg2的精确结果 Number 型

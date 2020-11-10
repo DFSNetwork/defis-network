@@ -1,25 +1,76 @@
 <template>
   <div class="accInfo">
-    <img class="accBgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/accBanner/banner0.png" alt="">
+    <img class="accBgImg" :src="`https://cdn.jsdelivr.net/gh/defis-net/material/accBanner/banner${bgImg}.png`" alt="">
     <div class="info flexa">
       <div class="headDiv flexc">
-        <img class="headImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/dbctokenmain-dbc.png" alt="">
+        <img class="headImg" :src="`https://cdn.jsdelivr.net/gh/defis-net/material/coin/${headImg}.png`" alt="">
       </div>
       <div>
-        <div class="name">开始溺亡的</div>
+        <div class="name">{{ nick }}</div>
         <div class="account flexb">
-          <span>ID: testtesttest</span>
-          <img class="copy" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/copy.png" alt="">
+          <span>ID: {{ id }}</span>
+          <!-- <img class="copy" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/copy.png" alt=""> -->
         </div>
-        <div class="intro">暂时没有简介</div>
+        <div class="intro">{{ intro }}</div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
+import {getPngLen, getPng} from '@/utils/public';
+import {nick} from '../js/nick'
+import memes from '@/views/konami/js/memes.js';
+
 export default {
   name: 'accInfo',
+  data() {
+    return {
+      nick: '',
+      id: '',
+      bgImg: '',
+      headImg: '',
+      intro: '',
+    }
+  },
+  mounted() {
+    this.handleGetRandom()
+  },
+  computed: {
+    ...mapState({
+      scatter: state => state.app.scatter,
+    }),
+  },
+  watch: {
+    scatter: {
+      handler: function sc (newVal) {
+        if (newVal.identity) {
+          this.id = newVal.identity.accounts[0].name;
+        }
+      },
+      deep: true
+    }
+  },
+  methods: {
+    handleGetRandom() {
+      const r3 = parseInt(Math.random() * 1000 % memes.length);
+      if (memes[r3].length > 50) {
+        this.handleGetRandom()
+        return
+      }
+      this.intro = memes[r3];
+
+      const r1 = parseInt(Math.random() * 1000 % nick.length);
+      this.nick = nick[r1]
+      const r2 = parseInt(Math.random() * 1000 % 5);
+      this.bgImg = r2
+      const len = getPngLen()
+      const r4 = parseInt(Math.random() * 1000 % len);
+      this.headImg = getPng(r4)
+    },
+  }
 }
 </script>
 
@@ -44,6 +95,7 @@ export default {
       background: #FFF;
       border-radius: 70px;
       width: 140px;
+      min-width: 140px;
       height: 140px;
       margin-right: 28px;
     }

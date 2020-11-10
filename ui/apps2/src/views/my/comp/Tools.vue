@@ -68,7 +68,7 @@
           <div>白菜</div>
         </div>
         <div class="list" @click="handleTo('total')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/dbctokenmain-dbc.png" alt="">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/fundation.png" alt="">
           <div>TOP21 {{ $t('info.info') }}</div>
         </div>
         <!-- <div class="list">
