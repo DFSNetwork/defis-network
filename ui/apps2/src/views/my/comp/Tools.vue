@@ -5,7 +5,7 @@
       <div class="title">数据与服务</div>
       <div class="lists flexa">
         <div class="list" @click="handleTo('myMarketList')">
-          <img class="icon big" src="http://localhost:8888/static/img/market.798da88e.svg" alt="">
+          <img class="icon big" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/market.svg" alt="">
           <div>我的做市</div>
         </div>
         <div class="list" @click="handleTo('history', {mid: 39})">
