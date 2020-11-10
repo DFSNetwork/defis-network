@@ -203,6 +203,10 @@ export default {
       }
       this.loading = false
       this.timeList.forEach(pond => {
+        if (!pond.running || pond.id === 2) {
+          return
+        }
+        // console.log(pond.id)
         let list = JSON.stringify(this.marketLists.find(vv => vv.mid === pond.id) || {});
         list = JSON.parse(list)
         if (!list.mid) {
