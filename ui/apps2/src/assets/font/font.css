@@ -8,3 +8,8 @@
   font-family: 'Din';
   src: url('./DIN-Medium.otf');
 }
+/* 减淡字体 */
+@font-face {
+  font-family: 'DinReg';
+  src: url('./DIN.otf');
+}

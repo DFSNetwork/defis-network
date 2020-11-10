@@ -3,7 +3,7 @@
     <div>
       <div class="votes flexb">
         <span class="flexa">
-          <span>您的DFS票数：{{ vote_power }}</span>
+          <span>您的DFS票数：<span class="num dinBold">{{ vote_power }}</span></span>
         </span>
       </div>
     </div>
@@ -135,20 +135,20 @@ export default {
 
 <style lang="scss" scoped>
 .accVoteInfo{
-  font-size: 26px;
+  font-size: 28px;
   text-align: left;
-  margin: 40px;
-  background: #07d79b;
-  border-radius: .26667rem;
-  color: #fff;
+  color: #333;
   padding: 30px;
-  box-shadow: 0 0.26667rem 0.53333rem 0 hsla(0,0%,86.3%,.5);
+  border-bottom: 20px solid #f6f6f6;
   .btn{
-    padding: 8px 20px;
-    background: #FFF;
-    color: #07D79B;
-    border-radius: 5px;
+    padding: 10px 32px;
+    background: #29D4B0;
+    color: #FFF;
+    border-radius: 30px;
     margin-left: 10px;
+  }
+  .num{
+    font-size: 32px;
   }
   .refresh{
     margin-left: 8px;

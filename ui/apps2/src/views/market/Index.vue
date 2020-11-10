@@ -240,7 +240,7 @@ export default {
         }
       })
       if (isNaN(all)) {
-        return '—'
+        return '0.00'
       }
       return all.toFixed(2)
     },

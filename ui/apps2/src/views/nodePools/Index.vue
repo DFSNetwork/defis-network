@@ -62,7 +62,7 @@ export default {
       accVoteData: {}, // 用户投票数据
 
       // LP 挖矿
-      lpPoolsMid: [39],
+      lpPoolsMid: [602],
       lpLists: [],
       accLpData: {},
       lpRankWeight: 0,
@@ -286,6 +286,9 @@ export default {
       this.poolsLists.forEach((list) => {
         const apy = (Math.pow(list.aprs, 86400 * 365) - 1) * 100;
         this.$set(list, 'apy', apy.toFixed(2));
+      })
+      this.poolsLists.sort((a, b) => {
+        return b.apy - a.apy
       })
     },
 
