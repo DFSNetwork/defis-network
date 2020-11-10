@@ -4,7 +4,7 @@
       <div class="hasPools flexb mb10">
         <div class="flexa">
           <span>{{ $t('mine.earnings') }}： {{ changeReWard || '0.00000000' }} DFS</span>
-          <img class="tipIcom" src="@/assets/img/dex/tips_icon_btn.svg" @click.stop="handleShowReWard">
+          <img class="tipIcom" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" @click.stop="handleShowReWard">
         </div>
         <div v-if="getMinerData && Number(reward)" v-loading="claimLoading"
           class="green" @click.stop="handleClaim">{{ $t('bonus.claim') }}</div>

@@ -14,10 +14,10 @@ async function getCdnImgJson() {
 }
 getCdnImgJson();
 export function getPngLen() {
-  return cdnImgJson.png.length
+  return cdnImgJson ? cdnImgJson.png.length : 1
 }
 export function getPng(index) {
-  return cdnImgJson.png[index]
+  return cdnImgJson ? cdnImgJson.png[index] : 'minedfstoken-dfs'
 }
 /*
  ** 加法函数，用来得到精确的加法结果
@@ -451,19 +451,23 @@ export function dealPrice(price) {
 // 返回币种图片地址
 export function getCoin(contract, coin) {
   // console.log(cdnImgJson)
-  const localeCoin = cdnImgJson.svg;
-  const localCoinPng = cdnImgJson.png;
   const inData = `${contract.toLowerCase()}-${coin.toLowerCase()}`
-  const has = localeCoin.find(v => v === inData)
-  if (has) {
-    return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${has}.svg`;
+  try {
+    const localeCoin = cdnImgJson.svg;
+    const localCoinPng = cdnImgJson.png;
+    const has = localeCoin.find(v => v === inData)
+    if (has) {
+      return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${has}.svg`;
+    }
+    const hasPng = localCoinPng.find(v => v === inData);
+    if (!has && hasPng) {
+      // return `/static/coin/${hasPng}.png`;
+      return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${hasPng}.png`;
+    }
+    return `https://ndi.340wan.com/eos/${inData}.png`
+  } catch (error) {
+    return `https://ndi.340wan.com/eos/${inData}.png`
   }
-  const hasPng = localCoinPng.find(v => v === inData);
-  if (!has && hasPng) {
-    // return `/static/coin/${hasPng}.png`;
-    return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${hasPng}.png`;
-  }
-  return `https://ndi.340wan.com/eos/${inData}.png`
 }
 
 // 处理账号缩略 < 12 隐藏后半部分 | === 12 隐藏中间部分 | 自己账户不处理

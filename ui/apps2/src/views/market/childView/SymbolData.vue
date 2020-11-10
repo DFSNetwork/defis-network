@@ -16,7 +16,7 @@
           <div>
             <div class="subTitle flexa">
               <span>{{ $t('mine.waitClaim') }}</span>
-              <img class="tipIcon ml10" @click="showReWardTip = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+              <img class="tipIcon ml10" @click="showReWardTip = true" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
             </div>
             <div class="claimNum">{{ accMineData.showReward || '0.00000000' }} DFS</div>
           </div>
@@ -69,7 +69,7 @@
                           'red':  sym0AndSy1 ? parseFloat(marketRewardSym1) < 0 : parseFloat(marketRewardSym0) < 0}">
               ({{ sym0AndSy1 ? marketRewardSym1 : marketRewardSym0 }})
             </span>
-            <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
+            <img class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
           </div>
           <div class="flexa">
             <span>{{ $t('market.marketTime') }}: </span>

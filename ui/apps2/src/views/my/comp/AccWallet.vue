@@ -9,7 +9,10 @@
     </div>
     <div class="wallet flexb">
       <div class="has">
-        <div class="subTitle">DFS资产</div>
+        <div class="subTitle flexa" @click="showTip = true">
+          <span>DFS资产</span>
+          <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg">
+        </div>
         <div>
           <span class="num dinBold">{{ allDfs | numberTofixed}}</span>
           <span class="small">DFS</span>
@@ -23,6 +26,11 @@
         </div>
       </div>
     </div>
+    <el-dialog
+      class="tipDialog"
+      :visible.sync="showTip">
+      <ProTip v-if="showTip"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -34,8 +42,13 @@ import { sellToken } from '@/utils/logic';
 import { toFixed, accAdd, accDiv, accSub, toLocalTime, dealMinerData } from '@/utils/public';
 import { dealRewardV3 } from '@/utils/logic';
 
+import ProTip from '../dialog/ProTip';
+
 export default {
   name: 'accWallet',
+  components: {
+    ProTip,
+  },
   data() {
     return {
       dssInfo: {},
@@ -50,6 +63,9 @@ export default {
       runTimer: null,
       marketTimer: null,
       marketRunTimer: null,
+
+      // dialog
+      showTip: false,
     }
   },
   mounted() {
@@ -339,6 +355,11 @@ export default {
       .subTitle{
         font-weight: 500;
         margin-bottom: 12px;
+        .tipIcon{
+          display: block;
+          margin-left: 8px;
+          width: 30px;
+        }
       }
     }
     .num{
@@ -348,6 +369,18 @@ export default {
       font-size: 22px;
       font-weight: 300;
       margin-left: 10px;
+    }
+  }
+}
+.tipDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 590px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
     }
   }
 }

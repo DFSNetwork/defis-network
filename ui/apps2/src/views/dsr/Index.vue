@@ -7,7 +7,7 @@
       <div>
         <div class="subTitle flexa tip">
           <span>{{ $t('mine.waitClaim') }}</span>
-          <img class="tipIcon ml10" @click="showReWardTip = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+          <img class="tipIcon ml10" @click="showReWardTip = true" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
         </div>
         <div class="claimNum dinBold">{{myDepositInfo.showReward || '0.00000000'}} DFS</div>
       </div>

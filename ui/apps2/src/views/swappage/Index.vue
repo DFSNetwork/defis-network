@@ -101,7 +101,7 @@
                 trigger="click">
                 <!-- 你的交易将会回滚，如果在确认前有很大的价格变化 -->
                 <div class="qusTip">{{ $t('dex.qusTip1') }}</div>
-                <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+                <span slot="reference" class="flexc ml10"><img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
             <span class="din">{{ tradeInfo.minOut }}</span>
@@ -116,7 +116,7 @@
                 trigger="click">
                 <!-- 根据交易量的多少，成交价与市价的差异 -->
                 <div class="qusTip">{{ $t('dex.qusTip2') }}</div>
-                <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+                <span slot="reference" class="flexc ml10"><img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
             <span class="flexa">
@@ -138,7 +138,7 @@
                 trigger="click">
                 <!-- 每笔交易的（0.30%）会给到流动性提供者 -->
                 <div class="qusTip">{{ $t('dex.qusTip3') }}</div>
-                <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+                <span slot="reference" class="flexc ml10"><img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
             <span class="din">{{fees}} {{ thisMarket0.symbol }}</span>
@@ -153,7 +153,7 @@
                 trigger="click">
                 <!-- 每笔交易的（0.30%）会给到流动性提供者 -->
                 <div class="qusTip">{{ $t('dex.qusTip4') }}</div>
-                <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+                <span slot="reference" class="flexc ml10"><img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
             <span class="din">{{ reward }} DFS</span>

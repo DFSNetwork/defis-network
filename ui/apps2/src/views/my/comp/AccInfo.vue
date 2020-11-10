@@ -7,9 +7,16 @@
       </div>
       <div>
         <div class="name">{{ nick }}</div>
-        <div class="account flexb">
-          <span>ID: {{ id }}</span>
-          <!-- <img class="copy" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/copy.png" alt=""> -->
+        <div class="account flexa">
+          <span
+            v-clipboard:copy="id"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError">ID: {{ id }}</span>
+          <img class="copy"
+            v-clipboard:copy="id"
+            v-clipboard:success="onCopy"
+            v-clipboard:error="onError"
+            src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/copy.png" alt="">
         </div>
         <div class="intro">{{ intro }}</div>
       </div>
@@ -69,7 +76,15 @@ export default {
       this.bgImg = r2
       const len = getPngLen()
       const r4 = parseInt(Math.random() * 1000 % len);
+      // console.log(r4)
       this.headImg = getPng(r4)
+      // console.log(this.headImg)
+    },
+    onCopy() {
+      this.$message.success(this.$t('public.copySuccess'));
+    },
+    onError() {
+      this.$message.error(this.$t('public.copyFail'));
     },
   }
 }
@@ -113,6 +128,7 @@ export default {
       margin-bottom: 8px;
       .copy{
         width: 24px;
+        margin-left: 10px;
       }
     }
   }

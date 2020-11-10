@@ -8,7 +8,7 @@
             placement="top-start"
             trigger="click">
             <div class="qusTip">{{ $t('invi.whatIsInviter') }}</div>
-            <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+            <span slot="reference" class="flexc ml10"><img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt=""></span>
           </el-popover>
     </div>
     <div class="myLink" v-if="link">

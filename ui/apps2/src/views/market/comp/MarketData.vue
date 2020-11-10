@@ -59,7 +59,7 @@
           </span>
         </span>
         <img  @click="handleChangeRewardType" class="qusTip" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
-        <img class="qusTip" src="@/assets/img/dex/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
+        <img class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
       </div>
       <div class="flexa">
         <span>{{ $t('market.marketTime') }}: </span>

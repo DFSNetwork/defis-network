@@ -4,7 +4,7 @@
       <span class="act">{{ $t('nodePools.poolsLists') }}</span>
       <span class="mineRule flexa" @click="showRules = true">
         <span>{{ $t('miningRules.rules') }}</span>
-        <img class="tipIcon" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+        <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
       </span>
     </div>
     <div class="lpList" v-if="lpLists.length">

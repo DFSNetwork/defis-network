@@ -7,7 +7,7 @@
       <span class="act">{{ $t('vote.vote') }}</span>
       <span class="flexa rulesTip tip" @click="showRules = !showRules">
         <span>{{ $t('vote.voteRules') }}</span>
-        <img class="tipIcon" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+        <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
       </span>
     </div>
     <!-- 代理账户信息 -->

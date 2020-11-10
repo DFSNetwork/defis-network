@@ -76,6 +76,9 @@ export default {
       const coinArr = dealSymArr(this.marketLists);
       feesDataKeys.forEach((key) => {
         const isShowToken = coinArr.find(v => v.symbol === key);
+        if (!isShowToken) {
+          return
+        }
         const value = feesData[key];
         const sym1Liq = isShowToken.reserve.split(' ')[0];
         const poolsApr = value / (sym1Liq - value) * 365 * 100;

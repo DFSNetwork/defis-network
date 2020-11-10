@@ -14,7 +14,7 @@
             placement="top-start"
             trigger="click">
             <div class="qusTip">{{ $t('dex.slipTip') }}</div>
-            <span slot="reference" class="flexc ml10"><img width="100%" src="@/assets/img/dex/tips_icon_btn.svg" alt=""></span>
+            <span slot="reference" class="flexc ml10"><img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt=""></span>
           </el-popover>
         </div>
         <div class="slips flexb">
@@ -30,7 +30,6 @@
         <div class="invitation">
           <div class="subTitle flex">
             <span>{{ $t('dex.inviter') }}</span>
-            <!-- <img class="iconImg" src="@/assets/img/dex/tips_icon_btn.svg" alt=""> -->
           </div>
           <div class="invitationIpt flex">
             <el-input class="elIpt" v-model="inviAcc"></el-input>

@@ -54,7 +54,7 @@
           </div>
           <div class="tip flexa" @click="showAboutMarket = true">
             <span>{{ $t('pools.spcTip') }}</span>
-            <img class="iconImg" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+            <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
           </div>
         </div>
         <!-- 按钮事件 -->

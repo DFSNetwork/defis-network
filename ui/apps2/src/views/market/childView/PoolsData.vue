@@ -5,7 +5,7 @@
       <div>
         <div class="subTitle flexa">
           <span>{{ $t('mine.waitClaim') }}</span>
-          <img class="tipIcon ml10" @click="showReWardTip = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+          <img class="tipIcon ml10" @click="showReWardTip = true" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
         </div>
         <div class="claimNum">{{allReward}} DFS</div>
       </div>
@@ -18,7 +18,7 @@
         <span class="act">{{ $t('mine.poolsList') }}</span>
         <span class="flexa mineRule" @click="showRules = true">
           <span>{{ $t('miningRules.rules') }}</span>
-          <img class="tipIcon" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+          <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
         </span>
       </div>
       <div class="noData" v-loading="!firstGet" v-if="!lists.length">{{ $t('public.noData') }}</div>

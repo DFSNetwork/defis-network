@@ -4,7 +4,7 @@
     <div>
       <div class="subTitle flexa tip">
         <span>{{ $t('mine.waitClaim') }}</span>
-        <img class="tipIcon ml10" @click="showRules = true" src="@/assets/img/dex/tips_icon_btn.svg" alt="">
+        <img class="tipIcon ml10" @click="showRules = true" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
       </div>
       <div class="claimNum ">
         <span class="dinBold">{{ accLpData.showReward || '0.00000000' }} TAG</span>
