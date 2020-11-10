@@ -1,7 +1,7 @@
 <template>
   <div class="lists flexa" v-loading="loading">
     <div class="coinDiv flexc">
-      <img class="coin" src="https://apps.defis.network/static/coin/xpettimecore-time.png?v=2" alt="">
+      <img class="coin" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/xpettimecore-time.png?v=2" alt="">
     </div>
     <div class="f1">
       <div class="projectName flexb">
@@ -203,6 +203,10 @@ export default {
       }
       this.loading = false
       this.timeList.forEach(pond => {
+        if (!pond.running || pond.id === 2) {
+          return
+        }
+        // console.log(pond.id)
         let list = JSON.stringify(this.marketLists.find(vv => vv.mid === pond.id) || {});
         list = JSON.parse(list)
         if (!list.mid) {

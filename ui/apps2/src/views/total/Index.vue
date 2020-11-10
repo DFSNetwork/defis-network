@@ -156,7 +156,7 @@ export default {
           return b.allCount - a.allCount
         })
       }
-      arr = arr.slice(0, 20)
+      arr = arr.slice(0, 21)
       // console.log(arr)
       return arr;
     },
@@ -263,8 +263,8 @@ export default {
             const key = `mid-${market.mid}`;
             const countData = this.dfsData.tradingVolumeData[key] || {};
             let countEos = (countData.amountIn.EOS || 0) + (countData.amountOut.EOS || 0);
-            let shortCountEos = countEos > 1000 ? `${(countEos / 1000).toFixed(2)}K` : countEos.toFixed(4);
-            feesApr.countEos = shortCountEos;
+            // let shortCountEos = countEos > 1000 ? `${(countEos / 1000).toFixed(2)}K` : countEos.toFixed(4);
+            feesApr.countEos = countEos.toFixed(4);
             feesApr.allCount = countEos.toFixed(4);
           }
           arr.push(feesApr)

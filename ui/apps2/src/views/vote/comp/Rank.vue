@@ -5,10 +5,6 @@
       <div class="noData tip" v-if="!rankLists.length">{{ $t('public.noData') }}</div>
       <template  v-for="(item, index) in rankLists">
         <div v-if="index < 21" :class="`list flexs ${handleGetClass(item.mid)}`" :key="index">
-          <!-- <label class="rankImg" v-if="index < 10">
-            <img :src="handleGetSrc(item.mid)" alt="">
-            <span class="rankNum">{{ index + 1}}</span>
-          </label> -->
           <div>
             <div class="poolName">
               <span class="coinImg flexa">
@@ -81,14 +77,6 @@ export default {
     }
   },
   methods: {
-    handleGetSrc(mid) {
-      const myclass = getV3PoolsClass(mid);
-      if (myclass) {
-        return `/static/rank/${myclass}.svg`
-      } else {
-        return ''
-      }
-    },
     handleGetClass(mid) {
       return getV3PoolsClass(mid)
     },

@@ -299,7 +299,7 @@ export default {
   },
   info: {
     info: 'Info',
-    top10: 'DFS Farm TOP20',
+    top10: 'DFS Farm TOP21',
     dfsMineApr: 'DFS Mining APR',
     markerFeesApr: 'Market Fees APR',
     yfcApr: 'YFC APR',
@@ -327,7 +327,7 @@ export default {
     voter:'voter',
     voterNum:'Total number of people',
     maxNum:'Select up to 3',
-    rankTip: 'The mine pool ranks outside the top 20, with no mining revenue.',
+    rankTip: 'The mine pool ranks outside the top 21, with no mining revenue.',
     challenge: 'Vote',
   },
   farms: {

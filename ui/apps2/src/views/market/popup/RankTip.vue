@@ -2,7 +2,7 @@
   <div class="rankTip">
     <div class="title">{{ $t('public.warmPrompt') }}</div>
     <div class="content">
-      该矿池排名在TOP20之外，暂无挖矿收益。
+      该矿池排名在TOP21之外，暂无挖矿收益。
     </div>
   </div>
 </template>

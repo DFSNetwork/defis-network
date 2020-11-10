@@ -8,6 +8,18 @@ function getHost() {
   return baseConfig.node.url;
 }
 
+export function getJson() {
+  return new Promise((resolve, reject) => {
+    axios.get('https://cdn.jsdelivr.net/gh/defis-net/material/coin/coinJson.json').then((res) => {
+      // let result = Object.assign(res.data, {});
+      let result = res.data;
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+
 // 获取投票矿池排名
 export function getVotePools() {
   const params = {
@@ -64,6 +76,23 @@ export function get_table_rows(params) {
     axios.post(`${host}/v1/chain/get_table_rows`, JSON.stringify(params)).then((res) => {
       let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+
+// 链上查表
+export function get_balance(params) {
+  return new Promise((resolve, reject) => {
+    const host = getHost()
+    axios.post(`${host}/v1/chain/get_currency_balance`, JSON.stringify(params)).then((res) => {
+      // let result = Object.assign(res.data, {});
+      let result = res.data;
+      if (!result.length) {
+        result = [`${Number(0).toFixed(params.decimal || 4)} ${params.symbol}`]
+      }
+      resolve({ status: res.status === 200, result: result[0] });
     }, err => {
       reject(err)
     })

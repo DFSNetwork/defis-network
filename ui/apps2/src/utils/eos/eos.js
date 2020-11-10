@@ -436,6 +436,85 @@ async getTableRows(obj, callback) {
     });
   }
 
+  // REX 操作
+  rexActions(obj, callback) {
+    this.getToAccount()
+    const formName = this.accountReset();
+    const permission = this.accountByScatter.authority;
+    let amount = obj.amount;
+    const params = {
+      actions: [{ // 投票
+        account: 'eosio',
+        name: 'voteproducer',
+        authorization: [{ 
+          actor: formName,
+          permission,
+        }],
+        data: {
+          voter: formName,
+          proxy: obj.proxy || 'dfsbpsproxy1', // 投票的节点名称
+          producers: [],
+        },
+      }]
+    }
+    if (obj.type === 'buyRex') {
+      const buyRex = [{ // 充值
+        account: 'eosio',
+        name: 'deposit',
+        authorization: [{
+          actor: formName,
+          permission,
+        }],
+        data: {
+          owner: formName,
+          amount, // eos 数量
+        },
+      },
+      { // 买入：buyrex
+        account: 'eosio',
+        name: 'buyrex',
+        authorization: [{
+          actor: formName,
+          permission,
+        }],
+        data: {
+          from: formName,
+          amount, // eos 数量
+        },
+      }]
+      params.actions.push(...buyRex)
+    } else {
+      const sellRex = [{ // 卖出：sellrex
+        account: 'eosio',
+        name: 'sellrex',
+        authorization: [{
+          actor: formName,
+          permission,
+        }],
+        data: {
+          from: formName,
+          rex: obj.rex
+        },
+      },
+      { // 提现
+        account: 'eosio',
+        name: 'withdraw',
+        authorization: [{
+          actor: formName,
+          permission,
+        }],
+        data: {
+          owner: formName,
+          amount: obj.getEos
+        },
+      }]
+      params.actions.push(...sellRex)
+    }
+    
+    console.log(params)
+    this.toTransaction(params, callback)
+  }
+
   // 直接执行操作
   async toTransaction(obj, callback) {
     const params = obj;
@@ -518,6 +597,7 @@ async getTableRows(obj, callback) {
       code: '0001',
       message: JSON.stringify(e),
     };
+    console.log(e)
     try {
       if (typeof (e) === 'object') {
         if (e.code === 402) {

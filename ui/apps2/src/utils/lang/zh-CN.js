@@ -300,7 +300,7 @@ export default {
   },
   info: {
     info: '概览',
-    top10: '大丰收农场TOP20',
+    top10: '大丰收农场TOP21',
     dfsMineApr: 'DFS挖矿年化',
     markerFeesApr: '做市手续费年化',
     yfcApr: 'YFC钓鱼年化',
@@ -328,7 +328,7 @@ export default {
     voter: '投票人',
     voterNum: '总人数',
     maxNum: '最多选择3个',
-    rankTip: '该矿池排名在TOP20之外，暂无挖矿收益。',
+    rankTip: '该矿池排名在TOP21之外，暂无挖矿收益。',
     challenge: '投票挑战',
   },
   farms: {

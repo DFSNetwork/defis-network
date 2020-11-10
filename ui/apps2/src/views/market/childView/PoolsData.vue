@@ -187,16 +187,9 @@ export default {
   },
   methods: {
     handleGetSrc(mid, index) {
-        // '/static/rank/rank${index + 1}.png'
-      // const myclass = getV3PoolsClass(mid);
-      // if (myclass && index <= 21) {
-      //   // return `https://apps.defis.network/static/rank/${myclass}.svg`
-      //   return `/static/rank/${myclass}.svg`
-      // } else {
-      //   return ''
-      // }
       if (index <= 21) {
-        return `/static/rank/${index + 1}.png`
+        // https://cdn.jsdelivr.net/gh/defis-net/material/art/levels/1.png
+        return `https://cdn.jsdelivr.net/gh/defis-net/material/art/levels/${index + 1}.png`
       } else {
         return ''
       }

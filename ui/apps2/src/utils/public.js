@@ -2,8 +2,17 @@ import Decimal from 'decimal.js';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
 import store from '@/store';
-import axios from 'axios';
+import {getJson} from './api'
 
+let cdnImgJson; // CDN 图片配置
+async function getCdnImgJson() {
+  const {status, result} = await getJson()
+  if (!status) {
+    return
+  }
+  cdnImgJson = result;
+}
+getCdnImgJson();
 /*
  ** 加法函数，用来得到精确的加法结果
  ** 返回值：arg1 + arg2的精确结果 Number 型
@@ -59,9 +68,6 @@ export function login(vThis, cb) {
     // handleScatterOut(cb)
     EosModel.getIdentity('eos', (err => {
       cb(err)
-      if (!err) {
-        getIp()
-      }
     }));
   });
 }
@@ -180,7 +186,7 @@ export function toBrowser(id, type) {
 }
 
 // 倒计时
-export function countdown(endtime, istamp) {
+export function countdown(endtime, istamp, type) {
   let t;
   if (!istamp) {
     t = Date.parse(endtime.replace(/-/g, '/')) - Date.parse(new Date());
@@ -189,7 +195,9 @@ export function countdown(endtime, istamp) {
   }
   const days = Math.floor(t / (1000 * 60 * 60 * 24));
   let hours = Math.floor((t / (1000 * 60 * 60)) % 24); // 不累加天数的小时
-  // let hours = Math.floor((t / (1000 * 60 * 60))); // 累加天数的小时
+  if (type === 'hours') {
+    hours = Math.floor((t / (1000 * 60 * 60))); // 累加天数的小时
+  }
   let minutes = Math.floor((t / 1000 / 60) % 60);
   let seconds = Math.floor((t / 1000) % 60);
   hours = hours >= 10 ? hours : `0${hours}`;
@@ -379,12 +387,6 @@ export function getDbcReward(mid, type) {
   return toFixed(reward, 8)
 }
 
-
-export function getIp() {
-  const acc = store.state.app.scatter.identity.accounts[0].name;
-  axios.get(`https://dfsdapp.sgxiang.com/record?account=${acc}`)
-}
-
 export function getDmdMinerHourRoi(market, type, dmdPools) {
   const config = store.state.config.dmdMineConfig;
   const thisConf = config.find(v => v.mid === market.mid) || {};
@@ -442,19 +444,18 @@ export function dealPrice(price) {
 
 // 返回币种图片地址
 export function getCoin(contract, coin) {
-  const localeCoin = ['eosio.token-eos', 'bankofusddv1-usdd', 'whaleextoken-wal'];
-  const localCoinPng = ['hbbguanfang5-hbb', 'cynthiacaoyi-cbed', 'huangheeos.e-jcb', 'buyniubinbbb-nbb', 'rosedefifarm-rose',
-  'yfctokenmain-yfc', 'eossanguotkt-tkt', 'pink.bank-pink', 'dbctokenmain-dbc', 'sars.run-eet', 'looptoken123-loop',
-  'lootglobcore-loot', 'pddtokenmain-pdd', 'xpettimecore-time', 'sars.run-sars', 'minedfstoken-dfs', 'eoscatstoken-cat']
+  // console.log(cdnImgJson)
+  const localeCoin = cdnImgJson.svg;
+  const localCoinPng = cdnImgJson.png;
   const inData = `${contract.toLowerCase()}-${coin.toLowerCase()}`
   const has = localeCoin.find(v => v === inData)
   if (has) {
-    return `https://apps.defis.network/static/coin/${has}.svg`;
+    return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${has}.svg`;
   }
   const hasPng = localCoinPng.find(v => v === inData);
   if (!has && hasPng) {
     // return `/static/coin/${hasPng}.png`;
-    return `https://apps.defis.network/static/coin/${hasPng}.png`;
+    return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${hasPng}.png`;
   }
   return `https://ndi.340wan.com/eos/${inData}.png`
 }
@@ -465,23 +466,6 @@ export function dealAccountHide(str) {
   if (scatter && scatter.identity && scatter.identity.accounts[0].name === str) {
     return str
   }
-  // let newStr = '';
-  // if (str.length < 12) {
-  //   const n = (str.length / 2).toFixed(0);
-  //   newStr = str.substr(0, n);
-  //   const m = str.substring(n).split('');
-  //   let end = '';
-  //   m.forEach(() => {
-  //     end += '*';
-  //   });
-  //   return newStr + end;
-  // }
-  // if (str.length === 12) {
-  //   const str1 = str.substr(0, 4);
-  //   const str2 = '****';
-  //   const str3 = str.substring(8);
-  //   return str1 + str2 + str3;
-  // }
   const t = str.length % 3;
   const len1 = Math.ceil(str.length/3);
   let len2 = len1;

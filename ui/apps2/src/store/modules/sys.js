@@ -29,25 +29,38 @@ const sys = {
       baseCoin: 'EOS', // 母币
       baseCoinContract: 'eosio.token',
       teamFunds: 'jinteamfunds', // 资金账户
+      // nodePools config
+      nodeMiner: 'tagtokenmine',
+      nodeToken: 'tagtokentest',
+      nodecoin: 'tagissuetest',
+      fundation: 'dfsfundatest',
+      lpPools: 'tageosmining',
     },
     devConfig: { // 开发环境配置
       node: {
-        area: "dev",
-        protocol: "http",
-        host: "183.250.89.179",
-        port: "58888",
-        url: "http://183.250.89.179:58888",
-        chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f",
+        area: 'production',
+        protocol: 'https',
+        host: 'eos.blockeden.cn', // eospush.tokenpocket.pro
+        port: '443',
+        url: 'https://eos.blockeden.cn', // https://eospush.tokenpocket.pro https://eos.greymass.com
+        chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
       },
-      toAccountSwap: 'jinswap11112', // 主交易 swap 合约
-      toAccountJin: 'jinbankoneo2', // JIN 合约
+      toAccountSwap: 'defisswapcnt', // 主交易 swap 合约
+      toAccountJin: 'bankofusddv1', // JIN 合约
       toAccountByHyk: 'jintokensell', // 限量买HYK
       hykContranct: 'jindaotokens', // HYK 合约
       bonusAccount: 'jindaojindao', // 分红账号
-      oracle: 'jinoracle113', // 价格合约
-      baseCoin: 'SYS', // 母币
+      oracle: 'jinoraclesv1', // 价格合约
+      baseCoin: 'EOS', // 母币
       baseCoinContract: 'eosio.token',
       teamFunds: 'jinteamfunds', // 资金账户
+      type: true,
+      // nodePools config
+      nodeMiner: 'tagtokenmine',
+      nodeToken: 'tagtokentest',
+      nodecoin: 'tagissuetest',
+      fundation: 'dfsfundatest',
+      lpPools: 'tageosmining',
     },
     proConfig: localStorage.getItem('proConfig') && JSON.parse(localStorage.getItem('proConfig')).type ? JSON.parse(localStorage.getItem('proConfig')) : { // 生产环境配置
       node: {
@@ -68,6 +81,12 @@ const sys = {
       baseCoinContract: 'eosio.token',
       teamFunds: 'jinteamfunds', // 资金账户
       type: true,
+      // nodePools config
+      nodeMiner: 'tagtokenfarm',
+      nodeToken: 'tagtokenmain',
+      nodecoin: 'tagissuemain',
+      fundation: 'dfsfundation',
+      lpPools: 'tageosmining',
     },
     damping: localStorage.getItem('damping') || 0.75, // DFS流通量计算得出 - Math.pow(0.75, parseInt(dfsCurrent / 1000000))
     dfsPrice: localStorage.getItem('dfsPrice') || '0', // DFS 5分钟均价

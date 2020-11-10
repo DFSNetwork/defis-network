@@ -8,7 +8,10 @@
         <span>{{ $t('vote.vote') }}</span>
         <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
       </span>
-      <span class="create flexc" @click="handleTo('pools')">{{ $t('mine.pools') }}</span>
+      <span class="create flexc" @click="showPools = true">
+        <span>{{ $t('mine.pools') }}</span>
+        <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
+      </span>
       <span class="create flexc" @click="showDss = true">
         <span>DSS</span>
         <img class="downdraw" src="@/assets/img/dialog/down.svg" alt="">
@@ -36,7 +39,7 @@
         </div>
         <div class="proClass">
           <div class="create flexc" @click="handleTo('farms')">{{ $t('farms.Lobby') }}</div>
-          <div class="create flexc" @click="handleTo('total')">TOP20 {{ $t('info.info') }}</div>
+          <div class="create flexc" @click="handleTo('total')">TOP21 {{ $t('info.info') }}</div>
           <div class="create flexc" @click="handleTo('coinViews', {mid: 39})">{{ $t('farms.coinView') }}</div>
         </div>
         <div class="proClass">
@@ -53,6 +56,16 @@
       <div @click="showDss = false">
         <div class="create flexc" @click="handleTo('dss')">DFS DSS</div>
         <div class="create flexc" @click="handleToProject('yfcDss')">YFC DSS</div>
+      </div>
+    </el-dialog>
+
+    <el-dialog class="mydialog showPools"
+      :modal="false"
+      :show-close="false"
+      :visible.sync="showPools">
+      <div @click="showPools = false">
+        <div class="create flexc" @click="handleTo('pools')">DFS 矿池</div>
+        <div class="create flexc" @click="handleTo('nodePools')">节点矿池</div>
       </div>
     </el-dialog>
 
@@ -89,6 +102,7 @@ export default {
       showVote: false,
       showApps: false,
       showDss: false,
+      showPools: false,
       ani: false,
       aniTimer: null,
       showEgg: false,
@@ -295,6 +309,11 @@ export default {
   &.showDss{
     /deep/ .el-dialog{
       margin-right: 210px;
+    }
+  }
+  &.showPools{
+    /deep/ .el-dialog{
+      margin-left: 230px;
     }
   }
 

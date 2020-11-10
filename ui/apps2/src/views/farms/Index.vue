@@ -24,17 +24,11 @@
       <div @click="handleTo('dss')">
         <Dss ref="dss"  :allClaiming="allClaiming"/>
       </div>
-      <div @click="handleTo('yfc')">
-        <Yfc ref="yfc"  :allClaiming="allClaiming"/>
-      </div>
       <div @click="handleTo('guns')">
         <Guns ref="guns"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('yfcDss')">
         <YfcDss ref="yfcDss"  :allClaiming="allClaiming"/>
-      </div>
-      <div @click="handleTo('dbc')">
-        <Dbc ref="dbc"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('pdd')">
         <Pdd ref="pdd"  :allClaiming="allClaiming"/>
@@ -55,8 +49,6 @@
     <div class="proLists">
       <TimeRank />
       <LootRank />
-      <DfsRank />
-      <YfcRank />
     </div>
 
     <el-dialog
@@ -73,8 +65,6 @@
 import MoreActionTip from './dialog/MoreActionTip';
 import Dss from './comp/Dss';
 import DfsMiner from './comp/DfsMiner';
-import Yfc from './comp/Yfc';
-import Dbc from './comp/Dbc';
 import Dmd from './comp/Dmd';
 import Guns from './comp/Guns';
 import Loop from './comp/Loop';
@@ -84,8 +74,6 @@ import MyTime from './comp/MyTime';
 // tools
 import TimeRank from './toolsComp/TimeRank';
 import LootRank from './toolsComp/LootRank';
-import DfsRank from './toolsComp/DfsRank';
-import YfcRank from './toolsComp/YfcRank';
 
 import { EosModel } from '@/utils/eos';
 
@@ -95,8 +83,6 @@ export default {
     MoreActionTip,
     Dss,
     DfsMiner,
-    Yfc,
-    Dbc,
     Dmd,
     Guns,
     Loop,
@@ -107,8 +93,6 @@ export default {
     // tools
     TimeRank,
     LootRank,
-    DfsRank,
-    YfcRank,
   },
   data() {
     return {
@@ -132,15 +116,13 @@ export default {
       let n = 0
       const dss = this.$refs.dss ? Number(this.$refs.dss.aboutEos || 0) : 0;
       const dfsMiner = this.$refs.dfsMiner ? Number(this.$refs.dfsMiner.aboutEos || 0) : 0;
-      const yfc = this.$refs.yfc ? Number(this.$refs.yfc.aboutEos || 0) : 0;
-      const dbc = this.$refs.dbc ? Number(this.$refs.dbc.aboutEos || 0) : 0;
       const dmd = this.$refs.dmd ? Number(this.$refs.dmd.aboutEos || 0) : 0;
       const guns = this.$refs.guns ? Number(this.$refs.guns.aboutEos || 0) : 0;
       const loop = this.$refs.loop ? Number(this.$refs.loop.aboutEos || 0) : 0;
       const pdd = this.$refs.pdd ? Number(this.$refs.pdd.aboutEos || 0) : 0;
       const yfcDss = this.$refs.yfcDss ? Number(this.$refs.yfcDss.aboutEos || 0) : 0;
       const lootTime = this.$refs.lootTime ? Number(this.$refs.lootTime.aboutEos || 0) : 0;
-      n = dss + dfsMiner + yfc + dbc + dmd + guns + loop + pdd + yfcDss + lootTime + n;
+      n = dss + dfsMiner + dmd + guns + loop + pdd + yfcDss + lootTime + n;
       this.allReward = n.toFixed(4);
       this.allRewardTimer = setTimeout(() => {
         this.handleGetAll()
@@ -155,14 +137,6 @@ export default {
     handleTo(name) {
       if (this.$route.name === name)  {
         return;
-      }
-      if (name === 'yfc') {
-        location.href = 'https://yfc.one';
-        return
-      }
-      if (name === 'dbc') {
-        location.href = 'https://dbc.yfc.one';
-        return
       }
       if (name === 'dmd') {
         location.href = 'https://dmd.finance/';
@@ -194,15 +168,13 @@ export default {
     handleRegLength() {
       const dss = this.$refs.dss.handleGetActions()
       const dfsMiner = this.$refs.dfsMiner.handleGetActions()
-      const yfc = this.$refs.yfc.handleGetActions()
-      const dbc = this.$refs.dbc.handleGetActions()
       const dmd = this.$refs.dmd.handleGetActions()
       const guns = this.$refs.guns.handleGetActions()
       const loop = this.$refs.loop.handleGetActions()
       const pdd = this.$refs.pdd.handleGetActions()
       const yfcDss = this.$refs.yfcDss.handleGetActions()
       const lootTime = this.$refs.lootTime.handleGetActions()
-      const tArr = [...dss, ...dfsMiner, ...yfc, ...dbc, ...dmd, ...guns, ...loop, ...pdd, ...yfcDss, ...lootTime];
+      const tArr = [...dss, ...dfsMiner, ...dmd, ...guns, ...loop, ...pdd, ...yfcDss, ...lootTime];
       this.allActions = tArr;
       if (this.allActions.length <= 10) { // 10条以内
         // console.log(this.allActions.length)
