@@ -4,7 +4,11 @@
     <div class="voteLists">
       <div class="noData tip" v-if="!rankLists.length">{{ $t('public.noData') }}</div>
       <template  v-for="(item, index) in rankLists">
-        <div v-if="index < 21" :class="`list flexs ${handleGetClass(item.mid)}`" :key="index">
+        <div v-if="index < 21" class="list flexa" :key="index">
+          <div class="rankDiv dinBold">
+            <img v-if="index < 3" :src="`https://cdn.jsdelivr.net/gh/defis-net/material/rank/voteRank${index+1}.png`" alt="">
+            <span v-else>{{index + 1}}</span>
+          </div>
           <div>
             <div class="poolName">
               <span class="coinImg flexa">
@@ -12,7 +16,6 @@
                   <img :src="item.sym0Data.imgUrl" :onerror="errorCoinImg">
                   <span>{{ item.symbol0 }}</span>
                 </span>
-                <span class="add">+</span>
                 <span class="flexa">
                   <img :src="item.sym1Data.imgUrl" :onerror="errorCoinImg">
                   <span>{{ item.symbol1 }}</span>
@@ -20,8 +23,10 @@
               </span>
             </div>
             <div class="num">
-              <span class="el-icon-coin icon"></span>
-              <span>{{ item.total_votes || '0' }}（{{ item.votesRate || '0.00' }}%）</span>
+              <img class="voteIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/vote.png" alt="">
+              <span>{{ item.total_votes || '0' }}</span>
+              <span class="tip small">（{{ item.votesRate || '0.00' }}%）</span>
+              <span class="green" @click.stop="handleToDetail(item)">{{ $t('public.detail') }}></span>
             </div>
           </div>
         </div>
@@ -80,6 +85,15 @@ export default {
     handleGetClass(mid) {
       return getV3PoolsClass(mid)
     },
+    handleToDetail(item) {
+      this.$router.push({
+        name: 'voteDetail',
+        params: {
+          symbol: `${item.symbol0}-${item.symbol1}`,
+          mid: item.mid
+        }
+      })
+    },
   }
 }
 </script>
@@ -95,55 +109,54 @@ export default {
 .list{
   position: relative;
   border-top: 1px solid #eee;
-  padding: 20px 30px;
-  margin-top: 15px;
+  padding: 28px 0;
   border-radius: 20px;
-  .coinImg{
+  .rankDiv{
+    width: 64px;
+    height: 64px;
+    font-size: 28px;
+    color: #999;
+    margin-right: 12px;
     img{
-      width: 50px;
+      width: 64px;
+    }
+  }
+  .coinImg{
+    margin-bottom: 16px;
+    img{
+      width: 44px;
+      height: 44px;
+      border-radius: 25px;;
       margin-right: 10px;
     }
-    .add{
-      margin: 20px;
+    &>span{
+      &:first-child{
+        margin-right: 30px;
+      }
     }
   }
   .num{
+    margin-top: 8px;
     text-align: left;
+    .voteIcon{
+      width: 28px;
+      margin-right: 8px;
+    }
     .icon{
       font-size: 27px;
       margin-right: 8px;
     }
-  }
-  .select{
-    width: 40px;
-    height: 40px;
-    border: 1px solid #e3e3e3;
-    color: #FFF;
-    border-radius: 50%;
-    box-sizing: border-box;
-    .el-icon-check{
-      font-size: 30px;
+    .small{
+      font-size: 24px;
+      margin-left: -8px;
     }
-    &.active{
-      background: #07d79b;
-      border: 0px solid transparent;
+    .green{
+      font-size: 22px;
+      color: #29D4B0;
     }
   }
 }
-// .rankImg{
-//   position: absolute;
-//   top: 0px;
-//   left: 0px;
-//   width: 72px;
-//   transform: translate(-47%, -47%) rotate(-45deg);
-//   img{
-//     width: 100%;
-//   }
-// }
 .rankImg{
-  // position: absolute;
-  // top: 0px;
-  // left: 25px;
   position: relative;
   width: 80px;
   margin-right: 10px;

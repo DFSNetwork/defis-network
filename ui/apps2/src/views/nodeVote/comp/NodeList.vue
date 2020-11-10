@@ -17,32 +17,30 @@
             <span class="nodeName">{{ item.owner }}</span>
           </div>
           <div class="tip data flexb">
-            <div class="flexa">
-              <van-icon class="coin rotate" name="coupon-o" />
+            <div class="flexa dinReg">
+              <span class="voteIcon flexc">
+                <img class="small" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/money.png" alt="">
+              </span>
               <span>{{ parseInt(item.num_votes) | numeralFormat }} EOS</span>
             </div>
-            <div class="flexa">
-              <img class="coin" src="@/assets/navImg/earth.svg">
+            <div class="flexa dinReg">
+              <img class="voteIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/earth.png" alt="">
               <a class="tip websize" :href="item.url" target="_blank" rel="noopener noreferrer">
                 {{ handleDealUrl(item.url) }}
               </a>
             </div>
-            <!-- <div class="flexa">
-              <img class="coin" src="@/assets/navImg/percent.svg">
-              <span>{{ item.percentage_votes }}%</span>
-            </div> -->
           </div>
           <div class="tip data flexb">
             <div class="flexa">
-              <i class="el-icon-coin coin"></i>
-              <span>{{ item.dfsVote || '0' }}</span>
-              <span class="green_p" @click.stop="handleToDetail(item)">{{ $t('public.detail') }}></span>
+              <img class="voteIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/vote.png" alt="">
+              <span class="dinReg">{{ item.dfsVote || '0' }}</span>
+              <span class="green" @click.stop="handleToDetail(item)">{{ $t('public.detail') }}></span>
             </div>
           </div>
         </div>
         <div class="checkBoxDiv flexc">
           <div class="checkBox flexc" :class="{'isChecked': item.isChecked}">
-            <van-icon v-if="item.isChecked" name="checked"/>
+            <img v-if="item.isChecked" class="checkedImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/checked.png" alt="">
           </div>
         </div>
       </div>
@@ -233,23 +231,23 @@ export default {
 
 <style lang="scss" scoped>
 .lists{
+  padding: 0 30px;
   .noData{
     font-size: 28px;
     text-align: center;
     padding: 50px 0;
   }
   .list{
-    // height: 130px;
-    padding: 20px 0;
-    border-top: 1px solid #EEE;
+    padding: 28px 0;
+    border-top: 1px solid rgba(220,220,220,.3);
     &:last-child{
       border-bottom: 0px solid #EEE;
     }
     .main{
       flex: 1;
       .logo{
-        width: 50px;
-        height: 50px;
+        width: 44px;
+        height: 44px;
         margin-right: 10px;
         border-radius: 50%;
       }
@@ -260,20 +258,22 @@ export default {
       margin-left: 20px;
       .checkBox{
         box-sizing: border-box;
-        height: 42px;
-        width: 42px;
+        height: 45px;
+        width: 45px;
         border: 1px solid #eee;
-        font-size: 45px;
         border-radius: 50%;;
         color: #07d79b;
         &.isChecked{
           border: 0px solid #eee;
         }
       }
+      .checkedImg{
+        width: 50px;
+      }
     }
     .rank{
-      background: #337352;
-      color: #fFF;
+      background: rgba(#29D4B0, .2);
+      color: #29D4B0;
       width: 50px;
       height: 35px;
       border-radius: 8px;
@@ -283,7 +283,7 @@ export default {
     .nodeName{
       font-weight: 500;
       color: #000;
-      font-size: 30px;
+      font-size: 28px;
     }
     .data{
       margin-top: 15px;
@@ -294,13 +294,22 @@ export default {
           flex: 4;
         }
       }
+      .voteIcon{
+        width: 28px;
+        margin-right: 8px;
+        .small{
+          width: 22px;
+        }
+      }
       .coin{
         font-size: 32px;
         max-width: 32px;
         margin-right: 10px;
       }
-      .green_p{
+      .green{
         margin-left: 8px;
+        color: #29D4B0;
+        font-size: 22px;
       }
       .rotate{
         transform: rotate(-45deg);

@@ -1,11 +1,7 @@
 <template>
   <div class="voteMain">
     <div class="banner">
-      <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
-      <div class="title">DFS Governance</div>
-      <div class="titleTip">
-        DFS tokens represent voting shares.
-      </div>
+      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/poolsVote.png" alt="">
     </div>
     <div class="mainTitle flexb">
       <span class="act">{{ $t('vote.vote') }}</span>
@@ -18,7 +14,7 @@
       <div>
         <div class="votes flexb">
           <span class="flexa">
-            <span>{{ $t('vote.myVote') }}：{{ vote_power }}</span>
+            <span>{{ $t('vote.myVote') }}：<span class="dinBold">{{ vote_power }}</span></span>
           </span>
         </div>
       </div>
@@ -28,18 +24,22 @@
     </div>
     <div class="selectList">
       <div class="tab flexb">
-        <div class="nav">
+        <div class="nav flexa">
           <span :class="{'act': act === 1}" @click="handleChangeTab(1)">{{ $t('vote.vote') }}</span>
           <span :class="{'act': act === 2}" @click="handleChangeTab(2)">{{ $t('vote.rank') }}</span>
           <span :class="{'act': act === 3}" @click="handleChangeTab(3)">{{ $t('vote.voted') }}</span>
         </div>
-        <div class="search">
-          <el-input prefix-icon="el-icon-search" @input="handleSearch"
+        <div class="search flexc">
+          <img class="searchImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/search.png" alt="">
+          <el-input @input="handleSearch"
             v-model="search" placeholder="搜索市场"></el-input>
         </div>
       </div>
       <div v-if="act !== 2" class="voteLists" v-loading="listLoading || hisLoading">
-        <div class="noData tip" v-if="!searchList.length">{{ $t('public.noData') }}</div>
+        <div class="noData tip" v-if="!searchList.length">
+          <img class="noDataImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/noData.png" alt="">
+          <div class="noDataTip">{{ $t('public.noData') }}</div>
+        </div>
         <template  v-for="(item, index) in searchList">
           <div class="list flexb" :key="index" @click="handleChecked(item, index)">
             <div>
@@ -49,21 +49,22 @@
                     <img :src="item.sym0Data.imgUrl" :onerror="errorCoinImg">
                     <span>{{ item.symbol0 }}</span>
                   </span>
-                  <span class="add">+</span>
                   <span class="flexa">
                     <img :src="item.sym1Data.imgUrl" :onerror="errorCoinImg">
                     <span>{{ item.symbol1 }}</span>
                   </span>
                 </span>
               </div>
-              <div class="num">
-                <span class="el-icon-coin icon"></span>
-                <span>{{ item.total_votes || '0' }}（{{ item.votesRate || '0.00' }}%）</span>
+              <div class="num flexa">
+                <img class="voteIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/vote.png" alt="">
+                <span>{{ item.total_votes || '0' }}</span>
+                <span class="tip small">（{{ item.votesRate || '0.00' }}%）</span>
                 <span class="green" @click.stop="handleToDetail(item)">{{ $t('public.detail') }}></span>
               </div>
             </div>
             <div v-if="act !== 3" class="select flexc" :class="{'active': item.isChecked}">
-              <span class="el-icon-check"></span>
+              <!-- <span class="el-icon-check"></span> -->
+              <img v-if="item.isChecked" class="checkedImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/checked.png" alt="">
             </div>
           </div>
         </template>
@@ -73,13 +74,15 @@
       </div>
     </div>
 
-    <div class="nullDiv"></div>
-    <div class="voteAction flexb">
-      <span>{{ $t('vote.checked') }} {{ checkedLeng }}/3</span>
-      <span>
-        <span v-if="checkedLeng" class="tip" @click="handleCancel">{{ $t('vote.cancelChecked') }}</span>
-        <span class="voteBtn" v-loading="voteLoading" @click="handleTovote">{{ $t('vote.toVote') }}</span>
-      </span>
+    <div v-if="act === 1">
+      <div class="nullDiv"></div>
+      <div class="voteAction flexb">
+        <span>{{ $t('vote.checked') }} {{ checkedLeng }}/3</span>
+        <span>
+          <span v-if="checkedLeng" class="tip" @click="handleCancel">{{ $t('vote.cancelChecked') }}</span>
+          <span class="voteBtn" v-loading="voteLoading" @click="handleTovote">{{ $t('vote.toVote') }}</span>
+        </span>
+      </div>
     </div>
 
     <el-dialog
@@ -482,31 +485,34 @@ export default {
 .mainTitle{
   font-size: 32px;
   text-align: left;
-  margin: 40px 0 40px;
+  margin: 30px 0;
   padding: 0 0 0 40px;
   &>span{
     margin-right: 60px;;
   }
   .rulesTip{
-    font-size: 30px;
+    font-size: 26px;
     margin-right: 40px;
     .tipIcon{
+      width: 28px;
       margin-left: 8px;
+      display: block;
     }
   }
   .act{
     color: $color-black;
     position: relative;
+    padding-left: 26px;
     &::before{
       content: '';
       position: absolute;
-      width:60px;
-      height:8px;
-      background:rgba(2,198,152,1);
+      width: 8px;
+      height: 32px;
+      background:#02C698;
       border-radius:4px;
-      bottom: -20px;
-      left: 50%;
-      transform: translateX(-45%);
+      left: 0%;
+      top: 50%;
+      transform: translateY(-45%);
     }
   }
 }
@@ -517,25 +523,11 @@ export default {
   font-size: 30px;
   color: #fff;
   position: relative;
-  background: #07D79B;
-  padding: 30px 40px;
   overflow: hidden;
-  .title{
-    position: relative;
-    font-size: 36px;
-    margin-bottom: 10px;
-    z-index: 2;
-  }
-  .titleTip{
-    position: relative;
-    z-index: 2;
-    font-weight: 300;
-  }
   .bgImg{
-    position: absolute;
-    top: 0;
-    left: 0;
+    display: block;
     width: 100%;
+    height: 100%;
     z-index: 0;
   }
 }
@@ -558,17 +550,17 @@ export default {
 }
 .info{
   text-align: left;
-  margin: 40px;
-  background: #07d79b;
-  border-radius: .26667rem;
-  color: #fff;
-  padding: 30px;
-  box-shadow: 0 0.26667rem 0.53333rem 0 hsla(0,0%,86.3%,.5);
+  background: #FFF;
+  color: #333;
+  padding: 40px 30px;
+  border-top: 1px solid rgba(220,220,220, .3);
+  border-bottom: 20px solid #f6f6f6;
   .btn{
-    padding: 8px 20px;
-    background: #FFF;
-    color: #07D79B;
-    border-radius: 5px;
+    font-size: 28px;
+    padding: 10px 38px;
+    background: #29D4B0;
+    color: #FFF;
+    border-radius: 30px;
     margin-left: 10px;
   }
   .refresh{
@@ -579,24 +571,19 @@ export default {
     border-radius: 30px;
   }
 }
-.selectList{
-  margin: 40px;
-  // padding: 0 30px;
-  box-shadow: 0 0.26667rem 0.53333rem 0 hsla(0,0%,86.3%,.5);
-  border-radius: 10px;
-  // overflow: hidden;
-}
 .tab{
-  padding: 30px;
+  padding: 0 26px;
   top: 0;
   background: #FFF;
   position: sticky;
   z-index: 10;
   .nav{
+    height: 85px;
     background: #FFF;
     color: #a6a6a6;
     &>span{
-      margin-right: 20px;
+      margin-right: 40px;
+      padding: 26px 0;
       &:last-child{
         margin-right: 0;
       }
@@ -604,19 +591,44 @@ export default {
     .act{
       color: #000;
       font-weight: 500;
+      position: relative;
+      &::before{
+        content: '';
+        position: absolute;
+        width: 32px;
+        height: 2px;
+        background:#333;
+        border-radius:4px;
+        left: 50%;
+        bottom: 0%;
+        transform: translateX(-50%);
+      }
     }
   }
   .search{
+    background: #F5F6F6;
+    border-radius: 30px;
+    // padding-left: 20px;
+    width: 240px;
+    // overflow: hidden;
+    position: relative;
+    .searchImg{
+      width: 26px;
+      position: absolute;
+      left: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+    }
     /deep/ .el-input{
-      width: 300px;
       // padding-left: 10px;
       .el-input__inner{
+        flex: 1;
         text-align: center;
-        font-size: 30px;
+        font-size: 28px;
         height: 60px;
         line-height: 38px;
-        padding-left: 40px;
-        border-radius: 30px;
+        background: transparent;
+        border: 0px;
         &:focus{
           border-color: #07d79b;
         }
@@ -627,11 +639,9 @@ export default {
         width: 30px;
       }
       .el-icon-search{
-        // &::before{
-          display: flex;
-          align-items: center;
-          justify-content: center;
-        // }
+        display: flex;
+        align-items: center;
+        justify-content: center;
       }
     }
   }
@@ -642,35 +652,55 @@ export default {
 .noData{
   padding: 50px 0;
   font-size: 30px;
+  position: relative;
+  .noDataImg{
+    width: 400px;
+  }
+  .noDataTip{
+    margin-top: -20px;
+  }
 }
 .list{
-  padding: 20px 0;
-  border-top: 1px solid #eee;
+  padding: 28px 0;
+  border-top: 1px solid rgba(220,220,220,.3);
   .coinImg{
+    margin-bottom: 16px;
     img{
-      width: 50px;
+      width: 44px;
+      height: 44px;
+      border-radius: 25px;;
       margin-right: 10px;
     }
-    .add{
-      margin: 20px;
+    &>span{
+      &:first-child{
+        margin-right: 30px;
+      }
     }
   }
   .num{
     margin-top: 8px;
     text-align: left;
+    .voteIcon{
+      width: 28px;
+      margin-right: 8px;
+    }
     .icon{
       font-size: 27px;
       margin-right: 8px;
     }
+    .small{
+      font-size: 24px;
+      margin-left: -8px;
+    }
     .green{
-      font-size: 27px;
-      color: #07d79b;
+      font-size: 22px;
+      color: #29D4B0;
     }
   }
   .select{
-    width: 40px;
-    height: 40px;
-    border: 1px solid #e3e3e3;
+    width: 50px;
+    height: 50px;
+    border: 1px solid #eee;
     color: #FFF;
     border-radius: 50%;
     box-sizing: border-box;
@@ -678,13 +708,16 @@ export default {
       font-size: 30px;
     }
     &.active{
-      background: #07d79b;
+      background: #29D4B0;
       border: 0px solid transparent;
+    }
+    .checkedImg{
+      width: 50px;
     }
   }
 }
 .nullDiv{
-  height: 150px;
+  height: 116px;
   width: 100%;
 }
 .voteAction{
@@ -692,15 +725,16 @@ export default {
   bottom: 0px;
   width: 100%;
   max-width: 750px;
-  height: 150px;
+  height: 116px;
   background: #fff;
   padding: 0 40px;
-  font-size: 30px;
+  font-size: 26px;
   box-sizing: border-box;
   border-top: 1px solid #eee;
   .voteBtn{
+    font-size: 28px;
     margin-left: 20px;
-    background: #07d79b;
+    background: #29D4B0;
     color: #FFF;
     padding: 12px 40px;
     border-radius: 30px;

@@ -1,11 +1,7 @@
 <template>
   <div class="nodeVote">
     <div class="banner">
-      <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
-      <div class="title">DFS Governance</div>
-      <div class="titleTip">
-        DFS tokens represent voting shares.
-      </div>
+      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/poolsVote.png" alt="">
     </div>
     <div class="mainTitle flexb">
       <span class="act">{{ $t('vote.vote') }}</span>
@@ -21,14 +17,15 @@
     <!-- tab数据 -->
     <div class="tabDiv">
       <div class="tab flexb">
-        <div class="nav">
+        <div class="nav flexa">
           <span :class="{'act': act === 1}" @click="handleChangeTab(1)">{{ $t('vote.vote') }}</span>
           <span :class="{'act': act === 2}" @click="handleChangeTab(2)">{{ $t('vote.rank') }}</span>
           <span :class="{'act': act === 3}" @click="handleChangeTab(3)">{{ $t('vote.voted') }}</span>
         </div>
-        <div class="search">
-          <el-input prefix-icon="el-icon-search" @input="handleSearch"
-            v-model="search" placeholder="搜索节点"></el-input>
+        <div class="search flexc">
+          <img class="searchImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/search.png" alt="">
+          <el-input @input="handleSearch"
+            v-model="search" placeholder="搜索市场"></el-input>
         </div>
       </div>
       <div class="lsContent">
@@ -264,25 +261,11 @@ export default {
     font-size: 30px;
     color: #fff;
     position: relative;
-    background: #07D79B;
-    padding: 30px 40px;
     overflow: hidden;
-    .title{
-      position: relative;
-      font-size: 36px;
-      margin-bottom: 10px;
-      z-index: 2;
-    }
-    .titleTip{
-      position: relative;
-      font-weight: 300;
-      z-index: 2;
-    }
     .bgImg{
-      position: absolute;
-      top: 0;
-      left: 0;
+      display: block;
       width: 100%;
+      height: 100%;
       z-index: 0;
     }
   }
@@ -290,50 +273,53 @@ export default {
     font-size: 32px;
     text-align: left;
     margin: 30px 0;
-    padding: 0 0 0 40px;
+    padding: 0 0 0 30px;
     &>span{
       margin-right: 60px;;
     }
     .rulesTip{
-      font-size: 30px;
+      font-size: 26px;
       margin-right: 40px;
       .tipIcon{
+        width: 28px;
         margin-left: 8px;
+        display: block;
       }
     }
     .act{
       color: $color-black;
       position: relative;
+      padding-left: 26px;
       &::before{
         content: '';
         position: absolute;
-        width:60px;
-        height:8px;
-        background:rgba(2,198,152,1);
+        width: 8px;
+        height: 32px;
+        background:#02C698;
         border-radius:4px;
-        bottom: -20px;
-        left: 50%;
-        transform: translateX(-45%);
+        left: 0;
+        top: 50%;
+        transform: translateY(-45%);
       }
     }
   }
   .tabDiv{
     font-size: 28px;
     text-align: left;
-    margin: 20px 30px;
-    padding: 0 20px 0;
-    box-shadow: 0 0.26667rem 0.53333rem 0 hsla(0,0%,86.3%,.5);
+    margin: 10px 0px;
     .tab{
-      padding: 20px 10px;
+      padding: 0 26px;
       top: 0;
       background: #FFF;
       position: sticky;
       z-index: 10;
       .nav{
+        height: 85px;
         background: #FFF;
         color: #a6a6a6;
         &>span{
-          margin-right: 20px;
+          margin-right: 40px;
+          padding: 26px 0;
           &:last-child{
             margin-right: 0;
           }
@@ -341,19 +327,44 @@ export default {
         .act{
           color: #000;
           font-weight: 500;
+          position: relative;
+          &::before{
+            content: '';
+            position: absolute;
+            width: 32px;
+            height: 2px;
+            background:#333;
+            border-radius:4px;
+            left: 50%;
+            bottom: 0%;
+            transform: translateX(-50%);
+          }
         }
       }
       .search{
+        background: #F5F6F6;
+        border-radius: 30px;
+        // padding-left: 20px;
+        width: 240px;
+        // overflow: hidden;
+        position: relative;
+        .searchImg{
+          width: 26px;
+          position: absolute;
+          left: 20px;
+          top: 50%;
+          transform: translateY(-50%);
+        }
         /deep/ .el-input{
-          width: 300px;
           // padding-left: 10px;
           .el-input__inner{
+            flex: 1;
             text-align: center;
-            font-size: 30px;
+            font-size: 28px;
             height: 60px;
             line-height: 38px;
-            padding-left: 40px;
-            border-radius: 30px;
+            background: transparent;
+            border: 0px;
             &:focus{
               border-color: #07d79b;
             }
@@ -364,11 +375,9 @@ export default {
             width: 30px;
           }
           .el-icon-search{
-            // &::before{
-              display: flex;
-              align-items: center;
-              justify-content: center;
-            // }
+            display: flex;
+            align-items: center;
+            justify-content: center;
           }
         }
       }
@@ -387,12 +396,12 @@ export default {
   height: 120px;
   background: #fff;
   padding: 0 40px;
-  font-size: 30px;
+  font-size: 26px;
   box-sizing: border-box;
   border-top: 1px solid #eee;
   .voteBtn{
     margin-left: 20px;
-    background: #07d79b;
+    background: #29D4B0;
     color: #FFF;
     padding: 12px 40px;
     border-radius: 30px;

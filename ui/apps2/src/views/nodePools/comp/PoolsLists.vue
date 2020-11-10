@@ -152,8 +152,8 @@ export default {
       bal1: '0.0000',
       timer: null,
       // 开始时间
-      lpTime: 1605067200,
-      rexTime: 1604980800,
+      lpTime: 1605096000 + 86400,
+      rexTime: 1605096000,
       lpCutDown: {},
       rexCutDown: {},
 

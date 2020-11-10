@@ -2,7 +2,7 @@
   <div class="detail">
     <div class="title">
       <span class="act" v-if="type === 'rex'">{{ pool.sym || 'EOS' }}矿池</span>
-      <span class="act" v-else>EOS/DFS LP矿池</span>
+      <span class="act" v-else>{{ lpPool.symbol0 }}/{{ lpPool.symbol1 }} LP矿池</span>
     </div>
     <div class="list" v-if="type === 'rex'">
       <div class="poolInfo flexa">
@@ -68,7 +68,7 @@
         <div class="mineList" :class="{'page1': page === 1}" :key="index">
           <div class="flexb mb10">
             <span>{{ item.owner }}</span>
-            <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
+            <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} {{ pool.sym }}</span>
           </div>
           <div class="flexb" v-if="type === 'rex'">
             <span>总票数</span>

@@ -9,12 +9,12 @@
     <div class="content flexb" v-loading="getLoading" @click="handleToBro">
       <div class="item">
         <div class="subTitle">代理账户</div>
-        <div>dfsbpsproxy1</div>
+        <div class="DinReg">dfsbpsproxy1</div>
       </div>
       <div class="item flexb">
         <div>
           <div class="subTitle">代理票数</div>
-          <div>{{ proxyData.eosNum || '-' }} EOS</div>
+          <div class="DinReg">{{ proxyData.eosNum || '-' }} EOS</div>
         </div>
         <i class="el-icon-arrow-right"></i>
       </div>
@@ -138,18 +138,19 @@ export default {
 .proxyAcc{
   color: #333;
   font-size: 28px;
-  margin: 30px;
-  box-shadow: 0 0.26667rem 0.53333rem 0 hsla(0,0%,86.3%,.5);
-  border-radius: 8px;
+  // margin: 30px;
+  border-top: 1px solid rgba(220,220,220,.3);
+  border-bottom: 1px solid rgba(220,220,220,.3);
   padding: 30px;
   .title{
-    font-size: 40px;
+    font-size: 34px;
     font-weight: 500;
-    color: rgba(2,198,152,1);
+    color: #29D4B0;
+    margin-bottom: 26px;
     .proxyBtn{
-      font-size: 24px;
-      padding: 8px 21px;
-      background:rgba(7,215,155,1);
+      font-size: 28px;
+      padding: 10px 28px;
+      background:#29D4B0;
       color: #FFF;
       border-radius: 40px;
     }
@@ -157,8 +158,13 @@ export default {
   .content{
     text-align: left;
     margin-top: 15px;
+    font-size: 28px;
     &>div{
       flex: 1;
+    }
+    .subTitle{
+      color: #000;
+      margin-bottom: 8px;
     }
   }
 }
