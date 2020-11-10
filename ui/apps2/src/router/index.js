@@ -149,8 +149,14 @@ const constantRouter = [
       { // 节点挖矿详情
         path: '/pool-detail/:type/:sym',
         name: 'poolDetail',
-        component: () => import(/* webpackChunkName: "nodePools" */ '@/views/nodePools/childView/DetailLists.vue'),
+        component: () => import(/* webpackChunkName: "poolDetail" */ '@/views/nodePools/childView/DetailLists.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
+      },
+      { // 我的页面
+        path: '/my-center',
+        name: 'myCenter',
+        component: () => import(/* webpackChunkName: "myCenter" */ '@/views/my/Index.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
       },
     ]
   },
