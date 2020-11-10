@@ -4,18 +4,26 @@
     <div class="tabbar flexb">
       <div class="bar" :class="{'act': $route.name === 'index' || $route.name === 'market'}"
         @click="handleTo('index')">
-        <img v-if="$route.name !== 'index' && $route.name !== 'market'" src="@/assets/navImg/swap_un.svg">
-        <img v-else src="@/assets/navImg/swap_select.svg">
+        <span class="myCoin flexc">
+          <img v-if="$route.name !== 'index' && $route.name !== 'market'" src="@/assets/navImg/swap_un.svg">
+          <img v-else src="@/assets/navImg/swap_select.svg">
+        </span>
         <div>{{ $t('tabbar.swap') }}</div>
       </div>
       <div class="bar" @click="handleToPro('pddex')">
-        <img src="@/assets/navImg/pddex_un.svg">
+        <span class="myCoin flexc">
+          <img src="@/assets/navImg/pddex_un.svg">
+        </span>
         <div>{{ $t('tabbar.order') }}</div>
       </div>
-      <!-- <div class="bar" @click="showMore = true;">
-        <img src="@/assets/navImg/more_un.svg">
-        <div>更多</div>
-      </div> -->
+      <div class="bar" :class="{'act': $route.name === 'myCenter'}"
+        @click="handleTo('myCenter')">
+        <span class="myCoin">
+          <img class="myCoinImg" v-if="$route.name !== 'myCenter'" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/my.png">
+          <img class="myCoinImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/my-checked.png">
+        </span>
+        <div>我的</div>
+      </div>
     </div>
   </div>
 </template>
@@ -82,9 +90,8 @@ export default {
       flex: 1;
       text-align: center;
       img{
-        // width: 45px;
         display: block;
-        margin: auto;
+        // margin: auto;
         margin-bottom: 3px;
         height: 45px;
       }
@@ -93,6 +100,14 @@ export default {
       }
       &.act{
         color: #61c8bc;
+      }
+      .myCoin{
+        height: 64px;
+        margin-bottom: 0px;
+        .myCoinImg{
+          margin: auto;
+          height: 64px;
+        }
       }
     }
   }
