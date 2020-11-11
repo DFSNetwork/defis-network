@@ -38,7 +38,7 @@ export async function getAccVote(cb) {
   const rows = result.rows || [];
   // 没有抵押数据
   if (!rows.length) {
-    cb({})
+    cb({eosNum: '0.0000'})
     return
   }
   // 代理不是dfsbpsproxy1
