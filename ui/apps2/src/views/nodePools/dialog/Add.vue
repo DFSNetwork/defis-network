@@ -30,8 +30,18 @@
       </div>
     </div>
     <div class="btnDiv">
-      <div class="btn flexc" v-loading="loading" @click="handleRexAction">{{ $t('public.confirm') }}</div>
+      <div class="btn flexc" v-loading="loading" @click="handleReg">{{ $t('public.confirm') }}</div>
     </div>
+
+    <el-dialog
+      class="myDialog"
+      :append-to-body="true"
+      :show-close="false"
+      :visible.sync="showTip">
+      <TipClaim v-if="showTip"
+        @listenType="listenType"/>
+      <!-- <Remove /> -->
+    </el-dialog>
   </div>
 </template>
 
@@ -40,10 +50,16 @@ import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 
 import { toFixed } from '@/utils/public';
-import { getRexActions } from '../js/nodePools'
+import { getRexActions, getClaimActions } from '../js/nodePools'
+
+
+import TipClaim from './TipClaim'
 
 export default {
   name: 'addVote',
+  components: {
+    TipClaim
+  },
   props: {
     rexPrice: {
       type: Number,
@@ -61,6 +77,7 @@ export default {
       buy: '',
       bal: '0.0000',
       loading: false,
+      showTip: false,
     }
   },
   computed: {
@@ -84,6 +101,14 @@ export default {
     }
   },
   methods: {
+    listenType(type) {
+      console.log(type)
+      if (type === 'next') {
+        this.handleRexAction()
+        return
+      }
+      this.handleClaim();
+    },
     handleToRex() {
       location.href = 'https://dfscommunity.baklib.com/newbie/f036'
     },
@@ -105,8 +130,7 @@ export default {
       const t = this.bal * rate;
       this.buy = t.toFixed(4)
     },
-    // 买入REX
-    handleRexAction() {
+    handleReg() {
       if (!Number(this.buy)) {
         return;
       }
@@ -117,6 +141,14 @@ export default {
         });
         return
       }
+      if (this.accVoteData.isDfsProxy && this.accVoteData.isfarmer && !this.accVoteData.showJoinBtn) {
+        this.showTip = true;
+        return
+      }
+      this.handleRexAction()
+    },
+    // 买入REX
+    handleRexAction() {
       this.loading = true;
       const params = getRexActions(this.accVoteData, {
         amount: `${toFixed(this.buy, 4)} EOS`,
@@ -132,12 +164,35 @@ export default {
           return
         }
         this.$message({
-          message: this.$t('public.success'),
+          message: '操作成功，请重新加入矿池',
           type: 'success'
         });
+        this.showTip = false;
         this.$emit('listenUpdata', 'acc')
       })
     },
+    // 领取
+    handleClaim() {
+      const params = getClaimActions(this.accVoteData)
+      EosModel.toTransaction(params, (res) => {
+        this.loading = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: '领取成功，即将执行REX操作',
+          type: 'success'
+        });
+        this.showTip = false;
+        setTimeout(() => {
+          this.handleRexAction()
+        }, 1000);
+      })
+    }
   }
 }
 </script>
@@ -192,6 +247,18 @@ export default {
       color: #fff;
       border-radius: 40px;
       font-size: 30px;
+    }
+  }
+}
+
+.myDialog{
+  // animation: none;
+  /deep/ .el-dialog{
+    width: 700px;
+    border-radius:12px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
     }
   }
 }

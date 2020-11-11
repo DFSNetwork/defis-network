@@ -55,7 +55,7 @@ export async function getAccVote(cb) {
   // console.log(kweight, uweight)
   accVoteData.percent = percent.toFixed(2)
   accVoteData.rexBegin = Date.parse(new Date()) / 1000 - 1605096000 >= 0;
-  cb(accVoteData)
+  // cb(accVoteData)
   getAccFarmerData(accVoteData, cb)
 }
 // 获取farmer挖矿数据
@@ -75,20 +75,20 @@ export async function getAccFarmerData(accVoteData, cb) {
     return
   }
   const rows = result.rows || [];
-  console.log(rows)
+  // console.log(rows)
   // console.log(accVoteData)
   if (!rows.length) {
     cb(accVoteData)
     return
   }
   const row = rows[0];
+  accVoteData.isfarmer = true;
+  accVoteData.last_drip = row.last_drip;
   if (accVoteData.last_vote_weight !== row.last_vote_weight) {
     accVoteData.showJoinBtn = true;
     cb(accVoteData)
     return;
   }
-  accVoteData.isfarmer = true;
-  accVoteData.last_drip = row.last_drip;
   cb(accVoteData)
 }
 
@@ -128,7 +128,7 @@ export function getReward(baseData, userData) {
   return rewardToken
 }
 
-export function getJoinActions() {
+export function getJoinActions(accVoteData) {
   const baseConfig = store.state.sys.baseConfig;
   const scatter = store.state.app.scatter;
   const formName = scatter.identity.accounts[0].name;
@@ -158,12 +158,17 @@ export function getJoinActions() {
   const params = {
     actions: []
   }
-  params.actions.push(harvest, join)
+  if (!accVoteData.isfarmer) {
+    params.actions.push(join)
+  } else if (accVoteData.showJoinBtn) {
+    params.actions.push(harvest)
+  }
   return params;
 }
 
 // 获取投票给Ta Action
 export function getVoteToProxy(accVoteData) {
+  const baseConfig = store.state.sys.baseConfig;
   const scatter = store.state.app.scatter;
   const formName = scatter.identity.accounts[0].name;
   const permission = scatter.identity.accounts[0].authority;
@@ -181,6 +186,28 @@ export function getVoteToProxy(accVoteData) {
       stake_cpu_quantity: '0.0001 EOS',
       transfer: 0
     }
+  }
+  const join = {
+    account: baseConfig.nodeMiner,
+    name: 'join',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      farmer: formName,
+    },
+  }
+  const harvest = {
+    account: baseConfig.nodeMiner,
+    name: 'harvest',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      farmer: formName,
+    },
   }
   const params = {
     actions: []
@@ -201,6 +228,11 @@ export function getVoteToProxy(accVoteData) {
       producers: [],
     },
   })
+  if (accVoteData.isfarmer) {
+    params.actions.push(harvest)
+  } else {
+    params.actions.push(join)
+  }
   return params;
 }
 
@@ -237,17 +269,17 @@ export function getClaimActions(accVoteData) {
       farmer: formName,
     },
   }
-  const join = {
-    account: baseConfig.nodeMiner,
-    name: 'join',
-    authorization: [{ 
-      actor: formName,
-      permission,
-    }],
-    data: {
-      farmer: formName,
-    },
-  }
+  // const join = {
+  //   account: baseConfig.nodeMiner,
+  //   name: 'join',
+  //   authorization: [{ 
+  //     actor: formName,
+  //     permission,
+  //   }],
+  //   data: {
+  //     farmer: formName,
+  //   },
+  // }
   const params = {
     actions: []
   }
@@ -267,11 +299,11 @@ export function getClaimActions(accVoteData) {
       producers: [],
     },
   })
-  if (accVoteData.isfarmer) {
-    params.actions.push(harvest)
-  } else {
-    params.actions.push(join)
-  }
+  // if (accVoteData.isfarmer) {
+  //   params.actions.push(harvest)
+  // } else {
+  //   params.actions.push(join)
+  // }
   return params;
 }
 
@@ -386,7 +418,7 @@ export function getRexActions(accVoteData, obj) {
   if (!Number(accVoteData.eosNum)) {
     params.actions.unshift(stakeCpu)
   }
-  params.actions.push(harvest)
+  // params.actions.push(harvest)
   // REX操作处理
   if (obj.type === 'buyRex') {
     params.actions.push(...buyRex)
@@ -397,11 +429,11 @@ export function getRexActions(accVoteData, obj) {
   params.actions.push(voteproducer)
   // 加入 ｜ 收获
   // console.log(accVoteData)
-  if (accVoteData.isfarmer) {
-    params.actions.push(harvest)
-  } else {
-    params.actions.push(join)
-  }
+  // if (accVoteData.isfarmer) {
+  //   params.actions.push(harvest)
+  // } else {
+  //   params.actions.push(join)
+  // }
   return params;
 }
 

@@ -4,11 +4,11 @@
       <div>
         <span>{{ $t('nodePools.voteNum', {token: 'EOS'}) }}：{{ accVoteData.eosNum }}</span>
       </div>
-      <span class="btn" v-loading="loadingJoin"
-        v-if="accVoteData.showJoinBtn" @click="handleJoin">加入矿池</span>
-      <span v-else-if="!accVoteData.isfarmer" class="proxy btn"
+      <span v-if="!accVoteData.isDfsProxy" class="proxy btn"
         v-loading="loadingProxy"
         @click="handleProxy">{{ $t('nodePools.proxyToHis') }}</span>
+      <span class="btn" v-loading="loadingJoin"
+        v-else-if="accVoteData.showJoinBtn" @click="handleJoin">加入矿池</span>
       <span class="flexa">
         <span class="btn" @click="showManage = !showManage">{{ $t('nodePools.manage') }}</span>
       </span>
@@ -32,12 +32,14 @@ import { EosModel } from '@/utils/eos';
 import { getJoinActions, getVoteToProxy } from '../js/nodePools';
 
 import ManageVote from '../dialog/ManageVote'
+import TipClaim from '../dialog/TipClaim'
 // import Remove from '../dialog/Remove'
 
 export default {
   name: 'accVoteNum',
   components: {
     ManageVote,
+    TipClaim
     // Remove,
   },
   props: {
@@ -84,6 +86,7 @@ export default {
       })
     },
     listenUpdata() {
+      this.showManage = false;
       setTimeout(() => {
         // 查询代理账户数据
         this.$emit('listenUpdata', 'acc')

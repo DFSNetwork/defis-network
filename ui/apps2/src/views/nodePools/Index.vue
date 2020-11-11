@@ -131,8 +131,10 @@ export default {
     handleUpdata(type) {
       console.log('数据更新', type)
       if (type === 'acc') {
-        this.handleGetAccVote()
-        this.handleGetAccLpMinerData()
+        setTimeout(() => {
+          this.handleGetAccVote()
+          this.handleGetAccLpMinerData()
+        }, 1000);
       }
     },
     // 获取节点列表
@@ -174,6 +176,7 @@ export default {
       }
       getAccVote((accVoteData) => {
         this.accVoteData = accVoteData;
+        this.$forceUpdate()
         this.handleDealAccReward(this.accVoteData)
       })
     },
