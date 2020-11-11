@@ -1,6 +1,6 @@
 <template>
   <div class="toFundation">
-    <img class="close" @click="handleClose()" src="@/assets/img/dialog/sd_icon_btn.svg">
+    <img class="close" @click="handleClose()" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg">
     <div class="title">乐捐款</div>
     <!-- 乐捐弹窗操作 -->
     <div class="symData">

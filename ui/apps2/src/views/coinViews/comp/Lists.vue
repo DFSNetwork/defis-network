@@ -6,7 +6,7 @@
         <div class="flexb name">
           <!-- <span class="flexc num"> -->
             <span>{{ (item.fromx) }}</span>
-            <span class="flexc"><img class="exchange" src="@/assets/img/dex/exchange.svg" alt=""></span>
+            <span class="flexc"><img class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/exchange.svg" alt=""></span>
             <span>{{ (item.tox) }}</span>
           <!-- </span> -->
         </div>

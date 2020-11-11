@@ -30,8 +30,8 @@
           </div>
           <div class="exchange">
             <div class="border flexc" :class="{'payFocus': payIptFocus, 'getFocus': getIptFocus}" @click="handleExchange">
-              <img class="iconImg" v-if="!direction" src="@/assets/img/dex/switch_down.svg">
-              <img class="iconImg" v-else src="@/assets/img/dex/switch_up.svg">
+              <img class="iconImg" v-if="!direction" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/switch_down.svg">
+              <img class="iconImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/switch_up.svg">
             </div>
           </div>
           <div class="sym0Data" :class="{'focus': getIptFocus}">
@@ -65,8 +65,8 @@
               <span v-if="!exRate">1{{ thisMarket1.symbol }} = {{ tradeInfo.aboutPrice || '-' }}{{ thisMarket0.symbol }}</span>
               <span v-else>1{{ thisMarket0.symbol }} = {{ tradeInfo.aboutPriceSym0 || '-' }}{{ thisMarket1.symbol }}</span>
               <span class="flexa" @click="exRate =!exRate">
-                <img class="iconImg small" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
-                <img class="iconImg small" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
+                <img class="iconImg small" v-if="!exRate" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_left.svg" alt="">
+                <img class="iconImg small" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_right.svg" alt="">
               </span>
             </span>
           </div>
@@ -76,12 +76,12 @@
 
           <div class="linkTo flexb">
             <span class="flexc">
-              <img src="@/assets/navImg/market.svg">
+              <img src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/market.svg">
               <span @click="handleTo('myMarketList')">{{ $t('market.myMarkets') }}</span>
               <i class="el-icon-arrow-right"></i>
             </span>
             <span class="flexc">
-              <img src="@/assets/navImg/record.svg">
+              <img src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/record.svg">
               <span @click="handleToHistory">{{ $t('dex.tradeHistory') }}</span>
               <i class="el-icon-arrow-right"></i>
             </span>
@@ -125,7 +125,7 @@
                           'red': Number(tradeInfo.priceRate) > 10}">
                 {{ tradeInfo.priceRate }}%
               </span>
-              <img class="tradeSet" @click="handleShowTools" src="@/assets/navImg/swapSet.svg" alt="">
+              <img class="tradeSet" @click="handleShowTools" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/swapSet.svg" alt="">
             </span>
           </div>
           <div class="flexb">
@@ -171,7 +171,7 @@
           <span class="marketNow" @click="handleTo('poolsMarket')">{{ $t('pools.toPool') }} ></span>
         </div>
         <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
-          <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
+          <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/tip.svg" alt="">
           <span>{{ $t('public.warmPrompt') }}</span>
         </div>
       </div>
@@ -183,7 +183,7 @@
       <div class="flexb">
         <div>{{ $t('dex.moreRoute') }}： </div>
         <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
-          <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
+          <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/tip.svg" alt="">
           <span>{{ $t('public.warmPrompt') }}</span>
         </div>
       </div>
@@ -938,16 +938,16 @@ export default {
       top: 50%;
       left: 50%;
       transform: translate(-50%, -50%);
-      background-image: url('../../assets/img/dex/enter_solid_default.svg');
+      background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material/dex/enter_solid_default.svg');
       background-repeat: no-repeat;
       background-size: cover;
       &.payFocus{
-        background-image: url('../../assets/img/dex/enter_solid_up.svg');
+        background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material/dex/enter_solid_up.svg');
         background-repeat: no-repeat;
         background-size: cover;
       }
       &.getFocus{
-        background-image: url('../../assets/img/dex/enter_solid_down.svg');
+        background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material/dex/enter_solid_down.svg');
         background-repeat: no-repeat;
         background-size: cover;
       }

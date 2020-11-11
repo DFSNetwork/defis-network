@@ -202,7 +202,7 @@ export default {
     handleDealApy(mid = 329, project) {
       let yfcReward = getYfcReward(this.thisMarket.mid, 'year', project);
       if (Number(yfcReward)) {
-        const YfcPool = this.marketLists.find(vv => vv.mid === mid);
+        const YfcPool = this.marketLists.find(vv => vv.mid === mid) || {};
         const price = parseFloat(YfcPool.reserve0 || 0) / parseFloat(YfcPool.reserve1 || 1)
         yfcReward = yfcReward * price / 20000 * 100;
         yfcReward = yfcReward.toFixed(2);

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="banner flexc">
-      <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
+      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/top_bg.svg" alt="">
       <div>
         <div class="bannerTitle">代币观察</div>
         <div class="bannerTip">币价走势，大额转账</div>

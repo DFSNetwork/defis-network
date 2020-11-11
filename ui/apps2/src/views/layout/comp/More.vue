@@ -14,40 +14,40 @@
           <div class="tip">{{ $t('more.wel') }}</div>
         </div>
         <img v-if="!scatter || !scatter.identity" @click="handleLogin"
-          class="right" src="@/assets/navImg/acc_right.svg" alt="">
+          class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/acc_right.svg" alt="">
         <span v-else class="red exit" @click="handleLoginOut">{{ $t('public.loginOut') }}</span>
       </div>
       <!-- list -->
       <div class="lists">
         <div class="title flexb" @click="handleToBP">
           <div class="flexa">
-            <img class="titleImg" src="https://apps.defis.network/static/faviconV3.png">
+            <img class="titleImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png">
             <span>{{ $t('more.aboutDfs') }}</span>
           </div>
-          <img class="right" src="@/assets/navImg/about_right.svg" alt="">
+          <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/about_right.svg" alt="">
         </div>
         <div class="list flexa" @click="handleShowComp('silderSet')">
-          <img class="listImg" src="@/assets/navImg/swap_set.svg">
+          <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/swap_set.svg">
           <span>{{ $t('dex.TradeSet') }}</span>
         </div>
         <div class="list flexa" @click="handleShowNode">
-          <img class="listImg" src="@/assets/navImg/node_set.svg">
+          <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/node_set.svg">
           <span>{{ $t('node.nodeSet') }}</span>
         </div>
         <div class="list flexa" @click="handleTo('createMarket')">
-          <img class="listImg" src="@/assets/navImg/create_set.svg">
+          <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/create_set.svg">
           <span>{{ $t('dex.addMarket') }}</span>
         </div>
         <div class="list flexa" @click="handleShowComp('invi')">
-          <img class="listImg" src="@/assets/navImg/invi_set.svg">
+          <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/invi_set.svg">
           <span>{{ $t('invi.invitation') }}</span>
         </div>
         <div class="list flexa" @click="handleToPro('docs')">
-          <img class="listImg" src="@/assets/navImg/tutorial_set.svg">
+          <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/tutorial_set.svg">
           <span>{{ $t('more.faq') }}</span>
         </div>
         <div class="list flexa" @click="handleShowComp('warn')">
-          <img class="listImg" src="@/assets/navImg/safe_set.svg">
+          <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/safe_set.svg">
           <span>{{ $t('public.warnTip') }}</span>
         </div>
       </div>
@@ -56,7 +56,7 @@
       <div class="lang flexb" @click="handleChangeLang()">
         <span v-if="language === 'zh-CN'">{{ $t('public.switchLang') }}</span>
         <span v-else>{{ $t('public.switchLang') }}</span>
-        <img class="langImg" src="@/assets/navImg/lang.svg">
+        <img class="langImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/lang.svg">
       </div>
       <!-- versions -->
       <div class="flexa version">
@@ -67,24 +67,24 @@
       <!-- 合作 -->
       <div class="flexb par">
         <a href="https://github.com/defis-net" target="_blank">
-          <img src="@/assets/img/par/GitHub_icon.svg" alt="">
+          <img src="https://cdn.jsdelivr.net/gh/defis-net/material/par/GitHub_icon.svg" alt="">
         </a>
         <a href="https://bihu.com/people/1511717747" target="_blank">
-          <img src="@/assets/img/par/bihu_icon.svg" alt="">
+          <img src="https://cdn.jsdelivr.net/gh/defis-net/material/par/bihu_icon.svg" alt="">
         </a>
         <a href="https://twitter.com/DFSnetworks" target="_blank">
-          <img src="@/assets/img/par/twitter_icon.svg" alt="">
+          <img src="https://cdn.jsdelivr.net/gh/defis-net/material/par/twitter_icon.svg" alt="">
         </a>
         <a href="https://t.me/dfsnet" target="_blank">
-          <img src="@/assets/img/par/telegram_icon.svg" alt="">
+          <img src="https://cdn.jsdelivr.net/gh/defis-net/material/par/telegram_icon.svg" alt="">
         </a>
         <a v-clipboard:copy="'dfsfarmer'"
           v-clipboard:success="handleCopy"
           v-clipboard:error="handleCopyError">
-          <img src="@/assets/img/par/WeChat_icon.svg" alt="">
+          <img src="https://cdn.jsdelivr.net/gh/defis-net/material/par/WeChat_icon.svg" alt="">
         </a>
         <a href="https://dfsofficial.medium.com/" target="_blank">
-          <img src="@/assets/img/par/medium_icon.svg" alt="">
+          <img src="https://cdn.jsdelivr.net/gh/defis-net/material/par/medium_icon.svg" alt="">
         </a>
       </div>
     </div>

@@ -15,7 +15,7 @@
           <span>{{ parseInt(node.num_votes || 0) }} EOS</span>
         </div>
         <div class="flexa">
-          <img class="coin" src="@/assets/navImg/earth.svg">
+          <img class="coin" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/earth.svg">
           <a class="tip websize" :href="node.url" target="_blank" rel="noopener noreferrer">
             {{ handleDealUrl(node.url || '') }}
           </a>
@@ -44,7 +44,7 @@
             <span>{{ $t('vote.vote') }}</span>
             <span>{{ item.voteNum }}</span>
           </div>
-          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://apps.defis.network/static/rank/rank${index + 1}.png`" alt=""></label>
+          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://cdn.jsdelivr.net/gh/defis-net/material/rank/rank${index + 1}.png`" alt=""></label>
         </div>
       </template>
 
@@ -66,13 +66,12 @@ import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toLocalTime, dealAccountHide } from '@/utils/public';
 import { get_producers } from '@/utils/api';
-import voteDefaultImg from '@/assets/img/poolspage/voteDefaultImg.png'
 
 export default {
   name: 'voteDetail',
   data() {
     return {
-      voteDefaultImg,
+      voteDefaultImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png',
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       owner: '',
       allVotes: '0',

@@ -5,14 +5,14 @@
       <div class="bar" :class="{'act': $route.name === 'index' || $route.name === 'market'}"
         @click="handleTo('index')">
         <span class="myCoin flexc">
-          <img v-if="$route.name !== 'index' && $route.name !== 'market'" src="@/assets/navImg/swap_un.svg">
-          <img v-else src="@/assets/navImg/swap_select.svg">
+          <img v-if="$route.name !== 'index' && $route.name !== 'market'" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/swap_un.svg">
+          <img v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/swap_select.svg">
         </span>
         <div>{{ $t('tabbar.swap') }}</div>
       </div>
       <div class="bar" @click="handleToPro('pddex')">
         <span class="myCoin flexc">
-          <img src="@/assets/navImg/pddex_un.svg">
+          <img src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/pddex_un.svg">
         </span>
         <div>{{ $t('tabbar.order') }}</div>
       </div>

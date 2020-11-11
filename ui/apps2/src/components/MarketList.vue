@@ -4,7 +4,7 @@
       <span v-if="$route.name === 'fundation'">选择币种</span>
       <span v-else>{{ $t('pools.chooseMarket') }}</span>
       <span>
-        <img class="closeSvg" @click="handleClose" src="@/assets/img/dialog/sd_icon_btn.svg" alt="">
+        <img class="closeSvg" @click="handleClose" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
       </span>
     </div>
     <div class="iptSearch">
@@ -23,7 +23,7 @@
                 <div class="tip">{{item.contract0}}</div>
               </div>
             </div>
-            <img class="addImg" src="@/assets/navImg/add.svg">
+            <img class="addImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/add.svg">
             <div class="flexa">
               <img class="coinImg" :onerror="errorCoinImg" :src="item.sym1Data.imgUrl">
               <div>
@@ -42,7 +42,7 @@
       <template v-for="(item, i) in searchArr">
         <div class="item flexb" @click="handleSelectThis(item)" v-if="handleShow(item)" :key="i">
           <div class="left flex">
-            <img class="coinImg" :src="item.imgUrl || errUrl" :onerror="errorCoinImg" alt="">
+            <img class="coinImg" :src="item.imgUrl" :onerror="errorCoinImg" alt="">
             <div>
               <div class="coin">{{ item.symbol }}</div>
               <div class="contract tip">{{ item.contract }}</div>
@@ -59,7 +59,6 @@
 <script>
 import { mapState } from 'vuex';
 import {dealSymArr} from '@/utils/public';
-import errUrl from '@/assets/img/eosio.token-eos.png'
 export default {
   data() {
     return {
@@ -67,7 +66,6 @@ export default {
       searchArr: [],
       coinList: [],
       filterCoinList: [],
-      errUrl,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
     }
   },

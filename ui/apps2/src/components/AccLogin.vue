@@ -5,7 +5,7 @@
       <span class="loginBtn" @click="handleLogin">{{ $t('public.login') }}</span>
     </div>
     <div class="login flexc" v-else>
-      <span class="flexc iconSpan"><img width="100%" src="@/assets/img/dex/user_icon.svg" alt=""></span>
+      <span class="flexc iconSpan"><img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/user_icon.svg" alt=""></span>
       <span>{{ scatter.identity.accounts[0].name }}</span>
     </div>
   </div>

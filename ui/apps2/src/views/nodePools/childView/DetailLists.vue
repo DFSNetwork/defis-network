@@ -30,7 +30,7 @@
             <div class="flexend">
               <span class="num din">{{ accLpData.showReward || '0.00000000' }}</span>
               <span class="red_p flexa" v-if="Number(addBuff)">（
-                <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
+                <img class="buffImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/buff2.svg">
                 {{ addBuff }}%）</span>
             </div>
           </div>
@@ -78,7 +78,7 @@
             <span>资金池</span>
             <span>{{ item.sym0 || '0.0000' }} {{lpPool.symbol0}} / {{ item.sym1 || '0.0000'}} {{lpPool.symbol1}}</span>
           </div>
-          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://apps.defis.network/static/rank/rank${index + 1}.png`" alt=""></label>
+          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://cdn.jsdelivr.net/gh/defis-net/material/rank/rank${index + 1}.png`" alt=""></label>
         </div>
       </template>
 

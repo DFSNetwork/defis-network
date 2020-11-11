@@ -5,7 +5,7 @@
         <div class="flexa symbolInfo">
           <img class="imgCoin" :src="thisMarket.sym0Data.imgUrl" :onerror="errorCoinImg"/>
           <span>{{ thisMarket.symbol0 }}</span>
-          <span class="and"><img src="@/assets/navImg/add.svg" alt=""></span>
+          <span class="and"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/add.svg" alt=""></span>
           <img class="imgCoin" :src="thisMarket.sym1Data.imgUrl" :onerror="errorCoinImg"/>
           <span>{{ thisMarket.symbol1 }}</span>
         </div>
@@ -58,7 +58,7 @@
             </span>)
           </span>
         </span>
-        <img  @click="handleChangeRewardType" class="qusTip" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
+        <img  @click="handleChangeRewardType" class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_green_left.svg" alt="">
         <img class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
       </div>
       <div class="flexa">

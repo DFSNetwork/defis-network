@@ -6,7 +6,6 @@
     <span class="" :class="{'tabAct': act === 2}" @click="handleChangeAct(2)">
       <span class="tabName flexc">{{ $t('tab.pools') }}</span>
     </span>
-    <!-- <span :class="{'tabAct': act === 3}" @click="handleChangeAct(3)">{{ $t('tab.bank') }}</span> -->
   </div>
 </template>
 
@@ -62,12 +61,12 @@ export default {
     text-align: center;
     color: #333333;
     &:first-child{
-      background-image: url('../../../assets/navImg/swap_tab_un.svg');
+      background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material/svg/swap_tab_un.svg');
       background-size: cover;
       background-repeat: no-repeat;
     }
     &:last-child{
-      background-image: url('../../../assets/navImg/market_un.svg');
+      background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material/svg/market_un.svg');
       background-size: cover;
       background-repeat: no-repeat;
     }
@@ -82,7 +81,7 @@ export default {
     background-image: none !important;
     &::before{
       content: '';
-      background-image: url('../../../assets/navImg/checked.svg');
+      background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material/svg/checked.svg');
       background-repeat: no-repeat;
       background-size: cover;
       position: absolute;

@@ -3,7 +3,7 @@
     <dsr-info :args="args" :timesmap="timesmap" :claimLoading="claimLoading" :ableClaimNum="ableClaimNum"
       @listenAllLock="listenAllLock"/>
     <div class="allClaim flexb">
-      <img class="bgImg" src="@/assets/navImg/myReward.png" alt="">
+      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/bg/myReward.png" alt="">
       <div>
         <div class="subTitle flexa tip">
           <span>{{ $t('mine.waitClaim') }}</span>

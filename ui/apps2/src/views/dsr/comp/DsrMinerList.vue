@@ -12,7 +12,7 @@
           <span class="flexc">
             <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
             <span class="addition flexa" v-if="Number(item.buff)">
-              <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
+              <img class="buffImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/buff2.svg">
               <span>{{ item.buff }}%</span>
             </span>
           </span>

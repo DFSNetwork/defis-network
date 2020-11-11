@@ -2,7 +2,7 @@
   <div class="addMarket">
     <div class="title">
       <span>{{ $t('more.addMarket') }}</span>
-      <img class="closeSvg" @click="handleClose" src="@/assets/img/dialog/sd_icon_btn.svg" alt="">
+      <img class="closeSvg" @click="handleClose" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
     </div>
     <div class="content">
       <!-- 币种1 -->
@@ -27,7 +27,7 @@
         </div>
       </div>
       <!-- + 号 -->
-      <div class="addDiv"><img src="@/assets/navImg/add.svg" alt=""></div>
+      <div class="addDiv"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/add.svg" alt=""></div>
       <!-- 币种2 -->
       <div class="symInfo flexb">
         <div>
@@ -56,8 +56,8 @@
       <div class="flexa num din" @click="exRate =!exRate">
         <span v-if="!exRate">1{{ thisMarket.symbol0 }} = {{ thisMarket.sym0Rate || '-' }}{{ thisMarket.symbol1 }}</span>
         <span v-else>1{{ thisMarket.symbol1 }} = {{ thisMarket.sym1Rate || '-' }}{{ thisMarket.symbol0 }}</span>
-        <img class="iconImg" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
-        <img class="iconImg" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
+        <img class="iconImg" v-if="!exRate" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_left.svg" alt="">
+        <img class="iconImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_right.svg" alt="">
       </div>
       <div class="tip">{{ $t('dex.poolNum') }}</div>
       <div class="num din">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>

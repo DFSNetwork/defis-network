@@ -1,7 +1,7 @@
 <template>
   <div class="farms">
     <div class="banner flexc">
-      <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
+      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/top_bg.svg" alt="">
       <div>
         <div class="title">农场大厅</div>
         <div class="subTip">每日农活，收益一目了然</div>

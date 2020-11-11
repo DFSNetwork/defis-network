@@ -14,7 +14,7 @@
               <div class="tip">{{ thisMarket.contract0 }}</div>
             </div>
           </div>
-          <img class="addImg" src="@/assets/navImg/add.svg">
+          <img class="addImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/add.svg">
           <div class="flexa">
             <img class="coinImg" :onerror="errorCoinImg" :src="thisMarket.sym1Data.imgUrl" >
             <div>
@@ -39,8 +39,8 @@
             <div class="num flexa din" @click="exRate = !exRate">
               <span v-if="!exRate">1{{ thisMarket.symbol0 }} = {{ thisMarket.sym0Rate || '-' }}{{ thisMarket.symbol1 }}</span>
               <span v-else>1{{ thisMarket.symbol1 }} = {{ thisMarket.sym1Rate || '-' }}{{ thisMarket.symbol0 }}</span>
-              <img class="iconImg" v-if="!exRate" src="@/assets/img/dex/price_switch_icon_btn_left.svg" alt="">
-              <img class="iconImg" v-else src="@/assets/img/dex/price_switch_icon_btn_right.svg" alt="">
+              <img class="iconImg" v-if="!exRate" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_left.svg" alt="">
+              <img class="iconImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_right.svg" alt="">
             </div>
           </div>
           <div class="item">
@@ -64,12 +64,12 @@
         <!-- 跳转连接 -->
         <div class="linkTo flexb">
           <span class="flexc">
-            <img src="@/assets/navImg/create_icon.svg">
+            <img src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/create_icon.svg">
             <span @click="handleTo('createMarket')">{{ $t('dex.addMarket') }}</span>
             <i class="el-icon-arrow-right"></i>
           </span>
           <span class="flexc">
-            <img src="@/assets/navImg/record.svg">
+            <img src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/record.svg">
             <span @click="handleTo('MarketHis')">{{ $t('more.mkHis') }}</span>
             <i class="el-icon-arrow-right"></i>
           </span>
@@ -320,7 +320,7 @@ export default {
     handleDealApy(mid = 329, project) {
       let yfcReward = getYfcReward(this.thisMarket.mid, 'year', project);
       if (Number(yfcReward)) {
-        const YfcPool = this.marketLists.find(vv => vv.mid === mid);
+        const YfcPool = this.marketLists.find(vv => vv.mid === mid) || {};
         const price = parseFloat(YfcPool.reserve0 || 0) / parseFloat(YfcPool.reserve1 || 1)
         yfcReward = yfcReward * price / 20000 * 100;
         yfcReward = yfcReward.toFixed(2);

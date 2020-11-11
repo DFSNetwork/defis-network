@@ -26,7 +26,7 @@
             <div class="flexend">
               <span class="num din">{{ accLpData.showReward || '0.00000000' }}</span>
               <span class="red_p flexa" v-if="Number(addBuff)">（
-                <img class="buffImg" src="@/assets/img/poolspage/buff2.svg">
+                <img class="buffImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/buff2.svg">
                 {{ addBuff }}%）</span>
             </div>
           </div>

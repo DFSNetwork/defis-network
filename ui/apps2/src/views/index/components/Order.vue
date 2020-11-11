@@ -3,12 +3,12 @@
     <div class="item">
       <div class="num flex">
         <span>1.0000 EOS</span>
-        <img class="iconImg" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
+        <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_green_left.svg" alt="">
         <span>1.0000 EOS</span>
       </div>
       <div class="flexb">
         <span class="user flex">
-          <img class="iconImg" src="@/assets/img/dex/user_icon.svg" alt="">
+          <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/user_icon.svg" alt="">
           <span>shenz****zhen</span>
         </span>
         <span class="tip">2020-07-23 15:45:47</span>
@@ -18,12 +18,12 @@
     <div class="item">
       <div class="num flex">
         <span>1.0000 EOS</span>
-        <img class="iconImg" src="@/assets/img/dex/price_switch_icon_green_left.svg" alt="">
+        <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_green_left.svg" alt="">
         <span>1.0000 EOS</span>
       </div>
       <div class="flexb">
         <span class="user flex">
-          <img class="iconImg" src="@/assets/img/dex/user_icon.svg" alt="">
+          <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/user_icon.svg" alt="">
           <span>shenz****zhen</span>
         </span>
         <span class="tip">2020-07-23 15:45:47</span>

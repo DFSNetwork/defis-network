@@ -119,7 +119,7 @@
             <span>{{ $t('dex.pools') }}</span>
             <span>{{ item.liq_bal0 | numToShot }} / {{ item.liq_bal1 | numToShot }}</span>
           </div>
-          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://apps.defis.network/static/rank/rank${index + 1}.png`" alt=""></label>
+          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://cdn.jsdelivr.net/gh/defis-net/material/rank/rank${index + 1}.png`" alt=""></label>
         </div>
       </template>
       <el-pagination
@@ -403,7 +403,7 @@ export default {
     handleDealApy(mid = 329, project) {
       let yfcReward = getYfcReward(this.thisMarket.mid, 'year', project);
       if (Number(yfcReward)) {
-        const YfcPool = this.marketLists.find(vv => vv.mid === mid);
+        const YfcPool = this.marketLists.find(vv => vv.mid === mid) || {};
         const price = parseFloat(YfcPool.reserve0 || 0) / parseFloat(YfcPool.reserve1 || 1)
         yfcReward = yfcReward * price / 20000 * 100;
         yfcReward = yfcReward.toFixed(2);

@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="banner">
-      <img class="bgImg" src="@/assets/img/poolspage/top_bg.svg" alt="">
+      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/top_bg.svg" alt="">
       <div class="bannerTitle">DFS Mining</div>
       <div class="bannerSubTitle">No Founder. No Investor. No Pre-mine.</div>
       <div class="flexb floatDiv">

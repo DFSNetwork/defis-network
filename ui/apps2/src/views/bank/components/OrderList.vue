@@ -3,7 +3,7 @@
     <div class="title flexb">
       <span class="act">{{ $t('bank.record') }}</span>
       <div class="flexa usddTip" @click="showUsddTip = true">
-        <img class="tipIcon" src="@/assets/img/dex/tip.svg" alt="">
+        <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/tip.svg" alt="">
         <span>{{ $t('public.warmPrompt') }}</span>
       </div>
     </div>

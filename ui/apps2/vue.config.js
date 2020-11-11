@@ -31,7 +31,7 @@ module.exports = {
   chainWebpack: config => {
     // 移除 prefetch 插件
     config.plugins.delete('prefetch')
-    config.when(process.env.NODE_ENV === 'development', (config) => {
+    config.when(process.env.NODE_ENV !== 'development', (config) => {
       config.optimization.splitChunks({
         chunks: 'all',
         cacheGroups: {

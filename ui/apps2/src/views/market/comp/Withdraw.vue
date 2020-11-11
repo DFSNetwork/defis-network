@@ -2,7 +2,7 @@
   <div class="removeMarket">
     <div class="title">
       <span>{{ $t('more.remove') }}</span>
-      <img class="closeSvg" @click="handleClose" src="@/assets/img/dialog/sd_icon_btn.svg" alt="">
+      <img class="closeSvg" @click="handleClose" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
     </div>
     <!-- 输入数据 -->
     <div class="iptDiv">

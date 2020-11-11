@@ -3,7 +3,7 @@
     <div class="title flexb">
       <span class="flexc">
         <span class="act" @click="showMarketList = true">{{ thisMarket.symbol0 }}-{{ thisMarket.symbol1 }}</span>
-        <img class="iconImg" src="@/assets/img/dex/down.svg" alt="">
+        <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/down.svg" alt="">
       </span>
     </div>
     <!-- <div class="tip noData">链上数据重新同步中。一天后恢复查询。</div> -->

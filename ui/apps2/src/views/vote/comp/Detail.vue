@@ -44,7 +44,7 @@
             <span>{{ $t('vote.vote') }}</span>
             <span>{{ item.voteNum }}</span>
           </div>
-          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://apps.defis.network/static/rank/rank${index + 1}.png`" alt=""></label>
+          <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://cdn.jsdelivr.net/gh/defis-net/material/rank/rank${index + 1}.png`" alt=""></label>
         </div>
       </template>
 

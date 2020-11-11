@@ -1,6 +1,6 @@
 <template>
   <div class="allClaim flexb flexs">
-    <img class="bgImg" src="@/assets/navImg/myReward.png" alt="">
+    <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/bg/myReward.png" alt="">
     <div>
       <div class="subTitle flexa tip">
         <span>{{ $t('mine.waitClaim') }}</span>

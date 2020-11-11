@@ -8,7 +8,7 @@
       :visible.sync="show">
       <div class="tipDiv">
         <div class="flex">
-          <img class="coinImg" src="@/assets/img/dialog/tips_poto.svg" alt="">
+          <img class="coinImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/tips_poto.svg" alt="">
         </div>
         <div class="tip">{{ $t('public.warmTip') }}</div>
         <div><el-button class="btn" type="primary" @click="show = false">{{ $t('public.known') }}</el-button></div>
