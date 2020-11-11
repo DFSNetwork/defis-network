@@ -62,7 +62,7 @@ const sys = {
       fundation: 'dfsfundatest',
       lpPools: 'tageosmining',
     },
-    proConfig: localStorage.getItem('proConfig') && JSON.parse(localStorage.getItem('proConfig')).type ? JSON.parse(localStorage.getItem('proConfig')) : { // 生产环境配置
+    proConfig: localStorage.getItem('proConfig') && JSON.parse(localStorage.getItem('proConfig')).isNewConfig ? JSON.parse(localStorage.getItem('proConfig')) : { // 生产环境配置
       node: {
         area: 'production',
         protocol: 'https',
@@ -80,7 +80,7 @@ const sys = {
       baseCoin: 'EOS', // 母币
       baseCoinContract: 'eosio.token',
       teamFunds: 'jinteamfunds', // 资金账户
-      type: true,
+      isNewConfig: true,
       // nodePools config
       nodeMiner: 'tagtokenfarm',
       nodeToken: 'tagtokenmain',

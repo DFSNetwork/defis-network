@@ -172,16 +172,10 @@ export default {
       if (!this.scatter || !this.scatter.identity) {
         return
       }
-      try {
-        getAccVote((accVoteData) => {
-          this.accVoteData = accVoteData;
-          this.handleDealAccReward(this.accVoteData)
-        })
-      } catch (error) {
-        if (this.scatter && this.scatter.identity && this.scatter.identity.accounts[0].name === 'judy.dfs') {
-          alert(JSON.stringify(error))
-        }
-      }
+      getAccVote((accVoteData) => {
+        this.accVoteData = accVoteData;
+        this.handleDealAccReward(this.accVoteData)
+      })
     },
     // 计算用户收益
     handleDealAccReward(accVoteData) {
@@ -242,36 +236,30 @@ export default {
       this.poolsTimer = setTimeout(() => {
         this.handleGetPools();
       }, 10000)
-      try {
-        const params = {
-          "code": this.baseConfig.nodeMiner,
-          "scope": this.baseConfig.nodeMiner,
-          "table": "pools",
-          "json":true,
-          "limit": 1000
-        }
-        const {status, result} = await get_table_rows(params);
-        if (!status) {
-          return
-        }
-        const lists = result.rows || [];
-        lists.forEach(v => {
-          const arr = v.sym.split(',');
-          const decimal = arr[0];
-          const sym = arr[1];
-          const imgUrl = getCoin(v.contract, sym)
-          v.decimal = decimal;
-          v.sym = sym;
-          v.imgUrl = imgUrl;
-        });
-        this.poolsLists = lists;
-        this.handleDealApy()
-        this.handleGetBal()
-      } catch (error) {
-        if (this.scatter && this.scatter.identity && this.scatter.identity.accounts[0].name === 'judy.dfs') {
-          alert(JSON.stringify(error))
-        }
+      const params = {
+        "code": this.baseConfig.nodeMiner,
+        "scope": this.baseConfig.nodeMiner,
+        "table": "pools",
+        "json":true,
+        "limit": 1000
       }
+      const {status, result} = await get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const lists = result.rows || [];
+      lists.forEach(v => {
+        const arr = v.sym.split(',');
+        const decimal = arr[0];
+        const sym = arr[1];
+        const imgUrl = getCoin(v.contract, sym)
+        v.decimal = decimal;
+        v.sym = sym;
+        v.imgUrl = imgUrl;
+      });
+      this.poolsLists = lists;
+      this.handleDealApy()
+      this.handleGetBal()
     },
     handleGetBal() {
       this.poolsLists.forEach(async (v) => {

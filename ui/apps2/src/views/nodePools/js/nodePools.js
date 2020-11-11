@@ -33,6 +33,7 @@ export async function getAccVote(cb) {
   }
   const {status, result} = await get_table_rows(params)
   if (!status) {
+    cb({eosNum: '0.0000'})
     return
   }
   const rows = result.rows || [];
