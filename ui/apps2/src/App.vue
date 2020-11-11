@@ -262,7 +262,11 @@ export default {
           return
         }
         const list = rows;
+        const dealList = [];
         list.forEach(v => {
+          if (!v.running) {
+            return
+          }
           if (v.start) {
             let beginTime = toLocalTime(`${v.start}.000+0000`);
             beginTime = moment(beginTime).valueOf();
@@ -273,8 +277,9 @@ export default {
             endTime = moment(endTime).valueOf();
             this.$set(v, 'endTime', endTime / 1000);
           }
+          dealList.push(v)
         });
-        this.$store.dispatch('setTimeList', list)
+        this.$store.dispatch('setTimeList', dealList)
       })
     },
     // 获取swap, yfc池子账户余额 - 10秒轮询
