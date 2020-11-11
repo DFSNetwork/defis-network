@@ -12,7 +12,7 @@
         @click="handleCheckedNode(item)">
         <div class="main">
           <div class="flexa">
-            <span class="rank flexc" v-if="act !== 3">{{ item.rank }}</span>
+            <span class="rank flexc">{{ item.rank }}</span>
             <img class="logo" :src="item.owner !== 'bp.dfs' ? item.logo : voteDefaultImg" :onerror="errorCoinImg">
             <span class="nodeName">{{ item.owner }}</span>
           </div>
@@ -188,11 +188,13 @@ export default {
         const node = this.nodeLists.find(vv => vv.owner === v);
         list.push(node);
       })
+      list.sort((a, b) => {
+        return b.dfsVote - a.dfsVote
+      })
       this.myVoteList = list
       // this.act === 3 ? this.lists = this.myVoteList : '';
     },
     handleDealLists() {
-      // const lists = JSON.parse(JSON.stringify(this.nodeLists));
       const lists = this.nodeLists;
       // act === 1
       // this.act === 1 ? this.lists = lists : '';
@@ -203,7 +205,6 @@ export default {
       })
       rank = rank.slice(0, 10)
       this.rankLists = rank;
-      // this.act === 2 ? this.lists = rank : '';
       // act === 3
       this.handleGetMyLists();
 
