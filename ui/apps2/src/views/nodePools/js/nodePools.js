@@ -55,7 +55,7 @@ export async function getAccVote(cb) {
   // console.log(kweight, uweight)
   accVoteData.percent = percent.toFixed(2)
   accVoteData.rexBegin = Date.parse(new Date()) / 1000 - 1605096000 >= 0;
-  // cb(accVoteData)
+  cb(accVoteData)
   getAccFarmerData(accVoteData, cb)
 }
 // 获取farmer挖矿数据
@@ -75,7 +75,7 @@ export async function getAccFarmerData(accVoteData, cb) {
     return
   }
   const rows = result.rows || [];
-  // console.log(result)
+  console.log(rows)
   // console.log(accVoteData)
   if (!rows.length) {
     cb(accVoteData)
@@ -83,6 +83,7 @@ export async function getAccFarmerData(accVoteData, cb) {
   }
   const row = rows[0];
   if (accVoteData.last_vote_weight !== row.last_vote_weight) {
+    accVoteData.showJoinBtn = true;
     cb(accVoteData)
     return;
   }
@@ -125,6 +126,82 @@ export function getReward(baseData, userData) {
   let rewardEos = accNum * Math.pow(aprs, t) - accNum; // 日收益 EOS
   let rewardToken = rewardEos / price;
   return rewardToken
+}
+
+export function getJoinActions() {
+  const baseConfig = store.state.sys.baseConfig;
+  const scatter = store.state.app.scatter;
+  const formName = scatter.identity.accounts[0].name;
+  const permission = scatter.identity.accounts[0].authority;
+  const join = {
+    account: baseConfig.nodeMiner,
+    name: 'join',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      farmer: formName,
+    },
+  }
+  const harvest = {
+    account: baseConfig.nodeMiner,
+    name: 'harvest',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      farmer: formName,
+    },
+  }
+  const params = {
+    actions: []
+  }
+  params.actions.push(harvest, join)
+  return params;
+}
+
+// 获取投票给Ta Action
+export function getVoteToProxy(accVoteData) {
+  const scatter = store.state.app.scatter;
+  const formName = scatter.identity.accounts[0].name;
+  const permission = scatter.identity.accounts[0].authority;
+  const stakeCpu = {
+    account: 'eosio',
+    name: 'delegatebw',
+    authorization: [{
+      actor: formName,
+      permission,
+    }],
+    data: {
+      from: formName,
+      receiver: formName,
+      stake_net_quantity: '0.0000 EOS',
+      stake_cpu_quantity: '0.0001 EOS',
+      transfer: 0
+    }
+  }
+  const params = {
+    actions: []
+  }
+  if (!Number(accVoteData.eosNum)) {
+    params.actions.unshift(stakeCpu)
+  }
+  params.actions.push({
+    account: 'eosio',
+    name: 'voteproducer',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      voter: formName,
+      proxy: 'dfsbpsproxy1', // 投票的节点名称
+      producers: [],
+    },
+  })
+  return params;
 }
 
 // 获取领取操作Actions

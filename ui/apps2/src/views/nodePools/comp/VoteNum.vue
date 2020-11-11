@@ -4,7 +4,9 @@
       <div>
         <span>{{ $t('nodePools.voteNum', {token: 'EOS'}) }}：{{ accVoteData.eosNum }}</span>
       </div>
-      <span v-if="!accVoteData.isfarmer" class="proxy btn"
+      <span class="btn" v-loading="loadingJoin"
+        v-if="accVoteData.showJoinBtn" @click="handleJoin">加入矿池</span>
+      <span v-else-if="!accVoteData.isfarmer" class="proxy btn"
         v-loading="loadingProxy"
         @click="handleProxy">{{ $t('nodePools.proxyToHis') }}</span>
       <span class="flexa">
@@ -27,7 +29,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 
-import { getClaimActions } from '../js/nodePools';
+import { getJoinActions, getVoteToProxy } from '../js/nodePools';
 
 import ManageVote from '../dialog/ManageVote'
 // import Remove from '../dialog/Remove'
@@ -48,6 +50,7 @@ export default {
   },
   data() {
     return {
+      loadingJoin: false,
       loadingProxy: false,
       showManage: false,
     }
@@ -58,6 +61,28 @@ export default {
     }),
   },
   methods: {
+    handleJoin() {
+      if (!this.scatter || !this.scatter.identity || this.loadingProxy) {
+        return
+      }
+      this.loadingJoin = true;
+      const params = getJoinActions(this.accVoteData)
+      EosModel.toTransaction(params, (res) => {
+        this.loadingJoin = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+        this.listenUpdata();
+      })
+    },
     listenUpdata() {
       setTimeout(() => {
         // 查询代理账户数据
@@ -70,7 +95,7 @@ export default {
         return
       }
       this.loadingProxy = true;
-      const params = getClaimActions(this.accVoteData)
+      const params = getVoteToProxy(this.accVoteData)
       EosModel.toTransaction(params, (res) => {
         this.loadingProxy = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
