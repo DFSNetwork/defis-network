@@ -313,6 +313,7 @@ export default {
     dbcApy: 'DBC偷菜年化',
     pddApy: 'PDD养猪年化',
     timeApy: 'TIME年化',
+    tagLpApy: 'TAG年化',
     exchange24: '24H兑换量',
   },
   vote: {

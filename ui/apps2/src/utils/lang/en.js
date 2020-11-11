@@ -312,6 +312,7 @@ export default {
     dbcApy: 'DBC APR',
     pddApy: 'PDD APR',
     timeApy: 'TIME APR',
+    tagLpApy: 'TAG APR',
     exchange24: '24H Volume',
   },
   vote: {

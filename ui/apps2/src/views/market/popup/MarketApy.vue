@@ -30,6 +30,10 @@
         <span>{{ $t('apy.timeApy') }}：</span>
         <span>{{ parseFloat(timeApy) ? `${timeApy}%` : '0.00%' }}</span>
       </div>
+      <div class="flexa" v-if="parseFloat(tagLpApy)">
+        <span>{{ $t('apy.tagLpApy') }}：</span>
+        <span>{{ parseFloat(tagLpApy) ? `${tagLpApy}%` : '0.00%' }}</span>
+      </div>
       <div class="flexa total">
         <span>{{ $t('info.totalApr') }}：</span>
         <span>{{ countApy }}%</span>
@@ -70,6 +74,10 @@ export default {
       default: function la() {
         return {}
       }
+    },
+    tagLpApy: {
+      type: String,
+      default: '0.00'
     }
   },
   watch: {

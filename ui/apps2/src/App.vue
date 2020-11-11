@@ -15,6 +15,8 @@ import { getVotePools } from '@/utils/api';
 import { EosModel } from '@/utils/eos';
 import MyKonami from '@/views/konami/Index';
 
+import {getTagLpBal} from '@/utils/minerLogic';
+
 export default {
   name: 'App',
   components: {
@@ -305,6 +307,7 @@ export default {
           this.$store.dispatch('setLpPoolsBal', lpPoolsBal)
         })
       })
+      getTagLpBal(() =>{})
     },
     // 获取当前发行量 和 计算衰减
     handleGetYfcCurrent() {

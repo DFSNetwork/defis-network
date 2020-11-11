@@ -33,7 +33,7 @@
             <!-- <span class="green" @click="handleToMarket(item.mid)">{{ $t('invi.join') }}</span> -->
           </div>
           <div class="flexa percent">
-            <div>
+            <div v-if="parseFloat(item.poolsApr)">
               <div class="num">{{ item.poolsApr || '—' }}</div>
               <div class="tip">{{ $t('info.markerFeesApr') }}</div>
             </div>
@@ -60,6 +60,10 @@
             <div v-if="parseFloat(item.timeApy)">
               <div class="num">{{ parseFloat(item.timeApy) ? `${item.timeApy}%` : '—' }}</div>
               <div class="tip">{{ $t('apy.timeApy') }}</div>
+            </div>
+            <div v-if="parseFloat(item.tagLpApy)">
+              <div class="num">{{ parseFloat(item.tagLpApy) ? `${item.tagLpApy}%` : '—' }}</div>
+              <div class="tip">{{ $t('apy.tagLpApy') }}</div>
             </div>
           </div>
           <div class="flexb total">
@@ -102,9 +106,11 @@
 
 <script>
 import { mapState } from 'vuex';
-import { getYfcReward, accAdd, toLocalTime, getDmdMinerHourRoi } from '@/utils/public';
+import { getYfcReward, accAdd, toLocalTime,
+  getDmdMinerHourRoi, getTagLpApy } from '@/utils/public';
 import { timeApy } from '@/utils/minerLogic';
-import { perDayRewardV3 } from '@/utils/logic' 
+import { perDayRewardV3 } from '@/utils/logic'
+
 export default {
   name: 'total',
   data() {
@@ -123,7 +129,10 @@ export default {
         value: '1',
         label: 'APY'
       }],
+      tagLpBal: '0.0000'
     }
+  },
+  mounted() {
   },
   computed: {
     ...mapState({
@@ -135,6 +144,7 @@ export default {
       lpMid: state => state.config.lpMid,
       timeList: state => state.config.timeList,
       marketLists: state => state.sys.marketLists,
+      baseConfig: state => state.sys.baseConfig,
     }),
     showArr() {
       if (!this.marketLists.length || !this.feesApr || !this.timeList.length) {
@@ -198,15 +208,6 @@ export default {
       return true
     },
   },
-  // watch: {
-  //   timeList: {
-  //     handler: function tl() {
-
-  //     },
-  //     deep: true,
-  //     immediate: true,
-  //   }
-  // },
   methods: {
     handleGetCheckRank() {
       const dmdPool = this.marketLists.find(v => v.mid === 326)
@@ -232,7 +233,10 @@ export default {
           feesApr.mid = market.mid;
           feesApr.reserve0 = market.reserve0;
           feesApr.reserve1 = market.reserve1;
-          count = accAdd(count, parseFloat(feesApr.poolsApr))
+          if (!feesApr.symbol) {
+            feesApr.symbol = market.symbol1;
+          }
+          count = accAdd(count, parseFloat(feesApr.poolsApr || 0))
 
           this.lpMid.forEach(lp => {
             const yfcReward = getYfcReward(market.mid, 'year', lp.symbol)
@@ -256,16 +260,26 @@ export default {
             count = accAdd(count, midTimeApy)
           }
 
+          if (market.mid === 602) {
+            // TAG LP挖矿年化
+            // console.log(market)
+            const tagLpApy = getTagLpApy(market.mid)
+            feesApr.tagLpApy = tagLpApy;
+            count = accAdd(count, tagLpApy)
+          }
+
           feesApr.count = count.toFixed(2);
 
           // 计算24H兑换量
           if (this.dfsData.tradingVolumeData) {
             const key = `mid-${market.mid}`;
-            const countData = this.dfsData.tradingVolumeData[key] || {};
-            let countEos = (countData.amountIn.EOS || 0) + (countData.amountOut.EOS || 0);
-            // let shortCountEos = countEos > 1000 ? `${(countEos / 1000).toFixed(2)}K` : countEos.toFixed(4);
-            feesApr.countEos = countEos.toFixed(4);
-            feesApr.allCount = countEos.toFixed(4);
+            const countData = this.dfsData.tradingVolumeData[key];
+            if (countData) {
+              let countEos = (countData.amountIn.EOS || 0) + (countData.amountOut.EOS || 0);
+              // let shortCountEos = countEos > 1000 ? `${(countEos / 1000).toFixed(2)}K` : countEos.toFixed(4);
+              feesApr.countEos = countEos.toFixed(4);
+              feesApr.allCount = countEos.toFixed(4);
+            }
           }
           arr.push(feesApr)
         } catch (error) {

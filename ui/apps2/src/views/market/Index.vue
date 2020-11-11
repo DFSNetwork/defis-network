@@ -97,7 +97,8 @@
       class="myDialog apy"
       :visible.sync="showApyDetail">
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
-                 :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
+                 :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"
+                 :tagLpApy="tagLpApy"/>
     </el-dialog>
     <!-- 加入做市 -->
     <el-dialog
@@ -140,7 +141,7 @@ import MarketData from './comp/MarketData';
 import Withdraw from './comp/Withdraw'
 
 // 公用方法
-import { getDmdMinerHourRoi, getYfcReward,
+import { getDmdMinerHourRoi, getYfcReward, getTagLpApy,
   toFixed, accAdd, accDiv } from '@/utils/public';
 import { perDayRewardV3 } from '@/utils/logic';
 import { timeApy } from '@/utils/minerLogic';
@@ -224,13 +225,22 @@ export default {
       }
       return '0.000';
     },
+    tagLpApy() {
+      if (this.thisMarket.mid === 602) {
+        return getTagLpApy(this.thisMarket.mid)
+      }
+      return '0.00'
+    },
     countApy() {
-      let all = accAdd(parseFloat(this.aprV3), parseFloat(this.feesApr))
+      let all = accAdd(parseFloat(this.aprV3), parseFloat(this.feesApr || 0))
       if (this.dmdApy) {
         all = accAdd(all, parseFloat(this.dmdApy))
       }
       if (this.timeApy) {
         all = accAdd(all, parseFloat(this.timeApy))
+      }
+      if (this.tagLpApy) {
+        all = accAdd(all, parseFloat(this.tagLpApy))
       }
       this.lpMid.forEach(v => {
         const apy = this.handleDealApy(v.mid, v.symbol);

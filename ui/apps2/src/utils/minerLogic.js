@@ -1,5 +1,6 @@
 // import axios from 'axios';
 import store from '@/store';
+import { get_balance } from '@/utils/api'
 /**
  * 
  * @param {*} mid 映射LP 做市ID
@@ -78,4 +79,22 @@ export function timeDssNum(li, userLP, rankWeight, allStaked) {
     console.log(error)
   }
   return 0
+}
+
+// 获取Tag Lp余额
+export async function getTagLpBal(cb) {
+  const baseConfig = store.state.sys.baseConfig;
+  const params = {
+    code: baseConfig.nodeToken,
+    symbol: 'TAG',
+    decimal: 8,
+    account: baseConfig.lpPools,
+  }
+  const {status, result} = await get_balance(params);
+  if (!status) {
+    cb(0)
+    return
+  }
+  store.dispatch('setTagLpBal', parseFloat(result))
+  cb(parseFloat(result))
 }

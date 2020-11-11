@@ -136,9 +136,15 @@ const sys = {
     marketLists: [], // 做市列表
     filterMkLists: [], // 过滤后的做市列表
 
+    // TagLp余额
+    tagLpBal: 0,
+
     nodeLists: [],
   },
   mutations: {
+    SET_TagLpBal: (state, tagLpBal) => {
+      state.tagLpBal = tagLpBal;
+    },
     SET_NodeLists: (state, nodeLists) => {
       state.nodeLists = nodeLists;
     },
@@ -207,6 +213,9 @@ const sys = {
     },
   },
   actions: {
+    setTagLpBal({ commit }, tagLpBal) {
+      commit('SET_TagLpBal', tagLpBal);
+    },
     setNodeLists({ commit }, nodeLists) {
       commit('SET_NodeLists', nodeLists);
     },

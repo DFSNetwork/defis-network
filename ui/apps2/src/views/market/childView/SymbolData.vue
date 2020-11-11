@@ -147,7 +147,8 @@
       class="myDialog apy"
       :visible.sync="showApyDetail">
       <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
-                 :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"/>
+                 :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"
+                 :tagLpApy="tagLpApy"/>
     </el-dialog>
     <!-- <el-dialog
       class="myDialog"
@@ -161,7 +162,8 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accSub, accAdd, accMul, accDiv, getMarketTime, dealAccountHide,
+import { toFixed, accSub, accAdd, accMul, accDiv,
+          getMarketTime, dealAccountHide, getTagLpApy,
          dealMinerData, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
@@ -283,13 +285,22 @@ export default {
       }
       return '0.000';
     },
+    tagLpApy() {
+      if (this.thisMarket.mid === 602) {
+        return getTagLpApy(this.thisMarket.mid)
+      }
+      return '0.00'
+    },
     countApy() {
-      let all = accAdd(parseFloat(this.aprV3), parseFloat(this.feesApr))
+      let all = accAdd(parseFloat(this.aprV3), parseFloat(this.feesApr || 0))
       if (this.dmdApy) {
         all = accAdd(all, parseFloat(this.dmdApy))
       }
       if (this.timeApy) {
         all = accAdd(all, parseFloat(this.timeApy))
+      }
+      if (this.tagLpApy) {
+        all = accAdd(all, parseFloat(this.tagLpApy))
       }
       this.lpMid.forEach(v => {
         const apy = this.handleDealApy(v.mid, v.symbol);

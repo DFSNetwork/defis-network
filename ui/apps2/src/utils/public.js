@@ -510,3 +510,21 @@ export function dealSymArr(lists = []) {
   })
   return uniques;
 }
+
+// 获取TAG LP年化
+export function getTagLpApy(mid) {
+  const lpLists = store.state.sys.marketLists.find(v => v.mid === (mid || 602));
+  const tagLpBal = store.state.sys.tagLpBal;
+  if (!lpLists || !parseFloat(tagLpBal)) {
+    return 0
+  }
+  const num = 1;
+  const rate = num / parseFloat(lpLists.reserve0);
+  const lpBal = tagLpBal;
+  const weight = 1.5;
+  const t = 86400 * 365;
+  const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
+  const price = parseFloat(lpLists.reserve0) / parseFloat(lpLists.reserve1);
+  const apy = reward * price / num * 100;
+  return apy.toFixed(2)
+}
