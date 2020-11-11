@@ -356,7 +356,7 @@ export default {
   height: 100%;
   background: rgba(255,255,255, .9);
   font-size: 33px;
-  z-index: 2001;
+  z-index: 1001;
   border-radius: 12px;
 }
 .rexCutDown{

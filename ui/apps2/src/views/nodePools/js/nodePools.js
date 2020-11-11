@@ -128,10 +128,26 @@ export function getReward(baseData, userData) {
 
 // 获取领取操作Actions
 export function getClaimActions(accVoteData) {
+  // console.log(accVoteData)
   const baseConfig = store.state.sys.baseConfig;
   const scatter = store.state.app.scatter;
   const formName = scatter.identity.accounts[0].name;
   const permission = scatter.identity.accounts[0].authority;
+  const stakeCpu = {
+    account: 'eosio',
+    name: 'delegatebw',
+    authorization: [{
+      actor: formName,
+      permission,
+    }],
+    data: {
+      from: formName,
+      receiver: formName,
+      stake_net_quantity: '0.0000 EOS',
+      stake_cpu_quantity: '0.0001 EOS',
+      transfer: 0
+    }
+  }
   const harvest = {
     account: baseConfig.nodeMiner,
     name: 'harvest',
@@ -155,20 +171,24 @@ export function getClaimActions(accVoteData) {
     },
   }
   const params = {
-    actions: [harvest, {
-      account: 'eosio',
-      name: 'voteproducer',
-      authorization: [{ 
-        actor: formName,
-        permission,
-      }],
-      data: {
-        voter: formName,
-        proxy: 'dfsbpsproxy1', // 投票的节点名称
-        producers: [],
-      },
-    }]
+    actions: []
   }
+  if (!Number(accVoteData.eosNum)) {
+    params.actions.unshift(stakeCpu)
+  }
+  params.actions.push(harvest, {
+    account: 'eosio',
+    name: 'voteproducer',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      voter: formName,
+      proxy: 'dfsbpsproxy1', // 投票的节点名称
+      producers: [],
+    },
+  })
   if (accVoteData.isfarmer) {
     params.actions.push(harvest)
   } else {
@@ -185,6 +205,21 @@ export function getRexActions(accVoteData, obj) {
   const permission = scatter.identity.accounts[0].authority;
   let amount = obj.amount;
 
+  const stakeCpu = {
+    account: 'eosio',
+    name: 'delegatebw',
+    authorization: [{
+      actor: formName,
+      permission,
+    }],
+    data: {
+      from: formName,
+      receiver: formName,
+      stake_net_quantity: '0.0000 EOS',
+      stake_cpu_quantity: '0.0001 EOS',
+      transfer: 0
+    }
+  }
   const harvest = { // 收获
     account: baseConfig.nodeMiner,
     name: 'harvest',
@@ -268,8 +303,12 @@ export function getRexActions(accVoteData, obj) {
     },
   }]
   const params = {
-    actions: [harvest]
+    actions: []
   };
+  if (!Number(accVoteData.eosNum)) {
+    params.actions.unshift(stakeCpu)
+  }
+  params.actions.push(harvest)
   // REX操作处理
   if (obj.type === 'buyRex') {
     params.actions.push(...buyRex)
@@ -279,7 +318,7 @@ export function getRexActions(accVoteData, obj) {
   // 添加投票操作
   params.actions.push(voteproducer)
   // 加入 ｜ 收获
-  console.log(accVoteData)
+  // console.log(accVoteData)
   if (accVoteData.isfarmer) {
     params.actions.push(harvest)
   } else {

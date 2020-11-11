@@ -1,7 +1,15 @@
 <template>
   <div class="addVote">
     <div class="rules">
-      {{ $t('nodePools.rexInfo') }}
+      <div class="tip flexb">
+        <span>{{ $t('nodePools.rexInfo') }}</span>
+        <span class="green_p" @click="handleToRex">详细></span>
+      </div>
+      <div>REX是“资源交易所”（Resource Exchange）的缩写，
+        由Block.One于2018年8月8日首次正式提出。
+        它是创建在EOS区块链中的无风险网络资源租赁市场。
+        这个交易所允许Token持有者将他们闲置的EOS出租给有需要的Dapp项目方、
+        组织或个人，以挣取“租金”，RAM利息和账号拍卖费等收益。</div>
     </div>
     <div class="iptDiv">
       <div class="subTitle">{{ $t('nodePools.buyRex') }}</div>
@@ -76,6 +84,9 @@ export default {
     }
   },
   methods: {
+    handleToRex() {
+      location.href = 'https://dfscommunity.baklib.com/newbie/f036'
+    },
     // 获取账户余额
     handleGetBal() {
       const params = {
