@@ -61,7 +61,7 @@
 
     <div class="title flexb">
       <span class="act">矿工列表</span>
-      <span class="tip count">总矿工：{{lists.length}}</span>
+      <span class="tip count">总矿工：{{allLists.length}}</span>
     </div>
     <div class="lists">
       <template v-for="(item, index) in lists">
