@@ -337,7 +337,7 @@ export default {
         "json":true,
         "index_position": 2,
         "key_type": "i64",
-        "limit": 1000,
+        "limit": 3000,
         "reverse": true
       }
       const { status, result } = await get_table_rows(params);
@@ -453,7 +453,7 @@ export default {
         "json":true,
         "index_position": 2,
         "key_type": "i64",
-        "limit": 1000,
+        "limit": 2000,
         "reverse": false
       }
       const { status, result } = await get_table_rows(params);
