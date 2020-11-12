@@ -141,10 +141,6 @@ export default {
         });
         return
       }
-      if (this.accVoteData.isDfsProxy && this.accVoteData.isfarmer && !this.accVoteData.showJoinBtn) {
-        this.showTip = true;
-        return
-      }
       this.handleRexAction()
     },
     // 买入REX

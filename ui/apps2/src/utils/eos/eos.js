@@ -215,7 +215,7 @@ class model {
     scatterItem.chain = chain;
     scatterItem.online = online;
     // test 账户
-    // scatterItem.identity.accounts[0].name = 'thisthenthat';
+    // scatterItem.identity.accounts[0].name = 'xiaohuzi1a2a';
     store.dispatch('setScatter', scatterItem);
     localStorage.setItem('Frontend-Token', '');
     callback()

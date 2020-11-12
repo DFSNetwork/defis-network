@@ -341,6 +341,18 @@ export function getRexActions(accVoteData, obj) {
       farmer: formName,
     },
   }
+  const harvest2 = { // 收获
+    account: baseConfig.nodeMiner,
+    name: 'harvest2',
+    authorization: [{ 
+      actor: formName,
+      permission,
+    }],
+    data: {
+      farmer: formName,
+      random: parseInt(Math.random() * 100)
+    },
+  }
   const join = { // 加入
     account: baseConfig.nodeMiner,
     name: 'join',
@@ -418,7 +430,7 @@ export function getRexActions(accVoteData, obj) {
   if (!Number(accVoteData.eosNum)) {
     params.actions.unshift(stakeCpu)
   }
-  // params.actions.push(harvest)
+  params.actions.push(harvest)
   // REX操作处理
   if (obj.type === 'buyRex') {
     params.actions.push(...buyRex)
@@ -429,11 +441,11 @@ export function getRexActions(accVoteData, obj) {
   params.actions.push(voteproducer)
   // 加入 ｜ 收获
   // console.log(accVoteData)
-  // if (accVoteData.isfarmer) {
-  //   params.actions.push(harvest)
-  // } else {
-  //   params.actions.push(join)
-  // }
+  if (accVoteData.isfarmer) {
+    params.actions.push(harvest2)
+  } else {
+    params.actions.push(join)
+  }
   return params;
 }
 

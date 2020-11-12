@@ -32,14 +32,12 @@ import { EosModel } from '@/utils/eos';
 import { getJoinActions, getVoteToProxy } from '../js/nodePools';
 
 import ManageVote from '../dialog/ManageVote'
-import TipClaim from '../dialog/TipClaim'
 // import Remove from '../dialog/Remove'
 
 export default {
   name: 'accVoteNum',
   components: {
     ManageVote,
-    TipClaim
     // Remove,
   },
   props: {
