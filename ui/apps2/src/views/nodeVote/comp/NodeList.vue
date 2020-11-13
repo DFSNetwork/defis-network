@@ -203,7 +203,7 @@ export default {
       rank.sort((a, b) => {
         return b.dfsVote - a.dfsVote
       })
-      rank = rank.slice(0, 10)
+      rank = rank.slice(0, 30)
       this.rankLists = rank;
       // act === 3
       this.handleGetMyLists();

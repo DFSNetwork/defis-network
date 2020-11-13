@@ -77,6 +77,10 @@ $color-tip: #a6a6a6;
 .el-loading-spinner .path{
   stroke: rgba(2,198,152,1) !important;
 }
+.el-loading-spinner .circular{
+  height: 42px !important;
+  width: 42px !important;
+}
 
 @keyframes changeBgShadow {
   0% {
