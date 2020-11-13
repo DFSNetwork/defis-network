@@ -72,11 +72,11 @@ export default {
   },
   computed: {
     ...mapState({
-      marketLists: state => state.sys.marketLists,
+      filterMkLists: state => state.sys.filterMkLists,
     }),
   },
   watch: {
-    marketLists: {
+    filterMkLists: {
       handler: function mls() {
         this.handleDealAmtNum()
       },
@@ -143,7 +143,7 @@ export default {
     // 计算捐款总额
     handleDealAmtNum() {
       let amt = 0;
-      if (!this.marketLists.length || !this.summaryLists.length) {
+      if (!this.filterMkLists.length || !this.summaryLists.length) {
         return amt;
       }
       this.summaryLists.forEach(v => {
@@ -154,7 +154,7 @@ export default {
           this.$set(v, 'aboutEos', v.total)
           return
         }
-        const market = this.marketLists.find(vv => {
+        const market = this.filterMkLists.find(vv => {
           return vv.contract0 === 'eosio.token' && vv.contract1 === v.account && vv.symbol1 === v.symbol
         })
         if (!market || !parseFloat(market.reserve1)) {
