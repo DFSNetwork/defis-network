@@ -206,7 +206,7 @@ export default {
       marketLists: state => state.sys.marketLists,
     }),
     addBuff() {
-      let buff = (1 || 1) - 1;
+      let buff = (this.accLpData.weight || 1) - 1;
       buff = buff * 100;
       return buff.toFixed(2)
     }
@@ -441,7 +441,7 @@ export default {
         return
       }
       this.accLpData = Object.assign({}, this.accLpData, result.rows[0])
-      console.log(this.accLpData)
+      // console.log(this.accLpData)
       this.handleGetLpReward()
     },
     // 获取挖矿列表
@@ -475,7 +475,7 @@ export default {
         const marketNum = sellToken(inData)
         v.sym0 = marketNum.getNum1.toFixed(this.lpPool.decimal0)
         v.sym1 = marketNum.getNum2.toFixed(this.lpPool.decimal1)
-        if (index < 25) {
+        if (index < 21) {
           v.weight = 1.3
         } else if (index < 50) {
           v.weight = 1.5
@@ -805,6 +805,11 @@ export default {
 
 /deep/ .el-input-number{
   overflow: hidden;
+  position: relative;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .el-input-number__decrease,
   .el-input-number__increase{
     display: flex;

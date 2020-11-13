@@ -400,12 +400,18 @@ export default {
 }
 
 /deep/ .el-input-number{
-  overflow: hidden;
+  // overflow: hidden;
+  position: relative;
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   .el-input-number__decrease,
   .el-input-number__increase{
     display: flex;
     align-items: center;
     justify-content: center;
+    top: 2px;
     height: 56px;
     width: 50px;
     box-sizing: border-box;

@@ -338,7 +338,7 @@ export default {
       let rank;
       if (index === -1) {
         weight = 1;
-      } else if (index < 25) {
+      } else if (index < 21) {
         weight = 1.3;
       } else if (index < 50) {
         weight = 1.5;
