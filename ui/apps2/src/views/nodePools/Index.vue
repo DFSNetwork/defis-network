@@ -81,7 +81,7 @@ export default {
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
-      marketLists: state => state.sys.marketLists,
+      filterMkLists: state => state.sys.filterMkLists,
       baseConfig: state => state.sys.baseConfig,
     }),
     yearApr() {
@@ -109,7 +109,7 @@ export default {
     clearInterval(this.lpRunTimer)
   },
   watch: {
-    marketLists: {
+    filterMkLists: {
       handler: function mls() {
         this.handleDealAccReward(this.accVoteData)
         this.handleGetLpPoolsLists()
@@ -183,7 +183,7 @@ export default {
     // 计算用户收益
     handleDealAccReward(accVoteData) {
       const keys = Object.keys(this.poolsData)
-      if (!this.marketLists.length || !keys.length || !this.proxyData.eosNum || !accVoteData.isfarmer) {
+      if (!this.filterMkLists.length || !keys.length || !this.proxyData.eosNum || !accVoteData.isfarmer) {
         return;
       }
       const allEos = this.proxyData.eosNum; // 总票数
@@ -298,12 +298,12 @@ export default {
 
     // Lp 矿池
     handleGetLpPoolsLists() {
-      if (!this.marketLists.length || this.lpLists.length) {
+      if (!this.filterMkLists.length || this.lpLists.length) {
         return
       }
       const lpLists = []
       this.lpPoolsMid.forEach(mid => {
-        const market = this.marketLists.find(v => v.mid === mid);
+        const market = this.filterMkLists.find(v => v.mid === mid);
         lpLists.push(market)
         this.handleGetLpRank(mid);
       })

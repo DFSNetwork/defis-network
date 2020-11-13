@@ -92,18 +92,12 @@ export async function getAccFarmerData(accVoteData, cb) {
   cb(accVoteData)
 }
 
-// 计算node pools 年化
-export function getPoolsApy() {
-  // const marketLists = store.state.sys.marketLists;
-
-}
-
 // 计算收益
 // baseData = {aprs}
 export function getReward(baseData, userData) {
   // console.log(baseData, userData)
-  const marketLists = store.state.sys.marketLists;
-  const market = marketLists.find(v => v.mid == baseData.mid)
+  const filterMkLists = store.state.sys.filterMkLists;
+  const market = filterMkLists.find(v => v.mid == baseData.mid)
   if (!market) {
     return 0
   }

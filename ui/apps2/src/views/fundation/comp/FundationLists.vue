@@ -63,6 +63,8 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import moment from 'moment';
 import {toLocalTime, toBrowser} from '@/utils/public'
 export default {
@@ -113,16 +115,22 @@ export default {
     }
   },
   computed: {
+    ...mapState({
+      filterMkLists: state => state.sys.filterMkLists,
+    }),
     option() {
       const newOp = [{
         value: '',
         label: '全部'
       }]
       this.summaryLists.forEach(v => {
-        // const has = newOp.find(vv => vv.value === v.account)
-        // if (has) {
-        //   return
-        // }
+        const hasMarket = this.filterMkLists.find(vv => {
+          return (vv.contract0 === v.account && vv.symbol0 === v.symbol)
+              || (vv.contract1 === v.account && vv.symbol1 === v.symbol)
+        })
+        if (!hasMarket) {
+          return;
+        }
         const op = {
           value: `${v.account}:${v.symbol}`,
           label: v.symbol

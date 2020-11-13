@@ -170,7 +170,7 @@ export default {
     clearInterval(this.lpRunTimer)
   },
   watch: {
-    marketLists: {
+    filterMkLists: {
       handler: function mls(newVal, oldVal) {
         if (oldVal && oldVal.length === newVal.length) {
           return
@@ -203,7 +203,7 @@ export default {
     ...mapState({
       scatter: state => state.app.scatter,
       baseConfig: state => state.sys.baseConfig,
-      marketLists: state => state.sys.marketLists,
+      filterMkLists: state => state.sys.filterMkLists,
     }),
     addBuff() {
       let buff = (this.accLpData.weight || 1) - 1;
@@ -296,7 +296,7 @@ export default {
       })
     },
     handleDealAccReward(accVoteData) {
-      if (!this.marketLists.length || !accVoteData.isfarmer) {
+      if (!this.filterMkLists.length || !accVoteData.isfarmer) {
         return;
       }
       const baseData = this.pool;
@@ -355,7 +355,7 @@ export default {
     },
     // 当前页面列表数据滚动
     handleListReward() {
-      if (!this.marketLists.length || !this.lists.length) {
+      if (!this.filterMkLists.length || !this.lists.length) {
         return;
       }
       this.lists.forEach(v => {
@@ -394,10 +394,10 @@ export default {
 
     // LP矿池处理
     handleGetLpInfo() {
-      if (!this.marketLists.length) {
+      if (!this.filterMkLists.length) {
         return
       }
-      const market = this.marketLists.find(v => v.mid == this.sym);
+      const market = this.filterMkLists.find(v => v.mid == this.sym);
       // console.log(market)
       this.lpPool = Object.assign({}, this.lpPool, market);
       this.handleGetLpReward()
