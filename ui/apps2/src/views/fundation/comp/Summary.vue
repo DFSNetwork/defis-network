@@ -8,22 +8,22 @@
       <div class="list">
         <div class="coin flexb">
           <div class="flexa">
-            <span>乐捐账户：dfsfundation</span>
+            <span>{{ $t('fundation.fundationAcc') }}：dfsfundation</span>
           </div>
           <!-- <div class="btn green_p" @click="showToFundation = !showToFundation">去捐款</div> -->
         </div>
         <div class="flexb totalDiv">
           <div>
             <div class="num dinBold">{{ amtNum }}</div>
-            <div class="tip">乐捐总额（EOS）</div>
+            <div class="tip">{{ $t('fundation.fundationNum') }}（EOS）</div>
           </div>
           <div>
             <div>
               <span class="num dinBold">{{ totalNum }}</span>
-              <span class="detail" @click="showDetail = !showDetail">查看详情></span>
+              <span class="detail" @click="showDetail = !showDetail">{{ $t('fundation.showDetail') }}></span>
             </div>
             <div class="tip">
-              <span>乐捐人次</span>
+              <span>{{ $t('fundation.fundationPeo') }}</span>
             </div>
           </div>
         </div>

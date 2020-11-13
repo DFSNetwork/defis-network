@@ -1,12 +1,12 @@
 <template>
   <div class="toFundation">
     <img class="close" @click="handleClose()" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg">
-    <div class="title">乐捐款</div>
+    <div class="title">{{ $t('fundation.funTran') }}</div>
     <!-- 乐捐弹窗操作 -->
     <div class="symData">
       <div class="info flexb">
         <span @click="handlePercent(1)">{{ $t('public.balance') }}: {{ bal }} {{ thisMarket0.symbol }}</span>
-        <span class="type">乐捐款</span>
+        <span class="type">{{ $t('fundation.funTran') }}</span>
       </div>
       <div class="iptDiv flexb">
         <div class="coinInfo flex" @click="listenShowDrawer()">
@@ -34,8 +34,8 @@
       <!-- memo -->
       <div class="memoDiv">
         <div class="info flexb">
-          <span>留言</span>
-          <span class="randomSpan" @click="handleRandom">随机</span>
+          <span>{{ $t('fundation.memoshort') }}</span>
+          <span class="randomSpan" @click="handleRandom">{{ $t('fundation.random') }}</span>
         </div>
         <div class="iptDiv">
           <van-field
@@ -51,7 +51,7 @@
       </div>
     </div>
     <!-- 按钮 -->
-    <div class="btn flexc" @click="handleFundation">确认</div>
+    <div class="btn flexc" @click="handleFundation">{{ $t('public.confirm') }}</div>
 
     <!-- 弹窗组件 -->
     <el-dialog

@@ -2,9 +2,9 @@
   <div>
     <!-- 币种统计 -->
     <div class="title flexb">
-      <span class="act">乐捐记录</span>
+      <span class="act">{{ $t('fundation.his') }}</span>
       <span class="sort">
-        <span>过滤：</span>
+        <span>{{ $t('fundation.fileter') }}：</span>
         <span>
           <el-select v-model="myFilter"
             class="select"
@@ -49,11 +49,11 @@
             <span class="tip time">{{ handleToLocalTime(item.create_time) }}</span>
           </div>
           <div class="price flexa">
-            <span class="tip">转账数量：</span>
+            <span class="tip">{{ $t('fundation.transNum') }}：</span>
             <span class="flexc qua din">{{ item.quantity }}</span>
           </div>
           <div class="price flexs">
-            <span class="tip">用户留言：</span>
+            <span class="tip">{{ $t('fundation.memo') }}：</span>
             <span class="hideText">{{ item.memo }}</span>
           </div>
         </div>
@@ -95,7 +95,7 @@ export default {
       minFilter: '0.1',
       minOption: [{
         value: '0',
-        label: '全部'
+        label: 'All'
       }, {
         value: '0.01',
         label: '0.01'

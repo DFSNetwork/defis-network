@@ -16,7 +16,7 @@
   
     <div class="nullDiv"></div>
     <div class="btnDiv">
-      <div class="btn flexc" @click="showToFundation=!showToFundation">乐捐一下</div>
+      <div class="btn flexc" @click="showToFundation=!showToFundation">{{ $t('fundation.toFundation') }}</div>
     </div>
     <!-- 去捐款 -->
     <el-dialog

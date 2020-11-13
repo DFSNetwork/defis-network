@@ -1,11 +1,11 @@
 <template>
   <div class="detail">
-    <div class="title">乐捐详情</div>
+    <div class="title">{{ $t('fundation.funDetail') }}</div>
     <div class="tables">
       <div class="liTitle flexb">
-        <div>币种</div>
-        <div>乐捐总量</div>
-        <div>乐捐人次</div>
+        <div>{{ $t('dex.coin', {coin: ''}) }}</div>
+        <div>{{ $t('fundation.fundationNum') }}</div>
+        <div>{{ $t('fundation.fundationPeo') }}</div>
       </div>
       <div class="licontent">
         <div class="li flexb" v-for="(item, index) in summaryLists" :key="index">
