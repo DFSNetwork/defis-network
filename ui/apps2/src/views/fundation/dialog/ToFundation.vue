@@ -267,13 +267,16 @@ export default {
   }
   .percent{
     margin-top: 20px;
-    color: rgba(41,212,176,1);
+    color: #333;
     font-size: 27px;
     &>span{
       padding: 12px 24px;
       background: #000;
       background: rgba(41,212,176,.2);
       border-radius: 6px;
+      &.act{
+        color: rgba(41,212,176,1);
+      }
     }
   }
   .memoDiv{
