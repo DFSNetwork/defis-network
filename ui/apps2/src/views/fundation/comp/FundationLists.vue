@@ -13,7 +13,7 @@
             <el-option
               v-for="item in option"
               :key="item.value"
-              :label="item.label"
+              :label="!item.value ? $t(`fundation.all`) : item.label"
               :value="item.value">
             </el-option>
           </el-select>
@@ -95,7 +95,7 @@ export default {
       minFilter: '0.1',
       minOption: [{
         value: '0',
-        label: 'All'
+        label: 'all'
       }, {
         value: '0.01',
         label: '0.01'
@@ -121,7 +121,7 @@ export default {
     option() {
       const newOp = [{
         value: '',
-        label: 'ALL'
+        label: 'all'
       }]
       this.summaryLists.forEach(v => {
         const hasMarket = this.filterMkLists.find(vv => {
@@ -157,7 +157,7 @@ export default {
     handleDealOption(newVal) {
       const newOp = [{
         value: '',
-        label: 'ALL'
+        label: 'all'
       }]
       newVal.forEach(v => {
         const op = {
