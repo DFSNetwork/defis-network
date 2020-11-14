@@ -183,7 +183,8 @@ export default {
     // 计算用户收益
     handleDealAccReward(accVoteData) {
       const keys = Object.keys(this.poolsData)
-      if (!this.filterMkLists.length || !keys.length || !this.proxyData.eosNum || !accVoteData.isfarmer) {
+      if (!this.filterMkLists.length || !keys.length || !this.proxyData.eosNum || !accVoteData.isfarmer
+       || accVoteData.showJoinBtn) {
         return;
       }
       const allEos = this.proxyData.eosNum; // 总票数
