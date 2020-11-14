@@ -71,8 +71,8 @@ export default {
       scatter: state => state.app.scatter,
     }),
     aboutEosNum() {
-      const num = this.buy * this.rexPrice;
-      return num.toFixed(4)
+      const num = this.buy * toFixed(this.rexPrice, 8);
+      return toFixed(num, 4)
     }
   },
   watch: {
@@ -105,7 +105,7 @@ export default {
       if (!status) {
         return
       }
-      console.log(result)
+      // console.log(result)
       if (!result.rows.length) {
         return
       }
@@ -113,13 +113,13 @@ export default {
       this.bal = rows.rex_balance.split(' ')[0];
   
       const lists = rows.rex_maturities || [];
-      let ableRex = rows.matured_rex;
+      let ableRex = parseFloat(rows.matured_rex);
       lists.forEach(v => {
         const nowT = Date.parse(new Date())
         const rexT = Date.parse(toLocalTime(`${v.key}.000+0000`).replace(/-/g, '/'))
         // console.log(nowT, rexT)
         if (nowT >= rexT) {
-          ableRex += v.value
+          ableRex = parseFloat(v.value) + parseFloat(ableRex)
         }
       });
       this.ableSell = `${(ableRex/10000).toFixed(4)}`

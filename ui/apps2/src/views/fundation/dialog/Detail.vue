@@ -13,7 +13,7 @@
             <img class="coinImg" :src="item.imgUrl" :onerror="errorCoinImg">
             <span>{{ item.symbol }}</span>
           </div>
-          <div class="num">{{ item.total }}</div>
+          <div class="num">{{ Number(item.total).toFixed(5) }}</div>
           <div class="num">{{ item.num }}</div>
         </div>
       </div>
@@ -54,16 +54,18 @@ export default {
   .tables{
     .liTitle,.li{
       &>div{
-        flex: 1;
+        flex: 3;
         height: 60px;
         display: flex;
         align-items: center;
         justify-content: flex-start;
         &:first-child{
+          flex: 2;
           text-align: left;
           justify-content: flex-start;
         }
         &:last-child{
+          flex: 1.5;
           text-align: right;
           justify-content: flex-end;
         }
