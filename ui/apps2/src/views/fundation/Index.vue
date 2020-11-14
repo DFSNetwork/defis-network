@@ -38,7 +38,7 @@ import ToFundation from './dialog/ToFundation';
 
 // api
 import { get_fundation } from '@/utils/api';
-import { getCoin } from '@/utils/public'
+import { getCoin, getRandomImg } from '@/utils/public'
 
 export default {
   name: 'fundation',
@@ -65,7 +65,6 @@ export default {
     }
   },
   mounted() {
-    // this.handleGetFundation()
   },
   beforeDestroy() {
     clearTimeout(this.timer)
@@ -77,7 +76,10 @@ export default {
   },
   watch: {
     filterMkLists: {
-      handler: function mls() {
+      handler: function mls(newVal, oldVal) {
+        if (oldVal && oldVal.length === newVal.length) {
+          return
+        }
         this.handleDealAmtNum()
       },
       deep: true,
@@ -126,6 +128,9 @@ export default {
       }
       // 分页数据处理
       const list = result.data || [];
+      list.forEach(v => {
+        this.$set(v, 'headImg', getRandomImg())
+      })
       if (this.page === 1) {
         this.hisLists = list;
       } else {

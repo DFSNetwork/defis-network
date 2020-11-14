@@ -19,6 +19,10 @@ export function getPngLen() {
 export function getPng(index) {
   return cdnImgJson ? cdnImgJson.png[index] : 'minedfstoken-dfs'
 }
+export function getRandomImg() {
+  const random = parseInt(Math.random() * 1000 % getPngLen());
+  return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${getPng(random)}.png`
+}
 /*
  ** 加法函数，用来得到精确的加法结果
  ** 返回值：arg1 + arg2的精确结果 Number 型
@@ -527,4 +531,30 @@ export function getTagLpApy(mid) {
   const price = parseFloat(lpLists.reserve0) / parseFloat(lpLists.reserve1);
   const apy = reward * price / num * 100;
   return apy.toFixed(2)
+}
+
+export function getDateDiff(dateTimeStamp){
+	var minute = 1000 * 60;
+	var hour = minute * 60;
+	var day = hour * 24;
+	var now = new Date().getTime();
+	var diffValue = now - dateTimeStamp;
+	if(diffValue < 0){return;}
+	var weekC =diffValue/(7*day);
+	var dayC =diffValue/day;
+	var hourC =diffValue/hour;
+  var minC =diffValue/minute;
+  let result = '';
+	if(weekC>=1){
+		result=toLocalTime(dateTimeStamp);
+	} else if(dayC>=1){
+		result=""+ parseInt(dayC) +"天前";
+	} else if(hourC>=1){
+		result=""+ parseInt(hourC) +"小时前";
+	} else if(minC>=1){
+		result=""+ parseInt(minC) +"分钟前";
+	} else {
+    result="刚刚";
+  }
+	return result;
 }

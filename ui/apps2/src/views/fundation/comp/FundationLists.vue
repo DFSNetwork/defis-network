@@ -35,6 +35,14 @@
     </div>
 
     <div class="lists">
+      <div class="tab flexb">
+        <div class="tabTitle">留言区</div>
+        <div class="type tip">
+          <span class="typeAct">最新</span>
+          <span>最热</span>
+          <span>最贵</span>
+        </div>
+      </div>
       <van-list
         v-model="loadingMore"
         :finished="finished"
@@ -42,19 +50,39 @@
         :finished-text="$t('public.noMore')"
         @load="handleCurrentChange"
       >
-        <!-- <div class="noData tip" v-if="!pageLists.length">{{ $t('public.noData') }}</div> -->
-        <div class="listOld" v-for="(item, index) in pageLists" :key="index" @click="handleToBrowser(item.trx_id)">
-          <div class="flexb name">
-            <span>{{ (item.fromx) }}</span>
-            <span class="tip time">{{ handleToLocalTime(item.create_time) }}</span>
+        <div class="listOld flexs" v-for="(item, index) in pageLists" :key="index">
+          <div class="headImg">
+            <img width="100%" :src="item.headImg">
           </div>
-          <div class="price flexa">
-            <span class="tip">{{ $t('fundation.transNum') }}：</span>
-            <span class="flexc qua din">{{ item.quantity }}</span>
-          </div>
-          <div class="price flexs">
-            <span class="tip">{{ $t('fundation.memo') }}：</span>
-            <span class="hideText">{{ item.memo }}</span>
+          <div class="mainContent">
+            <div class="flexb">
+              <div class="name">
+                <div>{{ (item.fromx) }}</div>
+                <div class="price flexa tip">
+                  <span class="">{{ $t('fundation.transNum') }}：</span>
+                  <span class="flexc qua dinReg">{{ item.quantity }}({{ item.account }})</span>
+                </div>
+              </div>
+              <div class="flexend tip likeDiv">
+                <span>1000</span>
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/like.png" alt="">
+                <!-- <img width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/like1.png" alt=""> -->
+              </div>
+            </div>
+            <div class="price flexs">
+              <span class="hideText">{{ item.memo }}</span>
+            </div>
+            <div class="tip time flexa">
+              <span>{{ handleToLocalTime(item.create_time) }}</span>
+              <span class="reply">回复</span>
+            </div>
+            <div class="showReply flexa" v-if="!item.showReply && item.reply">
+              <span>展开11条回复</span>
+              <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/showMore.png" alt="">
+            </div>
+            <div class="replyLists" v-else-if="item.showReply">
+              <ReplyLists :listsLen="11" :target="item.global_action_seq"/>
+            </div>
           </div>
         </div>
       </van-list>
@@ -66,9 +94,14 @@
 import { mapState } from 'vuex';
 
 import moment from 'moment';
-import {toLocalTime, toBrowser} from '@/utils/public'
+import {toBrowser, getDateDiff} from '@/utils/public'
+import ReplyLists from './ReplyLists';
+
 export default {
   name: 'fundationLists',
+  components: {
+    ReplyLists
+  },
   props: {
     pageLists: {
       type: Array,
@@ -171,7 +204,7 @@ export default {
     handleToLocalTime(time) {
       let t = moment(`${time}`).valueOf()
       t += 3600 * 8 * 1000;
-      const oDate = toLocalTime(t)
+      const oDate = getDateDiff(t)
       return oDate
     },
     handleToBrowser(id, type = 'tx') {
@@ -215,8 +248,44 @@ export default {
   }
 }
 .lists{
-  margin: 30px;
+  // margin: 30px;
+  border-top: 20px solid #f6f6f6;
   color: #333;
+  padding: 32px 30px;
+  .tab{
+    font-size: 28px;
+    color: #333;
+    .tabTitle{
+      font-weight: 500;
+    }
+    .type{
+      &>span{
+        position: relative;
+        padding: 8px 16px;
+        &::after{
+          content: '';
+          position: absolute;
+          width: 2px;
+          height: 26px;
+          background:#D0D0D0;
+          border-radius:4px;
+          right: 0%;
+          top: 50%;
+          transform: translateY(-45%);
+        }
+        &:last-child{
+          padding-right: 0;
+          &::after{
+            display: none;
+          }
+        }
+      }
+      .typeAct{
+        color: #333;
+      }
+    }
+  }
+
   .exchange{
     margin: 0 8px;
     width: 30px;
@@ -230,49 +299,67 @@ export default {
   }
   .listOld{
     font-size: 26px;
-    margin: 20px 0 24px;
-    padding: 26px;
-    border-radius: 10px;
-    border: 1px solid #eee;
-    // box-shadow: 0px 8px 40px 0px rgba(220,220,220,0.5);
-    &>div{
-      margin-top: 10px;
-      &:first-child{
-        margin-top: 0;
-      }
+    padding: 26px 0;
+    border-bottom: 1px solid rgba(220,220,220,.3);
+    .headImg{
+      width: 80px;
+      height: 80px;
+      border-radius: 45px;
+      overflow: hidden;
+      margin-right: 15px;
+    }
+    .mainContent{
+      text-align: left;
+      flex: 1;
     }
     .hideText{
-      font-size: 24px;
-      max-width: 500px;
+      font-size: 28px;
       overflow: hidden;
       word-break: break-all;
       white-space: pre-wrap;
-      // text-overflow: ellipsis; //溢出用省略号显示
-      // white-space: nowrap; //溢出不换行
-      // display:-webkit-box;
-      // -webkit-box-orient:vertical;
-      // -webkit-line-clamp:2;
     }
     .price{
       text-align: left;
       font-size: 24px;
+      margin-top: 6px;
+      font-weight: normal;
     }
 
     .name{
       font-size: 30px;
+      font-weight: 500;
       &>span{
         text-align: left;
       }
-      .time{
-        font-size: 24px;
+    }
+    .likeDiv{
+      font-size: 22px;
+      img{
+        width: 32px;
+        margin-left: 8px;
       }
     }
-    .num{
-      font-size: 26px;
-    }
     .qua{
+      font-size: 24px;
+    }
+    .time{
+      margin-top: 4px;
+      font-size: 20px;
+      // font-weight: 300;
+    }
+    .reply{
+      color: #999;
       font-size: 26px;
+      margin-left: 8px;
       font-weight: 500;
+    }
+    .showReply{
+      color: #29D4B0;
+      margin-top: 8px;
+      img{
+        width: 20px;
+        margin-left: 6px;
+      }
     }
   }
 }

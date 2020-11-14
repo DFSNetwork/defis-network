@@ -251,7 +251,7 @@ export default {
 <style lang="scss" scoped>
 .toFundation{
   position: relative;
-  padding: 20px;
+  padding: 28px;
   .close{
     position: absolute;
     right: 20px;
@@ -326,9 +326,9 @@ export default {
   }
 }
 .symData{
-  padding: 16px 30px;
+  // padding: 16px 30px;
   border-radius: 12px;
-  border: 1px solid #F3F3F3;
+  // border: 1px solid #F3F3F3;
   &.focus{
     border:1px solid rgba(7,215,155,1);
   }

@@ -11,7 +11,7 @@ export default {
       his: '乐捐记录',
       fileter: '过滤',
       all: '全部',
-      transNum: '转账数量',
+      transNum: '捐赠数量',
       memo: '用户留言',
       toFundation: '乐捐一下',
       funTran: '乐捐款',
