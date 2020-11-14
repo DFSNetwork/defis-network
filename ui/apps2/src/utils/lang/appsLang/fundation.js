@@ -27,7 +27,7 @@ export default {
       subTitle: 'Have Fun Donating to our fundation',
       nav: 'Fundation',
       fundationAcc:'Fundation account',
-      fundationNum:'Total music donation',
+      fundationNum:'Total Fundation',
       fundationPeo:'Fundation times',
       showDetail:'View details',
       his:'Fundation record',

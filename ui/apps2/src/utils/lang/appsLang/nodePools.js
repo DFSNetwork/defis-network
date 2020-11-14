@@ -35,6 +35,13 @@ export default {
       mineRules4: '4. 只需无风险质押EOS。即可实现最强的一键多挖；',
       mineRules5: '5. TAG秋禾，是固定每秒释放0.01枚的纪念币；',
       mineRules6: '6. 其余挖矿币种，来源于乐捐系统的余额。',
+      lpMineRelus: 'LP 挖矿规则',
+      lpMineRelus1: '1. 加入EOS/TAG交易对做市即可参与LP挖矿',
+      lpMineRelus2: '2. LP挖矿加成：',
+      lpMineRelus3: '有钱任性区（1-20名）：30%',
+      lpMineRelus4: '勤劳致富区（21-50名）：50%',
+      lpMineRelus5: '虽败犹荣区（51-100名）：10%',
+      lpMineRelus6: '与世无争区（100+名）：0%',
     }
   },
   'en': {
@@ -73,6 +80,13 @@ export default {
       mineRules4: '4. Just stake EOS without risk. You can achieve the strongest one-click multiple mining;',
       mineRules5: '5. TAG Qiuhe is a commemorative coin with a fixed release of 0.01 per second;',
       mineRules6: '6. The remaining mining currencies are derived from the balance of the Le Donation System. ',
+      lpMineRelus:'LP mining rules',
+      lpMineRelus1: '1. Join the EOS/TAG trading pair to participate in LP mining',
+      lpMineRelus2: '2. LP mining bonus:',
+      lpMineRelus3:'Wealthy and Wayward Zone (1-20): 30%',
+      lpMineRelus4:'Diligence to get rich (21-50 people): 50%',
+      lpMineRelus5:'Although defeated, it is still prosperous area (51-100): 10%',
+      lpMineRelus6:'Uncontested area (100+ names): 0%',
     }
   }
 }

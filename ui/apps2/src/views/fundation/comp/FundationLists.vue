@@ -121,7 +121,7 @@ export default {
     option() {
       const newOp = [{
         value: '',
-        label: '全部'
+        label: 'ALL'
       }]
       this.summaryLists.forEach(v => {
         const hasMarket = this.filterMkLists.find(vv => {
@@ -157,7 +157,7 @@ export default {
     handleDealOption(newVal) {
       const newOp = [{
         value: '',
-        label: '全部'
+        label: 'ALL'
       }]
       newVal.forEach(v => {
         const op = {
