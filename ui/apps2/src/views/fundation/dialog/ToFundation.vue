@@ -16,26 +16,29 @@
             <div class="contract tip">{{ thisMarket0.contract }}</div>
           </div>
         </div>
-        <div class="inputDiv flexb">
+        <div class="inputDiv flexb dinBold">
           <el-input class="elIpt" type="number" v-model="payNum" placeholder="0.0"
             @focus="handleFocus()"
             @blur="handleBlur()"></el-input>
         </div>
       </div>
       <!-- 百分比 -->
-      <div class="percent flexb">
-        <span @click="handlePercent(0)">0%</span>
-        <span @click="handlePercent(0.25)">25%</span>
-        <span @click="handlePercent(0.5)">50%</span>
-        <span @click="handlePercent(0.75)">75%</span>
-        <span @click="handlePercent(1)">MAX</span>
+      <div class="percent flexb din">
+        <span :class="{'act': percent === 0}" @click="handlePercent(0)">0%</span>
+        <span :class="{'act': percent === 0.25}" @click="handlePercent(0.25)">25%</span>
+        <span :class="{'act': percent === 0.5}" @click="handlePercent(0.5)">50%</span>
+        <span :class="{'act': percent === 0.75}" @click="handlePercent(0.75)">75%</span>
+        <span :class="{'act': percent === 1}" @click="handlePercent(1)">MAX</span>
       </div>
 
       <!-- memo -->
       <div class="memoDiv">
         <div class="info flexb">
           <span>{{ $t('fundation.memoshort') }}</span>
-          <span class="randomSpan" @click="handleRandom">{{ $t('fundation.random') }}</span>
+          <span class="randomSpan flexa" @click="handleRandom">
+            <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/refresh.png">
+            <span>{{ $t('fundation.random') }}</span>
+          </span>
         </div>
         <div class="iptDiv">
           <van-field
@@ -44,7 +47,7 @@
             rows="1"
             autosize
             type="textarea"
-            placeholder="请输入留言"
+            :placeholder="reply.global_action_seq ? `回复 ${reply.fromx}` : '请输入留言'"
           />
           <div class="iptlen">{{sizeof}}/256</div>
         </div>
@@ -81,6 +84,14 @@ export default {
   components: {
     MarketList
   },
+  props: {
+    reply: {
+      type: Object,
+      default: function rp() {
+        return {}
+      },
+    }
+  },
   data() {
     return {
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
@@ -95,6 +106,7 @@ export default {
       },
       timer: null,
       showMarketList: false,
+      percent: 0,
     }
   },
   beforeDestroy() {
@@ -158,6 +170,7 @@ export default {
       this.$emit('listenClose', type || false)
     },
     handlePercent(num) {
+      this.percent = num;
       const payNum = this.bal * num;
       this.payNum = payNum.toFixed(this.thisMarket0.decimal)
     },
@@ -222,13 +235,42 @@ export default {
         return 
       }
       this.loading = true;
-      const params = {
-        code: this.thisMarket0.contract,
-        toAccount: 'dfsfundation',
-        memo: this.memo,
-        quantity: `${this.payNum} ${this.thisMarket0.symbol}`
+      const formName = this.scatter.identity.accounts[0].name;
+
+      const transfer = {
+        account: this.thisMarket0.contract,
+        name: 'transfer',
+        authorization: [{
+          actor: formName, // 转账者
+          permission,
+        }],
+        data: {
+          from: formName,
+          to: 'dfsfundation',
+          memo: this.memo,
+          quantity: `${this.payNum} ${this.thisMarket0.symbol}`
+        }
       }
-      EosModel.transfer(params, (res) => {
+      const params = {
+        actions: [transfer],
+      }
+      if (this.reply.fromx) {
+        const replyAction = {
+          account: this.thisMarket0.contract,
+          name: 'transfer',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            user: formName,
+            to: 'dfsfundation',
+            memo: this.memo,
+            quantity: `${this.payNum} ${this.thisMarket0.symbol}`
+          }
+        }
+      }
+      EosModel.toTransaction(params, (res) => {
         this.loading = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
@@ -271,32 +313,41 @@ export default {
     font-size: 27px;
     &>span{
       padding: 12px 24px;
-      background: #000;
-      background: rgba(41,212,176,.2);
+      border: 1px solid rgba(#333, .1);
       border-radius: 6px;
       &.act{
+        background: rgba(41,212,176,.2);
         color: rgba(41,212,176,1);
+        border: 1px solid rgba(#11AE8D, .2);
       }
     }
   }
   .memoDiv{
-    margin-top: 20px;
+    margin-top: 35px;
     text-align: left;
+    font-size: 28px;
     .info{
-      margin-bottom: 10px;
+      margin-bottom: 18px;
       .randomSpan{
         padding: 4px 8px;
         border-radius: 3px;
-        font-size: 21px;
+        // font-size: 21px;
         color: #ff3100;
-        border: 1px solid #ff3100;
+        // border: 1px solid #ff3100;
+        img{
+          width: 32px;
+          margin-right: 8px;
+        }
       }
     }
     .iptDiv{
       font-size: 30px;
       outline: none;
-      border-bottom: 1px solid #eee;
-      padding-bottom: 8px;
+      background: #F5F5F5;
+      border-radius: 8px;
+      margin-bottom: 38px;
+      // border-bottom: 1px solid #eee;
+      padding: 20px;
       /deep/ .van-cell::after{
         border: 0;
       }
@@ -304,6 +355,7 @@ export default {
         padding: 0;
         border: 0px;
         font-size: 30px;
+        background: #F5F5F5;
       }
       .iptlen{
         text-align: right;
@@ -338,9 +390,9 @@ export default {
   .info{
     font-size: 24px;
     margin-bottom: 24px;
-    .type{
-      font-size: 28px;
-    }
+    // .type{
+    //   font-size: 28px;
+    // }
   }
   .iptDiv{
     .coinInfo{

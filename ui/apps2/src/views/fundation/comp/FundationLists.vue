@@ -65,16 +65,18 @@
               </div>
               <div class="flexend tip likeDiv">
                 <span>1000</span>
-                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/like.png" alt="">
-                <!-- <img width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/like1.png" alt=""> -->
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
+                <!-- <img width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt=""> -->
               </div>
             </div>
-            <div class="price flexs">
-              <span class="hideText">{{ item.memo }}</span>
-            </div>
-            <div class="tip time flexa">
-              <span>{{ handleToLocalTime(item.create_time) }}</span>
-              <span class="reply">回复</span>
+            <div @click="handleReply(item)">
+              <div class="price flexs">
+                <span class="hideText">{{ item.memo }}</span>
+              </div>
+              <div class="tip time flexa">
+                <span>{{ handleToLocalTime(item.create_time) }}</span>
+                <span class="reply">回复</span>
+              </div>
             </div>
             <div class="showReply flexa" v-if="!item.showReply && item.reply">
               <span>展开11条回复</span>
@@ -87,6 +89,14 @@
         </div>
       </van-list>
     </div>
+
+    <!-- 去捐款 -->
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible="showToFundation">
+      <ToFundation v-if="showToFundation" :reply="reply" @listenClose="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -96,11 +106,13 @@ import { mapState } from 'vuex';
 import moment from 'moment';
 import {toBrowser, getDateDiff} from '@/utils/public'
 import ReplyLists from './ReplyLists';
+import ToFundation from '../dialog/ToFundation';
 
 export default {
   name: 'fundationLists',
   components: {
-    ReplyLists
+    ReplyLists,
+    ToFundation,
   },
   props: {
     pageLists: {
@@ -144,7 +156,9 @@ export default {
       }, {
         value: '100',
         label: '100'
-      }]
+      }],
+      showToFundation: false,
+      reply: {},
     }
   },
   computed: {
@@ -187,6 +201,13 @@ export default {
     },
   },
   methods: {
+    handleReply(item) {
+      this.reply = item;
+      this.showToFundation = true
+    },
+    handleClose() {
+      this.showToFundation = false;
+    },
     handleDealOption(newVal) {
       const newOp = [{
         value: '',

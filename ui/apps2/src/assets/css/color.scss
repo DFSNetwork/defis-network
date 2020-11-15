@@ -148,3 +148,21 @@ $color-tip: #a6a6a6;
 input::-webkit-input-placeholder {
   color: #ccc !important;
 }
+
+.mydialog{
+  /deep/ .el-dialog{
+    border-radius: 12px;
+    width: 650px;
+    margin-top: 15vh !important;
+    .el-dialog__header{
+      padding: 0;
+    }
+    .el-dialog__body{
+      padding: 0;
+    }
+    .el-dialog__headerbtn{
+      font-size: 40px;
+      z-index: 1;
+    }
+  }
+}

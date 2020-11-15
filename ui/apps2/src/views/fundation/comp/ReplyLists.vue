@@ -14,8 +14,8 @@
               </div>
               <div class="likeDiv tip flexend">
                 <span>100</span>
-                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/like.png" alt="">
-                <!-- <img width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/like1.png" alt=""> -->
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
+                <!-- <img width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt=""> -->
               </div>
             </div>
           </div>
