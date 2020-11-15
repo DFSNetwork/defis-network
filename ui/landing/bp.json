@@ -1,0 +1,37 @@
+{
+    "producer_account_name": "bp.dfs",
+    "org": {
+        "candidate_name": "DeFis Network",
+        "website": "https://defis.network",
+        "ownership_disclosure": "",
+        "code_of_conduct": "",
+        "email": "",
+        "branding": {
+            "logo": "https://cdn.jsdelivr.net/gh/defis-net/material/art/DFSL-logo04.png"
+        },
+        "location": {
+            "name": "Singapore",
+            "country": "SG"
+        },
+        "social": {
+            "twitter": "DFSnetworks",
+            "github": "defis-net",
+            "telegram": "dfsnet",
+            "medium": "dfsofficial",
+            "wechat": "dfsdeveloper"
+        }
+    },
+    "nodes": [
+        {
+            "location": {
+                "name": "Singapore",
+                "country": "SG"
+            },
+            "node_type": "full",
+            "history_type": "none",
+            "api_endpoint": "http://eos.blockeden.cn",
+            "ssl_endpoint": "https://eos.blockeden.cn",
+            "p2p_endpoint": "eos.blockeden.cn:9876"
+        }
+    ]
+}
