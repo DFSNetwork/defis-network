@@ -1,0 +1,51 @@
+{
+    "producer_account_name": "bp.dfs",
+    "org": {
+        "candidate_name": "DeFis Network",
+        "website": "https://defis.network",
+        "ownership_disclosure": "DFS Community",
+        "code_of_conduct": "https://bihu.com/article/1649323677",
+        "email": "cryptohotgirl@gmail.com",
+        "github_user": [
+            "Judy098"
+        ],
+        "branding": {
+            "logo_256": "https://cdn.jsdelivr.net/gh/defis-net/material/logo/16_16.png",
+            "logo_1024": "https://cdn.jsdelivr.net/gh/defis-net/material/logo/32_32.png",
+            "logo_svg": "https://cdn.jsdelivr.net/gh/defis-net/material/logo/logo_16_16.svg"
+        },
+        "location": {
+            "name": "Singapore",
+            "country": "SG"
+        },
+        "social": {
+            "twitter": "DFSnetworks",
+            "github": "defis-net",
+            "telegram": "dfsnet",
+            "medium": "dfsofficial",
+            "wechat": "dfsdeveloper"
+        }
+    },
+    "nodes": [
+        {
+            "location": {
+                "name": "Hangzhou",
+                "country": "CN"
+            },
+            "node_type": "full",
+            "history_type": "none",
+            "ssl_endpoint": "https://eos.blockeden.cn",
+            "p2p_endpoint": "eos.blockeden.cn:9876"
+        },
+        {
+            "location": {
+                "name": "St. Louis",
+                "country": "US"
+            },
+            "node_type": "full",
+            "history_type": "none",
+            "api_endpoint": "http://bp.defis.network",
+            "p2p_endpoint": "bp.defis.network:9876"
+        }
+    ]
+}

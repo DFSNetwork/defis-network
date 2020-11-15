@@ -42,6 +42,11 @@ export default {
       lpMineRelus4: '勤劳致富区（21-50名）：50%',
       lpMineRelus5: '虽败犹荣区（51-100名）：10%',
       lpMineRelus6: '与世无争区（100+名）：0%',
+
+      rexTip1: 'REX是EOS公链自带的系统级抵押。',
+      rexTip2: '本金100%安全无损，无需转币。',
+      rexTip3: '买入REX后，4天后可以自由解锁。',
+      detail: '详细',
     }
   },
   'en': {
@@ -87,6 +92,11 @@ export default {
       lpMineRelus4:'Diligence to get rich (21-50 people): 50%',
       lpMineRelus5:'Although defeated, it is still prosperous area (51-100): 10%',
       lpMineRelus6:'Uncontested area (100+ names): 0%',
+
+      rexTip1:'REX is a system-level mortgage that comes with the EOS public chain. ',
+      rexTip2:'The principal is 100% safe and undamaged, no need to transfer coins. ',
+      rexTip3:'After buying REX, you can unlock it freely after 4 days. ',
+      detail:'Detailed',
     }
   }
 }
