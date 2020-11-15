@@ -42,7 +42,7 @@
                 "account-query"
             ],
             "api_endpoint": "http://eosapi.defis.network",
-            "ssl_endpoint": "https://eosapi.defis.network",
+            "ssl_endpoint": "https://eosapi.defis.network"
         },
         {
             "location": {
@@ -65,6 +65,3 @@
         }
     ]
 }
-
-
-
