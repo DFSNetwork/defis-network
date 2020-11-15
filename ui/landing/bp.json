@@ -3,7 +3,7 @@
     "org": {
         "candidate_name": "DeFis Network",
         "website": "https://defis.network",
-        "ownership_disclosure": "DFS Community",
+        "ownership_disclosure": "https://bihu.com/people/1511717747",
         "code_of_conduct": "https://bihu.com/article/1649323677",
         "email": "cryptohotgirl@gmail.com",
         "github_user": [
@@ -16,7 +16,9 @@
         },
         "location": {
             "name": "Singapore",
-            "country": "SG"
+            "country": "SG",
+            "latitude": 1.17,
+            "longitude": 103.51
         },
         "social": {
             "twitter": "DFSnetworks",
@@ -29,23 +31,40 @@
     "nodes": [
         {
             "location": {
-                "name": "Hangzhou",
-                "country": "CN"
+                "name": "St. Louis",
+                "country": "US",
+                "latitude": 38.62,
+                "longitude": -90.18
             },
-            "node_type": "full",
-            "history_type": "none",
-            "ssl_endpoint": "https://eos.blockeden.cn",
-            "p2p_endpoint": "eos.blockeden.cn:9876"
+            "node_type": "query",
+            "features": [
+                "chain-api",
+                "account-query"
+            ],
+            "api_endpoint": "http://eosapi.defis.network",
+            "ssl_endpoint": "https://eosapi.defis.network",
         },
         {
             "location": {
                 "name": "St. Louis",
-                "country": "US"
+                "country": "US",
+                "latitude": 38.62,
+                "longitude": -90.18
             },
-            "node_type": "full",
-            "history_type": "none",
-            "api_endpoint": "http://bp.defis.network",
-            "p2p_endpoint": "bp.defis.network:9876"
+            "node_type": "seed",
+            "p2p_endpoint": "seed.defis.network:9876"
+        },
+        {
+            "location": {
+                "name": "St. Louis",
+                "country": "US",
+                "latitude": 38.62,
+                "longitude": -90.18
+            },
+            "node_type": "producer"
         }
     ]
 }
+
+
+
