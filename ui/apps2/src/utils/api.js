@@ -123,3 +123,15 @@ export function get_fundation(params) {
     })
   })
 }
+// 获取乐捐总价值
+export function get_summary() {
+  // https://api.defis.network/history/fundation?page=1&limit=15
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/history/fundation/summary').then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}

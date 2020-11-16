@@ -37,8 +37,8 @@ import FundationLists from './comp/FundationLists'
 import ToFundation from './dialog/ToFundation';
 
 // api
-import { get_fundation } from '@/utils/api';
 import { getCoin, getRandomImg } from '@/utils/public'
+import { get_fundation, get_summary } from '@/utils/api';
 
 export default {
   name: 'fundation',
@@ -65,6 +65,7 @@ export default {
     }
   },
   mounted() {
+    this.handleGetSummary()
   },
   beforeDestroy() {
     clearTimeout(this.timer)
@@ -106,6 +107,17 @@ export default {
     handleClose() {
       this.showToFundation = false;
     },
+    async handleGetSummary() {
+      const {status, result} = await get_summary();
+      if (!status) {
+        return;
+      }
+      this.summaryLists = result.summary || [];
+      if (this.page === 1) {
+        this.totalNum = result.total;
+        this.handleDealAmtNum()
+      }
+    },
     async handleGetFundation() {
       const params = {
         min: this.min,
@@ -121,11 +133,11 @@ export default {
       if (!status) {
         return;
       }
-      this.summaryLists = result.summary || [];
-      if (this.page === 1) {
-        this.totalNum = result.total;
-        this.handleDealAmtNum()
-      }
+      this.totalNum = result.total;
+      // this.summaryLists = result.summary || [];
+      // if (this.page === 1) {
+      //   this.handleDealAmtNum()
+      // }
       // 分页数据处理
       const list = result.data || [];
       list.forEach(v => {
