@@ -63,7 +63,7 @@
                   <span class="flexc qua dinReg">{{ item.quantity }}({{ item.account }})</span>
                 </div>
               </div>
-              <div class="flexend tip likeDiv">
+              <div class="flexend tip likeDiv" @click="handleShowLike(item)">
                 <span>1000</span>
                 <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
                 <!-- <img width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt=""> -->
@@ -82,8 +82,8 @@
               <span>展开11条回复</span>
               <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/showMore.png" alt="">
             </div>
-            <div class="replyLists" v-else-if="item.showReply">
-              <ReplyLists :listsLen="11" :target="item.global_action_seq"/>
+            <div class="replyLists" v-else-if="!item.showReply">
+              <ReplyLists :listsLen="11" :reply="item"/>
             </div>
           </div>
         </div>
@@ -97,6 +97,13 @@
       :visible="showToFundation">
       <ToFundation v-if="showToFundation" :reply="reply" @listenClose="handleClose"/>
     </el-dialog>
+    <!-- 捐爱心 -->
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible="showToLike">
+      <Like v-if="showToLike" :reply="reply" @listenClose="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -107,12 +114,14 @@ import moment from 'moment';
 import {toBrowser, getDateDiff} from '@/utils/public'
 import ReplyLists from './ReplyLists';
 import ToFundation from '../dialog/ToFundation';
+import Like from '../dialog/Like';
 
 export default {
   name: 'fundationLists',
   components: {
     ReplyLists,
     ToFundation,
+    Like,
   },
   props: {
     pageLists: {
@@ -158,6 +167,7 @@ export default {
         label: '100'
       }],
       showToFundation: false,
+      showToLike: false,
       reply: {},
     }
   },
@@ -201,12 +211,20 @@ export default {
     },
   },
   methods: {
+    handleShowLike(item) {
+      this.reply = item;
+      this.showToLike = true
+    },
     handleReply(item) {
       this.reply = item;
       this.showToFundation = true
     },
-    handleClose() {
+    handleClose(type) {
       this.showToFundation = false;
+      this.showToLike = false;
+      if (type === 'likeSuccess') {
+        console.log(type)
+      }
     },
     handleDealOption(newVal) {
       const newOp = [{

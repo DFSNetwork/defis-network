@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="lists">
-      <div class="list">
+      <div class="list" v-for="(item, index) in lists" :key="`reply${index}`">
         <div class="flexa">
           <div class="headImg">
             <img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/sab123451111-sab.png" alt="">
@@ -12,7 +12,7 @@
                 <div>testtesttest</div>
                 <div class="tip funNum dinReg">捐赠数量: 100.0000 DFS</div>
               </div>
-              <div class="likeDiv tip flexend">
+              <div class="likeDiv tip flexend" @click="handleShowLike(item)">
                 <span>100</span>
                 <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
                 <!-- <img width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt=""> -->
@@ -21,14 +21,14 @@
           </div>
         </div>
 
-        <div class="memo">
+        <div class="memo" @click="handleShowToFundation(item)">
           <span>
             <span class="reply">回复</span>
             <span class="green">testtesttest</span>
           </span>
           <span>简单来说，我们创建DFS不是为了赚钱；我简单来说，我们创建DFS不是为了赚钱；我</span>
         </div>
-        <div class="time tip flexa">
+        <div class="time tip flexa" @click="handleShowToFundation(item)">
           <span>1分钟前</span>
           <span class="reply">回复</span>
         </div>
@@ -42,30 +42,69 @@
       <span>收回</span>
       <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/showMore.png" alt="">
     </div>
+    <!-- 去捐款 -->
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible="showToFundation">
+      <ToFundation v-if="showToFundation" :reply="reply" :replyItem="replyItem"
+        @listenClose="handleClose"/>
+    </el-dialog>
+    <!-- 捐爱心 -->
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible="showToLike">
+      <Like v-if="showToLike" :replyItem="replyItem" @listenClose="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import Like from '../dialog/Like';
+import ToFundation from '../dialog/ToFundation';
+
 export default {
   name: 'replyLists',
+  components: {
+    Like,
+    ToFundation,
+  },
   props: {
     listsLen: { // 总计多少条回复
       type: Number,
       default: 0
     },
-    target: {
-      type: Number,
-      default: 0,
-    }
+    reply: {
+      type: Object,
+      default: function rp() {
+        return {}
+      },
+    },
   },
   data() {
     return {
       pageSize: 10,
       page: 1,
-      lists: [],
+      lists: [{}],
+      showToLike: false,
+      replyItem: {},
+      showToFundation: false,
     }
   },
   methods: {
+    handleShowToFundation(item) {
+      this.replyItem = item;
+      this.showToFundation = true;
+    },
+    handleShowLike(item) {
+      this.replyItem = item;
+      this.showToLike = true;
+    },
+    handleClose() {
+      this.showToLike = false;
+      this.showToFundation = false;
+    },
     async handleGetReplyFirst() {
       // 第一次展开 获取前3条 - mounted调用
     },

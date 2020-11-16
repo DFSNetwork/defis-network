@@ -85,7 +85,13 @@ export default {
     MarketList
   },
   props: {
-    reply: {
+    reply: { // 主楼
+      type: Object,
+      default: function rp() {
+        return {}
+      },
+    },
+    replyItem: { // 主楼下的回复
       type: Object,
       default: function rp() {
         return {}
@@ -236,7 +242,9 @@ export default {
       }
       this.loading = true;
       const formName = this.scatter.identity.accounts[0].name;
+      const permission = this.scatter.identity.accounts[0].authority;
 
+      const quantity = `${this.payNum} ${this.thisMarket0.symbol}`;
       const transfer = {
         account: this.thisMarket0.contract,
         name: 'transfer',
@@ -248,7 +256,7 @@ export default {
           from: formName,
           to: 'dfsfundation',
           memo: this.memo,
-          quantity: `${this.payNum} ${this.thisMarket0.symbol}`
+          quantity,
         }
       }
       const params = {
@@ -256,20 +264,24 @@ export default {
       }
       if (this.reply.fromx) {
         const replyAction = {
-          account: this.thisMarket0.contract,
-          name: 'transfer',
+          account: 'dfscommunity',
+          name: 'reply',
           authorization: [{
             actor: formName, // 转账者
             permission,
           }],
           data: {
             user: formName,
-            to: 'dfsfundation',
+            target0: this.reply.global_action_seq,
+            target1: this.replyItem.global_action_seq || 0,
             memo: this.memo,
-            quantity: `${this.payNum} ${this.thisMarket0.symbol}`
+            code: this.thisMarket0.contract,
+            quantity,
           }
         }
+        params.actions.push(replyAction)
       }
+      console.log(params)
       EosModel.toTransaction(params, (res) => {
         this.loading = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
