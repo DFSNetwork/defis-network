@@ -10,12 +10,12 @@
             <div class="flexb">
               <div class="name">
                 <div>{{ item.fromx }}</div>
-                <div class="tip funNum dinReg">捐赠数量: 100.0000 DFS</div>
+                <div class="tip funNum dinReg">捐赠数量: {{ item.quantity }}</div>
               </div>
               <div class="likeDiv tip flexend" @click="handleShowLike(item)">
-                <span>100</span>
-                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
-                <!-- <img width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt=""> -->
+                <span>{{ item.like_count }}</span>
+                <img v-if="!item.like_status" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
+                <img v-else width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt="">
               </div>
             </div>
           </div>
@@ -24,9 +24,9 @@
         <div class="memo" @click="handleShowToFundation(item)">
           <span>
             <span class="reply">回复</span>
-            <span class="green">testtesttest</span>
+            <span class="green">{{ item.replyto }}</span>
           </span>
-          <span>简单来说，我们创建DFS不是为了赚钱；我简单来说，我们创建DFS不是为了赚钱；我</span>
+          <span>{{ item.memo }}</span>
         </div>
         <div class="time tip flexa" @click="handleShowToFundation(item)">
           <span>1分钟前</span>
@@ -61,6 +61,9 @@
 </template>
 
 <script>
+import moment from 'moment';
+import {getDateDiff} from '@/utils/public'
+
 import {get_reply_fundation} from '@/utils/api'
 import Like from '../dialog/Like';
 import ToFundation from '../dialog/ToFundation';
@@ -97,6 +100,12 @@ export default {
     this.handleGetReplyFirst()
   },
   methods: {
+    handleToLocalTime(time) {
+      let t = moment(`${time}`).valueOf()
+      t += 3600 * 8 * 1000;
+      const oDate = getDateDiff(t)
+      return oDate
+    },
     handleShowToFundation(item) {
       this.replyItem = item;
       this.showToFundation = true;

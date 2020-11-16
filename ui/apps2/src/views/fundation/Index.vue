@@ -39,7 +39,7 @@ import ToFundation from './dialog/ToFundation';
 
 // api
 import { getCoin, getRandomImg } from '@/utils/public'
-import { get_fundation, get_summary, get_new_fundation,
+import { get_summary, get_new_fundation,
   get_mvd_fundation, get_hot_fundation } from '@/utils/api';
 
 export default {
