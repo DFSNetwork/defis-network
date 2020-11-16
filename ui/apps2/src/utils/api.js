@@ -177,3 +177,16 @@ export function get_reply_fundation(params) {
     })
   })
 }
+
+// 获取rex挖矿列表
+export async function get_farmers_lists() {
+  return new Promise((resolve, reject) => {
+    // const params = {};
+    axios.get('https://api.defis.network/tag/farmers').then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
