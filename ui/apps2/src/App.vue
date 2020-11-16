@@ -264,7 +264,7 @@ export default {
         const list = rows;
         const dealList = [];
         list.forEach(v => {
-          if (!v.running) {
+          if (!v.running || id < 16) {
             return
           }
           if (v.start) {
