@@ -108,7 +108,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 
-import {get_table_rows, get_balance} from '@/utils/api'
+import {get_table_rows, get_balance, get_farmers_lists} from '@/utils/api'
 import { getCoin, toLocalTime, toFixed } from '@/utils/public'
 import { getAccVote, getReward, getLpReward } from '../js/nodePools'
 import { sellToken } from '@/utils/logic';
@@ -218,7 +218,7 @@ export default {
     handleGetThisPools() {
       if (this.type === 'rex') {
         this.handleGetPools(); // 获取矿池APR
-        this.handleGetRexPoolList(); // 获取rex矿工列表
+        this.handleGetRexPoolListApi(); // 获取rex矿工列表
         return
       }
       this.handleGetLpPoolsBal();
@@ -328,6 +328,21 @@ export default {
         this.$set(this.accVoteData, 'showReward', Number(tReward).toFixed(8))
         this.$set(this.accVoteData, 'tReward', Number(tReward))
       }, 20);
+    },
+    async handleGetRexPoolListApi() {
+      const {status, result} = await get_farmers_lists()
+      if (!status) {
+        this.handleGetRexPoolList()
+        return
+      }
+      const rows = result.farmers || [];
+      rows.forEach(v => {
+        const stakeEos = v.staked / 10000;
+        this.$set(v, 'stakeEos', stakeEos.toFixed(4))
+      });
+      this.allLists = rows;
+      this.lists = rows.slice(0, this.pageSize);
+      this.handleListReward()
     },
     async handleGetRexPoolList() {
       const params = {
