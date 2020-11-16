@@ -9,7 +9,7 @@
           <div class="mainDiv">
             <div class="flexb">
               <div class="name">
-                <div>testtesttest</div>
+                <div>{{ item.fromx }}</div>
                 <div class="tip funNum dinReg">捐赠数量: 100.0000 DFS</div>
               </div>
               <div class="likeDiv tip flexend" @click="handleShowLike(item)">
@@ -61,6 +61,7 @@
 </template>
 
 <script>
+import {get_reply_fundation} from '@/utils/api'
 import Like from '../dialog/Like';
 import ToFundation from '../dialog/ToFundation';
 
@@ -86,11 +87,14 @@ export default {
     return {
       pageSize: 10,
       page: 1,
-      lists: [{}],
+      lists: [],
       showToLike: false,
       replyItem: {},
       showToFundation: false,
     }
+  },
+  mounted() {
+    this.handleGetReplyFirst()
   },
   methods: {
     handleShowToFundation(item) {
@@ -107,6 +111,17 @@ export default {
     },
     async handleGetReplyFirst() {
       // 第一次展开 获取前3条 - mounted调用
+      const params = {
+        page: 1,
+        limit: 3,
+        id: this.reply.global_action_seq
+      }
+      const {status, result} = await get_reply_fundation(params)
+      console.log(status, result)
+      if (!status) {
+        return
+      }
+      this.lists = result.data || [];
     },
     // 点击展开更多时调用
     async handleGetMore() {

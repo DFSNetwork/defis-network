@@ -10,6 +10,7 @@
     <!-- 捐款记录 -->
     <FundationLists :pageLists="hisLists" :finished="finished"
       :summaryLists="summaryLists"
+      @listenActChange="handleActChange"
       @listenCurrentChange="handleCurrentChange"
       @listenFilterMin="handleFilterMin"
       @listenFilter="handleFilter"/>
@@ -38,7 +39,8 @@ import ToFundation from './dialog/ToFundation';
 
 // api
 import { getCoin, getRandomImg } from '@/utils/public'
-import { get_fundation, get_summary } from '@/utils/api';
+import { get_fundation, get_summary, get_new_fundation,
+  get_mvd_fundation, get_hot_fundation } from '@/utils/api';
 
 export default {
   name: 'fundation',
@@ -59,6 +61,7 @@ export default {
       showToFundation: false,
       filter: '', // 过滤条件
       min: '0.1',
+      typeAct: 0,
 
       // 上拉加载更多
       finished: false,
@@ -118,30 +121,55 @@ export default {
         this.handleDealAmtNum()
       }
     },
+    handleActChange(act) { // 监听子页面类型切换
+      this.typeAct = act;
+      this.page = 1;
+      this.hisLists = [];
+      // this.handleGetFundation()
+    },
     async handleGetFundation() {
+      console.log(this.typeAct)
       const params = {
         min: this.min,
         page: this.page,
         limit: this.pagesize
       }
-      if (this.filter) {
-        const arr = this.filter.split(':');
-        params.contract = arr[0];
-        params.sym = arr[1];
+      let status, result
+      if (this.scatter && !this.scatter.identity) {
+        params.user = this.scatter.identity.accounts[0].name;
       }
-      const {status, result} = await get_fundation(params)
+      if (this.typeAct === 0) {
+        if (this.filter) {
+          const arr = this.filter.split(':');
+          params.contract = arr[0];
+          params.sym = arr[1];
+        }
+        const res = await get_new_fundation(params)
+        status = res.status;
+        result = res.result;
+      } else if (this.typeAct === 1) {
+        const res = await get_hot_fundation(params)
+        status = res.status;
+        result = res.result;
+      } else if (this.typeAct === 2) {
+        const res = await get_mvd_fundation(params)
+        status = res.status;
+        result = res.result;
+      }
       if (!status) {
         return;
       }
+      console.log(result)
       this.totalNum = result.total;
-      // this.summaryLists = result.summary || [];
-      // if (this.page === 1) {
-      //   this.handleDealAmtNum()
-      // }
       // 分页数据处理
       const list = result.data || [];
+      this.handleDealMemoLists(list);
+    },
+    handleDealMemoLists(list) {
       list.forEach(v => {
         this.$set(v, 'headImg', getRandomImg())
+        const replyNum = (v.reply_count || 0) + (v.reply2_count || 0)
+        this.$set(v, 'replyNum', replyNum)
       })
       if (this.page === 1) {
         this.hisLists = list;
@@ -150,7 +178,7 @@ export default {
       }
       this.page += 1;
       // 数据全部加载完成
-      if (this.hisLists.length >= result.data.total) {
+      if (this.hisLists.length >= this.totalNum) {
         this.finished = true;
       }
     },

@@ -135,3 +135,45 @@ export function get_summary() {
     })
   })
 }
+// 获取最新 ｜ 最贵 ｜ 最热 留言数据
+export function get_new_fundation(params) {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/history/fundation/new', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+export function get_mvd_fundation(params) {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/history/fundation/mvd', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+export function get_hot_fundation(params) {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/history/fundation/hot', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+
+export function get_reply_fundation(params) {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/history/fundation/reply', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}

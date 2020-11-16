@@ -47,7 +47,7 @@
             rows="1"
             autosize
             type="textarea"
-            :placeholder="reply.global_action_seq ? `回复 ${reply.fromx}` : '请输入留言'"
+            :placeholder="reply.global_action_seq ? `回复 ${replyto}` : '请输入留言'"
           />
           <div class="iptlen">{{sizeof}}/256</div>
         </div>
@@ -144,6 +144,12 @@ export default {
       }
       return total;
     },
+    replyto() {
+      if (this.replyItem.fromx) {
+        return this.replyItem.fromx
+      }
+      return this.reply.fromx;
+    }
   },
   watch: {
     scatter: {
@@ -272,6 +278,7 @@ export default {
           }],
           data: {
             user: formName,
+            author: this.replyto,
             target0: this.reply.global_action_seq,
             target1: this.replyItem.global_action_seq || 0,
             memo: this.memo,
@@ -281,7 +288,6 @@ export default {
         }
         params.actions.push(replyAction)
       }
-      console.log(params)
       EosModel.toTransaction(params, (res) => {
         this.loading = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {

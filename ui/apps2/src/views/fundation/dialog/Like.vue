@@ -128,17 +128,17 @@ export default {
       this.num = num.toFixed(8)
     },
     handleToLink() {
-      if (Number(this.num) < 0.001) {
-        this.$message.error('最少 0.001 TAG')
-        return
-      }
-      if (Number(this.num) > parseFloat(this.bal)) {
-        this.$message.error('余额不足')
-        return
-      }
-      if (!this.scatter || !this.scatter.identity) {
-        return
-      }
+      // if (Number(this.num) < 0.001) {
+      //   this.$message.error('最少 0.001 TAG')
+      //   return
+      // }
+      // if (Number(this.num) > parseFloat(this.bal)) {
+      //   this.$message.error('余额不足')
+      //   return
+      // }
+      // if (!this.scatter || !this.scatter.identity) {
+      //   return
+      // }
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
 
@@ -164,6 +164,7 @@ export default {
           permission,
         }],
         data: {
+          author: 'judy.dfs',
           user: formName,
           target: this.reply.global_action_seq || 0,
         },

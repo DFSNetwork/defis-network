@@ -38,9 +38,9 @@
       <div class="tab flexb">
         <div class="tabTitle">留言区</div>
         <div class="type tip">
-          <span class="typeAct">最新</span>
-          <span>最热</span>
-          <span>最贵</span>
+          <span :class="{'typeAct': typeAct === 0}" @click="handleChangeAct(0)">最新</span>
+          <span :class="{'typeAct': typeAct === 1}" @click="handleChangeAct(1)">最热</span>
+          <span :class="{'typeAct': typeAct === 2}" @click="handleChangeAct(2)">最贵</span>
         </div>
       </div>
       <van-list
@@ -64,9 +64,9 @@
                 </div>
               </div>
               <div class="flexend tip likeDiv" @click="handleShowLike(item)">
-                <span>1000</span>
-                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
-                <!-- <img width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt=""> -->
+                <span>{{ item.like_count || 0 }}</span>
+                <img v-if="item.like_status === 0" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
+                <img v-else width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt="">
               </div>
             </div>
             <div @click="handleReply(item)">
@@ -78,12 +78,13 @@
                 <span class="reply">回复</span>
               </div>
             </div>
-            <div class="showReply flexa" v-if="!item.showReply && item.reply">
-              <span>展开11条回复</span>
+            <div class="showReply flexa" v-if="!item.showReply && item.replyNum"
+              @click="handleShowItemReply(item)">
+              <span>展开{{ item.replyNum }}条回复</span>
               <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/showMore.png" alt="">
             </div>
-            <div class="replyLists" v-else-if="!item.showReply">
-              <ReplyLists :listsLen="11" :reply="item"/>
+            <div class="replyLists" v-else-if="item.showReply">
+              <ReplyLists :listsLen="item.replyNum" :reply="item"/>
             </div>
           </div>
         </div>
@@ -169,6 +170,7 @@ export default {
       showToFundation: false,
       showToLike: false,
       reply: {},
+      typeAct: 0,
     }
   },
   computed: {
@@ -211,6 +213,13 @@ export default {
     },
   },
   methods: {
+    handleChangeAct(index) {
+      this.typeAct = index;
+      this.$emit('listenActChange', index)
+    },
+    handleShowItemReply(item) {
+      this.$set(item, 'showReply', true);
+    },
     handleShowLike(item) {
       this.reply = item;
       this.showToLike = true
