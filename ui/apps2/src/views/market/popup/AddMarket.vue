@@ -507,7 +507,8 @@ export default {
         }
       }
       &.disabled{
-        background:rgba(#29D4B0, .5);
+        background: #EAEAEA;
+        color: #999;
       }
     }
   }

@@ -149,7 +149,7 @@ export default {
     handlePercent(rate) {
       this.act = rate
       if (!rate) {
-        this.num = '0.01';
+        this.num = '0.001';
         return
       }
       const num = parseFloat(this.bal) * rate;
@@ -326,7 +326,8 @@ export default {
     color: #fff;
     font-size: 32px;
     &.unClick{
-      background: rgba(#29D4B0, .6);
+      background: #EAEAEA;
+      color: #999;
     }
   }
 }

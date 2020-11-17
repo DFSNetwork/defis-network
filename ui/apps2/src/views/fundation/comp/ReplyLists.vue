@@ -4,7 +4,7 @@
       <div class="list" v-for="(item, index) in lists" :key="`reply${index}`">
         <div class="flexa">
           <div class="headImg">
-            <img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/sab123451111-sab.png" alt="">
+            <img width="100%" :src="item.headImg" alt="">
           </div>
           <div class="mainDiv">
             <div class="flexb">
@@ -63,7 +63,7 @@
 <script>
 import { mapState } from 'vuex';
 import moment from 'moment';
-import {getDateDiff, toLocalTime} from '@/utils/public'
+import {getDateDiff, toLocalTime, getRandomImg} from '@/utils/public'
 
 import {get_reply_fundation} from '@/utils/api'
 import Like from '../dialog/Like';
@@ -145,6 +145,7 @@ export default {
       const lists = result.data || [];
       this.subLen = result.total;
       lists.forEach(v => {
+         this.$set(v, 'headImg', getRandomImg())
         const t = toLocalTime(v.create_time).replace(/-/g, '/');
         const times = Date.parse(t) + 3600 * 8 * 1000;
         this.$set(v, 'dealTime', toLocalTime(times))
