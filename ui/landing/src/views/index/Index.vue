@@ -158,15 +158,15 @@
     <div class="partners">
       <div class="title">{{ $t('nav.partners') }}</div>
       <div class="partnersList">
-        <div class="listImg flexC"><img src="@/assets/img/partners/tp.png?v=1" alt=""></div>
-        <div class="listImg flexC"><img src="@/assets/img/partners/meetone.png?v=1" alt=""></div>
-        <div class="listImg flexC"><img src="@/assets/img/partners/bitpie.png?v=1" alt=""></div>
-        <div class="listImg flexC"><img src="@/assets/img/partners/mykey.png?v=1" alt=""></div>
-        <div class="listImg flexC" @click="handleToShowReport('slowMist')"><img src="@/assets/img/partners/slowmist.png?v=2" alt=""></div>
-        <div class="listImg flexC" @click="handleToShowReport('peckshield')"><img src="@/assets/img/partners/peckshield.png" alt=""></div>
-        <div class="listImg flexC"><img src="@/assets/img/partners/newdex.png?v=1" alt=""></div>
-        <div class="listImg flexC"><img src="@/assets/img/partners/hoov3.png?v=2" alt=""></div>
-        <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partant/starteos.png" alt=""></div>
+        <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/tp.png?v=1" alt=""></div>
+        <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/meetone.png?v=1" alt=""></div>
+        <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/bitpie.png?v=1" alt=""></div>
+        <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/mykey.png?v=1" alt=""></div>
+        <div class="listImg flexC" @click="handleToShowReport('slowMist')"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/slowmist.png?v=2" alt=""></div>
+        <div class="listImg flexC" @click="handleToShowReport('peckshield')"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/peckshield.png" alt=""></div>
+        <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/newdex.png?v=1" alt=""></div>
+        <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/hoov3.png?v=2" alt=""></div>
+        <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/starteos.png" alt=""></div>
         <!-- <div class="listImg flexC none"></div> -->
       </div>
     </div>
@@ -186,7 +186,7 @@
     <el-dialog
       class="dialog"
       :visible.sync="showImg2">
-      <img width="100%" src="@/assets/img/record/peckshield.jpeg" />
+      <img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/record/peckshield.jpeg" />
     </el-dialog>
   </div>
 </template>
