@@ -137,7 +137,7 @@ export default {
         params.user = this.scatter.identity.accounts[0].name;
       }
       const {status, result} = await get_reply_fundation(params)
-      console.log(status, result)
+      // console.log(status, result)
       this.loading = false;
       if (!status) {
         return
