@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="lists">
+    <div class="lists" v-loading="loading">
       <div class="list" v-for="(item, index) in lists" :key="`reply${index}`">
         <div class="flexa">
           <div class="headImg">
@@ -10,10 +10,10 @@
             <div class="flexb">
               <div class="name">
                 <div>{{ item.fromx }}</div>
-                <div class="tip funNum dinReg">捐赠数量: {{ item.quantity }}</div>
+                <div class="tip funNum dinReg">{{ $t('fundation.transNum') }}: {{ item.quantity }}</div>
               </div>
               <div class="likeDiv tip flexend" @click="handleShowLike(item)">
-                <span>{{ item.like_count }}</span>
+                <span>{{ item.likeNum }}</span>
                 <img v-if="!item.like_status" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
                 <img v-else width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt="">
               </div>
@@ -23,23 +23,23 @@
 
         <div class="memo" @click="handleShowToFundation(item)">
           <span>
-            <span class="reply">回复</span>
+            <span class="reply">{{ $t('fundation.reply') }}</span>
             <span class="green">{{ item.replyto }}</span>
           </span>
           <span>{{ item.memo }}</span>
         </div>
         <div class="time tip flexa" @click="handleShowToFundation(item)">
-          <span>1分钟前</span>
-          <span class="reply">回复</span>
+          <span>{{ handleToLocalTime(item.dealTime) }}</span>
+          <span class="reply">{{ $t('fundation.reply') }}</span>
         </div>
       </div>
     </div>
-    <div class="showMore flexa" @click="handleGetMore">
-      <span>展开更多回复</span>
+    <div class="showMore flexa" v-if="lists.length < subLen" @click="handleGetMore">
+      <span>{{ $t('fundation.more') }}</span>
       <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/showMore.png" alt="">
     </div>
-    <div class="closeMore flexa" @click="handleGetMore">
-      <span>收回</span>
+    <div class="closeMore flexa" v-else @click="handleCloseMore">
+      <span>{{ $t('fundation.close') }}</span>
       <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/showMore.png" alt="">
     </div>
     <!-- 去捐款 -->
@@ -55,14 +55,15 @@
       class="mydialog"
       :show-close="false"
       :visible="showToLike">
-      <Like v-if="showToLike" :replyItem="replyItem" @listenClose="handleClose"/>
+      <Like v-if="showToLike" :reply="reply" :replyItem="replyItem" @listenClose="handleClose"/>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import moment from 'moment';
-import {getDateDiff} from '@/utils/public'
+import {getDateDiff, toLocalTime} from '@/utils/public'
 
 import {get_reply_fundation} from '@/utils/api'
 import Like from '../dialog/Like';
@@ -94,15 +95,22 @@ export default {
       showToLike: false,
       replyItem: {},
       showToFundation: false,
+      subLen: 0,
+      loading: true,
     }
   },
   mounted() {
     this.handleGetReplyFirst()
   },
+  computed: {
+    ...mapState({
+      scatter: state => state.app.scatter,
+    }),
+  },
   methods: {
     handleToLocalTime(time) {
       let t = moment(`${time}`).valueOf()
-      t += 3600 * 8 * 1000;
+      // t += 3600 * 8 * 1000;
       const oDate = getDateDiff(t)
       return oDate
     },
@@ -118,28 +126,61 @@ export default {
       this.showToLike = false;
       this.showToFundation = false;
     },
-    async handleGetReplyFirst() {
+    async handleGetReplyFirst(size = 3) {
       // 第一次展开 获取前3条 - mounted调用
       const params = {
-        page: 1,
-        limit: 3,
+        page: this.page,
+        limit: size,
         id: this.reply.global_action_seq
+      }
+      if (this.scatter && this.scatter.identity) {
+        params.user = this.scatter.identity.accounts[0].name;
       }
       const {status, result} = await get_reply_fundation(params)
       console.log(status, result)
+      this.loading = false;
       if (!status) {
         return
       }
-      this.lists = result.data || [];
+      const lists = result.data || [];
+      this.subLen = result.total;
+      lists.forEach(v => {
+        const t = toLocalTime(v.create_time).replace(/-/g, '/');
+        const times = Date.parse(t) + 3600 * 8 * 1000;
+        this.$set(v, 'dealTime', toLocalTime(times))
+        const likeNum = v.like_count * 1000;
+        this.$set(v, 'likeNum', likeNum.toFixed(0))
+      });
+      this.lists = lists;
     },
     // 点击展开更多时调用
     async handleGetMore() {
+      const params = {
+        page: this.page,
+        limit: 10,
+        id: this.reply.global_action_seq
+      }
+      const {status, result} = await get_reply_fundation(params)
+      if (!status) {
+        return
+      }
+      const lists = result.data || [];
+      lists.forEach(v => {
+        const t = toLocalTime(v.create_time).replace(/-/g, '/');
+        const times = Date.parse(t) + 3600 * 8 * 1000;
+        this.$set(v, 'dealTime', toLocalTime(times))
+      });
       // 调用API获取前10条
       if (this.page === 1) { // 第一页时 - 直接覆盖之前数据
-        this.lists = []
+        this.lists = lists
       } else { // 下一页时，在后面插入
-        this.lists.push(...[])
+        this.lists.push(...lists)
       }
+      this.page = this.page + 1;
+    },
+    // 收起弹窗
+    handleCloseMore() {
+      this.$emit('listenCloseSubLists', this.reply)
     }
   }
 }

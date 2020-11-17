@@ -38,7 +38,7 @@ import FundationLists from './comp/FundationLists'
 import ToFundation from './dialog/ToFundation';
 
 // api
-import { getCoin, getRandomImg } from '@/utils/public'
+import { getCoin, getRandomImg, toLocalTime } from '@/utils/public'
 import { get_summary, get_new_fundation,
   get_mvd_fundation, get_hot_fundation } from '@/utils/api';
 
@@ -65,6 +65,7 @@ export default {
 
       // 上拉加载更多
       finished: false,
+      isGetting: false,
     }
   },
   mounted() {
@@ -75,6 +76,7 @@ export default {
   },
   computed: {
     ...mapState({
+      scatter: state => state.app.scatter,
       filterMkLists: state => state.sys.filterMkLists,
     }),
   },
@@ -97,6 +99,7 @@ export default {
       this.$forceUpdate()
       this.filter = filter;
       this.page = 1;
+      document.documentElement.scrollTop = 9999;
       this.handleGetFundation()
     },
     handleFilterMin(min) {
@@ -105,6 +108,7 @@ export default {
       this.$forceUpdate()
       this.min = min;
       this.page = 1;
+      document.documentElement.scrollTop = 9999;
       this.handleGetFundation()
     },
     handleClose() {
@@ -116,26 +120,31 @@ export default {
         return;
       }
       this.summaryLists = result.summary || [];
-      if (this.page === 1) {
-        this.totalNum = result.total;
-        this.handleDealAmtNum()
-      }
+      this.handleDealAmtNum()
     },
     handleActChange(act) { // 监听子页面类型切换
       this.typeAct = act;
       this.page = 1;
       this.hisLists = [];
+      this.finished = false;
+      this.isGetting = false;
+      document.documentElement.scrollTop = 9999;
+      this.$forceUpdate()
       // this.handleGetFundation()
     },
     async handleGetFundation() {
-      console.log(this.typeAct)
+      if (this.isGetting) {
+        return
+      }
+      this.isGetting = true;
       const params = {
         min: this.min,
         page: this.page,
-        limit: this.pagesize
+        limit: this.pagesize,
+        act: this.typeAct,
       }
       let status, result
-      if (this.scatter && !this.scatter.identity) {
+      if (this.scatter && this.scatter.identity) {
         params.user = this.scatter.identity.accounts[0].name;
       }
       if (this.typeAct === 0) {
@@ -147,6 +156,7 @@ export default {
         const res = await get_new_fundation(params)
         status = res.status;
         result = res.result;
+        this.totalNum = result.total;
       } else if (this.typeAct === 1) {
         const res = await get_hot_fundation(params)
         status = res.status;
@@ -156,20 +166,27 @@ export default {
         status = res.status;
         result = res.result;
       }
+      this.isGetting = false;
       if (!status) {
         return;
       }
-      console.log(result)
-      this.totalNum = result.total;
       // 分页数据处理
-      const list = result.data || [];
-      this.handleDealMemoLists(list);
+      this.handleDealMemoLists(result, params.act);
     },
-    handleDealMemoLists(list) {
+    handleDealMemoLists(result, act) {
+      if (act !== this.typeAct) {
+        return
+      }
+      const list = result.data || [];
       list.forEach(v => {
         this.$set(v, 'headImg', getRandomImg())
-        const replyNum = (v.reply_count || 0) + (v.reply2_count || 0)
+        const replyNum = (v.reply_count || 0)
         this.$set(v, 'replyNum', replyNum)
+        const t = toLocalTime(v.create_time).replace(/-/g, '/');
+        const times = Date.parse(t) + 3600 * 8 * 1000;
+        this.$set(v, 'dealTime', toLocalTime(times))
+        const likeNum = v.like_count * 1000;
+        this.$set(v, 'likeNum', likeNum.toFixed(0))
       })
       if (this.page === 1) {
         this.hisLists = list;
@@ -178,7 +195,7 @@ export default {
       }
       this.page += 1;
       // 数据全部加载完成
-      if (this.hisLists.length >= this.totalNum) {
+      if (this.hisLists.length >= result.total || !list.length) {
         this.finished = true;
       }
     },

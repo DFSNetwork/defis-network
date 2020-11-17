@@ -47,7 +47,7 @@
             rows="1"
             autosize
             type="textarea"
-            :placeholder="reply.global_action_seq ? `回复 ${replyto}` : '请输入留言'"
+            :placeholder="reply.global_action_seq ? `${$t('fundation.reply')} ${replyto}` : $t('fundation.iptTip')"
           />
           <div class="iptlen">{{sizeof}}/256</div>
         </div>
@@ -271,7 +271,7 @@ export default {
       if (this.reply.fromx) {
         const replyAction = {
           account: 'dfscommunity',
-          name: 'reply',
+          name: 'submit',
           authorization: [{
             actor: formName, // 转账者
             permission,
@@ -279,14 +279,15 @@ export default {
           data: {
             user: formName,
             author: this.replyto,
-            target0: this.reply.global_action_seq,
-            target1: this.replyItem.global_action_seq || 0,
+            target0: this.replyItem.global_action_seq || this.reply.global_action_seq,
+            target1: this.reply.global_action_seq,
             memo: this.memo,
             code: this.thisMarket0.contract,
             quantity,
+            type: 'reply'
           }
         }
-        params.actions.push(replyAction)
+        params.actions.unshift(replyAction)
       }
       EosModel.toTransaction(params, (res) => {
         this.loading = false;

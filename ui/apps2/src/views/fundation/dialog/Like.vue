@@ -1,10 +1,13 @@
 <template>
   <div class="like">
     <img class="close" @click="handleClose(false)" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
-    <div class="title">乐捐送爱心</div>
+    <div class="title">{{ $t('fundation.likeTitle') }}</div>
     <div class="flexb bal dinReg">
-      <span>余额: {{ bal }}</span>
-      <span>预计捐献：{{ about }} 颗</span>
+      <span>{{ $t('public.balance') }}: {{ bal }}</span>
+      <span class="flexa">
+        <span>{{ $t('fundation.aboutFundation') }}：{{ about }} </span>
+        <img class="love" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt="">
+      </span>
     </div>
     <div class="flexb infoDiv">
       <div class="coinDiv flexb">
@@ -21,41 +24,48 @@
     <div class="percent flexb">
       <div class="pItem" :class="{'act': act === 0}" @click="handlePercent(0)">
         <div>
-          <div class="pNum dinBold">0.01</div>
-          <div class="tip">小爱</div>
+          <div class="pNum dinBold">0.001</div>
+          <div class="tip">{{ $t('fundation.lv0') }}</div>
+        </div>
+      </div>
+      <div class="pItem" :class="{'act': act === 0.01}" @click="handlePercent(0.01)">
+        <div>
+          <div class="pNum dinBold">1%</div>
+          <div class="tip">{{ $t('fundation.lv1') }}</div>
         </div>
       </div>
       <div class="pItem" :class="{'act': act == 0.25}" @click="handlePercent(0.25)">
         <div>
           <div class="pNum dinBold">25%</div>
-          <div class="tip">中爱</div>
-        </div>
-      </div>
-      <div class="pItem" :class="{'act': act == 0.5}" @click="handlePercent(0.5)">
-        <div>
-          <div class="pNum dinBold">50%</div>
-          <div class="tip">大爱</div>
+          <div class="tip">{{ $t('fundation.lv2') }}</div>
         </div>
       </div>
     </div>
 
     <div class="percent flexb">
+      <div class="pItem" :class="{'act': act == 0.5}" @click="handlePercent(0.5)">
+        <div>
+          <div class="pNum dinBold">50%</div>
+          <div class="tip">{{ $t('fundation.lv3') }}</div>
+        </div>
+      </div>
       <div class="pItem" :class="{'act': act == 0.75}" @click="handlePercent(0.75)">
         <div>
           <div class="pNum dinBold">75%</div>
-          <div class="tip">超爱</div>
+          <div class="tip">{{ $t('fundation.lv4') }}</div>
         </div>
       </div>
       <div class="pItem" :class="{'act': act == 1}" @click="handlePercent(1)">
         <div>
           <div class="pNum dinBold">100%</div>
-          <div class="tip">爱了爱了</div>
+          <div class="tip">{{ $t('fundation.lv5') }}</div>
         </div>
       </div>
-      <div></div>
     </div>
-    <div class="mainTip">*乐捐的TAG将进入乐捐系统</div>
-    <div class="btn flexc" @click="handleToLink">立即捐爱心</div>
+    <div class="mainTip">*{{ $t('fundation.likeTip') }}</div>
+    <div class="btn flexc unClick" v-if="showErr && this.num" @click="handleToLink">{{ errTip }}</div>
+    <div class="btn flexc" v-else
+      :class="{'unClick': !Number(this.num || 0)}" @click="handleToLink">{{ $t('fundation.toLike') }}</div>
   </div>
 </template>
 
@@ -73,12 +83,19 @@ export default {
         return {}
       },
     },
+    replyItem: { // 主楼下的回复
+      type: Object,
+      default: function rp() {
+        return {}
+      },
+    }
   },
   data() {
     return {
       num: '',
       act: '',
       bal: '0.0000',
+      errTip: '',
     }
   },
   computed: {
@@ -89,6 +106,17 @@ export default {
     about() {
       const n = parseFloat(this.num || 0) * 1000
       return parseInt(n)
+    },
+    showErr() {
+      if (Number(this.num) < 0.001) {
+        this.errTip = this.$t('fundation.minNum', {num: '0.001 TAG'}); // eslint-disable-line
+        return true;
+      }
+      if (Number(this.num) > parseFloat(this.bal)) {
+        this.errTip = this.$t('more.lowBal', {sym: 'TAG'}); // eslint-disable-line
+        return true;
+      }
+      return false
     }
   },
   watch: {
@@ -128,20 +156,16 @@ export default {
       this.num = num.toFixed(8)
     },
     handleToLink() {
-      // if (Number(this.num) < 0.001) {
-      //   this.$message.error('最少 0.001 TAG')
-      //   return
-      // }
-      // if (Number(this.num) > parseFloat(this.bal)) {
-      //   this.$message.error('余额不足')
-      //   return
-      // }
-      // if (!this.scatter || !this.scatter.identity) {
-      //   return
-      // }
+      if (this.showErr) {
+        return
+      }
+      if (!this.scatter || !this.scatter.identity) {
+        return
+      }
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
-
+      const memo = `${formName} 💗 ${this.replyItem.fromx || this.reply.fromx}`;
+      const quantity = `${Number(this.num).toFixed(8)} TAG`;
       const transfer = {
         account: 'tagtokenmain',
         name: 'transfer',
@@ -152,25 +176,30 @@ export default {
         data: {
           from: formName,
           to: 'dfsfundation',
-          memo: `${formName}`,
-          quantity: `${Number(this.num).toFixed(8)} TAG`
+          memo,
+          quantity,
         }
       }
       const like = {
         account: 'dfscommunity',
-        name: 'like',
+        name: 'submit',
         authorization: [{
           actor: formName, // 转账者
           permission,
         }],
         data: {
-          author: 'judy.dfs',
           user: formName,
-          target: this.reply.global_action_seq || 0,
+          author: this.replyItem.fromx || this.reply.fromx,
+          target0: this.replyItem.global_action_seq || this.reply.global_action_seq,
+          target1: this.reply.global_action_seq,
+          memo,
+          code: 'tagtokenmain',
+          quantity,
+          type: 'like'
         },
       }
       const params = {
-        actions: [transfer, like],
+        actions: [like, transfer],
       }
       EosModel.toTransaction(params, (res) => {
         this.loading = false;
@@ -215,6 +244,10 @@ export default {
   }
   .bal{
     font-size: 22px;
+    .love{
+      width: 32px;
+      margin-left: 8px;
+    }
   }
   .infoDiv{
     padding: 18px 0;
@@ -292,6 +325,9 @@ export default {
     background: #29D4B0;
     color: #fff;
     font-size: 32px;
+    &.unClick{
+      background: rgba(#29D4B0, .6);
+    }
   }
 }
 </style>

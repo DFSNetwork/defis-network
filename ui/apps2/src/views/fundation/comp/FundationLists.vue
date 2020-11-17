@@ -26,7 +26,7 @@
             <el-option
               v-for="item in minOption"
               :key="item.value"
-              :label="item.label"
+              :label="!Number(item.value || 0) ? $t(`fundation.all`) : item.label"
               :value="item.value">
             </el-option>
           </el-select>
@@ -36,11 +36,11 @@
 
     <div class="lists">
       <div class="tab flexb">
-        <div class="tabTitle">留言区</div>
+        <div class="tabTitle">{{ $t('fundation.memoArea') }}</div>
         <div class="type tip">
-          <span :class="{'typeAct': typeAct === 0}" @click="handleChangeAct(0)">最新</span>
-          <span :class="{'typeAct': typeAct === 1}" @click="handleChangeAct(1)">最热</span>
-          <span :class="{'typeAct': typeAct === 2}" @click="handleChangeAct(2)">最贵</span>
+          <span :class="{'typeAct': typeAct === 0}" @click="handleChangeAct(0)">{{ $t('fundation.new') }}</span>
+          <span :class="{'typeAct': typeAct === 1}" @click="handleChangeAct(1)">{{ $t('fundation.hot') }}</span>
+          <span :class="{'typeAct': typeAct === 2}" @click="handleChangeAct(2)">{{ $t('fundation.mvd') }}</span>
         </div>
       </div>
       <van-list
@@ -63,8 +63,8 @@
                   <span class="flexc qua dinReg">{{ item.quantity }}({{ item.account }})</span>
                 </div>
               </div>
-              <div class="flexend tip likeDiv" @click="handleShowLike(item)">
-                <span>{{ item.like_count || 0 }}</span>
+              <div class="flexa tip likeDiv" @click="handleShowLike(item)">
+                <span>{{ item.likeNum || 0 }}</span>
                 <img v-if="item.like_status === 0" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
                 <img v-else width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt="">
               </div>
@@ -74,17 +74,18 @@
                 <span class="hideText">{{ item.memo }}</span>
               </div>
               <div class="tip time flexa">
-                <span>{{ handleToLocalTime(item.create_time) }}</span>
-                <span class="reply">回复</span>
+                <span>{{ handleToLocalTime(item.dealTime) }}</span>
+                <span class="reply">{{ $t('fundation.reply') }}</span>
               </div>
             </div>
             <div class="showReply flexa" v-if="!item.showReply && item.replyNum"
               @click="handleShowItemReply(item)">
-              <span>展开{{ item.replyNum }}条回复</span>
+              <span>{{ $t('fundation.openSubReply', {len: item.replyNum}) }}</span>
               <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/showMore.png" alt="">
             </div>
             <div class="replyLists" v-else-if="item.showReply">
-              <ReplyLists :listsLen="item.replyNum" :reply="item"/>
+              <ReplyLists :listsLen="item.replyNum" :reply="item"
+                @listenCloseSubLists="handleCloseItemReply"/>
             </div>
           </div>
         </div>
@@ -213,21 +214,30 @@ export default {
     },
   },
   methods: {
+    // 切换类型
     handleChangeAct(index) {
       this.typeAct = index;
       this.$emit('listenActChange', index)
     },
+    // 展开更多
     handleShowItemReply(item) {
       this.$set(item, 'showReply', true);
     },
+    // 收起更多
+    handleCloseItemReply(item) {
+      this.$set(item, 'showReply', false);
+    },
+    // 显示点赞弹窗
     handleShowLike(item) {
       this.reply = item;
       this.showToLike = true
     },
+    // 显示回复弹窗
     handleReply(item) {
       this.reply = item;
       this.showToFundation = true
     },
+    // 关闭弹窗
     handleClose(type) {
       this.showToFundation = false;
       this.showToLike = false;
@@ -251,7 +261,6 @@ export default {
     },
     handleToLocalTime(time) {
       let t = moment(`${time}`).valueOf()
-      t += 3600 * 8 * 1000;
       const oDate = getDateDiff(t)
       return oDate
     },
