@@ -127,7 +127,7 @@ export function get_fundation(params) {
 export function get_summary() {
   // https://api.defis.network/history/fundation?page=1&limit=15
   return new Promise((resolve, reject) => {
-    axios.get('https://api.defis.network/history/fundation/summary').then((res) => {
+    axios.get('https://api.defis.network/fundation/summary').then((res) => {
       let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
     }, err => {
@@ -138,7 +138,7 @@ export function get_summary() {
 // 获取最新 ｜ 最贵 ｜ 最热 留言数据
 export function get_new_fundation(params) {
   return new Promise((resolve, reject) => {
-    axios.get('https://api.defis.network/history/fundation/new', {params}).then((res) => {
+    axios.get('https://api.defis.network/fundation/new', {params}).then((res) => {
       let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
     }, err => {
@@ -148,7 +148,7 @@ export function get_new_fundation(params) {
 }
 export function get_mvd_fundation(params) {
   return new Promise((resolve, reject) => {
-    axios.get('https://api.defis.network/history/fundation/mvd', {params}).then((res) => {
+    axios.get('https://api.defis.network/fundation/mvd', {params}).then((res) => {
       let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
     }, err => {
@@ -158,7 +158,7 @@ export function get_mvd_fundation(params) {
 }
 export function get_hot_fundation(params) {
   return new Promise((resolve, reject) => {
-    axios.get('https://api.defis.network/history/fundation/hot', {params}).then((res) => {
+    axios.get('https://api.defis.network/fundation/hot', {params}).then((res) => {
       let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
     }, err => {
@@ -169,7 +169,7 @@ export function get_hot_fundation(params) {
 
 export function get_reply_fundation(params) {
   return new Promise((resolve, reject) => {
-    axios.get('https://api.defis.network/history/fundation/reply', {params}).then((res) => {
+    axios.get('https://api.defis.network/fundation/reply', {params}).then((res) => {
       let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
     }, err => {
