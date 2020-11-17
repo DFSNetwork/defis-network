@@ -627,7 +627,7 @@ async getTableRows(obj, callback) {
         if (err.error.code === 3080001) {
           back = {
             code: 3080001,
-            message: detail[0].message,
+            message: err.error.details[0].message,
             // message: this.vthis.$t('error.insufficient', {res: 'RAM'}),
           }
         }
