@@ -6,9 +6,14 @@
         <span>{{ $t('nodePools.myRex') }}：</span>
         <span class="dinBold"> {{ bal }}</span>
       </div>
-      <div class="able flexa">
-        <span>{{ $t('nodePools.ableSell') }}：</span>
-        <span class="dinBold"> {{ ableSell }}</span>
+      <div class="able flexb">
+        <div class="flexa">
+          <span>{{ $t('nodePools.ableSell') }}：</span>
+          <span class="dinBold"> {{ ableSell }}</span>
+        </div>
+        <div v-if="rexLockLists.length">
+          <span class="red" @click="showLock = true">待解锁列表></span>
+        </div>
       </div>
     </div>
     <div class="iptDiv">
@@ -32,6 +37,12 @@
     <div class="btnDiv">
       <div class="btn flexc" v-loading="loading" @click="handlerSellRex">{{ $t('public.confirm') }}</div>
     </div>
+    <el-dialog
+      class="mydialog"
+      :append-to-body="true"
+      :visible.sync="showLock">
+      <RexLock :lists="rexLockLists"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -41,9 +52,13 @@ import { EosModel } from '@/utils/eos';
 import {toLocalTime, toFixed} from '@/utils/public'
 import {get_table_rows} from '@/utils/api'
 import { getRexActions } from '../js/nodePools'
+import RexLock from './RexLock'
 
 export default {
   name: 'removeRex',
+  components: {
+    RexLock
+  },
   props: {
     rexPrice: {
       type: Number,
@@ -62,6 +77,8 @@ export default {
       ableSell: '0.0000',
       buy: '',
       loading: false,
+      showLock: false,
+      rexLockLists: [],
     }
   },
   mounted() {
@@ -116,12 +133,18 @@ export default {
       let ableRex = parseFloat(rows.matured_rex);
       lists.forEach(v => {
         const nowT = Date.parse(new Date())
-        const rexT = Date.parse(toLocalTime(`${v.key}.000+0000`).replace(/-/g, '/'))
+        const dateTime = toLocalTime(`${v.key}.000+0000`)
+        this.$set(v, 'dateTime', dateTime)
+        const rexT = Date.parse(dateTime.replace(/-/g, '/'))
         // console.log(nowT, rexT)
         if (nowT >= rexT) {
           ableRex = parseFloat(v.value) + parseFloat(ableRex)
+        } else {
+          this.$set(v, 'num', (v.value/1000).toFixed(4))
         }
       });
+      this.rexLockLists = lists.filter(v => v.num)
+      console.log(this.rexLockLists)
       this.ableSell = `${(ableRex/10000).toFixed(4)}`
     },
     handleIn(rate) {
@@ -165,6 +188,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.red{
+  color: #e9574f;
+}
 .removeRex{
   // padding: 26px;
   text-align: left;
