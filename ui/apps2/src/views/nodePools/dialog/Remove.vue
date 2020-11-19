@@ -140,7 +140,7 @@ export default {
         if (nowT >= rexT) {
           ableRex = parseFloat(v.value) + parseFloat(ableRex)
         } else {
-          this.$set(v, 'num', (v.value/1000).toFixed(4))
+          this.$set(v, 'num', (v.value/10000).toFixed(4))
         }
       });
       this.rexLockLists = lists.filter(v => v.num)
