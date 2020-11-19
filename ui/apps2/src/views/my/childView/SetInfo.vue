@@ -126,7 +126,6 @@ export default {
       handler: function sc (newVal) {
         if (newVal.identity) {
           this.acc = newVal.identity.accounts[0].name;
-          // this.handleGetAccInfo()
         }
       },
       deep: true,
@@ -134,7 +133,6 @@ export default {
     },
     accInfo: {
       handler: function sc (newVal) {
-        console.log(newVal)
         this.avatar = newVal.avatar
         this.cover = newVal.cover;
         this.desc = newVal.desc;
@@ -159,13 +157,6 @@ export default {
     onConfirm(value) {
       this.sex = value;
       this.showPicker = false;
-    },
-    async handleGetAccInfo() {
-      const {status, result} = await get_acc_info(this.acc)
-      if (!status) {
-        return
-      }
-      console.log(result)
     },
     handleSure(src) {
       this.showCheckImg = false;
@@ -203,7 +194,6 @@ export default {
           }
         }]
       }
-      console.log(params)
       EosModel.toTransaction(params, (res) => {
         this.loading = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
@@ -217,7 +207,7 @@ export default {
           message: this.$t('public.success'),
           type: 'success'
         });
-        this.handleGetAccInfo()
+        get_acc_info(this.acc)
         this.$router.replace({
           name: 'myCenter',
         })

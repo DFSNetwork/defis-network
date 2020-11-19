@@ -164,6 +164,24 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "myCenter" */ '@/views/my/childView/SetInfo.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
       },
+      { // 关注
+        path: '/my-center/attention',
+        name: 'attention',
+        component: () => import(/* webpackChunkName: "myCenter" */ '@/views/my/childView/AccLists.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
+      { // 粉丝
+        path: '/my-center/fans',
+        name: 'fans',
+        component: () => import(/* webpackChunkName: "myCenter" */ '@/views/my/childView/AccLists.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
+      { // 访客
+        path: '/my-center/visitors',
+        name: 'visitors',
+        component: () => import(/* webpackChunkName: "myCenter" */ '@/views/my/childView/AccLists.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
     ]
   },
 ]
