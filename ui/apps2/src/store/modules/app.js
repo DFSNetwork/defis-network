@@ -26,8 +26,18 @@ const app = {
     },
     slipPoint: localStorage.getItem('slipPoint') ? parseInt(localStorage.getItem('slipPoint')) : 1,
     minScreen: false,
+    accInfo: {
+      avatar: "https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png",
+      cover: "https://cdn.jsdelivr.net/gh/defis-net/material/accBanner/banner0.png",
+      desc: "",
+      nick: "",
+      sex: 2,
+    }
   },
   mutations: {
+    SET_ACCINFO: (state, accInfo) => {
+      state.accInfo = accInfo;
+    },
     SET_MINSCREEN: (state, minScreen) => {
       state.minScreen = minScreen;
     },
@@ -54,6 +64,9 @@ const app = {
     },
   },
   actions: {
+    setAccInfo({ commit }, accInfo) {
+      commit('SET_ACCINFO', accInfo);
+    },
     setMinScreen({ commit }, minScreen) {
       commit('SET_MINSCREEN', minScreen);
     },

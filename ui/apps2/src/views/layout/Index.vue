@@ -40,6 +40,7 @@ import NodeSet from '@/components/popup/NodeSet';
 import WarmTip from '@/components/WarmTip';
 import Tabbar from './comp/Tabbar';
 
+import { get_acc_info } from '@/utils/api';
 import { dealMarketLists } from '@/utils/logic';
 
 export default {
@@ -76,6 +77,17 @@ export default {
     showAcc() {
       const showAcc = !this.$route.meta.noAcc;
       return showAcc
+    }
+  },
+  watch: {
+    scatter: {
+      handler: function sc (newVal) {
+        if (newVal.identity) {
+          get_acc_info(newVal.identity.accounts[0].name)
+        }
+      },
+      deep: true,
+      immediate: true
     }
   },
   mounted() {

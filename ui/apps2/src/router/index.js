@@ -158,6 +158,12 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "myCenter" */ '@/views/my/Index.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
       },
+      { // 编辑资料
+        path: '/my-center/set-edit',
+        name: 'setInfo',
+        component: () => import(/* webpackChunkName: "myCenter" */ '@/views/my/childView/SetInfo.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
     ]
   },
 ]

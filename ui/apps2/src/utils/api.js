@@ -177,6 +177,18 @@ export function get_reply_fundation(params) {
     })
   })
 }
+// 获取乐捐记录
+export async function get_acc_fund_lists(params) {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/fundation/i', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      // console.log(result)
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
 
 // 获取rex挖矿列表
 export async function get_farmers_lists() {
@@ -184,6 +196,33 @@ export async function get_farmers_lists() {
     // const params = {};
     axios.get('https://api.defis.network/tag/farmers').then((res) => {
       let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+
+// 获取账户信息
+export function get_acc_info(user) {
+  return new Promise((resolve, reject) => {
+    const params = {
+      "code":"dfscommunity",
+      "scope":"dfscommunity",
+      "table":"profiles",
+      "json":true,
+      "lower_bound": ` ${user}`,
+      "upper_bound": ` ${user}`,
+    }
+    const host = getHost()
+    axios.post(`${host}/v1/chain/get_table_rows`, JSON.stringify(params)).then((res) => {
+      let result = {};
+      if (!res.data.rows.length) {
+        result = {}
+      } else {
+        result = Object.assign(res.data.rows[0], {});
+        store.dispatch('setAccInfo', result);
+      }
       resolve({ status: res.status === 200, result });
     }, err => {
       reject(err)

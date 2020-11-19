@@ -1,12 +1,20 @@
 <template>
   <div class="accInfo">
-    <img class="accBgImg" :src="`https://cdn.jsdelivr.net/gh/defis-net/material/accBanner/banner${bgImg}.png`" alt="">
+    <img class="accBgImg" :src="accInfo.cover">
     <div class="info flexa">
       <div class="headDiv flexc">
-        <img class="headImg" :src="`https://cdn.jsdelivr.net/gh/defis-net/material/coin/${headImg}.png`" alt="">
+        <img class="headImg" :src="accInfo.avatar">
       </div>
-      <div>
-        <div class="name">{{ nick }}</div>
+      <div style="flex: 1">
+        <div class="name flexb">
+          <div class="flexa">
+            <span>{{ accInfo.nick || id }}</span>
+            <img v-if="accInfo.sex == 0" class="sex" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/sex0.png" alt="">
+            <img v-if="accInfo.sex == 1" class="sex" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/sex1.png" alt="">
+          </div>
+          <img class="set" @click="$router.push({name: 'setInfo'})"
+            src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/set.png" alt="">
+        </div>
         <div class="account flexa">
           <span
             v-clipboard:copy="id"
@@ -18,8 +26,27 @@
             v-clipboard:error="onError"
             src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/copy.png" alt="">
         </div>
-        <div class="intro">{{ intro }}</div>
+        <div class="intro">{{ accInfo.desc || '暂时没有简介' }}</div>
       </div>
+    </div>
+    <!-- 粉丝 & 资料编辑 -->
+    <div class="flexb infoData">
+      <div class="flexb numDiv">
+        <div>
+          <div class="num dinBold">0</div>
+          <div>粉丝</div>
+        </div>
+        <div>
+          <div class="num dinBold">0</div>
+          <div>关注</div>
+        </div>
+        <div>
+          <div class="num dinBold">0</div>
+          <div>访客</div>
+        </div>
+      </div>
+      <!-- 编辑资料 -->
+      <!-- <div class="setBtn flexc">编辑资料</div> -->
     </div>
   </div>
 </template>
@@ -48,6 +75,7 @@ export default {
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
+      accInfo: state => state.app.accInfo,
     }),
   },
   watch: {
@@ -93,7 +121,7 @@ export default {
 <style lang="scss" scoped>
 .accInfo{
   font-size: 24px;
-  height: 296px;
+  height: 408px;
   position: relative;
   .accBgImg{
     position: absolute;
@@ -123,6 +151,13 @@ export default {
     .name{
       font-size: 40px;
       font-weight: 500;
+      .sex{
+        width: 46px;
+        margin-left: 10px;
+      }
+      .set{
+        width: 44px;
+      }
     }
     .account{
       margin-bottom: 8px;
@@ -131,6 +166,32 @@ export default {
         margin-left: 10px;
       }
     }
+  }
+}
+.infoData{
+  margin-top: 30px;
+  position: relative;
+  z-index: 1;
+  color: #FFF;
+  font-size: 28px;
+  padding: 0 28px;
+  .num{
+    font-size: 40px;
+    margin-bottom: 8px;
+  }
+  .numDiv{
+    flex: 1;
+    &>div{
+      flex: 1;
+      text-align: center;
+      // margin-right: 60px;
+    }
+  }
+  .setBtn{
+    height: 60px;
+    border: 1px solid #FFF;
+    border-radius: 30px;
+    padding: 0 36px;
   }
 }
 </style>
