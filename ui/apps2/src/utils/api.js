@@ -194,7 +194,7 @@ export async function get_acc_fund_lists(params) {
 export async function get_farmers_lists() {
   return new Promise((resolve, reject) => {
     // const params = {};
-    axios.get('https://api.defis.network/tag/farmers').then((res) => {
+    axios.get('https://api.defis.network/basic/tag/farmers').then((res) => {
       let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
     }, err => {

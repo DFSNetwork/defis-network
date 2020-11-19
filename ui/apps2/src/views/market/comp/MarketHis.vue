@@ -157,8 +157,7 @@ export default {
         page: this.page,
         limit: this.pageSize,
       }
-      // https://api.defis.network/swap/depositlog\?user\=dfsdeveloper\&mid\=39\&page\=1\&limit\=15
-      const result = await axios.get('https://api.defis.network/swap/depositlog', {params});
+      const result = await axios.get('https://api.defis.network/basic/swap/depositlog', {params});
       this.loading = false;
       if (result.status !== 200) {
         this.hisList = [];
