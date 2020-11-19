@@ -11,7 +11,31 @@
     </div>
     <div class="searchDiv flexa">
       <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/search.png">
-      <van-field class="searchIpt" v-model="value" placeholder="请输入用户昵称/ID" />
+      <van-field class="searchIpt" v-model="search" placeholder="请输入用户昵称/ID" />
+    </div>
+
+    <div class="lists">
+      <div class="noData tip" v-if="!lists.length">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noData.png" alt="">
+        <div v-if="$route.name === 'attention'">还没有任何关注的人</div>
+        <div v-else-if="$route.name === 'fans'">暂时没有粉丝哦</div>
+        <div v-else>暂时没有历史访问哦</div>
+      </div>
+      <div class="list flexb" v-for="(item, index) in lists" :key="index">
+        <img class="headImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
+        <div class="mainData">
+          <div class="name">Nick</div>
+          <div class="desc tip">简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介简介</div>
+        </div>
+        <div class="type">
+          <div class="atted flexc" v-if="$route.name === 'attention'">已关注</div>
+          <div v-else-if="$route.name === 'fans'">
+            <span class="atted flexc" v-if="item.isAtted">互相关注</span>
+            <span class="fans flexc">回粉</span>
+          </div>
+          <div class="fans flexc" v-else>访问</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -21,7 +45,10 @@ import { mapState } from 'vuex';
 export default {
   name: 'accLists',
   data() {
-    return {}
+    return {
+      search: '',
+      lists: [{}],
+    }
   },
   computed: {
     ...mapState({
@@ -37,7 +64,7 @@ export default {
 
 <style lang="scss" scoped>
 .accLists{
-  font-size: 32px;
+  font-size: 28px;
   color: #333;
   .title{
     font-size: 36px;
@@ -78,7 +105,57 @@ export default {
         width: 100%;
       }
     }
-    .searchIpt{
+    // .searchIpt{
+    // }
+  }
+  .noData{
+    padding-top: 15vh;
+    img{
+      width: 400px;
+    }
+  }
+  .list{
+    height: 158px;
+    padding: 0 26px;
+    border-bottom: 1px solid rgba(220, 220, 220, .3);
+    &:last-child{
+      border-bottom: 0px solid rgba(220, 220, 220, .3);
+    }
+    .headImg{
+      height: 100px;
+      width: 100px;
+      border-radius: 50%;
+      margin-right: 22px;
+    }
+    .mainData{
+      flex: 1;
+      text-align: left;
+      .name{
+        font-size: 32px;
+        font-weight: 500;
+      }
+      .desc{
+        font-size: 26px;
+        margin-top: 4px;
+        max-width: 390px;
+        overflow:hidden; //超出的文本隐藏
+        text-overflow:ellipsis; //溢出用省略号显示
+        white-space:nowrap; //溢出不换行
+      }
+    }
+    .atted{
+      color: #999;
+      border: 1px solid #CBCBCB;
+      width: 140px;
+      height: 56px;
+      border-radius: 30px;
+    }
+    .fans{
+      width: 140px;
+      height: 56px;
+      border-radius: 30px;
+      color: #FFF;
+      background: #29D4B0;
     }
   }
 }
