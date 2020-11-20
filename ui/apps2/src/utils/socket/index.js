@@ -1,6 +1,7 @@
 
 import io from 'socket.io-client';
 import {toLocalTime} from '@/utils/public'
+import {get_kline_data} from '@/utils/api'
 class WsIo {
   constructor() {
     this.connect = false;
@@ -44,7 +45,50 @@ class WsIo {
   //   from: 1602123180,
   //   to: 1602124440,
   // });
-  subscribe(params, cb) {
+  async subscribe(params, cb) {
+    const {status, result} = await get_kline_data(params)
+    if (!status) {
+      cb([])
+      return
+    }
+    const decimal = params.diffDecimal;
+    let wsRes = result;
+    if (!Array.isArray(wsRes)) {
+      const item = {
+        open: wsRes.open,
+        high: wsRes.high,
+        low: wsRes.low,
+        close: wsRes.close,
+        volume: 0,
+        time: wsRes.id * 1000,
+        date: toLocalTime(wsRes.id * 1000),
+        isBarClosed: true,
+        isLastBar: true
+      }
+      cb([item])
+      return
+    }
+    const dealArr = [];
+    wsRes.forEach((v, index) => {
+      // if (v[0] === 1599235200 && v[1] > 20000000) {
+      //   return
+      // }
+      const item = {
+        open: v[1] * 10 ** decimal / 10000,
+        high: v[3] * 10 ** decimal / 10000,
+        low: v[4] * 10 ** decimal / 10000,
+        close: v[2] * 10 ** decimal / 10000,
+        volume: 0,
+        time: v[0] * 1000,
+        date: toLocalTime(v[0] * 1000),
+        isBarClosed: true,
+        isLastBar: index === wsRes.length - 1,
+      }
+      dealArr.push(item)
+    });
+    cb(dealArr)
+  }
+  subscribeOld(params, cb) {
     if (!this.connect) {
       this.init(() => {
         this.subscribe(params, cb)
@@ -96,6 +140,7 @@ class WsIo {
       cb(dealArr)
     });
   }
+
   disconnect() {
     this.socket.on('disconnect', function () {
       console.log('ws disconnect')

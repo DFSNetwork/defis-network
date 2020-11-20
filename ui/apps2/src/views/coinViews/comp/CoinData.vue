@@ -16,12 +16,12 @@
         <div class="data flexc">
           <div class="tip">
              <div>持有人数：</div>
-             <div>Volum 24H：</div>
+             <!-- <div>Volum 24H：</div> -->
              <div>当前发行量：</div>
           </div>
           <div class="num">
              <div>{{ holders }}</div>
-             <div>{{ parseInt(volume_24h) }}</div>
+             <!-- <div>{{ parseInt(volume_24h) }}</div> -->
              <div>{{ parseInt(supply) || '-' }}</div>
           </div>
         </div>
@@ -82,8 +82,10 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import MarketList from '@/components/MarketList';
 import { toLocalTime } from '@/utils/public';
+import { get_currency_stats } from '@/utils/api';
 import axios from 'axios';
 import KLine from '../kline/KLine';
 import Lists from './Lists';
@@ -187,6 +189,10 @@ export default {
     clearTimeout(this.timer)
   },
   computed: {
+    ...mapState({
+      // 箭头函数可使代码更简练
+      baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
+    }),
     price() {
       if (!this.checkedMarket.reserve1) {
         return '-'
@@ -226,6 +232,7 @@ export default {
           return
         }
         this.handleGetMids()
+        this.handleGetSupply()
       },
       deep: true,
       immediate: true,
@@ -298,8 +305,22 @@ export default {
         this.holders = res.holders;
         this.trx_24h = res.trx_24h;
         this.volume_24h = res.volume_24h;
-        this.supply = res.supply;
       })
+    },
+    // this.supply = res.supply;
+    async handleGetSupply() {
+      const params = {
+        code: this.checkedMarket.contract1,
+        symbol: this.checkedMarket.symbol1,
+      }
+      // console.log(this.checkedMarket)
+      const {status, result} = await get_currency_stats(params)
+      if (!status) {
+        return;
+      }
+      const res = result[this.checkedMarket.symbol1];
+      const supply = res.supply.split(' ')[0];
+      this.supply = supply;
     }
   },
 }
