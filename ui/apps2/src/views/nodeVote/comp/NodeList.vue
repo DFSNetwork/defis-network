@@ -28,7 +28,7 @@
               <span>{{ parseInt(item.num_votes) | numeralFormat }} EOS</span>
             </div>
             <div class="flexa dinReg">
-              <span class="tip">PB Rank:</span>
+              <span class="tip">BP Rank:</span>
               <span>{{ item.rank }}</span>
             </div>
           </div>
