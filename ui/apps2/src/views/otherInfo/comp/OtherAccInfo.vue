@@ -99,6 +99,7 @@ export default {
       visitor_count: 0,
       showCancel: false,
       showInfo: false,
+      isSend: false,
     }
   },
   mounted() {
@@ -106,6 +107,7 @@ export default {
     this.handleGetInfo()
     this.handleGetAccInfo()
     this.handleGetVisitNum()
+    this.handleAccVisit()
   },
   computed: {
     ...mapState({
@@ -186,9 +188,10 @@ export default {
     },
     // 静默接口
     async handleAccVisit() {
-      if (!this.scatter || !this.scatter.identity || !this.id) {
+      if (!this.scatter || !this.scatter.identity || !this.id || this.isSend) {
         return
       }
+      this.isSend = true
       const user = this.id;
       const formName = this.scatter.identity.accounts[0].name;
       await acc_visit_other(formName, user);
