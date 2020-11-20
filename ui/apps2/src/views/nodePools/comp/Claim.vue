@@ -5,13 +5,16 @@
       <div class="subTitle flexa tip">
         <span>{{ $t('mine.waitClaim') }}</span>
         <img class="tipIcon ml10" @click="showRules = true" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
+        <span class="about tip">(总收益 ≈ {{ allReward }} EOS)</span>
       </div>
       <div class="claimNum ">
         <span class="dinBold">{{ accLpData.showReward || '0.00000000' }} TAG</span>
         <span class="tip">(LP)</span>
+        <span class="tip dinReg"> ≈ {{ accLpData.aboutEos || '0.0000' }} EOS</span>
       </div>
-      <div class="claimNum dinBold" v-for="(v, index) in nKeys" :key="index">
-        {{ poolsData[v].showReward || '0.00000000' }} {{ poolsData[v].sym }}
+      <div class="claimNum" v-for="(v, index) in nKeys" :key="index">
+        <span class="dinBold">{{ poolsData[v].showReward || '0.00000000' }} {{ poolsData[v].sym }}</span>
+        <span class="tip dinReg"> ≈ {{ poolsData[v].aboutEos || '0.0000' }} EOS</span>
       </div>
     </div>
     <div class="flexb">
@@ -76,6 +79,14 @@ export default {
       scatter: state => state.app.scatter,
       baseConfig: state => state.sys.baseConfig,
     }),
+    allReward() {
+      let all = parseFloat(this.accLpData.aboutEos || 0)
+      const keys = Object.keys(this.poolsData);
+      keys.forEach(v => {
+        all += parseFloat(this.poolsData[v].aboutEos || 0)
+      })
+      return Number(all || 0).toFixed(4)
+    }
   },
   watch: {
     poolsData: {
@@ -170,7 +181,7 @@ export default {
     z-index: -1;
   }
   .ml10{
-    margin-left: 10px;
+    margin: 0 10px;
   }
   .subTitle{
     font-size: 26px;

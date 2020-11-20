@@ -181,11 +181,11 @@ export default {
       })
     },
     // 获取矿池价格
-    handleGetPoolPrice(contract, sym) {
-      if (contract === 'eosio.token') {
+    handleGetPoolPrice(mid) {
+      if (mid === 17) {
         return 1
       }
-      const market = this.filterMkLists.find(v => (v.contract1 === contract && v.symbol1 === sym))
+      const market = this.filterMkLists.find(v => v.mid == mid)
       if (!market) {
         return 0
       }
@@ -214,7 +214,9 @@ export default {
           last_drip: accVoteData.last_drip,
         }
         const reward = getReward(baseData, accData)
+        const price = this.handleGetPoolPrice(list.mid)
         this.$set(this.poolsData[v], 'accReward', reward.toFixed(8));
+        this.$set(this.poolsData[v], 'price', price);
       })
       this.handleRun()
       clearTimeout(this.rewardTimer)
@@ -239,6 +241,8 @@ export default {
             tReward = accReward
           }
           // console.log(tReward)
+          const aboutEos = tReward * this.poolsData[v].price;
+          this.$set(this.poolsData[v], 'aboutEos', Number(aboutEos).toFixed(4))
           this.$set(this.poolsData[v], 'showReward', Number(tReward).toFixed(8))
           this.$set(this.poolsData[v], 'tReward', Number(tReward))
           // this.$set(this.poolsData[v], 't', t)
