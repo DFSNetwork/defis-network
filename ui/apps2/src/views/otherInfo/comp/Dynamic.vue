@@ -12,9 +12,9 @@
           @load="handleCurrentChange"
         >
         <div class="list flexs" v-for="(item, index) in lists" :key="index">
-          <img class="headImg" :src="item.headImg" :onerror="errorCoinImg">
+          <img class="headImg" :src="accInfo.avatar || item.headImg" :onerror="errorCoinImg">
           <div class="mainData">
-            <div class="name">{{item.fromx}}</div>
+            <div class="name">{{accInfo.nick || item.fromx}}</div>
             <div class="num tip dinReg">捐赠数量: {{ item.quantity }}</div>
             <div class="content">{{ item.memo }}</div>
             <div class="time tip">{{handleToLocalTime(item.dealTime)}}</div>
@@ -26,6 +26,7 @@
 </template>
 
 <script>
+import Bus from '@/utils/bus';
 import moment from 'moment';
 
 import {getDateDiff, getCoin, toLocalTime} from '@/utils/public'
@@ -41,9 +42,20 @@ export default {
       page: 1,
       pagesize: 20,
       lists: [],
+      accInfo: {
+        avatar: "https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png",
+        cover: "https://cdn.jsdelivr.net/gh/defis-net/material/accBanner/banner0.png",
+        desc: "",
+        nick: "",
+        sex: 2,
+      },
     }
   },
   mounted() {
+    Bus.$on('busForAccInfo', (val) => {
+      this.accInfo = val;
+      console.log(this.accInfo)
+    });
     this.id = this.$route.params.id;
   },
   methods: {
@@ -150,6 +162,9 @@ export default {
     }
     .content{
       margin: 8px 0;
+      overflow: hidden;
+      word-break: break-all;
+      white-space: pre-wrap;
     }
     .time{
       margin-top: 4px;

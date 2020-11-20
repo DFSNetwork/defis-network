@@ -4,12 +4,13 @@
       <div class="list" v-for="(item, index) in lists" :key="`reply${index}`">
         <div class="flexa">
           <div class="headImg">
-            <img width="100%" :src="item.headImg" alt="">
+            <img width="100%" :src="item.accInfo ? item.accInfo.avatar || item.headImg : item.headImg"
+              :onerror="errorCoinImg">
           </div>
           <div class="mainDiv">
             <div class="flexb">
               <div class="name">
-                <div>{{ item.fromx }}</div>
+                <div>{{ item.accInfo ? item.accInfo.nick : item.fromx }}</div>
                 <div class="tip funNum dinReg">{{ $t('fundation.transNum') }}: {{ item.quantity }}</div>
               </div>
               <div class="likeDiv tip flexend" @click="handleShowLike(item)">
@@ -63,9 +64,9 @@
 <script>
 import { mapState } from 'vuex';
 import moment from 'moment';
-import {getDateDiff, toLocalTime, getRandomImg} from '@/utils/public'
+import {getDateDiff, toLocalTime, getCoin} from '@/utils/public'
 
-import {get_reply_fundation} from '@/utils/api'
+import {get_reply_fundation, get_acc_info} from '@/utils/api'
 import Like from '../dialog/Like';
 import ToFundation from '../dialog/ToFundation';
 
@@ -89,6 +90,7 @@ export default {
   },
   data() {
     return {
+      errorCoinImg: 'this.src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/pig.png"',
       pageSize: 10,
       page: 1,
       lists: [],
@@ -145,7 +147,7 @@ export default {
       const lists = result.data || [];
       this.subLen = result.total;
       lists.forEach(v => {
-         this.$set(v, 'headImg', getRandomImg())
+        this.$set(v, 'headImg', getCoin(v.account, v.symbol))
         const t = toLocalTime(v.create_time).replace(/-/g, '/');
         const times = Date.parse(t) + 3600 * 8 * 1000;
         this.$set(v, 'dealTime', toLocalTime(times))
@@ -153,6 +155,24 @@ export default {
         this.$set(v, 'likeNum', likeNum.toFixed(0))
       });
       this.lists = lists;
+      this.handleGetAccInfo();
+    },
+    handleGetAccInfo() {
+      this.lists.forEach((v, index) => {
+        if (v.isGetInfo) {
+          return
+        }
+        this.$set(v, 'isGetInfo', true)
+        // console.log(v)
+        setTimeout(async () => {
+          const {status, result} = await get_acc_info(v.fromx)
+          if (!status || !result.owner) {
+            return
+          }
+          this.$set(v, 'accInfo', result)
+        }, index * 300);
+      })
+      console.log(this.lists)
     },
     // 点击展开更多时调用
     async handleGetMore() {
@@ -167,9 +187,12 @@ export default {
       }
       const lists = result.data || [];
       lists.forEach(v => {
+        this.$set(v, 'headImg', getCoin(v.account, v.symbol))
         const t = toLocalTime(v.create_time).replace(/-/g, '/');
         const times = Date.parse(t) + 3600 * 8 * 1000;
         this.$set(v, 'dealTime', toLocalTime(times))
+        const likeNum = v.like_count * 1000;
+        this.$set(v, 'likeNum', likeNum.toFixed(0))
       });
       // 调用API获取前10条
       if (this.page === 1) { // 第一页时 - 直接覆盖之前数据
@@ -178,6 +201,7 @@ export default {
         this.lists.push(...lists)
       }
       this.page = this.page + 1;
+      this.handleGetAccInfo();
     },
     // 收起弹窗
     handleCloseMore() {

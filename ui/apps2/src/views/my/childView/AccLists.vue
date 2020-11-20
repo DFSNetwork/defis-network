@@ -127,18 +127,31 @@ export default {
         if (!newVal.length || !this.fansLists.length) {
           return
         }
-        this.fansLists.forEach(v => {
-          const has = newVal.find(vv => vv.owner === v.owner)
-          if (has) {
-            this.$set(v, 'isFollow', true)
-          }
-        })
+        this.handleDealFollowArr()
+      },
+      deep: true,
+      immediate: true
+    },
+    fansLists: {
+      handler: function af (newVal) {
+        if (!newVal.length || !this.allFollow.length) {
+          return
+        }
+        this.handleDealFollowArr()
       },
       deep: true,
       immediate: true
     }
   },
   methods: {
+    handleDealFollowArr() {
+      this.fansLists.forEach(v => {
+        const has = this.allFollow.find(vv => vv.owner === v.owner)
+        if (has) {
+          this.$set(v, 'isFollow', true)
+        }
+      })
+    },
     handleTo(item) {
       this.$router.push({
         name: 'otherInfo',

@@ -52,12 +52,13 @@
       >
         <div class="listOld flexs" v-for="(item, index) in pageLists" :key="index">
           <div class="headImg" @click="handleTo(item)">
-            <img width="100%" :src="item.headImg" :onerror="errorCoinImg">
+            <img width="100%" :src="item.accInfo ? item.accInfo.avatar || item.headImg : item.headImg"
+              :onerror="errorCoinImg">
           </div>
           <div class="mainContent">
             <div class="flexb">
               <div class="name"  @click="handleTo(item)">
-                <div>{{ (item.fromx) }}</div>
+                <div>{{ (item.accInfo ? item.accInfo.nick : item.fromx) }}</div>
                 <div class="price flexa tip">
                   <span class="">{{ $t('fundation.transNum') }}：</span>
                   <span class="flexc qua dinReg">{{ item.quantity }}({{ item.account }})</span>
@@ -114,6 +115,8 @@ import { mapState } from 'vuex';
 
 import moment from 'moment';
 import {toBrowser, getDateDiff} from '@/utils/public'
+
+import {get_acc_info} from '@/utils/api';
 import ReplyLists from './ReplyLists';
 import ToFundation from '../dialog/ToFundation';
 import Like from '../dialog/Like';
@@ -206,6 +209,7 @@ export default {
     pageLists: {
       handler: function pls() {
         this.loadingMore = false;
+        this.handleGetAccInfo()
       }
     },
     myFilter(newVal) {
@@ -216,6 +220,22 @@ export default {
     },
   },
   methods: {
+    handleGetAccInfo() {
+      this.pageLists.forEach((v, index) => {
+        if (v.isGetInfo) {
+          return
+        }
+        this.$set(v, 'isGetInfo', true)
+        // console.log(v)
+        setTimeout(async () => {
+          const {status, result} = await get_acc_info(v.fromx)
+          if (!status || !result.owner) {
+            return
+          }
+          this.$set(v, 'accInfo', result)
+        }, index * 300);
+      })
+    },
     handleTo(item) {
       this.$router.push({
         name: 'otherInfo',

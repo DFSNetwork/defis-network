@@ -70,6 +70,7 @@
 </template>
 
 <script>
+import Bus from '@/utils/bus';
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 
@@ -168,6 +169,7 @@ export default {
         return;
       }
       this.accInfo = result;
+      Bus.$emit('busForAccInfo', this.accInfo);
     },
     // 查询 他的粉丝 关注数
     async handleGetInfo() {
