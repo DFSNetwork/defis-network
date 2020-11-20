@@ -180,6 +180,17 @@ export default {
         this.handleDealAccReward(this.accVoteData)
       })
     },
+    // 获取矿池价格
+    handleGetPoolPrice(contract, sym) {
+      if (contract === 'eosio.token') {
+        return 1
+      }
+      const market = this.filterMkLists.find(v => (v.contract1 === contract && v.symbol1 === sym))
+      if (!market) {
+        return 0
+      }
+      return parseFloat(market.reserve0) / parseFloat(market.reserve1)
+    },
     // 计算用户收益
     handleDealAccReward(accVoteData) {
       const keys = Object.keys(this.poolsData)
@@ -218,6 +229,7 @@ export default {
       this.runTimer = setInterval(() => {
         const keys = Object.keys(this.poolsData)
         keys.forEach(v => {
+          // console.log(this.poolsData[v])
           const accReward = this.poolsData[v].accReward || 0;
           const showReward = this.poolsData[v].showReward || accReward;
           let tReward = this.poolsData[v].tReward || showReward;
@@ -394,6 +406,7 @@ export default {
       if (!this.accLpData.token || !this.lpLists[0].lpBal || !this.lpRankWeight) {
         return
       }
+      const price = parseFloat(this.lpLists[0].reserve0) / parseFloat(this.lpLists[0].reserve1)
       const rate = this.accLpData.token / this.lpLists[0].liquidity_token;
       const lpBal = this.lpLists[0].lpBal;
       const weight = this.lpRankWeight;
@@ -403,6 +416,7 @@ export default {
       let t = (nowT - lastT) / 1000 ;
       const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
       this.$set(this.accLpData, 'accLpReward', reward.toFixed(8))
+      this.$set(this.accLpData, 'price', price)
 
       // 定时器
       clearTimeout(this.lpTimer)
@@ -424,7 +438,9 @@ export default {
         if (tReward > accLpReward) {
           tReward = accLpReward
         }
+        const aboutEos = showReward * this.accLpData.price;
         // console.log(tReward, accLpReward, t)
+        this.$set(this.accLpData, 'aboutEos', Number(aboutEos).toFixed(4))
         this.$set(this.accLpData, 'showReward', Number(tReward).toFixed(8))
         this.$set(this.accLpData, 'tReward', Number(tReward))
         this.$set(this.accLpData, 't', t)
