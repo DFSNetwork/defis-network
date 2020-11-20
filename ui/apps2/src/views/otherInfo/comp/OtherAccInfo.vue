@@ -12,8 +12,12 @@
             <img v-if="accInfo.sex == 0" class="sex" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/sex0.png" alt="">
             <img v-if="accInfo.sex == 1" class="sex" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/sex1.png" alt="">
           </div>
-          <img class="set" @click="$router.push({name: 'setInfo'})"
-            src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/set.png" alt="">
+          <div class="followDiv">
+            <span class="fans flexc" v-if="!isFollow">关注</span>
+            <span class="follow flexc" v-else>已关注</span>
+          </div>
+          <!-- <img class="set" @click="$router.push({name: 'setInfo'})"
+            src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/set.png" alt=""> -->
         </div>
         <div class="account flexa">
           <span
@@ -26,17 +30,17 @@
             v-clipboard:error="onError"
             src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/copy.png" alt="">
         </div>
-        <div class="intro">{{ accInfo.desc || '暂时没有简介' }}</div>
       </div>
     </div>
+    <div class="intro flexa">{{ accInfo.desc || '暂时没有简介' }}</div>
     <!-- 粉丝 & 资料编辑 -->
     <div class="flexb infoData">
       <div class="flexb numDiv">
-        <div @click="$router.push({name: 'fans'})">
+        <div @click="handleTo('otherFans')">
           <div class="num dinBold">{{ accFansInfo.fans || 0 }}</div>
           <div>粉丝</div>
         </div>
-        <div @click="$router.push({name: 'follow'})">
+        <div @click="handleTo('otherFollow')">
           <div class="num dinBold">{{ accFansInfo.follow || 0 }}</div>
           <div>关注</div>
         </div>
@@ -54,30 +58,40 @@
 <script>
 import { mapState } from 'vuex';
 
-import {get_acc_flow_info} from '@/utils/api';
+import {get_acc_flow_info, get_acc_info, get_acc_lists} from '@/utils/api';
 
 export default {
-  name: 'accInfo',
+  name: 'otherAccInfo',
   data() {
     return {
       id: '',
       accFansInfo: {},
+      accInfo: {
+        avatar: "https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png",
+        cover: "https://cdn.jsdelivr.net/gh/defis-net/material/accBanner/banner0.png",
+        desc: "",
+        nick: "",
+        sex: 2,
+      },
+      isFollow: false, // 是否关注
     }
   },
   mounted() {
+    this.id = this.$route.params.id;
+    this.handleGetInfo()
+    this.handleGetAccInfo()
   },
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
-      accInfo: state => state.app.accInfo,
+      // accInfo: state => state.app.accInfo,
     }),
   },
   watch: {
     scatter: {
       handler: function sc (newVal) {
         if (newVal.identity) {
-          this.id = newVal.identity.accounts[0].name;
-          this.handleGetInfo()
+          this.handleGetFollowStatus()
         }
       },
       deep: true,
@@ -85,12 +99,43 @@ export default {
     }
   },
   methods: {
+    handleTo(name) {
+      this.$router.push({
+        name,
+        params: {
+          id: this.id
+        }
+      })
+    },
     onCopy() {
       this.$message.success(this.$t('public.copySuccess'));
     },
     onError() {
       this.$message.error(this.$t('public.copyFail'));
     },
+    // 查询我是否关注
+    async handleGetFollowStatus() {
+      const formName = this.scatter.identity.accounts[0].name;
+      const {status, result} = await get_acc_lists(formName, 'followers', this.id);
+      if (!status) {
+        return;
+      }
+      const rows = result.rows || [];
+      const has = rows.find(v => v.owner === this.id)
+      this.isFollow = !!has;
+    },
+    // 查询他人账户信息
+    async handleGetAccInfo() {
+      const {status, result} = await get_acc_info(this.id)
+      if (!status) {
+        return;
+      }
+      if (!result.owner) {
+        return;
+      }
+      this.accInfo = result;
+    },
+    // 查询 他的粉丝 关注数
     async handleGetInfo() {
       const {status, result} = await get_acc_flow_info(this.id)
       if (!status) {
@@ -116,7 +161,7 @@ export default {
   }
   .info{
     position: relative;
-    padding: 46px 28px 0;
+    padding: 30px 28px 0;
     color: #FFF;
     text-align: left;
     .headDiv{
@@ -150,10 +195,41 @@ export default {
         margin-left: 10px;
       }
     }
+
+    .follow{
+      font-size: 28px;
+      color: #FFF;
+      border: 1px solid #CBCBCB;
+      width: 140px;
+      height: 56px;
+      border-radius: 30px;
+    }
+    .fans{
+      font-size: 28px;
+      width: 140px;
+      height: 56px;
+      border-radius: 30px;
+      color: #29D4B0;
+      background: #FFF;
+      border: 1px solid #29D4B0;
+    }
+  }
+  .intro{
+    height: 64px;
+    line-height: 32px;
+    text-align: left;
+    position: relative;
+    color: #FFF;
+    margin: 12px 28px;
+    overflow: hidden;
+    text-overflow:ellipsis; //溢出用省略号显示
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
   }
 }
 .infoData{
-  margin-top: 30px;
+  margin-top: 20px;
   position: relative;
   z-index: 1;
   color: #FFF;

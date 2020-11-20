@@ -206,6 +206,7 @@ export async function get_farmers_lists() {
 // 获取账户信息
 export function get_acc_info(user) {
   return new Promise((resolve, reject) => {
+    const scatter = store.state.app.scatter;
     const params = {
       "code":"dfscommunity",
       "scope":"dfscommunity",
@@ -221,7 +222,9 @@ export function get_acc_info(user) {
         result = {}
       } else {
         result = Object.assign(res.data.rows[0], {});
-        store.dispatch('setAccInfo', result);
+        if (scatter && scatter.identity && scatter.identity.accounts[0].name === user) {
+          store.dispatch('setAccInfo', result);
+        }
       }
       resolve({ status: res.status === 200, result });
     }, err => {
@@ -229,3 +232,60 @@ export function get_acc_info(user) {
     })
   })
 }
+// 获取账户访客
+// 获取账户关注列表
+// ## 关注列表
+// cleos -u https://eos.blockeden.cn get table 
+// dfscommunity dfsdeveloper followers
+export function get_acc_lists(user, type, nextKey) {
+  return new Promise((resolve, reject) => {
+    const params = {
+      "code": "dfscommunity",
+      "scope": ` ${user}`,
+      "table": type,
+      "json": true,
+      "limit": 100,
+    }
+    if (nextKey) {
+      params.lower_bound = nextKey;
+    }
+    const host = getHost()
+    axios.post(`${host}/v1/chain/get_table_rows`, JSON.stringify(params)).then((res) => {
+      let result = Object.assign(res.data, {});
+      // console.log(result)
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+// 获取用户关注数量
+export function get_acc_flow_info(user) {
+  return new Promise((resolve, reject) => {
+    const params = {
+      "code": "dfscommunity",
+      "scope": "dfscommunity",
+      "table": "relations",
+      "json": true,
+      "lower_bound": ` ${user}`,
+      "upper_bound": ` ${user}`
+    }
+    const host = getHost()
+    axios.post(`${host}/v1/chain/get_table_rows`, JSON.stringify(params)).then((res) => {
+      let result = {};
+      if (!res.data.rows.length) {
+        result = {}
+      } else {
+        result = Object.assign(res.data.rows[0], {});
+      }
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+// setTimeout(() => {
+//   get_acc_lists('dfsdeveloper', 'followers')
+//   get_acc_lists('djsja24djdjs', 'fans')
+//   get_acc_flow_info('djsja24djdjs')
+// }, 2000);

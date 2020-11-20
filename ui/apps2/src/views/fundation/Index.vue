@@ -38,7 +38,7 @@ import FundationLists from './comp/FundationLists'
 import ToFundation from './dialog/ToFundation';
 
 // api
-import { getCoin, getRandomImg, toLocalTime } from '@/utils/public'
+import { getCoin, toLocalTime } from '@/utils/public'
 import { get_summary, get_new_fundation,
   get_mvd_fundation, get_hot_fundation } from '@/utils/api';
 
@@ -158,9 +158,11 @@ export default {
         result = res.result;
         this.totalNum = result.total;
       } else if (this.typeAct === 1) {
+        params.limit = 100;
         const res = await get_hot_fundation(params)
         status = res.status;
         result = res.result;
+        // console.log(result)
       } else if (this.typeAct === 2) {
         const res = await get_mvd_fundation(params)
         status = res.status;
@@ -179,7 +181,7 @@ export default {
       }
       const list = result.data || [];
       list.forEach(v => {
-        this.$set(v, 'headImg', getRandomImg())
+        this.$set(v, 'headImg', getCoin(v.account, v.symbol))
         const replyNum = (v.reply_count || 0)
         this.$set(v, 'replyNum', replyNum)
         const t = toLocalTime(v.create_time).replace(/-/g, '/');
@@ -188,6 +190,13 @@ export default {
         const likeNum = v.like_count * 1000;
         this.$set(v, 'likeNum', likeNum.toFixed(0))
       })
+      if (this.typeAct === 1) {
+        list.sort((a,b) => {
+          const aNum = parseInt(a.replyNum || 0) + parseInt(a.likeNum)
+          const bNum = parseInt(b.replyNum || 0) + parseInt(b.likeNum)
+          return bNum - aNum;
+        })
+      }
       if (this.page === 1) {
         this.hisLists = list;
       } else {

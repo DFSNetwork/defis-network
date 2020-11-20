@@ -51,12 +51,12 @@
         @load="handleCurrentChange"
       >
         <div class="listOld flexs" v-for="(item, index) in pageLists" :key="index">
-          <div class="headImg">
-            <img width="100%" :src="item.headImg">
+          <div class="headImg" @click="handleTo(item)">
+            <img width="100%" :src="item.headImg" :onerror="errorCoinImg">
           </div>
           <div class="mainContent">
             <div class="flexb">
-              <div class="name">
+              <div class="name"  @click="handleTo(item)">
                 <div>{{ (item.fromx) }}</div>
                 <div class="price flexa tip">
                   <span class="">{{ $t('fundation.transNum') }}：</span>
@@ -145,6 +145,8 @@ export default {
   },
   data() {
     return {
+      errorCoinImg: 'this.src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/pig.png"',
+      
       loadingMore: false,
       toTx: true,
       myFilter: '',
@@ -214,6 +216,14 @@ export default {
     },
   },
   methods: {
+    handleTo(item) {
+      this.$router.push({
+        name: 'otherInfo',
+        params: {
+          id: item.fromx
+        }
+      })
+    },
     // 切换类型
     handleChangeAct(index) {
       this.typeAct = index;
