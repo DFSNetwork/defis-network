@@ -1,6 +1,7 @@
 export default {
   'zh-CN': {
     fundation: {
+      tab: '乐捐',
       title: 'DFS 乐捐系统',
       subTitle: '既以为人，己愈有。既以与人，己愈多。',
       nav: '乐捐系统',
@@ -42,6 +43,7 @@ export default {
   },
   'en': {
     fundation: {
+      tab: 'Discover',
       title: 'DFS Fundation',
       subTitle: 'Have Fun Donating to our fundation',
       nav: 'Fundation',

@@ -5,22 +5,30 @@
       <div class="bar" :class="{'act': $route.name === 'index' || $route.name === 'market'}"
         @click="handleTo('index')">
         <span class="myCoin flexc">
-          <img v-if="$route.name !== 'index' && $route.name !== 'market'" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/swap_un.svg">
-          <img v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/swap_select.svg">
+          <img v-if="$route.name !== 'index' && $route.name !== 'market'" src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/swap-un.png">
+          <img v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/swap.png">
         </span>
         <div>{{ $t('tabbar.swap') }}</div>
       </div>
       <div class="bar" @click="handleToPro('pddex')">
         <span class="myCoin flexc">
-          <img src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/pddex_un.svg">
+          <img src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/pddex-un1.png">
         </span>
         <div>{{ $t('tabbar.order') }}</div>
       </div>
+      <div class="bar" :class="{'act': $route.name === 'fundation'}"
+        @click="handleTo('fundation')">
+        <span class="myCoin flexc">
+          <img class="myCoinImg" v-if="$route.name !== 'fundation'" src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/fundation-un1.png">
+          <img class="myCoinImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/fundation-un1.png">
+        </span>
+        <div>{{ $t('fundation.tab') }}</div>
+      </div>
       <div class="bar" :class="{'act': $route.name === 'myCenter'}"
         @click="handleTo('myCenter')">
-        <span class="myCoin">
-          <img class="myCoinImg" v-if="$route.name !== 'myCenter'" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/my.png">
-          <img class="myCoinImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/my-checked.png">
+        <span class="myCoin flexc">
+          <img class="myCoinImg" v-if="$route.name !== 'myCenter'" src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/my-un.png">
+          <img class="myCoinImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/my.png">
         </span>
         <div>{{ $t('tab.my') }}</div>
       </div>
@@ -86,6 +94,8 @@ export default {
     padding: 5px 0;
     border-top: 1px solid #eee;
     height: 100px;
+    color: #999;
+    font-weight: 500;
     &>div{
       flex: 1;
       text-align: center;
@@ -93,10 +103,10 @@ export default {
         display: block;
         // margin: auto;
         margin-bottom: 3px;
-        height: 45px;
+        height: 64px;
       }
       .sptImg{
-        width: 50px;
+        width: 64px;
       }
       &.act{
         color: #61c8bc;
@@ -104,10 +114,10 @@ export default {
       .myCoin{
         height: 64px;
         margin-bottom: 0px;
-        .myCoinImg{
-          margin: auto;
-          height: 64px;
-        }
+        // .myCoinImg{
+        //   margin: auto;
+        //   height: 64px;
+        // }
       }
     }
   }

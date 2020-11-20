@@ -32,7 +32,7 @@
         </div>
       </div>
     </div>
-    <div class="intro flexa">{{ accInfo.desc || '暂时没有简介' }}</div>
+    <div class="intro flexa" @click="showInfo = true">{{ accInfo.desc || '暂时没有简介' }}</div>
     <!-- 粉丝 & 资料编辑 -->
     <div class="flexb infoData">
       <div class="flexb numDiv">
@@ -59,6 +59,13 @@
       <CancelFollow v-if="showCancel" :checkItem="{owner: id}"
         @listenClose="handleClose"/>
     </el-dialog>
+
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible.sync="showInfo">
+      <DetailInfo :info="accInfo.desc || '暂时没有简介'"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -69,11 +76,13 @@ import { EosModel } from '@/utils/eos';
 import {get_acc_flow_info, get_acc_info, get_acc_lists,
   get_acc_visit, acc_visit_other} from '@/utils/api';
 import CancelFollow from '@/views/my/dialog/CancelFollow';
+import DetailInfo from '@/components/DetailInfo'
 
 export default {
   name: 'otherAccInfo',
   components: {
-    CancelFollow
+    CancelFollow,
+    DetailInfo,
   },
   data() {
     return {
@@ -89,6 +98,7 @@ export default {
       isFollow: false, // 是否关注
       visitor_count: 0,
       showCancel: false,
+      showInfo: false,
     }
   },
   mounted() {

@@ -26,7 +26,7 @@
             v-clipboard:error="onError"
             src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/copy.png" alt="">
         </div>
-        <div class="intro">{{ accInfo.desc || '暂时没有简介' }}</div>
+        <div class="intro" @click="showInfo = true">{{ accInfo.desc || '暂时没有简介' }}</div>
       </div>
     </div>
     <!-- 粉丝 & 资料编辑 -->
@@ -47,6 +47,14 @@
       </div>
       <!-- 编辑资料 -->
       <!-- <div class="setBtn flexc">编辑资料</div> -->
+
+      <el-dialog
+        class="mydialog"
+        :show-close="false"
+        :append-to-body="true"
+        :visible.sync="showInfo">
+        <DetailInfo :info="accInfo.desc || '暂时没有简介'"/>
+      </el-dialog>
     </div>
   </div>
 </template>
@@ -55,14 +63,19 @@
 import { mapState } from 'vuex';
 
 import {get_acc_flow_info, get_acc_visit} from '@/utils/api';
+import DetailInfo from '@/components/DetailInfo'
 
 export default {
   name: 'accInfo',
+  components: {
+    DetailInfo
+  },
   data() {
     return {
       id: '',
       accFansInfo: {},
       visitor_count: 0,
+      showInfo: false,
     }
   },
   mounted() {
