@@ -112,7 +112,7 @@ export default {
         name: '嫩脆麦芽',
         id: 4,
       }]],
-      reg: '/^(http|https):\/\//',
+      reg: '/^(http|https):///',
       error: false,
       url: '',
     }
