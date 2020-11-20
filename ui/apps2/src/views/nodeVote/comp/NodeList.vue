@@ -10,9 +10,13 @@
       <!-- <div class="noData tip" v-if="!lists.length">{{ $t('public.noData') }}</div> -->
       <div class="list flexa" v-for="(item, index) in lists" :key="index"
         @click="handleCheckedNode(item)">
+        <div class="rankDiv dinBold flexc" v-if="act !== 3">
+          <img v-if="index < 3" :src="`https://cdn.jsdelivr.net/gh/defis-net/material/rank/voteRank${index+1}.png`" alt="">
+          <span v-else>{{index + 1}}</span>
+        </div>
         <div class="main">
           <div class="flexa">
-            <span class="rank flexc">{{ item.rank }}</span>
+            <!-- <span class="rank flexc">{{ item.rank }}</span> -->
             <img class="logo" :src="item.owner !== 'bp.dfs' ? item.logo : voteDefaultImg" :onerror="errorCoinImg">
             <span class="nodeName">{{ item.owner }}</span>
           </div>
@@ -24,17 +28,21 @@
               <span>{{ parseInt(item.num_votes) | numeralFormat }} EOS</span>
             </div>
             <div class="flexa dinReg">
-              <img class="voteIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/earth.png" alt="">
-              <a class="tip websize" :href="item.url" target="_blank" rel="noopener noreferrer">
-                {{ handleDealUrl(item.url) }}
-              </a>
+              <span class="tip">PB Rank:</span>
+              <span>{{ item.rank }}</span>
             </div>
           </div>
           <div class="tip data flexb">
             <div class="flexa">
               <img class="voteIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/vote.png" alt="">
-              <span class="dinReg">{{ item.dfsVote || '0' }}</span>
+              <span class="dinReg">{{ item.dfsVote || '0' }} DFS</span>
               <span class="green" @click.stop="handleToDetail(item)">{{ $t('public.detail') }}></span>
+            </div>
+            <div class="flexa dinReg">
+              <img class="voteIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/earth.png" alt="">
+              <a class="tip websize" :href="item.url" target="_blank" rel="noopener noreferrer">
+                {{ handleDealUrl(item.url) }}
+              </a>
             </div>
           </div>
         </div>
@@ -251,6 +259,16 @@ export default {
     border-top: 1px solid rgba(220,220,220,.3);
     &:last-child{
       border-bottom: 0px solid #EEE;
+    }
+    .rankDiv{
+      width: 64px;
+      height: 64px;
+      font-size: 28px;
+      color: #999;
+      margin-right: 12px;
+      img{
+        width: 64px;
+      }
     }
     .main{
       flex: 1;
