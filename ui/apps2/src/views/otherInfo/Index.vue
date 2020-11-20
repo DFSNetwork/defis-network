@@ -8,6 +8,7 @@
 <script>
 import OtherAccInfo from './comp/OtherAccInfo';
 import Dynamic from './comp/Dynamic';
+// import {acc_visit_other} from '@/utils/api'
 export default {
   name: 'otherInfo',
   components: {
@@ -21,12 +22,8 @@ export default {
   },
   mounted() {
     this.id = this.$route.params.id;
-    this.handleGetOtherInfo();
   },
   methods: {
-    handleGetOtherInfo() {
-      
-    }
   }
 }
 </script>

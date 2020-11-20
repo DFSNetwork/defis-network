@@ -58,9 +58,10 @@ export default {
           return
         }
         this.$message({
-          message: '领取成功，即将执行REX操作',
+          message: this.$t('public.success'),
           type: 'success'
         });
+        this.$emit('listenClose', true)
       })
     }
   }

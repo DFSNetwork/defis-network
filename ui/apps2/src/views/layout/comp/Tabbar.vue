@@ -22,7 +22,7 @@
           <img class="myCoinImg" v-if="$route.name !== 'myCenter'" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/my.png">
           <img class="myCoinImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/my-checked.png">
         </span>
-        <div>我的</div>
+        <div>{{ $t('tab.my') }}</div>
       </div>
     </div>
   </div>

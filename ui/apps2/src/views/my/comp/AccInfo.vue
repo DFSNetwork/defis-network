@@ -41,7 +41,7 @@
           <div>关注</div>
         </div>
         <div>
-          <div class="num dinBold">0</div>
+          <div class="num dinBold">{{ visitor_count }}</div>
           <div>访客</div>
         </div>
       </div>
@@ -54,7 +54,7 @@
 <script>
 import { mapState } from 'vuex';
 
-import {get_acc_flow_info} from '@/utils/api';
+import {get_acc_flow_info, get_acc_visit} from '@/utils/api';
 
 export default {
   name: 'accInfo',
@@ -62,6 +62,7 @@ export default {
     return {
       id: '',
       accFansInfo: {},
+      visitor_count: 0,
     }
   },
   mounted() {
@@ -78,6 +79,7 @@ export default {
         if (newVal.identity) {
           this.id = newVal.identity.accounts[0].name;
           this.handleGetInfo()
+          this.handleGetVisitNum()
         }
       },
       deep: true,
@@ -97,6 +99,15 @@ export default {
         return;
       }
       this.accFansInfo = result;
+    },
+    // 访客数量
+    async handleGetVisitNum() {
+      const user = this.id;
+      const {status, result} = await get_acc_visit(user);
+      if (!status) {
+        return
+      }
+      this.visitor_count = result.visitor_count || 0;
     }
   }
 }

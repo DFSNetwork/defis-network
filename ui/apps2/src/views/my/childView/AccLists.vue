@@ -238,7 +238,7 @@ export default {
     async handleGetLists(user, table) {
       this.handleSetType(table, true)
       const {status, result} = await get_acc_lists(user, table);
-      console.log(user, result)
+      // console.log(user, result)
       if (!status) {
         this.handleSetType(table, false)
         return

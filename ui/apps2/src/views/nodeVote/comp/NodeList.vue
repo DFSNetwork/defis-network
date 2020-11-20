@@ -192,6 +192,14 @@ export default {
         return b.dfsVote - a.dfsVote
       })
       this.myVoteList = list
+      // console.log(this.myVoteList)
+      this.myVoteList.find(v => {
+        if (v.isChecked) {
+          return
+        }
+        const item = this.nodeLists.find(vv => v.owner === vv.owner)
+        this.$set(item, 'isChecked', true)
+      })
       // this.act === 3 ? this.lists = this.myVoteList : '';
     },
     handleDealLists() {

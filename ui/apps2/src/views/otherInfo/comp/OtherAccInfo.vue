@@ -13,8 +13,8 @@
             <img v-if="accInfo.sex == 1" class="sex" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/sex1.png" alt="">
           </div>
           <div class="followDiv">
-            <span class="fans flexc" v-if="!isFollow">关注</span>
-            <span class="follow flexc" v-else>已关注</span>
+            <span class="fans flexc" v-if="!isFollow" @click="handleFollow">关注</span>
+            <span class="follow flexc" v-else @click="showCancel = true">已关注</span>
           </div>
           <!-- <img class="set" @click="$router.push({name: 'setInfo'})"
             src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/set.png" alt=""> -->
@@ -45,23 +45,36 @@
           <div>关注</div>
         </div>
         <div>
-          <div class="num dinBold">0</div>
+          <div class="num dinBold">{{visitor_count}}</div>
           <div>访客</div>
         </div>
       </div>
       <!-- 编辑资料 -->
       <!-- <div class="setBtn flexc">编辑资料</div> -->
     </div>
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible.sync="showCancel">
+      <CancelFollow v-if="showCancel" :checkItem="{owner: id}"
+        @listenClose="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
 
-import {get_acc_flow_info, get_acc_info, get_acc_lists} from '@/utils/api';
+import {get_acc_flow_info, get_acc_info, get_acc_lists,
+  get_acc_visit, acc_visit_other} from '@/utils/api';
+import CancelFollow from '@/views/my/dialog/CancelFollow';
 
 export default {
   name: 'otherAccInfo',
+  components: {
+    CancelFollow
+  },
   data() {
     return {
       id: '',
@@ -74,17 +87,19 @@ export default {
         sex: 2,
       },
       isFollow: false, // 是否关注
+      visitor_count: 0,
+      showCancel: false,
     }
   },
   mounted() {
     this.id = this.$route.params.id;
     this.handleGetInfo()
     this.handleGetAccInfo()
+    this.handleGetVisitNum()
   },
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
-      // accInfo: state => state.app.accInfo,
     }),
   },
   watch: {
@@ -92,6 +107,7 @@ export default {
       handler: function sc (newVal) {
         if (newVal.identity) {
           this.handleGetFollowStatus()
+          this.handleAccVisit()
         }
       },
       deep: true,
@@ -99,6 +115,12 @@ export default {
     }
   },
   methods: {
+    handleClose(type) {
+      this.showCancel = false;
+      if (type) {
+        this.isFollow = false;
+      }
+    },
     handleTo(name) {
       this.$router.push({
         name,
@@ -142,7 +164,58 @@ export default {
         return;
       }
       this.accFansInfo = result;
-    }
+    },
+    // 访客数量
+    async handleGetVisitNum() {
+      const user = this.id;
+      const {status, result} = await get_acc_visit(user);
+      if (!status) {
+        return
+      }
+      this.visitor_count = result.visitor_count || 0;
+    },
+    // 静默接口
+    async handleAccVisit() {
+      if (!this.scatter || !this.scatter.identity || !this.id) {
+        return
+      }
+      const user = this.id;
+      const formName = this.scatter.identity.accounts[0].name;
+      await acc_visit_other(formName, user);
+    },
+    handleFollow() {
+      const formName = this.scatter.identity.accounts[0].name;
+      const permission = this.scatter.identity.accounts[0].authority;
+      
+      const params = {
+        actions: [{
+          account: 'dfscommunity',
+          name: 'follow',
+          authorization: [{
+            actor: formName,
+            permission,
+          }],
+          data: {
+            user: formName,
+            who: this.id
+          },
+        }]
+      }
+      EosModel.toTransaction(params, (res) => {
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.isFollow = true
+        this.$message({
+          message: '关注成功',
+          type: 'success'
+        });
+      })
+    },
   }
 }
 </script>
@@ -211,7 +284,6 @@ export default {
       border-radius: 30px;
       color: #29D4B0;
       background: #FFF;
-      border: 1px solid #29D4B0;
     }
   }
   .intro{

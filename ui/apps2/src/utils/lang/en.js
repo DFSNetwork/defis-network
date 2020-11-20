@@ -80,6 +80,7 @@ export default {
     yfc: 'YFC',
     poolVote: 'Pool Vote',
     nodeVote: 'Node Vote',
+    my: 'Me',
   },
   bank: {
     stake: 'Stake',

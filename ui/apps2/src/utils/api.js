@@ -284,8 +284,41 @@ export function get_acc_flow_info(user) {
     })
   })
 }
+
+// 获取访客记录
+export function get_acc_visit(user) {
+  return new Promise((resolve, reject) => {
+    const params = {
+      user,
+    }
+    axios.get('https://api.defis.network/social/summary', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+// 用户访问他人主页
+export function acc_visit_other(visitor, user) {
+  return new Promise((resolve, reject) => {
+    const params = {
+      user,
+      visitor,
+    }
+    axios.get('https://api.defis.network/social/visit', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+
 // setTimeout(() => {
-//   get_acc_lists('dfsdeveloper', 'followers')
-//   get_acc_lists('djsja24djdjs', 'fans')
-//   get_acc_flow_info('djsja24djdjs')
+//   // get_acc_lists('dfsdeveloper', 'followers')
+//   // get_acc_lists('djsja24djdjs', 'fans')
+//   // get_acc_flow_info('djsja24djdjs')
+//   acc_visit_other('iq3rwbsfcqlv', 'djsja24djdjs')
+//   get_acc_visit('iq3rwbsfcqlv')
 // }, 2000);
