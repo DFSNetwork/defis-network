@@ -161,6 +161,18 @@ export default {
         margin-left: 10px;
       }
     }
+    .intro{
+      height: 64px;
+      line-height: 32px;
+      text-align: left;
+      position: relative;
+      color: #FFF;
+      overflow: hidden;
+      text-overflow:ellipsis; //溢出用省略号显示
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
+    }
   }
 }
 .infoData{

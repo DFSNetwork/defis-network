@@ -1,13 +1,12 @@
 <template>
   <div class="imgcheck">
-    <!-- <img class="close" @click="handleClose(false)" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt=""> -->
     <div class="title">
       <span v-if="showType === 'bg'">选择背景</span>
       <span v-else>选择头像</span>
     </div>
     <div v-if="showType === 'bg'">
       <div class="flexb" v-for="(page, i) in bg" :key="`page${i}`">
-        <div class="item" v-for="(item, index) in page" :key="index" @click="checked = item.id">
+        <div class="item" v-for="(item, index) in page" :key="index" @click="handleCheck(item.id)">
           <img class="checkedImg" v-if="checked === item.id" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/checked.png" alt="">
           <img class="bgImg" :src="item.img">
           <div>{{ item.name }}</div>
@@ -17,7 +16,7 @@
     <div v-else>
       <div class="flexb" v-for="(page, i) in head" :key="`page${i}`">
         <div class="item" v-for="(item, index) in page" :key="index">
-          <div :class="`imgDiv flexc ${item.bgClass}`" @click="checked = item.id">
+          <div :class="`imgDiv flexc ${item.bgClass}`" @click="handleCheck(item.id)">
             <img class="checkedImg" v-if="checked === item.id" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/checked.png" alt="">
             <div class="bgFFF flexc">
               <img :src="item.img">
@@ -27,6 +26,14 @@
         </div>
       </div>
     </div>
+    <div class="self flexa" @click="handleCheck(999)">
+      <span class="flexc checkDiv">
+        <img class="checkedImg" v-if="checked === 999" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/checked.png" alt="">
+      </span>
+      <span>自定义：</span>
+      <input class="ipt" v-model="url" @blur="handleReg" placeholder="https://..." />
+    </div>
+    <div class="error" v-if="error && checked === 999">请输入正确图片地址</div>
     <div class="btn flexc" @click="handleSure">确定</div>
   </div>
 </template>
@@ -104,15 +111,39 @@ export default {
         bgClass: '',
         name: '嫩脆麦芽',
         id: 4,
-      }]]
+      }]],
+      reg: '/^(http|https):\/\//',
+      error: false,
+      url: '',
     }
   },
   methods: {
     handleClose(type) {
       this.$emit('listenClose', type)
     },
+    handleCheck(id) {
+      this.checked = id;
+    },
+    handleReg() {
+      if (!this.url) {
+        this.error = false;
+        return
+      }
+      const index = this.url.search(/(http|https):\/\//)
+      if (index === -1) {
+        this.error = true;
+      } else {
+        this.error = false;
+      }
+    },
     handleSure() {
       if (this.checked === -1) {
+        return
+      }
+      if (this.checked === 999) {
+        if (this.url && !this.error) {
+          this.$emit('listenSure', this.url)
+        }
         return
       }
       const tLists = this.showType === 'bg' ? this.bg : this.head;
@@ -197,6 +228,34 @@ export default {
       margin-right: 0;
     }
   }
+}
+.self{
+  .ipt{
+    flex: 1;
+    font-size: 28px;
+    height: 60px;
+    outline: none;
+    border: 1px solid rgba(220, 220, 220, .5);
+    border-radius: 8px;
+    padding: 0 18px;
+  }
+  .checkDiv{
+    border: 1px solid rgba(220, 220, 220, .4);
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    margin-right: 10px;
+  }
+  .checkedImg{
+    width: 44px;
+  }
+}
+.error{
+  color: #e9574f;
+  font-size: 24px;
+  text-align: left;
+  padding-left: 180px;
+  margin-top: 5px;
 }
 .btn{
   margin-top: 50px;
