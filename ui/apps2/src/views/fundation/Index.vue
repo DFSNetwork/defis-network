@@ -99,7 +99,7 @@ export default {
       this.$forceUpdate()
       this.filter = filter;
       this.page = 1;
-      document.documentElement.scrollTop = 9999;
+      document.documentElement.scrollTop = 0;
       this.handleGetFundation()
     },
     handleFilterMin(min) {
@@ -108,7 +108,7 @@ export default {
       this.$forceUpdate()
       this.min = min;
       this.page = 1;
-      document.documentElement.scrollTop = 9999;
+      document.documentElement.scrollTop = 0;
       this.handleGetFundation()
     },
     handleClose() {
