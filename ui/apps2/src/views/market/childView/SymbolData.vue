@@ -159,7 +159,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accSub, accAdd, accMul, accDiv,
@@ -242,7 +241,6 @@ export default {
         if (newVal.identity) {
           this.handleGetMinersLists('user')
           this.handleGetMarketDataByChain()
-          // this.handleGetMarketData()
           this.handleGetAccToken()
         }
       },
@@ -472,33 +470,6 @@ export default {
           this.handleGetNowMarket()
         }, 200);
       }
-    },
-    handleGetMarketData() {
-      const params = {
-        user: this.scatter.identity.accounts[0].name,
-        mid: this.$route.params.mid,
-      }
-      axios.get('https://dfsinfoapi.sgxiang.com/dapi/changelogdata', {params}).then((result) => {
-        const res = result.data;
-        this.marketData = [];
-        this.sTime = '0'
-        if (!result.data.logs.length) {
-          return
-        }
-        const newArr = []
-        for (const key in res) {
-          if (key !== 'logs' && key !== 'tag_log_format_block_time' && key !== 'tag_log_utc_block_time') {
-            if (key !== 'EOS') {
-              newArr.push(toFixed(res[key], this.thisMarket.decimal1 || 4))
-            } else {
-              newArr.unshift(toFixed(res[key], this.thisMarket.decimal0 || 4))
-            }
-          }
-        }
-        this.sTime = res.tag_log_utc_block_time;
-        this.handleGetTime();
-        this.marketData = newArr;
-      })
     },
     handleGetMarketDataByChain() {
       const params = {
