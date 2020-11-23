@@ -11,7 +11,7 @@
       </span>
     </div>
     <!-- 代理账户信息 -->
-    <ProxyAcc :voteWeight="voteWeight" :getLoading="getLoading"/>
+    <ProxyAcc :voteWeight="voteWeight" />
     <!-- 用户票数统计数据 -->
     <AccInfo />
     <!-- tab数据 -->
@@ -38,7 +38,7 @@
     <!-- 悬浮按钮 -->
     <div class="nullDiv"></div>
     <div class="voteAction flexb">
-      <span>{{ $t('vote.checked') }} {{ checkedLeng }}/10</span>
+      <span>{{ $t('vote.checked') }} {{ checkedLeng }}/15</span>
       <span>
         <span v-if="checkedLeng" class="tip" @click="handleCancel">{{ $t('vote.cancelChecked') }}</span>
         <span class="voteBtn" v-loading="voteLoading" @click="handleTovote">{{ $t('vote.toVote') }}</span>
@@ -89,6 +89,8 @@ export default {
   mounted() {
     this.handleGetNodeLists()
     this.handleGetVoteList();
+    // 计算权重值
+    this.handleGetWeight()
   },
   computed: {
     ...mapState({
@@ -174,8 +176,6 @@ export default {
       this.nodeLists = rows;
       this.handleDealData()
       // console.log(result)
-      // 计算权重值
-      this.handleGetWeight()
     },
     // 获取DFS 投票列表
     async handleGetVoteList() {

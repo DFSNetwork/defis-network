@@ -4,7 +4,11 @@ import AnchorLinkBrowserTransport from 'anchor-link-browser-transport'
 
 class AnchorClass {
   constructor() {
-    const transport = new AnchorLinkBrowserTransport()
+    this.transport = null
+    this.link = null
+  }
+  init() {
+    this.transport = new AnchorLinkBrowserTransport()
     this.link = new AnchorLink({transport})
   }
   async login() {

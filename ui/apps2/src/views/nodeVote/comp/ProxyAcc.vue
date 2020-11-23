@@ -36,7 +36,7 @@ export default {
     },
     getLoading: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
   data() {

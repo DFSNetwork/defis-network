@@ -237,7 +237,7 @@ export default {
       const checkedArr = this.nodeLists.filter(v => v.isChecked)
       const index = this.nodeLists.findIndex(v => v.owner === item.owner);
       const isChecked = this.nodeLists[index].isChecked || false;
-      if (checkedArr.length >= 10 && !isChecked) {
+      if (checkedArr.length >= 15 && !isChecked) {
         return
       }
       this.$set(this.nodeLists[index], 'isChecked', !isChecked)
