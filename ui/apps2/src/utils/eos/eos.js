@@ -39,7 +39,7 @@ class model {
     this.toAccountSwap = store.state.sys.baseConfig.toAccountSwap;
     this.actor = this.env === 'production' ? '111.3' : '11111111aaaa'; // 1111
 
-    this.wallet = localStorage.getItem('WALLET').toLowerCase()
+    this.wallet = (localStorage.getItem('WALLET') || 'scatter').toLowerCase()
   }
   getToAccount() { // 使用前重新获取最新账户
     this.toAccountJin = store.state.sys.baseConfig.toAccountJin;
@@ -53,7 +53,7 @@ class model {
 
   scatterInit(vthis, callback) {
     const self = this;
-    this.wallet = localStorage.getItem('WALLET').toLowerCase()
+    this.wallet = (localStorage.getItem('WALLET') || 'scatter').toLowerCase()
     self.vthis = vthis;
     if (this.wallet === 'anchor') {
       Anchor.init(callback)
