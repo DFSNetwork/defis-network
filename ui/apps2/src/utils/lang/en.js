@@ -79,7 +79,7 @@ export default {
     hyk: 'Subscribe',
     yfc: 'YFC',
     poolVote: 'Pool Vote',
-    nodeVote: 'Node Vote',
+    nodeVote: 'BP Vote',
     my: 'Me',
   },
   bank: {
