@@ -11,7 +11,7 @@
       </span>
     </div>
     <!-- 代理账户信息 -->
-    <ProxyAcc :voteWeight="voteWeight" />
+    <ProxyAcc :voteWeight="voteWeight"/>
     <!-- 用户票数统计数据 -->
     <AccInfo />
     <!-- tab数据 -->
