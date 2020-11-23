@@ -1,5 +1,5 @@
 
-import io from 'socket.io-client';
+// import io from 'socket.io-client';
 import {toLocalTime} from '@/utils/public'
 import {get_kline_data} from '@/utils/api'
 class WsIo {
@@ -9,13 +9,14 @@ class WsIo {
   }
   init(cb) {
     // console.log(cb)
-    const self = this;
-    self.socket = io('https://api.defis.network');
-    self.socket.on('connect', function () {
-      console.log('ws connect')
-      self.connect = true;
-      cb ? cb() : null;
-    })
+    // const self = this;
+    // self.socket = io('https://api.defis.network');
+    // self.socket.on('connect', function () {
+    //   console.log('ws connect')
+    //   self.connect = true;
+    //   cb ? cb() : null;
+    // })
+    cb ? cb() : null;
     // console.log(self.connect)
   }
   /**
