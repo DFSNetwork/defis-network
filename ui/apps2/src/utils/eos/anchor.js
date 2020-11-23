@@ -7,13 +7,24 @@ class AnchorClass {
     this.transport = null
     this.link = null
   }
-  init() {
+  init(cb) {
     this.transport = new AnchorLinkBrowserTransport()
-    this.link = new AnchorLink({transport})
+    this.link = new AnchorLink({transport: this.transport})
+    cb()
   }
-  async login() {
+  async login(cb) {
     const identity = await this.link.login('apps.defis.network')
     console.log(identity)
+    const newId = {
+      identity: {
+        accounts: [{
+          authority: identity.account.permissions[0].perm_name,
+          blockchain: "eos",
+          name: identity.account.account_name
+        }]
+      }
+    }
+    cb(newId)
   }
 }
 

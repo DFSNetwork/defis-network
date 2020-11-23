@@ -172,6 +172,12 @@ class model {
   */
   async getIdentity(chain, callback) {
     const self = this;
+    if (this.wallet === 'anchor') {
+      Anchor.login((item) => {
+        this.conserveAccount(item, callback);
+      })
+      return
+    }
     this.chainName = chain.toLowerCase();
     await this.chainNodeInit(this.chainName);
     const requiredFields = { accounts:[this.network] };
