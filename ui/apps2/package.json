@@ -9,6 +9,8 @@
   },
   "dependencies": {
     "amfe-flexible": "^2.2.1",
+    "anchor-link": "^2.1.4",
+    "anchor-link-browser-transport": "^2.1.2",
     "axios": "^0.19.0",
     "core-js": "^3.6.4",
     "decimal.js": "^10.0.1",

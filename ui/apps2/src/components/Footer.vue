@@ -106,6 +106,7 @@ export default {
     async handleGetDfsInfoData() {
       const result = await axios.get("https://dfsinfoapi.sgxiang.com/dapi/dfsdata");
       if (result.status !== 200) {
+        console.log(23)
         return;
       }
       this.dfsInfoData = result.data;

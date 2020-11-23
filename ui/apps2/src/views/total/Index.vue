@@ -291,22 +291,6 @@ export default {
     handleTopLoading() {
       this.topLoading = false;
     },
-    handleSetAllRes() {
-      const allResult = [];
-      const feesDataKeys = Object.keys(this.feesData)
-      const coinArr = this.handleDealSymArr(this.marketLists);
-      feesDataKeys.forEach((key) => {
-        const isShowToken = coinArr.find(v => v.symbol === key);
-        const value = this.feesData[key];
-        const sym1Liq = isShowToken.reserve.split(' ')[0];
-        const poolsApr = value / (sym1Liq - value) * 365 * 100;
-        allResult.push({
-          symbol: isShowToken.symbol,
-          poolsApr: `${poolsApr.toFixed(3)}%`
-        });
-      })
-      this.$store.dispatch('setFeesApr', allResult);
-    },
     handleToMarket(mid) {
       this.$router.push({
         name: 'market',

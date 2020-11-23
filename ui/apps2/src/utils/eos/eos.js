@@ -5,6 +5,9 @@ import store from '@/store';
 import scatterJS from 'scatterjs-core';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 
+// Anchor sdk
+import {Anchor} from './anchor';
+
 scatterJS.plugins( new ScatterEOS() );
 
 /*
@@ -47,6 +50,12 @@ class model {
   }
 
   scatterInit(vthis, callback) {
+    const wallet = localStorage.getItem('WALLET').toLowerCase()
+    if (wallet === 'anchor') {
+      Anchor.login()
+      return
+    }
+    
     const self = this;
     self.vthis = vthis;
     this.scatapp = store.state.app.scatter || {};
@@ -279,89 +288,28 @@ class model {
     if (!this.scatterEosJs) {
       await this.chainNodeInit(this.chainName);
     }
-    // 免费CPU
-    if (obj.useFreeCpu && this.chainName === 'eos') {
-      this.freeCpuTransaction(params, callback);
-      return;
-    }
     this.scatterEosJs.transaction(params).then(callback).catch((e) => {
       this.errorCall(e, callback);
     });
   }
 
-/*
-* 获取 getTableRows
-*/
-async getTableRows(obj, callback) {
-  // const formName = this.accountReset();
-  const params = obj;
-  // 配置
-  if (!this.EosJsUse) {
-    await this.chainNodeInit('eos')
-  }
-  this.EosJsUse.getTableRows(params).then((rammarket) => {
-    callback(rammarket)
-  })
-  .catch((e) => {
-    console.log(e);
-    // this.errorCall(e, callback);
-  });
-}
-
-  // 免CPU合约执行
-  freeCpuTransaction(params, callback) {
-    if (params.actions.length === 0) {
-      params.actions[0].authorization.unshift({ actor: this.actor, permission: 'active' });
-    } else {
-      params.actions.forEach((item) => {
-        item.authorization.unshift({
-          actor: this.actor,
-          permission: 'active',
-        })
-      })
+  /*
+  * 获取 getTableRows
+  */
+  async getTableRows(obj, callback) {
+    // const formName = this.accountReset();
+    const params = obj;
+    // 配置
+    if (!this.EosJsUse) {
+      await this.chainNodeInit('eos')
     }
-    this.scatterEosJs.transaction(params, {
-      broadcast: !1, // 是否广播
-      sign: !0,
-    }).then((res) => {
-      if (res.processed || res.transaction_id) {
-        const p = res;
-        const l = p.transaction.transaction;
-        l.signatures = p.transaction.signatures;
-        l.context_free_data = [];
-        const signed = JSON.stringify(l);
-        // callback(signed)
-        this.handleFreeCpuSend(signed, callback);
-        return;
-      }
-      this.handleScatterErrorBack(res);
-    }).catch((e) => {
-      this.errorCall(e, callback);
+    this.EosJsUse.getTableRows(params).then((rammarket) => {
+      callback(rammarket)
+    })
+    .catch((e) => {
+      console.log(e);
+      // this.errorCall(e, callback);
     });
-  }
-
-  // 服务端广播免费CPU
-  handleFreeCpuSend(signed, callback) {
-    try {
-      const host = location.origin;
-      let url = `${host}/cpu/pushTxWithoutCPU`;
-      if (this.env !== 'production') {
-        url = `http://${process.env.VUE_APP_BASEURL}:${process.env.VUE_APP_PORT2}/cpu/pushTxWithoutCPU`;
-      }
-      axios.post(url, { signed }, {
-        headers: {
-          accept: 'application/json, text/plain, */*',
-        },
-      }).then((res) => {
-        if (res.data.code === 200) {
-          callback({processed: true, transaction_id: true});
-          return;
-        }
-        callback(res.data);
-      });
-    } catch (err) {
-      this.$message.error(JSON.stringify(err));
-    }
   }
 
   /*
@@ -401,39 +349,6 @@ async getTableRows(obj, callback) {
     if (!identity) return item.name;
     this.accountByScatter = identity.accounts[0];
     return this.accountByScatter.name;
-  }
-
-  // 挖矿
-  async stake(obj, callback) {
-    this.getToAccount()
-    const formName = this.accountReset();
-    const permission = this.accountByScatter.authority;
-    const params = {
-      actions: [
-        {
-          account: this.toAccountJin,
-          name: 'stake',
-          authorization: [{
-            actor: formName, // 转账者
-            permission,
-          }],
-          data: {
-            debtid: obj.id,
-          }
-        }
-      ]
-    }
-    if (!this.scatterEosJs) {
-      await this.chainNodeInit(this.chainName);
-    }
-    // 免费CPU
-    if (obj.useFreeCpu && this.chainName === 'eos') {
-      this.freeCpuTransaction(params, callback);
-      return;
-    }
-    this.scatterEosJs.transaction(params).then(callback).catch((e) => {
-      this.errorCall(e, callback);
-    });
   }
 
   // REX 操作
@@ -520,12 +435,6 @@ async getTableRows(obj, callback) {
     const params = obj;
     if (!this.scatterEosJs) {
       await this.chainNodeInit(this.chainName);
-    }
-    // 免费CPU
-    if (obj.useFreeCpu && this.chainName === 'eos') {
-      delete params.useFreeCpu;
-      this.freeCpuTransaction(params, callback);
-      return;
     }
     this.scatterEosJs.transaction(params).then(callback).catch((e) => {
       this.errorCall(e, callback);
@@ -663,69 +572,6 @@ async getTableRows(obj, callback) {
       }
       callback(back);
     }
-  }
-
-  //  catch 错误回调
-  errorCallOld(e, callback) {
-    console.log(e)
-    const self = this;
-    const scatapp = store.state.app.scatter;
-    let back = {
-      code: 100001,
-      error: {
-        code: 100001
-      },
-      message: 'Unknown anomaly',
-    };
-    if (typeof (e) === 'object') {
-      back = {
-        code: '402',
-        error: {
-          code: '402',
-        },
-        message: e.message || 'Privileges have been lost. Please log in again.',
-      }
-      if (e.code === 402) {
-        back.message = e.message;
-      }
-      if (e.code === 'Scatter') {
-        // ${this.vthis.$t('error.error3040005')}
-        back.code = '100002'
-        back.message = this.vthis.$t('public.scatterDesktop');
-      }
-      if (e.Error && typeof (e.Error) === 'string' && e.Error.indexOf('No Identity') >= 0) {
-        back.message = 'Privileges have been lost. Please log in again.';
-        self.accountLoginOut(() => {
-          self.getIdentity(self.chainName, () => {});
-        });
-      }
-      if (scatapp && scatapp.identity && !scatterConnected) {
-        self.initNext();
-      }
-      if (e.name === "AssertionError") {
-        back.code = '500';
-        back.message = e.message;
-      }
-    }
-    if (typeof (e) === 'string') {
-      if (e.indexOf('code') >= 0) {
-        back = JSON.parse(e);
-      } else {
-        back = {
-          code: '0002',
-          error: {
-            code: '0002',
-          },
-          message: 'Failed to get the balance',
-        }
-      }
-    }
-    // self.vthis.$message.error(`${back.message} ${back.code}`);
-    back = {
-      code: 9999,
-      message: JSON.stringify(e)
-    }
-    callback(back);
   }
 }
 
