@@ -53,9 +53,12 @@ class model {
 
   scatterInit(vthis, callback) {
     const self = this;
+    this.wallet = localStorage.getItem('WALLET').toLowerCase()
     self.vthis = vthis;
     if (this.wallet === 'anchor') {
       Anchor.init(callback)
+      this.scatter = Anchor;
+      this.scatterEosJs = Anchor;
       return
     }
     
@@ -173,7 +176,7 @@ class model {
   async getIdentity(chain, callback) {
     const self = this;
     if (this.wallet === 'anchor') {
-      Anchor.login((item) => {
+      Anchor.getIdentity((item) => {
         this.conserveAccount(item, callback);
       })
       return

@@ -12,9 +12,9 @@ class AnchorClass {
     this.link = new AnchorLink({transport: this.transport})
     cb()
   }
-  async login(cb) {
+  async getIdentity(cb) {
     const identity = await this.link.login('apps.defis.network')
-    console.log(identity)
+    // console.log(identity)
     const newId = {
       identity: {
         accounts: [{
@@ -25,6 +25,16 @@ class AnchorClass {
       }
     }
     cb(newId)
+  }
+  transaction(params) {
+    return new Promise((resolve, reject) => {
+      this.link.transact(params).then((res) => {
+        // console.log(`Transaction broadcast! Transaction id: ${ res.processed.id }`)
+        resolve(res);
+      }, err => {
+        reject(err)
+      })
+    })
   }
 }
 

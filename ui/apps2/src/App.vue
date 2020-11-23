@@ -129,7 +129,7 @@ export default {
         this.handleRegInviAcc(inviAcc)
       }
       // set wallet
-      const wallet = urlParams.wallet || 'scatter';
+      const wallet = urlParams.wallet || localStorage.getItem('WALLET') || 'scatter';
       localStorage.setItem('WALLET', wallet)
       // set Language
       const lang = urlParams.lang;
