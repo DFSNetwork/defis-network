@@ -50,6 +50,51 @@
         :finished-text="$t('public.noMore')"
         @load="handleCurrentChange"
       >
+        <template v-if="typeAct === 0">
+          <div class="listOld flexs" v-for="(item, index) in top3Arr" :key="`top-${index}`">
+            <div class="headImg" @click="handleTo(item)">
+              <img width="100%" :src="item.accInfo ? item.accInfo.avatar || item.headImg : item.headImg"
+                :onerror="errorCoinImg">
+            </div>
+            <div class="mainContent">
+              <div class="flexb">
+                <div class="name"  @click="handleTo(item)">
+                  <div class="flexa">
+                    <span>{{ (item.accInfo ? item.accInfo.nick : item.fromx) }}</span>
+                    <img class="hotImg" width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/hot.png" alt="">
+                  </div>
+                  <div class="price flexa tip">
+                    <span class="">{{ $t('fundation.transNum') }}：</span>
+                    <span class="flexc qua dinReg">{{ item.quantity }}({{ item.account }})</span>
+                  </div>
+                </div>
+                <div class="flexa tip likeDiv" @click="handleShowLike(item)">
+                  <span>{{ item.likeNum || 0 }}</span>
+                  <img v-if="item.like_status === 0" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
+                  <img v-else width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt="">
+                </div>
+              </div>
+              <div @click="handleReply(item)">
+                <div class="price flexs">
+                  <span class="hideText">{{ item.memo }}</span>
+                </div>
+                <div class="tip time flexa">
+                  <span>{{ handleToLocalTime(item.dealTime) }}</span>
+                  <span class="reply">{{ $t('fundation.reply') }}</span>
+                </div>
+              </div>
+              <div class="showReply flexa" v-if="!item.showReply && item.replyNum"
+                @click="handleShowItemReply(item)">
+                <span>{{ $t('fundation.openSubReply', {len: item.replyNum}) }}</span>
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/showMore.png" alt="">
+              </div>
+              <div class="replyLists" v-else-if="item.showReply">
+                <ReplyLists :listsLen="item.replyNum" :reply="item"
+                  @listenCloseSubLists="handleCloseItemReply"/>
+              </div>
+            </div>
+          </div>
+        </template>
         <div class="listOld flexs" v-for="(item, index) in pageLists" :key="index">
           <div class="headImg" @click="handleTo(item)">
             <img width="100%" :src="item.accInfo ? item.accInfo.avatar || item.headImg : item.headImg"
@@ -114,9 +159,9 @@
 import { mapState } from 'vuex';
 
 import moment from 'moment';
-import {toBrowser, getDateDiff} from '@/utils/public'
+import {toBrowser, getDateDiff, getCoin, toLocalTime} from '@/utils/public'
 
-import {get_acc_info} from '@/utils/api';
+import {get_acc_info, get_top3_fundation} from '@/utils/api';
 import ReplyLists from './ReplyLists';
 import ToFundation from '../dialog/ToFundation';
 import Like from '../dialog/Like';
@@ -177,6 +222,7 @@ export default {
       showToLike: false,
       reply: {},
       typeAct: 0,
+      top3Arr: [],
     }
   },
   computed: {
@@ -218,8 +264,43 @@ export default {
     minFilter(newVal) {
       this.$emit('listenFilterMin', newVal)
     },
+    typeAct: {
+      handler: function tA() {
+        this.handleGetTop3()
+      },
+      deep: true,
+      immediate: true
+    },
   },
   methods: {
+    async handleGetTop3 () {
+      if (this.typeAct) {
+        return
+      }
+      const params = {};
+      if (this.scatter && this.scatter.identity) {
+        params.user = this.scatter.identity.accounts[0].name;
+      }
+      const {status, result} = await get_top3_fundation();
+      if (!status) {
+        return
+      }
+      const list = result.data || [];
+      list.forEach(v => {
+        this.$set(v, 'headImg', getCoin(v.account, v.symbol))
+        const replyNum = (v.reply_count || 0)
+        this.$set(v, 'replyNum', replyNum)
+        const t = toLocalTime(v.create_time).replace(/-/g, '/');
+        const times = Date.parse(t) + 3600 * 8 * 1000;
+        this.$set(v, 'dealTime', toLocalTime(times))
+        const likeNum = v.like_count * 1000;
+        this.$set(v, 'likeNum', likeNum.toFixed(0))
+      })
+      list.sort((a,b) => {
+        return b.eosvalue - a.eosvalue;
+      })
+      this.top3Arr = list;
+    },
     handleGetAccInfo() {
       this.pageLists.forEach((v, index) => {
         if (v.isGetInfo) {
@@ -417,6 +498,10 @@ export default {
       font-weight: 500;
       &>span{
         text-align: left;
+      }
+      .hotImg{
+        width: 34px;
+        margin-left: 10px;
       }
     }
     .likeDiv{
