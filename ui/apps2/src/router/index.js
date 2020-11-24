@@ -208,6 +208,19 @@ const constantRouter = [
       },
     ]
   },
+  {
+    path: '/financial',
+    component: Layout,
+    redirect: '/',
+    children: [
+      {
+        path: '/',
+        name: 'financial',
+        component: () => import(/* webpackChunkName: "financial" */ '@/views/financial/Index'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, },
+      }
+    ],
+  },
 ]
 
 export default new Router({
