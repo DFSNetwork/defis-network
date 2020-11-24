@@ -81,10 +81,6 @@ export default {
         if (!isShowToken) {
           return
         }
-        if(item.mid === 602) {
-          console.log(item)
-          console.log(isShowToken)
-        }
         const value = item.total * 0.002;
         const sym1Liq = isShowToken.reserve.split(' ')[0];
         const poolsApr = value / (sym1Liq - value) * 365 * 100;
