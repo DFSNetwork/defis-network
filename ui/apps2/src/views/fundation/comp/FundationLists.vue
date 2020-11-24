@@ -300,9 +300,26 @@ export default {
         return b.eosvalue - a.eosvalue;
       })
       this.top3Arr = list;
+      this.handleGetTopAccInfo()
     },
     handleGetAccInfo() {
       this.pageLists.forEach((v, index) => {
+        if (v.isGetInfo) {
+          return
+        }
+        this.$set(v, 'isGetInfo', true)
+        // console.log(v)
+        setTimeout(async () => {
+          const {status, result} = await get_acc_info(v.fromx)
+          if (!status || !result.owner) {
+            return
+          }
+          this.$set(v, 'accInfo', result)
+        }, index * 300);
+      })
+    },
+    handleGetTopAccInfo() {
+      this.top3Arr.forEach((v, index) => {
         if (v.isGetInfo) {
           return
         }
