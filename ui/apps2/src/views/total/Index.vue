@@ -271,11 +271,15 @@ export default {
           feesApr.count = count.toFixed(2);
 
           // 计算24H兑换量
-          if (this.dfsData.tradingVolumeData) {
-            const key = `mid-${market.mid}`;
-            const countData = this.dfsData.tradingVolumeData[key];
-            if (countData) {
-              let countEos = (countData.amountIn.EOS || 0) + (countData.amountOut.EOS || 0);
+          // console.log(this.dfsData)
+          if (this.dfsData.trading_volume_in && this.dfsData.trading_volume_out) {
+            // const key = `mid-${market.mid}`;
+            // const countData = this.dfsData.tradingVolumeData[key];
+            const inNum = this.dfsData.trading_volume_in.find(v => v.mid === market.mid && v.sym === 'EOS')
+            const outNum = this.dfsData.trading_volume_out.find(v => v.mid === market.mid && v.sym === 'EOS')
+            // console.log(inNum.total, outNum.total)
+            if (inNum || outNum) {
+              let countEos = (inNum.total || 0) + (outNum.total || 0);
               // let shortCountEos = countEos > 1000 ? `${(countEos / 1000).toFixed(2)}K` : countEos.toFixed(4);
               feesApr.countEos = countEos.toFixed(4);
               feesApr.allCount = countEos.toFixed(4);

@@ -60,7 +60,7 @@
               <div class="flexb">
                 <div class="name"  @click="handleTo(item)">
                   <div class="flexa">
-                    <span>{{ (item.accInfo ? item.accInfo.nick : item.fromx) }}</span>
+                    <span>{{ (item.accInfo ? item.accInfo.nick || item.fromx : item.fromx) }}</span>
                     <img class="hotImg" width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/hot.png" alt="">
                   </div>
                   <div class="price flexa tip">
@@ -103,7 +103,7 @@
           <div class="mainContent">
             <div class="flexb">
               <div class="name"  @click="handleTo(item)">
-                <div>{{ (item.accInfo ? item.accInfo.nick : item.fromx) }}</div>
+                <div>{{ (item.accInfo ? item.accInfo.nick || item.fromx : item.fromx) }}</div>
                 <div class="price flexa tip">
                   <span class="">{{ $t('fundation.transNum') }}：</span>
                   <span class="flexc qua dinReg">{{ item.quantity }}({{ item.account }})</span>
@@ -317,6 +317,7 @@ export default {
           this.$set(v, 'accInfo', result)
         }, index * 300);
       })
+      // console.log(this.pageLists)
     },
     handleGetTopAccInfo() {
       this.top3Arr.forEach((v, index) => {

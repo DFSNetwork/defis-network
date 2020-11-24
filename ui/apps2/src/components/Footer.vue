@@ -70,16 +70,18 @@ export default {
   },
   methods: {
     handleSetAllRes() {
-      const feesData = this.dfsInfoData.feesData || {};
       const allResult = [];
-      const feesDataKeys = Object.keys(feesData)
+      const feesDataKeys = this.dfsInfoData.trading_volume_in || [];
       const coinArr = dealSymArr(this.marketLists);
-      feesDataKeys.forEach((key) => {
-        const isShowToken = coinArr.find(v => v.symbol === key);
+      feesDataKeys.forEach((item) => {
+        if (item.sym === 'EOS') {
+          return
+        }
+        const isShowToken = coinArr.find(v => v.mid === item.mid);
         if (!isShowToken) {
           return
         }
-        const value = feesData[key];
+        const value = item.total * 0.002;
         const sym1Liq = isShowToken.reserve.split(' ')[0];
         const poolsApr = value / (sym1Liq - value) * 365 * 100;
         allResult.push({
@@ -104,9 +106,8 @@ export default {
     },
     // 获取总发行量
     async handleGetDfsInfoData() {
-      const result = await axios.get("https://dfsinfoapi.sgxiang.com/dapi/dfsdata");
+      const result = await axios.get("https://api.defis.network/basic/swap/summary");
       if (result.status !== 200) {
-        console.log(23)
         return;
       }
       this.dfsInfoData = result.data;
