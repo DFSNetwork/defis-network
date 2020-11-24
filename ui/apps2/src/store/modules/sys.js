@@ -66,9 +66,9 @@ const sys = {
       node: {
         area: 'production',
         protocol: 'https',
-        host: 'api.eosflare.io', // eospush.tokenpocket.pro
+        host: 'eos.blockeden.cn', // eospush.tokenpocket.pro
         port: '443',
-        url: 'https://api.eosflare.io', // https://eospush.tokenpocket.pro
+        url: 'https://eos.blockeden.cn', // https://eospush.tokenpocket.pro https://eos.greymass.com
         chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
       },
       toAccountSwap: 'defisswapcnt', // 主交易 swap 合约

@@ -29,17 +29,17 @@ export default {
         {
           area: 'production',
           protocol: 'https',
-          host: 'api.eosflare.io', // eospush.tokenpocket.pro
+          host: 'eos.blockeden.cn', // eospush.tokenpocket.pro
           port: '443',
-          url: 'https://api.eosflare.io', // https://eospush.tokenpocket.pro
+          url: 'https://eos.blockeden.cn', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
           area: 'production',
           protocol: 'https',
-          host: 'eos.blockeden.cn', // eospush.tokenpocket.pro
+          host: 'api.eosflare.io', // eospush.tokenpocket.pro
           port: '443',
-          url: 'https://eos.blockeden.cn', // https://eospush.tokenpocket.pro
+          url: 'https://api.eosflare.io', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
