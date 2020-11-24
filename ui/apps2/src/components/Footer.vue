@@ -77,9 +77,13 @@ export default {
         if (item.sym === 'EOS') {
           return
         }
-        const isShowToken = coinArr.find(v => v.mid === item.mid);
+        const isShowToken = coinArr.find(v => v.mid === item.mid && v.symbol !== 'EOS');
         if (!isShowToken) {
           return
+        }
+        if(item.mid === 602) {
+          console.log(item)
+          console.log(isShowToken)
         }
         const value = item.total * 0.002;
         const sym1Liq = isShowToken.reserve.split(' ')[0];
