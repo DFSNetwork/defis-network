@@ -2,21 +2,38 @@
   <div class="history">
     <div class="lists">
       <div class="noData tip" v-if="!pageLists.length">{{ $t('public.noData') }}</div>
-      <div class="listOld" v-for="(item, index) in pageLists" :key="index" @click="handleToBrowser(item.trx_id)">
-        <div class="flexb name">
-          <!-- <span class="flexc num"> -->
-            <span>{{ (item.fromx) }}</span>
-            <span class="flexc"><img class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/exchange.svg" alt=""></span>
-            <span>{{ (item.tox) }}</span>
-          <!-- </span> -->
+      <div v-for="(item, index) in pageLists" :key="index" @click="handleToBrowser(item.trx_id)">
+        <div class="listOld" v-if="item.transType === -1">
+          <div class="flexb name">
+              <span>{{ (item.fromx) }}</span>
+              <span class="flexc"><img class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/exchange.svg" alt=""></span>
+              <span>{{ (item.tox) }}</span>
+          </div>
+          <div class="price flexb">
+            <span class="tip">转账数量</span>
+            <span class="flexc qua">{{ item.quantity }}</span>
+          </div>
+          <div class="price flexb tip">
+            <span>转账时间</span>
+            <span>{{ handleToLocalTime(item.create_time) }}</span>
+          </div>
         </div>
-        <div class="price flexb">
-          <span class="tip">转账数量</span>
-          <span class="flexc qua">{{ item.quantity }}</span>
-        </div>
-        <div class="price flexb tip">
-          <span>转账时间</span>
-          <span>{{ handleToLocalTime(item.create_time) }}</span>
+        <div class="listOld flexb" v-else>
+          <div class="liTitle">
+            <div class="fromx">{{ (item.fromx) }}</div>
+            <div class="tip mt10">转账数量</div>
+            <div class="tip mt10">转账时间</div>
+          </div>
+          <div class="transType flexc" :class="{'deposit': item.transType === 2, 'sell': item.transType === 0}">
+            <span v-if="item.transType === 1">买入</span>
+            <span v-else-if="item.transType === 0">卖出</span>
+            <span v-else>做市</span>
+          </div>
+          <div class="content dinReg">
+            <div class="smallTo tip">{{ (item.tox) }}</div>
+            <div class="qua mt10">{{ item.quantity }}</div>
+            <div class="mt10 tip">{{ handleToLocalTime(item.create_time) }}</div>
+          </div>
         </div>
       </div>
     </div>
@@ -76,6 +93,9 @@ export default {
 <style lang="scss" scoped>
 .history{
   font-size: 27px;
+  color: #333;
+  text-align: left;
+  line-height: 40px;
   .title{
     font-size: 32px;
     text-align: left;
@@ -111,6 +131,9 @@ export default {
   }
 
   .lists{
+    .mt10{
+      margin-top: 10px;
+    }
     .exchange{
       margin: 0 8px;
       width: 30px;
@@ -123,17 +146,16 @@ export default {
       color: #444;
     }
     .listOld{
-      // margin: 40px;
+      margin: 30px 0 0;
       padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0px 8px 40px 0px rgba(220,220,220,0.5);
+      border-radius: 12px;
+      border: 1px solid #EAEAEA;
       &>div{
         margin-top: 10px;
         &:first-child{
           margin-top: 0;
         }
       }
-
       .name{
         &>span{
           text-align: left;
@@ -152,6 +174,35 @@ export default {
       .qua{
         font-size: 30px;
         font-weight: 500;
+      }
+      .liTitle{
+        flex: 1;
+        .fromx{
+          font-size: 30px;
+          font-weight: 500;
+        }
+      }
+      .content{
+        flex: 1;
+        text-align: right;
+        font-size: 24px;
+      }
+      .transType{
+        width: 68px;
+        height: 68px;
+        font-size: 22px;
+        border: 3px solid #29D4B0;
+        border-radius: 40px;
+        color: #29D4B0;
+        font-weight: 500;
+        &.sell{
+          border: 3px solid #FF2800;
+          color: #FF2800;
+        }
+        &.deposit{
+          border: 3px solid #FFD200;
+          color: #FFD200;
+        }
       }
     }
   }

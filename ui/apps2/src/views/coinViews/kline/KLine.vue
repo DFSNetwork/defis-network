@@ -158,8 +158,8 @@ export default {
         // Tv.createdDataBtn('5分钟', this.interval === '5', '5');
         // Tv.createdDataBtn('15分钟', this.interval === '15', '15');
         // Tv.createdDataBtn('30分钟', this.interval === '30', '30');
-        Tv.createdDataBtn('1小时', this.interval === '60', '60');
-        Tv.createdDataBtn('4小时', this.interval === '240', '240');
+        // Tv.createdDataBtn('1小时', this.interval === '60', '60');
+        // Tv.createdDataBtn('4小时', this.interval === '240', '240');
         Tv.createdDataBtn('1天', this.interval === '1D', '1D');
         Tv.createdDataBtn('1周', this.interval === '1W', '1W');
         Tv.createdDataBtn('1月', this.interval === '1M', '1M');

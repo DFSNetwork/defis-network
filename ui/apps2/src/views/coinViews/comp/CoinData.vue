@@ -287,7 +287,7 @@ export default {
       }
       this.timer = setTimeout(() => {
         this.handleGetList()
-      }, 5000);
+      }, 50000);
       const params = {
         token: this.checkedMarket.symbol1.toLowerCase(),
         page: this.page,
@@ -305,7 +305,38 @@ export default {
         this.holders = res.holders;
         this.trx_24h = res.trx_24h;
         this.volume_24h = res.volume_24h;
+        const data = res.data || [];
+        data.forEach(v => {
+          let transType = -1; // 0 - 卖出 ｜ 1 - 买入 ｜ 2 - 做市
+          if (v.tox === 'defisswapcnt' && v.memo === 'deposit') {
+            transType = 2;
+          } else if (v.tox === 'defisswapcnt' && v.memo.indexOf('swap') === 0) {
+            transType = 0;
+          } else if (v.formx === 'defisswapcnt' && v.memo === 'swap success') {
+            transType = 1
+          }
+          this.$set(v, 'transType', transType)
+        });
       })
+      // this.changeLoading = false;
+      // this.listLoading = false;
+      // this.pageLists = [{
+      //   account: "minedfstoken",
+      //   account_action_seq: 16570598,
+      //   amount: 124.2286,
+      //   block_num: 154249872,
+      //   create_time: "2020-11-24T18:44:24.000Z",
+      //   fromx: "pzalendfsdss",
+      //   global_action_seq: 280831996682,
+      //   id: 29408668,
+      //   memo: "",
+      //   namex: "transfer",
+      //   quantity: "124.2286 DFS",
+      //   symbol: "DFS",
+      //   tox: "dfsdsrsystem",
+      //   transType: 1,
+      //   trx_id: "50657d12d3d97b21f831daa51fa8a1d54b5da4f741b4b1ea7253832fe88143c3",
+      // }]
     },
     // this.supply = res.supply;
     async handleGetSupply() {

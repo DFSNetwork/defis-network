@@ -56,7 +56,7 @@ export default {
     clearInterval(this.timer);
     this.timer = setInterval(() => {
       this.handleGetDfsInfoData();
-    }, 1000 * 10);
+    }, 1000 * 30);
     this.handleGetDfsInfoData();
   },
   watch: {
