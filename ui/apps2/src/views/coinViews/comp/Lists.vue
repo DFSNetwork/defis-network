@@ -11,7 +11,7 @@
           </div>
           <div class="price flexb">
             <span class="tip">转账数量</span>
-            <span class="flexc qua">{{ item.quantity }}</span>
+            <span class="flexc qua dinReg">{{ item.quantity }}</span>
           </div>
           <div class="price flexb tip">
             <span>转账时间</span>
@@ -24,10 +24,13 @@
             <div class="tip mt10">转账数量</div>
             <div class="tip mt10">转账时间</div>
           </div>
-          <div class="transType flexc" :class="{'deposit': item.transType === 2, 'sell': item.transType === 0}">
+          <div class="transType flexc" :class="{'buy': item.transType === 1, 'sell': item.transType === 0}">
             <span v-if="item.transType === 1">买入</span>
             <span v-else-if="item.transType === 0">卖出</span>
-            <span v-else>做市</span>
+            <span v-else-if="item.transType === 2">做市</span>
+            <span v-else-if="item.transType === 3 || item.transType === 5">取回</span>
+            <span v-else-if="item.transType === 4">存入</span>
+            <span v-else>转账</span>
           </div>
           <div class="content dinReg">
             <div class="smallTo tip">{{ (item.tox) }}</div>
@@ -191,17 +194,17 @@ export default {
         width: 68px;
         height: 68px;
         font-size: 22px;
-        border: 3px solid #29D4B0;
+        border: 3px solid #FFD200;
         border-radius: 40px;
-        color: #29D4B0;
+        color: #FFD200;
         font-weight: 500;
         &.sell{
           border: 3px solid #FF2800;
           color: #FF2800;
         }
-        &.deposit{
-          border: 3px solid #FFD200;
-          color: #FFD200;
+        &.buy{
+          border: 3px solid #29D4B0;
+          color: #29D4B0;
         }
       }
     }
