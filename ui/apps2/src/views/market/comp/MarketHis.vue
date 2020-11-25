@@ -157,7 +157,7 @@ export default {
         page: this.page,
         limit: this.pageSize,
       }
-      const result = await axios.get('https://api.defis.network/basic/swap/depositlog', {params});
+      const result = await axios.get('https://api.defis.network/dfs/swap/depositlog', {params});
       this.loading = false;
       if (result.status !== 200) {
         this.hisList = [];

@@ -294,7 +294,7 @@ export default {
         limit: this.size,
         min: this.myFilter,
       }
-      axios.get('https://api.defis.network/basic/history/transfer', {
+      axios.get('https://api.defis.network/dfs/history/transfer', {
         params
       }).then(result => {
         this.listLoading = false;

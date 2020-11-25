@@ -151,7 +151,7 @@ export default {
       const params = {
         user: this.scatter.identity.accounts[0].name,
       }
-      axios.get('https://api.defis.network/basic/swap/deposit', {params}).then((result) => {
+      axios.get('https://api.defis.network/dfs/swap/deposit', {params}).then((result) => {
         this.loading = false;
         const res = result.data.data;
         res.forEach((v, index) => {
