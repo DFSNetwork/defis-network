@@ -158,7 +158,7 @@ export default {
         page: this.page,
         limit: this.pageSize,
       }
-      const result = await axios.get('https://api.defis.network/basic/swap/tradelog', {params});
+      const result = await axios.get('https://api.defis.network/dfs/swap/tradelog', {params});
       this.loading = false;
       if (result.status !== 200) {
         this.hisList = [];

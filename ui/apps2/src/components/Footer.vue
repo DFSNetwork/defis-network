@@ -106,7 +106,7 @@ export default {
     },
     // 获取总发行量
     async handleGetDfsInfoData() {
-      const result = await axios.get("https://api.defis.network/basic/swap/summary");
+      const result = await axios.get("https://api.defis.network/dfs/swap/summary");
       if (result.status !== 200) {
         return;
       }
