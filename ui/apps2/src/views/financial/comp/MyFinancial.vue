@@ -13,7 +13,7 @@
           </div>
           <div class="btnDiv flexb">
             <div class="btn flexc">领取</div>
-            <div class="btn flexc withdraw">取回</div>
+            <div class="btn flexc withdraw" @click="showWithdraw = true">取回</div>
           </div>
         </div>
         <div class="flexa li dinReg">理财本金：9.0298 DFS</div>
@@ -28,12 +28,29 @@
         </div>
       </div>
     </div>
+
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible.sync="showWithdraw">
+      <Withdraw />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import Withdraw from '../dialog/Withdraw';
+
 export default {
   name: 'myFinancial',
+  components: {
+    Withdraw,
+  },
+  data() {
+    return {
+      showWithdraw: false,
+    }
+  }
 }
 </script>
 

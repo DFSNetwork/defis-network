@@ -166,3 +166,21 @@ input::-webkit-input-placeholder {
     }
   }
 }
+.percent_p{
+  font-size: 28px;
+  color: #333;
+  &>span{
+    width: 92px;
+    border: 1px solid rgba(#333, .1);
+    border-radius: 8px;
+    height: 56px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &.act_p{
+      color: #29D4B0;
+      background: rgba(#29D4B0, .2);
+      border: 1px solid rgba(#11AE8D, .2);
+    }
+  }
+}
