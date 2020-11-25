@@ -218,6 +218,12 @@ const constantRouter = [
         name: 'financial',
         component: () => import(/* webpackChunkName: "financial" */ '@/views/financial/Index'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, },
+      },
+      {
+        path: '/financial/detail',
+        name: 'financialeDtail',
+        component: () => import(/* webpackChunkName: "financialeDtail" */ '@/views/financial/childViews/Detail'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, },
       }
     ],
   },

@@ -1,8 +1,8 @@
 <template>
   <div class="steady">
     <div class="title flexa">
-      <span class="name">稳健型</span>
-      <span class="tip">收益稳，历史100%兑付本金</span>
+      <span class="name">激进型</span>
+      <span class="tip">波动适长，长期追求更高收益</span>
     </div>
     <div class="lists">
       <div class="list" v-for="(item, index) in list" :key="index">
@@ -34,7 +34,7 @@
 
 <script>
 export default {
-  name: 'steady',
+  name: 'radical',
   data() {
     return {
       list: [{
