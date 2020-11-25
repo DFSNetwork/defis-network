@@ -168,6 +168,7 @@
           <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/newdex.png?v=1" alt=""></div>
           <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/hoov3.png?v=2" alt=""></div>
           <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/starteos.png" alt=""></div>
+          <div class="listImg flexC"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/partners/wombat.png" alt=""></div>
           <!-- <div class="listImg flexC none"></div> -->
           <!-- <div class="listImg flexC none"></div> -->
         </div>
