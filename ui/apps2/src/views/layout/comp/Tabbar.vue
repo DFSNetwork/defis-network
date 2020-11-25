@@ -24,6 +24,14 @@
         </span>
         <div>{{ $t('fundation.tab') }}</div>
       </div>
+      <div class="bar" :class="{'act': $route.name === 'financial'}"
+        @click="handleTo('financial')">
+        <span class="myCoin flexc">
+          <img class="myCoinImg" v-if="$route.name !== 'financial'" src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/money-un.png">
+          <img class="myCoinImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/money.png">
+        </span>
+        <div>{{ $t('financial.tab') }}</div>
+      </div>
       <div class="bar" :class="{'act': $route.name === 'myCenter'}"
         @click="handleTo('myCenter')">
         <span class="myCoin flexc">

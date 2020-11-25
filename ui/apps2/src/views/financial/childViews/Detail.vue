@@ -42,22 +42,41 @@
     </div>
 
     <!-- 交易规则 -->
-    <TradeRules v-if="false"/>
+    <TradeRules />
     <!-- 我的理财 -->
     <MyFinancial />
+
+    <div class="nullDiv"></div>
+    <div class="btnDiv">
+      <div class="btn flexc" @click="showDeposit = true">存入</div>
+    </div>
+
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible.sync="showDeposit">
+      <Deposit />
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import TradeRules from '../comp/TradeRules';
 import MyFinancial from '../comp/MyFinancial';
+import Deposit from '../dialog/Deposit';
 
 export default {
   name: 'financialDetail',
   components: {
     TradeRules,
     MyFinancial,
+    Deposit,
   },
+  data() {
+    return {
+      showDeposit: false,
+    }
+  }
 }
 </script>
 
@@ -142,6 +161,31 @@ export default {
     background: #F7F8FA;
     font-size: 26px;
     border-radius: 12px;
+  }
+}
+.nullDiv{
+  height: 135px;
+  width: 100%;
+}
+.btnDiv{
+  // height: 120px;
+  width: 100%;
+  position: fixed;
+  bottom: 110px;
+  background: #FFF;
+  .btn{
+    height: 90px;
+    background: #29D4B0;
+    border-radius: 45px;
+    font-size: 32px;
+    font-weight: 500;
+    color: #FFF;
+    margin: 15px 32px 30px;
+  }
+}
+.mydialog{
+  /deep/ .el-dialog{
+    width: 697px;
   }
 }
 </style>

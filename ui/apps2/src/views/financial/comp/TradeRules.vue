@@ -1,13 +1,13 @@
 <template>
-  <div class="tradeReles">
+  <div class="tradeReles" :class="{'noMargin': showType === 'dialog'}">
     <div class="title">交易规则</div>
     <div class="tip">存入、取回规则</div>
-    <div class="step flexb">
+    <div class="step flexb" v-if="showType !== 'dialog'">
       <span class="item"></span>
       <span class="item"></span>
       <span class="item"></span>
     </div>
-    <div class="stepSpan flexb">
+    <div class="stepSpan flexb" v-if="showType !== 'dialog'">
       <span>今日存入</span>
       <span>锁定四日</span>
       <span>到期取回</span>
@@ -23,6 +23,12 @@
 <script>
 export default {
   name: 'tradeReles',
+  props: {
+    showType: {
+      type: String,
+      default: ''
+    }
+  }
 }
 </script>
 
@@ -31,10 +37,16 @@ export default {
   color: #333;
   font-size: 28px;
   margin: 30px 32px;
+  &.noMargin{
+    margin: 30px 0;
+  }
   .title{
     font-size: 32px;
     font-weight: 500;
     margin-bottom: 8px;
+  }
+  .tip{
+    font-size: 24px;
   }
   .step{
     margin-top: 30px;
@@ -76,7 +88,7 @@ export default {
     }
   }
   .ul{
-    margin: 42px 0;
+    margin: 22px 0;
     .li{
       padding-left: 20px;
       color: #999;

@@ -16,13 +16,13 @@
             <div class="btn flexc withdraw">取回</div>
           </div>
         </div>
-        <div class="flexa li dinReg">存入本金：9.0298 DFS</div>
+        <div class="flexa li dinReg">理财本金：9.0298 DFS</div>
         <div class="flexa li dinReg">
-          <span>存入奖励：</span>
+          <span>理财收益：</span>
           <span class="green">0.0886 DFS</span>
         </div>
         <div class="flexa li dinReg">
-          <span>做市时长：12天01时28分31秒(盈亏: </span>
+          <span>理财时长：12天01时28分31秒(盈亏: </span>
           <span class="red">-2.71</span>
           <span>%)</span>
         </div>
@@ -57,6 +57,9 @@ export default {
     border: 1px solid rgba(220,220,220,0.3);
     border-radius: 20px;
     box-shadow: 0px 20px 40px 0px rgba(220,220,220,0.5);
+    &:last-child{
+      margin-bottom: 0;
+    }
     .coinInfo{
       img{
         width: 52px;

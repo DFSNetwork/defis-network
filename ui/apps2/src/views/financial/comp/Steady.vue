@@ -5,7 +5,7 @@
       <span class="tip">收益稳，历史100%兑付本金</span>
     </div>
     <div class="lists">
-      <div class="list" v-for="(item, index) in list" :key="index">
+      <div class="list" v-for="(item, index) in list" :key="index" @click="handleTo(item)">
         <div class="coin flexb">
           <div class="flexa">
             <img class="coinImg" :src="item.coinImg">
@@ -45,6 +45,18 @@ export default {
         lockTime: 4,
         desc: '稳健型 中低风险',
       }],
+    }
+  },
+  methods: {
+    handleTo() {
+      const params = {
+        type: 0, // 0 - 稳健型理财 ｜ 1 - 激进型理财
+        coin: 'EOS',
+      }
+      this.$router.push({
+        name: 'financialDetail',
+        params,
+      })
     }
   }
 }

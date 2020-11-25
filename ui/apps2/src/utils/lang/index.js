@@ -9,6 +9,7 @@ import zhLocale from './zh-CN';
 // apps Language
 import fundation from './appsLang/fundation'
 import nodePools from './appsLang/nodePools'
+import financial from './appsLang/financial'
 
 Vue.use(VueI18n);
 
@@ -17,13 +18,15 @@ const messages = {
     ...zhLocale,
     ...elZhLocale,
     ...fundation['zh-CN'],
-    ...nodePools['zh-CN']
+    ...nodePools['zh-CN'],
+    ...financial['zh-CN']
   },
   en: { // 英文包
     ...enLocale,
     ...elEnLocale,
     ...fundation['en'],
-    ...nodePools['en']
+    ...nodePools['en'],
+    ...financial['en']
   },
 };
 const i18n = new VueI18n({
