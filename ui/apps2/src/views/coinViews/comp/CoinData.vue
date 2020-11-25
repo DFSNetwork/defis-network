@@ -312,7 +312,7 @@ export default {
             transType = 2;
           } else if (v.tox === 'defisswapcnt' && v.memo.indexOf('swap') === 0) {
             transType = 0;
-          } else if (v.formx === 'defisswapcnt' && v.memo === 'swap success') {
+          } else if (v.fromx === 'defisswapcnt' && v.memo === 'swap success') {
             transType = 1
           }
           this.$set(v, 'transType', transType)
