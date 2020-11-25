@@ -314,6 +314,12 @@ export default {
             transType = 0;
           } else if (v.fromx === 'defisswapcnt' && v.memo === 'swap success') {
             transType = 1
+          } else if (v.fromx === 'defisswapcnt' && v.memo === 'withdraw') {
+            transType = 3;
+          } else if (v.tox === 'dfsdsrsystem') {
+            transType = 4;
+          } else if (v.fromx === 'dfsdsrsystem') {
+            transType = 5;
           }
           this.$set(v, 'transType', transType)
         });
@@ -376,16 +382,17 @@ export default {
   .act{
     color: $color-black;
     position: relative;
+    padding-left: 28px;
     &::before{
       content: '';
       position: absolute;
-      width:60px;
-      height:8px;
+      width: 8px;
+      height: 30px;
       background:rgba(2,198,152,1);
       border-radius:4px;
-      bottom: -20px;
-      left: 30px;
-      // transform: translateX(-45%);
+      top: 50%;
+      left: 0;
+      transform: translateY(-45%);
     }
   }
   .date{
