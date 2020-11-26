@@ -14,19 +14,41 @@
     </div>
     <div class="ul">
       <div class="li">存入EOS，锁定4日，解锁前不可取出，</div>
+      <div class="li flexa">
+        <span>收益与时间有关，时间越长，年化越高</span>
+        <img @click="showTip = true" class="tipImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/tips_icon_btn.svg" alt="">
+      </div>
+      <div class="li">每次操作(包括：领取、存入、取回)后，收益自动领取，时间加成清0，</div>
       <div class="li">解锁时间由最后一次存入行为决定，</div>
       <div class="li">解锁后，资金可自行取回</div>
     </div>
+
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible.sync="showTip">
+      <RewardTip v-if="showTip" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import RewardTip from '../dialog/RewardTip';
+
 export default {
   name: 'tradeReles',
+  components: {
+    RewardTip
+  },
   props: {
     showType: {
       type: String,
       default: ''
+    }
+  },
+  data() {
+    return {
+      showTip: false,
     }
   }
 }
@@ -107,7 +129,16 @@ export default {
         top: 20px;
         transform: translate(-50%, -50%);
       }
+      .tipImg{
+        width: 32px;
+        margin-left: 10px;
+      }
     }
+  }
+}
+.mydialog{
+  /deep/ .el-dialog{
+    width: 700px;
   }
 }
 </style>

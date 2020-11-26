@@ -36,7 +36,8 @@
         </div>
       </div>
       <div class="desc tip">
-        存入EOS，由智能合约自动操作参与挖矿。
+        <div>存入EOS，由智能合约自动操作参与挖矿。</div>
+        <div class="mt10">预计每万EOS每天收益：{{ about }} YFC</div>
       </div>
     </div>
 
@@ -67,6 +68,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import TradeRules from '../comp/TradeRules';
 import MyFinancial from '../comp/MyFinancial';
 import Deposit from '../dialog/Deposit';
@@ -92,6 +94,7 @@ export default {
       args: {},
       showRules: true,
       showTip: false,
+      price: '0.0000',
     }
   },
   mounted() {
@@ -100,6 +103,34 @@ export default {
   },
   beforeDestroy() {
     clearTimeout(this.argsTimer)
+  },
+  watch: {
+    filterMkLists: {
+      handler: function fm(newVal) {
+        if (!newVal.length) {
+          return
+        }
+        const market = newVal.find(v => v.mid === 329)
+        this.price = parseFloat(market.reserve0) / parseFloat(market.reserve1)
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
+  computed: {
+    ...mapState({
+      filterMkLists: state => state.sys.filterMkLists,
+    }),
+    about() {
+      if (!this.args.aprs || !Number(this.price)) {
+        return '0.00000000'
+      }
+      const apyAcc = Math.pow(this.args.aprs, 86400) - 1;
+      const yfcPrice = this.price;
+      const yfcNum = 10000 / yfcPrice;
+      let reward = yfcNum * apyAcc;
+      return reward.toFixed(8)
+    }
   },
   methods: {
     handleShowRules(noDeposit) {
@@ -236,6 +267,9 @@ export default {
     background: #F7F8FA;
     font-size: 26px;
     border-radius: 12px;
+    .mt10{
+      margin-top: 10px;
+    }
   }
 }
 .nullDiv{
