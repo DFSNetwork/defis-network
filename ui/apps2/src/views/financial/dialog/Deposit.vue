@@ -113,7 +113,7 @@ export default {
         code: 'eosio.token',
         symbol: 'EOS',
         decimal: 4,
-        account: ` ${formName}`,
+        account: formName,
       }
       const {status, result} = await get_balance(params);
       if (!status) {
