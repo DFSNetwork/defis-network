@@ -75,7 +75,4 @@ export default {
 
 <style lang="scss" scoped>
 @import '../css/financial.scss';
-.steady{
-  margin-top: -65px;
-}
 </style>
