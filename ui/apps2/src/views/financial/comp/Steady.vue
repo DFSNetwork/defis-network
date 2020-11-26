@@ -2,7 +2,7 @@
   <div class="steady">
     <div class="title flexa">
       <span class="name">稳健型</span>
-      <span class="tip">收益稳，历史100%兑付本金</span>
+      <span class="tip">本金无损, 解锁后随时取回</span>
     </div>
     <div class="lists">
       <div class="list" v-for="(item, index) in list" :key="index" @click="handleTo(item)">
@@ -19,7 +19,7 @@
 
         <div class="flexb info">
           <div class="percent">
-            <div class="apy dinBold">{{ item.apy }}%</div>
+            <div class="apy dinBold">{{ args.apy || '0.00' }}%</div>
             <div class="tip">实时年化</div>
           </div>
           <div class="dataInfo">
@@ -33,6 +33,8 @@
 </template>
 
 <script>
+import { gat_apys } from '../js/financial';
+
 export default {
   name: 'steady',
   data() {
@@ -43,9 +45,13 @@ export default {
         coinImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg',
         apy: '0.00',
         lockTime: 4,
-        desc: '稳健型 中低风险',
+        desc: '低风险 本金无损',
       }],
+      args: {},
     }
+  },
+  mounted() {
+    this.handleGetAprs()
   },
   methods: {
     handleTo() {
@@ -57,6 +63,11 @@ export default {
         name: 'financialDetail',
         params,
       })
+    },
+    handleGetAprs() {
+      gat_apys((res) => {
+        this.args = res;
+      })
     }
   }
 }
@@ -64,4 +75,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../css/financial.scss';
+.steady{
+  margin-top: -65px;
+}
 </style>

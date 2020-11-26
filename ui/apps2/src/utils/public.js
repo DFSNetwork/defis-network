@@ -279,8 +279,14 @@ export function getPoolApr(market) {
   return apr
 }
 
-export function getMarketTime(startTime) {
-  let t = Date.parse(new Date()) - (Number(startTime) + 8 * 3600) * 1000;
+export function getMarketTime(startTime, type) {
+  let t;
+  if (!type) {
+    t = Date.parse(new Date()) - (Number(startTime) + 8 * 3600) * 1000;
+  } else if (type === 'tamp') {
+    t = Date.parse(new Date()) - Date.parse(startTime.replace(/-/g, '/'))
+  }
+  
   const days = Math.floor(t / (1000 * 60 * 60 * 24));
   let hours = Math.floor((t / (1000 * 60 * 60)) % 24); // 不累加天数的小时
   // let hours = Math.floor((t / (1000 * 60 * 60))); // 累加天数的小时

@@ -1,8 +1,8 @@
 <template>
-  <div class="myFinancial">
+  <div class="myFinancial" v-if="accDepInfo.miner">
     <div class="title flexb">
       <span>我的理财</span>
-      <span class="green">一键领取</span>
+      <!-- <span class="green">一键领取</span> -->
     </div>
     <div class="lists">
       <div class="list">
@@ -12,19 +12,17 @@
             <span class="coinName">EOS</span>
           </div>
           <div class="btnDiv flexb">
-            <div class="btn flexc">领取</div>
-            <div class="btn flexc withdraw" @click="showWithdraw = true">取回</div>
+            <div class="btn flexc" @click="handleClaim">领取收益</div>
+            <div class="btn flexc withdraw" @click="showWithdraw = true">取回本金</div>
           </div>
         </div>
-        <div class="flexa li dinReg">理财本金：9.0298 DFS</div>
+        <div class="flexa li dinReg">理财本金：{{ accDepInfo.bal }}</div>
         <div class="flexa li dinReg">
           <span>理财收益：</span>
-          <span class="green">0.0886 DFS</span>
+          <span class="green">{{ accDepInfo.showReward || '0.00000000' }} YFC</span>
         </div>
         <div class="flexa li dinReg">
-          <span>理财时长：12天01时28分31秒(盈亏: </span>
-          <span class="red">-2.71</span>
-          <span>%)</span>
+          <span>理财时长：{{ finTime.days }}天{{ finTime.hours }}时{{ finTime.minutes }}分{{ finTime.seconds }}秒</span>
         </div>
       </div>
     </div>
@@ -33,22 +31,217 @@
       class="mydialog"
       :show-close="false"
       :visible.sync="showWithdraw">
-      <Withdraw />
+      <Withdraw  v-if="showWithdraw" @listenClose="handleClose"/>
     </el-dialog>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
 import Withdraw from '../dialog/Withdraw';
+import { get_table_rows, get_balance } from '@/utils/api'
+import { toLocalTime, getMarketTime, toFixed } from '@/utils/public';
 
 export default {
   name: 'myFinancial',
   components: {
     Withdraw,
   },
+  props: {
+    args: {
+      type: Object,
+      default: function ag() {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       showWithdraw: false,
+      accDepInfo: {},
+      finTime: {},
+      maxReward: '0.00000000',
+    }
+  },
+  beforeDestroy() {
+    clearTimeout(this.timer)
+    clearInterval(this.runTimer)
+  },
+  mounted() {
+    this.handleGetMaxReward();
+  },
+  computed: {
+    ...mapState({
+      scatter: state => state.app.scatter,
+      filterMkLists: state => state.sys.filterMkLists,
+    }),
+  },
+  watch: {
+    scatter: {
+      handler: function st() {
+        this.handleGetAccDepInfo()
+      },
+      immediate: true,
+      deep: true
+    },
+    filterMkLists: {
+      handler: function fm(newVal) {
+        if (!newVal.length) {
+          return
+        }
+        const market = newVal.find(v => v.mid === 329)
+        this.price = parseFloat(market.reserve0) / parseFloat(market.reserve1)
+        // console.log(this.price);
+        this.handleDealReward();
+      },
+      deep: true,
+      immediate: true,
+    },
+    args: {
+      handler: function fm() {
+        this.handleDealReward();
+      },
+      deep: true,
+      immediate: true,
+    }
+  },
+  methods: {
+    async handleGetMaxReward() {
+      const params = {
+        code: 'yfctokenmain',
+        symbol: 'YFC',
+        decimal: 8,
+        account: 'yfcpayoutone',
+      }
+      const {status, result} = await get_balance(params)
+      if (!status) {
+        return
+      }
+      this.maxReward = result.split(' ')[0];
+      // console.log(this.maxReward)
+    },
+    handleClose(type) {
+      this.showWithdraw = false;
+      if (type) {
+        setTimeout(() => {
+          this.handleGetAccDepInfo()
+        }, 1500);
+      }
+    },
+    // 获取用户理财详情
+    async handleGetAccDepInfo() {
+      const formName = this.scatter.identity.accounts[0].name;
+      const params = {
+        "code":"yfcpayoutone",
+        "scope":"EOS",
+        "table":"miners",
+        "json":true,
+        "lower_bound": ` ${formName}`,
+        "upper_bound": ` ${formName}`,
+      }
+      const { status, result } = await get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const rows = result.rows || [];
+      if (!rows.length) {
+        this.$emit('listenNoDeposit', true);
+        return
+      }
+      this.$emit('listenNoDeposit', false);
+      rows.forEach(v => {
+        const beginTime = toLocalTime(`${v.join_time}.000+0000`)
+        this.$set(v, 'beginTime', beginTime)
+        const lastTime = toLocalTime(`${v.last_drip}.000+0000`)
+        this.$set(v, 'lastTime', lastTime)
+      });
+      this.accDepInfo = rows[0];
+      this.handleTimer()
+    },
+    handleTimer() {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        this.handleTimer();
+      }, 1000);
+      const long = getMarketTime(this.accDepInfo.beginTime, 'tamp')
+      // console.log(long)
+      this.finTime = long;
+      this.handleDealReward()
+    },
+    // 计算理财收益
+    handleDealReward() {
+      if (!Number(this.args.aprs) || !Number(this.finTime.total) || !Number(this.price)) {
+        return
+      }
+      const lastTime = getMarketTime(this.accDepInfo.lastTime, 'tamp')
+      const apyAcc = Math.pow(this.args.aprs, lastTime.total / 1000) - 1;
+      const yfcPrice = this.price;
+      const yfcNum = parseFloat(this.accDepInfo.bal || 0) / yfcPrice;
+      let reward = yfcNum * apyAcc;
+      if (Number(reward) > Number(this.maxReward)) {
+        reward = this.maxReward;
+      }
+      this.$set(this.accDepInfo, 'reward', toFixed(reward, 8))
+      this.handleRewardRun()
+    },
+    // 数据滚动
+    handleRewardRun() {
+      if (!Number(this.accDepInfo.reward)) {
+        return
+      }
+      clearInterval(this.runTimer)
+      const reward = Number(this.accDepInfo.reward);
+      const showReward = this.accDepInfo.showReward || reward;
+      let tReward = showReward;
+      const t = (Number(reward) - Number(showReward)) / 50;
+
+      this.runTimer = setInterval(() => {
+        tReward = Number(t) + Number(tReward)
+        if (tReward < 0) {
+          this.$set(this.accDepInfo, 'showReward', '0.00000000')
+        }
+        if (tReward <= reward) {
+          this.$set(this.accDepInfo, 'showReward', toFixed(tReward, 8))
+        }
+        // console.log(tReward)
+      }, 20);
+    },
+    // 领取收益
+    handleClaim() {
+      const permission = this.scatter.identity.accounts[0].authority;
+      const formName = this.scatter.identity.accounts[0].name;
+      const params = {
+        actions: [{
+          account: 'yfcpayoutone',
+          name: 'claim',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            user: formName,
+            sym: 'EOS',
+          },
+        }],
+      }
+      EosModel.toTransaction(params, (res) => {
+        this.loading = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        setTimeout(() => {
+          this.handleGetAccDepInfo()
+        }, 1500);
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
     }
   }
 }

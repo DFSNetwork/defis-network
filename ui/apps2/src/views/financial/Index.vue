@@ -1,7 +1,7 @@
 <template>
   <div class="financial">
     <div class="banner">
-      <img src="https://cdn.jsdelivr.net/gh/defis-net/material/financial/financial.png" alt="">
+      <img src="https://cdn.jsdelivr.net/gh/defis-net/material/financial/financial1.png" alt="">
     </div>
     <Steady />
     <Radical/>

@@ -1,6 +1,6 @@
 <template>
   <div class="tradeReles" :class="{'noMargin': showType === 'dialog'}">
-    <div class="title">交易规则</div>
+    <div class="title">规则</div>
     <div class="tip">存入、取回规则</div>
     <div class="step flexb" v-if="showType !== 'dialog'">
       <span class="item"></span>
@@ -9,13 +9,13 @@
     </div>
     <div class="stepSpan flexb" v-if="showType !== 'dialog'">
       <span>今日存入</span>
-      <span>锁定四日</span>
+      <span>锁定4日</span>
       <span>到期取回</span>
     </div>
     <div class="ul">
-      <div class="li">存入金额，使用钱包等待期间享受收益，周末存入金额，使用钱包</div>
-      <div class="li">存入申请至成交期间可撤销，成交后不可撤销存入申请至成交期间可撤销，成交</div>
-      <div class="li">到期后1个交易日，资金可自行取回</div>
+      <div class="li">存入EOS，锁定4日，解锁前不可取出，</div>
+      <div class="li">解锁时间由最后一次存入行为决定，</div>
+      <div class="li">解锁后，资金可自行取回</div>
     </div>
   </div>
 </template>
