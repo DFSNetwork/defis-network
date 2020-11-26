@@ -15,7 +15,6 @@
       @listenFilterMin="handleFilterMin"
       @listenFilter="handleFilter"/>
   
-    <div class="nullDiv"></div>
     <div class="btnDiv">
       <div class="btn flexc" @click="showToFundation=!showToFundation">{{ $t('fundation.toFundation') }}</div>
     </div>
@@ -278,19 +277,19 @@ export default {
 }
 .btnDiv{
   position: fixed;
-  bottom: 0px;
-  height: 160px;
-  width: 100%;
+  bottom: 150px;
+  right: 34px;
   max-width: 750px;
   background: #fFF;
-  padding: 36px;
   box-sizing: border-box;
-  border-top: 1px solid #EAEAEA;
   .btn{
+    box-shadow: 0px 2px 16px 0px rgba(41,212,176,0.4);
     background: #29D4B0;
-    height: 90px;
-    border-radius: 45px;
+    height: 132px;
+    width: 132px;
+    border-radius: 70px;
     color: #fFF;
+
   }
 }
 

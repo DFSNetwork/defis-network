@@ -14,7 +14,7 @@ export default {
       all: '全部',
       transNum: '捐赠数量',
       memo: '用户留言',
-      toFundation: '乐捐一下',
+      toFundation: '乐捐',
       funTran: '乐捐款',
       memoshort: '留言',
       iptTip: '请输入留言',
