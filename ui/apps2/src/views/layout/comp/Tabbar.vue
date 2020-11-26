@@ -20,7 +20,7 @@
         @click="handleTo('fundation')">
         <span class="myCoin flexc">
           <img class="myCoinImg" v-if="$route.name !== 'fundation'" src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/fundation-un1.png">
-          <img class="myCoinImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/fundation.png">
+          <img class="myCoinImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/fundation1.png">
         </span>
         <div>{{ $t('fundation.tab') }}</div>
       </div>
