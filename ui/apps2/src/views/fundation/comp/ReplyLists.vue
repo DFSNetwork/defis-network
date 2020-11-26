@@ -10,7 +10,7 @@
           <div class="mainDiv">
             <div class="flexb">
               <div class="name">
-                <div>{{ item.accInfo ? item.accInfo.nick : item.fromx }}</div>
+                <div>{{ item.accInfo ? item.accInfo.nick || item.fromx : item.fromx }}</div>
                 <div class="tip funNum dinReg">{{ $t('fundation.transNum') }}: {{ item.quantity }}</div>
               </div>
               <div class="likeDiv tip flexend" @click="handleShowLike(item)">
