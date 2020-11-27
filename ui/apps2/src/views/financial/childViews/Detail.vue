@@ -183,6 +183,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/*iphone Xs Max*/
+@media only screen and (device-width: 414px) and (device-height: 896px) {
+  .btnDiv{
+    bottom: 30px !important;
+  }
+}
+/*iphoneX、iphoneXs*/
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+  .btnDiv{
+    bottom: 30px !important;
+  }
+}
 .detail{
   text-align: left;
   font-size: 24px;
@@ -281,7 +293,7 @@ export default {
   width: 100%;
   max-width: 750px;
   position: fixed;
-  bottom: 110px;
+  bottom: 10px;
   background: #FFF;
   .btn{
     height: 90px;

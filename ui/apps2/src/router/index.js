@@ -223,7 +223,7 @@ const constantRouter = [
         path: '/financial/detail',
         name: 'financialDetail',
         component: () => import(/* webpackChunkName: "financialDetail" */ '@/views/financial/childViews/Detail'),
-        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, },
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true,  noTab: true },
       }
     ],
   },
