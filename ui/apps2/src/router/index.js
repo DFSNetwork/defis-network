@@ -227,6 +227,25 @@ const constantRouter = [
       }
     ],
   },
+  {
+    path: '/bp-info',
+    component: Layout,
+    redirect: '/',
+    children: [
+      {
+        path: '/',
+        name: 'bpInfo',
+        component: () => import(/* webpackChunkName: "bpInfo" */ '@/views/bpInfo/Index'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
+      {
+        path: ':bpname',
+        name: 'detailInfo',
+        component: () => import(/* webpackChunkName: "detailInfo" */ '@/views/bpInfo/childViews/DetailInfo'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
+    ],
+  },
 ]
 
 export default new Router({
