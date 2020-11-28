@@ -163,7 +163,14 @@
 
     </div>
 
-    <div class="pool" v-if="marketLists.length && bestPath">
+    <div class="pool" v-if="isOgxSwap">
+      <div> 当前为Organix兑换模式 </div>
+      <div class="flexa priceUpdate" v-if="ogxPrices.length">
+        <span>价格更新时间: {{ ogxPrices[0].time }}</span>
+        <img @click="showOgxTip = true" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
+      </div>
+    </div>
+    <div class="pool" v-else-if="marketLists.length && bestPath">
       <div class="flexb">
         <div>
           <span>{{ $t('dex.poolNum') }}</span>
@@ -202,7 +209,7 @@
       class="mkListDia pcList"
       :show-close="false"
       :visible.sync="showMarketList">
-      <market-list :marketLists="marketLists" :thisMarket0="thisMarket0"
+      <market-list v-if="showMarketList" :marketLists="marketLists" :thisMarket0="thisMarket0"
         :thisMarket1="thisMarket1" :type="type"
         @listenMarketChange="handleMarketChange"
         @listenClose="handleClose"/>
@@ -215,6 +222,14 @@
     </el-dialog>
 
     <SlipPointTools ref="slipPointTools"/>
+
+    
+    <el-dialog
+      class="mkListDia pcList"
+      :show-close="false"
+      :visible.sync="showOgxTip">
+      <OgxSwapTip />
+    </el-dialog>
   </div>
 </template>
 
@@ -227,6 +242,9 @@ import { EosModel } from '@/utils/eos';
 import MarketList from '@/components/MarketList';
 import UsddTip from '@/components/UsddTip';
 import SlipPointTools from '@/components/SlipPointTools';
+import OgxSwapTip from './dialog/OgxSwapTip';
+
+import { ogx_get_num, ogx_get_prices_table } from './js/ogx.js';
 
 export default {
   name: 'swap',
@@ -235,6 +253,7 @@ export default {
     MarketList,
     UsddTip,
     SlipPointTools,
+    OgxSwapTip,
   },
   data() {
     return {
@@ -287,6 +306,9 @@ export default {
       },
       firstUrl: true,
       refreshLoading: false,
+
+      ogxPrices: [],
+      showOgxTip: false,
     }
   },
   computed: {
@@ -309,7 +331,11 @@ export default {
       return Number(this.payNum) && Number(this.getNum)
     },
     fees() {
-      let fee = accMul(Number(this.payNum), 0.003);
+      let rate = 0.003
+      if (this.isOgxSwap) {
+        rate = 0.002
+      }
+      let fee = accMul(Number(this.payNum), rate);
       if (Number(fee) < Number(accDiv(1, 10 ** this.thisMarket0.decimal))) {
         fee = 0;
       }
@@ -360,6 +386,14 @@ export default {
       }
       return false
     },
+    isOgxSwap() {
+      if (this.thisMarket0.contract === 'core.ogx' && this.thisMarket1.contract === 'core.ogx'
+      && this.thisMarket0.symbol !== 'OGX' && this.thisMarket1.symbol !== 'OGX') {
+        this.handleGetOgxPrices()
+        return true
+      }
+      return false
+    }
   },
   watch: {
     slipPoint: {
@@ -431,6 +465,11 @@ export default {
     this.handleSetMarkets();
   },
   methods: {
+    handleGetOgxPrices() {
+      ogx_get_prices_table((res) => {
+        this.ogxPrices = res;
+      })
+    },
     handleShowTools() {
       this.$refs.slipPointTools.showNav = true;
     },
@@ -545,9 +584,17 @@ export default {
       } else {
         inData.getNum = this.getNum || `${toFixed(1, this.thisMarket1.decimal)}`;
       }
+      
       try {
         // console.log(inData)
-        const outData = this.handleDealAmountOut(inData);
+        let outData;
+        if (this.isOgxSwap) {
+          inData.sym0 = this.thisMarket0.symbol;
+          inData.sym1 = this.thisMarket1.symbol;
+          outData = ogx_get_num(this.ogxPrices, inData)
+        } else {
+          outData = this.handleDealAmountOut(inData);
+        }
         // console.log(outData)
         // in & out 都是0，非焦点ipt置空
         if (!Number(outData.payNum) && !Number(outData.getNum)) {
@@ -682,10 +729,15 @@ export default {
       if (this.loading) {
         return
       }
-      if (!this.handleReg()) {
+      // if (!this.handleReg()) {
+      //   return
+      // }
+      this.loading = true;
+
+      if (this.isOgxSwap) {
+        this.handleOgxSwap()
         return
       }
-      this.loading = true;
       const path = this.thisMidsPath
 
       const tradeCoin = this.thisMarket0.symbol;
@@ -723,6 +775,51 @@ export default {
           message: this.$t('public.success'),
           type: 'success'
         });
+      })
+    },
+    handleOgxSwap() {
+      const formName = this.scatter.identity.accounts[0].name;
+      const permission = this.scatter.identity.accounts[0].authority;
+      const params = {
+        actions: [{
+          account: this.thisMarket0.contract,
+          name: 'exchange',
+          authorization: [{ 
+            actor: formName,
+            permission,
+          }],
+          data: {
+            from: formName,
+            source_currency_key: `${this.thisMarket0.decimal},${this.thisMarket0.symbol}`,
+            source_amount: `${this.payNum} ${this.thisMarket0.symbol}`,
+            dest_currency_key: `${this.thisMarket1.decimal},${this.thisMarket1.symbol}`,
+            memo: 'dfsogxinvite'
+          },
+        }]
+      }
+      EosModel.toTransaction(params, (res) => {
+        this.loading = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+        setTimeout(() => {
+          this.handleDealPrice()
+          this.handleGetOgxPrices()
+          this.payNum = '';
+          this.getNum = '';
+          setTimeout(() => {
+            this.handleInBy(this.tradeInfo.type, 'first')
+            this.handleBalanTimer();
+          }, 200);
+        }, 1500);
       })
     },
     handleDealPrice() {
@@ -1059,6 +1156,7 @@ export default {
   background:rgba(255,255,255,1);
   border-radius: 12px;
   border:2px solid rgba(224,224,224,1);
+  color: #333;
   .marketNow{
     margin-left: 20px;
     color: #29D4B0;
@@ -1066,6 +1164,13 @@ export default {
   .poolsNum{
     margin-top: 12px;
     color: $color-black;
+  }
+  .priceUpdate{
+    margin-top: 10px;
+    img{
+      width: 32px;
+      margin-left: 10px;
+    }
   }
 }
 .routePath{
