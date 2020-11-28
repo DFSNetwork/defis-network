@@ -119,7 +119,7 @@
                 <span slot="reference" class="flexc ml10"><img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
-            <span class="flexa">
+            <span class="flexa" v-if="!isOgxSwap">
               <span class="green din"
                 :class="{'yellow': Number(tradeInfo.priceRate) > 5,
                           'red': Number(tradeInfo.priceRate) > 10}">
@@ -127,6 +127,7 @@
               </span>
               <img class="tradeSet" @click="handleShowTools" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/swapSet.svg" alt="">
             </span>
+            <span>无滑点交易</span>
           </div>
           <div class="flexb">
             <span class="flex">
