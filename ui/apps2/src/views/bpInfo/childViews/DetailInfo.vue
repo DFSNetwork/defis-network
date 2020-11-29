@@ -7,8 +7,14 @@
 
     <div class="nullDiv"></div>
     <div class="btnDiv">
-      <div class="btn flexc">发布评价</div>
+      <div class="btn flexc" @click="showAddScore = true">发布评价</div>
     </div>
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible.sync="showAddScore">
+      <Score v-if="showAddScore" />
+    </el-dialog>
   </div>
 </template>
 
@@ -16,6 +22,7 @@
 import BpInfo from './comp/BpInfo';
 import Records from './comp/Records';
 import ScoreLists from './comp/ScoreLists';
+import Score from './dialog/Score';
 
 export default {
   name: 'detailInfo',
@@ -23,6 +30,12 @@ export default {
     BpInfo,
     Records,
     ScoreLists,
+    Score,
+  },
+  data() {
+    return {
+      showAddScore: false,
+    }
   }
 }
 </script>
