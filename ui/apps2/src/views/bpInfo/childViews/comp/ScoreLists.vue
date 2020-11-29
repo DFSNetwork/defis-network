@@ -38,7 +38,7 @@
             <div class="scoreType">
               <div class="tip">
                 <span v-if="value >= 4.5">推荐赞👍爆了</span>
-                <span v-else-if="value <= 4">推荐大家用</span>
+                <span v-else-if="value >= 4">推荐大家用</span>
                 <span v-else-if="value >= 3">一般般</span>
                 <span v-else-if="value >= 2 ">差</span>
                 <span v-else>非常差</span>

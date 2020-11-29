@@ -1,21 +1,15 @@
 <template>
   <div class="scoreDiv">
     <img class="close" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
-    <div class="title">评分</div>
+    <div class="title">编辑</div>
     <div class="content">
-      <div>亲，给个评分吧～</div>
-      <div class="score">
-        <van-rate v-model="value" allow-half
-          void-icon="star" void-color="#DBDBDB" color="#FFC300"/>
-        <div class="type">
-          <span v-if="value >= 4.5">推荐赞👍爆了</span>
-          <span v-else-if="value >= 4">推荐大家用</span>
-          <span v-else-if="value >= 3">一般般</span>
-          <span v-else-if="value >= 2 ">差</span>
-          <span v-else-if="value > 0">非常差</span>
-        </div>
+      <div class="addTitle flexb">
+        <span>标题</span>
+        <span class="flexa">
+          <van-field class="tleIpt" v-model="title" placeholder="请输入标题"/>
+          <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
+        </span>
       </div>
-      <div>写点评论</div>
       <div class="accMsg">
         <van-field
             class="input"
@@ -28,7 +22,6 @@
           <div class="iptlen">{{sizeof}}/256</div>
       </div>
     </div>
-
     <div class="btn flexc">确定</div>
   </div>
 </template>
@@ -86,28 +79,32 @@ export default {
     margin-bottom: 15px;
     text-align: center;
   }
-  .score{
-    margin: 15px 0;
-    text-align: center;
-    .type{
-      margin-top: 15px;
-      color: #FFBE00;
+  .addTitle{
+    font-size: 32px;
+    border-bottom: 1px solid rgba(220, 220, 220, .3);
+    .tleIpt{
+      /deep/ .van-field__control{
+        text-align: right;
+      }
     }
-    /deep/ .van-rate__icon{
-      font-size: 60px;
-      margin-right: 30px;
+    /deep/ .van-cell::after{
+      border: 0;
+    }
+    .right{
+      width: 12px;
     }
   }
   .accMsg{
     background: #F5F5F5;
     border-radius: 12px;
     padding: 22px;
-    margin: 15px 0;
+    margin: 40px 0;
     .input{
       padding: 0;
       border: 0px;
       font-size: 30px;
       background: #F5F5F5;
+      min-height: 350px;
     }
     .iptlen{
       text-align: right;

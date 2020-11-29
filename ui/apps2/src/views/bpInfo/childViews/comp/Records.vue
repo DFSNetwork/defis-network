@@ -2,7 +2,7 @@
   <div class="records">
     <div class="title flexb">
       <span>节点动态</span>
-      <span class="add">编辑</span>
+      <span class="add" @click="showAddScore = true">编辑</span>
     </div>
     <div class="scroll">
       <div class="longDiv flexa">
@@ -85,12 +85,28 @@
         </div>
       </div>
     </div>
+
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible.sync="showAddScore">
+      <AddRecord v-if="showAddScore" />
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import AddRecord from '../dialog/AddRecord'
 export default {
   name: 'records',
+  components: {
+    AddRecord,
+  },
+  data() {
+    return {
+      showAddScore: false,
+    }
+  }
 }
 </script>
 
