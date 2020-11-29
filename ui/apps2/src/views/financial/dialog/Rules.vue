@@ -1,7 +1,7 @@
 <template>
   <div class="tipDiv">
     <div class="content">
-      4天后随存随取
+      {{ $t('financial.rules10') }}
     </div>
   </div>
 </template>

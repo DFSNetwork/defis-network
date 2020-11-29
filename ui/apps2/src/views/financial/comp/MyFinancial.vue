@@ -1,7 +1,7 @@
 <template>
   <div class="myFinancial" v-if="accDepInfo.miner">
     <div class="title flexb">
-      <span>我的理财</span>
+      <span>{{ $t('financial.myDeposit') }}</span>
       <!-- <span class="green">一键领取</span> -->
     </div>
     <div class="lists">
@@ -12,17 +12,20 @@
             <span class="coinName">EOS</span>
           </div>
           <div class="btnDiv flexb">
-            <div class="btn flexc" @click="handleClaim">领取收益</div>
-            <div class="btn flexc withdraw" @click="showWithdraw = true">取回本金</div>
+            <div class="btn flexc" @click="handleClaim">{{ $t('financial.reward') }}</div>
+            <div class="btn flexc withdraw" @click="showWithdraw = true">{{ $t('financial.withdraw') }}</div>
           </div>
         </div>
-        <div class="flexa li dinReg">理财本金：{{ accDepInfo.bal }}</div>
+        <div class="flexa li dinReg">{{ $t('financial.finPrice') }}：{{ accDepInfo.bal }}</div>
         <div class="flexa li dinReg">
-          <span>理财收益：</span>
+          <span>{{ $t('financial.finReward') }}：</span>
           <span class="green">{{ accDepInfo.showReward || '0.00000000' }} YFC</span>
         </div>
         <div class="flexa li dinReg">
-          <span>理财时长：{{ finTime.days }}天{{ finTime.hours }}时{{ finTime.minutes }}分{{ finTime.seconds }}秒</span>
+          <span>{{ $t('financial.finTime') }}：
+            {{ $t('market.timer', {days: finTime.days, hours: finTime.hours, mins: finTime.minutes, secs: finTime.seconds}) }}
+            <!-- {{ finTime.days }}天{{ finTime.hours }}时{{ finTime.minutes }}分{{ finTime.seconds }}秒 -->
+          </span>
         </div>
       </div>
     </div>

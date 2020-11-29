@@ -4,11 +4,11 @@
       <img src="https://cdn.jsdelivr.net/gh/defis-net/material/financial/financial2.png" alt="">
       <div class="main flexb">
         <div>
-          <div>待分配</div>
+          <div>{{ $t('financial.assigned') }}</div>
           <div class="num dinBold">{{ allSend }} YFC</div>
         </div>
         <div>
-          <div>待销毁</div>
+          <div>{{ $t('financial.destory') }}</div>
           <div class="num dinBold">{{ bal3 }} YFC</div>
         </div>
       </div>

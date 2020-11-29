@@ -2,10 +2,10 @@
   <div class="withdraw">
     <img class="close" @click="handleClose(false)"
       src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg">
-    <div class="title">取回</div>
+    <div class="title">{{ $t('financial.withTitle') }}</div>
     <div class="content">
       <div>
-        <div class="bal dinReg" @click="handlePercent(1)">余额：{{ depositBal }} EOS</div>
+        <div class="bal dinReg" @click="handlePercent(1)">{{ $t('public.balance') }}：{{ depositBal }} EOS</div>
         <div class="flexb">
           <div class="flexa coinInfo">
             <img class="coinImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
@@ -30,10 +30,10 @@
     </div>
     <div class="btn flexc" :class="{'disabled': !regNum || down.total}" @click="handleWithdraw">
       <span v-if="down.total <= 0">
-        <span v-if="regNum">确认</span>
-        <span v-else>{{ regContent }}</span>
+        <span v-if="regNum">{{ $t('public.confirm') }}</span>
+        <span v-else>{{ $t(`financial.${regContent}`) }}</span>
       </span>
-      <span v-else>{{ `${down.hours}:${down.minutes}:${down.seconds}` }} 后解锁</span>
+      <span v-else>{{ $t('financial.timeUnlock', {time: `${down.hours}:${down.minutes}:${down.seconds}`}) }}</span>
     </div>
   </div>
 </template>
@@ -74,11 +74,11 @@ export default {
     }),
     regNum() {
       if (!Number(this.withdraw)) {
-        this.regContent = '请输入数量'; // eslint-disable-line
+        this.regContent = 'iptNum'; // eslint-disable-line
         return false
       }
       if (Number(this.withdraw) > Number(this.depositBal)) {
-        this.regContent = 'EOS 余额不足'; // eslint-disable-line
+        this.regContent = 'banLow'; // eslint-disable-line
         return false
       }
       return true

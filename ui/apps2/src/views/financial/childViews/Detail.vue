@@ -4,7 +4,7 @@
       <span class="back flexa" @click="$router.back()">
         <!-- <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/back.png" alt=""> -->
       </span>
-      <span>产品详情</span>
+      <span>{{ $t('financial.detail') }}</span>
       <span class="back"></span>
     </div>
     <!-- 币种 -->
@@ -19,25 +19,25 @@
     <div class="detailInfo">
       <div class="info flexs">
         <div class="apyInfo">
-          <div class="tip subTitle">实时年化</div>
+          <div class="tip subTitle">{{ $t('financial.apy') }}</div>
           <div class="num dinBold">{{ apy }}%</div>
           <div class="type flexa tip">
             <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/kline.png" alt="">
-            <span>稳健型</span>
+            <span>{{ $t('financial.status1') }}</span>
           </div>
         </div>
         <div class="time">
           <div class="tip subTitle flexa">
-            <span>产品期限</span>
+            <span>{{ $t('financial.date1') }}</span>
             <img @click="showTip = true" class="tipImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/tips_icon_btn.svg" alt="">
           </div>
-          <div class="date dinBold">4天</div>
-          <div class="count tip">理财总额：{{ depositNum }}</div>
+          <div class="date dinBold">4{{ $t('financial.day') }}</div>
+          <div class="count tip">{{ $t('financial.amount') }}：{{ depositNum }}</div>
         </div>
       </div>
       <div class="desc tip">
-        <div>存入EOS，由智能合约自动操作参与挖矿。</div>
-        <div class="mt10">预计每万EOS每天收益：{{ about }} YFC</div>
+        <div>{{ $t('financial.tip1') }}</div>
+        <div class="mt10">{{ $t('financial.tip2') }}：{{ about }} YFC</div>
       </div>
     </div>
 
@@ -48,7 +48,7 @@
 
     <div class="nullDiv"></div>
     <div class="btnDiv">
-      <div class="btn flexc" @click="showDeposit = true">存入</div>
+      <div class="btn flexc" @click="showDeposit = true">{{ $t('financial.deposit') }}</div>
     </div>
 
     <el-dialog
