@@ -255,6 +255,7 @@ export default {
   padding: 44px 32px;
   font-size: 28px;
   color: #333;
+  border-bottom: 25px solid #f5f5f5;
   .title{
     font-size: 32px;
   }

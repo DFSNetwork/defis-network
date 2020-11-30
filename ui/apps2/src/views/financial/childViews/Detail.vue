@@ -41,10 +41,11 @@
       </div>
     </div>
 
-    <!-- 交易规则 -->
-    <TradeRules v-if="showRules"/>
+
     <!-- 我的理财 -->
     <MyFinancial :args="args" ref="myFinancial" @listenNoDeposit="handleShowRules"/>
+    <!-- 交易规则 -->
+    <TradeRules />
 
     <div class="nullDiv"></div>
     <div class="btnDiv">
@@ -295,6 +296,7 @@ export default {
   position: fixed;
   bottom: 10px;
   background: #FFF;
+  z-index: 1000;
   .btn{
     height: 90px;
     background: #29D4B0;

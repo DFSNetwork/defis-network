@@ -43,7 +43,7 @@ export default {
       rules2: '今日存入',
       rules3: '锁定4日',
       rules4: '到期取回',
-      rules5: '存入EOS，锁定4日，解锁前不可取出，',
+      rules5: '存入EOS，锁定4日(UTC时间)，解锁前不可取出，',
       rules6: '收益与时间有关，时间越长，年化越高',
       rules7: '每次操作(包括：领取、存入、取回)后，收益自动领取，时间加成清0，',
       rules8: '解锁时间由最后一次存入行为决定，',
@@ -59,7 +59,7 @@ export default {
   },
   'en': {
     financial: {
-      tab:'Financial',
+      tab:'Funds',
       assigned:'To be assigned',
       destory: 'To be destroyed',
       detail:'Product details',
@@ -100,7 +100,7 @@ export default {
       rules2:'Deposit today',
       rules3:'Lock for 4 days',
       rules4:'Retrieve after expiration',
-      rules5:'Deposit into EOS, lock for 4 days, cannot withdraw before unlocking,',
+      rules5:'Deposit into EOS, lock for 4 days (UTC time), cannot withdraw before unlocking,',
       rules6:'Revenue is related to time, the longer the time, the higher the annualization',
       rules7:'After each operation (including: receiving, depositing, and retrieving), the income is automatically received, and the time bonus is cleared to 0,',
       rules8:'Unlocking time is determined by the last deposit behavior,',
