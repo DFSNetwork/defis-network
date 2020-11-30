@@ -15,7 +15,7 @@
           <img class="headImg" :src="accInfo.avatar || item.headImg" :onerror="errorCoinImg">
           <div class="mainData">
             <div class="name">{{accInfo.nick || item.fromx}}</div>
-            <div class="num tip dinReg">捐赠数量: {{ item.quantity }}</div>
+            <div class="num tip dinReg">捐赠数量: {{ item.quantity }} ({{item.account}})</div>
             <div class="content">{{ item.memo }}</div>
             <div class="time tip">{{handleToLocalTime(item.dealTime)}}</div>
             <div class="flexa replyDiv tip">
