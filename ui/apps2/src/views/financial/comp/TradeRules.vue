@@ -1,30 +1,31 @@
 <template>
   <div class="tradeReles" :class="{'noMargin': showType === 'dialog'}">
-    <div class="title">规则</div>
-    <div class="tip">存入、取回规则</div>
+    <div class="title">{{ $t('financial.rules') }}</div>
+    <div class="tip">{{ $t('financial.rules1') }}</div>
     <div class="step flexb" v-if="showType !== 'dialog'">
       <span class="item"></span>
       <span class="item"></span>
       <span class="item"></span>
     </div>
     <div class="stepSpan flexb" v-if="showType !== 'dialog'">
-      <span>今日存入</span>
-      <span>锁定4日</span>
-      <span>到期取回</span>
+      <span>{{ $t('financial.rules2') }}</span>
+      <span>{{ $t('financial.rules3') }}</span>
+      <span>{{ $t('financial.rules4') }}</span>
     </div>
     <div class="ul">
-      <div class="li">存入EOS，锁定4日，解锁前不可取出，</div>
+      <div class="li">{{ $t('financial.rules5') }}</div>
       <div class="li flexa">
-        <span>收益与时间有关，时间越长，年化越高</span>
+        <span>{{ $t('financial.rules6') }}</span>
         <img @click="showTip = true" class="tipImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/tips_icon_btn.svg" alt="">
       </div>
-      <div class="li">每次操作(包括：领取、存入、取回)后，收益自动领取，时间加成清0，</div>
-      <div class="li">解锁时间由最后一次存入行为决定，</div>
-      <div class="li">解锁后，资金可自行取回</div>
+      <div class="li">{{ $t('financial.rules7') }}</div>
+      <div class="li">{{ $t('financial.rules8') }}</div>
+      <div class="li">{{ $t('financial.rules9') }}</div>
     </div>
 
     <el-dialog
       class="mydialog"
+      :append-to-body="true"
       :show-close="false"
       :visible.sync="showTip">
       <RewardTip v-if="showTip" />

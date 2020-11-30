@@ -127,7 +127,7 @@
               </span>
               <img class="tradeSet" @click="handleShowTools" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/swapSet.svg" alt="">
             </span>
-            <span>无滑点交易</span>
+            <span v-else>无滑点交易</span>
           </div>
           <div class="flexb">
             <span class="flex">
