@@ -31,7 +31,7 @@
             <span>{{ $t('financial.date1') }}</span>
             <img @click="showTip = true" class="tipImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/tips_icon_btn.svg" alt="">
           </div>
-          <div class="date dinBold">4{{ $t('financial.day') }}</div>
+          <div class="date dinBold">{{ $t('financial.day', {days: 4}) }}</div>
           <div class="count tip">{{ $t('financial.amount') }}：{{ depositNum }}</div>
         </div>
       </div>
@@ -256,7 +256,7 @@ export default {
       color: #E62C3B;
     }
     .date{
-      font-size: 48px;
+      font-size: 36px;
       line-height: 64px;
     }
     .type{

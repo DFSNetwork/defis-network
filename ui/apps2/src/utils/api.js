@@ -352,6 +352,18 @@ export function get_top3_fundation(params) {
   })
 }
 
+
+// 获取公告
+export function get_voices() {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/dfs/swap/voices').then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
 // setTimeout(() => {
 //   // get_acc_lists('dfsdeveloper', 'followers')
 //   // get_acc_lists('djsja24djdjs', 'fans')

@@ -1,7 +1,10 @@
 <template>
   <div class="fundation">
-    <van-notice-bar color="#29D4B0" mode="closeable" background="#29D4B01A" left-icon="volume-o">
-      节点选美即将上线！
+    <van-notice-bar v-if="voices.length" color="#29D4B0" mode="closeable" background="#29D4B01A"
+      left-icon="volume-o" scrollable>
+        <span class="noticeSpan" v-for="(data, index) in voices" :key="index">
+          {{ data }}
+        </span>
     </van-notice-bar>
     <van-swipe class="banner" :autoplay="3000" indicator-color="white">
       <van-swipe-item v-for="(item, index) in images" :key="index" @click="handleTo(item.routeName)">
@@ -42,7 +45,7 @@ import ToFundation from './dialog/ToFundation';
 
 // api
 import { getCoin, toLocalTime } from '@/utils/public'
-import { get_summary, get_new_fundation,
+import { get_summary, get_new_fundation, get_voices,
   get_mvd_fundation, get_hot_fundation } from '@/utils/api';
 
 export default {
@@ -82,10 +85,12 @@ export default {
       // 上拉加载更多
       finished: false,
       isGetting: false,
+      voices: [],
     }
   },
   mounted() {
     this.handleGetSummary()
+    this.handleGetVoices()
   },
   beforeDestroy() {
     clearTimeout(this.timer)
@@ -109,6 +114,13 @@ export default {
     }
   },
   methods: {
+    async handleGetVoices() {
+      const {status, result} = await get_voices();
+      if (!status) {
+        return
+      }
+      this.voices = result.data || [];
+    },
     handleTo(name) {
       if (this.$route.name === name) {
         return
@@ -275,6 +287,12 @@ export default {
 <style lang="scss" scoped>
 .fundation{
   font-size: 27px;
+  .noticeSpan{
+    display: inline-block;
+    text-align: left;
+    min-width: 590px;
+    width: 590px;
+  }
   .banner{
     color: #FFF;
     position: relative;
