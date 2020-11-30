@@ -62,10 +62,19 @@ export default {
   watch: {
     poolsBal: {
       handler: function pb(val) {
-        this.poolsEos = accMul(val, 2).toFixed(4);
+        // this.poolsEos = accMul(val, 2).toFixed(4);
       },
       immediate: true,
       deep: true,
+    },
+    marketLists: {
+      handler: function mls(newVal) {
+        let count = 0
+        newVal.forEach(v => {
+          count = Number(count) + Number(v.eos_value)
+        })
+        this.poolsEos = count;
+      }
     }
   },
   methods: {

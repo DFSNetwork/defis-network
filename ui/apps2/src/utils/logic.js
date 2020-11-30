@@ -233,6 +233,20 @@ function dealMarketSort(newList) {
   return newListSort;
 }
 
+
+function get_token_eos_value(a, eos_price) {
+  let val0 = 0;
+  if (a.contract0 === "eosio.token" && a.sym0 === "4,EOS") {
+      val0 = parseFloat(a.reserve0);
+  } else if (a.contract1 === "eosio.token" && a.sym1 === "4,EOS") {
+      val0 = parseFloat(a.reserve1);
+  } else if (a.contract0 === "tethertether" && a.sym0 === "4,USDT") {
+      val0 = parseFloat(a.reserve0) / eos_price;
+  } else if (a.contract1 === "tethertether" && a.sym1 === "4,USDT") {
+      val0 = parseFloat(a.reserve1) / eos_price;
+  }
+  return val0;
+}
 // 列表处理 - 非vue数据处理迁移
 export function dealMarketLists(list, topLists) {
   const newList = []
@@ -240,6 +254,8 @@ export function dealMarketLists(list, topLists) {
   let dfsData = {}
   const mkFlt = store.state.config.mkFilterConf;
   const priceObj = getFilterPrice(list)
+  let eos_market = list.find(v => v.mid === 17);
+  let eos_price = parseFloat(eos_market.reserve1) / parseFloat(eos_market.reserve0);
   list.forEach((item) => {
     let v = item;
     if (v.contract1 === 'eosio.token' && v.sym1 === '4,EOS') {
@@ -293,6 +309,9 @@ export function dealMarketLists(list, topLists) {
       symbol: v.symbol1,
       imgUrl: getCoin(v.contract1, v.symbol1.toLowerCase()),
     }
+    let val0 = get_token_eos_value(v, eos_price);
+    v.eos_value = val0 * 2;
+    v.usdt_value = val0 * 2 * eos_price;
     const i = topLists.find(vv => vv === v.mid)
     if (i) {
       dfsData = v;
@@ -331,6 +350,7 @@ export function dealMarketLists(list, topLists) {
   const newMainList = dealMarketSort(mainList);
   newMainList.splice(1, 0, dfsData)
   store.dispatch('setFilterMkLists', newMainList)
+  // console.log(newListSort)
   return {
     allLists: newListSort,
     filterLists: newMainList,
