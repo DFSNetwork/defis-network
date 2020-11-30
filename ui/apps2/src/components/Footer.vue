@@ -85,6 +85,7 @@ export default {
         const sym1Liq = isShowToken.reserve.split(' ')[0];
         const poolsApr = value / (sym1Liq - value) * 365 * 100;
         allResult.push({
+          mid: item.mid,
           symbol: isShowToken.symbol,
           poolsApr: `${poolsApr.toFixed(3)}%`
         });
