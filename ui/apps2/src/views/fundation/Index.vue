@@ -1,9 +1,13 @@
 <template>
   <div class="fundation">
-    <div class="banner">
-      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/fundation.png" alt="">
-    </div>
-
+    <van-notice-bar color="#29D4B0" mode="closeable" background="#29D4B01A" left-icon="volume-o">
+      节点选美即将上线！
+    </van-notice-bar>
+    <van-swipe class="banner" :autoplay="3000" indicator-color="white">
+      <van-swipe-item v-for="(item, index) in images" :key="index" @click="handleTo(item.routeName)">
+        <img class="bgImg" :src="item.image" />
+      </van-swipe-item>
+    </van-swipe>
     <!-- 币种统计 -->
     <Summary :totalNum="totalNum" :amtNum="amtNum" :summaryLists="summaryLists"/>
 
@@ -50,6 +54,19 @@ export default {
   },
   data() {
     return {
+      images: [{
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner4.png',
+        routeName: 'fundation'
+      }, {
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner1.png',
+        routeName: 'nodeVote'
+      }, {
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner2.png',
+        routeName: 'nodePools'
+      }, {
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner3.png',
+        routeName: 'financial'
+      }],
       page: 1,
       pagesize: 20,
       totalNum: 0, // 总人次
@@ -92,6 +109,14 @@ export default {
     }
   },
   methods: {
+    handleTo(name) {
+      if (this.$route.name === name) {
+        return
+      }
+      this.$router.push({
+        name
+      })
+    },
     handleFilter(filter) {
       this.finished = false;
       this.hisLists = [];
@@ -257,7 +282,7 @@ export default {
       z-index: 1;
     }
     .bgImg{
-      height: 300px;
+      height: 320px;
       width: 100%;
       z-index: 0;
     }

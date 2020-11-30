@@ -422,7 +422,7 @@ export default {
       position: absolute;
       width: 8px;
       height: 30px;
-      background:#02C698;
+      background:#29D4B0;
       border-radius:4px;
       left: 0%;
       top: 50%;

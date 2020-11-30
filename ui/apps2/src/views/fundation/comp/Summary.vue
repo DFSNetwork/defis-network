@@ -95,7 +95,7 @@ export default {
   position: relative;
   border-radius: 20px 20px 0 0;
   box-shadow: 0px 4px 8px 4px rgba(237,237,237,0.5);
-  margin: -40px 30px 30px;
+  margin: 20px 30px 30px;
   background: #FFF;
   z-index: 1;
 }

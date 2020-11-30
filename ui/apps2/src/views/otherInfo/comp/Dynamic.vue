@@ -18,6 +18,16 @@
             <div class="num tip dinReg">捐赠数量: {{ item.quantity }}</div>
             <div class="content">{{ item.memo }}</div>
             <div class="time tip">{{handleToLocalTime(item.dealTime)}}</div>
+            <div class="flexa replyDiv tip">
+              <span class="flexa">
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
+                <span>{{ item.likeNum }}</span>
+              </span>
+              <span class="flexa right">
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/reply.png" alt="">
+                <span>{{ item.replyNum }}</span>
+              </span>
+            </div>
           </div>
         </div>
       </van-list>
@@ -54,7 +64,7 @@ export default {
   mounted() {
     Bus.$on('busForAccInfo', (val) => {
       this.accInfo = val;
-      console.log(this.accInfo)
+      // console.log(this.accInfo)
     });
     this.id = this.$route.params.id;
   },
@@ -85,8 +95,8 @@ export default {
         const t = toLocalTime(v.create_time).replace(/-/g, '/');
         const times = Date.parse(t) + 3600 * 8 * 1000;
         this.$set(v, 'dealTime', toLocalTime(times))
-        // const likeNum = v.like_count * 1000;
-        // this.$set(v, 'likeNum', likeNum.toFixed(0))
+        const likeNum = v.like_count * 1000;
+        this.$set(v, 'likeNum', likeNum.toFixed(0))
       })
       if (this.page === 1) {
         this.lists = rows;
@@ -161,7 +171,7 @@ export default {
       font-weight: normal;
     }
     .content{
-      margin: 8px 0;
+      margin: 8px 0 4px;
       overflow: hidden;
       word-break: break-all;
       white-space: pre-wrap;
@@ -169,6 +179,20 @@ export default {
     .time{
       margin-top: 4px;
       font-size: 20px;
+    }
+    .replyDiv{
+      margin-top: 18px;
+      font-size: 22px;
+      img{
+        width: 32px;
+        margin-right: 10px;
+      }
+      &>span{
+        width: 120px;
+      }
+      .right{
+        margin-left: 20px;
+      }
     }
   }
 }
