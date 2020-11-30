@@ -12,10 +12,13 @@ import VueClipboard from 'vue-clipboard2';
 import VueWorker from 'vue-worker';
 import './vant'
 
+import api from './api'
+
 // 复制文本插件
 Vue.use(VueClipboard)
 Vue.use(VueWorker)
 
+Vue.prototype.$api = api
 Vue.config.productionTip = false
 // 国际化 - 语言
 Vue.use(ElementUI, {

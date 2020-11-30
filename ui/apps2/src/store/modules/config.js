@@ -80,7 +80,10 @@ const config = {
       contract: 'tethertether',
       minEos: 100, // 最低价值 100 EOS
       priceMid: 17,
-    }]
+    }],
+
+    // pddex Data
+    boxMids: [], // 设置Box的做市Mid
   },
   mutations: {
     SET_LpMineList: (state, lpMineList) => {
@@ -96,6 +99,10 @@ const config = {
     SET_TimeList: (state, timeList) => {
       state.timeList = timeList;
     },
+    // pddex Data
+    SET_BOXMIDS: (state, boxMids) => {
+      state.boxMids = boxMids;
+    },
   },
   actions: {
     setLpMineList({ commit }, baseConfig) {
@@ -109,6 +116,10 @@ const config = {
     },
     setTimeList({ commit }, timeList) {
       commit('SET_TimeList', timeList);
+    },
+    // pddex Data
+    setBoxMids({ commit }, boxMids) {
+      commit('SET_BOXMIDS', boxMids);
     },
   }
 };

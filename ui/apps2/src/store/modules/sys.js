@@ -35,6 +35,10 @@ const sys = {
       nodecoin: 'tagissuetest',
       fundation: 'dfsfundatest',
       lpPools: 'tageosmining',
+      // pddex config
+      swap: 'defisswapcnt',
+      pddex: 'pddex.dfs',
+      box: 'swap.defi',
     },
     devConfig: { // 开发环境配置
       node: {
@@ -61,9 +65,13 @@ const sys = {
       nodecoin: 'tagissuetest',
       fundation: 'dfsfundatest',
       lpPools: 'tageosmining',
+      // pddex config
+      swap: 'defisswapcnt',
+      pddex: 'pddex.dfs',
+      box: 'swap.defi',
     },
-    proConfig: localStorage.getItem('proConfig') && JSON.parse(localStorage.getItem('proConfig')).isNewConfig ? JSON.parse(localStorage.getItem('proConfig')) : { // 生产环境配置
-      node: {
+    proConfig: { // 生产环境配置
+      node: localStorage.getItem('proConfig') ? JSON.parse(localStorage.getItem('proConfig')).node : {
         area: 'production',
         protocol: 'https',
         host: 'eos.blockeden.cn', // eospush.tokenpocket.pro
@@ -87,6 +95,10 @@ const sys = {
       nodecoin: 'tagissuemain',
       fundation: 'dfsfundation',
       lpPools: 'tageosmining',
+      // pddex config
+      swap: 'defisswapcnt',
+      pddex: 'pddex.dfs',
+      box: 'swap.defi',
     },
     damping: localStorage.getItem('damping') || 0.75, // DFS流通量计算得出 - Math.pow(0.75, parseInt(dfsCurrent / 1000000))
     dfsPrice: localStorage.getItem('dfsPrice') || '0', // DFS 5分钟均价

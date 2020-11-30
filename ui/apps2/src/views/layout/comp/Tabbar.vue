@@ -10,9 +10,11 @@
         </span>
         <div>{{ $t('tabbar.swap') }}</div>
       </div>
-      <div class="bar" @click="handleToPro('pddex')">
+      <div class="bar" :class="{'act': $route.name === 'pddex'}"
+        @click="handleTo('pddex')">
         <span class="myCoin flexc">
-          <img src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/pddex-un1.png">
+          <img v-if="$route.name !== 'pddex'" src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/pddex-un1.png">
+          <img v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/pddex1.png">
         </span>
         <div>{{ $t('tabbar.order') }}</div>
       </div>

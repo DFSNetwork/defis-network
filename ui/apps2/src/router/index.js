@@ -246,6 +246,20 @@ const constantRouter = [
       },
     ],
   },
+  // Pddex
+  {
+    path: '/pddex',
+    component: Layout,
+    redirect: '/',
+    children: [
+      {
+        path: '/',
+        name: 'pddex',
+        component: () => import(/* webpackChunkName: "pddex" */ '@/views/pddex/Index'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
+      },
+    ],
+  },
 ]
 
 export default new Router({
