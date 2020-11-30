@@ -325,6 +325,7 @@ export default {
     margin: auto;
     margin-bottom: 20px;
     width: 300px;
+    text-align: center;
   }
   .percent{
     margin-top: 20px;

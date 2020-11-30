@@ -104,11 +104,7 @@ export default {
     }
   },
   mounted() {
-    this.id = this.$route.params.id;
-    this.handleGetInfo()
-    this.handleGetAccInfo()
-    this.handleGetVisitNum()
-    this.handleAccVisit()
+    this.handleMounted()
   },
   computed: {
     ...mapState({
@@ -125,9 +121,30 @@ export default {
       },
       deep: true,
       immediate: true
+    },
+    '$route': {
+      handler: function sc () {
+        this.handleMounted()
+      },
+      deep: true,
+      immediate: true
     }
   },
   methods: {
+    handleMounted() {
+      this.id = this.$route.params.id;
+      this.accInfo = {
+        avatar: "https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png",
+        cover: "https://cdn.jsdelivr.net/gh/defis-net/material/accBanner/banner0.png",
+        desc: "",
+        nick: "",
+        sex: 2,
+      },
+      this.handleGetInfo()
+      this.handleGetAccInfo()
+      this.handleGetVisitNum()
+      this.handleAccVisit()
+    },
     handleClose(type) {
       this.showCancel = false;
       if (type) {
