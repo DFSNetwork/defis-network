@@ -76,7 +76,7 @@ export async function getAccFarmerData(accVoteData, cb) {
   }
   const rows = result.rows || [];
   // console.log(rows)
-  // console.log(accVoteData)
+  console.log(accVoteData)
   if (!rows.length) {
     cb(accVoteData)
     return
@@ -84,7 +84,8 @@ export async function getAccFarmerData(accVoteData, cb) {
   const row = rows[0];
   accVoteData.isfarmer = true;
   accVoteData.last_drip = row.last_drip;
-  if (accVoteData.last_vote_weight !== row.last_vote_weight) {
+  // if (accVoteData.last_vote_weight !== row.last_vote_weight) {
+  if (accVoteData.proxy !== 'dfsbpsproxy1') {
     accVoteData.showJoinBtn = true;
     cb(accVoteData)
     return;
