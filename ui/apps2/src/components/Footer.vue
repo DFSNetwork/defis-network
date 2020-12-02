@@ -60,12 +60,21 @@ export default {
     this.handleGetDfsInfoData();
   },
   watch: {
-    poolsBal: {
-      handler: function pb(val) {
-        this.poolsEos = accMul(val, 2).toFixed(4);
-      },
-      immediate: true,
-      deep: true,
+    // poolsBal: {
+    //   handler: function pb(val) {
+    //     // this.poolsEos = accMul(val, 2).toFixed(4);
+    //   },
+    //   immediate: true,
+    //   deep: true,
+    // },
+    marketLists: {
+      handler: function mls(newVal) {
+        let count = 0
+        newVal.forEach(v => {
+          count = Number(count) + Number(v.eos_value)
+        })
+        this.poolsEos = count;
+      }
     }
   },
   methods: {
@@ -85,6 +94,7 @@ export default {
         const sym1Liq = isShowToken.reserve.split(' ')[0];
         const poolsApr = value / (sym1Liq - value) * 365 * 100;
         allResult.push({
+          mid: item.mid,
           symbol: isShowToken.symbol,
           poolsApr: `${poolsApr.toFixed(3)}%`
         });

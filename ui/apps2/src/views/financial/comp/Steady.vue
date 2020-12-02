@@ -1,8 +1,8 @@
 <template>
   <div class="steady">
     <div class="title flexa">
-      <span class="name">稳健型</span>
-      <span class="tip">本金无损, 解锁后随时取回</span>
+      <span class="name">{{ $t('financial.status1') }}</span>
+      <span class="tip">{{ $t('financial.subTitle') }}</span>
     </div>
     <div class="lists">
       <div class="list" v-for="(item, index) in list" :key="index" @click="handleTo(item)">
@@ -14,17 +14,17 @@
               <div class="contract tip">{{ item.contract }}</div>
             </div>
           </div>
-          <div class="btn flexc">管理</div>
+          <div class="btn flexc">{{ $t('financial.manage') }}</div>
         </div>
 
         <div class="flexb info">
           <div class="percent">
             <div class="apy dinBold">{{ args.apy || '0.00' }}%</div>
-            <div class="tip">实时年化</div>
+            <div class="tip">{{ $t('financial.apy') }}</div>
           </div>
           <div class="dataInfo">
-            <div class="time dinBold">{{ item.lockTime }}天</div>
-            <div class="tip">{{ item.desc }}</div>
+            <div class="time dinBold">{{ $t('financial.day', {days: item.lockTime}) }}</div>
+            <div class="tip">{{ $t(`financial.${item.desc}`) }}</div>
           </div>
         </div>
       </div>
@@ -45,7 +45,7 @@ export default {
         coinImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg',
         apy: '0.00',
         lockTime: 4,
-        desc: '低风险 本金无损',
+        desc: 'riskLow',
       }],
       args: {},
     }

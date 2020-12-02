@@ -4,7 +4,7 @@
       <span class="back flexa" @click="$router.back()">
         <!-- <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/back.png" alt=""> -->
       </span>
-      <span>产品详情</span>
+      <span>{{ $t('financial.detail') }}</span>
       <span class="back"></span>
     </div>
     <!-- 币种 -->
@@ -19,36 +19,40 @@
     <div class="detailInfo">
       <div class="info flexs">
         <div class="apyInfo">
-          <div class="tip subTitle">实时年化</div>
+          <div class="tip subTitle">{{ $t('financial.apy') }}</div>
           <div class="num dinBold">{{ apy }}%</div>
           <div class="type flexa tip">
             <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/kline.png" alt="">
-            <span>稳健型</span>
+            <span>{{ $t('financial.status1') }}</span>
           </div>
         </div>
         <div class="time">
           <div class="tip subTitle flexa">
-            <span>产品期限</span>
+            <span>{{ $t('financial.date1') }}</span>
             <img @click="showTip = true" class="tipImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/tips_icon_btn.svg" alt="">
           </div>
-          <div class="date dinBold">4天</div>
-          <div class="count tip">理财总额：{{ depositNum }}</div>
+          <div class="date dinBold">{{ $t('financial.day', {days: 4}) }}</div>
+          <div class="count">
+            <span class="tip">{{ $t('financial.amount') }}：</span>
+            <span class="din">{{ depositNum }}</span>
+          </div>
         </div>
       </div>
       <div class="desc tip">
-        <div>存入EOS，由智能合约自动操作参与挖矿。</div>
-        <div class="mt10">预计每万EOS每天收益：{{ about }} YFC</div>
+        <div>{{ $t('financial.tip1') }}</div>
+        <div class="mt10">{{ $t('financial.tip2') }}：{{ about }} YFC</div>
       </div>
     </div>
 
-    <!-- 交易规则 -->
-    <TradeRules v-if="showRules"/>
+
     <!-- 我的理财 -->
     <MyFinancial :args="args" ref="myFinancial" @listenNoDeposit="handleShowRules"/>
+    <!-- 交易规则 -->
+    <TradeRules />
 
     <div class="nullDiv"></div>
     <div class="btnDiv">
-      <div class="btn flexc" @click="showDeposit = true">存入</div>
+      <div class="btn flexc" @click="showDeposit = true">{{ $t('financial.deposit') }}</div>
     </div>
 
     <el-dialog
@@ -255,7 +259,7 @@ export default {
       color: #E62C3B;
     }
     .date{
-      font-size: 48px;
+      font-size: 36px;
       line-height: 64px;
     }
     .type{
@@ -295,6 +299,7 @@ export default {
   position: fixed;
   bottom: 10px;
   background: #FFF;
+  z-index: 1000;
   .btn{
     height: 90px;
     background: #29D4B0;

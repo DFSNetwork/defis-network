@@ -1,9 +1,16 @@
 <template>
   <div class="fundation">
-    <div class="banner">
-      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/fundation.png" alt="">
-    </div>
-
+    <van-notice-bar v-if="voices.length" color="#29D4B0" mode="closeable" background="#29D4B01A"
+      left-icon="volume-o" scrollable>
+        <span class="noticeSpan" v-for="(data, index) in voices" :key="index">
+          {{ data }}
+        </span>
+    </van-notice-bar>
+    <van-swipe class="banner" :autoplay="3000" indicator-color="white">
+      <van-swipe-item v-for="(item, index) in images" :key="index" @click="handleTo(item.routeName)">
+        <img class="bgImg" :src="item.image" />
+      </van-swipe-item>
+    </van-swipe>
     <!-- 币种统计 -->
     <Summary :totalNum="totalNum" :amtNum="amtNum" :summaryLists="summaryLists"/>
 
@@ -38,7 +45,7 @@ import ToFundation from './dialog/ToFundation';
 
 // api
 import { getCoin, toLocalTime } from '@/utils/public'
-import { get_summary, get_new_fundation,
+import { get_summary, get_new_fundation, get_voices,
   get_mvd_fundation, get_hot_fundation } from '@/utils/api';
 
 export default {
@@ -50,6 +57,19 @@ export default {
   },
   data() {
     return {
+      images: [{
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner4.png',
+        routeName: 'fundation'
+      }, {
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner1.png',
+        routeName: 'nodeVote'
+      }, {
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner2.png',
+        routeName: 'nodePools'
+      }, {
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner3.png',
+        routeName: 'financial'
+      }],
       page: 1,
       pagesize: 20,
       totalNum: 0, // 总人次
@@ -65,10 +85,12 @@ export default {
       // 上拉加载更多
       finished: false,
       isGetting: false,
+      voices: [],
     }
   },
   mounted() {
     this.handleGetSummary()
+    this.handleGetVoices()
   },
   beforeDestroy() {
     clearTimeout(this.timer)
@@ -92,6 +114,21 @@ export default {
     }
   },
   methods: {
+    async handleGetVoices() {
+      const {status, result} = await get_voices();
+      if (!status) {
+        return
+      }
+      this.voices = result.data || [];
+    },
+    handleTo(name) {
+      if (this.$route.name === name) {
+        return
+      }
+      this.$router.push({
+        name
+      })
+    },
     handleFilter(filter) {
       this.finished = false;
       this.hisLists = [];
@@ -250,6 +287,12 @@ export default {
 <style lang="scss" scoped>
 .fundation{
   font-size: 27px;
+  .noticeSpan{
+    display: inline-block;
+    text-align: left;
+    min-width: 590px;
+    width: 590px;
+  }
   .banner{
     color: #FFF;
     position: relative;
@@ -257,7 +300,7 @@ export default {
       z-index: 1;
     }
     .bgImg{
-      height: 300px;
+      height: 320px;
       width: 100%;
       z-index: 0;
     }

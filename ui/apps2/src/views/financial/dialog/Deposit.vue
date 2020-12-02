@@ -2,10 +2,10 @@
   <div class="deposit">
     <img class="close" @click="handleClose(false)"
       src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg">
-    <div class="title">存款</div>
+    <div class="title">{{ $t('financial.depositTitle') }}</div>
     <div class="content">
       <div>
-        <div class="bal dinReg" @click="handleClickMax">余额：{{ bal }} EOS</div>
+        <div class="bal dinReg" @click="handleClickMax">{{ $t('public.balance') }}：{{ bal }} EOS</div>
         <div class="flexb">
           <div class="flexa coinInfo">
             <img class="coinImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
@@ -21,15 +21,15 @@
         </div>
       </div>
       <div class="flexb lockTime">
-        <span class="tip">存款时间</span>
-        <span class="red">存款锁定四日</span>
+        <span class="tip">{{ $t('financial.depTime') }}</span>
+        <span class="red">{{ $t('financial.depLock') }}</span>
       </div>
     </div>
 
     <!-- 按钮 -->
     <div class="btn flexc" :class="{'disabled': !regNum}"  @click="handleDeposit">
-      <span v-if="regNum">确认</span>
-      <span v-else>{{ regContent }}</span>
+      <span v-if="regNum">{{ $t('public.confirm') }}</span>
+      <span v-else>{{ $t(`financial.${regContent}`) }}</span>
     </div>
     <!-- 交易规则 -->
     <div class="rules">
@@ -66,11 +66,11 @@ export default {
     }),
     regNum() {
       if (!Number(this.deposit)) {
-        this.regContent = '请输入数量'; // eslint-disable-line
+        this.regContent = 'iptNum'; // eslint-disable-line
         return false
       }
       if (Number(this.deposit) > Number(this.bal)) {
-        this.regContent = 'EOS 余额不足'; // eslint-disable-line
+        this.regContent = 'banLow'; // eslint-disable-line
         return false
       }
       return true

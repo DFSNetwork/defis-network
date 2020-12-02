@@ -95,46 +95,48 @@
             </div>
           </div>
         </template>
-        <div class="listOld flexs" v-for="(item, index) in pageLists" :key="index">
-          <div class="headImg" @click="handleTo(item)">
-            <img width="100%" :src="item.accInfo ? item.accInfo.avatar || item.headImg : item.headImg"
-              :onerror="errorCoinImg">
-          </div>
-          <div class="mainContent">
-            <div class="flexb">
-              <div class="name"  @click="handleTo(item)">
-                <div>{{ (item.accInfo ? item.accInfo.nick || item.fromx : item.fromx) }}</div>
-                <div class="price flexa tip">
-                  <span class="">{{ $t('fundation.transNum') }}：</span>
-                  <span class="flexc qua dinReg">{{ item.quantity }}({{ item.account }})</span>
+        <template v-for="(item, index) in pageLists">
+          <div class="listOld flexs" :key="index" v-if="!item.isHot">
+            <div class="headImg" @click="handleTo(item)">
+              <img width="100%" :src="item.accInfo ? item.accInfo.avatar || item.headImg : item.headImg"
+                :onerror="errorCoinImg">
+            </div>
+            <div class="mainContent">
+              <div class="flexb">
+                <div class="name"  @click="handleTo(item)">
+                  <div>{{ (item.accInfo ? item.accInfo.nick || item.fromx : item.fromx) }}</div>
+                  <div class="price flexa tip">
+                    <span class="">{{ $t('fundation.transNum') }}：</span>
+                    <span class="flexc qua dinReg">{{ item.quantity }}({{ item.account }})</span>
+                  </div>
+                </div>
+                <div class="flexa tip likeDiv" @click="handleShowLike(item)">
+                  <span>{{ item.likeNum || 0 }}</span>
+                  <img v-if="item.like_status === 0" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
+                  <img v-else width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt="">
                 </div>
               </div>
-              <div class="flexa tip likeDiv" @click="handleShowLike(item)">
-                <span>{{ item.likeNum || 0 }}</span>
-                <img v-if="item.like_status === 0" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
-                <img v-else width="20px" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt="">
+              <div @click="handleReply(item)">
+                <div class="price flexs">
+                  <span class="hideText">{{ item.memo }}</span>
+                </div>
+                <div class="tip time flexa">
+                  <span>{{ handleToLocalTime(item.dealTime) }}</span>
+                  <span class="reply">{{ $t('fundation.reply') }}</span>
+                </div>
               </div>
-            </div>
-            <div @click="handleReply(item)">
-              <div class="price flexs">
-                <span class="hideText">{{ item.memo }}</span>
+              <div class="showReply flexa" v-if="!item.showReply && item.replyNum"
+                @click="handleShowItemReply(item)">
+                <span>{{ $t('fundation.openSubReply', {len: item.replyNum}) }}</span>
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/showMore.png" alt="">
               </div>
-              <div class="tip time flexa">
-                <span>{{ handleToLocalTime(item.dealTime) }}</span>
-                <span class="reply">{{ $t('fundation.reply') }}</span>
+              <div class="replyLists" v-else-if="item.showReply">
+                <ReplyLists :listsLen="item.replyNum" :reply="item"
+                  @listenCloseSubLists="handleCloseItemReply"/>
               </div>
-            </div>
-            <div class="showReply flexa" v-if="!item.showReply && item.replyNum"
-              @click="handleShowItemReply(item)">
-              <span>{{ $t('fundation.openSubReply', {len: item.replyNum}) }}</span>
-              <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/showMore.png" alt="">
-            </div>
-            <div class="replyLists" v-else-if="item.showReply">
-              <ReplyLists :listsLen="item.replyNum" :reply="item"
-                @listenCloseSubLists="handleCloseItemReply"/>
             </div>
           </div>
-        </div>
+        </template>
       </van-list>
     </div>
 
@@ -303,7 +305,11 @@ export default {
       this.handleGetTopAccInfo()
     },
     handleGetAccInfo() {
+      // console.log(this.top3Arr)
+      // console.log(this.pageLists)
       this.pageLists.forEach((v, index) => {
+        let isHot = this.top3Arr.find(vv => vv.id === v.id);
+        this.$set(v, 'isHot', !!isHot)
         if (v.isGetInfo) {
           return
         }
@@ -422,7 +428,7 @@ export default {
       position: absolute;
       width: 8px;
       height: 30px;
-      background:#02C698;
+      background:#29D4B0;
       border-radius:4px;
       left: 0%;
       top: 50%;
