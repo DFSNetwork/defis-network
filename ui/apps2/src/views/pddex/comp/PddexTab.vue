@@ -15,11 +15,13 @@ export default {
   data() {
     return {
       boxMarketList: [],
+      dfsLists: [],
     }
   },
   mounted() {
     this.handleGetBoxMids()
     this.handleGetPddexMarketList();
+    this.handleBoxLists();
   },
   computed: {
     ...mapState({
@@ -40,6 +42,13 @@ export default {
       },
       deep: true,
       immediate: true,
+    },
+    marketLists: {
+      handler: function ml(newVal) {
+        this.dfsLists = newVal
+      },
+      deep: true,
+      immediate: true
     }
   },
   methods: {
@@ -51,6 +60,46 @@ export default {
       }
       console.log(result)
       logicToDealBoxMids(result)
+    },
+    // 获取ppdex支持交易对
+    async handleGetPddexMarketList() {
+      console.log(this.baseConfig)
+      const params = {
+        code: this.baseConfig.pddex,
+        scope: this.baseConfig.pddex,
+        table: 'pairs',
+        json: true,
+        limit: 1000
+      }
+      const {status, result} = await this.$api.get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const lists = result.rows || [];
+      this.pddexList = lists;
+      // console.log(lists)
+
+      this.handleDealSwapAndPddex()
+    },
+    // 整合swap列表 和 pddex列表
+    handleDealSwapAndPddex() {
+      if (!this.pddexList.length || !this.marketLists.length) {
+        return
+      }
+      const newMList = JSON.parse(JSON.stringify(this.marketLists))
+      this.pddexList.forEach(v => {
+        const marketIndex = newMList.findIndex(vv => {
+          return vv.contract0 === v.contract0 && vv.contract1 === v.contract1
+        })
+        if (marketIndex === -1) {
+          console.log(v)
+          return
+        }
+        this.$set(newMList[marketIndex], 'pid', v.pid)
+        this.$set(newMList[marketIndex], 'unikey', v.unikey)
+      })
+      this.$store.dispatch('setPddexMarketLists', newMList)
+      console.log(newMList)
     },
     // 获取BOX做市列表
     async handleBoxLists() {
@@ -103,13 +152,12 @@ export default {
       })
       
       // console.log(newListSort)
-      this.$store.dispatch('setMarketLists', newListSort)
-
+      this.$store.dispatch('setPddexMarketLists', newListSort)
       this.handleDealSwapAndPddex();
     },
+
     // 获取做市列表
     async handleGetAllMarket() {
-      this.handleBoxLists();
       const params = {
         code: this.baseConfig.swap,
         scope: this.baseConfig.swap,
@@ -127,45 +175,6 @@ export default {
 
       this.handleDealBoxAndDfs()
     },
-    // 获取ppdex支持交易对
-    async handleGetPddexMarketList() {
-      console.log(this.baseConfig)
-      const params = {
-        code: this.baseConfig.pddex,
-        scope: this.baseConfig.pddex,
-        table: 'pairs',
-        json: true,
-        limit: 1000
-      }
-      const {status, result} = await this.$api.get_table_rows(params);
-      if (!status) {
-        return
-      }
-      const lists = result.rows || [];
-      this.pddexList = lists;
-      // console.log(lists)
-
-      this.handleDealSwapAndPddex()
-    },
-    // 整合swap列表 和 pddex列表
-    handleDealSwapAndPddex() {
-      if (!this.pddexList.length || !this.marketLists.length) {
-        return
-      }
-      const newMList = JSON.parse(JSON.stringify(this.marketLists))
-      this.pddexList.forEach(v => {
-        const marketIndex = newMList.findIndex(vv => {
-          return vv.contract0 === v.contract0 && vv.contract1 === v.contract1
-        })
-        if (marketIndex === -1) {
-          console.log(v)
-          return
-        }
-        this.$set(newMList[marketIndex], 'pid', v.pid)
-        this.$set(newMList[marketIndex], 'unikey', v.unikey)
-      })
-      this.$store.dispatch('setMarketLists', newMList)
-    }
   }
 }
 </script>

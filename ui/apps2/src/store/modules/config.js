@@ -84,6 +84,7 @@ const config = {
 
     // pddex Data
     boxMids: [], // 设置Box的做市Mid
+    marketLists: [], // pddex使用的做市列表 - 整合DFS 和 BOX
   },
   mutations: {
     SET_LpMineList: (state, lpMineList) => {
@@ -103,6 +104,9 @@ const config = {
     SET_BOXMIDS: (state, boxMids) => {
       state.boxMids = boxMids;
     },
+    SET_PddexMarketLists: (state, marketLists) => {
+      state.marketLists = marketLists;
+    },
   },
   actions: {
     setLpMineList({ commit }, baseConfig) {
@@ -120,6 +124,9 @@ const config = {
     // pddex Data
     setBoxMids({ commit }, boxMids) {
       commit('SET_BOXMIDS', boxMids);
+    },
+    setPddexMarketLists({ commit }, marketLists) {
+      commit('SET_PddexMarketLists', marketLists);
     },
   }
 };
