@@ -1,8 +1,8 @@
 <template>
   <div class="detailInfo">
     <div class="title flexc">节点详情</div>
-    <BpInfo />
-    <Records />
+    <BpInfo :isEditor="isEditor"/>
+    <Records :isEditor="isEditor" />
     <ScoreLists />
 
     <div class="nullDiv"></div>
@@ -19,10 +19,13 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+
 import BpInfo from './comp/BpInfo';
 import Records from './comp/Records';
 import ScoreLists from './comp/ScoreLists';
 import Score from './dialog/Score';
+import {get_table_rows} from '@/utils/api'
 
 export default {
   name: 'detailInfo',
@@ -35,6 +38,69 @@ export default {
   data() {
     return {
       showAddScore: false,
+      editors: [],
+      bpname: '',
+    }
+  },
+  computed: {
+    ...mapState({
+      scatter: state => state.app.scatter,
+    }),
+    isEditor() {
+      if (!this.scatter || !this.scatter.identity) {
+        return false;
+      }
+      const formName = this.scatter.identity.accounts[0].name;
+      const has = this.editors.find(v => v.owner === formName)
+      if (has) {
+        return true
+      }
+      return !false
+    }
+  },
+  watch: {
+    scatter: {
+      handler: function st(newVal) {
+        if (newVal.identity) {
+          // 用户数据获取
+          this.handleGetBal()
+        }
+      },
+    },
+  },
+  mounted() {
+    this.bpname = this.$route.params.bpname || 'dfs.bp';
+    // this.handleGetBpInf()
+    this.handleGeteditors()
+  },
+  methods: {
+    async handleGetBpInf() {
+      const params = {
+        // dfscommunity bp.dfs editors
+        "code":"dfscommunity",
+        "scope":"dfscommunity",
+        "table":"questions",
+        "json":true,
+      }
+      const {status, result} = await get_table_rows(params)
+      if (!status) {
+        return
+      }
+      console.log(result)
+    },
+    async handleGeteditors() {
+      const params = {
+        "code":"dfscommunity",
+        "scope": this.bpname,
+        "table":"editors",
+        "json":true,
+      }
+      const {status, result} = await get_table_rows(params)
+      if (!status) {
+        return
+      }
+      this.editors = result.rows || [];
+      // console.log(result)
     }
   }
 }

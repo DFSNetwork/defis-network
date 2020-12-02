@@ -2,7 +2,7 @@
   <div class="records">
     <div class="title flexb">
       <span>节点动态</span>
-      <span class="add" @click="showAddScore = true">编辑</span>
+      <span class="add" v-if="isEditor" @click="showAddScore = true">编辑</span>
     </div>
     <div class="scroll">
       <div class="longDiv flexa">
@@ -90,7 +90,7 @@
       class="mydialog"
       :show-close="false"
       :visible.sync="showAddScore">
-      <AddRecord v-if="showAddScore" />
+      <AddRecord v-if="showAddScore" @listenClose="handleClose"/>
     </el-dialog>
   </div>
 </template>
@@ -102,9 +102,20 @@ export default {
   components: {
     AddRecord,
   },
+  props: {
+    isEditor: {
+      type: Boolean,
+      default: false,
+    }
+  },
   data() {
     return {
       showAddScore: false,
+    }
+  },
+  methods: {
+    handleClose() {
+      this.showAddScore = false;
     }
   }
 }

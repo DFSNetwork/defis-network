@@ -40,7 +40,10 @@
 
     <!-- 简介 -->
     <div class="desc">
-      <div class="title">简介</div>
+      <div class="title flexb">
+        <span>简介</span>
+        <span class="add" v-if="isEditor">编辑</span>
+      </div>
       <div class="content">
         区块链奇才BM（Daniel Larimer）领导开发的类似操作
         系统的区块链架构平台，旨在实现分布式应用的性能扩
@@ -61,10 +64,52 @@
 
 <script>
 import ScoreDetail from './ScoreDetail';
+import {get_table_rows} from '@/utils/api'
 export default {
   name: 'bpInfo',
   components: {
     ScoreDetail,
+  },
+  props: {
+    isEditor: {
+      type: Boolean,
+      default: false,
+    }
+  },
+  mounted() {
+    this.handleGetQues()
+    this.handleGetAns()
+  },
+  methods: {
+    async handleGetQues() {
+      const params = {
+        // dfscommunity bp.dfs editors
+        "code":"dfscommunity",
+        "scope":"dfscommunity",
+        "table":"questions",
+        "json":true,
+      }
+      const {status, result} = await get_table_rows(params)
+      if (!status) {
+        return
+      }
+      console.log(result)
+    },
+    async handleGetAns() {
+      const params = {
+        // dfscommunity bp.dfs editors
+        "code":"dfscommunity",
+        "scope":"dfscommunity",
+        "table":"answers",
+        "json":true,
+      }
+      const {status, result} = await get_table_rows(params)
+      if (!status) {
+        return
+      }
+      console.log(result)
+    },
+    
   }
 }
 </script>
@@ -153,6 +198,14 @@ export default {
       transform: translate(0, -45%);
       background: #29D4B0;
       border-radius: 4px;
+    }
+    .add{
+      font-size: 26px;
+      background: #29D4B0;
+      border-radius: 40px;
+      padding: 8px 32px;
+      font-weight: normal;
+      color: #fff;
     }
   }
   .content{

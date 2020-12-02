@@ -1,6 +1,6 @@
 <template>
   <div class="scoreDiv">
-    <img class="close" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
+    <img class="close" @click="handleClose" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
     <div class="title">编辑</div>
     <div class="content">
       <div class="addTitle flexb">
@@ -14,7 +14,7 @@
         <van-field
             class="input"
             v-model="memo"
-            rows="1"
+            rows="8"
             autosize
             type="textarea"
             :placeholder="$t('fundation.iptTip')"
@@ -33,6 +33,7 @@ export default {
     return {
       value: 0,
       memo: '',
+      title: '',
     }
   },
   computed: {
@@ -56,6 +57,11 @@ export default {
       }
       return total;
     },
+  },
+  methods: {
+    handleClose() {
+      this.$emit('listenClose', false)
+    }
   }
 }
 </script>
