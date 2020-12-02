@@ -11,17 +11,33 @@
           :finished-text="$t('public.noMore')"
           @load="handleCurrentChange"
         >
-        <div class="list flexs" v-for="(item, index) in lists" :key="index">
+        <div class="list flexs" v-for="(item, index) in lists" :key="index" @click="handleShowReply(item)">
           <img class="headImg" :src="accInfo.avatar || item.headImg" :onerror="errorCoinImg">
           <div class="mainData">
             <div class="name">{{accInfo.nick || item.fromx}}</div>
-            <div class="num tip dinReg">捐赠数量: {{ item.quantity }}</div>
+            <div class="num tip dinReg">捐赠数量: {{ item.quantity }} ({{item.account}})</div>
             <div class="content">{{ item.memo }}</div>
             <div class="time tip">{{handleToLocalTime(item.dealTime)}}</div>
+            <div class="flexa replyDiv tip">
+              <span class="flexa">
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
+                <span>{{ item.likeNum }}</span>
+              </span>
+              <span class="flexa right">
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/reply.png" alt="">
+                <span>{{ item.replyNum }}</span>
+              </span>
+            </div>
           </div>
         </div>
       </van-list>
     </div>
+
+    <van-popup v-model="showRly" 
+      class="popup"
+      position="bottom">
+      <ReplyLists v-if="showRly" :item="checkItem" :accInfo="accInfo"/>
+    </van-popup>
   </div>
 </template>
 
@@ -31,8 +47,13 @@ import moment from 'moment';
 
 import {getDateDiff, getCoin, toLocalTime} from '@/utils/public'
 import {get_acc_fund_lists} from '@/utils/api'
+import ReplyLists from '../dialog/ReplyLists'
+
 export default {
   name: 'dynamic',
+  components: {
+    ReplyLists,
+  },
   data() {
     return {
       errorCoinImg: 'this.src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/pig.png"',
@@ -49,16 +70,39 @@ export default {
         nick: "",
         sex: 2,
       },
+      showRly: false,
+      checkItem: {},
     }
   },
   mounted() {
     Bus.$on('busForAccInfo', (val) => {
       this.accInfo = val;
-      console.log(this.accInfo)
+      // console.log(this.accInfo)
     });
-    this.id = this.$route.params.id;
+    this.handleMounted()
+  },
+  watch: {
+    '$route': {
+      handler: function sc () {
+        this.handleMounted()
+      },
+      deep: true,
+      immediate: true
+    }
   },
   methods: {
+    handleMounted() {
+      this.showRly = false;
+      this.id = this.$route.params.id;
+      this.lists = []
+      this.page = 1;
+      this.finished = false;
+      document.documentElement.scrollTop = 9999;
+    },
+    handleShowReply(item) {
+      this.checkItem = item;
+      this.showRly = true;
+    },
     handleCurrentChange() {
       this.handleGetLists()
     },
@@ -85,8 +129,8 @@ export default {
         const t = toLocalTime(v.create_time).replace(/-/g, '/');
         const times = Date.parse(t) + 3600 * 8 * 1000;
         this.$set(v, 'dealTime', toLocalTime(times))
-        // const likeNum = v.like_count * 1000;
-        // this.$set(v, 'likeNum', likeNum.toFixed(0))
+        const likeNum = v.like_count * 1000;
+        this.$set(v, 'likeNum', likeNum.toFixed(0))
       })
       if (this.page === 1) {
         this.lists = rows;
@@ -161,7 +205,7 @@ export default {
       font-weight: normal;
     }
     .content{
-      margin: 8px 0;
+      margin: 8px 0 4px;
       overflow: hidden;
       word-break: break-all;
       white-space: pre-wrap;
@@ -170,6 +214,24 @@ export default {
       margin-top: 4px;
       font-size: 20px;
     }
+    .replyDiv{
+      margin-top: 18px;
+      font-size: 22px;
+      img{
+        width: 32px;
+        margin-right: 10px;
+      }
+      &>span{
+        width: 120px;
+      }
+      .right{
+        margin-left: 20px;
+      }
+    }
   }
+}
+.popup{
+  height: 80%;
+  border-radius: 30px 30px 0 0 ;
 }
 </style>

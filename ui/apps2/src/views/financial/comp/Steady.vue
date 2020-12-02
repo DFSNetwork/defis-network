@@ -23,7 +23,7 @@
             <div class="tip">{{ $t('financial.apy') }}</div>
           </div>
           <div class="dataInfo">
-            <div class="time dinBold">{{ item.lockTime }} {{ $t('financial.day') }}</div>
+            <div class="time dinBold">{{ $t('financial.day', {days: item.lockTime}) }}</div>
             <div class="tip">{{ $t(`financial.${item.desc}`) }}</div>
           </div>
         </div>

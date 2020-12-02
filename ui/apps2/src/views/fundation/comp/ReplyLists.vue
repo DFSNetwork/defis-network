@@ -3,15 +3,15 @@
     <div class="lists" v-loading="loading">
       <div class="list" v-for="(item, index) in lists" :key="`reply${index}`">
         <div class="flexa">
-          <div class="headImg">
+          <div class="headImg" @click.stop="handleTo(item.fromx)">
             <img width="100%" :src="item.accInfo ? item.accInfo.avatar || item.headImg : item.headImg"
               :onerror="errorCoinImg">
           </div>
           <div class="mainDiv">
             <div class="flexb">
               <div class="name">
-                <div>{{ item.accInfo ? item.accInfo.nick || item.fromx : item.fromx }}</div>
-                <div class="tip funNum dinReg">{{ $t('fundation.transNum') }}: {{ item.quantity }}</div>
+                <div @click.stop="handleTo(item.fromx)">{{ item.accInfo ? item.accInfo.nick || item.fromx : item.fromx }}</div>
+                <div class="tip funNum dinReg">{{ $t('fundation.transNum') }}: {{ item.quantity }} ({{ item.account }})</div>
               </div>
               <div class="likeDiv tip flexend" @click="handleShowLike(item)">
                 <span>{{ item.likeNum }}</span>
@@ -23,7 +23,7 @@
         </div>
 
         <div class="memo" @click="handleShowToFundation(item)">
-          <span>
+          <span @click.stop="handleTo(item.replyto)">
             <span class="reply">{{ $t('fundation.reply') }}</span>
             <span class="green">{{ item.replyto }}</span>
           </span>
@@ -110,6 +110,14 @@ export default {
     }),
   },
   methods: {
+    handleTo(name) {
+      this.$router.push({
+        name: 'otherInfo',
+        params: {
+          id: name
+        }
+      })
+    },
     handleToLocalTime(time) {
       let t = moment(`${time}`).valueOf()
       // t += 3600 * 8 * 1000;
