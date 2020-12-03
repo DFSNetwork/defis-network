@@ -244,6 +244,12 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "detailInfo" */ '@/views/bpInfo/childViews/DetailInfo'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
       },
+      {
+        path: 'update-info/:bpname',
+        name: 'updateInfo',
+        component: () => import(/* webpackChunkName: "updateInfo" */ '@/views/bpInfo/childViews/UpdateInfo'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
     ],
   },
 ]

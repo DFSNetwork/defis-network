@@ -42,7 +42,7 @@
     <div class="desc">
       <div class="title flexb">
         <span>简介</span>
-        <span class="add" v-if="isEditor">编辑</span>
+        <span class="add" v-if="isEditor" @click="handleToUpdate">编辑</span>
       </div>
       <div class="content">
         区块链奇才BM（Daniel Larimer）领导开发的类似操作
@@ -75,6 +75,9 @@ export default {
       type: Boolean,
       default: false,
     }
+  },
+  data() {
+    return {}
   },
   mounted() {
     this.handleGetQues()
@@ -109,7 +112,14 @@ export default {
       }
       console.log(result)
     },
-    
+    handleToUpdate() {
+      this.$router.push({
+        name: 'updateInfo',
+        params: {
+          bpname: 'bp.dfs'
+        }
+      })
+    }
   }
 }
 </script>
