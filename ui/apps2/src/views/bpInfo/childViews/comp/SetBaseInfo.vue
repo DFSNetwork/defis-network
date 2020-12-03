@@ -12,21 +12,11 @@
     </div>
     <div class="flexb">
       <span class="flexa">
-        <span>节点头像</span>
-        <span class="red_p">*</span>
-      </span>
-      <span class="flexa">
-        <van-field v-model="actorImg" placeholder="请输入节点头像地址" />
-        <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
-      </span>
-    </div>
-    <div class="flexb">
-      <span class="flexa">
         <span>节点名称</span>
         <span class="red_p">*</span>
       </span>
       <span class="flexa">
-        <van-field v-model="name" placeholder="请输入节点名称" />
+        <van-field v-model="bpName" placeholder="请输入节点名称" />
         <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
       </span>
     </div>
@@ -36,32 +26,22 @@
         <!-- <span class="red_p">*</span> -->
       </span>
       <span class="flexa">
-        <van-field v-model="slogen" placeholder="请输入节点口号" />
+        <van-field v-model="slogon" placeholder="请输入节点口号" />
         <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
       </span>
     </div>
     <div class="flexb">
       <span class="flexa">
         <span>成立时间</span>
-        <!-- <span class="red_p">*</span> -->
+        <span class="red_p">*</span>
       </span>
       <span class="flexa" @click="show = true">
         <van-field v-model="time" placeholder="请输入成立时间" />
         <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
       </span>
       <van-calendar v-model="show" :min-date="minDate" :max-date="maxDate"
+        color="#29D4B0"
         @confirm="onConfirm" />
-    </div>
-
-    <div class="flexb">
-      <span class="flexa">
-        <span>官网地址</span>
-        <span class="red_p">*</span>
-      </span>
-      <span class="flexa">
-        <van-field v-model="web" placeholder="请输入官网地址" />
-        <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
-      </span>
     </div>
 
     <div class="flexa">
@@ -73,14 +53,14 @@
       <span class="flexa">
         <van-field
           class="textarea"
-          v-model="desc1"
-          rows="5"
+          v-model="desc0"
+          rows="3"
           autosize
           type="textarea"
           placeholder="请简单描述节点信息"
         />
       </span>
-      <div class="iptlen">{{sizeof1}}/256</div>
+      <!-- <div class="iptlen">{{sizeof1}}/256</div> -->
     </div>
 
     <div class="flexa">
@@ -92,14 +72,14 @@
       <span class="flexa">
         <van-field
           class="textarea"
-          v-model="desc2"
-          rows="5"
+          v-model="desc1"
+          rows="3"
           autosize
           type="textarea"
           placeholder="请简单描述节点信息"
         />
       </span>
-      <div class="iptlen">{{sizeof2}}/256</div>
+      <!-- <div class="iptlen">{{sizeof2}}/256</div> -->
     </div>
 
     <div class="btn flexc" @click="handleSave">保存</div>
@@ -107,19 +87,22 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
+import {get_table_rows} from '@/utils/api'
+import {toLocalTime} from '@/utils/public';
+
 export default {
   name: 'setBaseInfo',
   data() {
     return {
       account: '',
-      actorImg: '',
-      name: '',
-      slogen: '',
+      bpName: '',
+      slogon: '',
       time: '',
-      web: '',
 
+      desc0: '',
       desc1: '',
-      desc2: '',
 
       show: false,
       minDate: new Date(2017, 0, 1),
@@ -127,19 +110,39 @@ export default {
     }
   },
   computed: {
-    sizeof1(){
-      const str = this.desc1;
-      return this.handleGetSize(str)
-    },
-    sizeof2(){
-      const str = this.desc2;
-      return this.handleGetSize(str)
-    },
+    ...mapState({
+      scatter: state => state.app.scatter,
+    }),
   },
   mounted() {
     this.account = this.$route.params.bpname;
+    this.handleGetBaseInfo()
   },
   methods: {
+    async handleGetBaseInfo() {
+      const params = {
+        "code":"dfscommunity",
+        "scope":"dfscommunity",
+        "table":"producers",
+        "lower_bound": ` ${this.account}`,
+        "upper_bound": ` ${this.account}`,
+        "json":true,
+      }
+      const {status, result} = await get_table_rows(params)
+      if (!status) {
+        return
+      }
+      const rows = result.rows || []
+      if (!rows.length) {
+        return
+      }
+      const row = rows[0];
+      this.time = toLocalTime(row.create_time).substring(0, 10);
+      this.bpName = row.candidate_name;
+      this.desc0 = row.desc0;
+      this.desc1 = row.desc1;
+      this.slogon = row.slogon;
+    },
     formatDate(date) {
       return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
     },
@@ -147,27 +150,9 @@ export default {
       this.show = false;
       this.time = this.formatDate(date);
     },
-    handleGetSize(str) {
-      let total = 0,
-          charCode,
-          i,
-          len;
-      for(i = 0, len = str.length; i < len; i++){
-          charCode = str.charCodeAt(i);
-          if(charCode <= 0x007f) {
-              total += 1;
-          }else if(charCode <= 0x07ff){
-              total += 2;
-          }else if(charCode <= 0xffff){
-              total += 3;
-          }else{
-              total += 4;
-          }
-      }
-      return total;
-    },
     handleReg() {
-      if (!this.actorImg.trim() || !this.account.trim() || !this.web.trim()) {
+      if (!this.account.trim() || !this.account.trim()
+       || !this.time.trim()) {
         this.$message.error('请完善基础信息');
         return false
       }
@@ -177,9 +162,47 @@ export default {
       if (!this.handleReg()) {
         return
       }
-      console.log(234)
+      const formName = this.scatter.identity.accounts[0].name;
+      const permission = this.scatter.identity.accounts[0].authority;
+      let t = new Date().toISOString()
+      t = t.split('.')[0];
+
+      const params = {
+        actions: [{
+          account: 'dfscommunity',
+          name: 'setprod',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            editor: formName,
+            producer: this.account,
+            candidate_name: this.bpName,
+            logo: '',
+            slogon: this.slogon,
+            create_time: t,
+            desc0: this.desc0,
+            desc1: this.desc1
+          }
+        }]
+      }
+      EosModel.toTransaction(params, (res) => {
+        this.loadingJoin = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
     },
-  }
+  },
 }
 </script>
 

@@ -9,7 +9,7 @@
         <van-icon name="star" />
       </div>
       <div class="bar">
-        <div class="percent"></div>
+        <div class="percent" :style="handleGetPercent(9, 10)"></div>
       </div>
     </div>
     <div>
@@ -21,7 +21,7 @@
         <van-icon name="star" class="tip"/>
       </div>
       <div class="bar">
-        <div class="percent"></div>
+        <div class="percent" :style="handleGetPercent(7, 8)"></div>
       </div>
     </div>
     <div>
@@ -33,7 +33,7 @@
         <van-icon name="star" class="tip"/>
       </div>
       <div class="bar">
-        <div class="percent"></div>
+        <div class="percent" :style="handleGetPercent(5, 6)"></div>
       </div>
     </div>
     <div>
@@ -45,7 +45,7 @@
         <van-icon name="star" class="tip"/>
       </div>
       <div class="bar">
-        <div class="percent"></div>
+        <div class="percent" :style="handleGetPercent(3, 4)"></div>
       </div>
     </div>
     <div>
@@ -57,7 +57,7 @@
         <van-icon name="star" class="tip"/>
       </div>
       <div class="bar">
-        <div class="percent"></div>
+        <div class="percent" :style="handleGetPercent(1, 2)"></div>
       </div>
     </div>
   </div>
@@ -65,7 +65,21 @@
 
 <script>
 export default {
-  
+  props: {
+    bpStar: {
+      type: Object,
+      default: function bs() {
+        return {}
+      }
+    }
+  },
+  methods: {
+    handleGetPercent(lv1,lv2) {
+      let n = 0;
+      n = Number(this.bpStar[`star${lv1}`] || 0) + Number(this.bpStar[`star${lv2}`] || 0)
+      return `width: ${(n / this.bpStar.count_num) * 100}%`
+    }
+  }
 }
 </script>
 

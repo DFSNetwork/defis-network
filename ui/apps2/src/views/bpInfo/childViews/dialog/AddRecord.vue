@@ -13,55 +13,93 @@
       <div class="accMsg">
         <van-field
             class="input"
-            v-model="memo"
+            v-model="content"
             rows="8"
             autosize
             type="textarea"
             :placeholder="$t('fundation.iptTip')"
           />
-          <div class="iptlen">{{sizeof}}/256</div>
       </div>
     </div>
-    <div class="btn flexc">确定</div>
+    <div class="btn flexc" @click="handleSave">确定</div>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
+
 export default {
   name: 'scoreAcc',
   data() {
     return {
       value: 0,
-      memo: '',
+      content: '',
       title: '',
+      bpname: '',
     }
   },
   computed: {
-    sizeof(){
-      const str = this.memo;
-      let total = 0,
-          charCode,
-          i,
-          len;
-      for(i = 0, len = str.length; i < len; i++){
-          charCode = str.charCodeAt(i);
-          if(charCode <= 0x007f) {
-              total += 1;
-          }else if(charCode <= 0x07ff){
-              total += 2;
-          }else if(charCode <= 0xffff){
-              total += 3;
-          }else{
-              total += 4;
-          }
+    ...mapState({
+      scatter: state => state.app.scatter,
+      language: state => state.app.language,
+    }),
+    lang() {
+      if (this.language !== 'en') {
+        return 'zh'
       }
-      return total;
-    },
+      return 'en'
+    }
+  },
+  mounted() {
+    this.bpname = this.$route.params.bpname;
   },
   methods: {
     handleClose() {
       this.$emit('listenClose', false)
-    }
+    },
+    handleSave() {
+      if (!this.title.trim() || !this.content.trim()) {
+        return
+      }
+      const formName = this.scatter.identity.accounts[0].name;
+      const permission = this.scatter.identity.accounts[0].authority;
+      let t = new Date().toISOString()
+      t = t.split('.')[0];
+      const params = {
+        actions: [{
+          account: 'dfscommunity',
+          name: 'addstory',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            editor: formName,
+            producer: this.bpname,
+            id: 100000, // 没有回答过 - 100000 ｜ 回答过 - 回答的那个aid
+            lang: this.lang,
+            title: this.title,
+            content: this.content,
+            time: t,
+          }
+        }]
+      }
+      EosModel.toTransaction(params, (res) => {
+        this.loadingJoin = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
+    },
   }
 }
 </script>

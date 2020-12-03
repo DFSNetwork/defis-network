@@ -13,7 +13,7 @@
       class="mydialog"
       :show-close="false"
       :visible.sync="showAddScore">
-      <Score v-if="showAddScore" />
+      <Score v-if="showAddScore" @listenClose="handleClose"/>
     </el-dialog>
   </div>
 </template>
@@ -74,9 +74,14 @@ export default {
     this.handleGeteditors()
   },
   methods: {
+    handleClose(type) {
+      this.showAddScore = false;
+      if (type) {
+        // 执行操作
+      }
+    },
     async handleGetBpInf() {
       const params = {
-        // dfscommunity bp.dfs editors
         "code":"dfscommunity",
         "scope":"dfscommunity",
         "table":"questions",

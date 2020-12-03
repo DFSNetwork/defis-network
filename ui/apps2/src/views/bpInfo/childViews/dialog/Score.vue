@@ -1,6 +1,7 @@
 <template>
   <div class="scoreDiv">
-    <img class="close" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
+    <img class="close" @click="handleClose()"
+      src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
     <div class="title">评分</div>
     <div class="content">
       <div>给颗爱心</div>
@@ -80,7 +81,11 @@ export default {
       act: -1,
       bal: '100.00000000',
       errTip: '',
+      bpname: '',
     }
+  },
+  mounted() {
+    this.bpname = this.$route.params.bpname;
   },
   computed: {
     ...mapState({
@@ -140,6 +145,9 @@ export default {
     }
   },
   methods: {
+    handleClose(type) {
+      this.$emit('listenClose', type)
+    },
     handlePercent(num) {
       this.act = num;
       if (!num) {
@@ -198,7 +206,7 @@ export default {
         }],
         data: {
           user: formName,
-          author: 'dfs.bp',
+          author: this.bpname,
           target0,
           target1: 0,
           memo,

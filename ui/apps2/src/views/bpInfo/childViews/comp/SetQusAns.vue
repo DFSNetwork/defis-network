@@ -12,22 +12,24 @@
           <van-field
             class="textarea"
             v-model="v.ans"
-            rows="5"
+            clearable
+            rows="3"
             autosize
             type="textarea"
             placeholder="请简单描述节点信息"
           />
         </span>
-        <div class="iptlen">{{ v.getSize(v.ans) }}/256</div>
+        <!-- <div class="iptlen">{{ v.getSize(v.ans) }}/256</div> -->
       </div>
     </div>
 
-    <div class="btn flexc">保存</div>
+    <div class="btn flexc" @click="handleSave">保存</div>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
+import { EosModel } from '@/utils/eos';
 import {get_table_rows} from '@/utils/api'
 
 export default {
@@ -36,17 +38,25 @@ export default {
     return {
       qusAll: [],
       qus: [],
-      desc2: ''
+      ansAll: [],
+      desc2: '',
     }
   },
   mounted() {
     this.handleGetQus();
+    this.handleGetAns()
   },
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
       language: state => state.app.language,
     }),
+    lang() {
+      if (this.language !== 'en') {
+        return 'zh'
+      }
+      return 'en'
+    }
   },
   watch: {
     language() {
@@ -73,9 +83,37 @@ export default {
       }
       return total;
     },
+    handleDeal() {
+      if (!this.qusAll.length || !this.ansAll.length) {
+        return
+      }
+      this.qusAll.forEach(v => {
+        // const ans = this.ansAll.find(vv => vv.qid === v.id && vv.lang === v.lang)
+        const ans = this.ansAll.find(vv => vv.qid === v.id)
+        if (ans) {
+          this.$set(v, 'ans', ans.content)
+          this.$set(v, 'aid', ans.id)
+        }
+      })
+    },
+    async handleGetAns() {
+      const bpname = this.$route.params.bpname;
+      const params = {
+        "code": "dfscommunity",
+        "scope": bpname,
+        "table": "answers",
+        "json": true,
+      }
+      const {status, result} = await get_table_rows(params)
+      if (!status) {
+        return
+      }
+      console.log(result)
+      this.ansAll = result.rows || [];
+      this.handleDeal()
+    },
     async handleGetQus() {
       const params = {
-        // dfscommunity bp.dfs editors
         "code":"dfscommunity",
         "scope":"dfscommunity",
         "table":"questions",
@@ -93,6 +131,7 @@ export default {
         this.$set(v, 'ans', '')
       });
       this.qusAll = qusAll
+      this.handleDeal()
       this.handleGetLangQus()
     },
     handleGetLangQus() {
@@ -101,14 +140,74 @@ export default {
         lang = 'zh'
       }
       this.qus = this.qusAll.filter(v => v.lang === lang)
-    }
+    },
+    handleReg() {
+      let err = false;
+      this.qus.forEach(v => {
+        if (v.type === 'require' && !v.ans.trim()) {
+          this.$message.error('请检查必填回答是否已经填写！')
+          err = true
+          return 
+        }
+      })
+      if (err) {
+        return false
+      }
+      return true
+    },
+    handleSave() {
+      if (!this.handleReg()) {
+        return
+      }
+      const formName = this.scatter.identity.accounts[0].name;
+      const permission = this.scatter.identity.accounts[0].authority;
+      const bpname = this.$route.params.bpname;
+
+      const actions = [];
+      this.qus.forEach(v => {
+        const item = {
+          account: 'dfscommunity',
+          name: 'seta',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            editor: formName,
+            producer: bpname,
+            aid: v.aid || 100000, // 没有回答过 - 100000 ｜ 回答过 - 回答的那个aid
+            qid: v.id,
+            lang: this.lang,
+            content: v.ans,
+          }
+        }
+        actions.push(item)
+      })
+      const params = {
+        actions
+      }
+      EosModel.toTransaction(params, (res) => {
+        this.loadingJoin = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+      })
+    },
   }
 }
 </script>
 
 <style lang="scss" scoped>
 .setQusAns{
-  margin: 28px;
+  margin: 0 28px 28px;
   .title{
     height: 90px;
   }

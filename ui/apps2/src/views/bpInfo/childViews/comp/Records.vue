@@ -5,82 +5,15 @@
       <span class="add" v-if="isEditor" @click="showAddScore = true">编辑</span>
     </div>
     <div class="scroll">
+      <div class="noData flexc tip" v-if="!recordLists.length">暂无数据</div>
       <div class="longDiv flexa">
-        <div class="list">
-          <div class="rTitle">标题标题标题</div>
-          <div class="rTime tip">11.11 09:09</div>
+        <div class="list" v-for="(v, i) in recordLists" :key="i"
+          @click="handleLook(v)">
+          <div class="rTitle">{{ v.title }}</div>
+          <div class="rTime tip">{{ v.lTime }}</div>
           <div class="flexs">
             <img class="artImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/art.png" alt="">
-            <div class="subContent tip">
-              简介简介简介简介简介简介简介简介简介简介
-              简介简介简介简介简介简介简介简介简介简介
-            </div>
-          </div>
-        </div>
-        <div class="list">
-          <div class="rTitle">标题标题标题</div>
-          <div class="rTime tip">11.11 09:09</div>
-          <div class="flexs">
-            <img class="artImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/art.png" alt="">
-            <div class="subContent tip">
-              简介简介简介简介简介简介简介简介简介简介
-              简介简介简介简介简介简介简介简介简介简介
-            </div>
-          </div>
-        </div>
-        <div class="list">
-          <div class="rTitle">标题标题标题</div>
-          <div class="rTime tip">11.11 09:09</div>
-          <div class="flexs">
-            <img class="artImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/art.png" alt="">
-            <div class="subContent tip">
-              简介简介简介简介简介简介简介简介简介简介
-              简介简介简介简介简介简介简介简介简介简介
-            </div>
-          </div>
-        </div>
-        <div class="list">
-          <div class="rTitle">标题标题标题</div>
-          <div class="rTime tip">11.11 09:09</div>
-          <div class="flexs">
-            <img class="artImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/art.png" alt="">
-            <div class="subContent tip">
-              简介简介简介简介简介简介简介简介简介简介
-              简介简介简介简介简介简介简介简介简介简介
-            </div>
-          </div>
-        </div>
-        <div class="list">
-          <div class="rTitle">标题标题标题</div>
-          <div class="rTime tip">11.11 09:09</div>
-          <div class="flexs">
-            <img class="artImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/art.png" alt="">
-            <div class="subContent tip">
-              简介简介简介简介简介简介简介简介简介简介
-              简介简介简介简介简介简介简介简介简介简介
-            </div>
-          </div>
-        </div>
-        <div class="list">
-          <div class="rTitle">标题标题标题</div>
-          <div class="rTime tip">11.11 09:09</div>
-          <div class="flexs">
-            <img class="artImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/art.png" alt="">
-            <div class="subContent tip">
-              简介简介简介简介简介简介简介简介简介简介
-              简介简介简介简介简介简介简介简介简介简介
-            </div>
-          </div>
-        </div>
-        <div class="list">
-          <div class="rTitle">标题标题标题</div>
-          <div class="rTime tip">11.11 09:09</div>
-          <div class="flexs">
-            <img class="artImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/art.png" alt="">
-            <div class="subContent tip">
-              简介简介简介简介简介简介简介简介简介简介
-              简介简介简介简介简介简介简介简介简介简介
-            </div>
+            <div class="subContent tip">{{ v.content }}</div>
           </div>
         </div>
       </div>
@@ -92,15 +25,27 @@
       :visible.sync="showAddScore">
       <AddRecord v-if="showAddScore" @listenClose="handleClose"/>
     </el-dialog>
+
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible.sync="showStory">
+      <BpStory v-if="showStory" :story="story" @listenClose="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import AddRecord from '../dialog/AddRecord'
+import BpStory from '../dialog/BpStory'
+
+import {get_table_rows} from '@/utils/api'
+import {toLocalTime} from '@/utils/public';
 export default {
   name: 'records',
   components: {
     AddRecord,
+    BpStory,
   },
   props: {
     isEditor: {
@@ -111,11 +56,42 @@ export default {
   data() {
     return {
       showAddScore: false,
+      showStory: false,
+      recordLists: [],
+      story: {},
     }
   },
+  mounted() {
+    this.handleGetRecord()
+  },
   methods: {
+    handleLook(item) {
+      this.showStory = true;
+      this.story = item;
+      console.log(item)
+    },
     handleClose() {
       this.showAddScore = false;
+      this.showStory = false;
+    },
+    async handleGetRecord() {
+      const bpname = this.$route.params.bpname;
+      const params = {
+        "code":"dfscommunity",
+        "scope": bpname,
+        "table": "storys",
+        "json":true,
+      }
+      const {status, result} = await get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const rows = result.rows || [];
+      rows.forEach(v => {
+        const time = toLocalTime(`${v.time}.000+0000`)
+        this.$set(v, 'lTime', time)
+      });
+      this.recordLists = rows;
     }
   }
 }
@@ -155,6 +131,10 @@ export default {
   }
   .scroll{
     overflow: auto;
+    .noData{
+      height: 160px;
+      font-size: 28px;
+    }
     .longDiv{
       max-width: 2000px;
       .list{
