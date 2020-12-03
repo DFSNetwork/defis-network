@@ -55,7 +55,7 @@ export default {
       if (has) {
         return true
       }
-      return !false
+      return false
     }
   },
   watch: {
