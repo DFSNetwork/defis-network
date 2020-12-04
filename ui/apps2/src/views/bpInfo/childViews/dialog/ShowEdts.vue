@@ -1,11 +1,11 @@
 <template>
   <div class="content">
-    <div>1. 节点方调用命令：</div>
+    <div>1. {{ $t('bpInfo.addEditor1') }}：</div>
     <div class="code"
       v-clipboard:copy="code"
       v-clipboard:success="onCopy"
       v-clipboard:error="onError">{{ code }}</div>
-    <div>2. 联系DFS社区进行添加</div>
+    <div>2. {{ $t('bpInfo.addEditor2') }}</div>
   </div>
 </template>
 

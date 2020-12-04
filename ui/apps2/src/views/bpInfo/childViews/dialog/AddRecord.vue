@@ -46,7 +46,7 @@ export default {
     }),
     lang() {
       if (this.language !== 'en') {
-        return 'zh'
+        return 'cn'
       }
       return 'en'
     }

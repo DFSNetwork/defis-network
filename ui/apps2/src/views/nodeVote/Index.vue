@@ -19,7 +19,7 @@
       <div class="tab flexb">
         <div class="nav flexa">
           <span :class="{'act': act === 1}" @click="handleChangeTab(1)">{{ $t('vote.vote') }}</span>
-          <span :class="{'act': act === 2}" @click="handleChangeTab(2)">{{ $t('vote.rank') }}</span>
+          <span :class="{'act': act === 2}" @click="handleChangeTab(2)">{{ $t('bpInfo.scoreRank') }}</span>
           <span :class="{'act': act === 3}" @click="handleChangeTab(3)">{{ $t('vote.voted') }}</span>
         </div>
         <div class="search flexc">
@@ -31,6 +31,7 @@
       <div class="lsContent">
         <NodeList v-if="act !== 2" :act="act" :nodeLists="nodeLists"
           :search="search"
+          :AccMaxNum="AccMaxNum"
           :getLoading="getLoading" :myVote="myVote"/>
         <IndexComp v-else :nodeLists="nodeLists" :search="search"/>
       </div>
@@ -39,7 +40,7 @@
     <!-- 悬浮按钮 -->
     <div class="nullDiv"></div>
     <div class="voteAction flexb">
-      <span>{{ $t('vote.checked') }} {{ checkedLeng }}/15</span>
+      <span>{{ $t('vote.checked') }} {{ checkedLeng }}/{{ AccMaxNum }}</span>
       <span>
         <span v-if="checkedLeng" class="tip" @click="handleCancel">{{ $t('vote.cancelChecked') }}</span>
         <span class="voteBtn" v-loading="voteLoading" @click="handleTovote">{{ $t('vote.toVote') }}</span>
@@ -87,6 +88,7 @@ export default {
       voteWeight: 0,
       myVote: [], // 我的投票列表
       myVoteLoading: true,
+      AccMaxNum: 20,
     }
   },
   mounted() {

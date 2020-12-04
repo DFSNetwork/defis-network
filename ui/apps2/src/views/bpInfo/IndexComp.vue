@@ -172,7 +172,7 @@ export default {
           this.finished = true;
         }
         this.handleGetContent();
-      }, 500);
+      }, 200);
     },
     handleGetContent() {
       this.bpLists.forEach(async v => {

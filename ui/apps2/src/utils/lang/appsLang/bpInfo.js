@@ -2,6 +2,7 @@
 export default {
   'zh-CN': {
     bpInfo: {
+      scoreRank: '评价',
       proxyAcc: '代理账户',
       proxyNum: '代理票数',
       accDfsNum: '您的DFS票数',
@@ -53,10 +54,19 @@ export default {
       lang: '切换语言',
       baseInfo: '基础信息',
       qusAns: '问题答复',
+
+      editor: '编辑者',
+      bpjson: '是否提供 bp.json',
+      api: 'API节点',
+      noData1: '暂未提供',
+      fromBpjson: '取自bp.json',
+      addEditor1: '节点方调用命令',
+      addEditor2: '联系DFS社区进行添加',
     }
   },
   'en': {
     bpInfo: {
+      scoreRank: 'Rank',
       proxyAcc:'Proxy account',
       proxyNum:'Number of proxy votes',
       accDfsNum:'Your DFS votes',
@@ -68,7 +78,7 @@ export default {
       rpyNum1:' recommended ',
       rpyNum2:' think it\'s okay',
       rpyNum3:' think so-so',
-      currRank:'The (rank) rank of the node ranking',
+      currRank:'The {rank} rank of the node ranking',
       desc:'Introduction',
       edt:'Edit',
       showDetail:'View details',
@@ -108,6 +118,13 @@ export default {
       lang:'Lang',
       baseInfo:'Basic Info',
       qusAns:'Question',
+      editor:'Editor',
+      bpjson:'Do you provide bp.json',
+      api:'API node',
+      noData1:'Not available yet',
+      fromBpjson:'taken from bp.json',
+      addEditor1:'Node call command',
+      addEditor2:'Contact the DFS community to add',
     }
   }
 }

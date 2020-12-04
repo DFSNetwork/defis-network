@@ -1,11 +1,17 @@
 <template>
   <div class="bpInfo">
     <div class="info">
-      <div class="flexa">
-        <img class="bpImg" :src="bpDetailInfo.logo" :onerror="errorCoinImg">
-        <div class="">
-          <div class="name">{{ bpname }}</div>
-          <div class="dfsVote dinReg">{{ $t('bpInfo.voteNum', {num: bpDetailInfo.voteNum || 0}) }}</div>
+      <div class="flexb">
+        <div class="flexa">
+          <img class="bpImg" :src="bpDetailInfo.logo" :onerror="errorCoinImg">
+          <div class="">
+            <div class="name">{{ bpname }}</div>
+            <div class="dfsVote dinReg">{{ $t('bpInfo.voteNum', {num: bpDetailInfo.voteNum || 0}) }}</div>
+          </div>
+        </div>
+        <div class="likeDiv flexa din">
+          <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike1.png" alt="">
+          <span>{{ bpDetailInfo.likeNum }}</span>
         </div>
       </div>
       <div class="score">
@@ -49,7 +55,7 @@
         <span class="add" v-if="isEditor" @click="handleToUpdate">{{ $t('bpInfo.edt') }}</span>
       </div>
       <div class="content" :class="{'showAll': showDetail}" @click="showContent = true">
-        {{ bpInfo.desc0 }}
+        {{ lang === 'cn' ? bpInfo.desc0 : bpInfo.desc1 }}
       </div>
       <div class="item flexb">
         <span class="tip">{{ $t('bpInfo.createTime') }}</span>
@@ -61,29 +67,29 @@
       </div>
       <div class="item flexb">
         <span class="tip flexa" @click="showEdtsTip = true">
-          <span>编辑者</span>
+          <span>{{ $t('bpInfo.editor') }}</span>
           <img class="qus" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
         </span>
         <span>{{ edts || '-' }}</span>
       </div>
       <div class="item flexb">
         <span class="tip flexa" @click="handleShowBpJsonErr">
-          <span>是否提供 bp.json</span>
+          <span>{{ $t('bpInfo.bpjson') }}</span>
           <img v-if="!bpDetailInfo.bpjson || bpDetailInfo.bpjson_error"
             class="qus" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
         </span>
         <span class="flexa">
-          <span v-if="!bpDetailInfo.bpjson || bpDetailInfo.bpjson_error">暂未提供</span>
+          <span v-if="!bpDetailInfo.bpjson || bpDetailInfo.bpjson_error">{{ $t('bpInfo.noData1') }}</span>
           <span v-else>{{ `${bpDetailInfo.url}/bp.json` }}</span>
         </span>
       </div>
       <div class="item apiDiv">
         <span class="tip flexa" @click="handleShowApiTip">
-          <span>API节点</span>
+          <span>{{ $t('bpInfo.api') }}</span>
           <img class="qus" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
         </span>
         <div class="apiUrl">
-          <div class="tip" v-if="!bpDetailInfo.nodes">暂未提供</div>
+          <div class="tip" v-if="!bpDetailInfo.nodes">{{ $t('bpInfo.noData1') }}</div>
           <template v-else>
             <div class="flexb" v-for="(v, i) in bpDetailInfo.nodes" :key="`nodes${i}`">
               <span>{{ v.url }}</span>
@@ -236,6 +242,12 @@ export default {
       let weight_1 = parseInt((Date.parse(new Date()) / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
       weight_1 = 1 / Math.pow(2, weight_1) / 10000
       return weight_1
+    },
+    lang() {
+      if (this.language !== 'en') {
+        return 'cn'
+      }
+      return 'en'
     }
   },
   methods: {
@@ -247,7 +259,7 @@ export default {
       this.showBpJsonErr = true;
     },
     handleShowApiTip() {
-      this.contentTip = '取自bp.json'
+      this.contentTip = this.$t('bpInfo.fromBpjson')
       this.showBpJsonErr = true;
     },
     async handleGetBpInfo() {
@@ -279,10 +291,13 @@ export default {
           bpDetailInfo.nodes = arr;
         }
         // 获取社交信息
-        // github_user | email | 
         const social = bpjson.org ? bpjson.org.social : {};
-        console.log(social)
+        // console.log(social)
         bpDetailInfo.social = social;
+      }
+      if (bpDetailInfo.comments) {
+        const like = bpDetailInfo.comments.like * 1000;
+        bpDetailInfo.likeNum = like.toFixed(0)
       }
       const num = Number(bpDetailInfo.total_votes) * Number(this.voteWeight);
       bpDetailInfo.voteNum = Math.ceil(num);
@@ -415,11 +430,7 @@ export default {
       this.handleGetLangQus()
     },
     handleGetLangQus() {
-      let lang = 'en';
-      if (this.language !== 'en') {
-        lang = 'zh'
-      }
-      this.qus = this.qusAll.filter(v => v.lang === lang)
+      this.qus = this.qusAll.filter(v => v.lang === this.lang)
       // console.log(this.qus)
     },
     handleToUpdate() {
@@ -442,6 +453,12 @@ export default {
   .info{
     padding: 30px 32px;
     border-bottom: 20px solid #f5f5f5;
+    .likeDiv{
+      img{
+        width: 36px;
+        margin-right: 14px;;
+      }
+    }
     .bpImg{
       width: 64px;
       height: 64px;
@@ -564,7 +581,8 @@ export default {
   .qusLists{
     .qus{
       .qusTitle{
-        height: 90px;
+        min-height: 90px;
+        padding: 18px 0;
       }
       .qusContent{
         font-size: 28px;

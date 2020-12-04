@@ -53,7 +53,7 @@ export default {
     }),
     lang() {
       if (this.language !== 'en') {
-        return 'zh'
+        return 'cn'
       }
       return 'en'
     }
@@ -137,7 +137,7 @@ export default {
     handleGetLangQus() {
       let lang = 'en';
       if (this.language !== 'en') {
-        lang = 'zh'
+        lang = 'cn'
       }
       this.qus = this.qusAll.filter(v => v.lang === lang)
     },

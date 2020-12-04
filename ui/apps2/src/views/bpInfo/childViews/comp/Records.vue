@@ -38,6 +38,7 @@
 <script>
 import AddRecord from '../dialog/AddRecord'
 import BpStory from '../dialog/BpStory'
+import { mapState } from 'vuex';
 
 import {get_table_rows} from '@/utils/api'
 import {toLocalTime} from '@/utils/public';
@@ -64,11 +65,22 @@ export default {
   mounted() {
     this.handleGetRecord()
   },
+  computed: {
+    ...mapState({
+      scatter: state => state.app.scatter,
+      language: state => state.app.language,
+    }),
+    lang() {
+      if (this.language !== 'en') {
+        return 'cn'
+      }
+      return 'en'
+    }
+  },
   methods: {
     handleLook(item) {
       this.showStory = true;
       this.story = item;
-      console.log(item)
     },
     handleClose() {
       this.showAddScore = false;
@@ -81,6 +93,7 @@ export default {
         "scope": bpname,
         "table": "storys",
         "json":true,
+        limit: 1000,
       }
       const {status, result} = await get_table_rows(params);
       if (!status) {
@@ -91,7 +104,8 @@ export default {
         const time = toLocalTime(`${v.time}.000+0000`)
         this.$set(v, 'lTime', time)
       });
-      this.recordLists = rows;
+      const langArr = rows.filter(v => v.lang === this.lang)
+      this.recordLists = langArr;
     }
   }
 }
@@ -147,6 +161,13 @@ export default {
         border: 1px solid rgba(220,220,220, .3);
         margin: 0 0 0 32px;
         // box-sizing: border-box;
+        .rTitle{
+          overflow : hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+        }
         .rTime{
           font-size: 20px;
           margin: 10px 0;
