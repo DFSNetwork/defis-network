@@ -3,17 +3,17 @@
     <div class="flexb title">
       <div>Proxy</div>
       <div class="proxyBtn">
-        <span @click="handleTo('nodePools')">投票给TA</span>
+        <span @click="handleTo('nodePools')">{{ $t('nodePools.proxyToHis') }}</span>
       </div>
     </div>
     <div class="content flexb" v-loading="getLoading" @click="handleToBro">
       <div class="item">
-        <div class="subTitle">代理账户</div>
+        <div class="subTitle">{{ $t('bpInfo.proxyAcc') }}</div>
         <div class="DinReg">dfsbpsproxy1</div>
       </div>
       <div class="item flexb">
         <div>
-          <div class="subTitle">代理票数</div>
+          <div class="subTitle">{{ $t('bpInfo.proxyNum') }}</div>
           <div class="DinReg">{{ proxyData.eosNum || '-' }} EOS</div>
         </div>
         <i class="el-icon-arrow-right"></i>

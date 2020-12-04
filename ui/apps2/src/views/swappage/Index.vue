@@ -730,9 +730,9 @@ export default {
       if (this.loading) {
         return
       }
-      // if (!this.handleReg()) {
-      //   return
-      // }
+      if (!this.handleReg()) {
+        return
+      }
       this.loading = true;
 
       if (this.isOgxSwap) {

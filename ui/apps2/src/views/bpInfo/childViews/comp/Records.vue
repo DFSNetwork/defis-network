@@ -1,11 +1,11 @@
 <template>
   <div class="records">
     <div class="title flexb">
-      <span>节点动态</span>
-      <span class="add" v-if="isEditor" @click="showAddScore = true">编辑</span>
+      <span>{{ $t('bpInfo.story') }}</span>
+      <span class="add" v-if="isEditor" @click="showAddScore = true">{{ $t('bpInfo.edt') }}</span>
     </div>
     <div class="scroll">
-      <div class="noData flexc tip" v-if="!recordLists.length">暂无数据</div>
+      <div class="noData flexc tip" v-if="!recordLists.length">{{ $t('public.noData') }}</div>
       <div class="longDiv flexa">
         <div class="list" v-for="(v, i) in recordLists" :key="i"
           @click="handleLook(v)">

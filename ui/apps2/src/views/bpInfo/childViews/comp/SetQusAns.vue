@@ -16,14 +16,14 @@
             rows="3"
             autosize
             type="textarea"
-            placeholder="请简单描述节点信息"
+            :placeholder="$t('bpInfo.bpDescTip')"
           />
         </span>
         <!-- <div class="iptlen">{{ v.getSize(v.ans) }}/256</div> -->
       </div>
     </div>
 
-    <div class="btn flexc" @click="handleSave">保存</div>
+    <div class="btn flexc" @click="handleSave">{{ $t('bpInfo.save') }}</div>
   </div>
 </template>
 

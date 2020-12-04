@@ -1,12 +1,12 @@
 <template>
   <div class="scoreDiv">
     <img class="close" @click="handleClose" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
-    <div class="title">编辑</div>
+    <div class="title">{{$t('bpInfo.title')}}</div>
     <div class="content">
       <div class="addTitle flexb">
-        <span>标题</span>
+        <span>{{$t('bpInfo.title')}}</span>
         <span class="flexa">
-          <van-field class="tleIpt" v-model="title" placeholder="请输入标题"/>
+          <van-field class="tleIpt" v-model="title" :placeholder="$t('bpInfo.titleTip')"/>
           <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
         </span>
       </div>
@@ -21,7 +21,7 @@
           />
       </div>
     </div>
-    <div class="btn flexc" @click="handleSave">确定</div>
+    <div class="btn flexc" @click="handleSave">{{ $t('public.confirm') }}</div>
   </div>
 </template>
 

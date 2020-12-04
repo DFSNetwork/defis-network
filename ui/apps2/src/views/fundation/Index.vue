@@ -61,7 +61,7 @@ export default {
         image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner4.png',
         routeName: 'fundation'
       }, {
-        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner1.png',
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner1_1.png',
         routeName: 'nodeVote'
       }, {
         image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner2.png',

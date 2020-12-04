@@ -2,11 +2,11 @@
   <div class="detail">
     <div>
       <div class="star">
-        <van-icon name="star" />
-        <van-icon name="star" />
-        <van-icon name="star" />
-        <van-icon name="star" />
-        <van-icon name="star" />
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
       </div>
       <div class="bar">
         <div class="percent" :style="handleGetPercent(9, 10)"></div>
@@ -14,11 +14,11 @@
     </div>
     <div>
       <div class="star">
-        <van-icon name="star" />
-        <van-icon name="star" />
-        <van-icon name="star" />
-        <van-icon name="star" />
-        <van-icon name="star" class="tip"/>
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-un.png" alt="">
       </div>
       <div class="bar">
         <div class="percent" :style="handleGetPercent(7, 8)"></div>
@@ -26,11 +26,11 @@
     </div>
     <div>
       <div class="star">
-        <van-icon name="star" />
-        <van-icon name="star" />
-        <van-icon name="star" />
-        <van-icon name="star" class="tip"/>
-        <van-icon name="star" class="tip"/>
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-un.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-un.png" alt="">
       </div>
       <div class="bar">
         <div class="percent" :style="handleGetPercent(5, 6)"></div>
@@ -38,11 +38,11 @@
     </div>
     <div>
       <div class="star">
-        <van-icon name="star" />
-        <van-icon name="star" />
-        <van-icon name="star" class="tip"/>
-        <van-icon name="star" class="tip"/>
-        <van-icon name="star" class="tip"/>
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-un.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-un.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-un.png" alt="">
       </div>
       <div class="bar">
         <div class="percent" :style="handleGetPercent(3, 4)"></div>
@@ -50,11 +50,11 @@
     </div>
     <div>
       <div class="star">
-        <van-icon name="star" />
-        <van-icon name="star" class="tip"/>
-        <van-icon name="star" class="tip"/>
-        <van-icon name="star" class="tip"/>
-        <van-icon name="star" class="tip"/>
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-black.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-un.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-un.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-un.png" alt="">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/star-un.png" alt="">
       </div>
       <div class="bar">
         <div class="percent" :style="handleGetPercent(1, 2)"></div>
@@ -91,6 +91,10 @@ export default {
   }
   .star{
     font-size: 14px;
+    img{
+      width: 14px;
+      margin: 5px 4px;
+    }
     /deep/ .van-icon{
       margin: 5px 4px;
       color: #959AA5;

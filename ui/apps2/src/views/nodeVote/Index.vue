@@ -1,7 +1,7 @@
 <template>
   <div class="nodeVote">
     <div class="banner">
-      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/poolsVote.png" alt="">
+      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/bpVote.png" alt="">
     </div>
     <div class="mainTitle flexb">
       <span class="act">{{ $t('vote.vote') }}</span>
@@ -29,9 +29,10 @@
         </div>
       </div>
       <div class="lsContent">
-        <NodeList :act="act" :nodeLists="nodeLists"
+        <NodeList v-if="act !== 2" :act="act" :nodeLists="nodeLists"
           :search="search"
           :getLoading="getLoading" :myVote="myVote"/>
+        <IndexComp v-else :nodeLists="nodeLists" :search="search"/>
       </div>
     </div>
 
@@ -62,8 +63,9 @@ import ProxyAcc from './comp/ProxyAcc';
 import AccInfo from './comp/AccInfo';
 import NodeList from './comp/NodeList';
 import Rules from './dialog/Rules';
+import IndexComp from '@/views/bpInfo/IndexComp'
 
-import { get_producers, get_table_rows } from '@/utils/api';
+import { get_bp_info, get_table_rows } from '@/utils/api';
 export default {
   name: 'nodeVote',
   components: {
@@ -71,6 +73,7 @@ export default {
     AccInfo,
     NodeList,
     Rules,
+    IndexComp,
   },
   data() {
     return {
@@ -104,7 +107,7 @@ export default {
   watch: {
     act() {
       this.search = ''
-      this.handleCancel()
+      // this.handleCancel()
     },
     scatter: {
       handler: function listen(newVal) {
@@ -166,16 +169,27 @@ export default {
       })
     },
     async handleGetNodeLists() {
-      const {status, result} = await get_producers()
+      const {status, result} = await get_bp_info()
       this.getLoading = false;
       if (!status) {
         return
       }
-      const rows = result.producers || []
+      const rows = result.voters || []
+      rows.forEach(v => {
+        try {
+          const logo = v.bpjson.org.branding.logo_256;
+          this.$set(v, 'logo', logo)
+        } catch (error) {
+          this.$set(v, 'logo', '')
+        }
+        const num = Number(v.total_votes) * Number(this.voteWeight);
+        this.$set(v, 'voteNum', Math.ceil(num))
+        this.$set(v, 'baseInfo', {})
+      });
       this.$store.dispatch('setNodeLists', JSON.parse(JSON.stringify(rows)))
       this.nodeLists = rows;
       this.handleDealData()
-      // console.log(result)
+      this.handleGetMyLists()
     },
     // 获取DFS 投票列表
     async handleGetVoteList() {
@@ -239,7 +253,28 @@ export default {
       } else {
         this.myVote = rows[0].last_vote;
       }
+      this.handleGetMyLists()
       // console.log(this.myVote)
+    },
+    handleGetMyLists() {
+      if (!this.nodeLists.length || !this.myVote.length) {
+        return
+      }
+      const list = []
+      this.myVote.forEach(v => {
+        const node = this.nodeLists.find(vv => vv.owner === v);
+        list.push(node);
+      })
+      list.sort((a, b) => {
+        return b.dfsVote - a.dfsVote
+      })
+      list.find(v => {
+        if (v.isChecked) {
+          return
+        }
+        const item = this.nodeLists.find(vv => v.owner === vv.owner)
+        this.$set(item, 'isChecked', true)
+      })
     },
     // 获取全网权重加成
     async handleGetWeight() {

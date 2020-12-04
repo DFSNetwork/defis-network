@@ -2,41 +2,40 @@
   <div class="baseInfo">
     <div class="flexb">
       <span class="flexa">
-        <span>节点账号</span>
+        <span>{{ $t('bpInfo.bpAcc') }}</span>
         <span class="red_p">*</span>
       </span>
       <span class="flexa">
-        <van-field v-model="account" disabled placeholder="请输入节点头像地址" />
+        <van-field v-model="account" disabled />
         <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
       </span>
     </div>
     <div class="flexb">
       <span class="flexa">
-        <span>节点名称</span>
+        <span>{{ $t('bpInfo.bpName') }}</span>
         <span class="red_p">*</span>
       </span>
       <span class="flexa">
-        <van-field v-model="bpName" placeholder="请输入节点名称" />
+        <van-field v-model="bpName" :placeholder="$t('bpInfo.bpNameTip')" />
         <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
       </span>
     </div>
     <div class="flexb">
       <span class="flexa">
-        <span>节点口号</span>
-        <!-- <span class="red_p">*</span> -->
+        <span>{{ $t('bpInfo.bpSlogon') }}</span>
       </span>
       <span class="flexa">
-        <van-field v-model="slogon" placeholder="请输入节点口号" />
+        <van-field v-model="slogon" :placeholder="$t('bpInfo.bpSlogonTip')" />
         <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
       </span>
     </div>
     <div class="flexb">
       <span class="flexa">
-        <span>成立时间</span>
+        <span>{{ $t('bpInfo.createTime') }}</span>
         <span class="red_p">*</span>
       </span>
       <span class="flexa" @click="show = true">
-        <van-field v-model="time" placeholder="请输入成立时间" />
+        <van-field v-model="time" :placeholder="$t('bpInfo.bpTimeTip')" />
         <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
       </span>
       <van-calendar v-model="show" :min-date="minDate" :max-date="maxDate"
@@ -46,7 +45,7 @@
 
     <div class="flexa">
       <span class="flexa">
-        <span>节点简介 - 中文</span>
+        <span>{{ $t('bpInfo.bpDescCn') }}</span>
       </span>
     </div>
     <div class="textareaDiv">
@@ -57,7 +56,7 @@
           rows="3"
           autosize
           type="textarea"
-          placeholder="请简单描述节点信息"
+          :placeholder="$t('bpInfo.bpDescTip')"
         />
       </span>
       <!-- <div class="iptlen">{{sizeof1}}/256</div> -->
@@ -65,7 +64,7 @@
 
     <div class="flexa">
       <span class="flexa">
-        <span>节点简介 - 英文</span>
+        <span>{{ $t('bpInfo.bpDescEn') }}</span>
       </span>
     </div>
     <div class="textareaDiv">
@@ -76,13 +75,13 @@
           rows="3"
           autosize
           type="textarea"
-          placeholder="请简单描述节点信息"
+          :placeholder="$t('bpInfo.bpDescTip')"
         />
       </span>
       <!-- <div class="iptlen">{{sizeof2}}/256</div> -->
     </div>
 
-    <div class="btn flexc" @click="handleSave">保存</div>
+    <div class="btn flexc" @click="handleSave">{{ $t('bpInfo.save') }}</div>
   </div>
 </template>
 
@@ -153,7 +152,7 @@ export default {
     handleReg() {
       if (!this.account.trim() || !this.account.trim()
        || !this.time.trim()) {
-        this.$message.error('请完善基础信息');
+        this.$message.error(this.$t('bpInfo.errTip'));
         return false
       }
       return true

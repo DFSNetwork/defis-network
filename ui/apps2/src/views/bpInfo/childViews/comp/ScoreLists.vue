@@ -1,6 +1,6 @@
 <template>
   <div class="scoreLists">
-    <div class="title">用户评价</div>
+    <div class="title">{{ $t('bpInfo.accRpy') }}</div>
     <div class="lists">
       <van-list
         v-model="loadingMore"
@@ -19,11 +19,11 @@
               </div>
               <div class="scoreType">
                 <div class="tip">
-                  <span v-if="v.targetDeal >= 4.5">推荐赞👍爆了</span>
-                  <span v-else-if="v.targetDeal >= 4">推荐大家用</span>
-                  <span v-else-if="v.targetDeal >= 2">一般般</span>
-                  <span v-else-if="v.targetDeal >= 1 ">差</span>
-                  <span v-else>非常差</span>
+                  <span v-if="v.targetDeal >= 4.5">{{ $t('bpInfo.starType1') }}</span>
+                  <span v-else-if="v.targetDeal >= 4">{{ $t('bpInfo.starType2') }}</span>
+                  <span v-else-if="v.targetDeal >= 2">{{ $t('bpInfo.starType3') }}</span>
+                  <span v-else-if="v.targetDeal >= 1 ">{{ $t('bpInfo.starType4') }}</span>
+                  <span v-else>{{ $t('bpInfo.starType5') }}</span>
                 </div>
                 <div>
                   <van-rate v-model="v.targetDeal" readonly allow-half

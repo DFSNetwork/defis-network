@@ -10,6 +10,7 @@ import zhLocale from './zh-CN';
 import fundation from './appsLang/fundation'
 import nodePools from './appsLang/nodePools'
 import financial from './appsLang/financial'
+import bpInfo from './appsLang/bpInfo'
 
 Vue.use(VueI18n);
 
@@ -19,13 +20,15 @@ const messages = {
     ...elZhLocale,
     ...fundation['zh-CN'],
     ...nodePools['zh-CN'],
-    ...financial['zh-CN']
+    ...financial['zh-CN'],
+    ...bpInfo['zh-CN']
   },
   en: { // 英文包
     ...enLocale,
     ...elEnLocale,
     ...fundation['en'],
     ...nodePools['en'],
+    ...bpInfo['en'],
     ...financial['en']
   },
 };

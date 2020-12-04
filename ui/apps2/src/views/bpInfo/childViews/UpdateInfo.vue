@@ -2,7 +2,7 @@
   <div class="updateInfo">
     <div class="title flexc">
       <span class="back flexa"></span>
-      <span>编辑信息</span>
+      <span>{{ $t('bpInfo.edtInfo') }}</span>
       <span class="changeLang flexa">
         <van-popover
           v-model="showPopover"
@@ -12,7 +12,7 @@
           placement="bottom"
         >
           <template #reference>
-            <div @click="showPopover = !showPopover">切换语言</div>
+            <div @click.stop="showPopover = !showPopover">{{ $t('bpInfo.lang') }}</div>
           </template>
         </van-popover>
       </span>
@@ -20,8 +20,8 @@
 
     <!-- tab 切换 -->
     <div class="tabDiv flexb">
-      <span class="tab flexc" :class="{'act': act === 0}" @click="act = 0">基础信息</span>
-      <span class="tab flexc" :class="{'act': act === 1}" @click="act = 1">问题答复</span>
+      <span class="tab flexc" :class="{'act': act === 0}" @click="act = 0">{{ $t('bpInfo.baseInfo') }}</span>
+      <span class="tab flexc" :class="{'act': act === 1}" @click="act = 1">{{ $t('bpInfo.qusAns') }}</span>
       <span class="tab null"></span>
     </div>
 
@@ -89,6 +89,9 @@ export default {
       font-size: 32px;
       font-weight: normal;
       color: #29D4B0;
+      /deep/ .van-popove{
+        display: block !important;
+      }
     }
   }
   .tabDiv{

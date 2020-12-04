@@ -1,0 +1,56 @@
+<template>
+  <div class="content">
+    <div>1. 节点方调用命令：</div>
+    <div class="code"
+      v-clipboard:copy="code"
+      v-clipboard:success="onCopy"
+      v-clipboard:error="onError">{{ code }}</div>
+    <div>2. 联系DFS社区进行添加</div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: 'showContent',
+  props: {
+    content: {
+      type: String,
+      default: '',
+    },
+    bpname: {
+      type: String,
+      default: '',
+    },
+  },
+  computed: {
+    code() {
+      const t = `cleos push action dfscommunity seteditor '["${ this.bpname }","editor_account"]' -p bp.dfs`;
+      return t
+    }
+  },
+  methods: {
+    onCopy() {
+      this.$message.success(this.$t('public.copySuccess'));
+    },
+    onError() {
+      this.$message.error(this.$t('public.copyFail'));
+    },
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.content{
+  font-size: 28px;
+  padding: 28px;
+  border-radius: 12px;
+  color: #333;
+
+  .code{
+    margin: 18px 0;
+    background: #f5f5f5;
+    border-radius: 12px;
+    padding: 28px;
+  }
+}
+</style>

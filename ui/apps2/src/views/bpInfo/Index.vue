@@ -102,7 +102,7 @@ export default {
         this.$set(v, 'baseInfo', {})
       });
       this.allBpLists = allBpLists;
-      console.log(allBpLists)
+      // console.log(allBpLists)
     },
     handleCurrentChange() {
       if (!this.allBpLists.length) {

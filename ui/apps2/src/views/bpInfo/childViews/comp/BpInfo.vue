@@ -5,7 +5,7 @@
         <img class="bpImg" :src="bpDetailInfo.logo" :onerror="errorCoinImg">
         <div class="">
           <div class="name">{{ bpname }}</div>
-          <div class="dfsVote dinReg">{{ bpDetailInfo.voteNum || 0 }} 票数</div>
+          <div class="dfsVote dinReg">{{ $t('bpInfo.voteNum', {num: bpDetailInfo.voteNum || 0}) }}</div>
         </div>
       </div>
       <div class="score">
@@ -13,52 +13,87 @@
           <div class="scoreInfo">
             <div class="num dinBold">{{ score }}</div>
             <div class="star">
-              <van-icon name="star" />
-              <van-icon name="star" />
-              <van-icon name="star" />
-              <van-icon name="star" />
-              <van-icon name="star" />
+              <van-rate v-model="starIcon" allow-half readonly
+                void-icon="star" void-color="#DBDBDB" color="#FFC300"/>
             </div>
             <div class="tip scoreCount">
-              <span class="dinReg">{{ bpStar.showCntNum }}</span>
-              <span>人评价</span>
+              <!-- <span class="dinReg">{{ bpStar.showCntNum }}</span> -->
+              <span class="dinReg">{{ $t('bpInfo.rpyNum', {num: bpStar.showCntNum}) }}</span>
             </div>
           </div>
           <ScoreDetail :bpStar="bpStar"/>
           <div class="scoreNum tip">
-            <div><span class="dinReg">{{handleDealCountNum(type1)}}</span>人推荐</div>
-            <div><span class="dinReg">{{handleDealCountNum(type2)}}</span>人觉得还行</div>
-            <div><span class="dinReg">{{handleDealCountNum(type3)}}</span>人觉得一般般</div>
+            <div><span class="dinReg">{{handleDealCountNum(type1)}}</span>{{ $t('bpInfo.rpyNum1') }}</div>
+            <div><span class="dinReg">{{handleDealCountNum(type2)}}</span>{{ $t('bpInfo.rpyNum2') }}</div>
+            <div><span class="dinReg">{{handleDealCountNum(type3)}}</span>{{ $t('bpInfo.rpyNum3') }}</div>
           </div>
         </div>
         <div class="rank flexa">
           <img class="rankImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/bpInfo/rank.png" alt="">
-          <span>节点排行榜第{{ bpDetailInfo.bprank || 0 }}名</span>
+          <span>{{ $t('bpInfo.currRank', {rank: bpDetailInfo.bprank || 0}) }}</span>
         </div>
+      </div>
+      <div class="social flexa" v-if="bpDetailInfo.social">
+        <img v-if="bpDetailInfo.social.github" src="https://cdn.jsdelivr.net/gh/defis-net/material/par/GitHub_icon.svg" alt="">
+        <img v-if="bpDetailInfo.social.twitter" src="https://cdn.jsdelivr.net/gh/defis-net/material/par/twitter_icon.svg" alt="">
+        <img v-if="bpDetailInfo.social.telegram" src="https://cdn.jsdelivr.net/gh/defis-net/material/par/telegram_icon.svg" alt="">
+        <img v-if="bpDetailInfo.social.wechat" src="https://cdn.jsdelivr.net/gh/defis-net/material/par/WeChat_icon.svg" alt="">
+        <img v-if="bpDetailInfo.social.medium" src="https://cdn.jsdelivr.net/gh/defis-net/material/par/medium_icon.svg" alt="">
       </div>
     </div>
 
     <!-- 简介 -->
     <div class="desc">
       <div class="title flexb">
-        <span>简介</span>
-        <span class="add" v-if="isEditor" @click="handleToUpdate">编辑</span>
+        <span>{{ $t('bpInfo.desc') }}</span>
+        <span class="add" v-if="isEditor" @click="handleToUpdate">{{ $t('bpInfo.edt') }}</span>
       </div>
-      <div class="content" :class="{'showAll': showDetail}">
+      <div class="content" :class="{'showAll': showDetail}" @click="showContent = true">
         {{ bpInfo.desc0 }}
-        <span class="more"
-          @click="showDetail = !showDetail">
-          <span v-if="!showDetail">查看详情</span>
-          <span v-else>收起</span>
+      </div>
+      <div class="item flexb">
+        <span class="tip">{{ $t('bpInfo.createTime') }}</span>
+        <span>{{ bpInfo.lTime || '暂未编辑' }}</span>
+      </div>
+      <div class="item flexb">
+        <span class="tip">{{ $t('bpInfo.website') }}</span>
+        <span>{{ bpDetailInfo.url }}</span>
+      </div>
+      <div class="item flexb">
+        <span class="tip flexa" @click="showEdtsTip = true">
+          <span>编辑者</span>
+          <img class="qus" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
+        </span>
+        <span>{{ edts || '-' }}</span>
+      </div>
+      <div class="item flexb">
+        <span class="tip flexa" @click="handleShowBpJsonErr">
+          <span>是否提供 bp.json</span>
+          <img v-if="!bpDetailInfo.bpjson || bpDetailInfo.bpjson_error"
+            class="qus" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
+        </span>
+        <span class="flexa">
+          <span v-if="!bpDetailInfo.bpjson || bpDetailInfo.bpjson_error">暂未提供</span>
+          <span v-else>{{ `${bpDetailInfo.url}/bp.json` }}</span>
         </span>
       </div>
-      <div class="item flexb">
-        <span class="tip">成立时间</span>
-        <span>{{ bpInfo.lTime }}</span>
-      </div>
-      <div class="item flexb">
-        <span class="tip">官网地址</span>
-        <span>{{ bpDetailInfo.url }}</span>
+      <div class="item apiDiv">
+        <span class="tip flexa" @click="handleShowApiTip">
+          <span>API节点</span>
+          <img class="qus" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
+        </span>
+        <div class="apiUrl">
+          <div class="tip" v-if="!bpDetailInfo.nodes">暂未提供</div>
+          <template v-else>
+            <div class="flexb" v-for="(v, i) in bpDetailInfo.nodes" :key="`nodes${i}`">
+              <span>{{ v.url }}</span>
+              <span v-if="!v.isGet">Loading...</span>
+              <span v-else :class="{'green': v.ms < 1000,
+                'red': v.ms >= 3000,
+                'yellow': v.ms < 3000 && v.ms >= 1000}">{{ v.ms }}ms</span>
+            </div>
+          </template>
+        </div>
       </div>
       <div class="qusLists" v-if="showMore">
         <template v-for="(v, i) in qus">
@@ -71,33 +106,68 @@
 
       <div class="showMore tip flexc" @click="showMore = !showMore">
         <span class="flexa" v-if="!showMore">
-          <span>查看更多</span>
+          <span>{{ $t('bpInfo.showMore') }}</span>
           <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/down.png" alt="">
         </span>
         <span class="closeMore flexa" v-else>
-          <span>收起</span>
+          <span>{{ $t('bpInfo.close') }}</span>
           <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/down.png" alt="">
         </span>
       </div>
     </div>
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible.sync="showContent">
+      <ShowContent :content="bpInfo.desc0"/>
+    </el-dialog>
+
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible.sync="showEdtsTip">
+      <ShowEdts :bpname="bpname"/>
+    </el-dialog>
+
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible.sync="showBpJsonErr">
+      <ShowBpJsonErr :content="contentTip"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 import Bus from '@/utils/bus';
 import { mapState } from 'vuex';
 import ScoreDetail from './ScoreDetail';
 import {get_table_rows, get_bp_info} from '@/utils/api'
 import {toLocalTime} from '@/utils/public';
+import ShowContent from '../dialog/ShowContent';
+import ShowEdts from '../dialog/ShowEdts';
+import ShowBpJsonErr from '../dialog/ShowBpJsonErr';
+
 export default {
   name: 'bpInfo',
   components: {
     ScoreDetail,
+    ShowContent,
+    ShowEdts,
+    ShowBpJsonErr,
   },
   props: {
     isEditor: {
       type: Boolean,
       default: false,
+    },
+    editors: {
+      type: Array,
+      default: function ets() {
+        return []
+      }
     }
   },
   data() {
@@ -111,11 +181,16 @@ export default {
       qus: [],
       showMore: false,
       showDetail: false,
+      showContent: false,
+      showEdtsTip: false,
+      showBpJsonErr: false,
+      contentTip: '',
 
       // allStars
       allStars: [],
       bpStar: {},
       score: '0.0',
+      starIcon: 0
     }
   },
   mounted() {
@@ -134,6 +209,13 @@ export default {
       scatter: state => state.app.scatter,
       language: state => state.app.language,
     }),
+    edts() {
+      let s = [];
+      this.editors.forEach(v => {
+        s.push(v.owner)
+      })
+      return s.join(', ')
+    },
     type1() {
       let t = 0;
       t = Number(this.bpStar.star10 || 0) + Number(this.bpStar.star9 || 0) + Number(this.bpStar.star8 || 0);
@@ -157,6 +239,17 @@ export default {
     }
   },
   methods: {
+    handleShowBpJsonErr() {
+      if (this.bpDetailInfo.bpjson || !this.bpDetailInfo.bpjson_error) {
+        return
+      }
+      this.contentTip = this.bpDetailInfo.bpjson_error;
+      this.showBpJsonErr = true;
+    },
+    handleShowApiTip() {
+      this.contentTip = '取自bp.json'
+      this.showBpJsonErr = true;
+    },
     async handleGetBpInfo() {
       const params = {
         bp: this.bpname
@@ -166,11 +259,51 @@ export default {
         return
       }
       const bpDetailInfo = result;
-      bpDetailInfo.logo = bpDetailInfo.bpjson.org.branding.logo_256;
+      if (bpDetailInfo.bpjson) {
+        const bpjson = bpDetailInfo.bpjson;
+        bpDetailInfo.logo = (bpjson.org && bpjson.org.branding) ? bpjson.org.branding.logo_256 : '';
+
+        // 获取api列表
+        const nodes = bpjson.nodes
+        if (nodes) {
+          const arr = [];
+          nodes.forEach(v => {
+            if (!v.ssl_endpoint) {
+              return
+            }
+            const item = {
+              url: v.ssl_endpoint,
+            }
+            arr.push(item)
+          })
+          bpDetailInfo.nodes = arr;
+        }
+        // 获取社交信息
+        // github_user | email | 
+        const social = bpjson.org ? bpjson.org.social : {};
+        console.log(social)
+        bpDetailInfo.social = social;
+      }
       const num = Number(bpDetailInfo.total_votes) * Number(this.voteWeight);
       bpDetailInfo.voteNum = Math.ceil(num);
       this.bpDetailInfo = bpDetailInfo;
-      // console.log(bpDetailInfo)
+      this.handleGetSpeed();
+      console.log(bpDetailInfo)
+    },
+    handleGetSpeed() {
+      if (!this.bpDetailInfo.nodes) {
+        return
+      }
+      this.bpDetailInfo.nodes.forEach(v => {
+        let time = new Date().getTime();
+        axios.get(`${v.url}/v1/chain/get_info`, {
+          timeout: 5500,
+        }).then(() => {
+          time = new Date().getTime() - time;
+          this.$set(v, 'ms', time)
+          this.$set(v, 'isGet', true)
+        })
+      })
     },
     handleDealCountNum(n) {
       let t = n
@@ -211,8 +344,10 @@ export default {
         return
       }
       const row = rows[0];
-      const time = toLocalTime(row.create_time).substring(0, 10);
-      this.$set(row, 'lTime', time)
+      if (row.create_time !== '1970-01-01T00:00:00') {
+        const time = toLocalTime(row.create_time).substring(0, 10);
+        this.$set(row, 'lTime', time)
+      }
       this.bpInfo = row;
     },
     async handleGetScores() {
@@ -235,6 +370,7 @@ export default {
       const row = rows[0]
       const score = (row.total_star / row.user_count).toFixed(1);
       this.score = score;
+      this.starIcon = score / 2
     },
     async handleGetQues() {
       const params = {
@@ -275,7 +411,7 @@ export default {
           this.$set(v, 'ans', ans.content)
         }
       })
-      console.log(this.qusAll)
+      // console.log(this.qusAll)
       this.handleGetLangQus()
     },
     handleGetLangQus() {
@@ -284,7 +420,7 @@ export default {
         lang = 'zh'
       }
       this.qus = this.qusAll.filter(v => v.lang === lang)
-      console.log(this.qus)
+      // console.log(this.qus)
     },
     handleToUpdate() {
       this.$router.push({
@@ -319,12 +455,19 @@ export default {
     .dfsVote{
       color: #29D4B0;
     }
+    .social{
+      margin-top: 24px;
+      img{
+        width: 40px;
+        margin-right: 30px;
+      }
+    }
   }
   .score{
     margin-top: 34px;
     border: 1px solid rgba(220, 220, 220, .3);
     border-radius: 12px;
-    padding: 26px 32px;
+    padding: 26px 28px;
     .scoreInfo{
       color: #FFC300;
       text-align: center;
@@ -338,6 +481,9 @@ export default {
         margin-bottom: 6px;
         /deep/ .van-icon{
           margin: 3px;
+        }
+        /deep/ .van-rate__icon{
+          font-size: 20px;
         }
       }
     }
@@ -395,7 +541,7 @@ export default {
   .content{
     position: relative;
     margin-bottom: 15px;
-    min-height: 60px;
+    // min-height: 60px;
     max-height: 120px;
     overflow: hidden;
     &.showAll{
@@ -439,6 +585,30 @@ export default {
     border-bottom: 1px solid rgba(220,220,220,.3);
     &:last-child{
       border-bottom: 0;
+    }
+    &.apiDiv{
+      justify-content: space-between;
+      height: auto;
+      padding: 18px 0;
+      .apiUrl{
+        text-align: center;
+        &>div{
+          height: 45px;
+        }
+        .green{
+          color: #29D4B0;
+        }
+        .red{
+          color: #e9574f;
+        }
+        .yellow{
+          color: #f5a623;
+        }
+      }
+    }
+    .qus{
+      width: 30px;
+      margin-left: 10px;
     }
   }
 }

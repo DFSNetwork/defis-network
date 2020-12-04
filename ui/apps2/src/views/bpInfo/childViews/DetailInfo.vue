@@ -1,13 +1,13 @@
 <template>
   <div class="detailInfo">
-    <div class="title flexc">节点详情</div>
-    <BpInfo :isEditor="isEditor"/>
+    <div class="title flexc">{{ $t('bpInfo.bpInfo') }}</div>
+    <BpInfo :isEditor="isEditor" :editors="editors"/>
     <Records :isEditor="isEditor" />
     <ScoreLists />
 
     <div class="nullDiv"></div>
     <div class="btnDiv">
-      <div class="btn flexc" @click="showAddScore = true">发布评价</div>
+      <div class="btn flexc" @click="showAddScore = true">{{ $t('bpInfo.toRpy') }}</div>
     </div>
     <el-dialog
       class="mydialog"

@@ -2,9 +2,9 @@
   <div class="scoreDiv">
     <img class="close" @click="handleClose()"
       src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
-    <div class="title">评分</div>
+    <div class="title">{{ $t('bpInfo.score') }}</div>
     <div class="content">
-      <div>给颗爱心</div>
+      <div>{{ $t('bpInfo.give') }}</div>
       <div class="payLike">
         <div class="flexb bal dinReg">
           <span @click="handlePercent(1)">{{ $t('public.balance') }}: {{ bal }}</span>
@@ -35,19 +35,19 @@
         </div>
       </div>
 
-      <div>给个评分</div>
+      <div>{{ $t('bpInfo.toScore') }}</div>
       <div class="score">
         <van-rate v-model="value" allow-half
           void-icon="star" void-color="#DBDBDB" color="#FFC300"/>
         <div class="type">
-          <span v-if="value >= 4.5">推荐赞👍爆了</span>
-          <span v-else-if="value >= 3">推荐大家用</span>
-          <span v-else-if="value >= 2">一般般</span>
-          <span v-else-if="value >= 1 ">差</span>
-          <span v-else-if="value > 0">非常差</span>
+          <span v-if="value >= 4.5">{{ $t('bpInfo.starType1') }}</span>
+          <span v-else-if="value >= 3">{{ $t('bpInfo.starType2') }}</span>
+          <span v-else-if="value >= 2">{{ $t('bpInfo.starType3') }}</span>
+          <span v-else-if="value >= 1 ">{{ $t('bpInfo.starType4') }}</span>
+          <span v-else-if="value > 0">{{ $t('bpInfo.starType5') }}</span>
         </div>
       </div>
-      <div>写点评论</div>
+      <div>{{ $t('bpInfo.toEdtRpy') }}</div>
       <div class="accMsg">
         <van-field
             class="input"
@@ -62,7 +62,7 @@
     </div>
 
     <div class="btn flexc unClick" v-if="showErr">{{ errTip }}</div>
-    <div class="btn flexc" v-else @click="handleToSubmit">确定</div>
+    <div class="btn flexc" v-else @click="handleToSubmit">{{ $t('public.confirm') }}</div>
   </div>
 </template>
 
