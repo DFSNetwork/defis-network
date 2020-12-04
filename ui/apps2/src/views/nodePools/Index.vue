@@ -355,7 +355,7 @@ export default {
       let rank;
       if (index === -1) {
         weight = 1;
-      } else if (index < 21) {
+      } else if (index < 20) {
         weight = 1.3;
       } else if (index < 50) {
         weight = 1.5;
