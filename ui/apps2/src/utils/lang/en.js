@@ -320,7 +320,7 @@ export default {
     vote:'Vote',
     voteRules:'Vote Rules',
     myVote:'Your number of votes',
-    rank:'rank',
+    rank:'Rank',
     voted:'Voted',
     checked:'Selected',
     cancelChecked:'Cancel the check',

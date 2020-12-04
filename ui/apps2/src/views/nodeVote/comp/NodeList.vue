@@ -25,11 +25,11 @@
               <span class="voteIcon flexc">
                 <img class="small" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/money.png" alt="">
               </span>
-              <span>{{ parseInt(item.num_votes) | numeralFormat }} EOS</span>
+              <span>{{ parseInt(item.voteNum) | numeralFormat }} EOS</span>
             </div>
             <div class="flexa dinReg">
               <span class="tip">BP Rank:</span>
-              <span>{{ item.rank }}</span>
+              <span>{{ item.bprank }}</span>
             </div>
           </div>
           <div class="tip data flexb">
@@ -83,6 +83,10 @@ export default {
     search: {
       type: String,
       default: ''
+    },
+    AccMaxNum: {
+      type: Number,
+      default: 20
     }
   },
   data() {
@@ -111,11 +115,16 @@ export default {
         this.handleDealLists()
       }
     },
-    act() {
-      this.page = 1;
-      this.lists = []
-      this.finished = false;
-      this.handleDealLists()
+    act: {
+      handler: function act() {
+        this.page = 1;
+        this.lists = []
+        this.finished = false;
+        document.documentElement.scrollTop = 9999;
+        this.handleDealLists()
+      },
+      immediate: true,
+      deep: true
     },
     myVote: {
       handler: function nls(newVal) {
@@ -158,7 +167,6 @@ export default {
         const start = (this.page - 1) * this.pageSize;
         const end = this.page * this.pageSize;
         const pageLists = tArr.slice(start, end);
-        // console.log(pageLists, this.page)
         this.lists.push(...pageLists)
         this.loadingMore = false;
         this.page += 1;
@@ -200,21 +208,16 @@ export default {
         return b.dfsVote - a.dfsVote
       })
       this.myVoteList = list
-      // console.log(this.myVoteList)
-      this.myVoteList.find(v => {
-        if (v.isChecked) {
-          return
-        }
-        const item = this.nodeLists.find(vv => v.owner === vv.owner)
-        this.$set(item, 'isChecked', true)
-      })
-      // this.act === 3 ? this.lists = this.myVoteList : '';
+      // this.myVoteList.find(v => {
+      //   if (v.isChecked) {
+      //     return
+      //   }
+      //   const item = this.nodeLists.find(vv => v.owner === vv.owner)
+      //   this.$set(item, 'isChecked', true)
+      // })
     },
     handleDealLists() {
       const lists = this.nodeLists;
-      // act === 1
-      // this.act === 1 ? this.lists = lists : '';
-      // act === 2
       let rank = lists.filter(v => v.dfsRank <= 21)
       rank.sort((a, b) => {
         return b.dfsVote - a.dfsVote
@@ -237,7 +240,7 @@ export default {
       const checkedArr = this.nodeLists.filter(v => v.isChecked)
       const index = this.nodeLists.findIndex(v => v.owner === item.owner);
       const isChecked = this.nodeLists[index].isChecked || false;
-      if (checkedArr.length >= 15 && !isChecked) {
+      if (checkedArr.length >= this.AccMaxNum && !isChecked) {
         return
       }
       this.$set(this.nodeLists[index], 'isChecked', !isChecked)

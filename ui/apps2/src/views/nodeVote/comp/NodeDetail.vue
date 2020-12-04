@@ -1,7 +1,7 @@
 <template>
   <div class="voteDetail">
     <div class="title">
-      <span class="act">节点信息</span>
+      <span class="act">{{ $t('bpInfo.bpInfo') }}</span>
     </div>
     <div class="mylist">
       <div class="flexa">

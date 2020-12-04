@@ -184,3 +184,12 @@ input::-webkit-input-placeholder {
     }
   }
 }
+
+.van-popover--light{
+  border-radius: 8px;
+  box-shadow: 2px 4px 8px 4px rgba(219,219,219,0.5) !important;
+}
+.van-popover__action{
+  width: 150px !important;
+  padding: 0px !important;;
+}
