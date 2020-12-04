@@ -1,7 +1,7 @@
 <template>
   <div class="voteMain">
     <div class="banner">
-      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/poolsVote.png" alt="">
+      <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/bpVote.png" alt="">
     </div>
     <div class="mainTitle flexb">
       <span class="act">{{ $t('vote.vote') }}</span>
