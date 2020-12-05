@@ -203,7 +203,7 @@ export default {
           this.$set(v, 'accInfo', result)
         }, index * 300);
       })
-      console.log(this.lists)
+      // console.log(this.lists)
     },
   }
 }

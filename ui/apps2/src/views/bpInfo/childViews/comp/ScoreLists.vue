@@ -87,8 +87,7 @@ export default {
   methods: {
     handleToShowRpy(item) {
       this.item = item;
-      this.accInfo = {};
-      console.log(item)
+      this.accInfo = item.accInfo;
       this.showRly = true;
     },
     handleTo(name) {
