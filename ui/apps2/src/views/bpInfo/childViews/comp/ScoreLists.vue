@@ -9,12 +9,12 @@
         :finished-text="$t('public.noMore')"
         @load="handleCurrentChange"
       >
-        <div class="list flexs" v-for="(v, i) in lists" :key="i">
-          <img class="headImg" @click="handleTo(v.user)"
+        <div class="list flexs" v-for="(v, i) in lists" :key="i" @click="handleToShowRpy(v)">
+          <img class="headImg" @click.stop="handleTo(v.user)"
             :src="v.accInfo ? v.accInfo.avatar || v.headImg : v.headImg" :onerror="errImg">
           <div class="main">
             <div class="flexb">
-              <div class="accInfo"  @click="handleTo(v.user)">
+              <div class="accInfo"  @click.stop="handleTo(v.user)">
                 <div class="name">{{ (v.accInfo ? v.accInfo.nick || v.user : v.user) }}</div>
                 <div class="time tip dinReg">{{ v.dealTime }}</div>
               </div>
@@ -33,10 +33,26 @@
               </div>
             </div>
             <div class="content">{{ v.memo }}</div>
+            <div class="flexa replyDiv tip">
+              <span class="flexa">
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/newlike.png" alt="">
+                <span>{{ v.likeNum }}</span>
+              </span>
+              <span class="flexa right">
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/reply.png" alt="">
+                <span>{{ v.replyNum }}</span>
+              </span>
+            </div>
           </div>
         </div>
       </van-list>
     </div>
+
+    <van-popup v-model="showRly" 
+      class="popup"
+      position="bottom">
+      <ReplyLists v-if="showRly" :item="item" :accInfo="accInfo"/>
+    </van-popup>
   </div>
 </template>
 
@@ -44,7 +60,11 @@
 import Bus from '@/utils/bus';
 import {getCoin, toLocalTime} from '@/utils/public'
 import { get_bp_scores, get_acc_info } from '@/utils/api'
+import ReplyLists from '@/views/otherInfo/dialog/ReplyLists';
 export default {
+  components: {
+    ReplyLists,
+  },
   name: '',
   data() {
     return {
@@ -56,12 +76,21 @@ export default {
       lists: [],
       page: 1,
       pageSize: 20,
+      showRly: false,
+      item: {},
+      accInfo: {},
     }
   },
   mounted() {
     this.bpname = this.$route.params.bpname;
   },
   methods: {
+    handleToShowRpy(item) {
+      this.item = item;
+      this.accInfo = {};
+      console.log(item)
+      this.showRly = true;
+    },
     handleTo(name) {
       this.$router.push({
         name: 'otherInfo',
@@ -96,6 +125,9 @@ export default {
         this.$set(v, 'dealTime', toLocalTime(times))
         const targetDeal = v.target0 / 2;
         this.$set(v, 'targetDeal', targetDeal)
+        const likeNum = v.like_count * 1000;
+        this.$set(v, 'likeNum', likeNum.toFixed(0))
+        this.$set(v, 'fromx', v.user)
       })
 
       if (this.page === 1) {
@@ -181,6 +213,20 @@ export default {
     }
     .content{
       margin-top: 14px;
+    }
+    .replyDiv{
+      margin-top: 18px;
+      font-size: 22px;
+      img{
+        width: 32px;
+        margin-right: 10px;
+      }
+      &>span{
+        width: 120px;
+      }
+      .right{
+        margin-left: 20px;
+      }
     }
   }
 }
