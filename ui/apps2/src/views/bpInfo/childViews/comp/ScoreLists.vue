@@ -10,7 +10,7 @@
         @load="handleCurrentChange"
       >
         <div class="list flexs" v-for="(v, i) in lists" :key="i">
-          <img class="headImg" :src="v.accInfo ? v.accInfo.avatar || v.headImg : v.headImg">
+          <img class="headImg" :src="v.accInfo ? v.accInfo.avatar || v.headImg : v.headImg" :onerror="errImg">
           <div class="main">
             <div class="flexb">
               <div class="accInfo">
@@ -47,6 +47,7 @@ export default {
   name: '',
   data() {
     return {
+      errImg: 'this.src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/pig.png"',
       value: 3,
       bpname: '',
       loadingMore: false,
