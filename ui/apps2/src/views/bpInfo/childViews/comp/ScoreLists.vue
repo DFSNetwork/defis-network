@@ -10,10 +10,11 @@
         @load="handleCurrentChange"
       >
         <div class="list flexs" v-for="(v, i) in lists" :key="i">
-          <img class="headImg" :src="v.accInfo ? v.accInfo.avatar || v.headImg : v.headImg" :onerror="errImg">
+          <img class="headImg" @click="handleTo(v.user)"
+            :src="v.accInfo ? v.accInfo.avatar || v.headImg : v.headImg" :onerror="errImg">
           <div class="main">
             <div class="flexb">
-              <div class="accInfo">
+              <div class="accInfo"  @click="handleTo(v.user)">
                 <div class="name">{{ (v.accInfo ? v.accInfo.nick || v.user : v.user) }}</div>
                 <div class="time tip dinReg">{{ v.dealTime }}</div>
               </div>
@@ -61,6 +62,14 @@ export default {
     this.bpname = this.$route.params.bpname;
   },
   methods: {
+    handleTo(name) {
+      this.$router.push({
+        name: 'otherInfo',
+        params: {
+          id: name
+        }
+      })
+    },
     handleCurrentChange() {
       this.handleGetScoreLists()
     },
