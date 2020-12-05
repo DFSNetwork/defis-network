@@ -3,7 +3,7 @@
     <div class="info">
       <div class="flexb">
         <div class="flexa">
-          <img class="bpImg" :src="bpDetailInfo.logo" :onerror="errorCoinImg">
+          <img class="bpImg" :src="bpDetailInfo.logo || errorCoinImg" :onerror="errorCoinImg">
           <div class="">
             <div class="name">{{ bpname }}</div>
             <div class="dfsVote dinReg">{{ $t('bpInfo.voteNum', {num: bpDetailInfo.voteNum || 0}) }}</div>
@@ -303,7 +303,7 @@ export default {
       bpDetailInfo.voteNum = Math.ceil(num);
       this.bpDetailInfo = bpDetailInfo;
       this.handleGetSpeed();
-      console.log(bpDetailInfo)
+      // console.log(bpDetailInfo)
     },
     handleGetSpeed() {
       if (!this.bpDetailInfo.nodes) {

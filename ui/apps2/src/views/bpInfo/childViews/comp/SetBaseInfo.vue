@@ -163,8 +163,10 @@ export default {
       }
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
-      let t = new Date().toISOString()
-      t = t.split('.')[0];
+      // console.log(this.time)
+      // let t = Date().toISOString()
+      // t = t.split('.')[0];
+      let t = `${this.time}T00:00:00`
 
       const params = {
         actions: [{
