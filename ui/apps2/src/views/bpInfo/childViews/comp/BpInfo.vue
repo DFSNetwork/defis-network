@@ -382,10 +382,11 @@ export default {
       if (!rows.length) {
         return
       }
+      // console.log(rows)
       const row = rows[0]
-      const score = (row.total_star / row.user_count).toFixed(1);
+      const score = (row.total_star / row.user_count / 2).toFixed(1);
       this.score = score;
-      this.starIcon = score / 2
+      this.starIcon = Number(score)
     },
     async handleGetQues() {
       const params = {
