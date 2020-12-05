@@ -24,7 +24,7 @@ export default {
   },
   computed: {
     code() {
-      const t = `cleos push action dfscommunity seteditor '["${ this.bpname }","editor_account"]' -p bp.dfs`;
+      const t = `cleos push action dfscommunity seteditor '["${ this.bpname }","editor_account"]' -p ${ this.bpname }`;
       return t
     }
   },
