@@ -17,8 +17,8 @@
           <div style="flex: 1">
             <div class="name">{{ v.owner }}</div>
             <div class="star flexa dinBold">
-              <span>{{ v.score || '0.0' }}</span>
-              <van-rate v-model="v.score" allow-half readonly
+              <span>{{ v.scoreNum || '0.0' }}</span>
+              <van-rate v-model="v.scoreNumStar" allow-half readonly
                 void-icon="star" void-color="#DBDBDB" color="#FFC300"/>
               <span class="tip small dinReg">({{ $t('bpInfo.rpyNum', {num: v.total || 0}) }})</span>
             </div>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import {get_bp_info} from '@/utils/api'
+import {get_bp_info, get_table_rows} from '@/utils/api'
 import { mapState } from 'vuex';
 
 export default {
@@ -214,24 +214,27 @@ export default {
           this.$set(v, 'total', v.comments.total);
         }
 
-        // const params = {
-        //   "code":"dfscommunity",
-        //   "scope":"dfscommunity",
-        //   "table":"producers",
-        //   "lower_bound": ` ${v.owner}`,
-        //   "upper_bound": ` ${v.owner}`,
-        //   "json":true,
-        // }
-        // const {status, result} = await get_table_rows(params)
-        // if (!status) {
-        //   return
-        // }
-        // const rows = result.rows || []
-        // if (!rows.length) {
-        //   return
-        // }
-        // const row = rows[0];
-        // this.$set(v, 'baseInfo', row) 
+        const params = {
+          "code":"dfscommunity",
+          "scope":"dfscommunity",
+          "table":"scores",
+          "lower_bound": ` ${v.owner}`,
+          "upper_bound": ` ${v.owner}`,
+          "json":true,
+        }
+        const {status, result} = await get_table_rows(params)
+        if (!status) {
+          return
+        }
+        const rows = result.rows || []
+        if (!rows.length) {
+          return
+        }
+        const row = rows[0];
+        const scoreNum = (row.total_star / row.user_count / 2).toFixed(1);
+
+        this.$set(v, 'scoreNum', scoreNum) 
+        this.$set(v, 'scoreNumStar', Number(scoreNum)) 
       })
     },
   }
