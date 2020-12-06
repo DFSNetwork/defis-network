@@ -560,7 +560,7 @@ export default {
     position: relative;
     margin-bottom: 15px;
     // min-height: 60px;
-    max-height: 120px;
+    // max-height: 120px;
     overflow: hidden;
     &.showAll{
       max-height: 20000px;

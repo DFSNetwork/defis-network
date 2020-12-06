@@ -319,6 +319,7 @@ export default {
       -webkit-line-clamp: 1;
       -webkit-box-orient: vertical;
       padding: 0 12px;
+      line-height: 36px;
     }
 
     .bpImg{
