@@ -330,7 +330,6 @@ export default {
           return
         }
         const mediaData = dealMedia(v)
-        console.log(v)
         if (mediaData) {
           this.$set(v, 'memo', mediaData.memo)
           this.$set(v, 'audio', mediaData.audio)
@@ -352,6 +351,12 @@ export default {
       this.top3Arr.forEach((v, index) => {
         if (v.isGetInfo) {
           return
+        }
+        const mediaData = dealMedia(v)
+        if (mediaData) {
+          this.$set(v, 'memo', mediaData.memo)
+          this.$set(v, 'audio', mediaData.audio)
+          this.$set(v, 'video', mediaData.video)
         }
         this.$set(v, 'isGetInfo', true)
         // console.log(v)
