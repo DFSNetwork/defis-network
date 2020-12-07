@@ -9,6 +9,8 @@
         <div class="mainData">
           <div class="name">{{accInfo.nick || item.fromx}}</div>
           <div class="num tip dinReg">捐赠数量: {{ item.quantity }} ({{item.account}})</div>
+          <div class="content" v-if="item.audio"><FunAudio :src="item.audio"/></div>
+          <div class="content" v-if="item.video"><FunVideo :src="item.video"/></div>
           <div class="content">{{ item.memo }}</div>
           <div class="time tip">{{handleToLocalTime(item.dealTime)}}</div>
           <div class="flexa replyDiv tip">
@@ -57,6 +59,8 @@
                 <span class="green">{{ item.replyto }}</span>
               </span>
               <span>{{ item.memo }}</span>
+              <div class="content" v-if="item.audio"><FunAudio :src="item.audio"/></div>
+              <div class="content" v-if="item.video"><FunVideo :src="item.video"/></div>
             </div>
             <div class="time tip flexa" @click="handleShowToFundation(item)">
               <span>{{ handleToLocalTime(item.dealTime) }}</span>
@@ -86,16 +90,20 @@
 
 <script>
 import moment from 'moment';
-import {getDateDiff, getCoin, toLocalTime} from '@/utils/public'
+import {getDateDiff, getCoin, toLocalTime, dealMedia} from '@/utils/public'
 import {get_reply_fundation, get_acc_info} from '@/utils/api'
 import Like from '@/views/fundation/dialog/Like';
 import ToFundation from '@/views/fundation/dialog/ToFundation';
+import FunAudio from '@/views/fundation/comp/FunAudio';
+import FunVideo from '@/views/fundation/comp/FunVideo';
 
 export default {
   name: 'otherRpyLists',
   components: {
     Like,
     ToFundation,
+    FunAudio,
+    FunVideo,
   },
   props: {
     item: {
@@ -176,6 +184,12 @@ export default {
         this.$set(v, 'dealTime', toLocalTime(times))
         const likeNum = v.like_count * 1000;
         this.$set(v, 'likeNum', likeNum.toFixed(0))
+        const mediaData = dealMedia(v)
+        if (mediaData) {
+          this.$set(v, 'memo', mediaData.memo)
+          this.$set(v, 'audio', mediaData.audio)
+          this.$set(v, 'video', mediaData.video)
+        }
       });
       // 调用API获取前10条
       if (this.page === 1) { // 第一页时 - 直接覆盖之前数据
