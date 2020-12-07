@@ -566,3 +566,33 @@ export function getDateDiff(dateTimeStamp){
   }
   return result;
 }
+
+export function dealMedia(v) {
+  let memo = v.memo;
+  // 处理audio
+  const reg = /<audio:(http|https):\/\/.+>/;
+  const hasAudio = reg.exec(memo)
+  let audioUrl = '';
+  if (hasAudio) {
+    memo = v.memo.split(hasAudio[0]).join('')
+    audioUrl = hasAudio[0].split('audio:')[1];
+    audioUrl = audioUrl.substr(0, audioUrl.length - 1)
+  }
+  // 处理视频
+  let videoUrl = '';
+  const regVideo = /<video:(http|https):\/\/.+>/;
+  const hasVideo = regVideo.exec(memo)
+  if (hasVideo) {
+    memo = v.memo.split(hasVideo[0]).join('')
+    videoUrl = hasVideo[0].split('video:')[1];
+    videoUrl = videoUrl.substr(0, videoUrl.length - 1)
+  }
+  if (!audioUrl && !videoUrl) {
+    return false;
+  }
+  return {
+    audio: audioUrl,
+    video: videoUrl,
+    memo: memo
+  }
+}

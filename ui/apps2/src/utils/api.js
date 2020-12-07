@@ -379,8 +379,20 @@ export function get_bp_scores(params) {
 // 获取节点信息
 export function get_bp_info(params) {
   return new Promise((resolve, reject) => {
+    const nT = Date.parse(new Date())
+    if (!params && store.state.sys.nodeLists && nT - store.state.sys.nodeListsTamp < 600000) {
+      const result = {
+        voters: store.state.sys.nodeLists
+      };
+      resolve({ 
+        status: true,
+        result
+      });
+      return
+    }
     axios.get('https://api.defis.network/bp/bps', {params}).then((res) => {
       let result = Object.assign(res.data, {});
+      store.dispatch('setNodeListsTamp', Date.parse(new Date()))
       resolve({ status: res.status === 200, result });
     }, err => {
       reject(err)

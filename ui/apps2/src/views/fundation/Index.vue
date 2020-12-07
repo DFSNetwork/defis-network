@@ -326,6 +326,7 @@ export default {
   background: #fFF;
   box-sizing: border-box;
   font-size: 36px;
+  border-radius: 70px;
   .btn{
     box-shadow: 0px 2px 16px 0px rgba(41,212,176,0.4);
     background: #29D4B0;

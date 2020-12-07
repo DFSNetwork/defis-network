@@ -75,6 +75,12 @@
                 </div>
               </div>
               <div @click="handleReply(item)">
+                <div class="price flexs" v-if="item.audio">
+                  <FunAudio :src="item.audio"/>
+                </div>
+                <div class="price flexs" v-if="item.video">
+                  <FunVideo :src="item.video"/>
+                </div>
                 <div class="price flexs">
                   <span class="hideText">{{ item.memo }}</span>
                 </div>
@@ -117,6 +123,12 @@
                 </div>
               </div>
               <div @click="handleReply(item)">
+                <div class="price flexs" v-if="item.audio">
+                  <FunAudio :src="item.audio"/>
+                </div>
+                <div class="price flexs" v-if="item.video">
+                  <FunVideo :src="item.video"/>
+                </div>
                 <div class="price flexs">
                   <span class="hideText">{{ item.memo }}</span>
                 </div>
@@ -161,12 +173,14 @@
 import { mapState } from 'vuex';
 
 import moment from 'moment';
-import {toBrowser, getDateDiff, getCoin, toLocalTime} from '@/utils/public'
+import {toBrowser, getDateDiff, getCoin, toLocalTime, dealMedia} from '@/utils/public'
 
 import {get_acc_info, get_top3_fundation} from '@/utils/api';
 import ReplyLists from './ReplyLists';
 import ToFundation from '../dialog/ToFundation';
 import Like from '../dialog/Like';
+import FunAudio from './FunAudio';
+import FunVideo from './FunVideo';
 
 export default {
   name: 'fundationLists',
@@ -174,6 +188,8 @@ export default {
     ReplyLists,
     ToFundation,
     Like,
+    FunAudio,
+    FunVideo,
   },
   props: {
     pageLists: {
@@ -312,6 +328,13 @@ export default {
         this.$set(v, 'isHot', !!isHot)
         if (v.isGetInfo) {
           return
+        }
+        const mediaData = dealMedia(v)
+        // console.log(v)
+        if (mediaData) {
+          this.$set(v, 'memo', mediaData.memo)
+          this.$set(v, 'audio', mediaData.audio)
+          this.$set(v, 'video', mediaData.video)
         }
         this.$set(v, 'isGetInfo', true)
         // console.log(v)

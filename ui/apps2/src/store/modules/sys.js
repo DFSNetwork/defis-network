@@ -140,6 +140,7 @@ const sys = {
     tagLpBal: 0,
 
     nodeLists: [],
+    nodeListsTamp: Number(localStorage.getItem('nodeListsTamp') || 0),
   },
   mutations: {
     SET_TagLpBal: (state, tagLpBal) => {
@@ -147,6 +148,9 @@ const sys = {
     },
     SET_NodeLists: (state, nodeLists) => {
       state.nodeLists = nodeLists;
+    },
+    SET_NodeListsTamp: (state, nodeListsTamp) => {
+      state.nodeListsTamp = nodeListsTamp;
     },
     SET_RANKINFO: (state, rankInfo) => {
       state.rankInfo = rankInfo;
@@ -218,6 +222,9 @@ const sys = {
     },
     setNodeLists({ commit }, nodeLists) {
       commit('SET_NodeLists', nodeLists);
+    },
+    setNodeListsTamp({ commit }, nodeListsTamp) {
+      commit('SET_NodeListsTamp', nodeListsTamp);
     },
     setRankInfo({ commit }, rankInfo) {
       commit('SET_RANKINFO', rankInfo);
