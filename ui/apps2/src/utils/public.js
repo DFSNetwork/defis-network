@@ -568,7 +568,7 @@ export function getDateDiff(dateTimeStamp){
 }
 
 export function dealMedia(v) {
-  if (v.account !== 'tagtokenmain' || v.symbol !== 'TAG' || parseFloat(v.quantity) < 0.01) {
+  if (v.account !== 'tagtokenmain' || v.symbol !== 'TAG' || parseFloat(v.quantity) < 0.1) {
     return false
   }
   let memo = v.memo;
