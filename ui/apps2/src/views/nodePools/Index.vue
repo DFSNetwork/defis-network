@@ -257,13 +257,16 @@ export default {
         this.handleGetPools();
       }, 10000)
       const params = {
-        "code": this.baseConfig.nodeMiner,
-        "scope": this.baseConfig.nodeMiner,
-        "table": "pools",
+        "code":"dfsfundation",
+        "scope":"dfsfundation",
+        "table":"pools",
+        "key_type": "float64",
+        "index_position": 2,
         "json":true,
-        "limit": 1000
+        limit: 10
       }
       const {status, result} = await get_table_rows(params);
+      console.log(result)
       if (!status) {
         return
       }
