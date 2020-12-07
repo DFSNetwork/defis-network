@@ -330,7 +330,7 @@ export default {
           return
         }
         const mediaData = dealMedia(v)
-        // console.log(v)
+        console.log(v)
         if (mediaData) {
           this.$set(v, 'memo', mediaData.memo)
           this.$set(v, 'audio', mediaData.audio)
