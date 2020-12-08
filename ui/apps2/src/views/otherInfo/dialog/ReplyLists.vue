@@ -11,6 +11,9 @@
           <div class="num tip dinReg">捐赠数量: {{ item.quantity }} ({{item.account}})</div>
           <div class="content" v-if="item.audio"><FunAudio :src="item.audio"/></div>
           <div class="content" v-if="item.video"><FunVideo :src="item.video"/></div>
+          <div class="content" v-if="item.imgArr && item.imgArr.length">
+            <FunImg :imgArr="item.imgArr"/>
+          </div>
           <div class="content">{{ item.memo }}</div>
           <div class="time tip">{{handleToLocalTime(item.dealTime)}}</div>
           <div class="flexa replyDiv tip">
@@ -96,6 +99,7 @@ import Like from '@/views/fundation/dialog/Like';
 import ToFundation from '@/views/fundation/dialog/ToFundation';
 import FunAudio from '@/views/fundation/comp/FunAudio';
 import FunVideo from '@/views/fundation/comp/FunVideo';
+import FunImg from '@/views/fundation/comp/FunImg';
 
 export default {
   name: 'otherRpyLists',
@@ -104,6 +108,7 @@ export default {
     ToFundation,
     FunAudio,
     FunVideo,
+    FunImg,
   },
   props: {
     item: {
@@ -189,6 +194,7 @@ export default {
           this.$set(v, 'memo', mediaData.memo)
           this.$set(v, 'audio', mediaData.audio)
           this.$set(v, 'video', mediaData.video)
+          this.$set(v, 'imgArr', mediaData.imgArr || [])
         }
       });
       // 调用API获取前10条

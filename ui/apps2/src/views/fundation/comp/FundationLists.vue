@@ -84,8 +84,8 @@
                 <div class="price flexs">
                   <span class="hideText">{{ item.memo }}</span>
                 </div>
-                <div>
-                  
+                <div class="price flexs" v-if="item.imgArr && item.imgArr.length">
+                  <FunImg :imgArr="item.imgArr"/>
                 </div>
                 <div class="tip time flexa">
                   <span>{{ handleToLocalTime(item.dealTime) }}</span>
@@ -135,7 +135,7 @@
                 <div class="price flexs">
                   <span class="hideText">{{ item.memo }}</span>
                 </div>
-                <div class="price flexs">
+                <div class="price flexs" v-if="item.imgArr && item.imgArr.length">
                   <FunImg :imgArr="item.imgArr"/>
                 </div>
                 <div class="tip time flexa">
@@ -366,6 +366,7 @@ export default {
           this.$set(v, 'memo', mediaData.memo)
           this.$set(v, 'audio', mediaData.audio)
           this.$set(v, 'video', mediaData.video)
+          this.$set(v, 'imgArr', mediaData.imgArr || [])
         }
         this.$set(v, 'isGetInfo', true)
         // console.log(v)
