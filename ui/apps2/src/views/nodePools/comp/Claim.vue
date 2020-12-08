@@ -12,10 +12,12 @@
         <span class="tip">(LP)</span>
         <span class="tip dinReg"> ≈ {{ accLpData.aboutEos || '0.0000' }} EOS</span>
       </div>
-      <div class="claimNum" v-for="(v, index) in nKeys" :key="index">
-        <span class="dinBold">{{ poolsData[v].showReward || '0.00000000' }} {{ poolsData[v].sym }}</span>
-        <span class="tip dinReg"> ≈ {{ poolsData[v].aboutEos || '0.0000' }} EOS</span>
-      </div>
+      <template v-for="(v, index) in nKeys">
+        <div class="claimNum" v-if="poolsData[v].showReward" :key="index">
+          <span class="dinBold">{{ poolsData[v].showReward || '0.00000000' }} {{ poolsData[v].sym }}</span>
+          <span class="tip dinReg"> ≈ {{ poolsData[v].aboutEos || '0.0000' }} EOS</span>
+        </div>
+      </template>
     </div>
     <div class="flexb">
       <div class="allClaimBtn" v-loading="claim" @click="handleClaimAll">{{ $t('bonus.claim') }}</div>

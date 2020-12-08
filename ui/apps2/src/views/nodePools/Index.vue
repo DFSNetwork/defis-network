@@ -28,6 +28,11 @@
       <!-- 矿池列表 -->
       <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists" :accLpData="accLpData"
         :poolsData="poolsData" :rank="rank" :rankList="rankList" :lpRankWeight="lpRankWeight"/>
+
+      <div class="nullDiv"></div>
+      <div class="btnDiv">
+        <div class="btn flexc" @click="handleTo('createPool')">创建矿池</div>
+      </div>
     </div>
   </div>
 </template>
@@ -127,6 +132,11 @@ export default {
     },
   },
   methods: {
+    handleTo(name) {
+      this.$router.push({
+        name
+      })
+    },
     // 监听更新操作
     handleUpdata(type) {
       console.log('数据更新', type)
@@ -230,7 +240,10 @@ export default {
       clearInterval(this.runTimer)
       this.runTimer = setInterval(() => {
         const keys = Object.keys(this.poolsData)
-        keys.forEach(v => {
+        keys.forEach((v, index) => {
+          if (index >= 3) {
+            return
+          }
           // console.log(this.poolsData[v])
           const accReward = this.poolsData[v].accReward || 0;
           const showReward = this.poolsData[v].showReward || accReward;
@@ -263,7 +276,7 @@ export default {
         "key_type": "float64",
         "index_position": 2,
         "json":true,
-        limit: 10
+        "limit": 1000,
       }
       const {status, result} = await get_table_rows(params);
       console.log(result)
@@ -311,9 +324,9 @@ export default {
         const apy = (Math.pow(list.aprs, 86400 * 365) - 1) * 100;
         this.$set(list, 'apy', apy.toFixed(2));
       })
-      this.poolsLists.sort((a, b) => {
-        return b.apy - a.apy
-      })
+      // this.poolsLists.sort((a, b) => {
+      //   return b.apy - a.apy
+      // })
     },
 
     // Lp 矿池
@@ -476,6 +489,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+/*iphone Xs Max*/
+@media only screen and (device-width: 414px) and (device-height: 896px) {
+  .btnDiv{
+    bottom: 30px !important;
+  }
+}
+/*iphoneX、iphoneXs*/
+@media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+  .btnDiv{
+    bottom: 30px !important;
+  }
+}
 .bg{
   padding-bottom: 30px;
   background-image: linear-gradient(to bottom, #FFF1DE , rgba(#FFF1DE, .3));
@@ -523,6 +548,26 @@ export default {
       font-size: 26px;
       margin-top: 10px;
     }
+  }
+}
+.nullDiv{
+  height: 100px;
+}
+.btnDiv{
+  position: fixed;
+  bottom: 0px;
+  height: 100px;
+  padding: 10px 28px;
+  box-sizing: border-box;
+  width: 100%;
+  z-index: 1000;
+  font-size: 36px;
+  .btn{
+    width: 100%;
+    height: 90px;
+    border-radius: 45px;
+    background: #29D4B0;
+    color: #FFF;
   }
 }
 </style>

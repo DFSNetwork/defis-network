@@ -2,6 +2,11 @@
   <div class="claimRules">
     <!-- <div class="title">{{ $t('nodePools.mineRules') }}</div> -->
     <div class="constent">
+      <div class="subTitle">IDO平台自助开启矿池规则</div>
+      <div>1. 在DFS Swap中创建代币/EOS交易对。人人都可以自主创建或帮忙创建</div>
+      <div>2. 在DFS Swap拥有不小于100 EOS的流动性</div>
+      <div>3. 乐捐账号中，该代币余额的价值排名前三。</div>
+      <div>满足以上3个条件的代币，系统实时、自动开启挖矿。将乐捐的代币分发给投票系统的用户。</div>
       <div class="subTitle">REX {{ $t('nodePools.mineRules') }}</div>
       <div>{{ $t('nodePools.mineRules1') }}</div>
       <div>{{ $t('nodePools.mineRules2') }}</div>

@@ -59,6 +59,9 @@
       <div>{{ rexCutDown.hours }}:{{ rexCutDown.minutes }}:{{ rexCutDown.seconds }}</div>
     </div>
     <div class="list" v-for="(item, index) in poolsLists" :key="index"  @click="handleToDetailLists(item, 'rex')">
+      <div class="model" v-if="index > 2" @click.stop="''">
+        <span class="boost flexc" @click="handleShowBoost(item)">助力</span>
+      </div>
       <div class="poolInfo flexa">
         <img class="coinImg" :src="item.imgUrl">
         <div class="bal">
@@ -85,6 +88,12 @@
       :visible.sync="showRules">
       <MineRules v-if="showRules"/>
     </el-dialog>
+
+    <van-popup
+      class="mypopup"
+      v-model="showBoost" position="center">
+      <Boost :boostData="boostData" @handleClose="handleClose"/>
+    </van-popup>
   </div>
 </template>
 
@@ -96,12 +105,14 @@ import { EosModel } from '@/utils/eos';
 
 import SureTip from '@/views/farms/dialog/SureTip';
 import MineRules from '../dialog/MineRules';
+import Boost from '../dialog/Boost';
 
 export default {
   name: 'poolsLists',
   components: {
     SureTip,
     MineRules,
+    Boost,
   },
   props: {
     poolsLists: {
@@ -158,6 +169,8 @@ export default {
       rexCutDown: {},
 
       showRules: false,
+      showBoost: false,
+      boostData: {},
     }
   },
   mounted() {
@@ -209,8 +222,14 @@ export default {
         this.handleCountdown();
       }, 1000);
     },
+    handleShowBoost(item) {
+      this.boostData = item
+      this.showBoost = true;
+      console.log(item)
+    },
     handleClose() {
       this.showSure = false;
+      this.showBoost = false;
     },
     handleStartTimer() {
       clearTimeout(this.timer)
@@ -374,6 +393,25 @@ export default {
   border-radius: 12px;
   text-align: left;
   margin-bottom: 20px;
+  .model{
+    border-radius: 12px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(255,255,255, .8);
+    .boost{
+      position: absolute;
+      bottom: 20px;
+      right: 26px;
+      background: #FE8C37;
+      color: #FFF;
+      border-radius: 48px;
+      height: 60px;
+      padding: 0px 32px;
+    }
+  }
   .poolInfo{
     margin-bottom: 10px;
     padding-bottom: 10px;
@@ -442,11 +480,17 @@ export default {
     position: relative;
     margin: auto;
     width: 590px;
+    max-height: 900px;
+    overflow: auto;
     border-radius: 20px;
     .el-dialog__body,
     .el-dialog__header{
       padding: 0;
     }
   }
+}
+.mypopup{
+  background: transparent;
+  overflow-y: visible !important;
 }
 </style>
