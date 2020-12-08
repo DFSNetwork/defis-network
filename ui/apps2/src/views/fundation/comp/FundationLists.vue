@@ -84,6 +84,9 @@
                 <div class="price flexs">
                   <span class="hideText">{{ item.memo }}</span>
                 </div>
+                <div>
+                  
+                </div>
                 <div class="tip time flexa">
                   <span>{{ handleToLocalTime(item.dealTime) }}</span>
                   <span class="reply">{{ $t('fundation.reply') }}</span>
@@ -131,6 +134,9 @@
                 </div>
                 <div class="price flexs">
                   <span class="hideText">{{ item.memo }}</span>
+                </div>
+                <div class="price flexs">
+                  <FunImg :imgArr="item.imgArr"/>
                 </div>
                 <div class="tip time flexa">
                   <span>{{ handleToLocalTime(item.dealTime) }}</span>
@@ -181,6 +187,7 @@ import ToFundation from '../dialog/ToFundation';
 import Like from '../dialog/Like';
 import FunAudio from './FunAudio';
 import FunVideo from './FunVideo';
+import FunImg from './FunImg';
 
 export default {
   name: 'fundationLists',
@@ -190,6 +197,7 @@ export default {
     Like,
     FunAudio,
     FunVideo,
+    FunImg,
   },
   props: {
     pageLists: {
@@ -334,6 +342,7 @@ export default {
           this.$set(v, 'memo', mediaData.memo)
           this.$set(v, 'audio', mediaData.audio)
           this.$set(v, 'video', mediaData.video)
+          this.$set(v, 'imgArr', mediaData.imgArr || [])
         }
         this.$set(v, 'isGetInfo', true)
         // console.log(v)

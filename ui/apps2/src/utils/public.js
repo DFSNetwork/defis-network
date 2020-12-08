@@ -568,9 +568,9 @@ export function getDateDiff(dateTimeStamp){
 }
 
 export function dealMedia(v) {
-  if (v.account !== 'tagtokenmain' || v.symbol !== 'TAG' || parseFloat(v.quantity) < 0.1) {
-    return false
-  }
+  // if (v.account !== 'tagtokenmain' || v.symbol !== 'TAG' || parseFloat(v.quantity) < 0.1) {
+  //   return false
+  // }
   let memo = v.memo;
   // 处理audio
   const reg = /<audio:(http|https):\/\/.+>/;
@@ -590,12 +590,31 @@ export function dealMedia(v) {
     videoUrl = hasVideo[0].split('video:')[1];
     videoUrl = videoUrl.substr(0, videoUrl.length - 1)
   }
-  if (!audioUrl && !videoUrl) {
+  // 处理图片
+  const imgArr = [];
+  const regImg = /<img:(http|https):\/\/.+>/;
+  const hasImg = regImg.exec(memo)
+  if (hasImg) {
+    memo = v.memo.split(hasImg[0]).join('')
+    let tArr = hasImg[0].split('<')
+    let regt = /^img:(http|https):\/\/.+>/;
+    tArr.forEach(vv => {
+      let tHas = regt.exec(vv)
+      if (!tHas) {
+        return
+      }
+      let url = vv.split('>')[0]
+      url = url.replace('img:', '')
+      imgArr.push(url);
+    })
+  }
+  if (!audioUrl && !videoUrl && !imgArr.length) {
     return false;
   }
   return {
     audio: audioUrl,
     video: videoUrl,
+    imgArr,
     memo: memo
   }
 }
