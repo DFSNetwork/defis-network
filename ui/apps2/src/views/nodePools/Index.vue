@@ -68,7 +68,7 @@ export default {
       accVoteData: {}, // 用户投票数据
 
       // LP 挖矿
-      lpPoolsMid: [602],
+      lpPoolsMid: [602], // 665
       lpLists: [],
       accLpData: {},
       lpRankWeight: 0,
@@ -279,7 +279,7 @@ export default {
         "limit": 1000,
       }
       const {status, result} = await get_table_rows(params);
-      console.log(result)
+      // console.log(result)
       if (!status) {
         return
       }
@@ -555,7 +555,7 @@ export default {
 }
 .btnDiv{
   position: fixed;
-  bottom: 0px;
+  bottom: 10px;
   height: 100px;
   padding: 10px 28px;
   box-sizing: border-box;

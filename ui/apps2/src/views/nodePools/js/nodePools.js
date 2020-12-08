@@ -76,7 +76,7 @@ export async function getAccFarmerData(accVoteData, cb) {
   }
   const rows = result.rows || [];
   // console.log(rows)
-  console.log(accVoteData)
+  // console.log(accVoteData)
   if (!rows.length) {
     cb(accVoteData)
     return
