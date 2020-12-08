@@ -103,7 +103,12 @@ export default {
       rows.forEach(v => {
         const time = toLocalTime(`${v.time}.000+0000`)
         this.$set(v, 'lTime', time)
+        const lt = Date.parse(time.replace(/-/g, '/'))
+        this.$set(v, 'lt', lt)
       });
+      rows.sort((a, b) => {
+        return b.lt - a.lt
+      })
       const langArr = rows.filter(v => v.lang === this.lang)
       this.recordLists = langArr;
     }
