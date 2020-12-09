@@ -1,7 +1,10 @@
 <template>
   <div class="toFundation">
     <img class="close" @click="handleClose()" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg">
-    <div class="title">{{ $t('fundation.funTran') }}</div>
+    <div class="title">
+      <span v-if="$route.name !== 'nodePools'">{{ $t('fundation.funTran') }}</span>
+      <span v-else>乐捐助力</span>
+    </div>
     <!-- 乐捐弹窗操作 -->
     <div class="symData">
       <div class="info flexb">
