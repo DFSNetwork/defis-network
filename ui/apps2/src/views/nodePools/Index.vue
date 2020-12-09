@@ -242,11 +242,15 @@ export default {
     handleRun() {
       clearInterval(this.runTimer)
       this.runTimer = setInterval(() => {
-        const keys = Object.keys(this.poolsData)
-        keys.forEach((v, index) => {
+        // const keys = Object.keys(this.poolsData)
+        // poolsLists
+        // console.log(keys)
+        // console.log(this.poolsLists)
+        this.poolsLists.forEach((pList, index) => {
           if (index >= 3) {
             return
           }
+          const v = pList.sym;
           // console.log(this.poolsData[v])
           const accReward = this.poolsData[v].accReward || 0;
           const showReward = this.poolsData[v].showReward || accReward;
