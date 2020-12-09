@@ -97,6 +97,12 @@ export default {
       default: function rp() {
         return {}
       },
+    },
+    setCoin: {
+      type: Object,
+      default: function rp() {
+        return {}
+      },
     }
   },
   data() {
@@ -167,6 +173,21 @@ export default {
         this.memo = oldVal
       }
     },
+    setCoin: {
+      handler: function listen(newVal) {
+        if (!newVal.mid) {
+          return
+        }
+        this.thisMarket0 = {
+          contract: newVal.contract,
+          decimal: newVal.decimal,
+          symbol: newVal.sym,
+          imgUrl: newVal.imgUrl,
+        }
+      },
+      deep: true,
+      immediate: true,
+    }
   },
   methods: {
     handleRandom() {

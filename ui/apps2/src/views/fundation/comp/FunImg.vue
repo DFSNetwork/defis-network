@@ -59,7 +59,7 @@ export default {
           const r = parseInt(index / rNum);
           if (!dealImgArr[r]) {
             dealImgArr[r] = []
-          };
+          }
           dealImgArr[r].push(v)
         });
         this.dealImgArr = dealImgArr;

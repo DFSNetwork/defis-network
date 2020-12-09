@@ -46,12 +46,13 @@ export default {
       this.$emit('handleClose', false)
     },
     handleTo(name) {
-      this.$router.push({
-        name,
-        params: {
-          mid: this.boostData.mid
-        }
-      })
+      this.$emit('handleClose', name)
+      // this.$router.push({
+      //   name,
+      //   params: {
+      //     mid: this.boostData.mid
+      //   }
+      // })
     }
   }
 }

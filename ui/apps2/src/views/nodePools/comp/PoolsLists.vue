@@ -24,7 +24,9 @@
               <span class="apy">{{ $t('nodePools.apy') }}：{{ v.apy }}%</span>
             </div>
             <div class="flexend">
-              <span class="num din">{{ accLpData.showReward || '0.00000000' }}</span>
+              <span class="num din">
+                {{ accLpData[`${v.mid}`] ? accLpData[`${v.mid}`].showReward || '0.00000000' : '0.00000000' }}
+              </span>
               <span class="red_p flexa" v-if="Number(addBuff)">（
                 <img class="buffImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/buff2.svg">
                 {{ addBuff }}%）</span>
@@ -37,20 +39,20 @@
           <div class="flexb">
             <span class="flexa">
               <span>{{ $t('nodePools.planRank') }}：</span>
-              <el-input-number v-model="planRank" :min="1" :max="150"></el-input-number>
+              <el-input-number v-model="plan[v.mid]" :min="1" :max="150"></el-input-number>
             </span>
-            <span class="green_p" @click="handleDealToken">{{ $t('nodePools.doing') }}</span>
+            <span class="green_p" @click="handleDealToken(v)">{{ $t('nodePools.doing') }}</span>
           </div>
           <span>
             <el-slider
               :min="1"
               :max="100"
-              v-model="planRank">
+              v-model="plan[v.mid]">
             </el-slider>
           </span>
         </div>
         <div class="flexb" @click.stop="''">
-          <span>{{ $t('nodePools.myRank') }}：{{ rank }}</span>
+          <span>{{ $t('nodePools.myRank') }}：{{ accLpData[`${v.mid}`] ? accLpData[`${v.mid}`].rank || '100+' : '100+' }}</span>
         </div>
       </div>
     </div>
@@ -94,6 +96,26 @@
       v-model="showBoost" position="center">
       <Boost :boostData="boostData" @handleClose="handleClose"/>
     </van-popup>
+
+
+    <!-- 加入做市 -->
+    <el-dialog
+      class="mkListDia"
+      :show-close="false"
+      :visible.sync="showAdd">
+      <AddMarket v-if="showAdd"
+        :thisMarket="thisMarket"
+        @listenClose="handleClose"/>
+    </el-dialog>
+    <!-- 去捐款 -->
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible="showToFundation">
+      <ToFundation v-if="showToFundation"
+        :setCoin="boostData"
+        @listenClose="handleClose"/>
+    </el-dialog>
   </div>
 </template>
 
@@ -106,6 +128,8 @@ import { EosModel } from '@/utils/eos';
 import SureTip from '@/views/farms/dialog/SureTip';
 import MineRules from '../dialog/MineRules';
 import Boost from '../dialog/Boost';
+import AddMarket from '@/views/market/popup/AddMarket'
+import ToFundation from '@/views/fundation/dialog/ToFundation';
 
 export default {
   name: 'poolsLists',
@@ -113,6 +137,8 @@ export default {
     SureTip,
     MineRules,
     Boost,
+    AddMarket,
+    ToFundation,
   },
   props: {
     poolsLists: {
@@ -144,9 +170,9 @@ export default {
       default: '0'
     },
     rankList: {
-      type: Array,
+      type: Object,
       default: function rls() {
-        return []
+        return {}
       }
     },
     lpRankWeight: {
@@ -156,6 +182,7 @@ export default {
   },
   data() {
     return {
+      plan: {},
       planRank: 30,
       params: {},
       showSure: false,
@@ -171,6 +198,11 @@ export default {
       showRules: false,
       showBoost: false,
       boostData: {},
+
+      // 弹窗
+      showAdd: false,
+      showToFundation: false,
+      thisMarket: {},
     }
   },
   mounted() {
@@ -184,6 +216,7 @@ export default {
     ...mapState({
       scatter: state => state.app.scatter,
       baseConfig: state => state.sys.baseConfig,
+      marketLists: state => state.sys.marketLists,
     }),
     addBuff() {
       let buff = (this.lpRankWeight || 1) - 1;
@@ -202,8 +235,11 @@ export default {
       immediate: true,
     },
     lpLists: {
-      handler: function lls() {
+      handler: function lls(newVal) {
         this.handleStartTimer()
+        newVal.forEach(v => {
+          this.plan[v.mid] = localStorage.getItem(`node_lp${v.mid}`) ? Number(localStorage.getItem(`node_lp${v.mid}`)) : 30;
+        });
       },
       deep: true,
       immediate: true
@@ -225,11 +261,19 @@ export default {
     handleShowBoost(item) {
       this.boostData = item
       this.showBoost = true;
-      console.log(item)
+      this.thisMarket = this.marketLists.find(v => v.mid === item.mid)
+      // console.log(item)
     },
-    handleClose() {
+    handleClose(type) {
       this.showSure = false;
       this.showBoost = false;
+      this.showAdd = false;
+      this.showToFundation = false
+      if (type === 'market') {
+        this.showAdd = true;
+      } else if (type === 'fundation') {
+        this.showToFundation = true;
+      }
     },
     handleStartTimer() {
       clearTimeout(this.timer)
@@ -263,14 +307,19 @@ export default {
       })
     },
     // 计算相差多少
-    handleDealToken() {
-      if (!this.rankList.length || !this.lpLists.length) {
+    handleDealToken(v) {
+      console.log(this.rankList)
+      if (!this.rankList[v.mid] || !this.rankList[v.mid].length) {
         return 
       }
-      const market = this.lpLists[0];
+      const market = v;
       console.log(market)
-      const setRank = Number(this.planRank);
-      const rank75 = this.rankList[setRank - 1];
+      const setRank = Number(this.plan[v.mid]);
+      if (setRank > this.rankList[v.mid].length) {
+        this.$message.error('当前矿工人数不足')
+        return
+      }
+      const rank75 = this.rankList[v.mid][setRank - 1];
       console.log(rank75)
       const uLp = this.accLpData || {};
       const tToken = parseInt(rank75.token) - parseInt(uLp.token || 0)
@@ -290,14 +339,14 @@ export default {
         token: tToken,
         bal0: this.bal0,
         bal1: this.bal1,
-        planRank: this.planRank,
+        // planRank: this.planRank,
+        planRank: setRank,
       }
       this.params = params;
       this.showSure = true;
-      console.log(this.params)
     },
     handleSure() {
-      localStorage.setItem(`node_lp`, this.planRank)
+      localStorage.setItem(`node_lp${this.params.market.mid}`, this.params.planRank)
       setTimeout(() => {
       }, 1000);
       setTimeout(() => {
@@ -492,5 +541,20 @@ export default {
 .mypopup{
   background: transparent;
   overflow-y: visible !important;
+}
+
+.mkListDia{
+  // animation: none;
+  /deep/ .el-dialog{
+    border-radius:12px 12px 0px 0px;
+    position: relative;
+    margin: auto;
+    width: 690px;
+    border-radius:12px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+    }
+  }
 }
 </style>
