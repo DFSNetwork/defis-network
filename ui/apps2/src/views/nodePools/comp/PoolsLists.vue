@@ -27,9 +27,9 @@
               <span class="num din">
                 {{ accLpData[`${v.mid}`] ? accLpData[`${v.mid}`].showReward || '0.00000000' : '0.00000000' }}
               </span>
-              <span class="red_p flexa" v-if="Number(addBuff)">（
+              <span class="red_p flexa" v-if="Number(handleAddBuff(accLpData[`${v.mid}`]))">（
                 <img class="buffImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/buff2.svg">
-                {{ addBuff }}%）</span>
+                {{ handleAddBuff(accLpData[`${v.mid}`]) }}%）</span>
             </div>
           </div>
         </div>
@@ -246,6 +246,14 @@ export default {
     }
   },
   methods: {
+    handleAddBuff(v) {
+      if (!v) {
+        return 0
+      }
+      let buff = (v.weight || 1) - 1;
+      buff = buff * 100;
+      return buff.toFixed(2)
+    },
     handleCountdown() {
       const rexT = countdown(this.rexTime, true, 'hours')
       this.rexCutDown = rexT;
