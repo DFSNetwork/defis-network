@@ -22,7 +22,7 @@
     "numeral": "^2.0.6",
     "scatterjs-core": "^2.7.7",
     "scatterjs-plugin-eosjs": "^1.5.0",
-    "vant": "^2.10.11",
+    "vant": "^2.11.1",
     "vue": "^2.6.11",
     "vue-clipboard2": "^0.2.0",
     "vue-i18n": "^7.8.1",

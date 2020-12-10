@@ -75,8 +75,17 @@
                 </div>
               </div>
               <div @click="handleReply(item)">
+                <div class="price flexs" v-if="item.audio">
+                  <FunAudio :src="item.audio"/>
+                </div>
+                <div class="price flexs" v-if="item.video">
+                  <FunVideo :src="item.video"/>
+                </div>
                 <div class="price flexs">
                   <span class="hideText">{{ item.memo }}</span>
+                </div>
+                <div class="price flexs" v-if="item.imgArr && item.imgArr.length">
+                  <FunImg :imgArr="item.imgArr"/>
                 </div>
                 <div class="tip time flexa">
                   <span>{{ handleToLocalTime(item.dealTime) }}</span>
@@ -117,8 +126,17 @@
                 </div>
               </div>
               <div @click="handleReply(item)">
+                <div class="price flexs" v-if="item.audio">
+                  <FunAudio :src="item.audio"/>
+                </div>
+                <div class="price flexs" v-if="item.video">
+                  <FunVideo :src="item.video"/>
+                </div>
                 <div class="price flexs">
                   <span class="hideText">{{ item.memo }}</span>
+                </div>
+                <div class="price flexs" v-if="item.imgArr && item.imgArr.length">
+                  <FunImg :imgArr="item.imgArr"/>
                 </div>
                 <div class="tip time flexa">
                   <span>{{ handleToLocalTime(item.dealTime) }}</span>
@@ -161,12 +179,15 @@
 import { mapState } from 'vuex';
 
 import moment from 'moment';
-import {toBrowser, getDateDiff, getCoin, toLocalTime} from '@/utils/public'
+import {toBrowser, getDateDiff, getCoin, toLocalTime, dealMedia} from '@/utils/public'
 
 import {get_acc_info, get_top3_fundation} from '@/utils/api';
 import ReplyLists from './ReplyLists';
 import ToFundation from '../dialog/ToFundation';
 import Like from '../dialog/Like';
+import FunAudio from './FunAudio';
+import FunVideo from './FunVideo';
+import FunImg from './FunImg';
 
 export default {
   name: 'fundationLists',
@@ -174,6 +195,9 @@ export default {
     ReplyLists,
     ToFundation,
     Like,
+    FunAudio,
+    FunVideo,
+    FunImg,
   },
   props: {
     pageLists: {
@@ -313,6 +337,13 @@ export default {
         if (v.isGetInfo) {
           return
         }
+        const mediaData = dealMedia(v)
+        if (mediaData) {
+          this.$set(v, 'memo', mediaData.memo)
+          this.$set(v, 'audio', mediaData.audio)
+          this.$set(v, 'video', mediaData.video)
+          this.$set(v, 'imgArr', mediaData.imgArr || [])
+        }
         this.$set(v, 'isGetInfo', true)
         // console.log(v)
         setTimeout(async () => {
@@ -329,6 +360,13 @@ export default {
       this.top3Arr.forEach((v, index) => {
         if (v.isGetInfo) {
           return
+        }
+        const mediaData = dealMedia(v)
+        if (mediaData) {
+          this.$set(v, 'memo', mediaData.memo)
+          this.$set(v, 'audio', mediaData.audio)
+          this.$set(v, 'video', mediaData.video)
+          this.$set(v, 'imgArr', mediaData.imgArr || [])
         }
         this.$set(v, 'isGetInfo', true)
         // console.log(v)

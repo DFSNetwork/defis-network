@@ -16,6 +16,11 @@
           <div class="mainData">
             <div class="name">{{accInfo.nick || item.fromx}}</div>
             <div class="num tip dinReg">捐赠数量: {{ item.quantity }} ({{item.account}})</div>
+            <div class="content" v-if="item.audio"><FunAudio :src="item.audio"/></div>
+            <div class="content" v-if="item.video"><FunVideo :src="item.video"/></div>
+            <div class="content" v-if="item.imgArr && item.imgArr.length">
+              <FunImg :imgArr="item.imgArr"/>
+            </div>
             <div class="content">{{ item.memo }}</div>
             <div class="time tip">{{handleToLocalTime(item.dealTime)}}</div>
             <div class="flexa replyDiv tip">
@@ -45,14 +50,20 @@
 import Bus from '@/utils/bus';
 import moment from 'moment';
 
-import {getDateDiff, getCoin, toLocalTime} from '@/utils/public'
+import {getDateDiff, getCoin, toLocalTime, dealMedia} from '@/utils/public'
 import {get_acc_fund_lists} from '@/utils/api'
 import ReplyLists from '../dialog/ReplyLists'
+import FunAudio from '@/views/fundation/comp/FunAudio';
+import FunVideo from '@/views/fundation/comp/FunVideo';
+import FunImg from '@/views/fundation/comp/FunImg';
 
 export default {
   name: 'dynamic',
   components: {
     ReplyLists,
+    FunAudio,
+    FunVideo,
+    FunImg,
   },
   data() {
     return {
@@ -131,6 +142,13 @@ export default {
         this.$set(v, 'dealTime', toLocalTime(times))
         const likeNum = v.like_count * 1000;
         this.$set(v, 'likeNum', likeNum.toFixed(0))
+        const mediaData = dealMedia(v)
+        if (mediaData) {
+          this.$set(v, 'memo', mediaData.memo)
+          this.$set(v, 'audio', mediaData.audio)
+          this.$set(v, 'video', mediaData.video)
+          this.$set(v, 'imgArr', mediaData.imgArr || [])
+        }
       })
       if (this.page === 1) {
         this.lists = rows;

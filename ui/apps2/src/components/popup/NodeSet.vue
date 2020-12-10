@@ -89,6 +89,14 @@ export default {
           port: '443',
           url: 'https://api.eoslaomao.com', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        },
+        {
+          area: 'production',
+          protocol: 'https',
+          host: 'api.eosn.io',
+          port: '443',
+          url: 'https://api.eosn.io', // https://eospush.tokenpocket.pro
+          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         }
       ],
       node: null,

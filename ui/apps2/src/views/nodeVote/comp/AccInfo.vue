@@ -3,7 +3,7 @@
     <div>
       <div class="votes flexb">
         <span class="flexa">
-          <span>您的DFS票数：<span class="num dinBold">{{ vote_power }}</span></span>
+          <span>{{ $t('bpInfo.accDfsNum') }}：<span class="num dinBold">{{ vote_power }}</span></span>
         </span>
       </div>
     </div>

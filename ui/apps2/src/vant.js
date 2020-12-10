@@ -5,7 +5,7 @@ import Vue from 'vue'
 //   DropdownItem, PullRefresh, List, Popup, Stepper, Field,
 //   Slider, CellGroup, Notify, Checkbox } from 'vant';
 import { List, Icon, Field, Form, Picker, Popup, Rate, Swipe, SwipeItem,
-  NoticeBar } from 'vant';
+  NoticeBar, Popover, Calendar, Lazyload, ImagePreview } from 'vant';
 // Vue.use(Button)
 // Vue.use(Toast);
 // Vue.use(Tabbar);
@@ -33,4 +33,8 @@ Vue.use(Field);
 Vue.use(Form);
 Vue.use(Picker);
 Vue.use(NoticeBar);
+Vue.use(Popover);
+Vue.use(Calendar);
+Vue.use(Lazyload);
+Vue.use(ImagePreview);
 Vue.use(Rate);

@@ -61,13 +61,13 @@ export default {
         image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner4.png',
         routeName: 'fundation'
       }, {
-        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner1.png',
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner1_1.png',
         routeName: 'nodeVote'
       }, {
         image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner2.png',
         routeName: 'nodePools'
       }, {
-        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner3.png',
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner3_1.png',
         routeName: 'financial'
       }],
       page: 1,
@@ -326,6 +326,7 @@ export default {
   background: #fFF;
   box-sizing: border-box;
   font-size: 36px;
+  border-radius: 70px;
   .btn{
     box-shadow: 0px 2px 16px 0px rgba(41,212,176,0.4);
     background: #29D4B0;

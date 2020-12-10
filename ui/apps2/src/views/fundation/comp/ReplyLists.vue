@@ -28,6 +28,15 @@
             <span class="green">{{ item.replyto }}</span>
           </span>
           <span>{{ item.memo }}</span>
+          <div class="price flexs" v-if="item.audio">
+            <FunAudio :src="item.audio"/>
+          </div>
+          <div class="price flexs" v-if="item.video">
+            <FunVideo :src="item.video"/>
+          </div>
+          <div class="price flexs" v-if="item.imgArr && item.imgArr.length">
+            <FunImg :imgArr="item.imgArr"/>
+          </div>
         </div>
         <div class="time tip flexa" @click="handleShowToFundation(item)">
           <span>{{ handleToLocalTime(item.dealTime) }}</span>
@@ -64,17 +73,23 @@
 <script>
 import { mapState } from 'vuex';
 import moment from 'moment';
-import {getDateDiff, toLocalTime, getCoin} from '@/utils/public'
+import {getDateDiff, toLocalTime, getCoin, dealMedia} from '@/utils/public'
 
 import {get_reply_fundation, get_acc_info} from '@/utils/api'
 import Like from '../dialog/Like';
 import ToFundation from '../dialog/ToFundation';
+import FunAudio from './FunAudio';
+import FunVideo from './FunVideo';
+import FunImg from './FunImg';
 
 export default {
   name: 'replyLists',
   components: {
     Like,
     ToFundation,
+    FunAudio,
+    FunVideo,
+    FunImg
   },
   props: {
     listsLen: { // 总计多少条回复
@@ -161,6 +176,15 @@ export default {
         this.$set(v, 'dealTime', toLocalTime(times))
         const likeNum = v.like_count * 1000;
         this.$set(v, 'likeNum', likeNum.toFixed(0))
+
+        const mediaData = dealMedia(v)
+        // console.log(v)
+        if (mediaData) {
+          this.$set(v, 'memo', mediaData.memo)
+          this.$set(v, 'audio', mediaData.audio)
+          this.$set(v, 'video', mediaData.video)
+          this.$set(v, 'imgArr', mediaData.imgArr || [])
+        }
       });
       this.lists = lists;
       this.handleGetAccInfo();
@@ -254,6 +278,9 @@ export default {
       }
       .green{
         margin-right: 8px;
+      }
+      .price{
+        margin-top: 10px;;
       }
     }
     .time{

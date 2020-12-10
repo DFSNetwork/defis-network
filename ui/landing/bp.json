@@ -41,8 +41,8 @@
                 "chain-api",
                 "account-query"
             ],
-            "api_endpoint": "http://eosapi.defis.network",
-            "ssl_endpoint": "https://eosapi.defis.network"
+            "api_endpoint": "https://eos.blockeden.cn",
+            "ssl_endpoint": "https://eos.blockeden.cn"
         },
         {
             "location": {

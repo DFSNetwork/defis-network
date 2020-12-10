@@ -58,6 +58,7 @@
 
     <!-- 弹窗组件 -->
     <el-dialog
+      custom-class="mkListDia"
       class="mkListDia pcList"
       :append-to-body="true"
       :show-close="false"
@@ -464,7 +465,9 @@ export default {
 
 .mkListDia{
   // animation: none;
+  z-index: 10000 !important;
   /deep/ .el-dialog{
+    z-index: 10000;
     position: absolute;
     bottom: 0px;
     margin: 0px;
