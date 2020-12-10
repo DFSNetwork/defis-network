@@ -206,6 +206,12 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "follow" */ '@/views/my/childView/AccLists.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
       },
+      { // 创建矿池
+        path: '/create-pool',
+        name: 'createPool',
+        component: () => import(/* webpackChunkName: "createPool" */ '@/views/nodePools/childView/CreatePool.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
     ]
   },
   {

@@ -1,7 +1,10 @@
 <template>
   <div class="toFundation">
     <img class="close" @click="handleClose()" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg">
-    <div class="title">{{ $t('fundation.funTran') }}</div>
+    <div class="title">
+      <span v-if="$route.name !== 'nodePools'">{{ $t('fundation.funTran') }}</span>
+      <span v-else>乐捐助力</span>
+    </div>
     <!-- 乐捐弹窗操作 -->
     <div class="symData">
       <div class="info flexb">
@@ -97,6 +100,12 @@ export default {
       default: function rp() {
         return {}
       },
+    },
+    setCoin: {
+      type: Object,
+      default: function rp() {
+        return {}
+      },
     }
   },
   data() {
@@ -167,6 +176,21 @@ export default {
         this.memo = oldVal
       }
     },
+    setCoin: {
+      handler: function listen(newVal) {
+        if (!newVal.mid) {
+          return
+        }
+        this.thisMarket0 = {
+          contract: newVal.contract,
+          decimal: newVal.decimal,
+          symbol: newVal.sym,
+          imgUrl: newVal.imgUrl,
+        }
+      },
+      deep: true,
+      immediate: true,
+    }
   },
   methods: {
     handleRandom() {

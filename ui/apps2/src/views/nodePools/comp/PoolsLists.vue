@@ -1,8 +1,8 @@
 <template>
   <div class="poolsLists">
     <div class="title flexb">
-      <span class="act">{{ $t('nodePools.poolsLists') }}</span>
-      <span class="mineRule flexa" @click="showRules = true">
+      <span class="act">LP {{ $t('nodePools.poolsLists') }}</span>
+      <span class="mineRule flexa" @click="handleShowRules('lp')">
         <span>{{ $t('miningRules.rules') }}</span>
         <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
       </span>
@@ -24,10 +24,12 @@
               <span class="apy">{{ $t('nodePools.apy') }}：{{ v.apy }}%</span>
             </div>
             <div class="flexend">
-              <span class="num din">{{ accLpData.showReward || '0.00000000' }}</span>
-              <span class="red_p flexa" v-if="Number(addBuff)">（
+              <span class="num din">
+                {{ accLpData[`${v.mid}`] ? accLpData[`${v.mid}`].showReward || '0.00000000' : '0.00000000' }}
+              </span>
+              <span class="red_p flexa" v-if="Number(handleAddBuff(accLpData[`${v.mid}`]))">（
                 <img class="buffImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/buff2.svg">
-                {{ addBuff }}%）</span>
+                {{ handleAddBuff(accLpData[`${v.mid}`]) }}%）</span>
             </div>
           </div>
         </div>
@@ -37,28 +39,38 @@
           <div class="flexb">
             <span class="flexa">
               <span>{{ $t('nodePools.planRank') }}：</span>
-              <el-input-number v-model="planRank" :min="1" :max="150"></el-input-number>
+              <el-input-number v-model="plan[v.mid]" :min="1" :max="150"></el-input-number>
             </span>
-            <span class="green_p" @click="handleDealToken">{{ $t('nodePools.doing') }}</span>
+            <span class="green_p" @click="handleDealToken(v)">{{ $t('nodePools.doing') }}</span>
           </div>
           <span>
             <el-slider
               :min="1"
               :max="100"
-              v-model="planRank">
+              v-model="plan[v.mid]">
             </el-slider>
           </span>
         </div>
         <div class="flexb" @click.stop="''">
-          <span>{{ $t('nodePools.myRank') }}：{{ rank }}</span>
+          <span>{{ $t('nodePools.myRank') }}：{{ accLpData[`${v.mid}`] ? accLpData[`${v.mid}`].rank || '100+' : '100+' }}</span>
         </div>
       </div>
+    </div>
+    <div class="title flexb">
+      <span class="act">REX {{ $t('nodePools.poolsLists') }}</span>
+      <span class="mineRule flexa" @click="handleShowRules('rex')">
+        <span>{{ $t('miningRules.rules') }}</span>
+        <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
+      </span>
     </div>
     <div class="rexCutDown" v-if="rexCutDown.total > 0">
       <div>{{ $t('nodePools.cutDown', {type: 'REX'}) }}</div>
       <div>{{ rexCutDown.hours }}:{{ rexCutDown.minutes }}:{{ rexCutDown.seconds }}</div>
     </div>
     <div class="list" v-for="(item, index) in poolsLists" :key="index"  @click="handleToDetailLists(item, 'rex')">
+      <div class="model" v-if="index > 2" @click.stop="''">
+        <span class="boost flexc" @click="handleShowBoost(item)">助力</span>
+      </div>
       <div class="poolInfo flexa">
         <img class="coinImg" :src="item.imgUrl">
         <div class="bal">
@@ -83,7 +95,33 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showRules">
-      <MineRules v-if="showRules"/>
+      <MineRules v-if="showRules" :status="status"/>
+    </el-dialog>
+
+    <van-popup
+      class="mypopup"
+      v-model="showBoost" position="center">
+      <Boost :boostData="boostData" @handleClose="handleClose"/>
+    </van-popup>
+
+
+    <!-- 加入做市 -->
+    <el-dialog
+      class="mkListDia"
+      :show-close="false"
+      :visible.sync="showAdd">
+      <AddMarket v-if="showAdd"
+        :thisMarket="thisMarket"
+        @listenClose="handleClose"/>
+    </el-dialog>
+    <!-- 去捐款 -->
+    <el-dialog
+      class="mydialog"
+      :show-close="false"
+      :visible="showToFundation">
+      <ToFundation v-if="showToFundation"
+        :setCoin="boostData"
+        @listenClose="handleClose"/>
     </el-dialog>
   </div>
 </template>
@@ -96,12 +134,18 @@ import { EosModel } from '@/utils/eos';
 
 import SureTip from '@/views/farms/dialog/SureTip';
 import MineRules from '../dialog/MineRules';
+import Boost from '../dialog/Boost';
+import AddMarket from '@/views/market/popup/AddMarket'
+import ToFundation from '@/views/fundation/dialog/ToFundation';
 
 export default {
   name: 'poolsLists',
   components: {
     SureTip,
     MineRules,
+    Boost,
+    AddMarket,
+    ToFundation,
   },
   props: {
     poolsLists: {
@@ -133,9 +177,9 @@ export default {
       default: '0'
     },
     rankList: {
-      type: Array,
+      type: Object,
       default: function rls() {
-        return []
+        return {}
       }
     },
     lpRankWeight: {
@@ -145,6 +189,7 @@ export default {
   },
   data() {
     return {
+      plan: {},
       planRank: 30,
       params: {},
       showSure: false,
@@ -158,6 +203,14 @@ export default {
       rexCutDown: {},
 
       showRules: false,
+      showBoost: false,
+      boostData: {},
+
+      // 弹窗
+      showAdd: false,
+      showToFundation: false,
+      thisMarket: {},
+      status: '',
     }
   },
   mounted() {
@@ -171,6 +224,7 @@ export default {
     ...mapState({
       scatter: state => state.app.scatter,
       baseConfig: state => state.sys.baseConfig,
+      marketLists: state => state.sys.marketLists,
     }),
     addBuff() {
       let buff = (this.lpRankWeight || 1) - 1;
@@ -189,14 +243,29 @@ export default {
       immediate: true,
     },
     lpLists: {
-      handler: function lls() {
+      handler: function lls(newVal) {
         this.handleStartTimer()
+        newVal.forEach(v => {
+          this.plan[v.mid] = localStorage.getItem(`node_lp${v.mid}`) ? Number(localStorage.getItem(`node_lp${v.mid}`)) : 30;
+        });
       },
       deep: true,
       immediate: true
     }
   },
   methods: {
+    handleShowRules(status) {
+      this.status = status
+      this.showRules = true
+    },
+    handleAddBuff(v) {
+      if (!v) {
+        return 0
+      }
+      let buff = (v.weight || 1) - 1;
+      buff = buff * 100;
+      return buff.toFixed(2)
+    },
     handleCountdown() {
       const rexT = countdown(this.rexTime, true, 'hours')
       this.rexCutDown = rexT;
@@ -209,8 +278,22 @@ export default {
         this.handleCountdown();
       }, 1000);
     },
-    handleClose() {
+    handleShowBoost(item) {
+      this.boostData = item
+      this.showBoost = true;
+      this.thisMarket = this.marketLists.find(v => v.mid === item.mid)
+      // console.log(item)
+    },
+    handleClose(type) {
       this.showSure = false;
+      this.showBoost = false;
+      this.showAdd = false;
+      this.showToFundation = false
+      if (type === 'market') {
+        this.showAdd = true;
+      } else if (type === 'fundation') {
+        this.showToFundation = true;
+      }
     },
     handleStartTimer() {
       clearTimeout(this.timer)
@@ -244,14 +327,19 @@ export default {
       })
     },
     // 计算相差多少
-    handleDealToken() {
-      if (!this.rankList.length || !this.lpLists.length) {
+    handleDealToken(v) {
+      console.log(this.rankList)
+      if (!this.rankList[v.mid] || !this.rankList[v.mid].length) {
         return 
       }
-      const market = this.lpLists[0];
+      const market = v;
       console.log(market)
-      const setRank = Number(this.planRank);
-      const rank75 = this.rankList[setRank - 1];
+      const setRank = Number(this.plan[v.mid]);
+      if (setRank > this.rankList[v.mid].length) {
+        this.$message.error('当前矿工人数不足')
+        return
+      }
+      const rank75 = this.rankList[v.mid][setRank - 1];
       console.log(rank75)
       const uLp = this.accLpData || {};
       const tToken = parseInt(rank75.token) - parseInt(uLp.token || 0)
@@ -271,14 +359,14 @@ export default {
         token: tToken,
         bal0: this.bal0,
         bal1: this.bal1,
-        planRank: this.planRank,
+        // planRank: this.planRank,
+        planRank: setRank,
       }
       this.params = params;
       this.showSure = true;
-      console.log(this.params)
     },
     handleSure() {
-      localStorage.setItem(`node_lp`, this.planRank)
+      localStorage.setItem(`node_lp${this.params.market.mid}`, this.params.planRank)
       setTimeout(() => {
       }, 1000);
       setTimeout(() => {
@@ -374,6 +462,25 @@ export default {
   border-radius: 12px;
   text-align: left;
   margin-bottom: 20px;
+  .model{
+    border-radius: 12px;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    left: 0;
+    top: 0;
+    background: rgba(255,255,255, .8);
+    .boost{
+      position: absolute;
+      bottom: 20px;
+      right: 26px;
+      background: #FE8C37;
+      color: #FFF;
+      border-radius: 48px;
+      height: 60px;
+      padding: 0px 32px;
+    }
+  }
   .poolInfo{
     margin-bottom: 10px;
     padding-bottom: 10px;
@@ -442,7 +549,28 @@ export default {
     position: relative;
     margin: auto;
     width: 590px;
+    max-height: 900px;
+    overflow: auto;
     border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+    }
+  }
+}
+.mypopup{
+  background: transparent;
+  overflow-y: visible !important;
+}
+
+.mkListDia{
+  // animation: none;
+  /deep/ .el-dialog{
+    border-radius:12px 12px 0px 0px;
+    position: relative;
+    margin: auto;
+    width: 690px;
+    border-radius:12px;
     .el-dialog__body,
     .el-dialog__header{
       padding: 0;

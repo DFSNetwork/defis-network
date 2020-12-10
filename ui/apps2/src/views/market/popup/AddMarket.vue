@@ -1,7 +1,8 @@
 <template>
   <div class="addMarket">
     <div class="title">
-      <span>{{ $t('more.addMarket') }}</span>
+      <span v-if="$route.name !== 'nodePools'">{{ $t('more.addMarket') }}</span>
+      <span v-else>做市助力</span>
       <img class="closeSvg" @click="handleClose" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
     </div>
     <div class="content">

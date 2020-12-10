@@ -76,7 +76,7 @@ export async function getAccFarmerData(accVoteData, cb) {
   }
   const rows = result.rows || [];
   // console.log(rows)
-  console.log(accVoteData)
+  // console.log(accVoteData)
   if (!rows.length) {
     cb(accVoteData)
     return
@@ -446,7 +446,8 @@ export function getRexActions(accVoteData, obj) {
 
 // 获取LPreward
 export function getLpReward(baseData, accData) {
-  const rate = accData.token / baseData.liquidity_token;
+  const tagNum = baseData.contract1 === "tagtokenmain" ? parseFloat(accData.sym1) : parseFloat(accData.sym0)
+  const rate = tagNum / baseData.allTag;
   const lpBal = baseData.bal;
   const weight = accData.weight || 1;
   const nowT = Date.parse(new Date())

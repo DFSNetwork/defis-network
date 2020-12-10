@@ -1,7 +1,7 @@
 <template>
   <div class="marketList">
     <div class="header">
-      <span v-if="$route.name === 'fundation'">选择币种</span>
+      <span v-if="$route.name === 'fundation' || $route.name === 'createPool'">选择币种</span>
       <span v-else>{{ $t('pools.chooseMarket') }}</span>
       <span>
         <img class="closeSvg" @click="handleClose" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
@@ -51,7 +51,7 @@
           <div class="balan">{{ item.balan }}</div>
         </div>
       </template>
-      <div v-if="!search" class="searchMore flexc">更多代币请搜索查询</div>
+      <!-- <div v-if="!search" class="searchMore flexc">更多代币请搜索查询</div> -->
     </div>
   </div>
 </template>
@@ -109,6 +109,11 @@ export default {
         this.filterCoinList = [];
         if (this.type === 'kline') {
           this.searchArr = this.marketLists;
+        } else if (this.type === 'pools') {
+          const arr = dealSymArr(newVal)
+          arr.shift()
+          this.coinList = arr;
+          this.filterCoinList = arr;
         } else if (this.type !== 'other') {
           const arr = dealSymArr(newVal)
           this.coinList = arr;
@@ -127,6 +132,7 @@ export default {
     }
   },
   mounted() {
+    console.log(this.type)
   },
   methods: {
     handleToCreate() {

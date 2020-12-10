@@ -7,15 +7,17 @@
         <img class="tipIcon ml10" @click="showRules = true" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
         <span class="about tip">(总收益 ≈ {{ allReward }} EOS)</span>
       </div>
-      <div class="claimNum ">
-        <span class="dinBold">{{ accLpData.showReward || '0.00000000' }} TAG</span>
+      <div class="claimNum" v-for="(v) in lpPoolsMid" :key="v">
+        <span class="dinBold">{{ accLpData[v] ? accLpData[v].showReward || '0.00000000' : '0.00000000' }} TAG</span>
         <span class="tip">(LP)</span>
-        <span class="tip dinReg"> ≈ {{ accLpData.aboutEos || '0.0000' }} EOS</span>
+        <span class="tip dinReg"> ≈ {{ accLpData[v] ? accLpData[v].aboutEos || '0.0000' : '0.0000' }} EOS</span>
       </div>
-      <div class="claimNum" v-for="(v, index) in nKeys" :key="index">
-        <span class="dinBold">{{ poolsData[v].showReward || '0.00000000' }} {{ poolsData[v].sym }}</span>
-        <span class="tip dinReg"> ≈ {{ poolsData[v].aboutEos || '0.0000' }} EOS</span>
-      </div>
+      <template v-for="(v, index) in nKeys">
+        <div class="claimNum" v-if="poolsData[v].showReward" :key="index">
+          <span class="dinBold">{{ poolsData[v].showReward || '0.00000000' }} {{ poolsData[v].sym }}</span>
+          <span class="tip dinReg"> ≈ {{ poolsData[v].aboutEos || '0.0000' }} EOS</span>
+        </div>
+      </template>
     </div>
     <div class="flexb">
       <div class="allClaimBtn" v-loading="claim" @click="handleClaimAll">{{ $t('bonus.claim') }}</div>
@@ -121,21 +123,38 @@ export default {
           }
         ]
       }
-      const lpAction = {
-        account: this.baseConfig.nodeMiner,
-        name: 'claim',
-        authorization: [{ 
-          actor: formName,
-          permission,
-        }],
-        data: {
-          user: formName,
-          mid: this.lpPoolsMid[0]
-        },
-      }
-      if (Number(this.accLpData.showReward)) {
-        params.actions.push(lpAction)
-      }
+      this.lpPoolsMid.forEach(v => {
+        const lpAction = {
+          account: this.baseConfig.nodeMiner,
+          name: 'claim',
+          authorization: [{ 
+            actor: formName,
+            permission,
+          }],
+          data: {
+            user: formName,
+            mid: v
+          },
+        }
+        if (this.accLpData[v] && Number(this.accLpData[v].showReward)) {
+          params.actions.push(lpAction)
+        }
+      })
+      // const lpAction = {
+      //   account: this.baseConfig.nodeMiner,
+      //   name: 'claim',
+      //   authorization: [{ 
+      //     actor: formName,
+      //     permission,
+      //   }],
+      //   data: {
+      //     user: formName,
+      //     mid: this.lpPoolsMid[0]
+      //   },
+      // }
+      // if (Number(this.accLpData.showReward)) {
+      //   params.actions.push(lpAction)
+      // }
       // console.log(params)
       EosModel.toTransaction(params, (res) => {
         this.loadingProxy = false;

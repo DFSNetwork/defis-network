@@ -204,6 +204,7 @@ export default {
       scatter: state => state.app.scatter,
       baseConfig: state => state.sys.baseConfig,
       filterMkLists: state => state.sys.filterMkLists,
+      marketLists: state => state.sys.marketLists,
     }),
     addBuff() {
       let buff = (this.accLpData.weight || 1) - 1;
@@ -412,7 +413,7 @@ export default {
       if (!this.filterMkLists.length) {
         return
       }
-      const market = this.filterMkLists.find(v => v.mid == this.sym);
+      const market = this.marketLists.find(v => v.mid == this.sym);
       // console.log(market)
       this.lpPool = Object.assign({}, this.lpPool, market);
       this.handleGetLpReward()
@@ -455,7 +456,18 @@ export default {
       if (!result.rows.length) {
         return
       }
-      this.accLpData = Object.assign({}, this.accLpData, result.rows[0])
+      const rows = result.rows[0]
+      const market = this.lpLists.find(v => v.mid === this.sym);
+      const inData = {
+        poolSym0: market.reserve0.split(' ')[0],
+        poolSym1: market.reserve1.split(' ')[0],
+        poolToken: market.liquidity_token,
+        sellToken: Math.abs(rows.token)
+      }
+      const marketData = sellToken(inData)
+      rows.market0 = marketData.getNum1;
+      rows.market1 = marketData.getNum2;
+      this.accLpData = Object.assign({}, this.accLpData, rows)
       // console.log(this.accLpData)
       this.handleGetLpReward()
     },
@@ -523,7 +535,9 @@ export default {
       if (!this.accLpData.token || !this.lpPool.bal || !this.lpPool.liquidity_token) {
         return
       }
-      const rate = this.accLpData.token / this.lpPool.liquidity_token;
+      const allTagNum = this.handleAllLpTagNum()
+      const tagNum = this.lpPool.contract1 === "tagtokenmain" ? parseFloat(this.accLpData.sym1) : parseFloat(this.accLpData.sym0)
+      const rate = tagNum / allTagNum;
       const lpBal = this.lpPool.bal;
       const weight = this.accLpData.weight || 1;
       const nowT = Date.parse(new Date())
@@ -540,6 +554,18 @@ export default {
       }, 1000);
       // LP数据滚动
       this.handleRunLp()
+    },
+    // 获取LP池子的总TAG数量
+    handleAllLpTagNum() {
+      let count = 0;
+      this.marketLists.forEach(v => {
+        if (v.contract0 === "tagtokenmain" && v.symbol0 === "TAG") {
+          count = Number(count) + parseFloat(v.reserve0)
+        } else if (v.contract1 === "tagtokenmain" && v.symbol1 === "TAG") {
+          count = Number(count) + parseFloat(v.reserve1)
+        }
+      })
+      return count;
     },
     handleRunLp() {
       clearInterval(this.lpRunTimer)
@@ -564,16 +590,18 @@ export default {
       if (!this.lpPool.bal || !this.lpPool.reserve0) {
         return
       }
-      const num = 1;
-      const rate = num / parseFloat(this.lpPool.reserve0);
+      const allTagNum = this.handleAllLpTagNum()
+      const tagNum = this.lpPool.contract1 === "tagtokenmain" ? parseFloat(this.lpPool.reserve1) : parseFloat(this.lpPool.reserve0)
+      const otherNum = this.lpPool.contract1 === "tagtokenmain" ? parseFloat(this.lpPool.reserve0) : parseFloat(this.lpPool.reserve1)
+      const price = otherNum / tagNum;
+      const num = this.lpPool.contract0 === "eosio.token" ? 1 / price : 100 / price;
+      const rate = num / allTagNum;
       const lpBal = this.lpPool.bal;
       const weight = 1.5;
       const t = 86400 * 365;
       const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
-      // console.log(reward)
-      const price = parseFloat(this.lpPool.reserve0) / parseFloat(this.lpPool.reserve1);
-      // console.log('price:', price)
-      const apy = reward * price / num * 100;
+      
+      const apy = reward / num * 100;
       // console.log(apy.toFixed(2))
       this.$set(this.lpPool, 'apy', apy.toFixed(2))
     },
@@ -582,6 +610,8 @@ export default {
       if (!this.lpPool.bal || !this.lpPool.liquidity_token) {
         return;
       }
+      const allTag = this.handleAllLpTagNum()
+      this.$set(this.lpPool, 'allTag', allTag);
       this.lists.forEach(v => {
         const reward = getLpReward(this.lpPool, v)
         this.$set(v, 'accReward', reward)
