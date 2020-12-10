@@ -1,8 +1,8 @@
 <template>
   <div class="poolsLists">
     <div class="title flexb">
-      <span class="act">{{ $t('nodePools.poolsLists') }}</span>
-      <span class="mineRule flexa" @click="showRules = true">
+      <span class="act">LP {{ $t('nodePools.poolsLists') }}</span>
+      <span class="mineRule flexa" @click="handleShowRules('lp')">
         <span>{{ $t('miningRules.rules') }}</span>
         <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
       </span>
@@ -56,6 +56,13 @@
         </div>
       </div>
     </div>
+    <div class="title flexb">
+      <span class="act">REX {{ $t('nodePools.poolsLists') }}</span>
+      <span class="mineRule flexa" @click="handleShowRules('rex')">
+        <span>{{ $t('miningRules.rules') }}</span>
+        <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
+      </span>
+    </div>
     <div class="rexCutDown" v-if="rexCutDown.total > 0">
       <div>{{ $t('nodePools.cutDown', {type: 'REX'}) }}</div>
       <div>{{ rexCutDown.hours }}:{{ rexCutDown.minutes }}:{{ rexCutDown.seconds }}</div>
@@ -88,7 +95,7 @@
     <el-dialog
       class="myDialog"
       :visible.sync="showRules">
-      <MineRules v-if="showRules"/>
+      <MineRules v-if="showRules" :status="status"/>
     </el-dialog>
 
     <van-popup
@@ -203,6 +210,7 @@ export default {
       showAdd: false,
       showToFundation: false,
       thisMarket: {},
+      status: '',
     }
   },
   mounted() {
@@ -246,6 +254,10 @@ export default {
     }
   },
   methods: {
+    handleShowRules(status) {
+      this.status = status
+      this.showRules = true
+    },
     handleAddBuff(v) {
       if (!v) {
         return 0
