@@ -27,7 +27,7 @@
         :accLpData="accLpData" @listenUpdata="handleUpdata"/>
       <van-notice-bar class="notice" color="#FE3B37" mode="closeable" background="#FE3B3726"
         left-icon="volume-o" scrollable>
-        <span>2020-12-13 将启动新的LP挖矿规则, 详情请查看LP挖矿规则，提前操作，避免损失！</span>
+        <span>2020-12-13 20:00:00（北京时间）将启动新的LP挖矿规则, 详情请查看LP挖矿规则，提前操作，避免损失！</span>
       </van-notice-bar>
       <!-- 矿池列表 -->
       <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists" :accLpData="accLpData"
