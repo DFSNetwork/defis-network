@@ -153,6 +153,8 @@ const sys = {
 
     nodeLists: [],
     nodeListsTamp: Number(localStorage.getItem('nodeListsTamp') || 0),
+    // pddex
+    tradeInfo: {},
   },
   mutations: {
     SET_TagLpBal: (state, tagLpBal) => {
@@ -227,6 +229,10 @@ const sys = {
     SET_FilterMkLists: (state, filterMkLists) => {
       state.filterMkLists = filterMkLists;
     },
+    // pddex
+    SET_TRADEINFO: (state, tradeInfo) => {
+      state.tradeInfo = tradeInfo;
+    },
   },
   actions: {
     setTagLpBal({ commit }, tagLpBal) {
@@ -295,6 +301,10 @@ const sys = {
     },
     setFilterMkLists({ commit }, filterMkLists) {
       commit('SET_FilterMkLists', filterMkLists);
+    },
+    // pddex
+    setTradeInfo({ commit }, tradeInfo) {
+      commit('SET_TRADEINFO', tradeInfo);
     },
   }
 };

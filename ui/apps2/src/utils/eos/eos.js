@@ -237,6 +237,13 @@ class model {
     // scatterItem.identity.accounts[0].name = 'rickyshi1234';
     store.dispatch('setScatter', scatterItem);
     localStorage.setItem('Frontend-Token', '');
+
+    const newAccount = {
+      name: this.accountByScatter.name,
+      permissions: this.accountByScatter.authority,
+      publicKey: this.accountByScatter.publicKey,
+    }
+    store.dispatch('setAccount', newAccount);
     callback()
   }
 

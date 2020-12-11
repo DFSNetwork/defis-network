@@ -1,0 +1,506 @@
+<template>
+  <div class="trade">
+    <div>
+      <div class="symbolInfo flexb">
+        <div class="flexa">
+          <img class="coinImg" :src="market.sym1Data.imgUrl" :onerror="errorCoinImg">
+          <!-- <img class="coinImg" src="@/assets/logo.png" alt=""> -->
+          <div @click="showLists = true">
+            <div class="name">
+              <span>{{ market.symbol1 }}/{{ market.symbol0 }}</span>
+              <van-icon name="arrow-down"/>
+            </div>
+            <div class="contract tip">{{ market.contract1 }}/{{ market.contract0 }}</div>
+          </div>
+        </div>
+        <div class="flexa">
+          <div class="star flexc" @click="''"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/star-un.png" alt=""></div>
+          <!-- <div class="kline flexc" @click="handleToKline"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/pddkline.png" alt=""></div> -->
+          <div class="tools flexc" @click="showSet = true"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/setting.png" alt=""></div>
+        </div>
+      </div>
+      <div class="flexb content">
+        <Left :market="market" @listenUpdate="hanldeSuccess()"/>
+        <Right :market="market"/>
+      </div>
+      <div class="tradeInfo flexb">
+        <div>
+          <div>{{ showTradeinfo.minGet || '0.0000' }}</div>
+          <div class="tip">最少获取({{ showTradeinfo.getCoin }})</div>
+        </div>
+        <div>
+          <div :class="{'green': Number(showTradeinfo.rate) > 0,
+                        'yellow': Number(showTradeinfo.rate) >= 5,
+                        'red': Number(showTradeinfo.rate) >= 10}">
+            {{ showTradeinfo.rate || '0.00' }}%
+          </div>
+          <div class="tip">滑点</div>
+        </div>
+        <div>
+          <div>{{ showTradeinfo.fees || '0.0000' }}</div>
+          <div class="tip">手续费({{ showTradeinfo.feesCoin }})</div>
+        </div>
+      </div>
+    </div>
+    <!-- 订单信息 -->
+    <div class="orders">
+      <div class="allOrder flexa" @click="handleTo('pddexOrder')">
+        <img class="allImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/allOrder.png" alt="">
+        <span>全部订单</span>
+      </div>
+      <van-tabs class="myTabs" sticky v-model="active" color="#29D4B0">
+        <van-tab title="当前订单">
+          <div class="noData tip" v-if="!orderList.length">暂无数据</div>
+          <div class="list" v-for="(v, i) in orderList" :key="`order-${i}`">
+            <div class="liTitle flexb">
+              <div class="symbol">
+                <span v-if="v.isBuy" class="green">买 </span>
+                <span v-else class="red">卖 </span>
+                <span>{{ market.symbol1 }}/{{ market.symbol0 }}</span>
+                <span class="tip"> ({{ v.oDate.substr(5, 18) }})</span>
+              </div>
+              <div><van-button plain type="danger" @click="handleCancel(v, i)">撤单</van-button></div>
+            </div>
+            <div class="flexb liTitle">
+              <div>
+                <div class="num">{{ v.orderNum }}</div>
+                <div class="subTitle tip">委托量({{ market.symbol1 }})</div>
+              </div>
+              <div>
+                <div class="num">{{ v.orderPrice }}</div>
+                <div class="subTitle tip">委托价({{ market.symbol0 }})</div>
+              </div>
+              <div>
+                <div class="num">{{ v.amt }}</div>
+                <div class="subTitle tip">委托额({{ market.symbol0 }})</div>
+              </div>
+            </div>
+            <div class="flexb" v-if="false">
+              <div>
+                <div class="num">—</div>
+                <div class="subTitle tip">成交量({{ market.symbol1 }})</div>
+              </div>
+              <div>
+                <div class="num">—</div>
+                <div class="subTitle tip">成交均价({{ market.symbol0 }})</div>
+              </div>
+              <div>
+                <div class="num">—</div>
+                <div class="subTitle tip">手续费({{ market.symbol0 }})</div>
+              </div>
+            </div>
+          </div>
+        </van-tab>
+      </van-tabs>
+    </div>
+
+    <van-popup class="popup" v-model="showLists">
+      <market-lists-comp
+        :marketLists="marketLists"
+        v-if="showLists"
+        @listenClose="handleClose"
+        @listenMarketChange="handleChange"/>
+    </van-popup>
+
+    <van-popup class="popup popupSet" position="top" v-model="showSet">
+      <PointSlider
+        v-if="showSet"
+        @handleClose="handleClose"/>
+    </van-popup>
+
+    <van-popup v-model="showCancel">
+      <cancel-sure :item="cancelItem" :itemIndex="cancelIndex"
+        @handleClose="handleClose"
+        @cancelSuccess="hanldeSuccess"/>
+    </van-popup>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+import { toFixed, toLocalTime, dealPrice } from '@/utils/public';
+import Left from './comp/Left';
+import Right from './comp/Right';
+import MarketListsComp from './popup/MarketLists';
+import PointSlider from './popup/PointSlider'
+import CancelSure from "@/views/pddex/order/comp/CancelSure";
+export default {
+  name: 'trade',
+  components: {
+    Left,
+    Right,
+    MarketListsComp,
+    PointSlider,
+    CancelSure,
+  },
+  data() {
+    return {
+      errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
+      active: 0,
+      showLists: false,
+      showSet: false,
+      showCancel: false,
+      market: {
+        mid: 17,
+        symbol0: 'EOS',
+        contract0: 'eosio.token',
+        symbol1: 'USDT',
+        contract1: 'tethertether',
+        sym0Data:{
+          imgUrl: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg'
+        },
+        sym1Data:{
+          imgUrl: 'https://ndi.340wan.com/eos/tethertether-usdt.png'
+        }
+      },
+      showTradeinfo: {},
+      getOrder: false,
+      orderList: [],
+      cancelItem: {},
+      cancelIndex: 0,
+      orderLength: 0,
+    }
+  },
+  mounted() {
+  },
+  watch: {
+    marketLists: {
+      handler: function ml() {
+        this.handleGetMarket()
+        if (!this.getOrder) {
+          this.handleGetOrderList()
+        }
+      },
+      deep: true,
+      immediate: true,
+    },
+    tradeInfo: {
+      handler: function ml() {
+        this.handleDealTradeInfo()
+      },
+      deep: true,
+      immediate: true,
+    },
+    account: {
+      handler: function acc() {
+        this.handleGetOrderList()
+      },
+      deep: true,
+      immediate: true,
+    },
+  },
+  computed: {
+    ...mapState({
+      account: state => state.app.account,
+      marketLists: state => state.config.marketLists,
+      tradeInfo: state => state.sys.tradeInfo,
+      baseConfig: state => state.sys.baseConfig,
+    }),
+  },
+  methods: {
+    handleTo(name) {
+      this.$router.push({
+        name
+      })
+    },
+    handleToKline() {
+      this.$router.push({
+        name: 'kLine',
+        params: {
+          symbol: this.$route.params.symbol
+        }
+      })
+    },
+    hanldeSuccess(index) {
+      this.showCancel = false;
+      if (index !== undefined) {
+        this.orderList.splice(index, 1)
+        return
+      }
+      this.handleGetOrderList(this.orderList.length)
+    },
+    handleDealTradeInfo() {
+      if (typeof this.tradeInfo !== 'object' || !this.tradeInfo.price) {
+        this.showTradeinfo = {}
+        return
+      }
+      const isBuy = this.tradeInfo.direction === 'buy'
+      const decimal = isBuy ? this.market.decimal0 : this.market.decimal1;
+      const showTradeinfo = JSON.parse(JSON.stringify(this.tradeInfo)) || {};
+      let fees = (showTradeinfo.payNum || 0) * 3 / 1000;
+      if (fees < 1 / 10 ** decimal) {
+        fees = 0;
+      }
+      showTradeinfo.fees = fees.toFixed(decimal);
+      let rate = 0
+      if (showTradeinfo.swapInPrice) {
+        rate = (showTradeinfo.price - showTradeinfo.swapInPrice) / showTradeinfo.price * 100;
+      }
+      rate = Math.abs(rate);
+      showTradeinfo.rate = rate.toFixed(2);
+      const getCoin = isBuy ? this.market.symbol1 : this.market.symbol0;
+      const feesCoin = !isBuy ? this.market.symbol1 : this.market.symbol0;
+      showTradeinfo.getCoin = getCoin;
+      showTradeinfo.feesCoin = feesCoin;
+      this.showTradeinfo = showTradeinfo;
+    },
+    handleGetMarket() {
+      const params = this.$route.params;
+      const arr = params.symbol.split('-')
+      try {
+        const market = this.marketLists.find(v => {
+          return v.symbol0 === arr[1].toUpperCase() && v.symbol1 === arr[3].toUpperCase()
+              && v.contract0 === arr[0] && v.contract1 === arr[2] 
+        })
+        if (market) {
+          this.market = market;
+        }
+      } catch (error) {
+        return
+      }
+    },
+    handleCancel(item, index){
+      this.cancelItem = item;
+      this.cancelIndex = index;
+      this.showCancel = true;
+    },
+    handleClose() {
+      this.showLists = false;
+      this.showSet = false;
+      this.showCancel = false;
+    },
+    handleChange(item) {
+      this.handleClose();
+      this.market = item;
+      this.orderList = [];
+      this.handleGetOrderList()
+      this.$router.push({
+        name: 'pddexTrade',
+        params: {
+          symbol: `${item.contract0}-${item.symbol0}-${item.contract1}-${item.symbol1}`
+        }
+      })
+    },
+    // 查询交易对订单
+    async handleGetOrderList(length) {
+      // console.log(this.market.pid, this.account.name)
+      if (!this.market.pid) {
+        return;
+      }
+      if (!this.account.name) {
+        return
+      }
+      this.getOrder = true;
+      const params = {
+        code: this.baseConfig.pddex,
+        scope: this.market.pid,
+        table: 'orders',
+        json: true,
+        limit: 1000,
+        index_position: 3,
+        key_type: "i64",
+        lower_bound: ` ${this.account.name}`,
+        upper_bound: ` ${this.account.name}`,
+      }
+      const {status, result} = await this.$api.get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const lists = result.rows || [];
+      lists.forEach(v => {
+        const arr = v.quantity.split(' ');
+        if (arr[1] === this.market.symbol0) {
+          this.$set(v, 'isBuy', true)
+          const amt = arr[0]
+          this.$set(v, 'amt', amt)
+          const oDate = toLocalTime(`${v.time}.000+0000`)
+          this.$set(v, 'oDate', oDate)
+          const orderNum = v.min_out / 10 ** this.market.decimal1;
+          this.$set(v, 'orderNum', toFixed(orderNum, this.market.decimal1))
+          const orderPrice = dealPrice( v.price / 1000000);
+          this.$set(v, 'orderPrice', orderPrice)
+        } else {
+          this.$set(v, 'isBuy', false)
+          const orderNum = arr[0]
+          this.$set(v, 'orderNum', orderNum)
+          const orderPrice = dealPrice( v.price / 1000000);
+          this.$set(v, 'orderPrice', orderPrice)
+          const oDate = toLocalTime(`${v.time}.000+0000`)
+          this.$set(v, 'oDate', oDate)
+          const amt = v.min_out / 10 ** this.market.decimal0
+          this.$set(v, 'amt', toFixed(amt, this.market.decimal0))
+        }
+      });
+      this.orderList = lists;
+      if (length !== undefined && length === lists.length) {
+        setTimeout(() => {
+          this.handleGetOrderList(length)
+        }, 1000);
+      }
+      // console.log(lists)
+      this.$forceUpdate()
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.trade{
+  font-size: 27px;
+  text-align: left;
+  color: #000;
+  // padding: 0 20px;
+  // background: #FFF;
+  .symbolInfo{
+    padding: 0 20px;
+    background: #fff;
+    height: 110px;
+    position: sticky;
+    top: 0;
+    z-index: 12;
+    .coinImg{
+      width: 72px;
+      height: 72px;
+      margin-right: 10px;
+      border-radius: 50px;
+    }
+    .name{
+      font-weight: 500;
+      font-size: 36px;
+      line-height: 38px;
+      .van-icon{
+        margin-left: 8px;
+        font-size: 33px;
+        line-height: 33px;
+      }
+    }
+    .contract{
+      font-size: 24px;
+      line-height: 24px;
+    }
+    .star,
+    .tools{
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      margin-left: 32px;
+      img{
+        width: 100%;
+      }
+      // box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.12);
+    }
+    .star{
+      width: 42px;
+      height: 42px;
+    }
+    .kline{
+      border-radius: 10px;
+      box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.12);
+      width: 60px;
+      height: 60px;
+      margin-right: 10px;
+      img{
+        width: 60%;
+      }
+    }
+  }
+  .green{
+    color: #29D4B0;
+  }
+  .yellow{
+    color: #f29949;
+  }
+  .red{
+    color: #FE3B37;
+  }
+  .content{
+    padding: 0 20px;
+    background: #fff;
+    align-items: flex-start;
+    padding-bottom: 40px;
+  }
+  .tradeInfo{
+    background: #f4f4f4;
+    padding: 20px 30px;
+    // margin-bottom: 10px;
+    // margin: 20px 40px;
+    // border-radius: 10px;
+    // border: 1px solid #eee;
+    // box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.08);
+    &>div{
+      flex: 1;
+    }
+    &>div:nth-child(2){
+      text-align: center;
+    }
+    &>div:last-child{
+      text-align: right;
+    }
+  }
+  .orders{
+    padding: 0 20px;
+    background: #fff;
+    position: relative;
+    .allOrder{
+      position: absolute;
+      z-index: 10;
+      top: 26px;
+      right: 30px;
+      color: #999;
+      .allImg{
+        width: 24px;
+        margin-right: 14px;
+      }
+    }
+    .myTabs{
+      .noData{
+        padding: 100px 0;
+        text-align: center;
+      }
+      /deep/ .van-tabs__wrap{
+        width: 200px;
+        .van-tab{
+          justify-content: flex-start;
+        }
+        .van-tabs__line{
+          left: -18%;
+        }
+      }
+    }
+    .list{
+      // height: 300px;
+      padding: 20px;
+      margin: 20px 0;
+      background: #FFF;
+      border-radius: 15px;;
+      box-shadow: 0px 10px 20px 0px rgba(220,220,220,0.5);
+      .symbol{
+        font-size: 30px;
+        font-weight: 500;
+      }
+      .van-button{
+        height: 60px;
+      }
+      .liTitle{
+        margin-bottom: 20px;
+      }
+      .subTitle{
+        font-size: 24px;
+      }
+      .num{
+        font-size: 30px;
+      }
+    }
+  }
+}
+.popup{
+  width: 90%;
+  border-radius: 15px;
+
+  &.popupSet{
+    top: 110px;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
+}
+</style>

@@ -1,0 +1,91 @@
+.price{
+  font-size: 28px;
+  background: #FFF;
+  box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.12);
+  .marketPrice{
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #a6a6a6;
+  }
+  /deep/ .van-stepper{
+    font-size: 28px;
+    height: 78px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  /deep/ .van-stepper__input{
+    font-size: 30px;
+    background: #FFF;
+    width: calc(100% - 180px);
+    height: 78px;
+  }
+  /deep/ .van-stepper__minus, /deep/.van-stepper__plus{
+    color: #07c160;
+    background: #FFF;
+    height: 78px;
+    width: 78px;
+    border-right: 2px solid #eee;
+  }
+  /deep/.van-stepper__plus{
+    color: #ee0a24;
+    border-left: 2px solid #eee;
+    border-right: 0px ;
+  }
+} 
+.num{
+  margin: 30px 0 10px;
+  box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.12);
+  .numIpt{
+    padding: 15px;
+    /deep/ .van-field__control{
+      font-size: 33px;
+    }
+  }
+}
+.aboutNum{
+  text-align: right;
+  margin-top: 30px;
+  font-weight: 500;
+}
+.slider{
+  position: relative;
+  padding: 20px 10px;
+  .sliderVulue{
+    position: relative;
+    z-index: 10;
+    background: #ee0a24;
+    z-index: 10;
+    color: #FFF;
+    font-size: 21px;
+    padding: 6px;
+    width: 30px;
+    height: 30px;
+    border-radius: 20px;
+  }
+}
+.bal{
+  margin: 20px 0 0px;
+}
+.percent{
+  .toCenter{
+    transform: translate(45%, 0);
+  }
+}
+.btnDiv{
+  margin-top: 20px;
+  .btn{
+    width: 100%;
+  }
+}
+
+.van-button--primary{
+  background: #29D4B0;
+  border: 1px solid #29D4B0;
+}
+.van-button--danger{
+  background: #FE3B37;
+  border: 1px solid #FE3B37;
+}

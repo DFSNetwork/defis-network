@@ -5,8 +5,9 @@ import Vue from 'vue'
 //   DropdownItem, PullRefresh, List, Popup, Stepper, Field,
 //   Slider, CellGroup, Notify, Checkbox } from 'vant';
 import { List, Icon, Field, Form, Picker, Popup, Rate, Swipe, SwipeItem,
-  NoticeBar, Popover, Calendar, Lazyload, ImagePreview } from 'vant';
-// Vue.use(Button)
+  NoticeBar, Popover, Calendar, Lazyload, ImagePreview, Tab, Tabs, DropdownMenu,
+  Slider, CellGroup, Button, Stepper, DropdownItem, PullRefresh, Sticky } from 'vant';
+Vue.use(Button)
 // Vue.use(Toast);
 // Vue.use(Tabbar);
 // Vue.use(TabbarItem);
@@ -15,19 +16,19 @@ Vue.use(SwipeItem);
 Vue.use(Icon);
 // Vue.use(Grid);
 // Vue.use(GridItem);
-// Vue.use(Tab);
-// Vue.use(Tabs);
-// Vue.use(Sticky);
+Vue.use(Tab);
+Vue.use(Tabs);
+Vue.use(Sticky);
 // Vue.use(Switch);
-// Vue.use(DropdownMenu);
-// Vue.use(DropdownItem);
-// Vue.use(PullRefresh);
+Vue.use(DropdownMenu);
+Vue.use(DropdownItem);
+Vue.use(PullRefresh);
 Vue.use(List);
 Vue.use(Popup);
-// Vue.use(Stepper);
+Vue.use(Stepper);
 Vue.use(Field);
-// Vue.use(Slider);
-// Vue.use(CellGroup);
+Vue.use(Slider);
+Vue.use(CellGroup);
 // Vue.use(Notify);
 // Vue.use(Checkbox);
 Vue.use(Form);

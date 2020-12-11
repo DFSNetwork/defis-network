@@ -85,6 +85,7 @@ const config = {
     // pddex Data
     boxMids: [], // 设置Box的做市Mid
     marketLists: [], // pddex使用的做市列表 - 整合DFS 和 BOX
+    hotLists: []
   },
   mutations: {
     SET_LpMineList: (state, lpMineList) => {

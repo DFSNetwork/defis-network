@@ -32,7 +32,8 @@ const app = {
       desc: "",
       nick: "",
       sex: 2,
-    }
+    },
+    account: {},
   },
   mutations: {
     SET_ACCINFO: (state, accInfo) => {
@@ -62,6 +63,9 @@ const app = {
       state.slipPoint = slipPoint;
       localStorage.setItem('slipPoint', JSON.stringify(slipPoint));
     },
+    SET_ACCOUNT: (state, account) => {
+      state.account = account;
+    },
   },
   actions: {
     setAccInfo({ commit }, accInfo) {
@@ -84,6 +88,9 @@ const app = {
     },
     setSlipPoint({ commit }, slipPoint) {
       commit('SET_SLIPPOINT', Number(slipPoint));
+    },
+    setAccount({ commit }, account) {
+      commit('SET_ACCOUNT', account);
     },
   }
 };

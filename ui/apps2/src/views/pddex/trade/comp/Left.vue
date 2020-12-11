@@ -1,0 +1,292 @@
+<template>
+  <div class="tradeLeft">
+    <!-- 买入/卖出 -->
+    <div class="direction flexb">
+      <div class="flexc" :class="{'buy': direction === 'buy'}"
+        @click="handleChangeDirection('buy')">买入</div>
+      <div class="flexc" :class="{'sell': direction === 'sell'}"
+        @click="handleChangeDirection('sell')">卖出</div>
+    </div>
+    <!-- 限价/市价 -->
+    <div class="type">
+      <van-dropdown-menu active-color="#29D4B0">
+        <van-dropdown-item v-model="type" :options="option1" />
+      </van-dropdown-menu>
+    </div>
+    <MarketTrade v-if="type === 1"
+      :type="type" :direction="direction" :market="market"
+      :bal0="bal0" :bal1="bal1"/>
+    <LimitTrade v-else :type="type" :direction="direction" :market="market"
+      :bal0="bal0" :bal1="bal1" @listenUpdate="handleUpdate"/>
+  </div>
+</template>
+
+<script>
+import { mapState } from 'vuex';
+import { SwapRouter } from '@/utils/logic';
+import { toFixed, accMul } from '@/utils/public';
+import { DApp } from '@/utils/wallet';
+import LimitTrade from './LimitTrade';
+import MarketTrade from './MarketTrade';
+export default {
+  name: 'tradeLeft',
+  components: {
+    MarketTrade,
+    LimitTrade,
+  },
+  props: {
+    market: {
+      type: Object,
+      default: function mk() {
+        return {}
+      }
+    }
+  },
+  data() {
+    return {
+      direction: 'buy',
+      type: 1, // 0 - 限价 ｜ 1 - 市价
+      option1: [
+        { text: '限价挂单', value: 0 },
+        { text: '市价交易', value: 1 },
+      ],
+      price: '',
+      getPrice: false,
+      num: '',
+      bal0: '100000.0000', // DFS
+      bal1: '100000.0000', // EOS
+      slider: 0,
+      aboutNum: '0.0000',
+
+      // change Type
+      sliderChange: false,
+      // timer
+      sliderTimer: null,
+      balTimer: null,
+    }
+  },
+  watch: {
+    'market.mid': {
+      handler: function smid(newVal, oldVal) {
+        if (newVal === oldVal && !this.market.price && this.getPrice) {
+          return
+        }
+        this.getPrice = true;
+        this.price = this.market.price || '0.0000';
+        this.handleStartBalTimer()
+      },
+      deep: true,
+      immediate: true,
+    },
+    marketLists: {
+      handler: function ml(newArr) {
+        SwapRouter.init(newArr, this)
+      },
+      deep: true,
+      immediate: true,
+    },
+    account: {
+      handler: function acc() {
+        this.handleStartBalTimer()
+      },
+      deep: true,
+      immediate: true,
+    }
+  },
+  computed: {
+    ...mapState({
+      account: state => state.app.account,
+      marketLists: state => state.sys.marketLists,
+    }),
+  },
+  mounted() {
+    if (this.$route.params.type) {
+      this.direction = this.$route.params.type;
+    }
+  },
+  beforeDestroy() {
+    clearInterval(this.balTimer);
+    clearTimeout(this.sliderTimer)
+  },
+  methods: {
+    handleUpdate() {
+      this.$emit('listenUpdate', true)
+    },
+    handleStartBalTimer() {
+      if (!this.account.name) {
+        return
+      }
+      clearInterval(this.balTimer);
+      this.handleGetAccBal()
+      this.handleGetAccBal('sym1')
+      this.balTimer = setInterval(() => {
+        this.handleStartBalTimer();
+      }, 10000);
+    },
+    handleChangeDirection(type) {
+      if (this.direction === type) {
+        return
+      }
+      this.direction = type;
+      this.num = '';
+      this.aboutNum = '0.0000';
+      this.slider = 0;
+    },
+    handleDealNum(num) {
+      if (this.sliderChange) {
+        return
+      }
+      if (this.type === 1) { // 市价交易
+        this.handleDealMarketNum(num)
+        return
+      }
+      if (!Number(this.price)) {
+        this.aboutNum = '0.0000';
+        return
+      }
+      const aboutNum = this.price * num;
+      this.aboutNum = toFixed(aboutNum, this.market.decimal0);
+      this.handleDealSlider();
+    },
+    // 市价交易
+    handleDealMarketNum(num) {
+      const m0 = this.market
+      const params0 = this.direction === 'buy' ? `${m0.contract0}:${m0.symbol0}` : `${m0.contract1}:${m0.symbol1}`
+      const params1 = this.direction !== 'buy' ? `${m0.contract0}:${m0.symbol0}` : `${m0.contract1}:${m0.symbol1}`
+      const inData = {
+        type: this.direction === 'sell' ? 'pay' : 'get'
+      }
+      const path = SwapRouter.get_paths(params0, params1, inData.type)
+      const params = [
+        path,
+        inData.type === 'pay' ? params0 : params1,
+      ]
+      params.push(accMul(num, 10 ** this.market.decimal1))
+      if (this.direction !== 'sell') {
+        params.push(inData.type)
+      }
+      try {
+        const res = SwapRouter.get_amounts_out(...params)
+        let aboutNum = res.amount_in / 10 ** this.market.decimal0;
+        this.aboutNum = toFixed(aboutNum, this.market.decimal0);
+      } catch (error) {
+        this.aboutNum = 0
+      }
+      this.handleDealSlider()
+    },
+    handleDealSlider() {
+      const bal = this.direction === 'buy' ? this.bal0 : this.bal1;
+      const dealNum = this.direction === 'buy' ? this.aboutNum : this.num;
+      let slider = dealNum / bal * 100;
+      if (slider < 0) {
+        slider = 0;
+      } else if (slider > 100) {
+        slider = 100;
+      }
+      this.slider = parseInt(slider)
+    },
+    onChange(value) {
+      this.sliderChange = true;
+      clearTimeout(this.sliderTimer)
+      this.sliderTimer = setTimeout(() => {
+        this.sliderChange = false;
+      }, 500);
+      if (this.type === 1) { // 市价交易
+        this.onChangeMarket(value)
+        return
+      }
+      const bal = this.direction === 'buy' ? this.bal0 : this.bal1;
+      const aboutNum = bal * value / 100;
+      this.aboutNum = toFixed(aboutNum, this.market.decimal1)
+      // 计算num
+      if (!Number(this.price)) {
+        this.num = '';
+        return
+      }
+      let num = aboutNum / this.price;
+      this.num = toFixed(num, this.market.decimal0)
+    },
+    // 市价时滑点滑动条
+    onChangeMarket(value) {
+      const bal = this.direction === 'buy' ? this.bal0 : this.bal1;
+      const dealNum = value / 100 * bal;
+      if (this.direction === 'buy') {
+        this.aboutNum = dealNum.toFixed(4)
+      } else {
+        this.num = dealNum.toFixed(4)
+      }
+    },
+    handleChange(num) {
+      this.slider = num;
+      this.onChange(num)
+    },
+    // 获取用户余额
+    handleGetAccBal(type) {
+      let params = {
+        code: this.market.contract0,
+        coin: this.market.symbol0,
+      }
+      const isSym0 = type !== 'sym1';
+      if (!isSym0) {
+        params = {
+          code: this.market.contract1,
+          coin: this.market.symbol1,
+        }
+      }
+      DApp.getCurrencyBalance(params, (res) => {
+        const coin = res.split(' ')[1];
+        if (coin !== this.market.symbol0 && coin !== this.market.symbol1) {
+          return;
+        }
+        const decimal = isSym0 ? this.market.decimal0 : this.market.decimal1;
+        let bal = parseFloat(res || 0).toFixed(decimal);
+        isSym0 ? this.bal0 = bal : this.bal1 = bal;
+      })
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.tradeLeft{
+  width: 50%;
+  max-width: 50%;
+  color: #000;
+  margin-top: 20px;
+  padding: 0 15px;
+  .direction{
+    box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.08);
+    &>div{
+      flex: 1;
+      border: 1px solid #e3e3e3;
+      height: 81px;
+      font-size: 30px;
+      border-radius: 8px;
+      &:first-child{
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      }
+      &:last-child{
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+      }
+      &.buy{
+        color: #29D4B0;
+        border-color: #29D4B0;;
+      }
+      &.sell{
+        color: #FE3B37;
+        border-color: #FE3B37;
+      }
+    }
+  }
+  .type{
+    position: relative;
+    z-index: 11;
+    margin: 30px 0;
+    /deep/ .van-dropdown-menu__bar{
+      height: 78px;
+    }
+  }
+}
+</style>
