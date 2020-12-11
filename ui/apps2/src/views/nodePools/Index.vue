@@ -25,6 +25,10 @@
       <!-- 待领取收益 -->
       <MyClaim :poolsData="poolsData" :accVoteData="accVoteData" :lpPoolsMid="lpPoolsMid"
         :accLpData="accLpData" @listenUpdata="handleUpdata"/>
+      <van-notice-bar class="notice" color="#FE3B37" mode="closeable" background="#FE3B3726"
+        left-icon="volume-o" scrollable>
+        <span>2020-12-13 将启动新的LP挖矿规则, 详情请查看LP挖矿规则，提前操作，避免损失！</span>
+      </van-notice-bar>
       <!-- 矿池列表 -->
       <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists" :accLpData="accLpData"
         :poolsData="poolsData" :rank="rank" :rankList="rankListObj" :lpRankWeight="lpRankWeight"/>
@@ -121,7 +125,9 @@ export default {
       handler: function mls() {
         this.handleDealAccReward(this.accVoteData)
         this.handleGetLpPoolsLists()
-      }
+      },
+      deep: true,
+      immediate: true
     },
     scatter: {
       handler: function listen(newVal) {
@@ -630,6 +636,10 @@ export default {
       margin-top: 10px;
     }
   }
+}
+.notice{
+  height: 56px;
+  font-size: 24px;
 }
 .nullDiv{
   height: 100px;
