@@ -7,7 +7,7 @@
       </span>
       <span>数量</span>
     </div>
-    <div class="sellOrder">
+    <div class="sellOrder dinReg">
       <template v-if="sellArr.length < 6">
         <div class="flexb list red" v-for="i in 6" :key="`null-${i}`">
           <span class="bgLeng"></span>
@@ -22,8 +22,8 @@
         <span>{{ v.num }}</span>
       </div>
     </div>
-    <div class="currentPrice flexc">{{ market.price || '-.----' }}</div>
-    <div class="buyOrder">
+    <div class="currentPrice flexa dinReg">{{ market.price || '-.----' }}</div>
+    <div class="buyOrder dinReg">
       <div class="flexb list green" v-for="(v, i) in buyArr" :key="`buy-${i}`"
         @click="handleClickPrice(v)">
         <span class="bgLeng" :style="`width: ${v.rate}%`"></span>
@@ -159,7 +159,11 @@ export default {
   max-width: 50%;
   color: #000;
   margin-top: 20px;
-  // padding: 0 15px;
+  margin-left: 15px;
+  box-sizing: border-box;
+  // .tools{
+  //   padding: 0 15px;
+  // }
   .deepNum{
     border: 1px solid #eee;
     padding: 4px 12px;
@@ -169,7 +173,7 @@ export default {
 
   .buyOrder,
   .sellOrder{
-    padding: 0 15px;
+    padding: 0 15px 0 0;
     height: 310px;
     overflow: auto;
     .list{

@@ -255,11 +255,12 @@ export default {
   margin-top: 20px;
   padding: 0 15px;
   .direction{
-    box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.08);
+    // box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.08);
+    border: 1px solid rgba(220,220,220,.3);
     &>div{
       flex: 1;
-      border: 1px solid #e3e3e3;
-      height: 81px;
+      // border: 1px solid #e3e3e3;
+      height: 80px;
       font-size: 30px;
       border-radius: 8px;
       &:first-child{
@@ -271,21 +272,31 @@ export default {
         border-bottom-left-radius: 0px;
       }
       &.buy{
-        color: #29D4B0;
-        border-color: #29D4B0;;
+        color: #FFF;
+        background: #29D4B0;;
       }
       &.sell{
-        color: #FE3B37;
-        border-color: #FE3B37;
+        color: #FFF;
+        background: #FE3B37;
       }
     }
   }
   .type{
     position: relative;
     z-index: 11;
-    margin: 30px 0;
+    margin: 24px 0;
     /deep/ .van-dropdown-menu__bar{
-      height: 78px;
+      font-size: 28px;
+      height: 70px;
+      box-shadow: none;
+      border-radius: 8px;
+      border: 1px solid rgba(220,220,220,.3);
+      .van-dropdown-menu__item{
+        justify-content: flex-start;
+        .van-dropdown-menu__title{
+          width: 90%;
+        }
+      }
     }
   }
 }

@@ -1,6 +1,12 @@
 <template>
   <div class="order">
-    <div class="title flexc">我的订单</div>
+    <div class="title flexb">
+      <span class="back flexa" @click="$router.back()">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/back.png" alt="">
+      </span>
+      <span>我的订单</span>
+      <span class="back"></span>
+    </div>
     <van-sticky>
       <van-dropdown-menu active-color="#29d4b0">
         <van-dropdown-item v-model="value1" :options="option1" />
@@ -8,7 +14,7 @@
       </van-dropdown-menu>
     </van-sticky>
     <van-pull-refresh v-model="isLoading" @refresh="onRefresh">
-      <div class="orderLists">
+      <div class="orderLists dinReg">
         <van-list
           v-model="loading"
           :offset="150"
@@ -27,7 +33,7 @@
                   <span v-if="item.isBuy" class="green">买 </span>
                   <span v-else class="red">卖 </span>
                   <span>{{ item.symbol1 }}/{{ item.symbol0 }}</span>
-                  <span class="tip"> ({{ item.oDate }})</span>
+                  <span class="tip dateTime"> ({{ item.oDate }})</span>
                 </div>
                 <div>
                   <van-button v-if="value2 === 'a'" plain type="danger" @click="handleCancel(item, index)">撤单</van-button>
@@ -38,7 +44,7 @@
                   </span>
                 </div>
               </div>
-              <div class="flexb liTitle">
+              <div class="flexb dataInfo">
                 <div>
                   <div class="num">{{ item.orderNum }}</div>
                   <div class="subTitle tip">委托量({{ item.symbol1 }})</div>
@@ -236,7 +242,7 @@ export default {
             const amt = arr[0]
             this.$set(v, 'amt', amt)
             const oDate = toLocalTime(`${v.time}.000+0000`)
-            this.$set(v, 'oDate', oDate)
+            this.$set(v, 'oDate', oDate.substr(5, 18))
             const orderNum = v.min_out / 10 ** market.decimal1;
             this.$set(v, 'orderNum', toFixed(orderNum, market.decimal1))
             const orderPrice = dealPrice( v.price / 1000000);
@@ -385,6 +391,15 @@ export default {
     background: #FFF;
     font-size: 33px;
     height: 80px;
+    padding: 0 28px;
+    .back{
+      width: 50px;
+      height: 50px;
+      img{
+        display: block;
+        width: 18px;
+      }
+    }
   }
   .tools{
     padding: 10px 20px;
@@ -410,10 +425,15 @@ export default {
       margin: 20px;
       background: #FFF;
       border-radius: 15px;;
-      box-shadow: 0px 10px 20px 0px rgba(220,220,220,0.5);
+      // box-shadow: 0px 10px 20px 0px rgba(220,220,220,0.5);
+      border: 1px solid rgba(220,220,220,.4);
       .symbol{
         font-size: 30px;
         font-weight: 500;
+        .dateTime{
+          font-size: normal;
+          font-size: 24px;
+        }
       }
       .van-button{
         height: 60px;
@@ -421,8 +441,19 @@ export default {
       .liTitle{
         margin-bottom: 20px;
       }
+      .dataInfo{
+        &>div{
+          &:nth-child(1){
+            text-align: left;
+          }
+          &:last-child{
+            text-align: right;
+          }
+        }
+      }
       .subTitle{
         font-size: 24px;
+        margin-top: 10px;
       }
       .num{
         font-size: 30px;

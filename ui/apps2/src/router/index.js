@@ -285,7 +285,7 @@ const constantRouter = [
             path: 'order',
             name: 'pddexOrder',
             component: () => import(/* webpackChunkName: "pddexOrder" */ '@/views/pddex/order/Index'),
-            meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
+            meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
           }
         ]
       },

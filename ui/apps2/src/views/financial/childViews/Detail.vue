@@ -2,7 +2,7 @@
   <div class="detail">
     <div class="title flexb">
       <span class="back flexa" @click="$router.back()">
-        <!-- <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/back.png" alt=""> -->
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/back.png" alt="">
       </span>
       <span>{{ $t('financial.detail') }}</span>
       <span class="back"></span>

@@ -14,7 +14,10 @@
           </div>
         </div>
         <div class="flexa">
-          <div class="star flexc" @click="''"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/star-un.png" alt=""></div>
+          <div class="star flexc" v-if="!isLike"
+            @click="handleAddLike"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/star-un.png" alt=""></div>
+          <div class="star flexc" v-else
+            @click="handleCancelLike"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/star-is.png" alt=""></div>
           <!-- <div class="kline flexc" @click="handleToKline"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/pddkline.png" alt=""></div> -->
           <div class="tools flexc" @click="showSet = true"><img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/setting.png" alt=""></div>
         </div>
@@ -25,11 +28,11 @@
       </div>
       <div class="tradeInfo flexb">
         <div>
-          <div>{{ showTradeinfo.minGet || '0.0000' }}</div>
+          <div class="tradeNum dinReg">{{ showTradeinfo.minGet || '0.0000' }}</div>
           <div class="tip">最少获取({{ showTradeinfo.getCoin }})</div>
         </div>
         <div>
-          <div :class="{'green': Number(showTradeinfo.rate) > 0,
+          <div class="tradeNum dinReg" :class="{'green': Number(showTradeinfo.rate) > 0,
                         'yellow': Number(showTradeinfo.rate) >= 5,
                         'red': Number(showTradeinfo.rate) >= 10}">
             {{ showTradeinfo.rate || '0.00' }}%
@@ -37,7 +40,7 @@
           <div class="tip">滑点</div>
         </div>
         <div>
-          <div>{{ showTradeinfo.fees || '0.0000' }}</div>
+          <div class="tradeNum dinReg">{{ showTradeinfo.fees || '0.0000' }}</div>
           <div class="tip">手续费({{ showTradeinfo.feesCoin }})</div>
         </div>
       </div>
@@ -50,7 +53,10 @@
       </div>
       <van-tabs class="myTabs" sticky v-model="active" color="#29D4B0">
         <van-tab title="当前订单">
-          <div class="noData tip" v-if="!orderList.length">暂无数据</div>
+          <div class="noData tip" v-if="!orderList.length">
+            <img class="noDataPng" src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noOrder.png" alt="">
+            <div>暂无数据</div>
+          </div>
           <div class="list" v-for="(v, i) in orderList" :key="`order-${i}`">
             <div class="liTitle flexb">
               <div class="symbol">
@@ -118,6 +124,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import { DApp } from '@/utils/wallet';
 import { toFixed, toLocalTime, dealPrice } from '@/utils/public';
 import Left from './comp/Left';
 import Right from './comp/Right';
@@ -159,6 +166,8 @@ export default {
       cancelItem: {},
       cancelIndex: 0,
       orderLength: 0,
+
+      likeArr: [],
     }
   },
   mounted() {
@@ -182,7 +191,11 @@ export default {
       immediate: true,
     },
     account: {
-      handler: function acc() {
+      handler: function acc(newVal) {
+        if (!newVal.name) {
+          return
+        }
+        this.handleGetLikes();
         this.handleGetOrderList()
       },
       deep: true,
@@ -196,8 +209,114 @@ export default {
       tradeInfo: state => state.sys.tradeInfo,
       baseConfig: state => state.sys.baseConfig,
     }),
+    isLike() {
+      const has = this.likeArr.find(v => v.mid === this.market.mid)
+      return !!has;
+    }
   },
   methods: {
+    async handleGetLikes() {
+      if (!this.account.name) {
+        return
+      }
+      const params = {
+        "code":"dfsusersinfo",
+        "scope": `${this.account.name}`,
+        "table":"likes",
+        "json":true,
+        "limit": 1000,
+      }
+      const {status, result} = await this.$api.get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const rows = result.rows;
+      if (!rows.length) {
+        this.likeArr = [];
+        return
+      }
+      this.likeArr = rows;
+    },
+    handleCancelLike() {
+      if (!this.account.name) {
+        return
+      }
+      const formName = this.account.name;
+      const permission = this.account.permissions;
+      const params = {
+        actions: [{
+          account: 'dfsusersinfo',
+          name: 'unlike',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            user: formName,
+            mid: this.market.mid
+          }
+        }]
+      }
+      DApp.toTransaction(params, (err) => {
+        if (err && err.code === 402) {
+          return;
+        }
+        if (err) {
+          this.$message({
+            type: 'error',
+            message: err.message,
+          })
+          return;
+        }
+        this.$message({
+          type: 'success',
+          message: '操作成功'
+        })
+        setTimeout(() => {
+          this.handleGetLikes()
+        }, 1000);
+      })
+    },
+    handleAddLike() {
+      if (!this.account.name) {
+        return
+      }
+      const formName = this.account.name;
+      const permission = this.account.permissions;
+      const params = {
+        actions: [{
+          account: 'dfsusersinfo',
+          name: 'like',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            user: formName,
+            mid: this.market.mid
+          }
+        }]
+      }
+      DApp.toTransaction(params, (err) => {
+        if (err && err.code === 402) {
+          return;
+        }
+        if (err) {
+          this.$message({
+            type: 'error',
+            message: err.message,
+          })
+          return;
+        }
+        this.$message({
+          type: 'success',
+          message: '操作成功'
+        })
+        setTimeout(() => {
+          this.handleGetLikes()
+        }, 1000);
+      })
+    },
     handleTo(name) {
       this.$router.push({
         name
@@ -395,10 +514,10 @@ export default {
     }
     .kline{
       border-radius: 10px;
-      box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.12);
+      // box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.12);
       width: 60px;
       height: 60px;
-      margin-right: 10px;
+      margin-left: 32px;
       img{
         width: 60%;
       }
@@ -422,11 +541,7 @@ export default {
   .tradeInfo{
     background: #f4f4f4;
     padding: 20px 30px;
-    // margin-bottom: 10px;
-    // margin: 20px 40px;
-    // border-radius: 10px;
-    // border: 1px solid #eee;
-    // box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.08);
+    font-size: 24px;
     &>div{
       flex: 1;
     }
@@ -435,6 +550,10 @@ export default {
     }
     &>div:last-child{
       text-align: right;
+    }
+    .tradeNum{
+      margin-bottom: 10px;
+      font-size: 28px;
     }
   }
   .orders{
@@ -454,16 +573,27 @@ export default {
     }
     .myTabs{
       .noData{
-        padding: 100px 0;
+        padding: 20px 0;
         text-align: center;
+        .noDataPng{
+          height: 400px;
+        }
       }
       /deep/ .van-tabs__wrap{
         width: 200px;
+        .van-tab--active{
+          padding-left: 20px;
+        }
         .van-tab{
           justify-content: flex-start;
         }
         .van-tabs__line{
-          left: -18%;
+          position: absolute;
+          left: 0%;
+          bottom: 50%;
+          transform: translate(0, 0) !important;
+          width: 8px;
+          height: 28px;
         }
       }
     }

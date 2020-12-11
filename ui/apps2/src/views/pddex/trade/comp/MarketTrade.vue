@@ -5,7 +5,7 @@
       <div class="marketPrice">以当前最优价格成交</div>
     </div>
     <!-- 挂单数量 -->
-    <div class="num">
+    <div class="num dinBold">
       <van-cell-group>
         <van-field class="numIpt" type="number" v-model="num"
           placeholder="请输入交易数量"
@@ -13,30 +13,30 @@
           @blur="numIptBlur"
           @input="handleDealNum">
           <template #extra>
-            <span>{{ market.symbol1 }}</span>
+            <span class="din">{{ market.symbol1 }}</span>
           </template>
         </van-field>
       </van-cell-group>
     </div>
     <!-- 可用EOS -->
-    <div class="flexb bal">
+    <div class="flexb bal dinReg">
       <span class="tip">余额:</span>
       <span v-if="direction !== 'sell'">{{ bal0 }} {{ market.symbol0 }}</span>
       <span v-else>{{ bal1 }} {{ market.symbol1 }}</span>
     </div>
     <!-- 百分比 -->
-    <div class="slider">
+    <div class="slider" :class="{'sellSlider': direction !== 'buy'}">
       <van-slider v-model="slider" show-stops @input="onChange"
         :active-color="direction === 'buy' ? '#29D4B0' : '#FE3B37'">
       </van-slider>
     </div>
-    <div class="flexb tip percent">
+    <div class="flexb tip percent dinReg">
       <span @click="handleChange(0)">0%</span>
       <span @click="handleChange(50)" class="toCenter">50%</span>
       <span @click="handleChange(100)">100%</span>
     </div>
-    <div class="flexb aboutNum">
-      <span class="tip">交易额</span>
+    <div class="flexa aboutNum dinReg">
+      <span class="tip">交易额：</span>
       <span>≈ {{ aboutNum }} {{ market.symbol0 }}</span>
     </div>
     <!-- 交易按钮 -->

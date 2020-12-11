@@ -16,6 +16,11 @@
           <div>最新价(EOS)</div>
           <div>成交量(EOS)</div>
         </div>
+        <div class="noDate tip" v-if="!followList.length">
+          <img class="noDataPng" src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noStar.png" alt="">
+          <div>快去添加你感兴趣的交易对吧</div>
+          <div class="toFollow flexc" @click="active = 1">添加</div>
+        </div>
         <div class="rankItem flexb dinReg" v-for="(v, index) in followList" :key="`${active}-${index}`" @click="handleToTrade(v)">
           <div class="name flexa">
             <img class="coinUrl" :src="v.sym1Data.imgUrl" :onerror="errorCoinImg">
@@ -73,10 +78,11 @@ export default {
   data() {
     return {
       active: 0,
-      followList: [],
+      followList: [], // 关注展示列表
       tradeRankList: [], // 成交量排行
       tradeList: [],
       rankList: [],
+      likeArr: [], // 存放接口返回的关注数据
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
     }
   },
@@ -97,15 +103,62 @@ export default {
           return
         }
         this.handleRankList()
+        this.handleDealLike()
       },
       immediate: true,
       deep: true,
     },
     active() {
       this.handleRankList()
+    },
+    account: {
+      handler: function at(newVal) {
+        if (!newVal.name) {
+          return
+        }
+        this.handleGetLikes();
+      },
+      deep: true,
+      immediate: true,
     }
   },
   methods: {
+    async handleGetLikes() {
+      if (!this.account.name) {
+        return
+      }
+      const params = {
+        "code":"dfsusersinfo",
+        "scope": `${this.account.name}`,
+        "table":"likes",
+        "json":true,
+        "limit": 1000,
+      }
+      const {status, result} = await this.$api.get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const rows = result.rows;
+      if (!rows.length) {
+        return
+      }
+      this.likeArr = rows;
+      this.handleDealLike()
+    },
+    handleDealLike() {
+      if (!this.likeArr.length || !this.marketLists.length) {
+        return
+      }
+      const dealArr = [];
+      this.likeArr.forEach(v => {
+        const item = this.marketLists.find(vv => vv.mid === v.mid)
+        if (!item) {
+          return
+        }
+        dealArr.push(item)
+      })
+      this.followList = dealArr;
+    },
     handleToTrade(li) {
       let symbol = 'eosio.token-eos-minedfstoken-dfs';
       if (li) {
@@ -233,6 +286,22 @@ export default {
     background: #FFF;
     border-radius: 15px;
     overflow: hidden;
+    .noDate{
+      padding: 100px 0;
+      font-size: 27px;
+      .noDataPng{
+        height: 400px;
+      }
+      .toFollow{
+        color: #FFF;
+        background: #29D4B0;
+        height: 72px;
+        width: 360px;
+        border-radius: 40px;
+        font-size: 28px;
+        margin: 30px auto;
+      }
+    }
     .subTitle{
       height: 60px !important;
       color: #999 !important;
