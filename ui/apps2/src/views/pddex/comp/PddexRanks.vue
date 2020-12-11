@@ -77,7 +77,7 @@ export default {
   name: 'pddexTab',
   data() {
     return {
-      active: 0,
+      active: 1,
       followList: [], // 关注展示列表
       tradeRankList: [], // 成交量排行
       tradeList: [],

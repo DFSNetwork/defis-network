@@ -33,7 +33,8 @@
             </div>
           </div>
         </div>
-        <div class="reward">{{ $t('nodePools.marketNum') }}：{{ v.reserve0 }}/{{ v.reserve1 }}</div>
+        <div class="reward">{{ $t('nodePools.marketNum') }}：{{ handleDealReserve(v.reserve0) }}/{{ handleDealReserve(v.reserve1) }}</div>
+        <div class="reward">{{ $t('market.myMarkets') }}：{{ handleDealMyLpNum(v) }}</div>
 
         <div class="myRank plan" @click.stop="''">
           <div class="flexb">
@@ -248,12 +249,27 @@ export default {
         newVal.forEach(v => {
           this.plan[v.mid] = localStorage.getItem(`node_lp${v.mid}`) ? Number(localStorage.getItem(`node_lp${v.mid}`)) : 30;
         });
+        console.log(this.accLpData)
       },
       deep: true,
       immediate: true
     }
   },
   methods: {
+    handleDealMyLpNum(v) {
+      if (!v) {
+        return
+      }
+      const lpNum = this.accLpData[`${v.mid}`] || {};
+      const num0 = `${Number(lpNum.market0 || 0).toFixed(4)} ${v.symbol0}`
+      const num1 = `${Number(lpNum.market1 || 0).toFixed(4)} ${v.symbol1}`
+      let numStr = `${num0}/${num1}`
+      return numStr
+    },
+    handleDealReserve(reserve) {
+      const arr = reserve.split(' ');
+      return `${Number(arr[0]).toFixed(4)} ${arr[1]}`
+    },
     handleShowRules(status) {
       this.status = status
       this.showRules = true
@@ -429,6 +445,9 @@ export default {
 }
 .lpList{
   position: relative;
+  .reward{
+    margin: 14px 0;
+  }
   .myRank{
     margin-top: 15px;
     // border-top: 1px solid #eee;
