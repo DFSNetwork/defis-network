@@ -88,7 +88,7 @@ export default {
       voteWeight: 0,
       myVote: [], // 我的投票列表
       myVoteLoading: true,
-      AccMaxNum: 20,
+      AccMaxNum: 25,
     }
   },
   mounted() {
