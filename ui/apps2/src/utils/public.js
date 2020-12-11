@@ -573,28 +573,32 @@ export function dealMedia(v) {
   }
   let memo = v.memo;
   // 处理audio
-  const reg = /<audio:(http|https):\/\/.+>/;
+  const reg = /<audio:(http|https):\/\/.+\.(mp3|ogg|asf|wma|wav|rm|ape|real|MP3|OGG|ASF|WMA|WAV|RM|APE|REAL)>/g;
   const hasAudio = reg.exec(memo)
   let audioUrl = '';
   if (hasAudio) {
+    console.log(hasAudio)
     memo = v.memo.split(hasAudio[0]).join('')
     audioUrl = hasAudio[0].split('audio:')[1];
     audioUrl = audioUrl.substr(0, audioUrl.length - 1)
   }
+
   // 处理视频
   let videoUrl = '';
-  const regVideo = /<video:(http|https):\/\/.+>/;
+  const regVideo = /<video:(http|https):\/\/.+\.(avi|mp4|mov|asf|wmv|rmvb|fly|AVI|MP4|MOV|ASF|WMV|RMVB|FLY)>/g;
   const hasVideo = regVideo.exec(memo)
   if (hasVideo) {
+    console.log(hasVideo)
     memo = v.memo.split(hasVideo[0]).join('')
     videoUrl = hasVideo[0].split('video:')[1];
     videoUrl = videoUrl.substr(0, videoUrl.length - 1)
   }
   // 处理图片
   const imgArr = [];
-  const regImg = /<img:(http|https):\/\/.+>/;
+  const regImg = /<img:(http|https):\/\/.+\.(jpeg|png|svg|jpg|gif|JPEG|PNG|SVG|JPG|GIF)>/g;
   const hasImg = regImg.exec(memo)
   if (hasImg) {
+    console.log(hasImg)
     memo = v.memo.split(hasImg[0]).join('')
     let tArr = hasImg[0].split('<')
     let regt = /^img:(http|https):\/\/.+>/;
