@@ -35,7 +35,8 @@
             </div>
           </div>
         </div>
-        <div class="reward">{{ $t('nodePools.marketNum') }}：{{ lpPool.reserve0 }}/{{ lpPool.reserve1 }}</div>
+        <div class="reward">{{ $t('nodePools.marketNum') }}：{{ handleDealReserve(lpPool.reserve0) }}/{{ handleDealReserve(lpPool.reserve1) }}</div>
+        <div class="reward">{{ $t('market.myMarkets') }}：{{ handleDealMyLpNum(lpPool) }}</div>
 
         <div class="myRank plan">
           <div class="flexb">
@@ -68,7 +69,12 @@
         <div class="mineList" :class="{'page1': page === 1}" :key="index">
           <div class="flexb mb10">
             <span>{{ item.owner }}</span>
-            <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} {{ pool.sym }}</span>
+            <span class="flexa">
+              <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} {{ pool.sym }}</span>
+              <span class="red_p flexa" v-if="Number(item.addBuff)">（
+                <img class="buffImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/buff2.svg">
+                {{ item.addBuff }}%）</span>
+            </span>
           </div>
           <div class="flexb" v-if="type === 'rex'">
             <span>总票数</span>
@@ -213,6 +219,23 @@ export default {
     }
   },
   methods: {
+    handleDealMyLpNum(v) {
+      if (!v) {
+        return
+      }
+      const lpNum = this.accLpData || {};
+      const num0 = `${Number(lpNum.sym0 || 0).toFixed(4)} ${v.symbol0}`
+      const num1 = `${Number(lpNum.sym1 || 0).toFixed(4)} ${v.symbol1}`
+      let numStr = `${num0}/${num1}`
+      return numStr
+    },
+    handleDealReserve(reserve) {
+      if (!reserve) {
+        return `0.0000`
+      }
+      const arr = reserve.split(' ');
+      return `${Number(arr[0]).toFixed(4)} ${arr[1]}`
+    },
     handleClose() {
       this.showSure = false;
     },
@@ -502,12 +525,15 @@ export default {
         const marketNum = sellToken(inData)
         v.sym0 = marketNum.getNum1.toFixed(this.lpPool.decimal0)
         v.sym1 = marketNum.getNum2.toFixed(this.lpPool.decimal1)
-        if (index < 21) {
+        if (index < 20) {
           v.weight = 1.3
+          v.addBuff = 30
         } else if (index < 50) {
           v.weight = 1.5
+           v.addBuff = 50
         } else if (index < 100) {
           v.weight = 1.1
+          v.addBuff = 10
         } else {
           v.weight = 1
         }
@@ -732,6 +758,9 @@ export default {
 
 .lpList{
   position: relative;
+  .reward{
+    margin: 14px 0;
+  }
   .myRank{
     margin-top: 15px;
     // border-top: 1px solid #eee;
@@ -763,13 +792,13 @@ export default {
     .num{
       font-size: 50px;
     }
-    .buffImg{
-      width: 25px;
-    }
     .apy{
       color: #333;
     }
   }
+}
+.buffImg{
+  width: 25px;
 }
 .lists{
   margin-bottom: 30px;
