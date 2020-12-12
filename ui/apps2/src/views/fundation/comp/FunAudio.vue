@@ -76,7 +76,6 @@ export default {
           this.$set(this.duration[index], 'isPlaying', false)
         }
       })
-      console.log(this.duration)
       if (this.duration[i].isPlaying) {
         myaudio[i].play()
         return
