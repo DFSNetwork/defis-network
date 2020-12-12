@@ -9,8 +9,8 @@
         <div class="mainData">
           <div class="name">{{accInfo.nick || item.fromx}}</div>
           <div class="num tip dinReg">捐赠数量: {{ item.quantity }} ({{item.account}})</div>
-          <div class="content" v-if="item.audio"><FunAudio :src="item.audio"/></div>
-          <div class="content" v-if="item.video"><FunVideo :src="item.video"/></div>
+          <div class="content" v-if="item.audio && item.audio.length"><FunAudio :src="item.audio"/></div>
+          <div class="content" v-if="item.video && item.video.length"><FunVideo :src="item.video"/></div>
           <div class="content" v-if="item.imgArr && item.imgArr.length">
             <FunImg :imgArr="item.imgArr"/>
           </div>

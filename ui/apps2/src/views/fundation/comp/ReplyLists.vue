@@ -28,10 +28,10 @@
             <span class="green">{{ item.replyto }}</span>
           </span>
           <span>{{ item.memo }}</span>
-          <div class="price flexs" v-if="item.audio">
+          <div class="price flexs" v-if="item.audio && item.audio.length">
             <FunAudio :src="item.audio"/>
           </div>
-          <div class="price flexs" v-if="item.video">
+          <div class="price flexs" v-if="item.video && item.video.length">
             <FunVideo :src="item.video"/>
           </div>
           <div class="price flexs" v-if="item.imgArr && item.imgArr.length">
