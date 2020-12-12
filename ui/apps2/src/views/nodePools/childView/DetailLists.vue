@@ -525,12 +525,12 @@ export default {
         const marketNum = sellToken(inData)
         v.sym0 = marketNum.getNum1.toFixed(this.lpPool.decimal0)
         v.sym1 = marketNum.getNum2.toFixed(this.lpPool.decimal1)
-        if (index < 20) {
+        if (index < 30) {
           v.weight = 1.3
           v.addBuff = 30
-        } else if (index < 50) {
-          v.weight = 1.5
-           v.addBuff = 50
+        } else if (index < 60) {
+          v.weight = 1.2
+          v.addBuff = 20
         } else if (index < 100) {
           v.weight = 1.1
           v.addBuff = 10

@@ -383,10 +383,10 @@ export default {
         let rank;
         if (index === -1) {
           weight = 1;
-        } else if (index < 20) {
+        } else if (index < 30) {
           weight = 1.3;
-        } else if (index < 50) {
-          weight = 1.5;
+        } else if (index < 60) {
+          weight = 1.2;
         } else {
           weight = 1.1;
         }
@@ -549,7 +549,7 @@ export default {
         const num = v.contract0 === "eosio.token" ? 1 / price : 100 / price;
         const rate = num / allTagNum;
         const lpBal = this.lpLists[0].lpBal;
-        const weight = 1.5;
+        const weight = 1.3;
         const t = 86400 * 365;
         const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
         // console.log(reward)

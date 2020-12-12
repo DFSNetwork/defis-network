@@ -531,7 +531,7 @@ export function getTagLpApy(mid) {
   const num = 1;
   const rate = num / parseFloat(lpLists.reserve0);
   const lpBal = tagLpBal;
-  const weight = 1.5;
+  const weight = 1.3;
   const t = 86400 * 365;
   const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
   const price = parseFloat(lpLists.reserve0) / parseFloat(lpLists.reserve1);
