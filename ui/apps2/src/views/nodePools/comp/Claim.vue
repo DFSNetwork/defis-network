@@ -82,7 +82,12 @@ export default {
       baseConfig: state => state.sys.baseConfig,
     }),
     allReward() {
-      let all = parseFloat(this.accLpData.aboutEos || 0)
+      // console.log(this.accLpData)
+      const mids = Object.keys(this.accLpData);
+      let all = 0;
+      mids.forEach(v => {
+        all = parseFloat(this.accLpData[v].aboutEos || 0) + Number(all)
+      })
       const keys = Object.keys(this.poolsData);
       keys.forEach(v => {
         all += parseFloat(this.poolsData[v].aboutEos || 0)
