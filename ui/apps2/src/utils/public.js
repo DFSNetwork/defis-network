@@ -568,9 +568,9 @@ export function getDateDiff(dateTimeStamp){
 }
 
 export function dealMedia(v) {
-  // if (v.account !== 'tagtokenmain' || v.symbol !== 'TAG' || parseFloat(v.quantity) < 0.1) {
-  //   return false
-  // }
+  if (v.account !== 'tagtokenmain' || v.symbol !== 'TAG' || parseFloat(v.quantity) < 0.1) {
+    return false
+  }
   let memo = v.memo;
   // let memo = '<audio:https://cdn.jsdelivr.net/gh/defis-net/material/mp3/DreamChaser.mp3>1<video:https://cdn.jsdelivr.net/gh/defis-net/material/video/JingleBellRock.mp4>2<video:https://cdn.jsdelivr.net/gh/defis-net/material/video/JingleBellRock.mp4>'
   // 获取所有音频
