@@ -82,7 +82,7 @@
           <div class="num din">{{ poolsData[item.sym] ? poolsData[item.sym].showReward || '0.00000000' : '0.00000000' }}</div>
         </div>
       </div>
-      <div class="reward">{{ $t('nodePools.poolsBal') }}：{{ poolsData[item.sym] ? poolsData[item.sym].bal : `0.0000 ${item.sym}` }}</div>
+      <div class="reward">{{ $t('nodePools.poolsBal') }}：{{ poolsData[item.sym] ? poolsData[item.sym].poolbal : `0.0000 ${item.sym}` }}</div>
     </div>
 
     <el-dialog
@@ -249,7 +249,7 @@ export default {
         newVal.forEach(v => {
           this.plan[v.mid] = localStorage.getItem(`node_lp${v.mid}`) ? Number(localStorage.getItem(`node_lp${v.mid}`)) : 30;
         });
-        console.log(this.accLpData)
+        // console.log(this.accLpData)
       },
       deep: true,
       immediate: true
@@ -323,41 +323,43 @@ export default {
       if (!this.scatter || !this.scatter.identity || !this.lpLists.length) {
         return
       }
-      const v = this.lpLists[0];
-      let params = {
-        code: v.contract0,
-        coin: v.symbol0,
-        decimal: v.decimal0,
-      }
-      if (type !== 'bal0') {
-        params = {
-          code: v.contract1,
-          coin: v.symbol1,
-          decimal: v.decimal1,
+      this.lpLists.forEach(v => {
+        // const v = this.lpLists[0];
+        let params = {
+          code: v.contract0,
+          coin: v.symbol0,
+          decimal: v.decimal0,
         }
-      }
-      EosModel.getCurrencyBalance(params, res => {
-        let balance = toFixed('0.0000000000001', params.decimal);
-        (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
-        type === 'bal0' ? this.bal0 = balance : this.bal1 = balance;
+        if (type !== 'bal0') {
+          params = {
+            code: v.contract1,
+            coin: v.symbol1,
+            decimal: v.decimal1,
+          }
+        }
+        EosModel.getCurrencyBalance(params, res => {
+          let balance = toFixed('0.0000000000001', params.decimal);
+          (!res || res.length === 0) ? balance : balance = res.split(' ')[0];
+          type === 'bal0' ? this.$set(v, 'bal0', balance) : this.$set(v, 'bal1', balance);
+        })
       })
     },
     // 计算相差多少
     handleDealToken(v) {
-      console.log(this.rankList)
+      // console.log(this.rankList)
+      // console.log(v)
       if (!this.rankList[v.mid] || !this.rankList[v.mid].length) {
         return 
       }
       const market = v;
-      console.log(market)
+      // console.log(market)
       const setRank = Number(this.plan[v.mid]);
       if (setRank > this.rankList[v.mid].length) {
         this.$message.error('当前矿工人数不足')
         return
       }
       const rank75 = this.rankList[v.mid][setRank - 1];
-      console.log(rank75)
-      const uLp = this.accLpData || {};
+      const uLp = this.accLpData[v.mid] || {};
       const tToken = parseInt(rank75.token) - parseInt(uLp.token || 0)
       const inData = {
         poolSym0: market.reserve0.split(' ')[0],
@@ -373,8 +375,8 @@ export default {
         pay0,
         pay1,
         token: tToken,
-        bal0: this.bal0,
-        bal1: this.bal1,
+        bal0: v.bal0,
+        bal1: v.bal1,
         // planRank: this.planRank,
         planRank: setRank,
       }
