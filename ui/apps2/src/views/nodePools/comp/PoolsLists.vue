@@ -73,16 +73,16 @@
         <span class="boost flexc" @click="handleShowBoost(item)">助力</span>
       </div>
       <div class="poolInfo flexa">
-        <img class="coinImg" :src="item.imgUrl">
+        <img class="coinImg" :src="item.imgUrl" :onerror="errorCoinImg">
         <div class="bal">
           <div class="flexb">
             <span>{{ $t('nodePools.poolsReward', {token:item.sym}) }}</span>
             <span class="apy">{{ $t('nodePools.apyShort') }}：{{ item.apy || '0.00' }}%</span>
           </div>
-          <div class="num din">{{ poolsData[item.sym] ? poolsData[item.sym].showReward || '0.00000000' : '0.00000000' }}</div>
+          <div class="num din">{{ poolsData[`${item.sym}-${item.mid}`] ? poolsData[`${item.sym}-${item.mid}`].showReward || '0.00000000' : '0.00000000' }}</div>
         </div>
       </div>
-      <div class="reward">{{ $t('nodePools.poolsBal') }}：{{ poolsData[item.sym] ? poolsData[item.sym].poolbal : `0.0000 ${item.sym}` }}</div>
+      <div class="reward">{{ $t('nodePools.poolsBal') }}：{{ poolsData[`${item.sym}-${item.mid}`] ? poolsData[`${item.sym}-${item.mid}`].poolbal : `0.0000 ${item.sym}` }}</div>
     </div>
 
     <el-dialog
@@ -190,6 +190,7 @@ export default {
   },
   data() {
     return {
+      errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       plan: {},
       planRank: 30,
       params: {},
