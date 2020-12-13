@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     ...mapState({
-      baseConfig: state => state.config.baseConfig, // 基础配置 - 默认为{}
+      baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
       account: state => state.app.account, // 开发环境
     })
   },

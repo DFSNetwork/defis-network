@@ -219,11 +219,11 @@ export default {
       }
       const allEos = this.proxyData.eosNum; // 总票数
       const pools = this.poolsData;
-      // console.log(pools)
+      // console.log(keys)
       keys.forEach((v) => {
         // 计算年化
         const poolBal = parseFloat(pools[v].bal);
-        const list = this.poolsLists.find(vv => vv.sym === v);
+        const list = this.poolsLists.find(vv => `${vv.sym}-${vv.mid}` === v);
         const baseData = Object.assign({}, list, {
           allEos,
           poolBal,
@@ -256,7 +256,7 @@ export default {
           if (index >= 3) {
             return
           }
-          const v = pList.sym;
+          const v = `${pList.sym}-${pList.mid}`; // ${v.sym}-${v.mid}
           // console.log(this.poolsData[v])
           const accReward = this.poolsData[v].accReward || 0;
           const showReward = this.poolsData[v].showReward || accReward;
@@ -312,7 +312,7 @@ export default {
     },
     handleGetBal() {
       this.poolsLists.forEach(async (v) => {
-        if (this.poolsData[v.sym]) {
+        if (this.poolsData[`${v.sym}-${v.mid}`]) {
           return
         }
         const params = {
@@ -325,7 +325,7 @@ export default {
         if (!status) {
           return
         }
-        this.$set(this.poolsData, v.sym, Object.assign({}, (this.poolsData[v.sym] || v) , {bal: result}))
+        this.$set(this.poolsData, `${v.sym}-${v.mid}`, Object.assign({}, (this.poolsData[`${v.sym}-${v.mid}`] || v) , {bal: result}))
       })
     },
     // 计算年化
@@ -333,7 +333,10 @@ export default {
       if (!this.poolsLists.length) {
         return;
       }
-      this.poolsLists.forEach((list) => {
+      this.poolsLists.forEach((list, index) => {
+        if (index >= 3) {
+          return
+        }
         const apy = (Math.pow(list.aprs, 86400 * 365) - 1) * 100;
         this.$set(list, 'apy', apy.toFixed(2));
       })
@@ -349,7 +352,7 @@ export default {
       }
       const lpLists = []
       this.lpPoolsMid.forEach(mid => {
-        const market = this.marketLists.find(v => v.mid === mid);
+        const market = this.filterMkLists.find(v => v.mid === mid);
         lpLists.push(market)
         this.handleGetLpRank(mid);
       })
