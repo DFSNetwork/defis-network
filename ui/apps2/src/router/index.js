@@ -291,6 +291,20 @@ const constantRouter = [
       },
     ],
   },
+  // pToken跨链兑换
+  {
+    path: '/ptokens',
+    component: Layout,
+    redirect: '/',
+    children: [
+      {
+        path: '/',
+        name: 'ptokens',
+        component: () => import(/* webpackChunkName: "ptokens" */ '@/views/pTokens/Index'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
+      }
+    ],
+  },
 ]
 
 export default new Router({
