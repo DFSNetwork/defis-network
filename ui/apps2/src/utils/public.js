@@ -523,19 +523,35 @@ export function dealSymArr(lists = []) {
 
 // 获取TAG LP年化
 export function getTagLpApy(mid) {
+  const lpMids = [602, 665];
   const lpLists = store.state.sys.marketLists.find(v => v.mid === (mid || 602));
   const tagLpBal = store.state.sys.tagLpBal;
   if (!lpLists || !parseFloat(tagLpBal)) {
     return 0
   }
-  const num = 1;
-  const rate = num / parseFloat(lpLists.reserve0);
+  let allTagNum = 0;
+  lpMids.forEach(vmid => {
+    const v = store.state.sys.marketLists.find(v => v.mid === (vmid || 602));
+    if (v.contract0 === "tagtokenmain" && v.symbol0 === "TAG") {
+      allTagNum = Number(allTagNum) + parseFloat(v.reserve0)
+    } else if (v.contract1 === "tagtokenmain" && v.symbol1 === "TAG") {
+      allTagNum = Number(allTagNum) + parseFloat(v.reserve1)
+    }
+  })
+  // const num = 1;
+  // const rate = num / parseFloat(lpLists.reserve0);
+  const tagNum = lpLists.contract1 === "tagtokenmain" ? parseFloat(lpLists.reserve1) : parseFloat(lpLists.reserve0)
+  const otherNum = lpLists.contract1 === "tagtokenmain" ? parseFloat(lpLists.reserve0) : parseFloat(lpLists.reserve1)
+  const price = otherNum / tagNum;
+  const num = lpLists.contract0 === "eosio.token" ? 1 / price : 100 / price;
+  const rate = num / allTagNum;
+
   const lpBal = tagLpBal;
   const weight = 1.3;
   const t = 86400 * 365;
   const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
-  const price = parseFloat(lpLists.reserve0) / parseFloat(lpLists.reserve1);
-  const apy = reward * price / num * 100;
+  // const price = parseFloat(lpLists.reserve0) / parseFloat(lpLists.reserve1);
+  const apy = reward / num * 100;
   return apy.toFixed(2)
 }
 

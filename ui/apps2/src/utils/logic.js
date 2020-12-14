@@ -276,6 +276,24 @@ export function dealMarketLists(list, topLists) {
         exchangeSym: true,
       }
       v = newList;
+    } else if (v.contract1 === 'tethertether' && v.sym1 === '4,USDT') {
+      const newList = {
+        contract0: v.contract1,
+        contract1: v.contract0,
+        last_update: v.last_update,
+        liquidity_token: v.liquidity_token,
+        mid: v.mid,
+        price0_cumulative_last: v.price1_cumulative_last,
+        price0_last: v.price1_last,
+        price1_cumulative_last: v.price0_cumulative_last,
+        price1_last: v.price0_last,
+        reserve0: v.reserve1,
+        reserve1: v.reserve0,
+        sym0: v.sym1,
+        sym1: v.sym0,
+        exchangeSym: true,
+      }
+      v = newList;
     }
     const sym0 = v.sym0.split(',');
     v.symbol0 = sym0[1]; // 币种
