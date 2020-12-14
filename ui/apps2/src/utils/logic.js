@@ -276,7 +276,7 @@ export function dealMarketLists(list, topLists) {
         exchangeSym: true,
       }
       v = newList;
-    } else if (v.contract1 === 'tethertether' && v.sym1 === '4,USDT') {
+    } else if (v.contract0 !== 'eosio.token' && v.contract1 === 'tethertether' && v.sym1 === '4,USDT') {
       const newList = {
         contract0: v.contract1,
         contract1: v.contract0,
