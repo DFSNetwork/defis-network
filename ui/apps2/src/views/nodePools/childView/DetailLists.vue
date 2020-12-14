@@ -265,13 +265,16 @@ export default {
         this.handleGetPools();
       }, 10000)
       const params = {
-        "code": this.baseConfig.nodeMiner,
-        "scope": this.baseConfig.nodeMiner,
-        "table": "pools",
+        "code":"dfsfundation",
+        "scope":"dfsfundation",
+        "table":"pools",
+        "key_type": "float64",
+        "index_position": 2,
         "json":true,
-        "limit": 1000
+        "limit": 1000,
       }
       const {status, result} = await get_table_rows(params);
+      console.log(result)
       if (!status) {
         return
       }
@@ -623,7 +626,7 @@ export default {
       const num = this.lpPool.contract0 === "eosio.token" ? 1 / price : 100 / price;
       const rate = num / allTagNum;
       const lpBal = this.lpPool.bal;
-      const weight = 1.5;
+      const weight = 1.3;
       const t = 86400 * 365;
       const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
       
