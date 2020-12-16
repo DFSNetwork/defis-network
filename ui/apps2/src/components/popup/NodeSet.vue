@@ -53,6 +53,14 @@ export default {
         {
           area: 'production',
           protocol: 'https',
+          host: 'api.fwnw.com',
+          port: '443',
+          url: 'https://api.fwnw.com',
+          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        },
+        {
+          area: 'production',
+          protocol: 'https',
           host: 'eos.greymass.com', // eospush.tokenpocket.pro
           port: '443',
           url: 'https://eos.greymass.com', // https://eospush.tokenpocket.pro
