@@ -87,7 +87,7 @@ export default {
     allDfs() {
       let all = parseFloat(this.bal || 0);
       all = accAdd(all, parseFloat(this.nowMarket.getNum2 || 0))
-      all = accAdd(all, parseFloat(this.dssInfo.balance))
+      all = accAdd(all, parseFloat(this.dssInfo.balance || 0))
       return all
     },
     rewardRun() {
