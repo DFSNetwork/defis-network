@@ -499,6 +499,12 @@ export default {
         } else if (symbol1[1] === 'EOS') {
           newArr[0] = symbol1[0];
           newArr[1] = symbol0[0];
+        } else if (symbol0[1] === 'USDT') {
+          newArr[0] = symbol0[0];
+          newArr[1] = symbol1[0];
+        } else if (symbol1[1] === 'USDT') {
+          newArr[0] = symbol1[0];
+          newArr[1] = symbol0[0];
         }
 
         this.sTime = Date.parse(`${list[0].start}.000+0000`) / 1000 - 8 * 3600
