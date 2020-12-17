@@ -69,7 +69,7 @@ export default {
       accVoteData: {}, // 用户投票数据
 
       // LP 挖矿
-      lpPoolsMid: [602, 665], // 665
+      lpPoolsMid: [], // 665
       lpLists: [],
       accLpData: {},
       lpRankWeight: 0,
@@ -91,6 +91,7 @@ export default {
       filterMkLists: state => state.sys.filterMkLists,
       marketLists: state => state.sys.marketLists,
       baseConfig: state => state.sys.baseConfig,
+      poolsTagBal: state => state.sys.poolsTagBal,
     }),
     yearApr() {
       let apy = 0;
@@ -103,6 +104,7 @@ export default {
     }
   },
   mounted() {
+    this.handleGetVotes()
     // 获取代理信息
     this.handleGetProxy();
     this.handleGetNodeLists();
@@ -135,8 +137,40 @@ export default {
       deep: true,
       immediate: true,
     },
+    lpPoolsMid: {
+      handler: function lpMids(newVal) {
+        this.handleGetLpPoolsLists()
+        this.handleGetAccLpMinerData()
+      },
+      deep: true,
+      immediate: true,
+    }
   },
   methods: {
+    async handleGetVotes() {
+      const params = {
+        "code": "vote.tag",
+        "scope": "vote.tag",
+        "table": "pools",
+        "json": true,
+        limit: 10000
+      }
+      const {status, result} = await get_table_rows(params)
+      if (!status) {
+        return
+      }
+      let rows = result.rows || [];
+      rows.sort((a, b) => {
+        return a.rank - b.rank
+      })
+      const mids = [];
+      rows.forEach(v => {
+        mids.push(v.mid)
+      })
+      this.lpPoolsMid = mids;
+      console.log(mids)
+      // this.voteList = rows;
+    },
     handleTo(name) {
       this.$router.push({
         name
@@ -343,16 +377,42 @@ export default {
 
     // Lp 矿池
     handleGetLpPoolsLists() {
-      if (!this.filterMkLists.length || this.lpLists.length) {
+      if (!this.filterMkLists.length || this.lpLists.length || !this.lpPoolsMid.length) {
         return
       }
       const lpLists = []
       this.lpPoolsMid.forEach(mid => {
-        const market = this.filterMkLists.find(v => v.mid === mid);
-        lpLists.push(market)
+        // const market = this.filterMkLists.find(v => v.mid === mid);
+        const market = this.marketLists.find(v => v.mid === mid);
+        if (market.contract1 === 'tagtokenmain' && market.symbol1 === 'TAG') {
+          lpLists.push(market)
+        } else if (market.contract0 === 'tagtokenmain' && market.symbol0 === 'TAG') {
+          const v = market;
+          const t = {
+            contract0: v.contract1,
+            contract1: v.contract0,
+            last_update: v.last_update,
+            liquidity_token: v.liquidity_token,
+            mid: v.mid,
+            price0_cumulative_last: v.price1_cumulative_last,
+            price0_last: v.price1_last,
+            price1_cumulative_last: v.price0_cumulative_last,
+            price1_last: v.price0_last,
+            reserve0: v.reserve1,
+            reserve1: v.reserve0,
+            sym0: v.sym1,
+            sym1: v.sym0,
+            exchangeSym: true,
+            sym0Data: v.sym1Data,
+            sym1Data: v.sym0Data,
+            symbol0: v.symbol1,
+            symbol1: v.symbol0,
+          }
+          lpLists.push(t)
+        }
         this.handleGetLpRank(mid);
       })
-      this.lpLists = lpLists;
+      this.lpLists = lpLists.slice(0, 10);
       this.handleGetLpPoolsBal()
       this.handleGetAccLpMinerData();
     },
@@ -414,6 +474,9 @@ export default {
     },
     // 获取用户LP挖矿数据
     async handleGetAccLpMinerData() {
+      if (!this.lpPoolsMid.length) {
+        return
+      }
       const formName = this.scatter.identity.accounts[0].name;
       this.lpPoolsMid.forEach(async mid => {
         const params = {
@@ -433,6 +496,9 @@ export default {
         }
         const rows = result.rows[0]
         const market = this.lpLists.find(v => v.mid === mid);
+        if (!market) {
+          return
+        }
         const inData = {
           poolSym0: market.reserve0.split(' ')[0],
           poolSym1: market.reserve1.split(' ')[0],
@@ -545,7 +611,8 @@ export default {
         const tagNum = v.contract1 === "tagtokenmain" ? parseFloat(v.reserve1) : parseFloat(v.reserve0)
         const otherNum = v.contract1 === "tagtokenmain" ? parseFloat(v.reserve0) : parseFloat(v.reserve1)
         const price = otherNum / tagNum;
-        const num = v.contract0 === "eosio.token" ? 1 / price : 100 / price;
+        // const num = v.contract0 === "eosio.token" ? 1 / price : 100 / price;
+        const num = 0.1;
         const rate = num / allTagNum;
         const lpBal = this.lpLists[0].lpBal;
         const weight = 1.3;
@@ -560,15 +627,15 @@ export default {
     },
     // 获取LP池子的总TAG数量
     handleAllLpTagNum() {
-      let count = 0;
-      this.lpLists.forEach(v => {
-        if (v.contract0 === "tagtokenmain" && v.symbol0 === "TAG") {
-          count = Number(count) + parseFloat(v.reserve0)
-        } else if (v.contract1 === "tagtokenmain" && v.symbol1 === "TAG") {
-          count = Number(count) + parseFloat(v.reserve1)
-        }
-      })
-      return count;
+      // let count = 0;
+      // this.lpLists.forEach(v => {
+      //   if (v.contract0 === "tagtokenmain" && v.symbol0 === "TAG") {
+      //     count = Number(count) + parseFloat(v.reserve0)
+      //   } else if (v.contract1 === "tagtokenmain" && v.symbol1 === "TAG") {
+      //     count = Number(count) + parseFloat(v.reserve1)
+      //   }
+      // })
+      return this.poolsTagBal;
     }
   }
 }

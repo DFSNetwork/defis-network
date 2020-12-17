@@ -40,7 +40,7 @@ import NodeSet from '@/components/popup/NodeSet';
 import WarmTip from '@/components/WarmTip';
 import Tabbar from './comp/Tabbar';
 
-import { get_acc_info } from '@/utils/api';
+import { get_acc_info, get_balance } from '@/utils/api';
 import { dealMarketLists } from '@/utils/logic';
 
 export default {
@@ -65,6 +65,7 @@ export default {
       showInvi: false,
       showNode: false,
       showWarm: false,
+      tagTimer: null,
     }
   },
   computed:{
@@ -91,13 +92,32 @@ export default {
     }
   },
   mounted() {
+    this.handleGetTagBal()
     this.handleRowsMarket();
     this.handleStartTimer();
   },
   beforeDestroy() {
     clearInterval(this.timer);
+    clearTimeout(this.tagTimer)
   },
   methods: {
+    async handleGetTagBal() {
+      clearTimeout(this.tagTimer)
+      this.tagTimer = setTimeout(() => {
+        this.handleGetTagBal()
+      }, 10000);
+      const params = {
+        code: 'tagtokenmain',
+        coin: 'TAG',
+        decimal: 8,
+        account: 'defisswapcnt'
+      }
+      const {status, result} = await get_balance(params);
+      if (!status) {
+        return
+      }
+      this.$store.dispatch('setPoolsTagBal', result.split(' ')[0])
+    },
     handleClose() {
       this.showWarm = false;
     },

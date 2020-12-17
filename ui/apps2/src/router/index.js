@@ -291,6 +291,27 @@ const constantRouter = [
       },
     ],
   },
+  // vote for tag lp
+  // voteForTag
+  {
+    path: '/vote-tag',
+    component: Layout,
+    redirect: '/',
+    children: [
+      {
+        path: '/',
+        name: 'voteForTag',
+        component: () => import(/* webpackChunkName: "voteForTag" */ '@/views/voteForTag/Index'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
+      },
+      {
+        path: 'detail-tag/:mid',
+        name: 'tagVoteDetail',
+        component: () => import(/* webpackChunkName: "tagVoteDetail" */ '@/views/voteForTag/comp/Detail'),
+        meta: { title: 'DeFis-Network',  noAcc: true, noFooter: true },
+      },
+    ],
+  },
 ]
 
 export default new Router({
