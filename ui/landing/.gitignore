@@ -16,4 +16,5 @@ package-lock.json*
 *.sln
 *.project
 *.sw?
-release.sh
+release*.sh
+*bp.json
