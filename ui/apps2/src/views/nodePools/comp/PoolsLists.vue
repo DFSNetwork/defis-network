@@ -17,7 +17,7 @@
       </div>
       <div class="list" v-for="(v, i) in lpLists" :key="`lp${i}`" @click="handleToDetailLists(v, 'lp')">
         <div class="poolInfo flexa">
-          <img class="coinImg" :src="v.sym1Data.imgUrl">
+          <img class="coinImg" :src="v.sym0Data.imgUrl">
           <div class="bal">
             <div class="flexb">
               <span>{{ v.symbol0 }}/{{ v.symbol1 }} {{ $t('nodePools.lpMine') }}</span>
