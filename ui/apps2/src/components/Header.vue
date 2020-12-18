@@ -31,7 +31,6 @@
         <div class="proClass">
           <div class="create flexc" @click="handleTo('fundation')">
             <span>{{ $t('fundation.nav') }}</span>
-            <span class="newPro">NEW</span>
           </div>
           <div class="create flexc" @click="handleToProject('pddex')">PDDEX</div>
           <div class="create flexc" @click="handleToProject('yfcGuns')">YFC {{ $t('farms.yfcGun') }}</div>
@@ -55,7 +54,10 @@
       <div @click="showDss = false">
         <div class="create flexc" @click="handleTo('dss')">DFS DSS</div>
         <div class="create flexc" @click="handleToProject('yfcDss')">YFC DSS</div>
-        <div class="create flexc" @click="handleTo('dssForTag')">TAG DSS</div>
+        <div class="create flexc" @click="handleTo('dssForTag')">
+          <span>TAG DSS</span>
+          <span class="newPro">NEW</span>
+        </div>
       </div>
     </el-dialog>
 
@@ -74,9 +76,16 @@
       :show-close="false"
       :visible.sync="showVote">
       <div @click="showVote = false">
-        <div class="create flexc" @click="handleTo('vote')">{{ $t('tab.poolVote') }}</div>
-        <div class="create flexc" @click="handleTo('nodeVote')">{{ $t('tab.nodeVote') }}</div>
-        <div class="create flexc" @click="handleTo('voteForTag')">TAG {{ $t('tab.poolVote') }}</div>
+        <div class="create flexc" @click="handleTo('nodeVote')">EOS节点</div>
+        <div class="create flexc" @click="handleTo('vote')">DFS矿池</div>
+        <div class="create flexc" @click="handleTo('voteForTag')">
+          <span>TAG矿池</span>
+          <span class="newPro">NEW</span>
+        </div>
+        <div class="create flexc" @click="handleTo('voteForTag')">
+          <span>系统参数</span>
+          <span class="newPro">NEW</span>
+        </div>
       </div>
     </el-dialog>
 
@@ -309,6 +318,7 @@ export default {
   }
   &.showDss{
     /deep/ .el-dialog{
+      width: 200px;
       margin-right: 210px;
     }
   }
