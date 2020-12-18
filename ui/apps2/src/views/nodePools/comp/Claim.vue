@@ -7,11 +7,13 @@
         <img class="tipIcon ml10" @click="showRules = true" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
         <span class="about tip">(总收益 ≈ {{ allReward }} EOS)</span>
       </div>
-      <div class="claimNum" v-for="(v) in lpPoolsMid" :key="v">
-        <span class="dinBold">{{ accLpData[v] ? accLpData[v].showReward || '0.00000000' : '0.00000000' }} TAG</span>
-        <span class="tip">(LP)</span>
-        <span class="tip dinReg"> ≈ {{ accLpData[v] ? accLpData[v].aboutEos || '0.0000' : '0.0000' }} EOS</span>
-      </div>
+      <template v-for="(v) in lpPoolsMid">
+        <div class="claimNum" :key="v" v-if="accLpData[v] && parseFloat(accLpData[v].showReward)">
+          <span class="dinBold">{{ accLpData[v] ? accLpData[v].showReward || '0.00000000' : '0.00000000' }} TAG</span>
+          <span class="tip">(LP)</span>
+          <span class="tip dinReg"> ≈ {{ accLpData[v] ? accLpData[v].aboutEos || '0.0000' : '0.0000' }} EOS</span>
+        </div>
+      </template>
       <template v-for="(v, index) in nKeys">
         <div class="claimNum" v-if="poolsData[v].showReward" :key="index">
           <span class="dinBold">{{ poolsData[v].showReward || '0.00000000' }} {{ poolsData[v].sym }}</span>

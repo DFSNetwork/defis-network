@@ -414,8 +414,9 @@ export default {
       })
       let dealArr = lpLists.slice(0, 10);
       dealArr.sort((a, b) => {
-        return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+        return parseFloat(b.reserve1) - parseFloat(a.reserve1)
       })
+      
       this.lpLists = dealArr;
       this.handleGetLpPoolsBal()
       this.handleGetAccLpMinerData();
@@ -564,7 +565,7 @@ export default {
     handleRunLp() {
       clearInterval(this.lpRunTimer)
       this.lpRunTimer = setInterval(() => {
-        const price = this.lpLists[0].price;
+        const price = this.lpLists.find(vv => vv.mid === 602).price;
         const keys = Object.keys(this.accLpData)
         const newJson = {}
         keys.forEach((mid) => {
