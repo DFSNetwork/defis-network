@@ -138,7 +138,7 @@ export default {
       immediate: true,
     },
     lpPoolsMid: {
-      handler: function lpMids(newVal) {
+      handler: function lpMids() {
         this.handleGetLpPoolsLists()
         this.handleGetAccLpMinerData()
       },
@@ -608,9 +608,9 @@ export default {
       }
       const allTagNum = this.handleAllLpTagNum()
       this.lpLists.forEach(v => {
-        const tagNum = v.contract1 === "tagtokenmain" ? parseFloat(v.reserve1) : parseFloat(v.reserve0)
-        const otherNum = v.contract1 === "tagtokenmain" ? parseFloat(v.reserve0) : parseFloat(v.reserve1)
-        const price = otherNum / tagNum;
+        // const tagNum = v.contract1 === "tagtokenmain" ? parseFloat(v.reserve1) : parseFloat(v.reserve0)
+        // const otherNum = v.contract1 === "tagtokenmain" ? parseFloat(v.reserve0) : parseFloat(v.reserve1)
+        // const price = otherNum / tagNum;
         // const num = v.contract0 === "eosio.token" ? 1 / price : 100 / price;
         const num = 0.1;
         const rate = num / allTagNum;

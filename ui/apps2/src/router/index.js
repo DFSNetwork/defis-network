@@ -312,6 +312,20 @@ const constantRouter = [
       },
     ],
   },
+  // dss for tag
+  {
+    path: '/dss-tag',
+    component: Layout,
+    redirect: '/',
+    children: [
+      {
+        path: '/',
+        name: 'dssForTag',
+        component: () => import(/* webpackChunkName: "dssForTag" */ '@/views/dssForTag/Index'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
+      },
+    ],
+  },
 ]
 
 export default new Router({

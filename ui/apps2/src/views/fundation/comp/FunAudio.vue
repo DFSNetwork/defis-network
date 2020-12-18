@@ -86,7 +86,7 @@ export default {
     // 播放结束
     handleEnd() {
       const myaudio = this.$refs.myaudio;
-      myaudio.forEach(v => {
+      myaudio.forEach((v, i) => {
         v.currentTime = 0;
         this.$set(this.duration[i], 'isPlaying', false)
       })

@@ -259,7 +259,7 @@ export default {
     retrieve: '取回', // retrieve
     unOpen: 'DSR合约正在审核中，等待正式开放。',
     testData: '页面数据均为测试数据。预估开放日九月八。可能提前或延迟。',
-    dfsHolders: 'DFS 家人', // DFS Holders
+    dfsHolders: '{coin} 家人', // DFS Holders
     total: '总数', // Total
     totalNum: '总存款',
     nowApy: '实时年化',
