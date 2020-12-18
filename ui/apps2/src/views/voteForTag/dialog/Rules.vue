@@ -14,7 +14,7 @@
         <li>{{ $t('voteRules.rules9') }}</li>
         <li>{{ $t('voteRules.rules10') }}</li>
       </ul>
-      <div class="warm">6. 用户投票选择的前五个交易对, 可以参与TAG挖矿</div>
+      <div class="warm">6. 用户投票选择的前10个交易对, 可以参与TAG挖矿</div>
     </div>
   </div>
 </template>

@@ -67,7 +67,7 @@ export default {
     },
     handleBlur() {
       const n = Number(this.payNum);
-      n > 0 ? this.payNum = toFixed(n, 4) : this.payNum = '';
+      n > 0 ? this.payNum = toFixed(n, this.thisMarket.decimal) : this.payNum = '';
     },
     handleClickBalan() {
       this.payNum = this.myDepositInfo.balance || '0.0000';
