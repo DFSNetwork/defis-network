@@ -55,6 +55,7 @@
       <div @click="showDss = false">
         <div class="create flexc" @click="handleTo('dss')">DFS DSS</div>
         <div class="create flexc" @click="handleToProject('yfcDss')">YFC DSS</div>
+        <div class="create flexc" @click="handleTo('dssForTag')">TAG DSS</div>
       </div>
     </el-dialog>
 
@@ -75,6 +76,7 @@
       <div @click="showVote = false">
         <div class="create flexc" @click="handleTo('vote')">{{ $t('tab.poolVote') }}</div>
         <div class="create flexc" @click="handleTo('nodeVote')">{{ $t('tab.nodeVote') }}</div>
+        <div class="create flexc" @click="handleTo('voteForTag')">TAG {{ $t('tab.poolVote') }}</div>
       </div>
     </el-dialog>
 
@@ -318,8 +320,8 @@ export default {
 
   &.showVote{
     /deep/ .el-dialog{
-      width: 170px;
-      margin-left: 110px;
+      width: 200px;
+      margin-left: 80px;
     }
   }
   
