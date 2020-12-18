@@ -326,6 +326,20 @@ const constantRouter = [
       },
     ],
   },
+  // vote for tag params
+  {
+    path: '/vote-params',
+    component: Layout,
+    redirect: '/',
+    children: [
+      {
+        path: '/',
+        name: 'sysParams',
+        component: () => import(/* webpackChunkName: "sysParams" */ '@/views/sysParams/Index'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
+      },
+    ],
+  },
 ]
 
 export default new Router({

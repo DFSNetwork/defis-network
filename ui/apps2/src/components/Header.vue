@@ -82,7 +82,7 @@
           <span>TAG矿池</span>
           <span class="newPro">NEW</span>
         </div>
-        <div class="create flexc" @click="handleTo('voteForTag')">
+        <div class="create flexc" @click="handleTo('sysParams')">
           <span>系统参数</span>
           <span class="newPro">NEW</span>
         </div>

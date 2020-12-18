@@ -6,7 +6,7 @@ import Vue from 'vue'
 //   Slider, CellGroup, Notify, Checkbox } from 'vant';
 import { List, Icon, Field, Form, Picker, Popup, Rate, Swipe, SwipeItem,
   NoticeBar, Popover, Calendar, Lazyload, ImagePreview, Tab, Tabs, DropdownMenu,
-  Slider, CellGroup, Button, Stepper, DropdownItem, PullRefresh, Sticky } from 'vant';
+  Slider, CellGroup, Button, Stepper, DropdownItem, PullRefresh, Sticky, Progress } from 'vant';
 Vue.use(Button)
 // Vue.use(Toast);
 // Vue.use(Tabbar);
@@ -39,3 +39,4 @@ Vue.use(Calendar);
 Vue.use(Lazyload);
 Vue.use(ImagePreview);
 Vue.use(Rate);
+Vue.use(Progress);
