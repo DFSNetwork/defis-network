@@ -168,7 +168,7 @@ export default {
         mids.push(v.mid)
       })
       this.lpPoolsMid = mids;
-      console.log(mids)
+      // console.log(mids)
       // this.voteList = rows;
     },
     handleTo(name) {
@@ -298,7 +298,7 @@ export default {
           }
           // console.log(tReward)
           const aboutEos = tReward * this.poolsData[v].price;
-          this.$set(this.poolsData[v], 'aboutEos', Number(aboutEos).toFixed(4))
+          this.$set(this.poolsData[v], 'aboutEos', Number(aboutEos || 0).toFixed(4))
           this.$set(this.poolsData[v], 'showReward', Number(tReward).toFixed(8))
           this.$set(this.poolsData[v], 'tReward', Number(tReward))
           // this.$set(this.poolsData[v], 't', t)
@@ -412,7 +412,11 @@ export default {
         }
         this.handleGetLpRank(mid);
       })
-      this.lpLists = lpLists.slice(0, 10);
+      let dealArr = lpLists.slice(0, 10);
+      dealArr.sort((a, b) => {
+        return parseFloat(b.reserve0) - parseFloat(a.reserve0)
+      })
+      this.lpLists = dealArr;
       this.handleGetLpPoolsBal()
       this.handleGetAccLpMinerData();
     },
