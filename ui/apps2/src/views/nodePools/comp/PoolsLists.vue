@@ -19,7 +19,7 @@
           <div class="bgShadow" v-if="i < 10"></div>
           <div class="list mg20">
             <div class="model" v-if="i >= 10" @click.stop="''">
-              <span class="boost flexc" @click="handleTo('voteForTag')">助力</span>
+              <span class="boost flexc" @click="handleTo('voteForTag')">{{ $t('nodePools.boost') }}</span>
             </div>
             <div class="poolInfo flexa">
               <img class="coinImg" :src="v.sym0Data.imgUrl">
@@ -73,14 +73,14 @@
       </div>
       <div class="list" v-for="(item, index) in poolsLists" :key="index"  @click="handleToDetailLists(item, 'rex')">
         <div class="model" v-if="index > 2" @click.stop="''">
-          <span class="boost flexc" @click="handleShowBoost(item)">助力</span>
+          <span class="boost flexc" @click="handleShowBoost(item)">{{ $t('nodePools.boost') }}</span>
         </div>
         <div class="poolInfo flexa">
           <img class="coinImg" :src="item.imgUrl" :onerror="errorCoinImg">
           <div class="bal">
             <div class="flexb">
               <span>{{ $t('nodePools.poolsReward', {token:item.sym}) }}</span>
-              <span class="apy">{{ $t('nodePools.apyShort') }}：{{ item.apy || '0.00' }}%</span>
+              <span class="apy">{{ $t('nodePools.apy') }}：{{ item.apy || '0.00' }}%</span>
             </div>
             <div class="num din">{{ poolsData[`${item.sym}-${item.mid}`] ? poolsData[`${item.sym}-${item.mid}`].showReward || '0.00000000' : '0.00000000' }}</div>
           </div>
