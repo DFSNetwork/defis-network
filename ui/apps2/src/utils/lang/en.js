@@ -197,7 +197,7 @@ export default {
     pools: 'Pools',
     minReward: 'DFS reward less than {minReward} will not be sent.',
     rewardCut: 'The last four digits of the reward decimal will be truncated.',
-    rewardPrice: 'Unclaimed DFS rewards may increase or decrease due to the rise or fall of the current DFS price.',
+    rewardPrice: 'Unclaimed {coin} rewards may increase or decrease due to the rise or fall of the current {coin} price.',
     minAbleReward: 'Notes for Claim',
     mineBuff: 'Calculate power bonus',
     buff: 'Calculate power bonus',

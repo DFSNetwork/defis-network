@@ -198,7 +198,7 @@ export default {
     pools: '矿池',
     minReward: '领取小于{minReward}的DFS将不会有奖励到账。',
     rewardCut: '奖励的小数点后四位将被截取。',
-    rewardPrice: '未领取的DFS奖励受到DFS当前币价涨跌影响，可能增多或减少。',
+    rewardPrice: '未领取的{coin}奖励受到{coin}当前币价涨跌影响，可能增多或减少。',
     minAbleReward: '领取注意事项', // Minimum recoverable
     mineBuff: '挖矿算力加成',
     buff: '算力加成',
