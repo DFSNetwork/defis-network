@@ -57,7 +57,7 @@ export default {
   },
   data() {
     return {
-      check: 10,
+      check: 1,
       options: [],
       totalNum: 0,
       isVote: false,
@@ -88,9 +88,6 @@ export default {
   },
   methods: {
     handleCheck(mid) {
-      if (this.isVote) {
-        return
-      }
       this.check = mid
     },
     // 获取当前投票详情
@@ -120,6 +117,13 @@ export default {
       })
       this.totalNum = totalNum;
       this.options = rows;
+      let maxArr = JSON.parse(JSON.stringify(rows))
+      maxArr.sort((a, b) => {
+        return b.allVote - a.allVote
+      })
+      if (!this.isVote) {
+        this.check = maxArr[0].mid
+      }
     },
     // 获取百分比
     handleGetPercent(num) {
@@ -148,7 +152,7 @@ export default {
         return
       }
       this.check = rows[0].last_vote;
-      // this.isVote = true;
+      this.isVote = true;
     },
     // 投票
     handleVote() {
