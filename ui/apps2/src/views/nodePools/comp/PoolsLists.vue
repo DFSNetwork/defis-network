@@ -22,7 +22,7 @@
               <span class="boost flexc" @click="handleTo('voteForTag')">{{ $t('nodePools.boost') }}</span>
             </div>
             <div class="poolInfo flexa">
-              <img class="coinImg" :src="v.sym0Data.imgUrl">
+              <img class="coinImg" :src="v.sym0Data.imgUrl" :onerror="errorCoinImg">
               <div class="bal">
                 <div class="flexb">
                   <span>{{ v.symbol0 }}/{{ v.symbol1 }} {{ $t('nodePools.lpMine') }}</span>
