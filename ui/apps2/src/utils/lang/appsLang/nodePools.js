@@ -59,6 +59,8 @@ export default {
       cpTip1: '* 只支持 Token/EOS 类型的矿池',
       cpTip2: '* 创建矿池无需任何费用',
       boost: '助力',
+      voteMineNew: '投票挖矿',
+      lpMineNew: '做市挖矿',
     }
   },
   'en': {
@@ -121,6 +123,8 @@ export default {
       cpTip1:'* Only support Token/EOS type mining pool',
       cpTip2:'* There is no cost to create a mining pool',
       boost: 'Boost',
+      voteMineNew:'Vote mining',
+      lpMineNew:'market making mining',
     }
   }
 }

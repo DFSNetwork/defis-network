@@ -2,9 +2,9 @@
   <div class="poolsLists">
     <div class="tabDiv flexb">
       <div class="tab flexc" :class="{'actTab': tabAct === 1}" @click="tabAct = 1">
-        REX {{ $t('nodePools.poolsLists') }}</div>
+        {{ $t('nodePools.voteMineNew') }}</div>
       <div class="tab flexc" :class="{'actTab': tabAct === 2}" @click="tabAct = 2">
-        LP {{ $t('nodePools.poolsLists') }}</div>
+        {{ $t('nodePools.lpMineNew') }}</div>
     </div>
     <div v-if="tabAct === 2">
       <div class="title flexb">

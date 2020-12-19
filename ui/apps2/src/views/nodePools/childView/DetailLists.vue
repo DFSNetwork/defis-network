@@ -1,7 +1,7 @@
 <template>
   <div class="detail">
     <div class="title">
-      <span class="act" v-if="type === 'rex'">{{ $t('sys.coinPool', {coin: pool.sym || 'EOS'}) }}</span>
+      <span class="act" v-if="type === 'rex'">{{ $t('sys.coinPool', {coin: this.rSymbol || 'EOS'}) }}</span>
       <span class="act" v-else>{{ $t('sys.coinLpPool', {coin: `${lpPool.symbol0}/${lpPool.symbol1}`}) }}</span>
     </div>
     <div class="list" v-if="type === 'rex'">
@@ -15,7 +15,7 @@
           <div class="num din">{{ accVoteData.showReward || '0.00000000' }}</div>
         </div>
       </div>
-      <div class="reward">{{ $t('nodePools.poolsBal') }}：{{ pool.bal || `0.0000 ${pool.sym}` }}</div>
+      <div class="reward">{{ $t('nodePools.poolsBal') }}：{{ pool.bal || `0.0000 ${this.rSymbol}` }}</div>
     </div>
     <div class="lpList" v-else>
       <div class="bgShadow"></div>
@@ -132,6 +132,7 @@ export default {
       lists: [],
       type: 'rex', // rex ｜ lp
       sym: 'eosio.token-eos', // 合约-Token ｜ mid
+      rSymbol: 'EOS',
       pool: {},
       accVoteData: {},
 
@@ -162,6 +163,9 @@ export default {
   mounted() {
     this.type = this.$route.params.type;
     this.sym = this.$route.params.sym;
+    if (this.type === 'rex') {
+      this.rSymbol = this.sym.split('-')[1].toUpperCase();
+    }
     this.handleGetThisPools()
   },
   beforeDestroy() {
