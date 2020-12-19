@@ -278,10 +278,6 @@ export default {
     handleRun() {
       clearInterval(this.runTimer)
       this.runTimer = setInterval(() => {
-        // const keys = Object.keys(this.poolsData)
-        // poolsLists
-        // console.log(keys)
-        // console.log(this.poolsLists)
         this.poolsLists.forEach((pList, index) => {
           if (index >= 3) {
             return
@@ -412,7 +408,7 @@ export default {
         }
         this.handleGetLpRank(mid);
       })
-      let dealArr = lpLists.slice(0, 10);
+      let dealArr = lpLists;
       dealArr.sort((a, b) => {
         return parseFloat(b.reserve1) - parseFloat(a.reserve1)
       })
@@ -589,21 +585,6 @@ export default {
         })
         this.accLpData = newJson;
         this.$forceUpdate()
-
-        // const accLpReward = this.accLpData.accLpReward || 0;
-        // const showReward = this.accLpData.showReward || accLpReward;
-        // let tReward = this.accLpData.tReward || showReward;
-        // const t = this.accLpData.t  || ((accLpReward - showReward) / 50)
-        // tReward = Number(tReward) + Number(t);
-        // if (tReward > accLpReward) {
-        //   tReward = accLpReward
-        // }
-        // const aboutEos = showReward * this.accLpData.price;
-        // // console.log(tReward, accLpReward, t)
-        // this.$set(this.accLpData, 'aboutEos', Number(aboutEos).toFixed(4))
-        // this.$set(this.accLpData, 'showReward', Number(tReward).toFixed(8))
-        // this.$set(this.accLpData, 'tReward', Number(tReward))
-        // this.$set(this.accLpData, 't', t)
       }, 20);
     },
     // 计算LP年化
@@ -612,34 +593,22 @@ export default {
         return
       }
       const allTagNum = this.handleAllLpTagNum()
-      this.lpLists.forEach(v => {
-        // const tagNum = v.contract1 === "tagtokenmain" ? parseFloat(v.reserve1) : parseFloat(v.reserve0)
-        // const otherNum = v.contract1 === "tagtokenmain" ? parseFloat(v.reserve0) : parseFloat(v.reserve1)
-        // const price = otherNum / tagNum;
-        // const num = v.contract0 === "eosio.token" ? 1 / price : 100 / price;
+      this.lpLists.forEach((v,i) => {
+        if (i >= 10) {
+          return
+        }
         const num = 0.1;
         const rate = num / allTagNum;
         const lpBal = this.lpLists[0].lpBal;
         const weight = 1.3;
         const t = 86400 * 365;
         const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
-        // console.log(reward)
-        // console.log('price:', price)
         const apy = reward / num * 100;
-        // console.log(apy.toFixed(2))
         this.$set(v, 'apy', apy.toFixed(2))
       })
     },
     // 获取LP池子的总TAG数量
     handleAllLpTagNum() {
-      // let count = 0;
-      // this.lpLists.forEach(v => {
-      //   if (v.contract0 === "tagtokenmain" && v.symbol0 === "TAG") {
-      //     count = Number(count) + parseFloat(v.reserve0)
-      //   } else if (v.contract1 === "tagtokenmain" && v.symbol1 === "TAG") {
-      //     count = Number(count) + parseFloat(v.reserve1)
-      //   }
-      // })
       return this.poolsTagBal;
     }
   }
