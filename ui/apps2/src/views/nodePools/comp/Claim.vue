@@ -5,7 +5,7 @@
       <div class="subTitle flexa tip">
         <span>{{ $t('mine.waitClaim') }}</span>
         <img class="tipIcon ml10" @click="showRules = true" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
-        <span class="about tip">(总收益 ≈ {{ allReward }} EOS)</span>
+        <span class="about tip">({{ $t('nodePools.allReward') }} ≈ {{ allReward }} EOS)</span>
       </div>
       <template v-for="(v) in lpPoolsMid">
         <div class="claimNum" :key="v" v-if="accLpData[v] && parseFloat(accLpData[v].showReward)">

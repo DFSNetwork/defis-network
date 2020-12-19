@@ -66,8 +66,8 @@
       :show-close="false"
       :visible.sync="showPools">
       <div @click="showPools = false">
-        <div class="create flexc" @click="handleTo('pools')">DFS 矿池</div>
-        <div class="create flexc" @click="handleTo('nodePools')">TAG 矿池</div>
+        <div class="create flexc" @click="handleTo('pools')">{{ $t('sys.coinPool', {coin: 'DFS'}) }}</div>
+        <div class="create flexc" @click="handleTo('nodePools')">{{ $t('sys.coinPool', {coin: 'TAG'}) }}</div>
       </div>
     </el-dialog>
 
@@ -76,14 +76,14 @@
       :show-close="false"
       :visible.sync="showVote">
       <div @click="showVote = false">
-        <div class="create flexc" @click="handleTo('nodeVote')">EOS节点</div>
-        <div class="create flexc" @click="handleTo('vote')">DFS矿池</div>
+        <div class="create flexc" @click="handleTo('nodeVote')">{{ $t('sys.vote1') }}</div>
+        <div class="create flexc" @click="handleTo('vote')">{{ $t('sys.coinPool', {coin: 'DFS'}) }}</div>
         <div class="create flexc" @click="handleTo('voteForTag')">
-          <span>TAG矿池</span>
+          <span>{{ $t('sys.coinPool', {coin: 'TAG'}) }}</span>
           <span class="newPro">NEW</span>
         </div>
         <div class="create flexc" @click="handleTo('sysParams')">
-          <span>系统参数</span>
+          <span>{{ $t('sys.vote2') }}</span>
           <span class="newPro">NEW</span>
         </div>
       </div>

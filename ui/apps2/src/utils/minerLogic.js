@@ -1,6 +1,6 @@
 // import axios from 'axios';
 import store from '@/store';
-import { get_balance } from '@/utils/api'
+import { get_balance, get_table_rows } from '@/utils/api'
 /**
  * 
  * @param {*} mid 映射LP 做市ID
@@ -97,4 +97,32 @@ export async function getTagLpBal(cb) {
   }
   store.dispatch('setTagLpBal', parseFloat(result))
   cb(parseFloat(result))
+}
+
+// TAG LP 矿池列表
+export async function get_tag_lp_mids(cb) {
+  const params = {
+    "code": "vote.tag",
+    "scope": "vote.tag",
+    "table": "pools",
+    "json": true,
+    limit: 10000
+  }
+  const {status, result} = await get_table_rows(params)
+  if (!status) {
+    return
+  }
+  let rows = result.rows || [];
+  rows.sort((a, b) => {
+    return a.rank - b.rank
+  })
+  let mids = [];
+  rows.forEach(v => {
+    mids.push(v.mid)
+  })
+  mids = mids.slice(0, 10)
+  store.dispatch('setTagLpMids', mids)
+  if (cb) {
+    cb(mids)
+  }
 }

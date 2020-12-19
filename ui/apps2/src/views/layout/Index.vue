@@ -42,6 +42,7 @@ import Tabbar from './comp/Tabbar';
 
 import { get_acc_info, get_balance } from '@/utils/api';
 import { dealMarketLists } from '@/utils/logic';
+import { get_tag_lp_mids } from '@/utils/minerLogic';
 
 export default {
   name: 'layout',
@@ -95,12 +96,18 @@ export default {
     this.handleGetTagBal()
     this.handleRowsMarket();
     this.handleStartTimer();
+    this.handleGetVotes()
   },
   beforeDestroy() {
     clearInterval(this.timer);
     clearTimeout(this.tagTimer)
   },
   methods: {
+    // 获取TAG LP 矿池列表
+    async handleGetVotes() {
+      get_tag_lp_mids()
+      // console.log(this.$store.state.config.tagLpMids)
+    },
     async handleGetTagBal() {
       clearTimeout(this.tagTimer)
       this.tagTimer = setTimeout(() => {

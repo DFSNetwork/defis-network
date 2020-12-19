@@ -1,15 +1,15 @@
 <template>
   <div class="paramsTip">
     <div class="content">
-      <div>TAG为每秒释放0.01个的代币。获取方式有3种</div>
+      <div>{{ $t('sysParams.rules1') }}</div>
       <ul class="subRules">
-        <li>参加投票挖矿从乐捐系统中获得TAG</li>
-        <li>通过做市挖矿获得TAG</li>
-        <li>在DSS中存入TAG获得TAG</li>
+        <li>{{ $t('sysParams.rules2') }}</li>
+        <li>{{ $t('sysParams.rules3') }}</li>
+        <li>{{ $t('sysParams.rules4') }}</li>
       </ul>
-      <div>分配给乐捐账户的比例，委托给DFS社区投票决定</div>
-      <div>分配的LP做市挖矿的部分，等于80% - 投票选出的乐捐比例</div>
-      <div>分配的DSS的部分固定为剩下的20%</div>
+      <div>{{ $t('sysParams.rules5') }}</div>
+      <div>{{ $t('sysParams.rules6') }}</div>
+      <div>{{ $t('sysParams.rules7') }}</div>
     </div>
   </div>
 </template>

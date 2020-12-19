@@ -31,7 +31,7 @@
 
       <div class="nullDiv"></div>
       <div class="btnDiv">
-        <div class="btn flexc" @click="handleTo('createPool')">创建矿池</div>
+        <div class="btn flexc" @click="handleTo('createPool')">{{ $t('nodePools.createPool') }}</div>
       </div>
     </div>
   </div>

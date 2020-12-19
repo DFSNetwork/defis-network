@@ -47,6 +47,17 @@ export default {
       rexTip2: '本金100%安全无损，无需转币。',
       rexTip3: '买入REX后，4天后可以自由解锁。',
       detail: '详细',
+      // add
+      tagVoteRules: '用户投票选择的前10个交易对, 可以参与TAG挖矿',
+      tagVote: '{coin} 矿池投票',
+      allReward: '总收益',
+      minerLists: '矿工列表',
+      allMinerNum: '总矿工',
+      allVotes: '总票数',
+      allRes: '资金池',
+      createPool: '创建矿池',
+      cpTip1: '* 只支持 Token/EOS 类型的矿池',
+      cpTip2: '* 创建矿池无需任何费用',
     }
   },
   'en': {
@@ -61,7 +72,7 @@ export default {
       apy:'APY',
       marketNum:'Market-making capital',
       planRank:'Reservation Ranking',
-      doing:'One-click preemption',
+      doing:'Preemption',
       myRank:'Your ranking',
       poolsReward:'{token} Mining Pool',
       apyShort:'APY',
@@ -97,6 +108,17 @@ export default {
       rexTip2:'The principal is 100% safe and undamaged, no need to transfer coins. ',
       rexTip3:'After buying REX, you can unlock it freely after 4 days. ',
       detail:'Detailed',
+      // add
+      tagVoteRules:'The first 10 trading pairs voted by users can participate in TAG mining',
+      tagVote:'{coin} Mining Pool Vote',
+      allReward:'Total Reward',
+      minerLists:'Miner List',
+      allMinerNum:'Total Miner',
+      allVotes:'Total Votes',
+      allRes:'Capital Pool',
+      createPool:'Create Pool',
+      cpTip1:'* Only support Token/EOS type mining pool',
+      cpTip2:'* There is no cost to create a mining pool',
     }
   }
 }

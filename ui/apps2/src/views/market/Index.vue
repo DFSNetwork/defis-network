@@ -194,6 +194,7 @@ export default {
       dfsPrice: state => state.sys.dfsPrice,
       storeFeesApr: state => state.sys.feesApr,
       lpMid: state => state.config.lpMid,
+      tagLpMids: state => state.config.tagLpMids,
     }),
     // 每万每日挖矿
     perDayRewardV3() {
@@ -226,7 +227,8 @@ export default {
       return '0.000';
     },
     tagLpApy() {
-      if (this.thisMarket.mid === 602) {
+      const has = this.tagLpMids.find(v => v === this.thisMarket.mid)
+      if (has) {
         return getTagLpApy(this.thisMarket.mid)
       }
       return '0.00'

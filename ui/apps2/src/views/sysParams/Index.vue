@@ -5,10 +5,6 @@
     </div>
     <div class="mainTitle flexb">
       <span class="act">{{ $t('vote.vote') }}</span>
-      <!-- <span class="flexa rulesTip tip" @click="showRules = !showRules">
-        <span>{{ $t('vote.voteRules') }}</span>
-        <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
-      </span> -->
     </div>
     <div class="info flexb" v-loading="!swapGet || !dssGet">
       <div>

@@ -11,6 +11,8 @@ import fundation from './appsLang/fundation'
 import nodePools from './appsLang/nodePools'
 import financial from './appsLang/financial'
 import bpInfo from './appsLang/bpInfo'
+import sys from './appsLang/sys'
+import sysParams from './appsLang/sysParams'
 
 Vue.use(VueI18n);
 
@@ -21,7 +23,9 @@ const messages = {
     ...fundation['zh-CN'],
     ...nodePools['zh-CN'],
     ...financial['zh-CN'],
-    ...bpInfo['zh-CN']
+    ...bpInfo['zh-CN'],
+    ...sysParams['zh-CN'],
+    ...sys['zh-CN']
   },
   en: { // 英文包
     ...enLocale,
@@ -29,7 +33,9 @@ const messages = {
     ...fundation['en'],
     ...nodePools['en'],
     ...bpInfo['en'],
-    ...financial['en']
+    ...financial['en'],
+    ...sysParams['en'],
+    ...sys['en']
   },
 };
 const i18n = new VueI18n({

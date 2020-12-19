@@ -211,7 +211,7 @@ export default {
     wRewaed: '10,000 {coin}/24H',
     nextLess: 'Next damping',
     current: 'Current supply',
-    waitClaim: 'Pending reward',
+    waitClaim: 'Reward',
     claimAll: 'Claim all',
     poolsList: 'Pools',
     myMine: 'My dig',

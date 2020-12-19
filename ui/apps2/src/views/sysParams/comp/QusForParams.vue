@@ -1,7 +1,7 @@
 <template>
   <div class="qus">
     <div class="qusTitle flexb">
-      <span>TAG代币分发给乐捐系统的比例参数</span>
+      <span>{{ $t('sysParams.qusTitle') }}</span>
       <img @click="showRules = !showRules" class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
     </div>
     <!-- <div class="qusSubTitle">当前 30% DSS + 10%乐捐 + 60% LP挖矿。</div> -->
@@ -13,7 +13,7 @@
         </div>
         <div class="main">
           <div class="">
-            <span>TAG代币的乐捐比例: </span>
+            <span>{{ $t('sysParams.ans') }}: </span>
             <span class="dinBold">{{ v.fun }}%</span>
           </div>
           <div class="flexb">
@@ -21,7 +21,7 @@
               <van-progress :show-pivot="false" :percentage="handleGetPercent(v.allVote)" color="#29D4B0"/>
             </div>
             <div class="voteNum dinReg">
-              <span>{{ v.allVote }} 票</span>
+              <span>{{ $t('sysParams.votes', {num: v.allVote}) }}</span>
               <span class="pNum">{{ handleGetPercent(v.allVote) }}%</span>
             </div>
           </div>
@@ -30,9 +30,8 @@
     </div>
     <div class="nullDiv"></div>
     <div class="btnDiv">
-      <div v-if="!isVote" v-loading="loading"
-        class="btn flexc" @click="handleVote">确定投票</div>
-      <div v-else class="btn disabled flexc">已投票</div>
+      <div v-loading="loading"
+        class="btn flexc" @click="handleVote">{{ $t('sysParams.sure') }}</div>
     </div>
 
     <el-dialog

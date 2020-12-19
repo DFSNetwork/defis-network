@@ -259,6 +259,7 @@ export default {
       lpMid: state => state.config.lpMid,
       rankInfoV3: state => state.sys.rankInfoV3,
       marketLists: state => state.sys.marketLists,
+      tagLpMids: state => state.config.tagLpMids,
     }),
     isAbled() {
       if (this.thisMarket.contract0 === 'eosio.token' || this.thisMarket.contract0 === 'tethertether' ||
@@ -284,7 +285,8 @@ export default {
       return '0.000';
     },
     tagLpApy() {
-      if (this.thisMarket.mid === 602) {
+      const has = this.tagLpMids.find(v => v === this.thisMarket.mid)
+      if (has) {
         return getTagLpApy(this.thisMarket.mid)
       }
       return '0.00'

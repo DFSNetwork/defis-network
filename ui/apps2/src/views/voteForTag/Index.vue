@@ -5,14 +5,14 @@
     </div>
     <div class="mainTitle flexb">
       <!-- <span class="act">{{ $t('vote.vote') }}</span> -->
-      <span class="act">TAG矿池投票</span>
+      <span class="act">{{ $t('nodePools.tagVote', {coin: 'TAG'}) }}</span>
       <span class="flexa rulesTip tip" @click="showRules = !showRules">
         <span>{{ $t('vote.voteRules') }}</span>
         <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
       </span>
     </div>
     <div class="info " v-loading="!swapGet || !dssGet">
-      <div class="subTitle">用户投票选择的前10个交易对 可以参与TAG挖矿</div>
+      <div class="subTitle">{{ $t('nodePools.tagVoteRules') }}</div>
       <div class="flexb">
         <div class="votes flexb">
           <span class="flexa">
@@ -34,7 +34,7 @@
         <div class="search flexc">
           <img class="searchImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/search.png" alt="">
           <el-input @input="handleSearch"
-            v-model="search" placeholder="搜索市场"></el-input>
+            v-model="search" :placeholder="$t('sys.searchMarket')"></el-input>
         </div>
       </div>
       <div v-if="act !== 2" class="voteLists" v-loading="listLoading || hisLoading">
