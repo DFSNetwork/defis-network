@@ -156,7 +156,7 @@ export default {
     },
     // 投票
     handleVote() {
-      if (!this.account.name || !this.check || this.isVote || this.loading) {
+      if (!this.account.name || !this.check || this.loading) {
         return
       }
       this.loading = true;
