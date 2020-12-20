@@ -16,7 +16,7 @@
       </div>
       <div class="lpList" v-if="lpLists.length">
         <div style="position: relative;" v-for="(v, i) in lpLists" :key="`lp${i}`" @click="handleToDetailLists(v, 'lp')">
-          <div class="bgShadow" v-if="i < 10"></div>
+          <!-- <div class="bgShadow" v-if="i < 10"></div> -->
           <div class="list mg20">
             <div class="model" v-if="i >= 10" @click.stop="''">
               <span class="boost flexc" @click="handleTo('voteForTag')">{{ $t('nodePools.boost') }}</span>
@@ -327,8 +327,8 @@ export default {
       this.timer = setTimeout(() => {
         this.handleStartTimer()
       }, 5000);
-      this.handleGetBal('bal0')
-      this.handleGetBal('bal1')
+      // this.handleGetBal('bal0')
+      // this.handleGetBal('bal1')
     },
     handleGetBal(type = 'bal0') {
       if (!this.scatter || !this.scatter.identity || !this.lpLists.length) {
