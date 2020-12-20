@@ -479,7 +479,10 @@ export default {
         return
       }
       const formName = this.scatter.identity.accounts[0].name;
-      this.lpPoolsMid.forEach(async mid => {
+      this.lpPoolsMid.forEach(async (mid, index) => {
+        if (index >= 10) {
+          return
+        }
         const params = {
           "code": this.baseConfig.nodeMiner,
           "scope": mid,
