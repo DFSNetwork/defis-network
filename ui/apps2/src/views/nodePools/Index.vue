@@ -161,7 +161,7 @@ export default {
       }
       let rows = result.rows || [];
       rows.sort((a, b) => {
-        return a.rank - b.rank
+        return Number(b.total_votes) - Number(a.total_votes)
       })
       const mids = [];
       rows.forEach(v => {
@@ -382,7 +382,7 @@ export default {
         return
       }
       const lpLists = []
-      this.lpPoolsMid.forEach(mid => {
+      this.lpPoolsMid.forEach((mid, index) => {
         // const market = this.filterMkLists.find(v => v.mid === mid);
         const market = this.marketLists.find(v => v.mid === mid);
         if (market.contract1 === 'tagtokenmain' && market.symbol1 === 'TAG') {
@@ -411,7 +411,7 @@ export default {
           }
           lpLists.push(t)
         }
-        this.handleGetLpRank(mid);
+        this.handleGetLpRank(mid, index);
       })
       let dealArr = lpLists;
       dealArr.sort((a, b) => {
@@ -423,8 +423,8 @@ export default {
       this.handleGetAccLpMinerData();
     },
     // 获取LP 挖矿排名
-    async handleGetLpRank(mid) {
-      if (!this.scatter || !this.scatter.identity) {
+    async handleGetLpRank(mid, index) {
+      if (!this.scatter || !this.scatter.identity || index >= 10) {
         return
       }
       // const formName = this.scatter.identity.accounts[0].name;
@@ -459,6 +459,7 @@ export default {
         this.$set(v, 'weight', weight)
         this.$set(v, 'rank', rank)
       })
+      // console.log(mid, rows)
       this.rankListObj[`${mid}`] = rows;
       this.handleGetLpReward()
     },
@@ -483,7 +484,7 @@ export default {
       if (!this.lpPoolsMid.length) {
         return
       }
-      console.log(123)
+      // console.log(this.lpPoolsMid)
       const formName = this.scatter.identity.accounts[0].name;
       this.lpPoolsMid.forEach(async (mid, index) => {
         if (index >= 10) {
@@ -519,6 +520,7 @@ export default {
           const marketData = sellToken(inData)
           rows.market0 = marketData.getNum1;
           rows.market1 = marketData.getNum2;
+          // console.log(mid, rows)
           this.accLpData[`${mid}`] = rows;
           this.handleGetLpReward()
         }, index * 100);
