@@ -365,9 +365,9 @@ export default {
         return;
       }
       this.poolsLists.forEach((list, index) => {
-        if (index >= 3) {
-          return
-        }
+        // if (index >= 3) {
+        //   return
+        // }
         const apy = (Math.pow(list.aprs, 86400 * 365) - 1) * 100;
         this.$set(list, 'apy', apy.toFixed(2));
       })
@@ -413,12 +413,16 @@ export default {
         }
         this.handleGetLpRank(mid, index);
       })
-      let dealArr = lpLists;
+      let dealArr = lpLists.slice(0, 10);
+      let dealArr2 = lpLists.slice(10, 1000)
       dealArr.sort((a, b) => {
         return parseFloat(b.reserve1) - parseFloat(a.reserve1)
       })
+      dealArr2.sort((a, b) => {
+        return parseFloat(b.reserve1) - parseFloat(a.reserve1)
+      })
       
-      this.lpLists = dealArr;
+      this.lpLists = [...dealArr, ...dealArr2];
       this.handleGetLpPoolsBal()
       this.handleGetAccLpMinerData();
     },
@@ -607,9 +611,9 @@ export default {
       }
       const allTagNum = this.handleAllLpTagNum()
       this.lpLists.forEach((v,i) => {
-        if (i >= 10) {
-          return
-        }
+        // if (i >= 10) {
+        //   return
+        // }
         const num = 0.1;
         const rate = num / allTagNum;
         const lpBal = this.lpLists[0].lpBal;
