@@ -284,6 +284,9 @@ export default {
           }
           const v = `${pList.sym}-${pList.mid}`; // ${v.sym}-${v.mid}
           // console.log(this.poolsData[v])
+          if (!this.poolsData[v]) {
+            return
+          }
           const accReward = this.poolsData[v].accReward || 0;
           const showReward = this.poolsData[v].showReward || accReward;
           let tReward = this.poolsData[v].tReward || showReward;
@@ -337,21 +340,23 @@ export default {
       this.handleGetBal()
     },
     handleGetBal() {
-      this.poolsLists.forEach(async (v) => {
+      this.poolsLists.forEach(async (v, i) => {
         if (this.poolsData[`${v.sym}-${v.mid}`]) {
           return
         }
-        const params = {
-          code: v.contract,
-          symbol: v.sym,
-          decimal: v.decimal,
-          account: this.baseConfig.fundation,
-        }
-        const {status, result} = await get_balance(params);
-        if (!status) {
-          return
-        }
-        this.$set(this.poolsData, `${v.sym}-${v.mid}`, Object.assign({}, (this.poolsData[`${v.sym}-${v.mid}`] || v) , {bal: result}))
+        setTimeout(async () => {
+          const params = {
+            code: v.contract,
+            symbol: v.sym,
+            decimal: v.decimal,
+            account: this.baseConfig.fundation,
+          }
+          const {status, result} = await get_balance(params);
+          if (!status) {
+            return
+          }
+          this.$set(this.poolsData, `${v.sym}-${v.mid}`, Object.assign({}, (this.poolsData[`${v.sym}-${v.mid}`] || v) , {bal: result}))
+        }, i * 100);
       })
     },
     // 计算年化
@@ -478,42 +483,45 @@ export default {
       if (!this.lpPoolsMid.length) {
         return
       }
+      console.log(123)
       const formName = this.scatter.identity.accounts[0].name;
       this.lpPoolsMid.forEach(async (mid, index) => {
         if (index >= 10) {
           return
         }
-        const params = {
-          "code": this.baseConfig.nodeMiner,
-          "scope": mid,
-          "table": "miners",
-          "json":true,
-          "lower_bound": ` ${formName}`,
-          "upper_bound": ` ${formName}`,
-        }
-        const {status, result} = await get_table_rows(params)
-        if (!status) {
-          return
-        }
-        if (!result.rows.length) {
-          return
-        }
-        const rows = result.rows[0]
-        const market = this.lpLists.find(v => v.mid === mid);
-        if (!market) {
-          return
-        }
-        const inData = {
-          poolSym0: market.reserve0.split(' ')[0],
-          poolSym1: market.reserve1.split(' ')[0],
-          poolToken: market.liquidity_token,
-          sellToken: Math.abs(rows.token)
-        }
-        const marketData = sellToken(inData)
-        rows.market0 = marketData.getNum1;
-        rows.market1 = marketData.getNum2;
-        this.accLpData[`${mid}`] = rows;
-        this.handleGetLpReward()
+        setTimeout(async () => {
+          const params = {
+            "code": this.baseConfig.nodeMiner,
+            "scope": mid,
+            "table": "miners",
+            "json":true,
+            "lower_bound": ` ${formName}`,
+            "upper_bound": ` ${formName}`,
+          }
+          const {status, result} = await get_table_rows(params)
+          if (!status) {
+            return
+          }
+          if (!result.rows.length) {
+            return
+          }
+          const rows = result.rows[0]
+          const market = this.lpLists.find(v => v.mid === mid);
+          if (!market) {
+            return
+          }
+          const inData = {
+            poolSym0: market.reserve0.split(' ')[0],
+            poolSym1: market.reserve1.split(' ')[0],
+            poolToken: market.liquidity_token,
+            sellToken: Math.abs(rows.token)
+          }
+          const marketData = sellToken(inData)
+          rows.market0 = marketData.getNum1;
+          rows.market1 = marketData.getNum2;
+          this.accLpData[`${mid}`] = rows;
+          this.handleGetLpReward()
+        }, index * 100);
       });
     },
     // 计算LP池子收益
