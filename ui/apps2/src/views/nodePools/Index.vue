@@ -367,7 +367,7 @@ export default {
       if (!this.poolsLists.length) {
         return;
       }
-      this.poolsLists.forEach((list, index) => {
+      this.poolsLists.forEach((list) => {
         // console.log(list)
         // if (index >= 3) {
         //   return
@@ -612,7 +612,7 @@ export default {
         return
       }
       const allTagNum = this.handleAllLpTagNum()
-      this.lpLists.forEach((v,i) => {
+      this.lpLists.forEach((v) => {
         // if (i >= 10) {
         //   return
         // }
