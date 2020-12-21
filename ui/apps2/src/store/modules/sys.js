@@ -136,6 +136,7 @@ const sys = {
     rankTrade: localStorage.getItem('rankTrade') ? JSON.parse(localStorage.getItem('rankTrade')) : [], // 挖矿权重列表,
     dfsData: {},
     poolsBal: '0.0000', // swap EOS数量
+    poolsTagBal: localStorage.getItem('poolsTagBal') ? localStorage.getItem('poolsTagBal') : '1000.00000000', // swap TAG数量
 
     // 挖矿年化计算数据
     list: [], // yfc挖矿列表
@@ -204,6 +205,10 @@ const sys = {
     },
     SET_PoolsBal: (state, poolsBal) => {
       state.poolsBal = poolsBal;
+    },
+    SET_PoolsTagBal: (state, poolsTagBal) => {
+      state.poolsTagBal = poolsTagBal;
+      localStorage.setItem('poolsTagBal', poolsTagBal)
     },
     SET_List: (state, list) => {
       state.list = list;
@@ -277,6 +282,9 @@ const sys = {
     },
     setPoolsBal({ commit }, poolsBal) {
       commit('SET_PoolsBal', poolsBal);
+    },
+    setPoolsTagBal({ commit }, poolsTagBal) {
+      commit('SET_PoolsTagBal', poolsTagBal)
     },
     setList({ commit }, list) {
       commit('SET_List', list);

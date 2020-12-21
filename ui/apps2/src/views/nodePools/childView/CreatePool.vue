@@ -2,7 +2,7 @@
   <div class="createDex">
     <div class="titleDiv">
       <span class="el-icon-arrow-left back" @click="handleBack"></span>
-      <span>创建矿池</span>
+      <span>{{ $t('nodePools.createPool') }}</span>
     </div>
     <div class="content">
       <div class="list">
@@ -28,8 +28,8 @@
       </div>
 
       <div class="tipDiv">
-        <span class="flexa mt10">* 只支持 Token/EOS 类型的矿池</span>
-        <span class="flexa mt10">* 创建矿池无需任何费用</span>
+        <span class="flexa mt10">{{ $t('nodePools.cpTip1') }}</span>
+        <span class="flexa mt10">{{ $t('nodePools.cpTip2') }}</span>
       </div>
 
       <div class="btnDiv">

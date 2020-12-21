@@ -28,7 +28,7 @@
         <!-- <span>100%</span> -->
       </div>
     </div>
-    <div class="btn flexc" :class="{'disabled': !regNum || down.total}" @click="handleWithdraw">
+    <div class="btn flexc" :class="{'disabled': !regNum || down.total > 0}" @click="handleWithdraw">
       <span v-if="down.total <= 0">
         <span v-if="regNum">{{ $t('public.confirm') }}</span>
         <span v-else>{{ $t(`financial.${regContent}`) }}</span>
@@ -156,7 +156,8 @@ export default {
       }
       const permission = this.scatter.identity.accounts[0].authority;
       const formName = this.scatter.identity.accounts[0].name;
-      const amount = Number(this.withdraw || 0) * 10000
+      let amount = Number(this.withdraw || 0) * 10000
+      amount = parseInt(amount)
       const params = {
         actions: [{
           account: 'yfcsteadyone',

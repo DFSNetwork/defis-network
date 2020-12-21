@@ -1,8 +1,8 @@
 <template>
   <div class="detail">
     <div class="title">
-      <span class="act" v-if="type === 'rex'">{{ pool.sym || 'EOS' }}矿池</span>
-      <span class="act" v-else>{{ lpPool.symbol0 }}/{{ lpPool.symbol1 }} LP矿池</span>
+      <span class="act" v-if="type === 'rex'">{{ $t('sys.coinPool', {coin: this.rSymbol || 'EOS'}) }}</span>
+      <span class="act" v-else>{{ $t('sys.coinLpPool', {coin: `${lpPool.symbol0}/${lpPool.symbol1}`}) }}</span>
     </div>
     <div class="list" v-if="type === 'rex'">
       <div class="poolInfo flexa">
@@ -15,7 +15,7 @@
           <div class="num din">{{ accVoteData.showReward || '0.00000000' }}</div>
         </div>
       </div>
-      <div class="reward">{{ $t('nodePools.poolsBal') }}：{{ pool.bal || `0.0000 ${pool.sym}` }}</div>
+      <div class="reward">{{ $t('nodePools.poolsBal') }}：{{ pool.bal || `0.0000 ${this.rSymbol}` }}</div>
     </div>
     <div class="lpList" v-else>
       <div class="bgShadow"></div>
@@ -61,8 +61,8 @@
     </div>
 
     <div class="title flexb">
-      <span class="act">矿工列表</span>
-      <span class="tip count">总矿工：{{allLists.length}}</span>
+      <span class="act">{{ $t('nodePools.minerLists') }}</span>
+      <span class="tip count">{{ $t('nodePools.allMinerNum') }}：{{allLists.length}}</span>
     </div>
     <div class="lists">
       <template v-for="(item, index) in lists">
@@ -77,11 +77,11 @@
             </span>
           </div>
           <div class="flexb" v-if="type === 'rex'">
-            <span>总票数</span>
+            <span>{{ $t('nodePools.allVotes') }}</span>
             <span>{{ item.stakeEos || '0.0000' }} EOS</span>
           </div>
           <div class="flexb" v-else>
-            <span>资金池</span>
+            <span>{{ $t('nodePools.allRes') }}</span>
             <span>{{ item.sym0 || '0.0000' }} {{lpPool.symbol0}} / {{ item.sym1 || '0.0000'}} {{lpPool.symbol1}}</span>
           </div>
           <label class="rankImg" v-if="page === 1 && index < 3"><img :src="`https://cdn.jsdelivr.net/gh/defis-net/material/rank/rank${index + 1}.png`" alt=""></label>
@@ -132,6 +132,7 @@ export default {
       lists: [],
       type: 'rex', // rex ｜ lp
       sym: 'eosio.token-eos', // 合约-Token ｜ mid
+      rSymbol: 'EOS',
       pool: {},
       accVoteData: {},
 
@@ -162,6 +163,9 @@ export default {
   mounted() {
     this.type = this.$route.params.type;
     this.sym = this.$route.params.sym;
+    if (this.type === 'rex') {
+      this.rSymbol = this.sym.split('-')[1].toUpperCase();
+    }
     this.handleGetThisPools()
   },
   beforeDestroy() {
@@ -211,6 +215,7 @@ export default {
       baseConfig: state => state.sys.baseConfig,
       filterMkLists: state => state.sys.filterMkLists,
       marketLists: state => state.sys.marketLists,
+      poolsTagBal: state => state.sys.poolsTagBal,
     }),
     addBuff() {
       let buff = (this.accLpData.weight || 1) - 1;
@@ -274,7 +279,7 @@ export default {
         "limit": 1000,
       }
       const {status, result} = await get_table_rows(params);
-      console.log(result)
+      // console.log(result)
       if (!status) {
         return
       }
@@ -586,15 +591,16 @@ export default {
     },
     // 获取LP池子的总TAG数量
     handleAllLpTagNum() {
-      let count = 0;
-      this.marketLists.forEach(v => {
-        if (v.contract0 === "tagtokenmain" && v.symbol0 === "TAG") {
-          count = Number(count) + parseFloat(v.reserve0)
-        } else if (v.contract1 === "tagtokenmain" && v.symbol1 === "TAG") {
-          count = Number(count) + parseFloat(v.reserve1)
-        }
-      })
-      return count;
+      // let count = 0;
+      // this.marketLists.forEach(v => {
+      //   if (v.contract0 === "tagtokenmain" && v.symbol0 === "TAG") {
+      //     count = Number(count) + parseFloat(v.reserve0)
+      //   } else if (v.contract1 === "tagtokenmain" && v.symbol1 === "TAG") {
+      //     count = Number(count) + parseFloat(v.reserve1)
+      //   }
+      // })
+      // return count;
+      return this.poolsTagBal;
     },
     handleRunLp() {
       clearInterval(this.lpRunTimer)
@@ -620,10 +626,10 @@ export default {
         return
       }
       const allTagNum = this.handleAllLpTagNum()
-      const tagNum = this.lpPool.contract1 === "tagtokenmain" ? parseFloat(this.lpPool.reserve1) : parseFloat(this.lpPool.reserve0)
-      const otherNum = this.lpPool.contract1 === "tagtokenmain" ? parseFloat(this.lpPool.reserve0) : parseFloat(this.lpPool.reserve1)
-      const price = otherNum / tagNum;
-      const num = this.lpPool.contract0 === "eosio.token" ? 1 / price : 100 / price;
+      // const tagNum = this.lpPool.contract1 === "tagtokenmain" ? parseFloat(this.lpPool.reserve1) : parseFloat(this.lpPool.reserve0)
+      // const otherNum = this.lpPool.contract1 === "tagtokenmain" ? parseFloat(this.lpPool.reserve0) : parseFloat(this.lpPool.reserve1)
+      // const price = otherNum / tagNum;
+      const num = 0.1;
       const rate = num / allTagNum;
       const lpBal = this.lpPool.bal;
       const weight = 1.3;

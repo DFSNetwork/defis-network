@@ -1,7 +1,7 @@
 <template>
   <div class="poolsLists">
     <div class="title flexb">
-      <span class="act">{{ $t('dsr.dfsHolders',{coin: 'DFS'}) }}</span>
+      <span class="act">{{ $t('dsr.dfsHolders',{coin: 'TAG'}) }}</span>
       <span class="totalMiners tip">{{ $t('dsr.total') }}：{{ allMinersList.length }}</span>
     </div>
     <div class="noData" v-loading="!getMinersList" v-if="!minersArr.length">{{ $t('public.noData') }}</div>
@@ -10,7 +10,7 @@
         <div class="flexb mb10">
           <span>{{ handleDealAccountHide(item.holder) }}</span>
           <span class="flexc">
-            <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} DFS</span>
+            <span>{{ $t('mine.earnings') }}：{{ item.showReward || '0.00000000' }} TAG</span>
             <span class="addition flexa" v-if="Number(item.buff)">
               <img class="buffImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/buff2.svg">
               <span>{{ item.buff }}%</span>
@@ -50,7 +50,7 @@ import { mapState } from 'vuex';
 import moment from 'moment';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accAdd, accSub, accMul, accDiv, toLocalTime, countdown, dealAccountHide } from '@/utils/public';
-import Mock from 'mockjs';
+// import Mock from 'mockjs';
 import MyDeposit from '../dialog/MyDeposit';
 export default {
   name: 'dsrMinerList',
@@ -130,27 +130,10 @@ export default {
       rate = accMul(rate, 100);
       return toFixed(rate, 2)
     },
-    handlMock() {
-      this.mock = Mock.mock({
-        // 属性 list 的值是一个数组，其中含有 1 到 10 个元素
-        'allMinersList|0-50': [{
-          'lastTime|1598222381000-1598223381000': 1598223381000,
-          last_drip: "2020-08-23T22:56:21",
-          'liq': '@float(100, 10000)',
-          'liq_bal0': '@float(100, 10000)' + ` EOS`,
-          'liq_bal1': '@float(200, 30000)' + ` DFS`,
-          'miner': '@string("lower", 12)',
-        }]
-      })
-      this.allMinersList = this.mock.allMinersList
-      this.handleGetPageArr();
-      // 输出结果
-      // console.log(this.mock)
-    },
     handleGetList() {
       const params = {
-        "code": "dfsdsrsystem",
-        "scope": "dfsdsrsystem",
+        "code": "dss.tag",
+        "scope": "dss.tag",
         "table": "holders",
         "index_position": 2,
         "key_type": "i64",

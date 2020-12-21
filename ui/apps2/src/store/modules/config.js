@@ -65,7 +65,8 @@ const config = {
     tampList: 0,
     // Time 挖矿列表
     timeList: [],
-
+    // TAG LP Mids
+    tagLpMids: localStorage.getItem('tagLpMids') ? JSON.parse(localStorage.getItem('tagLpMids')) : [],
 
     // market 过滤配置列表
     mkFilterConf: [{
@@ -85,7 +86,7 @@ const config = {
     // pddex Data
     boxMids: [], // 设置Box的做市Mid
     marketLists: [], // pddex使用的做市列表 - 整合DFS 和 BOX
-    hotLists: []
+    hotLists: [],
   },
   mutations: {
     SET_LpMineList: (state, lpMineList) => {
@@ -108,6 +109,10 @@ const config = {
     SET_PddexMarketLists: (state, marketLists) => {
       state.marketLists = marketLists;
     },
+    SET_TagLpMids: (state, tagLpMids) => {
+      state.tagLpMids = tagLpMids;
+      localStorage.setItem('tagLpMids', JSON.stringify(tagLpMids))
+    },
   },
   actions: {
     setLpMineList({ commit }, baseConfig) {
@@ -128,6 +133,9 @@ const config = {
     },
     setPddexMarketLists({ commit }, marketLists) {
       commit('SET_PddexMarketLists', marketLists);
+    },
+    setTagLpMids({ commit }, tagLpMids) {
+      commit('SET_TagLpMids', tagLpMids);
     },
   }
 };

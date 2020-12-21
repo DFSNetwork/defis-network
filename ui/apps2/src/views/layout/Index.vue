@@ -40,8 +40,9 @@ import NodeSet from '@/components/popup/NodeSet';
 import WarmTip from '@/components/WarmTip';
 import Tabbar from './comp/Tabbar';
 
-import { get_acc_info } from '@/utils/api';
+import { get_acc_info, get_balance } from '@/utils/api';
 import { dealMarketLists } from '@/utils/logic';
+import { get_tag_lp_mids } from '@/utils/minerLogic';
 
 export default {
   name: 'layout',
@@ -65,6 +66,7 @@ export default {
       showInvi: false,
       showNode: false,
       showWarm: false,
+      tagTimer: null,
     }
   },
   computed:{
@@ -91,13 +93,38 @@ export default {
     }
   },
   mounted() {
+    this.handleGetTagBal()
     this.handleRowsMarket();
     this.handleStartTimer();
+    this.handleGetVotes()
   },
   beforeDestroy() {
     clearInterval(this.timer);
+    clearTimeout(this.tagTimer)
   },
   methods: {
+    // 获取TAG LP 矿池列表
+    async handleGetVotes() {
+      get_tag_lp_mids()
+      // console.log(this.$store.state.config.tagLpMids)
+    },
+    async handleGetTagBal() {
+      clearTimeout(this.tagTimer)
+      this.tagTimer = setTimeout(() => {
+        this.handleGetTagBal()
+      }, 10000);
+      const params = {
+        code: 'tagtokenmain',
+        coin: 'TAG',
+        decimal: 8,
+        account: 'defisswapcnt'
+      }
+      const {status, result} = await get_balance(params);
+      if (!status) {
+        return
+      }
+      this.$store.dispatch('setPoolsTagBal', result.split(' ')[0])
+    },
     handleClose() {
       this.showWarm = false;
     },

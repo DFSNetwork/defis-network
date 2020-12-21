@@ -1,9 +1,14 @@
 <template>
   <div class="minReward">
     <div class="title">{{ $t('mine.minAbleReward') }}</div>
-    <div class="mb10">{{ $t('mine.minReward', {minReward: minReward}) }}</div>
-    <div class="mb10">{{ $t('mine.rewardCut') }}</div>
-    <div v-if="$route.name !== 'dsr'">{{ $t('mine.rewardPrice') }}</div>
+    <div v-if="$route.name !== 'dssForTag'">
+      <div class="mb10">{{ $t('mine.minReward', {minReward: minReward}) }}</div>
+      <div class="mb10">{{ $t('mine.rewardCut') }}</div>
+      <div>{{ $t('mine.rewardPrice', {coin: 'DFS'}) }}</div>
+    </div>
+    <div v-else>
+      <div>{{ $t('mine.rewardPrice', {coin: 'TAG'}) }}</div>
+    </div>
   </div>
 </template>
 

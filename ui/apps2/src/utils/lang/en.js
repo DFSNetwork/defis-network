@@ -197,7 +197,7 @@ export default {
     pools: 'Pools',
     minReward: 'DFS reward less than {minReward} will not be sent.',
     rewardCut: 'The last four digits of the reward decimal will be truncated.',
-    rewardPrice: 'Unclaimed DFS rewards may increase or decrease due to the rise or fall of the current DFS price.',
+    rewardPrice: 'Unclaimed {coin} rewards may increase or decrease due to the rise or fall of the current {coin} price.',
     minAbleReward: 'Notes for Claim',
     mineBuff: 'Calculate power bonus',
     buff: 'Calculate power bonus',
@@ -211,7 +211,7 @@ export default {
     wRewaed: '10,000 {coin}/24H',
     nextLess: 'Next damping',
     current: 'Current supply',
-    waitClaim: 'Pending reward',
+    waitClaim: 'Reward',
     claimAll: 'Claim all',
     poolsList: 'Pools',
     myMine: 'My dig',
@@ -258,7 +258,7 @@ export default {
     retrieve: 'Retrieve',
     unOpen: 'The DSR contract is under review and is waiting for its official opening.',
     testData: 'The page data are all test data. Estimated open day on September 8. It may be advanced or delayed.',
-    dfsHolders: 'DFS Holders', // DFS Holders
+    dfsHolders: '{coin} Holders', // DFS Holders
     total: 'Total', // Total
     totalNum: 'Total deposit',
     nowApy: 'Current APY',

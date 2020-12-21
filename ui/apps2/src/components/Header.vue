@@ -31,7 +31,6 @@
         <div class="proClass">
           <div class="create flexc" @click="handleTo('fundation')">
             <span>{{ $t('fundation.nav') }}</span>
-            <span class="newPro">NEW</span>
           </div>
           <div class="create flexc" @click="handleToProject('pddex')">PDDEX</div>
           <div class="create flexc" @click="handleToProject('yfcGuns')">YFC {{ $t('farms.yfcGun') }}</div>
@@ -55,6 +54,10 @@
       <div @click="showDss = false">
         <div class="create flexc" @click="handleTo('dss')">DFS DSS</div>
         <div class="create flexc" @click="handleToProject('yfcDss')">YFC DSS</div>
+        <div class="create flexc" @click="handleTo('dssForTag')">
+          <span>TAG DSS</span>
+          <span class="newPro">NEW</span>
+        </div>
       </div>
     </el-dialog>
 
@@ -63,8 +66,8 @@
       :show-close="false"
       :visible.sync="showPools">
       <div @click="showPools = false">
-        <div class="create flexc" @click="handleTo('pools')">DFS 矿池</div>
-        <div class="create flexc" @click="handleTo('nodePools')">TAG 矿池</div>
+        <div class="create flexc" @click="handleTo('pools')">{{ $t('sys.coinPool', {coin: 'DFS'}) }}</div>
+        <div class="create flexc" @click="handleTo('nodePools')">{{ $t('sys.coinPool', {coin: 'TAG'}) }}</div>
       </div>
     </el-dialog>
 
@@ -73,8 +76,16 @@
       :show-close="false"
       :visible.sync="showVote">
       <div @click="showVote = false">
-        <div class="create flexc" @click="handleTo('vote')">{{ $t('tab.poolVote') }}</div>
-        <div class="create flexc" @click="handleTo('nodeVote')">{{ $t('tab.nodeVote') }}</div>
+        <div class="create flexc" @click="handleTo('nodeVote')">{{ $t('sys.vote1') }}</div>
+        <div class="create flexc" @click="handleTo('vote')">{{ $t('sys.coinPool', {coin: 'DFS'}) }}</div>
+        <div class="create flexc" @click="handleTo('voteForTag')">
+          <span>{{ $t('sys.coinPool', {coin: 'TAG'}) }}</span>
+          <span class="newPro">NEW</span>
+        </div>
+        <div class="create flexc" @click="handleTo('sysParams')">
+          <span>{{ $t('sys.vote2') }}</span>
+          <span class="newPro">NEW</span>
+        </div>
       </div>
     </el-dialog>
 
@@ -307,6 +318,7 @@ export default {
   }
   &.showDss{
     /deep/ .el-dialog{
+      width: 200px;
       margin-right: 210px;
     }
   }
@@ -318,8 +330,8 @@ export default {
 
   &.showVote{
     /deep/ .el-dialog{
-      width: 170px;
-      margin-left: 110px;
+      width: 200px;
+      margin-left: 80px;
     }
   }
   

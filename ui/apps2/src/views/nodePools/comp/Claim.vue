@@ -1,17 +1,19 @@
 <template>
-  <div class="allClaim flexb flexs">
+  <div class="allClaim flexb flexs" v-loading="waiting">
     <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/bg/myReward.png" alt="">
     <div>
       <div class="subTitle flexa tip">
         <span>{{ $t('mine.waitClaim') }}</span>
         <img class="tipIcon ml10" @click="showRules = true" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
-        <span class="about tip">(总收益 ≈ {{ allReward }} EOS)</span>
+        <span class="about tip">({{ $t('nodePools.allReward') }} ≈ {{ allReward }} EOS)</span>
       </div>
-      <div class="claimNum" v-for="(v) in lpPoolsMid" :key="v">
-        <span class="dinBold">{{ accLpData[v] ? accLpData[v].showReward || '0.00000000' : '0.00000000' }} TAG</span>
-        <span class="tip">(LP)</span>
-        <span class="tip dinReg"> ≈ {{ accLpData[v] ? accLpData[v].aboutEos || '0.0000' : '0.0000' }} EOS</span>
-      </div>
+      <template v-for="(v) in lpPoolsMid">
+        <div class="claimNum" :key="v" v-if="accLpData[v] && parseFloat(accLpData[v].showReward)">
+          <span class="dinBold">{{ accLpData[v] ? accLpData[v].showReward || '0.00000000' : '0.00000000' }} TAG</span>
+          <span class="tip">(LP)</span>
+          <span class="tip dinReg"> ≈ {{ accLpData[v] ? accLpData[v].aboutEos || '0.0000' : '0.0000' }} EOS</span>
+        </div>
+      </template>
       <template v-for="(v, index) in nKeys">
         <div class="claimNum" v-if="poolsData[v].showReward" :key="index">
           <span class="dinBold">{{ poolsData[v].showReward || '0.00000000' }} {{ poolsData[v].sym }}</span>
@@ -93,6 +95,12 @@ export default {
         all += parseFloat(this.poolsData[v].aboutEos || 0)
       })
       return Number(all || 0).toFixed(4)
+    },
+    waiting() {
+      if (this.lpPoolsMid.length || this.nKeys.length) {
+        return false
+      }
+      return true
     }
   },
   watch: {
@@ -106,10 +114,10 @@ export default {
   },
   methods: {
     handleClaimAll() {
-      if (!this.scatter || !this.scatter.identity || this.loadingProxy) {
+      if (!this.scatter || !this.scatter.identity || this.claim) {
         return
       }
-      this.loadingProxy = true;
+      this.claim = true;
       const formName = this.scatter.identity.accounts[0].name;
       const permission = this.scatter.identity.accounts[0].authority;
       // const params = getClaimActions(this.accVoteData)
@@ -145,24 +153,8 @@ export default {
           params.actions.push(lpAction)
         }
       })
-      // const lpAction = {
-      //   account: this.baseConfig.nodeMiner,
-      //   name: 'claim',
-      //   authorization: [{ 
-      //     actor: formName,
-      //     permission,
-      //   }],
-      //   data: {
-      //     user: formName,
-      //     mid: this.lpPoolsMid[0]
-      //   },
-      // }
-      // if (Number(this.accLpData.showReward)) {
-      //   params.actions.push(lpAction)
-      // }
-      // console.log(params)
       EosModel.toTransaction(params, (res) => {
-        this.loadingProxy = false;
+        this.claim = false;
         if(res.code && JSON.stringify(res.code) !== '{}') {
           this.$message({
             message: res.message,

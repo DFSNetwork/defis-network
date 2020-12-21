@@ -1,88 +1,92 @@
 <template>
   <div class="poolsLists">
-    <div class="title flexb">
-      <span class="act">LP {{ $t('nodePools.poolsLists') }}</span>
-      <span class="mineRule flexa" @click="handleShowRules('lp')">
-        <span>{{ $t('miningRules.rules') }}</span>
-        <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
-      </span>
+    <div class="tabDiv flexb">
+      <div class="tab flexc" :class="{'actTab': tabAct === 1}" @click="tabAct = 1">
+        {{ $t('nodePools.voteMineNew') }}</div>
+      <div class="tab flexc" :class="{'actTab': tabAct === 2}" @click="tabAct = 2">
+        {{ $t('nodePools.lpMineNew') }}</div>
     </div>
-    <div class="lpList" v-if="lpLists.length">
-      <div class="bgShadow"></div>
-      <div class="lpCutDown flexc" v-if="lpCutDown.total > 0">
-        <div>
-          <div>{{ $t('nodePools.cutDown', {type: 'LP'}) }}</div>
-          <div>{{ lpCutDown.hours }}:{{ lpCutDown.minutes }}:{{ lpCutDown.seconds }}</div>
+    <div v-if="tabAct === 2">
+      <div class="title flexb">
+        <span class="act">LP {{ $t('nodePools.poolsLists') }}</span>
+        <span class="mineRule flexa" @click="handleShowRules('lp')">
+          <span>{{ $t('miningRules.rules') }}</span>
+          <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
+        </span>
+      </div>
+      <div class="lpList" v-if="lpLists.length">
+        <div style="position: relative;" v-for="(v, i) in lpLists" :key="`lp${i}`" @click="handleToDetailLists(v, 'lp')">
+          <!-- <div class="bgShadow" v-if="i < 10"></div> -->
+          <div class="list mg20">
+            <div class="model" v-if="i >= 10" @click.stop="''">
+              <span class="boost flexc" @click="handleTo('voteForTag')">{{ $t('nodePools.boost') }}</span>
+            </div>
+            <div class="poolInfo flexa">
+              <img class="coinImg" :src="v.sym0Data.imgUrl" :onerror="errorCoinImg">
+              <div class="bal">
+                <div class="flexb">
+                  <span>{{ v.symbol0 }}/{{ v.symbol1 }} {{ $t('nodePools.lpMine') }}</span>
+                  <span class="apy">{{ $t('nodePools.apy') }}：{{ v.apy || '0.00' }}%</span>
+                </div>
+                <div class="flexend">
+                  <span class="num din">
+                    {{ accLpData[`${v.mid}`] ? accLpData[`${v.mid}`].showReward || '0.00000000' : '0.00000000' }}
+                  </span>
+                  <span class="red_p flexa" v-if="Number(handleAddBuff(accLpData[`${v.mid}`]))">（
+                    <img class="buffImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/buff2.svg">
+                    {{ handleAddBuff(accLpData[`${v.mid}`]) }}%）</span>
+                </div>
+              </div>
+            </div>
+            <div class="reward">{{ $t('nodePools.marketNum') }}：{{ handleDealReserve(v.reserve0) }}/{{ handleDealReserve(v.reserve1) }}</div>
+            <!-- <div class="reward">{{ $t('market.myMarkets') }}：{{ handleDealMyLpNum(v) }}</div>
+            <div class="myRank plan" @click.stop="''">
+              <div class="flexb">
+                <span class="flexa">
+                  <span>{{ $t('nodePools.planRank') }}：</span>
+                  <el-input-number v-model="plan[v.mid]" :min="1" :max="150"></el-input-number>
+                </span>
+                <span class="green_p" @click="handleDealToken(v)">{{ $t('nodePools.doing') }}</span>
+              </div>
+              <span>
+                <el-slider
+                  :min="1"
+                  :max="100"
+                  v-model="plan[v.mid]">
+                </el-slider>
+              </span>
+            </div>
+            <div class="flexb" @click.stop="''">
+              <span>{{ $t('nodePools.myRank') }}：{{ accLpData[`${v.mid}`] ? accLpData[`${v.mid}`].rank || '100+' : '100+' }}</span>
+            </div> -->
+          </div>
         </div>
       </div>
-      <div class="list" v-for="(v, i) in lpLists" :key="`lp${i}`" @click="handleToDetailLists(v, 'lp')">
+    </div>
+    <div v-else>
+      <div class="title flexb">
+        <span class="">REX {{ $t('nodePools.poolsLists') }}</span>
+        <span class="mineRule flexa" @click="handleShowRules('rex')">
+          <span>{{ $t('miningRules.rules') }}</span>
+          <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
+        </span>
+      </div>
+      <div class="list" v-for="(item, index) in poolsLists" :key="index"  @click="handleToDetailLists(item, 'rex')">
+        <div class="model" v-if="index > 2" @click.stop="''">
+          <span class="boost flexc" @click="handleShowBoost(item)">{{ $t('nodePools.boost') }}</span>
+        </div>
         <div class="poolInfo flexa">
-          <img class="coinImg" :src="v.sym1Data.imgUrl">
+          <img class="coinImg" :src="item.imgUrl" :onerror="errorCoinImg">
           <div class="bal">
             <div class="flexb">
-              <span>{{ v.symbol0 }}/{{ v.symbol1 }} {{ $t('nodePools.lpMine') }}</span>
-              <span class="apy">{{ $t('nodePools.apy') }}：{{ v.apy }}%</span>
+              <span>{{ $t('nodePools.poolsReward', {token:item.sym}) }}</span>
+              <span class="apy">{{ $t('nodePools.apy') }}：{{ item.apy || '0.00' }}%</span>
             </div>
-            <div class="flexend">
-              <span class="num din">
-                {{ accLpData[`${v.mid}`] ? accLpData[`${v.mid}`].showReward || '0.00000000' : '0.00000000' }}
-              </span>
-              <span class="red_p flexa" v-if="Number(handleAddBuff(accLpData[`${v.mid}`]))">（
-                <img class="buffImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/buff2.svg">
-                {{ handleAddBuff(accLpData[`${v.mid}`]) }}%）</span>
-            </div>
+            <div class="num din">{{ poolsData[`${item.sym}-${item.mid}`] ? poolsData[`${item.sym}-${item.mid}`].showReward || '0.00000000' : '0.00000000' }}</div>
           </div>
         </div>
-        <div class="reward">{{ $t('nodePools.marketNum') }}：{{ handleDealReserve(v.reserve0) }}/{{ handleDealReserve(v.reserve1) }}</div>
-        <div class="reward">{{ $t('market.myMarkets') }}：{{ handleDealMyLpNum(v) }}</div>
-
-        <div class="myRank plan" @click.stop="''">
-          <div class="flexb">
-            <span class="flexa">
-              <span>{{ $t('nodePools.planRank') }}：</span>
-              <el-input-number v-model="plan[v.mid]" :min="1" :max="150"></el-input-number>
-            </span>
-            <span class="green_p" @click="handleDealToken(v)">{{ $t('nodePools.doing') }}</span>
-          </div>
-          <span>
-            <el-slider
-              :min="1"
-              :max="100"
-              v-model="plan[v.mid]">
-            </el-slider>
-          </span>
-        </div>
-        <div class="flexb" @click.stop="''">
-          <span>{{ $t('nodePools.myRank') }}：{{ accLpData[`${v.mid}`] ? accLpData[`${v.mid}`].rank || '100+' : '100+' }}</span>
-        </div>
+        <div class="reward">{{ $t('nodePools.poolsBal') }}：{{ poolsData[`${item.sym}-${item.mid}`] ? poolsData[`${item.sym}-${item.mid}`].poolbal : `0.0000 ${item.sym}` }}</div>
       </div>
-    </div>
-    <div class="title flexb">
-      <span class="act">REX {{ $t('nodePools.poolsLists') }}</span>
-      <span class="mineRule flexa" @click="handleShowRules('rex')">
-        <span>{{ $t('miningRules.rules') }}</span>
-        <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
-      </span>
-    </div>
-    <div class="rexCutDown" v-if="rexCutDown.total > 0">
-      <div>{{ $t('nodePools.cutDown', {type: 'REX'}) }}</div>
-      <div>{{ rexCutDown.hours }}:{{ rexCutDown.minutes }}:{{ rexCutDown.seconds }}</div>
-    </div>
-    <div class="list" v-for="(item, index) in poolsLists" :key="index"  @click="handleToDetailLists(item, 'rex')">
-      <div class="model" v-if="index > 2" @click.stop="''">
-        <span class="boost flexc" @click="handleShowBoost(item)">助力</span>
-      </div>
-      <div class="poolInfo flexa">
-        <img class="coinImg" :src="item.imgUrl" :onerror="errorCoinImg">
-        <div class="bal">
-          <div class="flexb">
-            <span>{{ $t('nodePools.poolsReward', {token:item.sym}) }}</span>
-            <span class="apy">{{ $t('nodePools.apyShort') }}：{{ item.apy || '0.00' }}%</span>
-          </div>
-          <div class="num din">{{ poolsData[`${item.sym}-${item.mid}`] ? poolsData[`${item.sym}-${item.mid}`].showReward || '0.00000000' : '0.00000000' }}</div>
-        </div>
-      </div>
-      <div class="reward">{{ $t('nodePools.poolsBal') }}：{{ poolsData[`${item.sym}-${item.mid}`] ? poolsData[`${item.sym}-${item.mid}`].poolbal : `0.0000 ${item.sym}` }}</div>
     </div>
 
     <el-dialog
@@ -190,6 +194,7 @@ export default {
   },
   data() {
     return {
+      tabAct: 1,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       plan: {},
       planRank: 30,
@@ -257,6 +262,11 @@ export default {
     }
   },
   methods: {
+    handleTo(name) {
+      this.$router.push({
+        name
+      })
+    },
     handleDealMyLpNum(v) {
       if (!v) {
         return
@@ -317,8 +327,8 @@ export default {
       this.timer = setTimeout(() => {
         this.handleStartTimer()
       }, 5000);
-      this.handleGetBal('bal0')
-      this.handleGetBal('bal1')
+      // this.handleGetBal('bal0')
+      // this.handleGetBal('bal1')
     },
     handleGetBal(type = 'bal0') {
       if (!this.scatter || !this.scatter.identity || !this.lpLists.length) {
@@ -416,6 +426,27 @@ export default {
   margin: 32px;
   font-size: 28px;
   color: #333;
+  .tabDiv{
+    font-size: 36px;
+    margin: 14px 0;
+    &>div{
+      position: relative;
+      height: 92px;
+      flex: 1;
+      &.actTab{
+        color: #29D4B0;
+        &::after{
+          content: '';
+          position: absolute;
+          width: 52px;
+          height: 4px;
+          background: #29D4B0;
+          border-radius: 4px;
+          bottom: 0px;
+        }
+      }
+    }
+  }
 }
 .title{
   font-size: 32px;
@@ -449,7 +480,7 @@ export default {
 .lpList{
   position: relative;
   .reward{
-    margin: 14px 0;
+    margin: 14px 0 0;
   }
   .myRank{
     margin-top: 15px;
@@ -477,13 +508,16 @@ export default {
 }
 .list{
   position: relative;
-  z-index: 1;
+  z-index: 10;
   background: #FFF;
   border: 1px solid #eee;
   padding: 20px 26px;
   border-radius: 12px;
   text-align: left;
   margin-bottom: 20px;
+  &.mg20{
+    margin-bottom: 30px;
+  }
   .model{
     border-radius: 12px;
     position: absolute;

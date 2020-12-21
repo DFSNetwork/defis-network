@@ -31,7 +31,7 @@
 
       <div class="nullDiv"></div>
       <div class="btnDiv">
-        <div class="btn flexc" @click="handleTo('createPool')">创建矿池</div>
+        <div class="btn flexc" @click="handleTo('createPool')">{{ $t('nodePools.createPool') }}</div>
       </div>
     </div>
   </div>
@@ -69,7 +69,7 @@ export default {
       accVoteData: {}, // 用户投票数据
 
       // LP 挖矿
-      lpPoolsMid: [602, 665], // 665
+      lpPoolsMid: [], // 665
       lpLists: [],
       accLpData: {},
       lpRankWeight: 0,
@@ -91,18 +91,23 @@ export default {
       filterMkLists: state => state.sys.filterMkLists,
       marketLists: state => state.sys.marketLists,
       baseConfig: state => state.sys.baseConfig,
+      poolsTagBal: state => state.sys.poolsTagBal,
     }),
     yearApr() {
       let apy = 0;
       const pools = this.poolsData;
       const keys = Object.keys(pools);
-      keys.forEach((v) => {
+      keys.forEach((v, index) => {
+        if (index >= 3) {
+          return
+        }
         apy = apy + parseFloat(pools[v].apy || 0)
       })
       return apy.toFixed(2)
     }
   },
   mounted() {
+    this.handleGetVotes()
     // 获取代理信息
     this.handleGetProxy();
     this.handleGetNodeLists();
@@ -135,8 +140,40 @@ export default {
       deep: true,
       immediate: true,
     },
+    lpPoolsMid: {
+      handler: function lpMids() {
+        this.handleGetLpPoolsLists()
+        this.handleGetAccLpMinerData()
+      },
+      deep: true,
+      immediate: true,
+    }
   },
   methods: {
+    async handleGetVotes() {
+      const params = {
+        "code": "vote.tag",
+        "scope": "vote.tag",
+        "table": "pools",
+        "json": true,
+        limit: 10000
+      }
+      const {status, result} = await get_table_rows(params)
+      if (!status) {
+        return
+      }
+      let rows = result.rows || [];
+      rows.sort((a, b) => {
+        return Number(b.total_votes) - Number(a.total_votes)
+      })
+      const mids = [];
+      rows.forEach(v => {
+        mids.push(v.mid)
+      })
+      this.lpPoolsMid = mids;
+      // console.log(mids)
+      // this.voteList = rows;
+    },
     handleTo(name) {
       this.$router.push({
         name
@@ -244,16 +281,15 @@ export default {
     handleRun() {
       clearInterval(this.runTimer)
       this.runTimer = setInterval(() => {
-        // const keys = Object.keys(this.poolsData)
-        // poolsLists
-        // console.log(keys)
-        // console.log(this.poolsLists)
         this.poolsLists.forEach((pList, index) => {
           if (index >= 3) {
             return
           }
           const v = `${pList.sym}-${pList.mid}`; // ${v.sym}-${v.mid}
           // console.log(this.poolsData[v])
+          if (!this.poolsData[v]) {
+            return
+          }
           const accReward = this.poolsData[v].accReward || 0;
           const showReward = this.poolsData[v].showReward || accReward;
           let tReward = this.poolsData[v].tReward || showReward;
@@ -264,7 +300,7 @@ export default {
           }
           // console.log(tReward)
           const aboutEos = tReward * this.poolsData[v].price;
-          this.$set(this.poolsData[v], 'aboutEos', Number(aboutEos).toFixed(4))
+          this.$set(this.poolsData[v], 'aboutEos', Number(aboutEos || 0).toFixed(4))
           this.$set(this.poolsData[v], 'showReward', Number(tReward).toFixed(8))
           this.$set(this.poolsData[v], 'tReward', Number(tReward))
           // this.$set(this.poolsData[v], 't', t)
@@ -288,7 +324,7 @@ export default {
         "limit": 1000,
       }
       const {status, result} = await get_table_rows(params);
-      // console.log(result)
+      // console.log(JSON.parse(JSON.stringify(result)))
       if (!status) {
         return
       }
@@ -307,21 +343,23 @@ export default {
       this.handleGetBal()
     },
     handleGetBal() {
-      this.poolsLists.forEach(async (v) => {
+      this.poolsLists.forEach(async (v, i) => {
         if (this.poolsData[`${v.sym}-${v.mid}`]) {
           return
         }
-        const params = {
-          code: v.contract,
-          symbol: v.sym,
-          decimal: v.decimal,
-          account: this.baseConfig.fundation,
-        }
-        const {status, result} = await get_balance(params);
-        if (!status) {
-          return
-        }
-        this.$set(this.poolsData, `${v.sym}-${v.mid}`, Object.assign({}, (this.poolsData[`${v.sym}-${v.mid}`] || v) , {bal: result}))
+        setTimeout(async () => {
+          const params = {
+            code: v.contract,
+            symbol: v.sym,
+            decimal: v.decimal,
+            account: this.baseConfig.fundation,
+          }
+          const {status, result} = await get_balance(params);
+          if (!status) {
+            return
+          }
+          this.$set(this.poolsData, `${v.sym}-${v.mid}`, Object.assign({}, (this.poolsData[`${v.sym}-${v.mid}`] || v) , {bal: result}))
+        }, i * 100);
       })
     },
     // 计算年化
@@ -330,35 +368,69 @@ export default {
         return;
       }
       this.poolsLists.forEach((list, index) => {
-        if (index >= 3) {
-          return
-        }
+        // console.log(list)
+        // if (index >= 3) {
+        //   return
+        // }
         const apy = (Math.pow(list.aprs, 86400 * 365) - 1) * 100;
         this.$set(list, 'apy', apy.toFixed(2));
       })
-      // this.poolsLists.sort((a, b) => {
-      //   return b.apy - a.apy
-      // })
+      // console.log(this.poolsLists)
     },
 
     // Lp 矿池
     handleGetLpPoolsLists() {
-      if (!this.filterMkLists.length || this.lpLists.length) {
+      if (!this.filterMkLists.length || this.lpLists.length || !this.lpPoolsMid.length) {
         return
       }
       const lpLists = []
-      this.lpPoolsMid.forEach(mid => {
-        const market = this.filterMkLists.find(v => v.mid === mid);
-        lpLists.push(market)
-        this.handleGetLpRank(mid);
+      this.lpPoolsMid.forEach((mid, index) => {
+        // const market = this.filterMkLists.find(v => v.mid === mid);
+        const market = this.marketLists.find(v => v.mid === mid);
+        if (market.contract1 === 'tagtokenmain' && market.symbol1 === 'TAG') {
+          lpLists.push(market)
+        } else if (market.contract0 === 'tagtokenmain' && market.symbol0 === 'TAG') {
+          const v = market;
+          const t = {
+            contract0: v.contract1,
+            contract1: v.contract0,
+            last_update: v.last_update,
+            liquidity_token: v.liquidity_token,
+            mid: v.mid,
+            price0_cumulative_last: v.price1_cumulative_last,
+            price0_last: v.price1_last,
+            price1_cumulative_last: v.price0_cumulative_last,
+            price1_last: v.price0_last,
+            reserve0: v.reserve1,
+            reserve1: v.reserve0,
+            sym0: v.sym1,
+            sym1: v.sym0,
+            exchangeSym: true,
+            sym0Data: v.sym1Data,
+            sym1Data: v.sym0Data,
+            symbol0: v.symbol1,
+            symbol1: v.symbol0,
+          }
+          lpLists.push(t)
+        }
+        this.handleGetLpRank(mid, index);
       })
-      this.lpLists = lpLists;
+      let dealArr = lpLists.slice(0, 10);
+      let dealArr2 = lpLists.slice(10, 1000)
+      dealArr.sort((a, b) => {
+        return parseFloat(b.reserve1) - parseFloat(a.reserve1)
+      })
+      dealArr2.sort((a, b) => {
+        return parseFloat(b.reserve1) - parseFloat(a.reserve1)
+      })
+      
+      this.lpLists = [...dealArr, ...dealArr2];
       this.handleGetLpPoolsBal()
       this.handleGetAccLpMinerData();
     },
     // 获取LP 挖矿排名
-    async handleGetLpRank(mid) {
-      if (!this.scatter || !this.scatter.identity) {
+    async handleGetLpRank(mid, index) {
+      if (!this.scatter || !this.scatter.identity || index >= 10) {
         return
       }
       // const formName = this.scatter.identity.accounts[0].name;
@@ -393,6 +465,7 @@ export default {
         this.$set(v, 'weight', weight)
         this.$set(v, 'rank', rank)
       })
+      // console.log(mid, rows)
       this.rankListObj[`${mid}`] = rows;
       this.handleGetLpReward()
     },
@@ -414,36 +487,49 @@ export default {
     },
     // 获取用户LP挖矿数据
     async handleGetAccLpMinerData() {
+      if (!this.lpPoolsMid.length) {
+        return
+      }
+      // console.log(this.lpPoolsMid)
       const formName = this.scatter.identity.accounts[0].name;
-      this.lpPoolsMid.forEach(async mid => {
-        const params = {
-          "code": this.baseConfig.nodeMiner,
-          "scope": mid,
-          "table": "miners",
-          "json":true,
-          "lower_bound": ` ${formName}`,
-          "upper_bound": ` ${formName}`,
-        }
-        const {status, result} = await get_table_rows(params)
-        if (!status) {
+      this.lpPoolsMid.forEach(async (mid, index) => {
+        if (index >= 10) {
           return
         }
-        if (!result.rows.length) {
-          return
-        }
-        const rows = result.rows[0]
-        const market = this.lpLists.find(v => v.mid === mid);
-        const inData = {
-          poolSym0: market.reserve0.split(' ')[0],
-          poolSym1: market.reserve1.split(' ')[0],
-          poolToken: market.liquidity_token,
-          sellToken: Math.abs(rows.token)
-        }
-        const marketData = sellToken(inData)
-        rows.market0 = marketData.getNum1;
-        rows.market1 = marketData.getNum2;
-        this.accLpData[`${mid}`] = rows;
-        this.handleGetLpReward()
+        setTimeout(async () => {
+          const params = {
+            "code": this.baseConfig.nodeMiner,
+            "scope": mid,
+            "table": "miners",
+            "json":true,
+            "lower_bound": ` ${formName}`,
+            "upper_bound": ` ${formName}`,
+          }
+          const {status, result} = await get_table_rows(params)
+          if (!status) {
+            return
+          }
+          if (!result.rows.length) {
+            return
+          }
+          const rows = result.rows[0]
+          const market = this.lpLists.find(v => v.mid === mid);
+          if (!market) {
+            return
+          }
+          const inData = {
+            poolSym0: market.reserve0.split(' ')[0],
+            poolSym1: market.reserve1.split(' ')[0],
+            poolToken: market.liquidity_token,
+            sellToken: Math.abs(rows.token)
+          }
+          const marketData = sellToken(inData)
+          rows.market0 = marketData.getNum1;
+          rows.market1 = marketData.getNum2;
+          // console.log(mid, rows)
+          this.accLpData[`${mid}`] = rows;
+          this.handleGetLpReward()
+        }, index * 100);
       });
     },
     // 计算LP池子收益
@@ -494,7 +580,7 @@ export default {
     handleRunLp() {
       clearInterval(this.lpRunTimer)
       this.lpRunTimer = setInterval(() => {
-        const price = this.lpLists[0].price;
+        const price = this.lpLists.find(vv => vv.mid === 602).price;
         const keys = Object.keys(this.accLpData)
         const newJson = {}
         keys.forEach((mid) => {
@@ -518,21 +604,6 @@ export default {
         })
         this.accLpData = newJson;
         this.$forceUpdate()
-
-        // const accLpReward = this.accLpData.accLpReward || 0;
-        // const showReward = this.accLpData.showReward || accLpReward;
-        // let tReward = this.accLpData.tReward || showReward;
-        // const t = this.accLpData.t  || ((accLpReward - showReward) / 50)
-        // tReward = Number(tReward) + Number(t);
-        // if (tReward > accLpReward) {
-        //   tReward = accLpReward
-        // }
-        // const aboutEos = showReward * this.accLpData.price;
-        // // console.log(tReward, accLpReward, t)
-        // this.$set(this.accLpData, 'aboutEos', Number(aboutEos).toFixed(4))
-        // this.$set(this.accLpData, 'showReward', Number(tReward).toFixed(8))
-        // this.$set(this.accLpData, 'tReward', Number(tReward))
-        // this.$set(this.accLpData, 't', t)
       }, 20);
     },
     // 计算LP年化
@@ -541,34 +612,23 @@ export default {
         return
       }
       const allTagNum = this.handleAllLpTagNum()
-      this.lpLists.forEach(v => {
-        const tagNum = v.contract1 === "tagtokenmain" ? parseFloat(v.reserve1) : parseFloat(v.reserve0)
-        const otherNum = v.contract1 === "tagtokenmain" ? parseFloat(v.reserve0) : parseFloat(v.reserve1)
-        const price = otherNum / tagNum;
-        const num = v.contract0 === "eosio.token" ? 1 / price : 100 / price;
+      this.lpLists.forEach((v,i) => {
+        // if (i >= 10) {
+        //   return
+        // }
+        const num = 0.1;
         const rate = num / allTagNum;
         const lpBal = this.lpLists[0].lpBal;
         const weight = 1.3;
         const t = 86400 * 365;
         const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
-        // console.log(reward)
-        // console.log('price:', price)
         const apy = reward / num * 100;
-        // console.log(apy.toFixed(2))
         this.$set(v, 'apy', apy.toFixed(2))
       })
     },
     // 获取LP池子的总TAG数量
     handleAllLpTagNum() {
-      let count = 0;
-      this.lpLists.forEach(v => {
-        if (v.contract0 === "tagtokenmain" && v.symbol0 === "TAG") {
-          count = Number(count) + parseFloat(v.reserve0)
-        } else if (v.contract1 === "tagtokenmain" && v.symbol1 === "TAG") {
-          count = Number(count) + parseFloat(v.reserve1)
-        }
-      })
-      return count;
+      return this.poolsTagBal;
     }
   }
 }

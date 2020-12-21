@@ -234,7 +234,7 @@ function dealMarketSort(newList) {
 }
 
 
-function get_token_eos_value(a, eos_price) {
+function get_token_eos_value(a, eos_price, tag_price) {
   let val0 = 0;
   if (a.contract0 === "eosio.token" && a.sym0 === "4,EOS") {
       val0 = parseFloat(a.reserve0);
@@ -244,6 +244,12 @@ function get_token_eos_value(a, eos_price) {
       val0 = parseFloat(a.reserve0) / eos_price;
   } else if (a.contract1 === "tethertether" && a.sym1 === "4,USDT") {
       val0 = parseFloat(a.reserve1) / eos_price;
+  } else if (a.contract0 === "tagtokenmain" && a.sym0 === "8,TAG") {
+    val0 = parseFloat(a.reserve0) / tag_price;
+    // console.log(a.mid, val0)
+  } else if (a.contract1 === "tagtokenmain" && a.sym1 === "8,TAG") {
+    val0 = parseFloat(a.reserve1) / tag_price;
+    // console.log(a.mid, val0)
   }
   return val0;
 }
@@ -254,8 +260,13 @@ export function dealMarketLists(list, topLists) {
   let dfsData = {}
   const mkFlt = store.state.config.mkFilterConf;
   const priceObj = getFilterPrice(list)
+  // EOS/USDT 价格
   let eos_market = list.find(v => v.mid === 17);
   let eos_price = parseFloat(eos_market.reserve1) / parseFloat(eos_market.reserve0);
+  // EOS/TAG 价格
+  let tag_market = list.find(v => v.mid === 602);
+  let tag_price = parseFloat(tag_market.reserve1) / parseFloat(tag_market.reserve0);
+  // console.log(tag_price, eos_price)
   list.forEach((item) => {
     let v = item;
     if (v.contract1 === 'eosio.token' && v.sym1 === '4,EOS') {
@@ -277,6 +288,25 @@ export function dealMarketLists(list, topLists) {
       }
       v = newList;
     } else if (v.contract0 !== 'eosio.token' && v.contract1 === 'tethertether' && v.sym1 === '4,USDT') {
+      const newList = {
+        contract0: v.contract1,
+        contract1: v.contract0,
+        last_update: v.last_update,
+        liquidity_token: v.liquidity_token,
+        mid: v.mid,
+        price0_cumulative_last: v.price1_cumulative_last,
+        price0_last: v.price1_last,
+        price1_cumulative_last: v.price0_cumulative_last,
+        price1_last: v.price0_last,
+        reserve0: v.reserve1,
+        reserve1: v.reserve0,
+        sym0: v.sym1,
+        sym1: v.sym0,
+        exchangeSym: true,
+      }
+      v = newList;
+    } else if (v.contract0 !== 'eosio.token' && v.contract0 !== 'tethertether'
+            && v.contract1 === 'tagtokenmain' && v.sym1 === '8,TAG') {
       const newList = {
         contract0: v.contract1,
         contract1: v.contract0,
@@ -328,7 +358,7 @@ export function dealMarketLists(list, topLists) {
       symbol: v.symbol1,
       imgUrl: getCoin(v.contract1, v.symbol1.toLowerCase()),
     }
-    let val0 = get_token_eos_value(v, eos_price);
+    let val0 = get_token_eos_value(v, eos_price, tag_price);
     v.eos_value = val0 * 2;
     v.usdt_value = val0 * 2 * eos_price;
     const i = topLists.find(vv => vv === v.mid)
