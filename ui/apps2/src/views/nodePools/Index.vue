@@ -97,7 +97,10 @@ export default {
       let apy = 0;
       const pools = this.poolsData;
       const keys = Object.keys(pools);
-      keys.forEach((v) => {
+      keys.forEach((v, index) => {
+        if (index >= 3) {
+          return
+        }
         apy = apy + parseFloat(pools[v].apy || 0)
       })
       return apy.toFixed(2)
@@ -321,7 +324,7 @@ export default {
         "limit": 1000,
       }
       const {status, result} = await get_table_rows(params);
-      // console.log(result)
+      // console.log(JSON.parse(JSON.stringify(result)))
       if (!status) {
         return
       }
@@ -365,15 +368,14 @@ export default {
         return;
       }
       this.poolsLists.forEach((list, index) => {
+        // console.log(list)
         // if (index >= 3) {
         //   return
         // }
         const apy = (Math.pow(list.aprs, 86400 * 365) - 1) * 100;
         this.$set(list, 'apy', apy.toFixed(2));
       })
-      // this.poolsLists.sort((a, b) => {
-      //   return b.apy - a.apy
-      // })
+      // console.log(this.poolsLists)
     },
 
     // Lp 矿池
