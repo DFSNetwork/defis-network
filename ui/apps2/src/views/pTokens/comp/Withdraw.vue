@@ -18,7 +18,7 @@
     <div class="btn flexc" @click="show = true">提币</div>
 
     <van-popup class="popup" v-model="show">
-      <WithDrawSure />
+      <WithDrawSure :params="params" @listenSure="handleSure"/>
     </van-popup>
   </div>
 </template>
@@ -37,14 +37,22 @@ export default {
       address: '',
       bal: '100.00000000',
       show: false,
+      params: {},
     }
   },
   methods: {
+    handleSure() {
+      const params = {
+        actions: [{
+          
+        }]
+      }
+    },
     handlePercent(n) {
       this.percent = n
       const amount = this.bal * n / 100;
       this.amount = amount.toFixed(4)
-    }
+    },
   }
 }
 </script>
