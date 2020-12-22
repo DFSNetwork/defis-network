@@ -278,6 +278,7 @@ export default {
         // console.log('get')
         const rows = res.rows || [];
         this.voteList = rows;
+        // console.log(rows)
         this.handlerDealMlVote()
       })
     },
@@ -292,6 +293,10 @@ export default {
       })
       this.voteList.forEach(v => {
         const marketIndex = this.allList.findIndex(vv => vv.mid === v.mid);
+        if (!this.allList[marketIndex]) {
+          // console.log(marketIndex)
+          return
+        }
         const total_votes = parseInt(Number(v.total_votes) / 10000)
         this.$set(this.allList[marketIndex], 'total_votes', total_votes)
         const rate =  total_votes / allVote * 100
