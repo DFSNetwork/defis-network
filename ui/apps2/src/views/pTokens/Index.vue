@@ -12,67 +12,140 @@
         <img class="qus" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
       </div>
       <van-popover
+        class="iptPopDiv"
         v-model="showPopover"
         trigger="click"
-        :actions="actions"
-        @select="onSelect"
+        :get-container="getContainer"
       >
+        <template #default>
+          <div class="options">
+            <template v-for="(v, i) in actions">
+              <div class="iptDiv flexa" v-if="act === 1 ? v.deposit : v.withdraw"
+                :key="i" @click="handleChecked(v)">
+                <div class="sym flexa" v-if="act === 1">
+                  <img class="coin" :src="v.src0">
+                  <span>{{ v.token0 }}</span>
+                </div>
+                <div class="sym flexa" v-else>
+                  <img class="coin" :src="v.src1">
+                  <span>{{ v.token1 }}</span>
+                </div>
+                <img class="to" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/exchange.svg" alt="">
+                <div class="sym flexa" v-if="act === 1">
+                  <img class="coin" :src="v.src1">
+                  <span>{{ v.token1 }}</span>
+                </div>
+                <div class="sym flexa" v-else>
+                  <img class="coin" :src="v.src0">
+                  <span>{{ v.token0 }}</span>
+                </div>
+              </div>
+            </template>
+          </div>
+        </template>
         <template #reference>
-          
-      <div class="iptDiv flexa" @click="handleShowPop">
-        <div class="sym flexa">
-          <img class="coin" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg">
-          <span>BTC</span>
-        </div>
-        <img class="to" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/exchange.svg" alt="">
-        <div class="sym flexa">
-          <img class="coin" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg">
-          <span>PBTC</span>
-        </div>
-      </div>
+          <div class="flexb">
+            <div class="iptDiv flexa" v-if="act === 1">
+              <div class="sym flexa">
+                <img class="coin" :src="action.src0">
+                <span>{{ action.token0 }}</span>
+              </div>
+              <img class="to" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/exchange.svg" alt="">
+              <div class="sym flexa">
+                <img class="coin" :src="action.src1">
+                <span>{{ action.token1 }}</span>
+              </div>
+            </div>
+            <div class="iptDiv flexa" v-else>
+              <div class="sym flexa">
+                <img class="coin" :src="action.src1">
+                <span>{{ action.token1 }}</span>
+              </div>
+              <img class="to" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/exchange.svg" alt="">
+              <div class="sym flexa">
+                <img class="coin" :src="action.src0">
+                <span>{{ action.token0 }}</span>
+              </div>
+            </div>
+            <img class="down" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/down.svg" alt="">
+          </div>
         </template>
       </van-popover>
     </div>
+    <Deposit v-show="act === 1" :action="action"/>
+    <Withdraw v-if="act === 2" :action="action"/>
+    <Rules />
   </div>
 </template>
 
 <script>
-import { v4 as uuidv4 } from 'uuid';
+import Deposit from './comp/Deposit'
+import Withdraw from './comp/Withdraw'
+import Rules from './comp/Rules'
+
 export default {
   name: 'pTokens',
+  components: {
+    Withdraw,
+    Deposit,
+    Rules,
+  },
   data() {
     return {
       act: 1,
       showPopover: false,
-      actions: [{ text: '选项一' }, { text: '选项二' }, { text: '选项三' }],
+      actions: [{
+        deposit: 1,
+        withdraw: 1,
+        token0: 'BTC',
+        token1: 'PBTC',
+        src0: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/btc.png',
+        src1: 'https://ndi.340wan.com/eos/btc.ptokens-pbtc.png',
+        decimal0: '8',
+        decimal1: '8',
+      }, {
+        deposit: 0,
+        withdraw: 1,
+        token0: 'ETH',
+        token1: 'PETH',
+        decimal0: '9',
+        decimal1: '9',
+        src0: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eth.png',
+        src1: 'https://ndi.340wan.com/eos/btc.ptokens-pbtc.png',
+      }],
+      action: {
+        token0: 'BTC',
+        token1: 'PBTC',
+        src0: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/btc.png',
+        src1: 'https://ndi.340wan.com/eos/btc.ptokens-pbtc.png',
+        decimal0: '8',
+        decimal1: '8',
+      },
       uuid: ''
     }
   },
+  watch: {
+    act: {
+      handler: function at(newVal) {
+        if (newVal === 1) {
+          this.action = this.actions.find(v => v.deposit === 1)
+        }
+      },
+      deep: true,
+      immediate: true,
+    }
+  },
   mounted() {
-    this.handleGetAddress()
+    // this.handleGetAddress()
   },
   methods: {
-    handleShowPop() {
-      console.log(this.showPopover)
-      if (this.showPopover) {
-        return
-      }
-      this.showPopover = true;
+    getContainer() {
+      return document.querySelector('.selectDiv');
     },
-    onSelect(action) {
-      this.$toast(action.text);
+    handleChecked(v) {
+      this.action = v
+      this.showPopover = false;
     },
-    async handleGetAddress() {
-      this.uuid = uuidv4()
-      const params = {
-        "id": this.uuid,
-        "jsonrpc": "2.0",
-        "method": "app_getNativeDepositAddress",
-        "params": ["iq3rwbsfcqlv"]
-      }
-      const {status, result} = await this.$api.ptoken_get_address(params)
-      console.log(result)
-    }
   }
 }
 </script>
@@ -103,13 +176,24 @@ export default {
   .qus{
     width: 32px;
   }
-  .iptDiv{
+  .iptPopDiv{
+    width: 100%;
+    box-sizing: border-box;
     background: #FFF;
+    border-radius: 4px;
+    padding: 0 18px;
     margin: 18px 0;
+    .down{
+      width: 18px;
+    }
+  }
+  .options{
+    padding: 0 18px;
+    width: 600px;
+  }
+  .iptDiv{
     font-size: 28px;
     height: 80px;
-    border-radius: 4px;
-    padding: 0 14px;
     .coin{
       width: 44px;
       margin-right: 10px;

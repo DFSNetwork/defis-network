@@ -350,7 +350,7 @@ const constantRouter = [
         path: '/',
         name: 'ptokens',
         component: () => import(/* webpackChunkName: "ptokens" */ '@/views/pTokens/Index'),
-        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
       }
     ],
   },
