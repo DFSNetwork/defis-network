@@ -175,7 +175,8 @@ export default {
         if (!newVal.length || (oldVal && newVal.length === oldVal.length)) {
           return
         }
-        this.allList = newVal;
+        this.allList = this.handleDealMarket(newVal);
+        // this.allList = newVal;
         this.listLoading = false;
         this.handlerDealMlVote();
         this.handleSearch();
@@ -205,6 +206,17 @@ export default {
     this.handleGetVotes()
   },
   methods: {
+    handleDealMarket(marketLists) {
+      const dealTagLists = [];
+      marketLists.forEach(v => {
+        if ((v.contract0 === 'eosio.token' && v.symbol0 === 'EOS') ||
+            (v.contract0 === 'tethertether' && v.symbol0 === 'USDT')) {
+          dealTagLists.push(v)
+          return
+        }
+      })
+      return dealTagLists;
+    },
     handleTovote() {
       const checked = this.allList.filter(v => v.isChecked) || []
       if (!checked.length || this.voteLoading) {
