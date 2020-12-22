@@ -18,6 +18,14 @@
 <script>
 export default {
   name: 'withdrawSure',
+  props: {
+    params: {
+      type: Object,
+      default: function ps() {
+        return {}
+      }
+    }
+  },
 }
 </script>
 
