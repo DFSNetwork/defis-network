@@ -37,9 +37,11 @@ export default {
   methods: {
     async handleGetAddress() {
       this.uuid = uuidv4()
-      const token = this.action.token1.toLowerCase();
+      const token = this.action.urlToken.toLowerCase();
+      const token1 = this.action.token1.toLowerCase();
       const params = {
         token,
+        token1,
         "id": this.uuid,
         "jsonrpc": "2.0",
         "method": "app_getNativeDepositAddress",
@@ -55,7 +57,8 @@ export default {
       this.handleQrCode()
     },
     handleQrCode() {
-      const size = (280 * 0.5 * (document.documentElement.clientWidth / 375))
+      let size = (280 * 0.5 * (document.documentElement.clientWidth / 375))
+      size > 190 ? size = 190 : '';
       this.qrCode = new QRCode(this.$refs.qrCodeUrl, {
         text: this.address,
         width: size,

@@ -75,6 +75,7 @@
     <Deposit v-show="act === 1" :action="action"/>
     <Withdraw v-if="act === 2" :action="action"/>
     <Rules />
+    <History  :action="action"/>
   </div>
 </template>
 
@@ -82,6 +83,7 @@
 import Deposit from './comp/Deposit'
 import Withdraw from './comp/Withdraw'
 import Rules from './comp/Rules'
+import History from './comp/History'
 
 export default {
   name: 'pTokens',
@@ -89,6 +91,7 @@ export default {
     Withdraw,
     Deposit,
     Rules,
+    History,
   },
   data() {
     return {
@@ -97,8 +100,10 @@ export default {
       actions: [{
         deposit: 1,
         withdraw: 1,
+        urlToken: 'pbtc',
         token0: 'BTC',
         token1: 'PBTC',
+        contract1: 'btc.ptokens',
         src0: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/btc.png',
         src1: 'https://ndi.340wan.com/eos/btc.ptokens-pbtc.png',
         decimal0: '8',
@@ -106,16 +111,19 @@ export default {
       }, {
         deposit: 0,
         withdraw: 1,
+        urlToken: 'pweth',
         token0: 'ETH',
         token1: 'PETH',
-        decimal0: '9',
+        decimal0: '18',
         decimal1: '9',
+        contract1: 'eth.ptokens',
         src0: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eth.png',
         src1: 'https://ndi.340wan.com/eos/btc.ptokens-pbtc.png',
       }],
       action: {
         token0: 'BTC',
         token1: 'PBTC',
+        urlToken: 'pbtc',
         src0: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/btc.png',
         src1: 'https://ndi.340wan.com/eos/btc.ptokens-pbtc.png',
         decimal0: '8',

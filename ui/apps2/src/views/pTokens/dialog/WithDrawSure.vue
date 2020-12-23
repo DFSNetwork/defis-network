@@ -2,16 +2,16 @@
   <div class="sureTip">
     <div class="title">提现</div>
     <div class="content">
-      <div class="flexa">
+      <div class="flexs">
         <span>提现地址：</span>
-        <span class="yellow">123456788</span>
+        <span class="yellow">{{ params.address }}</span>
       </div>
       <div class="flexa">
         <span>提现数量：</span>
-        <span>1.00000000</span>
+        <span class="din">{{ params.amount }}</span>
       </div>
     </div>
-    <div class="btn flexc">确认提现</div>
+    <div class="btn flexc" @click="handleSure">确认提现</div>
   </div>
 </template>
 
@@ -26,14 +26,20 @@ export default {
       }
     }
   },
+  methods: {
+    handleSure() {
+      this.$emit('listenSure', true)
+    }
+  }
 }
 </script>
 
 <style lang="scss" scoped>
 .sureTip{
-  width: 600px;
-  padding: 28px;
+  width: 620px;
+  padding: 38px;
   border-radius: 12px;
+  box-sizing: border-box;
   font-size: 28px;
   color: #333;
   .title{
@@ -42,12 +48,16 @@ export default {
     margin-bottom: 18px;
   }
   .content{
-    padding-left: 50px;
+    // padding-left: 50px;
     &>div{
       margin-bottom: 10px;
+      line-height: 40px;
     }
     .yellow{
+      max-width: 400px;
+      width: 400px;
       color: #FFBD23;
+      word-break: break-all;
     }
   }
   .btn{
@@ -56,6 +66,7 @@ export default {
     background: #29D4B0;
     color: #FFF;
     margin-top: 30px;
+    font-size: 32px;
   }
 }
 </style>

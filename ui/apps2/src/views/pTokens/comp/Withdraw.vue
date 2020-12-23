@@ -4,7 +4,10 @@
     <div>
       <van-field class="ipt din flexa" v-model="address" placeholder="请输入用户名" />
     </div>
-    <div class="title">提币数量</div>
+    <div class="title flexb">
+      <span>提币数量</span>
+      <span class="bal tip">余额：{{ bal }} {{ action.token1 }}</span>
+    </div>
     <div>
       <van-field class="ipt din flexa" v-model="amount" placeholder="请输入用户名" />
     </div>
@@ -15,7 +18,7 @@
       <span :class="{'act_p': percent === 75}" @click="handlePercent(75)">75%</span>
       <span :class="{'act_p': percent === 100}" @click="handlePercent(100)">100%</span>
     </div>
-    <div class="btn flexc" @click="show = true">提币</div>
+    <div class="btn flexc" v-loading="loading" @click="handleReg">提币</div>
 
     <van-popup class="popup" v-model="show">
       <WithDrawSure :params="params" @listenSure="handleSure"/>
@@ -24,34 +27,134 @@
 </template>
 
 <script>
+import { EosModel } from '@/utils/eos';
+import { mapState } from 'vuex';
+import {get_balance} from '@/utils/api'
+import {toFixed} from '@/utils/public'
 import WithDrawSure from '../dialog/WithDrawSure'
 export default {
   name: 'withdrawForPtoken',
   components: {
     WithDrawSure
   },
+  props: {
+    action: {
+      type: Object,
+      default: function atn() {
+        return {}
+      }
+    }
+  },
   data() {
     return {
       percent: 0,
-      amount: '',
-      address: '',
+      amount: '0.1',
+      address: '3HztY4pR55BBRBDweMsX7dAQxnxcmpvNMX',
       bal: '100.00000000',
       show: false,
       params: {},
+      loading: false,
+    }
+  },
+  computed: {
+    ...mapState({
+      account: state => state.app.account,
+    }),
+  },
+  watch: {
+    account: {
+      handler: function at(newVal) {
+        if (!newVal.name) {
+          return
+        }
+        this.handleGetBal();
+      },
+      deep: true,
+      immediate: true
+    },
+    action() {
+      this.handleGetBal()
     }
   },
   methods: {
+    async handleGetBal() {
+      if (!this.account.name) {
+        return
+      }
+      const params = {
+        code: this.action.contract1,
+        symbol: this.action.token1,
+        decimal: this.action.decimal1,
+        account: this.account.name,
+      }
+      const {status, result} = await get_balance(params)
+      if (!status) {
+        return
+      }
+      this.bal = result.split(' ')[0]
+    },
+    handleReg() {
+      if (!this.address.trim()) {
+        this.$message.error('请输入提现地址')
+        return
+      }
+      // if (Number(this.amount || 0) < 0.00005) {
+      //   this.$message.error('最少提现数量为0.00005')
+      //   return
+      // }
+      // if (Number(this.amount || 0) > Number(this.bal)) {
+      //   this.$message.error('余额不足')
+      //   return
+      // }
+      this.params = {
+        address: this.address,
+        amount: `${toFixed(this.amount, this.action.decimal1)} ${this.action.token1}`,
+        token: this.action.token1
+      }
+      this.show = true;
+    },
     handleSure() {
+      this.loading = true;
+      const formName = this.account.name;
+      const permission = this.account.permissions;
+      const quantity = `${toFixed(this.amount, this.action.decimal1)} ${this.action.token1}`;
       const params = {
         actions: [{
-          
+          account: this.action.contract1,
+          name: 'redeem',
+          authorization: [{
+            actor: formName, // 转账者
+            permission,
+          }],
+          data: {
+            memo: this.address.trim(),
+            sender: formName,
+            quantity,
+          }
         }]
       }
+      EosModel.toTransaction(params, (res) => {
+        this.loading = false;
+        if(res.code && JSON.stringify(res.code) !== '{}') {
+          this.$message({
+            message: res.message,
+            type: 'error'
+          });
+          return
+        }
+        this.show = false;
+        this.$message({
+          message: this.$t('public.success'),
+          type: 'success'
+        });
+        setTimeout(() => {
+        }, 800);
+      })
     },
     handlePercent(n) {
       this.percent = n
       const amount = this.bal * n / 100;
-      this.amount = amount.toFixed(4)
+      this.amount = amount.toFixed(this.action.decimal1)
     },
   }
 }
