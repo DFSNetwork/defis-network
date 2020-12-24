@@ -58,6 +58,9 @@ export default {
   data() {
     return {
       images: [{
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material2/christmas/Christmas.png',
+        routeName: 'fundation'
+      }, {
         image: 'https://cdn.jsdelivr.net/gh/defis-net/material/fundation/banner4.png',
         routeName: 'fundation'
       }, {
