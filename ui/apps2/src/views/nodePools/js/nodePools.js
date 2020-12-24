@@ -120,6 +120,9 @@ export function getReward(baseData, userData) {
 
   let rewardEos = accNum * Math.pow(aprs, t) - accNum; // 日收益 EOS
   let rewardToken = rewardEos / price;
+  if (parseFloat(baseData.poolbal) < rewardToken) {
+    rewardToken = parseFloat(baseData.poolbal)
+  }
   return rewardToken
 }
 
