@@ -98,14 +98,14 @@ export default {
         this.$message.error('请输入提现地址')
         return
       }
-      // if (Number(this.amount || 0) < 0.00005) {
-      //   this.$message.error('最少提现数量为0.00005')
-      //   return
-      // }
-      // if (Number(this.amount || 0) > Number(this.bal)) {
-      //   this.$message.error('余额不足')
-      //   return
-      // }
+      if (Number(this.amount || 0) < 0.00005 && this.action.token1 === 'PBTC') {
+        this.$message.error('最少提现数量为0.00005 PBTC')
+        return
+      }
+      if (Number(this.amount || 0) > Number(this.bal)) {
+        this.$message.error('余额不足')
+        return
+      }
       this.params = {
         address: this.address,
         amount: `${toFixed(this.amount, this.action.decimal1)} ${this.action.token1}`,
