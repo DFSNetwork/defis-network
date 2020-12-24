@@ -2,7 +2,8 @@
   <div class="header flexb">
     <div class="tools flexb">
       <div class="logoDiv" :class="{'ani': ani}" @click="handleToIndex" @dblclick="handleDbClick">
-        <img class="logo" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png">
+        <img class="logo" src="https://cdn.jsdelivr.net/gh/defis-net/material2/christmas/logo.png">
+        <!-- <img class="logo" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png"> -->
       </div>
       <span class="create flexc" @click="showVote = true">
         <span>{{ $t('vote.vote') }}</span>
