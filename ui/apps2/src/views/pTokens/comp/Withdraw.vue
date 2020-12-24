@@ -2,14 +2,14 @@
   <div class="withdraw">
     <div class="title">提币地址</div>
     <div>
-      <van-field class="ipt din flexa" v-model="address" placeholder="请输入用户名" />
+      <van-field class="ipt din flexa" v-model="address" placeholder="请输入提币地址" />
     </div>
     <div class="title flexb">
       <span>提币数量</span>
       <span class="bal tip">余额：{{ bal }} {{ action.token1 }}</span>
     </div>
     <div>
-      <van-field class="ipt din flexa" v-model="amount" placeholder="请输入用户名" />
+      <van-field class="ipt din flexa" v-model="amount" placeholder="请输入提币数量" />
     </div>
     <div class="percent_p flexb din">
       <span :class="{'act_p': percent === 0}" @click="handlePercent(0)">0%</span>
@@ -48,9 +48,9 @@ export default {
   data() {
     return {
       percent: 0,
-      amount: '0.1',
-      address: '3HztY4pR55BBRBDweMsX7dAQxnxcmpvNMX',
-      bal: '100.00000000',
+      amount: '',
+      address: '',
+      bal: '0.00000000',
       show: false,
       params: {},
       loading: false,
