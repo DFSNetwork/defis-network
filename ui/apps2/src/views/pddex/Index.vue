@@ -118,9 +118,12 @@ export default {
       if (!status) {
         return
       }
+      console.log(result)
       const lists = result.rows;
       this.boxMarketList = lists;
       const boxLists = logicToDealBoxMarket(lists)
+      console.log(boxLists)
+      console.log(boxLists.length)
       this.boxLists = boxLists;
       this.handleDealBoxAndDfs()
     },
