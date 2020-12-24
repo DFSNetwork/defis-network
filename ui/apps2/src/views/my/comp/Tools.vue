@@ -35,7 +35,7 @@
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png" alt="">
           <div>TAG</div>
         </div>
-        <div class="list" @click="handleToProject('pbtc')">
+        <div class="list" @click="handleTo('ptokens')">
           <img class="icon" src="https://ndi.340wan.com/eos/btc.ptokens-pbtc.png" alt="">
           <div>PBTC充提</div>
         </div>

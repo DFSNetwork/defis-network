@@ -70,8 +70,12 @@
               </span>
             </span>
           </div>
-          <div class="btnDiv">
+          <div class="btnDiv flexb">
             <div class="btn flexc" v-loading="loading" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
+            <div class="ptokens" v-if="isPtokens" @click="handleTo('ptokens')">
+              <img :src="ptokenData.imgUrl">
+              <div>{{ ptokenData.symbol }}</div>
+            </div>
           </div>
 
           <div class="linkTo flexb">
@@ -322,6 +326,36 @@ export default {
       filterMkLists: state => state.sys.filterMkLists,
       marketLists: state => state.sys.marketLists,
     }),
+    isPtokens() {
+      if (this.thisMarket0.contract === 'btc.ptokens' && this.thisMarket0.symbol === 'PBTC') {
+        return true
+      }
+      if (this.thisMarket1.contract === 'btc.ptokens' && this.thisMarket1.symbol === 'PBTC') {
+        return true
+      }
+      if (this.thisMarket0.contract === 'eth.ptokens' && this.thisMarket0.symbol === 'PETH') {
+        return true
+      }
+      if (this.thisMarket1.contract === 'eth.ptokens' && this.thisMarket1.symbol === 'PETH') {
+        return true
+      }
+      return false
+    },
+    ptokenData() {
+      if (this.thisMarket0.contract === 'btc.ptokens' && this.thisMarket0.symbol === 'PBTC') {
+        return this.thisMarket0
+      }
+      if (this.thisMarket1.contract === 'btc.ptokens' && this.thisMarket1.symbol === 'PBTC') {
+        return this.thisMarket1
+      }
+      if (this.thisMarket0.contract === 'eth.ptokens' && this.thisMarket0.symbol === 'PETH') {
+        return this.thisMarket0
+      }
+      if (this.thisMarket1.contract === 'eth.ptokens' && this.thisMarket1.symbol === 'PETH') {
+        return this.thisMarket1
+      }
+      return {}
+    },
     // showMax0() {
     //   return Number(this.payNum) !== Number(this.balanceSym0)
     // },
@@ -1114,6 +1148,7 @@ export default {
   font-size: 32px;
   font-weight: 500;
   .btn{
+    flex: 1;
     height: 88px;
     // background:rgba(7,215,155,1);
     background: #29D4B0;
@@ -1121,6 +1156,15 @@ export default {
     color: #fff;
     &:active{
       background:rgba(2,198,152,1);
+    }
+  }
+  .ptokens{
+    margin-left: 30px;
+    font-size: 24px;
+    text-align: center;
+    img{
+      width: 44px;
+      margin-bottom: 5px;
     }
   }
 }
