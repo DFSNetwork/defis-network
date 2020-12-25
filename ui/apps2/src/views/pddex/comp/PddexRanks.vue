@@ -83,6 +83,7 @@ export default {
       tradeList: [],
       rankList: [],
       likeArr: [], // 存放接口返回的关注数据
+      swapTradeLists: {},
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
     }
   },
@@ -102,6 +103,7 @@ export default {
         if (!newVal.length) {
           return
         }
+        this.handleDealTradeRankLogic()
         this.handleRankList()
         this.handleDealLike()
       },
@@ -181,36 +183,63 @@ export default {
       this.rankList = newArr.slice(0, 20);
     },
     async handleGetFees() {
-      const {status, result} = await this.$api.dfsdata()
+      const {status, result} = await this.$api.get_swap_summary()
       if (!status) {
         return
       }
-      const trade = result.tradingVolumeData || {};
+      this.swapTradeLists = result
+      this.handleDealTradeRankLogic()
+    },
+    handleDealTradeRankLogic() {
+      console.log(this.marketLists.length)
+      if (!this.marketLists.length) {
+        return
+      }
       const tradeList = [];
-      const keys = Object.keys(trade);
-      keys.forEach(v => {
-        const t = trade[v];
-        let count = 0; // 总成交EOS量
-        if (t.amountIn && t.amountIn.EOS) {
-          count += t.amountIn.EOS
+      const inLists = this.swapTradeLists.trading_volume_in || []
+      inLists.forEach(v => {
+        const market = this.marketLists.find(vv => vv.mid === v.mid)
+        // 不存在
+        if (!market || v.sym !== 'EOS') {
+          return
         }
-        if (t.amountOut && t.amountOut.EOS) {
-          count += t.amountOut.EOS
-        }
-        if (count <= 0) {
+        // 非EOS交易对
+        if (market.contract0 !== 'eosio.token' && market.contract1 !== 'eosio.token') {
           return
         }
         const li = {
-          mid: v.split('-')[1],
-          count: count.toFixed(4),
+          mid: v.mid,
+          count: Number(v.total || 0).toFixed(4),
         }
         tradeList.push(li)
+      })
+      const outLists = this.swapTradeLists.trading_volume_out || []
+      outLists.forEach(v => {
+        const market = this.marketLists.find(vv => vv.mid === v.mid)
+        // 不存在
+        if (!market || v.sym !== 'EOS') {
+          return
+        }
+        // 非EOS交易对
+        if (market.contract0 !== 'eosio.token' && market.contract1 !== 'eosio.token') {
+          return
+        }
+        const index = tradeList.findIndex(vv => vv.mid === v.mid)
+        if (index === -1) {
+          tradeList.push({
+            mid: v.mid,
+            count: Number(v.total || 0).toFixed(4),
+          })
+          return
+        }
+        let count = Number(tradeList[index].count) + v.total
+        tradeList[index].count = Number(count).toFixed(4)
       })
       tradeList.sort((a, b) => {
         return Number(b.count) - Number(a.count)
       })
       this.tradeList = tradeList.slice(0, 20);
-      // console.log(this.tradeList)
+      console.log(this.tradeList)
       this.handleDealTradeRank()
     },
     handleDealTradeRank() {

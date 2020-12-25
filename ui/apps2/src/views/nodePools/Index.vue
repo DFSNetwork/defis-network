@@ -13,9 +13,15 @@
             </div>
           </div>
           <div class="right">
+            <div class="dinBold">{{ lpyearApr }}%</div>
+            <div class="tip bonus">
+              <span>做市实时年化</span>
+            </div>
+          </div>
+          <div class="right">
             <div class="dinBold">{{ yearApr }}%</div>
             <div class="tip bonus">
-              <span>{{ $t('dsr.nowApy') }}</span>
+              <span>投票实时年化</span>
             </div>
           </div>
         </div>
@@ -104,6 +110,12 @@ export default {
         apy = apy + parseFloat(pools[v].apy || 0)
       })
       return apy.toFixed(2)
+    },
+    lpyearApr() {
+      if (!this.lpLists.length) {
+        return '0.00'
+      }
+      return this.lpLists[0].apy || '0.00'
     }
   },
   mounted() {

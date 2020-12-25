@@ -1,14 +1,14 @@
 <template>
   <div class="poolsLists">
     <div class="tabDiv flexb">
-      <div class="tab flexc" :class="{'actTab': tabAct === 1}" @click="tabAct = 1">
-        {{ $t('nodePools.voteMineNew') }}</div>
       <div class="tab flexc" :class="{'actTab': tabAct === 2}" @click="tabAct = 2">
         {{ $t('nodePools.lpMineNew') }}</div>
+      <div class="tab flexc" :class="{'actTab': tabAct === 1}" @click="tabAct = 1">
+        {{ $t('nodePools.voteMineNew') }}</div>
     </div>
     <div v-if="tabAct === 2">
       <div class="title flexb">
-        <span class="act">LP {{ $t('nodePools.poolsLists') }}</span>
+        <span class="">{{ $t('nodePools.lpMineNew') }}</span>
         <span class="mineRule flexa" @click="handleShowRules('lp')">
           <span>{{ $t('miningRules.rules') }}</span>
           <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
@@ -65,7 +65,7 @@
     </div>
     <div v-else>
       <div class="title flexb">
-        <span class="">REX {{ $t('nodePools.poolsLists') }}</span>
+        <span class="">{{ $t('nodePools.voteMineNew') }}</span>
         <span class="mineRule flexa" @click="handleShowRules('rex')">
           <span>{{ $t('miningRules.rules') }}</span>
           <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
@@ -194,7 +194,7 @@ export default {
   },
   data() {
     return {
-      tabAct: 1,
+      tabAct: 2,
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       plan: {},
       planRank: 30,

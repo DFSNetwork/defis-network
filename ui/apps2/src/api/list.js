@@ -16,3 +16,14 @@ export function get_table_rows(params) {
     })
   })
 }
+
+export function get_swap_summary() {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/basic/swap/summary').then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}

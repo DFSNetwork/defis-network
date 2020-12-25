@@ -191,6 +191,7 @@ export default {
     handleAllClaim(pageIndex) {
       this.allClaiming = true;
       let actions = this.allActions;
+      // console.log(actions)
       let pageArr = []
       if (pageIndex !== -1) {
         this.allActions.forEach((v, index) => {
