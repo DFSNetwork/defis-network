@@ -206,7 +206,7 @@ export default {
             let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
             lastTime = moment(lastTime).valueOf();
             minnerData.lastTime = lastTime;
-            const liq = minnerData.liq_bal0.split(' ')[1] === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
+            const liq = this.getLiq(minnerData);
             minnerData.liq = liq;
             this.$set(v, 'minnerData', minnerData)
           })
@@ -214,13 +214,31 @@ export default {
         }, index * 100);
       })
     },
+    getLiq(minnerData) {
+      const liq0 = minnerData.liq_bal0.split(' ');
+      if (liq0[1] === 'EOS') {
+        return liq0[0]
+      }
+      const liq1 = minnerData.liq_bal1.split(' ');
+      if (liq1[1] === 'EOS') {
+        return liq1[0]
+      }
+      let EosPrice = this.marketLists.find(v => v.mid === 17)
+      EosPrice = EosPrice.price;
+      if (liq0[1] === 'USDT') {
+        return liq0[0] * EosPrice
+      }
+      if (liq1[1] === 'USDT') {
+        return liq1[0] * EosPrice
+      }
+      return 0
+    },
     handleRunReward() {
       this.loading = false;
       clearTimeout(this.listsTimer)
       this.listsTimer = setTimeout(() => {
         this.handleRunReward()
       }, 1000);
-  
       this.lists.forEach((v, index) => {
         if (this.timerArr[index]) {
           clearInterval(this.timerArr[index]);

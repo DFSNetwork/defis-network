@@ -176,6 +176,14 @@ export default {
       const lootTime = this.$refs.lootTime.handleGetActions()
       const tArr = [...dss, ...dfsMiner, ...dmd, ...guns, ...loop, ...pdd, ...yfcDss, ...lootTime];
       this.allActions = tArr;
+      console.log('dss', dss)
+      console.log('dfsMiner', dfsMiner)
+      console.log('dmd', dmd)
+      console.log('guns', guns)
+      console.log('loop', loop)
+      console.log('yfcDss', yfcDss)
+      console.log('lootTime', lootTime)
+      console.log('pdd', pdd)
       if (this.allActions.length <= 10) { // 10条以内
         // console.log(this.allActions.length)
         // 直接执行
