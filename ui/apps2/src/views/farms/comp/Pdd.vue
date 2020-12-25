@@ -222,6 +222,9 @@ export default {
       this.hasGet = true;
       const formName = this.scatter.identity.accounts[0].name;
       this.dealArr.forEach((v, index) => {
+        if (!Number(v.weight)) {
+          return
+        }
         let tDateStart = countdown(v.beginTime, true);
         let tDateEnd = countdown(v.endTime, true);
         if (!(tDateStart.total <= 0 && tDateEnd.total > 0) || parseFloat(v.supply) >= parseFloat(v.max_supply)) {
@@ -248,7 +251,7 @@ export default {
             let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
             lastTime = moment(lastTime).valueOf();
             minnerData.lastTime = lastTime;
-            const liq = minnerData.liq_bal0.split(' ')[1] === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
+            const liq = this.getLiq(minnerData);
             minnerData.liq = liq;
             this.$set(v, 'minnerData', minnerData)
             this.$set(v, 'showReward', '0.00000000')
@@ -258,6 +261,17 @@ export default {
           })
         }, index * 200);
       })
+    },
+    getLiq(minnerData) {
+      const liq0 = minnerData.liq_bal0.split(' ');
+      if (liq0[1] === 'EOS') {
+        return liq0[0]
+      }
+      const liq1 = minnerData.liq_bal1.split(' ');
+      if (liq1[1] === 'EOS') {
+        return liq1[0]
+      }
+      return 0
     },
     handleRunReward() {
       if (!Number(this.poolsBal) || !Number(this.lpPoolsBal[this.project])) {

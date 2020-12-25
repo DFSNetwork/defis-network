@@ -359,6 +359,9 @@ export function getYfcReward(mid, type, project = 'YFC') {
 }
 
 export function getAccYfcReward(minnerData, data, type) {
+  if (!Number(minnerData.liq)) {
+    return '0.00000000'
+  }
   const rate = accDiv(minnerData.liq || 10000, data.eosBal);
   const weight = data.weight;
   const damping = data.damping;
