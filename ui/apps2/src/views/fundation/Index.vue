@@ -294,7 +294,7 @@ export default {
     display: inline-block;
     text-align: left;
     min-width: 590px;
-    width: 590px;
+    // width: 590px;
   }
   .banner{
     color: #FFF;

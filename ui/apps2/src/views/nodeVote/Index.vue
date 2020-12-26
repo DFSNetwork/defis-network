@@ -20,6 +20,7 @@
         <div class="nav flexa">
           <span :class="{'act': act === 2}" @click="handleChangeTab(2)">{{ $t('bpInfo.scoreRank') }}</span>
           <span :class="{'act': act === 1}" @click="handleChangeTab(1)">{{ $t('vote.vote') }}</span>
+          <span :class="{'act': act === 4}" @click="handleChangeTab(4)">推荐</span>
           <span :class="{'act': act === 3}" @click="handleChangeTab(3)">{{ $t('vote.voted') }}</span>
         </div>
         <div class="search flexc">

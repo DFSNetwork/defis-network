@@ -20,10 +20,10 @@
             <img class="logo" :src="item.owner !== 'bp.dfs' ? item.logo : voteDefaultImg" :onerror="errorCoinImg">
             <span class="nodeName">{{ item.owner }}</span>
           </div>
-          <div v-if="item.tags" class="tags">
+          <div v-if="item.tags && act === 4" class="tags">
             <span v-for="(v, i) in item.tags" :key="`tags_${i}`">{{ v }}</span>
           </div>
-          <div class="tip data flexb">
+          <div class="tip data flexb" v-if="act !== 4">
             <div class="flexa dinReg">
               <span class="voteIcon flexc">
                 <img class="small" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/money.png" alt="">
@@ -35,7 +35,7 @@
               <span>{{ item.bprank }}</span>
             </div>
           </div>
-          <div class="tip data flexb">
+          <div class="tip data flexb" v-if="act !== 4">
             <div class="flexa">
               <img class="voteIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/vote.png" alt="">
               <span class="dinReg">{{ item.dfsVote || '0' }} DFS</span>
@@ -166,6 +166,9 @@ export default {
           tArr = this.rankLists;
         } else if (this.act === 3) {
           tArr = this.myVoteList;
+        } else if (this.act === 4) {
+          tArr = tArr.filter(v => v.tags && v.tags.length > 0);
+          console.log(tArr)
         }
         const start = (this.page - 1) * this.pageSize;
         const end = this.page * this.pageSize;
@@ -189,6 +192,9 @@ export default {
         tArr = this.rankLists;
       } else if (this.act === 3) {
         tArr = this.myVoteList;
+      } else if (this.act === 4) {
+        tArr = tArr.filter(v => v.tags && v.tags.length > 0);
+        console.log(tArr)
       }
       const arr = tArr.filter(v => {
         const index = v.owner.indexOf(search);
