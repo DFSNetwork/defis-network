@@ -37,11 +37,22 @@ export default {
       account: state => state.app.account,
     }),
   },
+  watch: {
+    account: {
+      handler: function at() {
+        this.handleGetAddress()
+      },
+      deep: true,
+      immediate: true,
+    }
+  },
   mounted() {
-    this.handleGetAddress()
   },
   methods: {
     async handleGetAddress() {
+      if (!this.account.name) {
+        return
+      }
       this.uuid = uuidv4()
       const token = this.action.urlToken.toLowerCase();
       const token1 = this.action.token1.toLowerCase();
