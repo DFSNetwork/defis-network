@@ -194,6 +194,26 @@ export function toBrowser(id, type) {
   let url = `${typeObj[type]}${id}`
   location.href = url;
 }
+// 跳转对应链上的区块浏览器 - id: txid | account , chain: 所属链 , type: 'tx' | 'account' | 'token'
+export function toBrowserBtc(id, type) {
+  const typeObj = {
+    tx: 'https://blockstream.info/tx/',
+    account: 'https://blockstream.info/address/',
+    token: 'https://bloks.io/tokens/',
+  }
+  let url = `${typeObj[type]}${id}`
+  location.href = url;
+}
+// 跳转对应链上的区块浏览器 - id: txid | account , chain: 所属链 , type: 'tx' | 'account' | 'token'
+export function toBrowserEtc(id, type) {
+  const typeObj = {
+    tx: 'https://etherscan.io/tx/',
+    // account: 'https://blockstream.info/address/',
+    // token: 'https://bloks.io/tokens/',
+  }
+  let url = `${typeObj[type]}${id}`
+  location.href = url;
+}
 
 // 倒计时
 export function countdown(endtime, istamp, type) {

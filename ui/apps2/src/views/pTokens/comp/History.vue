@@ -14,8 +14,8 @@
         <div class="item flexa" v-for="(v, i) in dLists" :key="`d_${i}`">
           <div class="din">{{ v.amount }}</div>
           <div>{{ v.vdate }}</div>
-          <div>{{ v.originating_tx_hash }}</div>
-          <div>{{ v.broadcast_tx_hash }}</div>
+          <div @click="handletoBrowser(v.originating_tx_hash)">{{ v.originating_tx_hash }}</div>
+          <div @click="handletoBrowser(v.broadcast_tx_hash, 'eos')">{{ v.broadcast_tx_hash }}</div>
         </div>
       </div>
     </div>
@@ -33,8 +33,8 @@
         <div class="item flexa" v-for="(v, i) in wLists" :key="`w_${i}`">
           <div class="din">{{ v.amount }}</div>
           <div>{{ v.vdate }}</div>
-          <div>{{ v.originating_tx_hash }}</div>
-          <div>{{ v.broadcast_tx_hash }}</div>
+          <div @click="handletoBrowser(v.originating_tx_hash, 'eos')">{{ v.originating_tx_hash }}</div>
+          <div @click="handletoBrowser(v.broadcast_tx_hash)">{{ v.broadcast_tx_hash }}</div>
         </div>
       </div>
     </div>
@@ -43,7 +43,7 @@
 
 <script>
 import { v4 as uuidv4 } from 'uuid';
-import { toLocalTime } from '@/utils/public'
+import { toLocalTime, toBrowserBtc, toBrowserEtc, toBrowser } from '@/utils/public'
 export default {
   props: {
     action: {
@@ -77,6 +77,21 @@ export default {
   mounted() {
   },
   methods: {
+    handletoBrowser(id, chaineos) {
+      const chain = chaineos || this.action.urlToken;
+      if (chain === 'eos') {
+        toBrowser(id, 'tx')
+        return
+      }
+      if (chain === 'pbtc') {
+        toBrowserBtc(id, 'tx')
+        return
+      }
+      if (chain === 'pweth') {
+        toBrowserEtc(id, 'tx')
+        return
+      }
+    },
     async handleGetDLists() {
       const uuid = uuidv4()
       const params = {
