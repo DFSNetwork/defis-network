@@ -11,6 +11,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 import { v4 as uuidv4 } from 'uuid';
 import QRCode from 'qrcodejs2'
 
@@ -31,6 +32,11 @@ export default {
       qrCode: '',
     }
   },
+  computed: {
+    ...mapState({
+      account: state => state.app.account,
+    }),
+  },
   mounted() {
     this.handleGetAddress()
   },
@@ -39,13 +45,14 @@ export default {
       this.uuid = uuidv4()
       const token = this.action.urlToken.toLowerCase();
       const token1 = this.action.token1.toLowerCase();
+      const name = this.account.name;
       const params = {
         token,
         token1,
         "id": this.uuid,
         "jsonrpc": "2.0",
         "method": "app_getNativeDepositAddress",
-        "params": ["iq3rwbsfcqlv"]
+        "params": [name]
       }
       const {status, result} = await this.$api.ptoken_get_address(params)
       // console.log(result)
