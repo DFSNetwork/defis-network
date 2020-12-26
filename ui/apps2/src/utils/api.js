@@ -355,7 +355,8 @@ export function get_top3_fundation(params) {
 // 获取公告
 export function get_voices() {
   return new Promise((resolve, reject) => {
-    axios.get('https://api.defis.network/dfs/swap/voices').then((res) => {
+    // https://api.defis.network/static/swap/voices
+    axios.get('https://api.defis.network/static/swap/voices').then((res) => {
       let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
     }, err => {

@@ -20,6 +20,9 @@
             <img class="logo" :src="item.owner !== 'bp.dfs' ? item.logo : voteDefaultImg" :onerror="errorCoinImg">
             <span class="nodeName">{{ item.owner }}</span>
           </div>
+          <div v-if="item.tags" class="tags">
+            <span v-for="(v, i) in item.tags" :key="`tags_${i}`">{{ v }}</span>
+          </div>
           <div class="tip data flexb">
             <div class="flexa dinReg">
               <span class="voteIcon flexc">
@@ -280,6 +283,26 @@ export default {
         height: 44px;
         margin-right: 10px;
         border-radius: 50%;
+      }
+      .tags{
+        display: flex;
+        flex-wrap: wrap;
+        margin: 10px 0;
+        &>span{
+          margin: 5px 0;
+          border-radius: 4px;
+          color: #29D4B0;
+          background: rgba(41, 212, 176, 0.12);
+          font-size: 22px;
+          padding: 4px 8px;
+          margin-right: 8px;
+          overflow : hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          max-width: 350px;
+        }
       }
     }
     .checkBoxDiv{

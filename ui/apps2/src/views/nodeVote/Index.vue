@@ -33,6 +33,7 @@
           :search="search"
           :AccMaxNum="AccMaxNum"
           :getLoading="getLoading" :myVote="myVote"/>
+        <!-- <NodeTag v-else-if="act !== 4" :nodeLists="nodeLists"/> -->
         <IndexComp v-else :nodeLists="nodeLists" :search="search"/>
       </div>
     </div>
@@ -122,6 +123,23 @@ export default {
     }
   },
   methods: {
+    async handleGetBpTags() {
+      const {status, result} = await this.$api.getBpTags()
+      if (!status) {
+        return
+      }
+      this.nodeLists.forEach(v => {
+        const hasTags = result.find(vv => vv.name === v.owner);
+        if (!hasTags) {
+          return
+        }
+        const tagsArr = hasTags.tags || [];
+        if (!tagsArr.length) {
+          return
+        }
+        this.$set(v, 'tags', tagsArr)
+      })
+    },
     handleSearch() {},
     handleCancel() {
       this.nodeLists.forEach(v => {
@@ -192,6 +210,7 @@ export default {
       this.nodeLists = rows;
       this.handleDealData()
       this.handleGetMyLists()
+      this.handleGetBpTags()
     },
     // 获取DFS 投票列表
     async handleGetVoteList() {
