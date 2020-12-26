@@ -33,6 +33,7 @@
         <NodeList v-if="act !== 2" :act="act" :nodeLists="nodeLists"
           :search="search"
           :AccMaxNum="AccMaxNum"
+          :tagLists="tagLists"
           :getLoading="getLoading" :myVote="myVote"/>
         <!-- <NodeTag v-else-if="act !== 4" :nodeLists="nodeLists"/> -->
         <IndexComp v-else :nodeLists="nodeLists" :search="search"/>
@@ -91,6 +92,7 @@ export default {
       myVote: [], // 我的投票列表
       myVoteLoading: true,
       AccMaxNum: 25,
+      tagLists: [],
     }
   },
   mounted() {
@@ -129,6 +131,7 @@ export default {
       if (!status) {
         return
       }
+      this.tagLists = result;
       this.nodeLists.forEach(v => {
         const hasTags = result.find(vv => vv.name === v.owner);
         if (!hasTags) {

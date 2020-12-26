@@ -10,7 +10,7 @@
       <!-- <div class="noData tip" v-if="!lists.length">{{ $t('public.noData') }}</div> -->
       <div class="list flexa" v-for="(item, index) in lists" :key="index"
         @click="handleCheckedNode(item)">
-        <div class="rankDiv dinBold flexc" v-if="act !== 3">
+        <div class="rankDiv dinBold flexc" v-if="act !== 3 && act !== 4">
           <img v-if="index < 3" :src="`https://cdn.jsdelivr.net/gh/defis-net/material/rank/voteRank${index+1}.png`" alt="">
           <span v-else>{{index + 1}}</span>
         </div>
@@ -68,6 +68,12 @@ export default {
       default: 1
     },
     nodeLists: {
+      type: Array,
+      default: function nl () {
+        return []
+      }
+    },
+    tagLists: {
       type: Array,
       default: function nl () {
         return []
@@ -167,8 +173,7 @@ export default {
         } else if (this.act === 3) {
           tArr = this.myVoteList;
         } else if (this.act === 4) {
-          tArr = tArr.filter(v => v.tags && v.tags.length > 0);
-          console.log(tArr)
+          tArr = this.handleDealTags()
         }
         const start = (this.page - 1) * this.pageSize;
         const end = this.page * this.pageSize;
@@ -193,8 +198,7 @@ export default {
       } else if (this.act === 3) {
         tArr = this.myVoteList;
       } else if (this.act === 4) {
-        tArr = tArr.filter(v => v.tags && v.tags.length > 0);
-        console.log(tArr)
+        tArr = this.handleDealTags()
       }
       const arr = tArr.filter(v => {
         const index = v.owner.indexOf(search);
@@ -203,6 +207,17 @@ export default {
       this.searchArr = arr;
       // this.lists = arr;
       this.handleCurrentChange()
+    },
+    handleDealTags() {
+      const arr = [];
+      this.tagLists.forEach(v => {
+        const item = this.nodeLists.find(vv => vv.owner === v.name);
+        if (!item) {
+          return
+        }
+        arr.push(item)
+      });
+      return arr
     },
     handleGetMyLists() {
       if (!this.nodeLists.length || !this.myVote.length) {
