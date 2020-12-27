@@ -115,6 +115,9 @@ export default {
         this.$set(v, 'allVote', allVote);
         totalNum = Number(totalNum) + Number(allVote)
       })
+      rows.sort((a, b) => {
+        return b.allVote - a.allVote
+      })
       this.totalNum = totalNum;
       this.options = rows;
       let maxArr = JSON.parse(JSON.stringify(rows))
@@ -260,9 +263,11 @@ export default {
     height: 110px;
   }
   .btnDiv{
+    margin: auto;
     position: fixed;
     bottom: 0px;
-    left: 0px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
     max-width: 750px;
     box-sizing: border-box;

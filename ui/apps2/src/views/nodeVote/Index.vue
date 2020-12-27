@@ -20,6 +20,7 @@
         <div class="nav flexa">
           <span :class="{'act': act === 2}" @click="handleChangeTab(2)">{{ $t('bpInfo.scoreRank') }}</span>
           <span :class="{'act': act === 1}" @click="handleChangeTab(1)">{{ $t('vote.vote') }}</span>
+          <span :class="{'act': act === 4}" @click="handleChangeTab(4)">{{ $t('bpInfo.recommend') }}</span>
           <span :class="{'act': act === 3}" @click="handleChangeTab(3)">{{ $t('vote.voted') }}</span>
         </div>
         <div class="search flexc">
@@ -32,7 +33,9 @@
         <NodeList v-if="act !== 2" :act="act" :nodeLists="nodeLists"
           :search="search"
           :AccMaxNum="AccMaxNum"
+          :tagLists="tagLists"
           :getLoading="getLoading" :myVote="myVote"/>
+        <!-- <NodeTag v-else-if="act !== 4" :nodeLists="nodeLists"/> -->
         <IndexComp v-else :nodeLists="nodeLists" :search="search"/>
       </div>
     </div>
@@ -89,6 +92,7 @@ export default {
       myVote: [], // 我的投票列表
       myVoteLoading: true,
       AccMaxNum: 25,
+      tagLists: [],
     }
   },
   mounted() {
@@ -122,6 +126,24 @@ export default {
     }
   },
   methods: {
+    async handleGetBpTags() {
+      const {status, result} = await this.$api.getBpTags()
+      if (!status) {
+        return
+      }
+      this.tagLists = result;
+      this.nodeLists.forEach(v => {
+        const hasTags = result.find(vv => vv.name === v.owner);
+        if (!hasTags) {
+          return
+        }
+        const tagsArr = hasTags.tags || [];
+        if (!tagsArr.length) {
+          return
+        }
+        this.$set(v, 'tags', tagsArr)
+      })
+    },
     handleSearch() {},
     handleCancel() {
       this.nodeLists.forEach(v => {
@@ -192,6 +214,7 @@ export default {
       this.nodeLists = rows;
       this.handleDealData()
       this.handleGetMyLists()
+      this.handleGetBpTags()
     },
     // 获取DFS 投票列表
     async handleGetVoteList() {

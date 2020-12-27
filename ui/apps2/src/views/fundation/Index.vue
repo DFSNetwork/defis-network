@@ -1,7 +1,7 @@
 <template>
   <div class="fundation">
     <van-notice-bar v-if="voices.length" color="#29D4B0" mode="closeable" background="#29D4B01A"
-      left-icon="volume-o" scrollable>
+      left-icon="volume-o">
         <span class="noticeSpan" v-for="(data, index) in voices" :key="index">
           {{ data }}
         </span>
@@ -294,7 +294,7 @@ export default {
     display: inline-block;
     text-align: left;
     min-width: 590px;
-    width: 590px;
+    // width: 590px;
   }
   .banner{
     color: #FFF;

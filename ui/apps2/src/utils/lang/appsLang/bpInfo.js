@@ -62,6 +62,7 @@ export default {
       fromBpjson: '取自bp.json',
       addEditor1: '节点方调用命令',
       addEditor2: '联系DFS社区进行添加',
+      recommend: '推荐',
     }
   },
   'en': {
@@ -125,6 +126,7 @@ export default {
       fromBpjson:'taken from bp.json',
       addEditor1:'Node call command',
       addEditor2:'Contact the DFS community to add',
+      recommend: 'REC',
     }
   }
 }

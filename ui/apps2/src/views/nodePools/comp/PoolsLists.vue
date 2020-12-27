@@ -16,9 +16,8 @@
       </div>
       <div class="lpList" v-if="lpLists.length">
         <div style="position: relative;" v-for="(v, i) in lpLists" :key="`lp${i}`" @click="handleToDetailLists(v, 'lp')">
-          <!-- <div class="bgShadow" v-if="i < 10"></div> -->
           <div class="list mg20">
-            <div class="model" v-if="i >= 10" @click.stop="''">
+            <div class="model" v-if="i >= lpLength" @click.stop="''">
               <span class="boost flexc" @click="handleTo('voteForTag')">{{ $t('nodePools.boost') }}</span>
             </div>
             <div class="poolInfo flexa">
@@ -153,6 +152,10 @@ export default {
     ToFundation,
   },
   props: {
+    lpLength: {
+      type:  Number,
+      default: 15,
+    },
     poolsLists: {
       type: Array,
       default: function pls() {

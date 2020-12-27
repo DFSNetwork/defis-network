@@ -10,7 +10,7 @@
       <!-- <div class="noData tip" v-if="!lists.length">{{ $t('public.noData') }}</div> -->
       <div class="list flexa" v-for="(item, index) in lists" :key="index"
         @click="handleCheckedNode(item)">
-        <div class="rankDiv dinBold flexc" v-if="act !== 3">
+        <div class="rankDiv dinBold flexc" v-if="act !== 3 && act !== 4">
           <img v-if="index < 3" :src="`https://cdn.jsdelivr.net/gh/defis-net/material/rank/voteRank${index+1}.png`" alt="">
           <span v-else>{{index + 1}}</span>
         </div>
@@ -20,7 +20,10 @@
             <img class="logo" :src="item.owner !== 'bp.dfs' ? item.logo : voteDefaultImg" :onerror="errorCoinImg">
             <span class="nodeName">{{ item.owner }}</span>
           </div>
-          <div class="tip data flexb">
+          <div v-if="item.tags && act === 4" class="tags">
+            <span v-for="(v, i) in item.tags" :key="`tags_${i}`">{{ v }}</span>
+          </div>
+          <div class="tip data flexb" v-if="act !== 4">
             <div class="flexa dinReg">
               <span class="voteIcon flexc">
                 <img class="small" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/money.png" alt="">
@@ -32,7 +35,7 @@
               <span>{{ item.bprank }}</span>
             </div>
           </div>
-          <div class="tip data flexb">
+          <div class="tip data flexb" v-if="act !== 4">
             <div class="flexa">
               <img class="voteIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/vote.png" alt="">
               <span class="dinReg">{{ item.dfsVote || '0' }} DFS</span>
@@ -65,6 +68,12 @@ export default {
       default: 1
     },
     nodeLists: {
+      type: Array,
+      default: function nl () {
+        return []
+      }
+    },
+    tagLists: {
       type: Array,
       default: function nl () {
         return []
@@ -163,6 +172,8 @@ export default {
           tArr = this.rankLists;
         } else if (this.act === 3) {
           tArr = this.myVoteList;
+        } else if (this.act === 4) {
+          tArr = this.handleDealTags()
         }
         const start = (this.page - 1) * this.pageSize;
         const end = this.page * this.pageSize;
@@ -186,6 +197,8 @@ export default {
         tArr = this.rankLists;
       } else if (this.act === 3) {
         tArr = this.myVoteList;
+      } else if (this.act === 4) {
+        tArr = this.handleDealTags()
       }
       const arr = tArr.filter(v => {
         const index = v.owner.indexOf(search);
@@ -194,6 +207,17 @@ export default {
       this.searchArr = arr;
       // this.lists = arr;
       this.handleCurrentChange()
+    },
+    handleDealTags() {
+      const arr = [];
+      this.tagLists.forEach(v => {
+        const item = this.nodeLists.find(vv => vv.owner === v.name);
+        if (!item) {
+          return
+        }
+        arr.push(item)
+      });
+      return arr
     },
     handleGetMyLists() {
       if (!this.nodeLists.length || !this.myVote.length) {
@@ -280,6 +304,26 @@ export default {
         height: 44px;
         margin-right: 10px;
         border-radius: 50%;
+      }
+      .tags{
+        display: flex;
+        flex-wrap: wrap;
+        margin: 10px 0;
+        &>span{
+          margin: 5px 0;
+          border-radius: 4px;
+          color: #29D4B0;
+          background: rgba(41, 212, 176, 0.12);
+          font-size: 22px;
+          padding: 4px 8px;
+          margin-right: 8px;
+          overflow : hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 1;
+          -webkit-box-orient: vertical;
+          max-width: 350px;
+        }
       }
     }
     .checkBoxDiv{

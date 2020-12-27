@@ -57,3 +57,15 @@ export function boxMidsAndOrder() {
     })
   })
 }
+
+// 获取节点tag标签
+export function getBpTags() {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/bp/recommends').then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}

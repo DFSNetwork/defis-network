@@ -48,7 +48,7 @@ export default {
       rexTip3: '买入REX后，4天后可以自由解锁。',
       detail: '详细',
       // add
-      tagVoteRules: '用户投票选择的前10个交易对, 可以参与TAG挖矿',
+      tagVoteRules: '用户投票选择的前15个交易对, 可以参与TAG挖矿',
       tagVote: '{coin} 矿池投票',
       allReward: '总收益',
       minerLists: '矿工列表',
