@@ -33,6 +33,7 @@
         :accLpData="accLpData" @listenUpdata="handleUpdata"/>
       <!-- 矿池列表 -->
       <PoolsLists :poolsLists="poolsLists" :lpLists="lpLists" :accLpData="accLpData"
+        :lpLength="lpLength"
         :poolsData="poolsData" :rank="rank" :rankList="rankListObj" :lpRankWeight="lpRankWeight"/>
 
       <div class="nullDiv"></div>
@@ -82,6 +83,7 @@ export default {
       rank: '0',
       rankList: [],
       rankListObj: {},
+      lpLength: 15,
 
       // 定时器
       poolsTimer: null,
@@ -427,8 +429,8 @@ export default {
         }
         this.handleGetLpRank(mid, index);
       })
-      let dealArr = lpLists.slice(0, 10);
-      let dealArr2 = lpLists.slice(10, 1000)
+      let dealArr = lpLists.slice(0, this.lpLength);
+      let dealArr2 = lpLists.slice(this.lpLength, 1000)
       dealArr.sort((a, b) => {
         return parseFloat(b.reserve1) - parseFloat(a.reserve1)
       })
@@ -442,7 +444,7 @@ export default {
     },
     // 获取LP 挖矿排名
     async handleGetLpRank(mid, index) {
-      if (!this.scatter || !this.scatter.identity || index >= 10) {
+      if (!this.scatter || !this.scatter.identity || index >= this.lpLength) {
         return
       }
       // const formName = this.scatter.identity.accounts[0].name;
@@ -505,7 +507,7 @@ export default {
       // console.log(this.lpPoolsMid)
       const formName = this.scatter.identity.accounts[0].name;
       this.lpPoolsMid.forEach(async (mid, index) => {
-        if (index >= 10) {
+        if (index >= this.lpLength) {
           return
         }
         setTimeout(async () => {
@@ -625,9 +627,6 @@ export default {
       }
       const allTagNum = this.handleAllLpTagNum()
       this.lpLists.forEach((v) => {
-        // if (i >= 10) {
-        //   return
-        // }
         const num = 0.1;
         const rate = num / allTagNum;
         const lpBal = this.lpLists[0].lpBal;
