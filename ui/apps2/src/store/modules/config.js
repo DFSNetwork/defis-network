@@ -81,6 +81,18 @@ const config = {
       contract: 'tethertether',
       minEos: 100, // 最低价值 100 EOS
       priceMid: 17,
+    }, {
+      symbol: 'TAG',
+      sym: '8,TAG',
+      contract: 'tagtokenmain',
+      minEos: 100, // 最低价值 100 EOS
+      priceMid: 602,
+    }, {
+      symbol: 'DFS',
+      sym: '4,DFS',
+      contract: 'minedfstoken',
+      minEos: 100, // 最低价值 100 EOS
+      priceMid: 39,
     }],
 
     // pddex Data
