@@ -104,6 +104,7 @@ export default {
       this.lists.forEach(v => {
         const curr = this.handleGetNowMarket(v)
         const newV = v;
+        newV.token = `${newV.token}`
         newV.nowMarket = curr;
         const reserve0 = v.reserve0.split(' ')[0];
         const reserve1 = v.reserve1.split(' ')[0];
@@ -149,36 +150,23 @@ export default {
       this.getToken = true;
       this.lists = []
       const params = {
-        user: this.scatter.identity.accounts[0].name,
+        "code":"defislogsone",
+        "scope": this.scatter.identity.accounts[0].name,
+        "table":"liqs",
+        "json":true,
+        limit: 1000,
       }
-      axios.get('https://api.defis.network/dfs/swap/deposit', {params}).then((result) => {
+      EosModel.getTableRows(params, (res) => {
+        console.log(res)
+        const list = res.rows || [];
         this.loading = false;
-        const res = result.data.data;
-        res.forEach((v, index) => {
+        list.forEach((v, index) => {
           const item = this.marketLists.find(vv => vv.mid == v.mid)
           const next = parseInt(index / 10)
           setTimeout(() => {
-            this.handleGetTable(item)
+            this.handleGetMarketDataByChain(item, v.token)
           }, next * 1000);
         })
-      })
-    },
-    handleGetTable(v) {
-      const params = {
-        code: this.baseConfig.toAccountSwap,
-        scope: v.mid,
-        table: 'liquidity',
-        lower_bound: ` ${this.scatter.identity.accounts[0].name}`,
-        upper_bound: ` ${this.scatter.identity.accounts[0].name}`,
-        json: true
-      }
-      EosModel.getTableRows(params, (res) => {
-        const list = res.rows || [];
-        let token = '0'
-        !list[0] ? token = '0' : token = `${list[0].token}`;
-        if (Number(token)) {
-          this.handleGetMarketDataByChain(v, token)
-        }
       })
     },
     handleGetMarketDataByChain(v, token) {
@@ -191,6 +179,7 @@ export default {
         "upper_bound": ` ${this.scatter.identity.accounts[0].name}`,
       }
       EosModel.getTableRows(params, (res) => {
+        // console.log(res)
         const list = res.rows || [];
         this.sTime = '0'
         this.marketData = [];
@@ -232,7 +221,7 @@ export default {
         poolSym0: item.reserve0.split(' ')[0],
         poolSym1: item.reserve1.split(' ')[0],
         poolToken: item.liquidity_token,
-        sellToken: item.token
+        sellToken: `${item.token}`
       }
       const nowMarket = sellToken(inData);
       nowMarket.getNum1 = toFixed(nowMarket.getNum1, 4)
