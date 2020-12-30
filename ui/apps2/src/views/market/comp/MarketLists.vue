@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import axios from "axios";
+// import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accDiv } from '@/utils/public';

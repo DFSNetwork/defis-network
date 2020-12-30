@@ -69,3 +69,15 @@ export function getBpTags() {
     })
   })
 }
+
+// 获取PDDEX行情列表
+export function getPddexMarkets() {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/market/tops').then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
