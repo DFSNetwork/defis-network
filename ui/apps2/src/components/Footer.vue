@@ -1,10 +1,20 @@
 <template>
   <div class="footer">
-    <div class="" @click="clickOnDFSInfoData">
-      24H{{ $t('footer.swapNum') }}: {{ dfsInfoData.eos_volume ? dfsInfoData.eos_volume : "0.00" }}
+    <div v-if="isEx" class="" @click="clickOnDFSInfoData">
+      24H{{ $t('footer.swapNum') }}: {{ dfsInfoData.total_volume ? dfsInfoData.total_volume : "0.00" }}
       {{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('footer.orderNum') }}
     </div>
-    <div class="poolsNum">{{ $t('footer.tlv') }}: {{ poolsEos }} EOS</div>
+    <div v-else class="" @click="clickOnDFSInfoData">
+      24H{{ $t('footer.swapNum') }}: ${{ dfsInfoData.total_volume_usdt ? dfsInfoData.total_volume_usdt : "0.00" }}
+      {{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('footer.orderNum') }}
+    </div>
+    <div class="poolsNum flexc" @click="isEx = !isEx">
+      <span>{{ $t('footer.tlv') }}: </span>
+      <span v-if="isEx">{{ poolsEos }}</span>
+      <span v-else>${{ poolsUsdt }}</span>
+      <img v-if="isEx" class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_left.svg" alt="">
+      <img v-else class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_right.svg" alt="">
+    </div>
 
     <div class="safe tip">
       <span>{{ $t('public.safeRecord1') }}</span>
@@ -41,6 +51,8 @@ export default {
       timer: null,
       closeDFSInfoDataTip: true,
       poolsEos: '0.0000 EOS',
+      poolsUsdt: '0.0000',
+      isEx: true,
     }
   },
   computed: {
@@ -67,15 +79,18 @@ export default {
     //   immediate: true,
     //   deep: true,
     // },
-    marketLists: {
-      handler: function mls(newVal) {
-        let count = 0
-        newVal.forEach(v => {
-          count = Number(count) + Number(v.eos_value)
-        })
-        this.poolsEos = count;
-      }
-    }
+    // marketLists: {
+    //   handler: function mls(newVal) {
+    //     let count = 0
+    //     let countU = 0
+    //     newVal.forEach(v => {
+    //       count = Number(count) + Number(v.eos_value)
+    //       countU = Number(countU) + Number(v.usdt_value)
+    //     })
+    //     this.poolsEos = count;
+    //     this.poolsUsdt = countU;
+    //   }
+    // }
   },
   methods: {
     handleSetAllRes() {
@@ -121,6 +136,11 @@ export default {
         return;
       }
       this.dfsInfoData = result.data;
+      this.poolsEos = this.dfsInfoData.tvl_eos;
+      this.poolsUsdt = parseFloat(this.dfsInfoData.tvl_usdt);
+      const price = this.poolsUsdt / parseFloat(this.poolsEos)
+      const total_volume_usdt = price * parseFloat(this.dfsInfoData.total_volume)
+      this.$set(this.dfsInfoData, 'total_volume_usdt', total_volume_usdt.toFixed(4))
       this.$store.dispatch('setDfsData', this.dfsInfoData)
       this.handleSetAllRes()
     },
@@ -166,6 +186,15 @@ export default {
   color: #333;
   .poolsNum{
     margin-top: 8px;
+    &>span{
+      &:first-child{
+        margin-right: 8px;
+      }
+    }
+    .exchange{
+      width: 30px;
+      margin: 0 10px;
+    }
   }
   .safe{
     margin: 12px 0 30px;
