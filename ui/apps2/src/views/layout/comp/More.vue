@@ -21,8 +21,7 @@
       <div class="lists">
         <div class="title flexb" @click="handleToBP">
           <div class="flexa">
-            <img class="titleImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/christmas/logo-christmas.png">
-            <!-- <img class="titleImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png"> -->
+            <img class="titleImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png">
             <span>{{ $t('more.aboutDfs') }}</span>
           </div>
           <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/about_right.svg" alt="">
