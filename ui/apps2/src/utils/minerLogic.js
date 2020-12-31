@@ -114,7 +114,7 @@ export async function get_tag_lp_mids(cb) {
   }
   let rows = result.rows || [];
   rows.sort((a, b) => {
-    return a.rank - b.rank
+    return Number(b.total_votes) - Number(a.total_votes)
   })
   let mids = [];
   rows.forEach(v => {

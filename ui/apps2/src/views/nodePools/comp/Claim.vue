@@ -10,7 +10,7 @@
       <template v-for="(v) in lpPoolsMid">
         <div class="claimNum" :key="v" v-if="accLpData[v] && parseFloat(accLpData[v].showReward)">
           <span class="dinBold">{{ accLpData[v] ? accLpData[v].showReward || '0.00000000' : '0.00000000' }} TAG</span>
-          <span class="tip">(LP)</span>
+          <span class="tip small">/{{ accLpData[v].symbol0 }}</span>
           <span class="tip dinReg"> ≈ {{ accLpData[v] ? accLpData[v].aboutEos || '0.0000' : '0.0000' }} EOS</span>
         </div>
       </template>
@@ -207,6 +207,9 @@ export default {
     font-size: 30px;
     font-weight: 500;
     margin-top: 8px;
+    .small{
+      font-size: 24px;
+    }
   }
   .allClaimBtn{
     background: #29D4B0;

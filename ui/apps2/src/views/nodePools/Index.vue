@@ -540,6 +540,8 @@ export default {
           const marketData = sellToken(inData)
           rows.market0 = marketData.getNum1;
           rows.market1 = marketData.getNum2;
+          rows.symbol0 = market.symbol0;
+          rows.symbol1 = market.symbol1;
           // console.log(mid, rows)
           this.accLpData[`${mid}`] = rows;
           this.handleGetLpReward()
