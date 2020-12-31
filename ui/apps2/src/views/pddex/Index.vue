@@ -1,7 +1,7 @@
 <template>
   <div>
     <transition name="fade" mode="out-in">
-      <router-view class="content"/>
+      <router-view class="content" @listenUpdate="handleUpdate"/>
     </transition>
     <!-- <PddexTab /> -->
   </div>
@@ -9,24 +9,26 @@
 
 <script>
 import { mapState } from 'vuex';
-import { logicToDealMarket, logicToDealBoxMarket, logicToDealBoxMids } from './comp/appLogic'
-// import PddexTab from './comp/PddexTab'
+import { logicToDealBoxMarket, logicToDealBoxMids } from './comp/appLogic'
 import { DApp } from '@/utils/wallet';
+import { dealAreaArr } from '@/views/pddex/comp/appLogic';
+
 export default {
   name: 'pddex',
   components: {
-    // PddexTab
   },
   data() {
     return {
       boxMarketList: [],
       dfsLists: [],
+      allMarket: {},
     }
   },
   mounted() {
-    this.handleGetBoxMids()
+    this.handleGetMarkets()
     this.handleGetPddexMarketList();
-    this.handleBoxLists();
+    // this.handleGetBoxMids()
+    // this.handleBoxLists();
     DApp.scatterInit(this, () => {
     })
   },
@@ -34,7 +36,6 @@ export default {
     ...mapState({
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
       marketLists: state => state.sys.marketLists, // 生产环境
-      // pddexMarketLists: state => state.config.marketLists, // 生产环境
       boxMids: state => state.config.boxMids, // 生产环境
     })
   },
@@ -46,7 +47,7 @@ export default {
         }
         const boxLists = logicToDealBoxMarket(this.boxMarketList)
         this.boxLists = boxLists;
-        this.handleDealBoxAndDfs()
+        // this.handleDealBoxAndDfs()
       },
       deep: true,
       immediate: true,
@@ -60,6 +61,9 @@ export default {
     }
   },
   methods: {
+    handleUpdate() {
+      this.handleGetMarkets()
+    },
     // 获取支持box的交易对id
     async handleGetBoxMids() {
       const {status, result} = await this.$api.boxMidsAndOrder();
@@ -68,7 +72,7 @@ export default {
       }
       logicToDealBoxMids(result)
     },
-    // 获取ppdex支持交易对
+    // 获取ppdex支持交易对 配对pid
     async handleGetPddexMarketList() {
       const params = {
         code: this.baseConfig.pddex,
@@ -82,29 +86,58 @@ export default {
         return
       }
       const lists = result.rows || [];
+      lists.forEach(v => {
+        const sym0Arr = v.sym0.split(',')
+        const sym1Arr = v.sym1.split(',')
+        this.$set(v, 'symbol0', sym0Arr[1])
+        this.$set(v, 'decimal0', sym0Arr[0])
+        this.$set(v, 'symbol1', sym1Arr[1])
+        this.$set(v, 'decimal1', sym1Arr[0])
+      })
       this.pddexList = lists;
-
-      this.handleDealSwapAndPddex()
+      this.handleDealAllMarket()
     },
-    // 整合swap列表 和 pddex列表
-    handleDealSwapAndPddex() {
-      if (!this.pddexList.length || !this.marketLists.length) {
+    // 获取行情数据
+    async handleGetMarkets() {
+      const {status, result} = await this.$api.getPddexMarkets()
+      if (!status) {
         return
       }
-      const newMList = JSON.parse(JSON.stringify(this.marketLists))
-      this.pddexList.forEach(v => {
-        const marketIndex = newMList.findIndex(vv => {
-          return vv.contract0 === v.contract0 && vv.contract1 === v.contract1
+      const keys = Object.keys(result);
+      const lists = {}
+      keys.forEach(key => {
+        const coin = key.split('_markets')[0].toUpperCase()
+        const arr = dealAreaArr(result[key] || [], coin)
+        lists[coin] = arr;
+      })
+      this.allMarket = lists;
+      this.handleDealAllMarket()
+    },
+    // 处理 allMarket 对应pid
+    handleDealAllMarket() {
+      const keys = Object.keys(this.allMarket)
+      if (!keys.length || !this.pddexList.length) {
+        return
+      }
+      let allMarket = []
+      keys.forEach(key => {
+        allMarket.push(...this.allMarket[key])
+      })
+      allMarket.forEach(v => {
+        const has = this.pddexList.find(vv => {
+          return (vv.contract0 === v.contract0 && vv.symbol0 === v.symbol0 && vv.contract1 === v.contract1 && vv.symbol1 === v.symbol1)
+              || (vv.contract0 === v.contract1 && vv.symbol0 === v.symbol1 && vv.contract1 === v.contract0 && vv.symbol1 === v.symbol0)
         })
-        if (marketIndex === -1) {
-          console.log(v)
+        if (!has) {
           return
         }
-        this.$set(newMList[marketIndex], 'pid', v.pid)
-        this.$set(newMList[marketIndex], 'unikey', v.unikey)
+        this.$set(v, 'pid', has.pid)
+        this.$set(v, 'unikey', has.unikey)
       })
-      this.$store.dispatch('setPddexMarketLists', newMList)
+      this.$store.dispatch('setPddexMarketLists', allMarket)
     },
+
+    // 暂时不用
     // 获取BOX做市列表
     async handleBoxLists() {
       const params = {
@@ -164,25 +197,24 @@ export default {
       this.$store.dispatch('setPddexMarketLists', newListSort)
       this.handleDealSwapAndPddex();
     },
-
-    // 获取做市列表
-    async handleGetAllMarket() {
-      const params = {
-        code: this.baseConfig.swap,
-        scope: this.baseConfig.swap,
-        table: 'markets',
-        json: true,
-        limit: 1000
-      }
-      const {status, result} = await this.$api.get_table_rows(params);
-      if (!status) {
+    // 整合swap列表 和 pddex列表
+    handleDealSwapAndPddex() {
+      if (!this.pddexList.length || !this.marketLists.length) {
         return
       }
-      const lists = result.rows;
-      const newListSort = logicToDealMarket(lists, this.topLists, this.klineMids)
-      this.dfsLists = newListSort;
-
-      this.handleDealBoxAndDfs()
+      const newMList = JSON.parse(JSON.stringify(this.marketLists))
+      this.pddexList.forEach(v => {
+        const marketIndex = newMList.findIndex(vv => {
+          return vv.contract0 === v.contract0 && vv.contract1 === v.contract1
+        })
+        if (marketIndex === -1) {
+          console.log(v)
+          return
+        }
+        this.$set(newMList[marketIndex], 'pid', v.pid)
+        this.$set(newMList[marketIndex], 'unikey', v.unikey)
+      })
+      this.$store.dispatch('setPddexMarketLists', newMList)
     },
   }
 }

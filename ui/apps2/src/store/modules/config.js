@@ -37,21 +37,24 @@ const config = {
       },
     ],
     // YFC类型LP挖矿配置
-    lpMid: [{
-      mid: 329,
-      symbol: 'YFC',
-      contract: 'yfctokenmain', // 币种合约
-      poolAcc: 'yfcfishponds', // 待瓜分余额
-      mineAcc: 'yfcfishponds', // 挖矿操作合约账户
-      decimal: 8,
-    }, {
-      mid: 346,
-      symbol: 'DBC',
-      contract: 'dbctokenmain', // 币种合约
-      poolAcc: 'dbcfarmers11', // 待瓜分余额
-      mineAcc: 'dbcfarmers11', // 挖矿操作合约账户
-      decimal: 8,
-    }, {
+    lpMid: [
+      // {
+      // mid: 329,
+      // symbol: 'YFC',
+      // contract: 'yfctokenmain', // 币种合约
+      // poolAcc: 'yfcfishponds', // 待瓜分余额
+      // mineAcc: 'yfcfishponds', // 挖矿操作合约账户
+      // decimal: 8,
+      // }, 
+    //   {
+    //   mid: 346,
+    //   symbol: 'DBC',
+    //   contract: 'dbctokenmain', // 币种合约
+    //   poolAcc: 'dbcfarmers11', // 待瓜分余额
+    //   mineAcc: 'dbcfarmers11', // 挖矿操作合约账户
+    //   decimal: 8,
+    // }, 
+    {
       mid: 459,
       symbol: 'PDD',
       contract: 'pddtokenmain', // 币种合约

@@ -7,6 +7,7 @@
     </div>
     <div class="rankTabs">
       <van-tabs v-model="coinName"
+        v-if="active === 1"
         animated
         class="subTab"
         title-inactive-color="#999"
@@ -52,81 +53,111 @@
           </span>
         </div>
       </div>
-      <div class="rankList" v-if="active === 0">
-        <div class="noDate tip" v-if="!followList.length">
-          <img class="noDataPng" src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noStar.png" alt="">
-          <div>快去添加你感兴趣的交易对吧</div>
-          <div class="toFollow flexc" @click="active = 1">添加</div>
-        </div>
-        <div class="rankItem flexb dinReg" v-for="(v, index) in followList" :key="`${active}-${index}`" @click="handleToTrade(v)">
-          <div class="name flexa">
-            <img class="coinUrl" :src="v.sym1Data.imgUrl" :onerror="errorCoinImg">
-            <div>
-              <div>{{ v.symbol1 }}/{{ v.symbol0 }}</div>
-              <div class="tip smallTip">
-                <span v-if="sortPools">底池 {{ v.volume24H }}</span>
-                <span v-else-if="sortApy">APY {{ v.countApy }}%</span>
-                <span v-else>24H额 {{ v.volume24H }}</span>
+      <van-pull-refresh
+        v-model="isLoading"
+        success-text="刷新成功"
+        @refresh="onRefresh"
+      >
+        <div class="rankList" v-if="active === 0">
+          <div class="noDate tip" v-if="!followList.length">
+            <img class="noDataPng" src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noStar.png" alt="">
+            <div>快去添加你感兴趣的交易对吧</div>
+            <div class="toFollow flexc" @click="active = 1">添加</div>
+          </div>
+          <div class="rankItem flexb dinReg" v-for="(v, index) in followList" :key="`${active}-${index}`" @click="handleToTrade(v)">
+            <div class="name flexa">
+              <img class="coinUrl" :src="v.sym1Data.imgUrl" :onerror="errorCoinImg">
+              <div>
+                <div>
+                  <span>{{ v.symbol1 }}</span>
+                  <span class="small">/{{ v.symbol0 }}</span>
+                </div>
+                <div class="tip smallTip">
+                  <span v-if="sortPools">底池 {{ v.volume24H }}</span>
+                  <span v-else-if="sortApy">
+                    <span>APY {{ v.countApy }}%</span>
+                    <span class="green_p" @click.stop="handleShowApy(v)">详情＞</span>
+                  </span>
+                  <span v-else>24H额 {{ v.volume24H }}</span>
+                </div>
               </div>
             </div>
-          </div>
-          <div class="priceDiv">
-            <div>{{ v.price || '-' }}</div>
-            <div class="tip smallTip">
-              <span>{{ language === 'en' ? '$' : '¥' }}</span>
-              <span>{{ v.aboutPrice }}</span>
-            </div>
-          </div>
-          <div class="rateDiv">
-            <span class="rate flexc"
-              :class="{'green': parseFloat(v.price_change_rate) > 0,
-                       'red': parseFloat(v.price_change_rate) < 0}">
-              {{ v.priceRate || '-' }}</span>
-          </div>
-        </div>
-      </div>
-      <div class="rankList" v-else>
-        <div class="rankItem flexb dinReg" v-for="(v, index) in cdAreaLists" :key="`${active}-${index}`" @click="handleToTrade(v)">
-          <div class="name flexa">
-            <img class="coinUrl" :src="v.sym1Data.imgUrl" :onerror="errorCoinImg">
-            <div>
-              <div>{{ v.symbol1 }}/{{ v.symbol0 }}</div>
+            <div class="priceDiv">
+              <div>{{ v.price || '-' }}</div>
               <div class="tip smallTip">
-                <span v-if="sortPools">底池 {{ v.volume24H }}</span>
-                <span v-else-if="sortApy">APY {{ v.countApy }}%</span>
-                <span v-else>24H额 {{ v.volume24H }}</span>
+                <span>{{ language === 'en' ? '$' : '¥' }}</span>
+                <span>{{ v.aboutPrice }}</span>
               </div>
             </div>
-          </div>
-          <div class="priceDiv">
-            <div>{{ v.price || '-' }}</div>
-            <div class="tip smallTip">
-              <span>{{ language === 'en' ? '$' : '¥' }}</span>
-              <span>{{ v.aboutPrice }}</span>
+            <div class="rateDiv">
+              <span class="rate flexc"
+                :class="{'green': parseFloat(v.price_change_rate) > 0,
+                        'red': parseFloat(v.price_change_rate) < 0}">
+                {{ v.priceRate || '-' }}</span>
             </div>
           </div>
-          <div class="rateDiv">
-            <span class="rate flexc"
-              :class="{'green': parseFloat(v.price_change_rate) > 0,
-                       'red': parseFloat(v.price_change_rate) < 0}">
-              {{ v.priceRate || '-' }}</span>
+        </div>
+        <div class="rankList" v-else>
+          <div class="noDate tip" v-loading="unGetAllMarket" v-if="!cdAreaLists.length">
+            <img class="noDataPng" src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noStar.png" alt="">
+            <div>{{ $t('public.noData') }}</div>
+          </div>
+          <div class="rankItem flexb dinReg" v-for="(v, index) in cdAreaLists" :key="`${active}-${index}`" @click="handleToTrade(v)">
+            <div class="name flexa">
+              <img class="coinUrl" :src="v.sym1Data.imgUrl" :onerror="errorCoinImg">
+              <div>
+                <div>
+                  <span>{{ v.symbol1 }}</span>
+                  <span class="small">/{{ v.symbol0 }}</span>
+                </div>
+                <div class="tip smallTip">
+                  <span v-if="sortPools">底池 {{ v.volume24H }}</span>
+                  <span v-else-if="sortApy">
+                    <span>APY {{ v.countApy }}%</span>
+                    <span class="green_p" @click.stop="handleShowApy(v)">详情＞</span>
+                  </span>
+                  <span v-else>24H额 {{ v.volume24H }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="priceDiv">
+              <div>{{ v.price || '-' }}</div>
+              <div class="tip smallTip">
+                <span>{{ language === 'en' ? '$' : '¥' }}</span>
+                <span>{{ v.aboutPrice }}</span>
+              </div>
+            </div>
+            <div class="rateDiv">
+              <span class="rate flexc"
+                :class="{'green': parseFloat(v.price_change_rate) > 0,
+                        'red': parseFloat(v.price_change_rate) < 0}">
+                {{ v.priceRate || '-' }}</span>
+            </div>
           </div>
         </div>
-      </div>
+      </van-pull-refresh>
     </div>
+    <!-- 年化详情 -->
+    <el-dialog
+      class="myDialog apy"
+      :visible.sync="showApyDetail">
+      <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
+                 :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"
+                 :tagLpApy="tagLpApy"/>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { getCoin, dealPrice} from '@/utils/public';
-
-import { perDayRewardV3 } from '@/utils/logic';
-import { getDmdMinerHourRoi, getTagLpApy } from '@/utils/public';
-import { timeApy } from '@/utils/minerLogic';
+import { dealAreaArr } from '@/views/pddex/comp/appLogic';
+import MarketApy from '@/views/market/popup/MarketApy'
 
 export default {
   name: 'pddexTab',
+  components: {
+    MarketApy,
+  },
   data() {
     return {
       coinName: 'EOS',
@@ -148,6 +179,19 @@ export default {
       sortApy: 0,
       sortRate: 0,
       sortPrice: 0,
+
+      // apyData
+      countApy: '0.00',
+      feesApr: '0.00',
+      aprV3: '0.00',
+      lpApy: {},
+      dmdApy: '0.00',
+      timeApy: '0.00',
+      tagLpApy: '0.00',
+      showApyDetail: false,
+
+      isLoading: false,
+      unGetAllMarket: true,
     }
   },
   mounted() {
@@ -162,6 +206,7 @@ export default {
       hotLists: state => state.config.hotLists, // 生产环境
       dfsPrice: state => state.sys.dfsPrice,
       tagLpMids: state => state.config.tagLpMids,
+      lpMid: state => state.config.lpMid,
     })
   },
   watch: {
@@ -170,15 +215,10 @@ export default {
     //     if (!newVal.length) {
     //       return
     //     }
-    //     // this.handleDealTradeRankLogic()
-    //     // this.handleRankList()
-    //     // this.handleDealLike()
+    //     this.isLoading = false;
     //   },
     //   immediate: true,
     //   deep: true,
-    // },
-    // active() {
-    //   // this.handleRankList()
     // },
     allMarket: {
       handler: function am() {
@@ -211,6 +251,22 @@ export default {
     },
   },
   methods: {
+    onRefresh() {
+      this.handleGetMarkets()
+      this.handleGetLikes();
+      this.$emit('listenUpdate', true)
+    },
+    // 显示年化
+    handleShowApy(v) {
+      this.countApy = v.countApy;
+      this.feesApr = Number(v.feesApr || 0);
+      this.aprV3 = v.aprV3;
+      this.lpApy = v.lpApy;
+      this.dmdApy = v.dmdApy;
+      this.timeApy = v.timeApy;
+      this.tagLpApy = v.tagLpApy;
+      this.showApyDetail = true
+    },
     // 处理排序
     handleDealSort() {
       const area = this.coinName;
@@ -289,48 +345,12 @@ export default {
     },
     handleSortPrice() {
       let t = (this.sortPrice + 1) % 3;
-      console.log(t)
       this.sortPrice = t;
       this.sortPools = 0;
       this.sortVol = 0;
       this.sortApy = 0;
       this.sortRate = 0;
       this.handleDealSort()
-    },
-
-    // 处理币种APY
-    handleDealApy(v) {
-      // 手续费年化
-      const fees = parseFloat(v.volume24H || 0) * 0.002;
-      const sym0Liq = parseFloat(v.reserve0 || 0) * 2;
-      const feesApr = fees / (sym0Liq - fees) * 365 * 100;
-      // DFS 挖矿年化
-      const rewardV3 = perDayRewardV3(v.mid)
-      const aprV3 = rewardV3 * this.dfsPrice / 20000 * 365 * 100;
-      // console.log(aprV3)
-      // DMD 挖矿年化
-      const dmdPool = this.marketLists.find(vv => vv.mid === 326)
-      let dmdRoi = getDmdMinerHourRoi(v, 'year', dmdPool)
-      const dmdApy = dmdRoi;
-      // TIME 挖矿年化
-      let tApy = 0
-      const pool = this.marketLists.find(vv => vv.mid === 530) || {}
-      let apy = timeApy(v, 'year', pool)
-      if (Number(apy)) {
-        tApy = apy;
-      }
-      // TAG 挖矿年化
-      let tagLpApy = 0
-      const has = this.tagLpMids.find(vv => vv === v.mid)
-      if (has) {
-        tagLpApy = getTagLpApy(v.mid)
-      }
-      // console.log( parseFloat(feesApr), parseFloat(aprV3), parseFloat(dmdApy)
-      //               , parseFloat(tApy), parseFloat(tagLpApy))
-
-      const countApy = parseFloat(feesApr) + parseFloat(aprV3) + parseFloat(dmdApy)
-                     + parseFloat(tApy) + parseFloat(tagLpApy)
-      return countApy
     },
 
     // 获取关注列表
@@ -367,6 +387,7 @@ export default {
       keys.forEach(key => {
         allMarket.push(...this.allMarket[key])
       })
+      // this.$store.dispatch('setPddexMarketLists', allMarket)
       
       this.likeArr.forEach(v => {
         const item = allMarket.find(vv => vv.mid === v.mid)
@@ -393,6 +414,8 @@ export default {
     // 获取行情数据
     async handleGetMarkets() {
       const {status, result} = await this.$api.getPddexMarkets()
+      this.isLoading = false;
+      this.unGetAllMarket = false;
       if (!status) {
         return
       }
@@ -400,7 +423,7 @@ export default {
       const lists = {}
       keys.forEach(key => {
         const coin = key.split('_markets')[0].toUpperCase()
-        const arr = this.handleDealArr(result[key] || [], coin)
+        const arr = dealAreaArr(result[key] || [], coin)
         lists[coin] = arr;
       })
       // console.log(result)
@@ -415,115 +438,9 @@ export default {
       this.cdAreaLists = this.allMarket[coin];
       // console.log(this.allMarket[coin])
     },
-    handleExchange(coin, v) {
-      if (coin === 'EOS' && v.contract0 === 'eosio.token' && v.sym0 === '4,EOS') {
-        return true
-      }
-      if (coin === 'TAG' && v.contract0 === 'tagtokenmain' && v.sym0 === '8,TAG') {
-        return true
-      }
-      if (coin === 'USDT' && v.contract0 === 'tethertether' && v.sym0 === '4,USDT') {
-        return true
-      }
-      return false
-    },
-    handleDealArr(arr, coin) {
-      const newArr = []
-      const coinPrice = this.handleGetCoinPrice(coin);
-      arr.forEach(list => {
-        let v = list;
-        if (!this.handleExchange(coin, v)) {
-          const tLi = {
-            contract0: v.contract1,
-            contract1: v.contract0,
-            last_update: v.last_update,
-            liquidity_token: v.liquidity_token,
-            mid: v.mid,
-            price0_cumulative_last: v.price1_cumulative_last,
-            price0_last: v.price1_last,
-            price1_cumulative_last: v.price0_cumulative_last,
-            price1_last: v.price0_last,
-            reserve0: v.reserve1,
-            reserve1: v.reserve0,
-            sym0: v.sym1,
-            sym1: v.sym0,
-            exchangeSym: true,
-            cur_price: v.cur_price,
-            eos_value: v.eos_value,
-            last_price: v.last_price,
-            usdt_value: v.usdt_value,
-            volume24H: v.volume24H,
-            price_change_rate: v.price_change_rate,
-            price_change_24h: v.price_change_24h,
-          }
-          v = tLi;
-        }
-        const sym0 = v.sym0.split(',');
-        v.symbol0 = sym0[1]; // 币种
-        v.decimal0 = sym0[0]; // 精度
-        const sym1 = v.sym1.split(',');
-        v.symbol1 = sym1[1]; // 币种
-        v.decimal1 = sym1[0]; // 精度
-        v.price = dealPrice((parseFloat(v.reserve0) / parseFloat(v.reserve1) || 0))
-        v.aboutPrice = (coinPrice * v.price).toFixed(2)
-        v.priceRate = parseFloat(v.price_change_rate) > 0 ? `+${v.price_change_rate}` : v.price_change_rate;
-        v.sym0Data = {
-          mid: v.mid,
-          last_update: v.last_update,
-          liquidity_token: v.liquidity_token,
-          price_cumulative_last: v.price0_cumulative_last,
-          price_last: v.price0_last,
-          contract: v.contract0,
-          decimal: v.decimal0,
-          reserve: v.reserve0,
-          sym: v.sym0,
-          symbol: v.symbol0,
-          imgUrl: getCoin(v.contract0, v.symbol0),
-        }
-        v.sym1Data = {
-          mid: v.mid,
-          last_update: v.last_update,
-          liquidity_token: v.liquidity_token,
-          price_cumulative_last: v.price1_cumulative_last,
-          price_last: v.price1_last,
-          contract: v.contract1,
-          decimal: v.decimal1,
-          reserve: v.reserve1,
-          sym: v.sym1,
-          symbol: v.symbol1,
-          imgUrl: getCoin(v.contract1, v.symbol1),
-        }
-        const countApy = this.handleDealApy(v)
-        v.countApy = parseFloat(countApy || 0).toFixed(2);
-        newArr.push(v)
-      })
-      return newArr
-    },
-    // 获取分区币种的价格
-    handleGetCoinPrice(coin) {
-      const lang = this.language;
-      let mid = 17;
-      if (coin === 'EOS') {
-        mid = 17;
-      } else if (coin === 'TAG') {
-        mid = 665;
-      } else if (coin === 'USDT') {
-        mid = 0;
-      }
-      if (mid === 0) {
-        return lang === 'en' ? 1 : 6.5;
-      }
-      if (!this.marketLists.length) {
-        return 0
-      }
-      const market = this.marketLists.find(v => v.mid === mid)
-      let price = coin === market.symbol1 ? 
-                  parseFloat(market.reserve0) / parseFloat(market.reserve1) :
-                  parseFloat(market.reserve1) / parseFloat(market.reserve0);
-      return lang === 'en' ? price : 6.5 * price;
-    },
+  
 
-    // 暂时吧使用
+    // 暂时不使用
     // 排行数据
     handleRankList() {
       this.handleDealTradeRank()
@@ -722,6 +639,9 @@ export default {
     }
     .smallTip{
       font-size: 20px;
+      .green_p{
+        margin-left: 10px;
+      }
     }
     .priceDiv{
       .tip{
@@ -783,7 +703,7 @@ export default {
       font-weight: 500;
       position: relative;
       .small{
-        font-size: 24px;
+        font-size: 22px;
         color: #999;
       }
       .toTop{
@@ -792,6 +712,24 @@ export default {
         top: 0px;
         right: 0px;
       }
+    }
+  }
+}
+
+.myDialog{
+  /deep/ .el-dialog{
+    position: relative;
+    margin: auto;
+    width: 570px;
+    border-radius: 20px;
+    .el-dialog__body,
+    .el-dialog__header{
+      padding: 0;
+    }
+  }
+  &.apy{
+    /deep/ .el-dialog{
+      width: 620px;
     }
   }
 }

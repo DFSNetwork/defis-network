@@ -120,7 +120,7 @@ export async function get_tag_lp_mids(cb) {
   rows.forEach(v => {
     mids.push(v.mid)
   })
-  mids = mids.slice(0, 10)
+  mids = mids.slice(0, 15)
   store.dispatch('setTagLpMids', mids)
   if (cb) {
     cb(mids)
