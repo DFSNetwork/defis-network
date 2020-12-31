@@ -225,6 +225,7 @@ export function dealAreaArr(arr, coin) {
     const sym1 = v.sym1.split(',');
     v.symbol1 = sym1[1]; // 币种
     v.decimal1 = sym1[0]; // 精度
+    v.poolsNum = `${parseFloat(v.reserve0).toFixed(4)} ${v.symbol0}`
     v.price = dealPrice((parseFloat(v.reserve0) / parseFloat(v.reserve1) || 0))
     v.aboutPrice = (coinPrice * v.price).toFixed(2)
     v.priceRate = parseFloat(v.price_change_rate) > 0 ? `+${v.price_change_rate}` : v.price_change_rate;

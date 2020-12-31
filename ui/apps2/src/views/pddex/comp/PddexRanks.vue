@@ -73,7 +73,7 @@
                   <span class="small">/{{ v.symbol0 }}</span>
                 </div>
                 <div class="tip smallTip">
-                  <span v-if="sortPools">底池 {{ v.volume24H }}</span>
+                  <span v-if="sortPools">底池 {{ v.poolsNum }}</span>
                   <span v-else-if="sortApy">
                     <span>APY {{ v.countApy }}%</span>
                     <span class="green_p" @click.stop="handleShowApy(v)">详情＞</span>
@@ -111,7 +111,7 @@
                   <span class="small">/{{ v.symbol0 }}</span>
                 </div>
                 <div class="tip smallTip">
-                  <span v-if="sortPools">底池 {{ v.volume24H }}</span>
+                  <span v-if="sortPools">底池 {{ v.poolsNum }}</span>
                   <span v-else-if="sortApy">
                     <span>APY {{ v.countApy }}%</span>
                     <span class="green_p" @click.stop="handleShowApy(v)">详情＞</span>
