@@ -411,6 +411,7 @@ export function dealMarketLists(list, topLists) {
 export function getV3Apr(mid, rankAprs) {
   const rankInfoV3 = store.state.sys.rankInfoV3;
   const aprs = rankAprs ? rankAprs : rankInfoV3.find(v => v.mid === mid);
+  // console.log(aprs)
   if (!aprs) {
     return {
       isRainbow: false,
@@ -419,6 +420,12 @@ export function getV3Apr(mid, rankAprs) {
   }
   let poolEos = getPoolEosBal(mid);
   poolEos = poolEos * 2;
+  if (!Number(poolEos)) {
+    return {
+      isRainbow: false,
+      cur_apy: 0,
+    }
+  }
   const damping = store.state.sys.damping;
   const dfsPrice = store.state.sys.dfsPrice;
   // console.log(aprs);
