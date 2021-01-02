@@ -96,6 +96,12 @@ const config = {
       contract: 'minedfstoken',
       minEos: 100, // 最低价值 100 EOS
       priceMid: 39,
+    }, {
+      symbol: 'USDC',
+      sym: '4,USDC',
+      contract: 'usdxusdxusdx',
+      minEos: 100, // 最低价值 100 EOS
+      priceMid: 738,
     }],
 
     // pddex Data
