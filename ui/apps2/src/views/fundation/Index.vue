@@ -7,7 +7,7 @@
         </span>
     </van-notice-bar>
     <van-swipe class="banner" :autoplay="3000" indicator-color="white">
-      <van-swipe-item v-for="(item, index) in images" :key="index" @click="handleTo(item.routeName)">
+      <van-swipe-item v-for="(item, index) in images" :key="index" @click="handleTo(item.routeName, item.link)">
         <img class="bgImg" :src="item.image" />
       </van-swipe-item>
     </van-swipe>
@@ -58,6 +58,10 @@ export default {
   data() {
     return {
       images: [{
+        image: 'https://cdn.jsdelivr.net/gh/defis-net/material2/banner/usdx.png',
+        routeName: 'fundation',
+        link: 'https://usdx.gitee.io/'
+      }, {
         image: 'https://cdn.jsdelivr.net/gh/defis-net/material2/banner/2021.jpg',
         routeName: 'fundation'
       }, {
@@ -124,7 +128,11 @@ export default {
       }
       this.voices = result.data || [];
     },
-    handleTo(name) {
+    handleTo(name, link) {
+      if (link) {
+        location.href = link
+        return
+      }
       if (this.$route.name === name) {
         return
       }
