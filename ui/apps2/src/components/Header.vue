@@ -68,6 +68,7 @@
       <div @click="showPools = false">
         <div class="create flexc" @click="handleTo('pools')">{{ $t('sys.coinPool', {coin: 'DFS'}) }}</div>
         <div class="create flexc" @click="handleTo('nodePools')">{{ $t('sys.coinPool', {coin: 'TAG'}) }}</div>
+        <div class="create flexc" @click="handleToProject('usdx')">{{ $t('sys.coinPool', {coin: 'USDX'}) }}</div>
       </div>
     </el-dialog>
 
@@ -205,6 +206,9 @@ export default {
       if (name === 'loop') {
         location.href = 'https://loop.ech.one/index.html'
       }
+      if (name === 'usdx') {
+        location.href = 'https://usdx.gitee.io/'
+      }
     }
   },
 }
@@ -324,6 +328,7 @@ export default {
   }
   &.showPools{
     /deep/ .el-dialog{
+      width: 180px;
       margin-left: 230px;
     }
   }

@@ -419,6 +419,7 @@ export function getV3Apr(mid, rankAprs) {
     };
   }
   let poolEos = getPoolEosBal(mid);
+  // console.log(poolEos)
   poolEos = poolEos * 2;
   if (!Number(poolEos)) {
     return {
@@ -443,11 +444,17 @@ export function getV3Apr(mid, rankAprs) {
 function getPoolEosBal(mid) {
   const marketLists = store.state.sys.marketLists;
   const market = marketLists.find(v => v.mid === mid) || {};
+  const usdt = marketLists.find(v => v.mid === 17) || {};
+  const usdtPrice = parseFloat(usdt.reserve0 || 0) / parseFloat(usdt.reserve1 || 1)
   let eosBal = 0;
   if (market.symbol0 === 'EOS' && market.contract0 === 'eosio.token') {
     eosBal = parseFloat(market.reserve0)
   } else if (market.symbol1 === 'EOS' && market.contract1 === 'eosio.token') {
     eosBal = parseFloat(market.reserve1)
+  } else if (market.symbol0 === 'USDT' && market.contract0 === 'tethertether') {
+    eosBal = parseFloat(market.reserve0) * usdtPrice
+  } else if (market.symbol1 === 'USDT' && market.contract1 === 'tethertether') {
+    eosBal = parseFloat(market.reserve1) * usdtPrice
   }
   return eosBal;
 }
