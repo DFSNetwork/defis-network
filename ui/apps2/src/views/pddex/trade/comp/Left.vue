@@ -53,8 +53,8 @@ export default {
       price: '',
       getPrice: false,
       num: '',
-      bal0: '100000.0000', // DFS
-      bal1: '100000.0000', // EOS
+      bal0: '0.0000', // DFS
+      bal1: '0.0000', // EOS
       slider: 0,
       aboutNum: '0.0000',
 
