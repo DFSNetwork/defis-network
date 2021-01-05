@@ -93,7 +93,7 @@ export default {
     ...mapState({
       account: state => state.app.account,
       baseConfig: state => state.sys.baseConfig,
-      sliderPonit: state => state.sys.sliderPonit,
+      sliderPonit: state => state.app.slipPoint,
       tradeInfo: state => state.sys.tradeInfo,
     }),
   },
@@ -161,7 +161,7 @@ export default {
       minGet = toFixed(minGet, decimalMinGet)
       dealInfo.minGet = minGet;
       dealInfo.direction = this.direction;
-      // console.log(dealInfo)
+      // console.log(dealInfo, dealInfo.payNum, dealInfo.price, sliPitNum)
 
       this.$store.dispatch('setTradeInfo', dealInfo)
     },
@@ -176,6 +176,7 @@ export default {
         type: this.direction === 'sell' ? 'pay' : 'get'
       }
       const path = SwapRouter.get_paths(params0, params1, inData.type)
+      console.log(path)
       const params = [
         path,
         inData.type === 'pay' ? params0 : params1,

@@ -124,7 +124,6 @@ export default {
     ...mapState({
       account: state => state.app.account,
       baseConfig: state => state.sys.baseConfig,
-      sliderPonit: state => state.sys.sliderPonit,
       tradeInfo: state => state.sys.tradeInfo,
     }),
   },

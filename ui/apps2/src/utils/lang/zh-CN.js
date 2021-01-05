@@ -297,7 +297,7 @@ export default {
   },
   tabbar: {
     swap: '闪兑',
-    order: '挂单',
+    order: '行情',
   },
   info: {
     info: '概览',

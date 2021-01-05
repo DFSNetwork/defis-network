@@ -327,16 +327,12 @@ export default {
           symbol0[0],
           symbol1[0]
         ]
-        if (symbol0[1] === 'EOS') {
+        
+        const v = this.thisMarket;
+        if (symbol0[1] === v.symbol0) {
           newArr[0] = symbol0[0];
           newArr[1] = symbol1[0];
-        } else if (symbol1[1] === 'EOS') {
-          newArr[0] = symbol1[0];
-          newArr[1] = symbol0[0];
-        } else if (symbol0[1] === 'USDT') {
-          newArr[0] = symbol0[0];
-          newArr[1] = symbol1[0];
-        } else if (symbol1[1] === 'USDT') {
+        } else if (symbol1[1] === v.symbol0) {
           newArr[0] = symbol1[0];
           newArr[1] = symbol0[0];
         }

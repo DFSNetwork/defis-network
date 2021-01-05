@@ -157,12 +157,13 @@ export default {
         limit: 1000,
       }
       EosModel.getTableRows(params, (res) => {
-        console.log(res)
+        // console.log(res)
         const list = res.rows || [];
         this.loading = false;
         list.forEach((v, index) => {
           const item = this.marketLists.find(vv => vv.mid == v.mid)
           const next = parseInt(index / 10)
+          // console.log(item.symbol0,item.symbol1)
           setTimeout(() => {
             this.handleGetMarketDataByChain(item, v.token)
           }, next * 1000);
@@ -196,16 +197,10 @@ export default {
           symbol0[0],
           symbol1[0]
         ]
-        if (symbol0[1] === 'EOS') {
+        if (symbol0[1] === v.symbol0) {
           newArr[0] = symbol0[0];
           newArr[1] = symbol1[0];
-        } else if (symbol1[1] === 'EOS') {
-          newArr[0] = symbol1[0];
-          newArr[1] = symbol0[0];
-        } else if (symbol0[1] === 'USDT') {
-          newArr[0] = symbol0[0];
-          newArr[1] = symbol1[0];
-        } else if (symbol1[1] === 'USDT') {
+        } else if (symbol1[1] === v.symbol0) {
           newArr[0] = symbol1[0];
           newArr[1] = symbol0[0];
         }
