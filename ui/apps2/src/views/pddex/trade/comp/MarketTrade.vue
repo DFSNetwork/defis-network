@@ -49,7 +49,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import { SwapRouter } from '@/utils/logic';
+// import { SwapRouter } from '@/utils/logic';
+import { SwapRouter, SwapRouterFilter } from '@/utils/swap_router';
 import { toFixed, accMul } from '@/utils/public';
 import { DApp } from '@/utils/wallet';
 export default {
@@ -87,6 +88,7 @@ export default {
       sliderChange: false,
       // timer
       sliderTimer: null,
+      tradeMids: '',
     }
   },
   computed: {
@@ -175,8 +177,11 @@ export default {
       const inData = {
         type: this.direction === 'sell' ? 'pay' : 'get'
       }
-      const path = SwapRouter.get_paths(params0, params1, inData.type)
-      console.log(path)
+      let path = SwapRouterFilter.get_paths(params0, params1, inData.type)
+      if (!path.length) {
+        path = SwapRouter.get_paths(params0, params1, inData.type)
+      }
+      // console.log(path)
       const params = [
         path,
         inData.type === 'pay' ? params0 : params1,
@@ -186,11 +191,15 @@ export default {
         params.push(inData.type)
       }
       try {
-        const res = SwapRouter.get_amounts_out(...params)
+        let res = SwapRouterFilter.get_amounts_out(...params)
+        if (!res.mid) {
+          res = SwapRouter.get_amounts_out(...params)
+        }
+        // const res = SwapRouter.get_amounts_out(...params)
         let aboutNum = res.amount_in / 10 ** this.market.decimal0;
         this.aboutNum = toFixed(aboutNum, this.market.decimal0);
         this.direction === 'buy' ? res.payNum = this.aboutNum : res.payNum = num
-        
+        this.tradeMids = res.mid;
         this.handleSetTradeInfo(res)
       } catch (error) {
         this.aboutNum = 0
@@ -236,18 +245,28 @@ export default {
       const inData = {
         type: 'pay'
       }
-      const path = SwapRouter.get_paths(params0, params1, inData.type)
+      let path = SwapRouterFilter.get_paths(params0, params1, inData.type)
+      if (!path.length) {
+        path = SwapRouter.get_paths(params0, params1, inData.type)
+      }
+      // const path = SwapRouter.get_paths(params0, params1, inData.type)
+      // console.log(1, path)
       const params = [
         path,
         inData.type === 'pay' ? params0 : params1,
       ]
       params.push(accMul(pay, 10 ** decimal))
       try {
-        const res = SwapRouter.get_amounts_out(...params)
+        let res = SwapRouterFilter.get_amounts_out(...params)
+        if (!res.mid) {
+          res = SwapRouter.get_amounts_out(...params)
+        }
+        // const res = SwapRouter.get_amounts_out(...params)
         isBuy ? this.num = toFixed(parseFloat(res.quantity_out), getDecimal)
               : this.aboutNum = toFixed(parseFloat(res.quantity_out), getDecimal)
         res.payNum = pay;
         res.direction = this.direction;
+        this.tradeMids = res.mid;
         this.handleSetTradeInfo(res)
       } catch (error) {
         console.log(error)
@@ -293,8 +312,10 @@ export default {
 
       const minOut = parseInt(this.tradeInfo.minGet * 10 ** decimalSell);
 
-      const hasPid = !!this.market.pid;
-      const id = hasPid ? this.market.pid : this.market.mid;
+      // const hasPid = !!this.market.pid;
+      // const id = hasPid ? this.market.pid : this.market.mid;
+      const hasPid = false;
+      const id = this.tradeMids;
       let memo = `swap:${id}:${minOut}`;
       hasPid ? memo : memo = `${memo}:2`
       const params = {

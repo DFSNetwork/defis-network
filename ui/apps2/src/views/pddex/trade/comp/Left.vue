@@ -23,7 +23,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import { SwapRouter } from '@/utils/logic';
+import { SwapRouter, SwapRouterFilter } from '@/utils/swap_router';
+// import { SwapRouter } from '@/utils/logic';
 import { toFixed, accMul } from '@/utils/public';
 import { DApp } from '@/utils/wallet';
 import LimitTrade from './LimitTrade';
@@ -80,7 +81,11 @@ export default {
     },
     marketLists: {
       handler: function ml(newArr) {
+        if (!newArr.length) {
+          return
+        }
         SwapRouter.init(newArr, this)
+        SwapRouterFilter.init(this.filterMkLists, this)
       },
       deep: true,
       immediate: true,
@@ -97,6 +102,7 @@ export default {
     ...mapState({
       account: state => state.app.account,
       marketLists: state => state.sys.marketLists,
+      filterMkLists: state => state.sys.filterMkLists,
     }),
   },
   mounted() {

@@ -115,7 +115,7 @@ export default {
     },
     // 处理 allMarket 对应pid
     handleDealAllMarket() {
-      const keys = Object.keys(this.allMarket)
+      const keys = Object.keys(this.allMarket) || []
       if (!keys.length || !this.pddexList.length) {
         return
       }

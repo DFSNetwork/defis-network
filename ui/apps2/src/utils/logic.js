@@ -556,28 +556,28 @@ class swapRouter {
   
         let new_paths = []
 
-        // for (let i = 0; i < paths.length; i++) {
-        //   let path = paths[i];
-        //   let tks = path.split("-");
-        //   if (tks.length >= 3) {
-        //     continue
-        //   }
-        //   if (tks[0] === tokenA && tks[tks.length - 1] !== tokenB) {
-        //     new_paths.push(tokenB + "-" + path)
-        //   }
+        for (let i = 0; i < paths.length; i++) {
+          let path = paths[i];
+          let tks = path.split("-");
+          if (tks.length >= 3) {
+            continue
+          }
+          if (tks[0] === tokenA && tks[tks.length - 1] !== tokenB) {
+            new_paths.push(tokenB + "-" + path)
+          }
   
-        //   if (tks[tks.length - 1] === tokenA && tks[0] !== tokenB) {
-        //     new_paths.push(path + "-" + tokenB);
-        //   }
+          if (tks[tks.length - 1] === tokenA && tks[0] !== tokenB) {
+            new_paths.push(path + "-" + tokenB);
+          }
   
-        //   if (tks[0] === tokenB && tks[tks.length - 1] !== tokenA) {
-        //     new_paths.push(tokenA + "-" + path)
-        //   }
+          if (tks[0] === tokenB && tks[tks.length - 1] !== tokenA) {
+            new_paths.push(tokenA + "-" + path)
+          }
   
-        //   if (tks[tks.length - 1] === tokenB && tks[0] !== tokenA) {
-        //     new_paths.push(path + "-" + tokenA);
-        //   }
-        // }
+          if (tks[tks.length - 1] === tokenB && tks[0] !== tokenA) {
+            new_paths.push(path + "-" + tokenA);
+          }
+        }
   
         paths = paths.concat(new_paths);
   
@@ -727,7 +727,7 @@ class swapRouter {
         return parseFloat(a.quantity_out) - parseFloat(b.quantity_out);
       })
     }
-    // console.log(amounts_out_arr)
+    console.log(amounts_out_arr)
     this.bestPath = this._pathsArr[amounts_out_arr[0].mIndex]
     amounts_out_arr[0].bestPath = this.bestPath;
     return amounts_out_arr[0]
