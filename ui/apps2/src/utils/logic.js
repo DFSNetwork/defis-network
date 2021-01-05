@@ -591,7 +591,6 @@ class swapRouter {
       paths = paths.sort((a, b) => {
         return a.length - b.length;
       })
-      console.log(paths)
       return {
         paths, pair_market_map, mid_market_map, tokens
       }
