@@ -146,9 +146,8 @@
     <el-dialog
       class="myDialog apy"
       :visible.sync="showApyDetail">
-      <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
-                 :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"
-                 :tagLpApy="tagLpApy"/>
+      <MarketApy :isActual="true"
+                 :aprInfo="aprInfo"/>
     </el-dialog>
     <!-- <el-dialog
       class="myDialog"
@@ -162,15 +161,15 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accSub, accAdd, accMul, accDiv,
-          getMarketTime, dealAccountHide, getTagLpApy,
-         dealMinerData, getYfcReward, getDmdMinerHourRoi } from '@/utils/public';
+          getMarketTime, dealAccountHide,
+         dealMinerData, getYfcReward } from '@/utils/public';
 import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
 import MarketTip from '../popup/MarketTip';
 import MarketApy from '../popup/MarketApy'
 // import RankTip from '../popup/RankTip'
-import { timeApy } from '@/utils/minerLogic';
 import { perDayRewardV3, getV3PoolsClass, dealRewardV3 } from '@/utils/logic';
+import { dealApy } from '@/views/pddex/comp/appLogic.js'
 
 export default {
   components: {
@@ -268,51 +267,13 @@ export default {
       }
       return false;
     },
-    dmdApy() {
-      const dmdPool = this.marketLists.find(v => v.mid === 326)
-      let dmdRoi = getDmdMinerHourRoi(this.thisMarket, 'year', dmdPool)
-      if (Number(dmdRoi)) {
-        return dmdRoi;
-      }
-      return '0.000';
-    },
-    timeApy() {
-      const pool = this.marketLists.find(v => v.mid === 530)
-      let apy = timeApy(this.thisMarket, 'year', pool)
-      if (Number(apy)) {
-        return apy;
-      }
-      return '0.000';
-    },
-    tagLpApy() {
-      const has = this.tagLpMids.find(v => v === this.thisMarket.mid)
-      if (has) {
-        return getTagLpApy(this.thisMarket.mid)
-      }
-      return '0.00'
+    aprInfo() {
+      const market = this.thisMarket;
+      const aprInfo = dealApy(market)
+      return aprInfo;
     },
     countApy() {
-      let all = accAdd(parseFloat(this.aprV3), parseFloat(this.feesApr || 0))
-      if (this.dmdApy) {
-        all = accAdd(all, parseFloat(this.dmdApy))
-      }
-      if (this.timeApy) {
-        all = accAdd(all, parseFloat(this.timeApy))
-      }
-      if (this.tagLpApy) {
-        all = accAdd(all, parseFloat(this.tagLpApy))
-      }
-      this.lpMid.forEach(v => {
-        const apy = this.handleDealApy(v.mid, v.symbol);
-        this.lpApy[`${v.symbol.toLowerCase()}Apy`] = apy;
-        if (apy) {
-          all = accAdd(all, Number(apy))
-        }
-      })
-      if (isNaN(all)) {
-        return '0.00'
-      }
-      return all.toFixed(2)
+      return parseFloat(this.aprInfo.countApy || 0).toFixed(2)
     },
     minReward() {
       if (!Number(this.dfsPrice)) {
@@ -333,14 +294,6 @@ export default {
     },
     dayRewardNumV3() {
       return perDayRewardV3(this.thisMarket.mid)
-    },
-    aprV3() {
-      const aprV3 = this.dayRewardNumV3 * this.dfsPrice / 20000 * 365 * 100;
-      return aprV3.toFixed(2)
-    },
-    feesApr() {
-      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {}
-      return parseFloat(feesApr.poolsApr)
     },
     marketReward() {
       if (!this.marketData.length || !Number(this.nowMarket.getNum1)) {

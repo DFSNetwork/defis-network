@@ -33,42 +33,38 @@
             <!-- <span class="green" @click="handleToMarket(item.mid)">{{ $t('invi.join') }}</span> -->
           </div>
           <div class="flexa percent">
-            <div v-if="parseFloat(item.poolsApr)">
-              <div class="num">{{ item.poolsApr || '—' }}</div>
+            <div v-if="parseFloat(item.feesApr)">
+              <div class="num">{{ item.feesApr || '—' }}</div>
               <div class="tip">{{ $t('info.markerFeesApr') }}</div>
             </div>
-            <div v-if="parseFloat(item.value)">
-              <div class="num">{{ parseFloat(item.value) ? item.value : '—' }}</div>
+            <div v-if="parseFloat(item.aprV3)">
+              <div class="num">{{ `${item.aprV3}%` }}</div>
               <div class="tip">{{ $t('info.dfsMineApr') }}</div>
             </div>
-            <div v-if="parseFloat(item.yfcApr)">
-              <div class="num">{{ parseFloat(item.yfcApr) ? `${item.yfcApr}%` : '—' }}</div>
-              <div class="tip">{{ $t('info.yfcApr') }}</div>
-            </div>
-            <div v-if="parseFloat(item.dmdRoi)">
-              <div class="num">{{ parseFloat(item.dmdRoi) ? `${item.dmdRoi}%` : '—' }}</div>
+            <div v-if="parseFloat(item.dmdApy)">
+              <div class="num">{{ `${item.dmdApy}%` }}</div>
               <div class="tip">{{ $t('apy.dmdApy') }}</div>
             </div>
-            <div v-if="parseFloat(item.dbcApr)">
-              <div class="num">{{ parseFloat(item.dbcApr) ? `${item.dbcApr}%` : '—' }}</div>
-              <div class="tip">{{ $t('apy.dbcApy') }}</div>
-            </div>
             <div v-if="parseFloat(item.pddApr)">
-              <div class="num">{{ parseFloat(item.pddApr) ? `${item.pddApr}%` : '—' }}</div>
+              <div class="num">{{ `${item.pddApr}%` }}</div>
               <div class="tip">{{ $t('apy.pddApy') }}</div>
             </div>
             <div v-if="parseFloat(item.timeApy)">
-              <div class="num">{{ parseFloat(item.timeApy) ? `${item.timeApy}%` : '—' }}</div>
+              <div class="num">{{ `${item.timeApy}%` }}</div>
               <div class="tip">{{ $t('apy.timeApy') }}</div>
             </div>
             <div v-if="parseFloat(item.tagLpApy)">
-              <div class="num">{{ parseFloat(item.tagLpApy) ? `${item.tagLpApy}%` : '—' }}</div>
+              <div class="num">{{ `${item.tagLpApy}%` }}</div>
               <div class="tip">{{ $t('apy.tagLpApy') }}</div>
+            </div>
+            <div v-if="parseFloat(item.usdcApr)">
+              <div class="num">{{ `${item.usdcApr}%` }}</div>
+              <div class="tip">{{ $t('apy.usdcLpApy') }}</div>
             </div>
           </div>
           <div class="flexb total">
             <span>{{ $t('info.totalApr') }}</span>
-            <span class="num">{{ item.count }}%</span>
+            <span class="num">{{ item.countApy }}%</span>
           </div>
           <div class="flexb liq">
             <div>{{ $t('dex.pools') }}: </div>
@@ -106,10 +102,8 @@
 
 <script>
 import { mapState } from 'vuex';
-import { getYfcReward, accAdd, toLocalTime,
-  getDmdMinerHourRoi, getTagLpApy } from '@/utils/public';
-import { timeApy } from '@/utils/minerLogic';
-import { perDayRewardV3 } from '@/utils/logic'
+import { toLocalTime } from '@/utils/public';
+import { dealApy } from '@/views/pddex/comp/appLogic.js'
 
 export default {
   name: 'total',
@@ -153,7 +147,7 @@ export default {
       let arr = this.handleGetCheckRank()
       if (this.sortValue === '1') {
         arr = arr.sort((a, b) => {
-          return b.count - a.count
+          return b.countApy - a.countApy
         })
       }
       if (this.sortValue === '2') {
@@ -210,82 +204,46 @@ export default {
   },
   methods: {
     handleGetCheckRank() {
-      const dmdPool = this.marketLists.find(v => v.mid === 326)
-      const timePool = this.marketLists.find(v => v.mid === 530)
       let arr = [];
       this.handleTopLoading()
       const top10 = this.marketLists.slice(0, 30)
-      // const top10 = this.marketLists
 
       top10.forEach(market => {
         if (market.contract0 !== 'eosio.token') {
           return
         }
         try {
-          let count = 0;
-          const reward = perDayRewardV3(market.mid);
-          const apr = reward * this.dfsPrice / 20000 * 365 * 100;
-          count = accAdd(count, apr.toFixed(2))
-
-          const feesApr = this.feesApr.find(vv => vv.mid === market.mid) || {};
-          feesApr.value = `${apr.toFixed(2)}%`;
-          feesApr.img = market.sym1Data.imgUrl;
-          feesApr.mid = market.mid;
-          feesApr.reserve0 = market.reserve0;
-          feesApr.reserve1 = market.reserve1;
-          if (!feesApr.symbol) {
-            feesApr.symbol = market.symbol1;
-          }
-          count = accAdd(count, parseFloat(feesApr.poolsApr || 0))
-
-          this.lpMid.forEach(lp => {
-            const yfcReward = getYfcReward(market.mid, 'year', lp.symbol)
-            const YfcPool = this.marketLists.find(vv => vv.mid === lp.mid);
-            const price = parseFloat(YfcPool.reserve0) / parseFloat(YfcPool.reserve1)
-            const apy = yfcReward * price / 20000 * 100;
-            feesApr[`${lp.symbol.toLowerCase()}Apr`] = (apy || 0).toFixed(2);
-            count = accAdd(count, (apy || 0).toFixed(2))
+          const topItem = {}
+          topItem.img = market.sym1Data.imgUrl;
+          topItem.mid = market.mid;
+          topItem.reserve0 = market.reserve0;
+          topItem.reserve1 = market.reserve1;
+          topItem.symbol = market.symbol1;
+          
+          const aprInfo = dealApy(market)
+          topItem.feesApr = parseFloat(aprInfo.feesApr || 0).toFixed(2);
+          topItem.aprV3 = parseFloat(aprInfo.aprV3 || 0).toFixed(2);
+          topItem.dmdApy = parseFloat(aprInfo.dmdApy || 0).toFixed(2);
+          topItem.tagLpApy = parseFloat(aprInfo.tagLpApy || 0).toFixed(2);
+          topItem.timeApy = parseFloat(aprInfo.timeApy || 0).toFixed(2);
+          topItem.usdcApr = parseFloat(aprInfo.usdcApr || 0).toFixed(2);
+          topItem.countApy = parseFloat(aprInfo.countApy || 0).toFixed(2);
+          const keys = Object.keys(topItem.lpApy || {});
+          keys.forEach(key => {
+            topItem[key] = parseFloat(topItem.lpApy[key] || 0).toFixed(2);
           })
 
-          let dmdRoi = getDmdMinerHourRoi(market, 'year', dmdPool)
-          if (Number(dmdRoi)) {
-            feesApr.dmdRoi = dmdRoi;
-            count = accAdd(count, dmdRoi)
-          }
-
-          // TIME 挖矿年化计算
-          const midTimeApy = timeApy(market, 'year' ,timePool)
-          if (Number(midTimeApy)) {
-            feesApr.timeApy = midTimeApy;
-            count = accAdd(count, midTimeApy)
-          }
-
-          if (market.mid === 602) {
-            // TAG LP挖矿年化
-            // console.log(market)
-            const tagLpApy = getTagLpApy(market.mid)
-            feesApr.tagLpApy = tagLpApy;
-            count = accAdd(count, tagLpApy)
-          }
-
-          feesApr.count = count.toFixed(2);
-
           // 计算24H兑换量
-          // console.log(this.dfsData)
           if (this.dfsData.trading_volume_in && this.dfsData.trading_volume_out) {
-            // const key = `mid-${market.mid}`;
-            // const countData = this.dfsData.tradingVolumeData[key];
-            const inNum = this.dfsData.trading_volume_in.find(v => v.mid === market.mid && v.sym === 'EOS')
-            const outNum = this.dfsData.trading_volume_out.find(v => v.mid === market.mid && v.sym === 'EOS')
-            // console.log(inNum.total, outNum.total)
+            const inNum = this.dfsData.trading_volume_in.find(v => v.mid === market.mid && v.sym === 'EOS') || {}
+            const outNum = this.dfsData.trading_volume_out.find(v => v.mid === market.mid && v.sym === 'EOS') || {}
             if (inNum || outNum) {
               let countEos = (inNum.total || 0) + (outNum.total || 0);
-              // let shortCountEos = countEos > 1000 ? `${(countEos / 1000).toFixed(2)}K` : countEos.toFixed(4);
-              feesApr.countEos = countEos.toFixed(4);
-              feesApr.allCount = countEos.toFixed(4);
+              topItem.countEos = countEos.toFixed(4);
+              topItem.allCount = countEos.toFixed(4);
             }
           }
-          arr.push(feesApr)
+          arr.push(topItem)
         } catch (error) {
           console.log(error)
         }

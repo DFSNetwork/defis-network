@@ -4,35 +4,31 @@
     <div class="table">
       <div class="flexa">
         <span>{{ $t('info.markerFeesApr') }}：</span>
-        <span>{{ feesApr ? `${feesApr}%` : '0.00%' }}</span>
+        <span>{{ `${parseFloat(aprInfo.feesApr || 0).toFixed(2)}%` }}</span>
       </div>
-      <div class="flexa" v-if="parseFloat(aprV3) || parseFloat(aprV3)">
+      <div class="flexa" v-if="parseFloat(aprInfo.aprV3 || 0)">
         <span>{{ $t('info.dfsMineApr') }}：</span>
-        <span>{{ parseFloat(aprV3) ? `${aprV3}%` : '0.00%' }}</span>
+        <span>{{ `${parseFloat(aprInfo.aprV3 || 0).toFixed(2)}%` }}</span>
       </div>
-      <div class="flexa" v-if="parseFloat(lpApy.yfcApy)">
-        <span>{{ $t('info.yfcApr') }}：</span>
-        <span>{{ parseFloat(lpApy.yfcApy) ? `${lpApy.yfcApy}%` : '0.00%' }}</span>
-      </div>
-      <div class="flexa" v-if="parseFloat(dmdApy)">
+      <div class="flexa" v-if="parseFloat(aprInfo.dmdApy)">
         <span>{{ $t('apy.dmdApy') }}：</span>
-        <span>{{ parseFloat(dmdApy) ? `${dmdApy}%` : '0.00%' }}</span>
+        <span>{{ `${parseFloat(aprInfo.dmdApy || 0).toFixed(2)}%` }}</span>
       </div>
-      <div class="flexa" v-if="parseFloat(lpApy.dbcApy)">
-        <span>{{ $t('apy.dbcApy') }}：</span>
-        <span>{{ parseFloat(lpApy.dbcApy) ? `${lpApy.dbcApy}%` : '0.00%' }}</span>
-      </div>
-      <div class="flexa" v-if="parseFloat(lpApy.pddApy)">
+      <div class="flexa" v-if="aprInfo.lpApy && parseFloat(aprInfo.lpApy.pddApy)">
         <span>{{ $t('apy.pddApy') }}：</span>
-        <span>{{ parseFloat(lpApy.pddApy) ? `${lpApy.pddApy}%` : '0.00%' }}</span>
+        <span>{{ `${parseFloat(aprInfo.lpApy.pddApy || 0).toFixed(2)}%` }}</span>
       </div>
-      <div class="flexa" v-if="parseFloat(timeApy)">
+      <div class="flexa" v-if="parseFloat(aprInfo.timeApy)">
         <span>{{ $t('apy.timeApy') }}：</span>
-        <span>{{ parseFloat(timeApy) ? `${timeApy}%` : '0.00%' }}</span>
+        <span>{{ `${parseFloat(aprInfo.timeApy).toFixed(2)}%` }}</span>
       </div>
-      <div class="flexa" v-if="parseFloat(tagLpApy)">
+      <div class="flexa" v-if="parseFloat(aprInfo.tagLpApy)">
         <span>{{ $t('apy.tagLpApy') }}：</span>
-        <span>{{ parseFloat(tagLpApy) ? `${tagLpApy}%` : '0.00%' }}</span>
+        <span>{{ `${parseFloat(aprInfo.tagLpApy).toFixed(2)}%` }}</span>
+      </div>
+      <div class="flexa" v-if="parseFloat(aprInfo.usdcApr)">
+        <span>{{ $t('apy.usdcLpApy') }}：</span>
+        <span>{{ `${parseFloat(aprInfo.usdcApr).toFixed(2)}%` }}</span>
       </div>
       <div class="flexa total">
         <span>{{ $t('info.totalApr') }}：</span>
@@ -78,12 +74,18 @@ export default {
     tagLpApy: {
       type: String,
       default: '0.00'
+    },
+    aprInfo: {
+      type: Object,
+      default: function la() {
+        return {}
+      }
     }
   },
   watch: {
-    lpApy: {
+    aprInfo: {
       handler: function lp() {
-        console.log(this.lpApy)
+        console.log(this.aprInfo)
       },
       immediate: true
     }

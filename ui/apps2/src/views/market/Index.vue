@@ -96,9 +96,8 @@
     <el-dialog
       class="myDialog apy"
       :visible.sync="showApyDetail">
-      <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
-                 :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"
-                 :tagLpApy="tagLpApy"/>
+      <MarketApy :countApy="countApy" :isActual="true"
+                 :aprInfo="aprInfo"/>
     </el-dialog>
     <!-- 加入做市 -->
     <el-dialog
@@ -141,10 +140,10 @@ import MarketData from './comp/MarketData';
 import Withdraw from './comp/Withdraw'
 
 // 公用方法
-import { getDmdMinerHourRoi, getYfcReward, getTagLpApy,
-  toFixed, accAdd, accDiv } from '@/utils/public';
+import { getYfcReward,
+  toFixed, accDiv } from '@/utils/public';
 import { perDayRewardV3 } from '@/utils/logic';
-import { timeApy } from '@/utils/minerLogic';
+import { dealApy } from '@/views/pddex/comp/appLogic.js'
 
 export default {
   name: 'market',
@@ -188,73 +187,21 @@ export default {
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
-      slipPoint: state => state.app.slipPoint,
       baseConfig: state => state.sys.baseConfig,
       marketLists: state => state.sys.marketLists,
-      dfsPrice: state => state.sys.dfsPrice,
-      storeFeesApr: state => state.sys.feesApr,
-      lpMid: state => state.config.lpMid,
-      tagLpMids: state => state.config.tagLpMids,
     }),
     // 每万每日挖矿
     perDayRewardV3() {
       const rewardV3 = perDayRewardV3(this.thisMarket.mid)
       return rewardV3
     },
-    // 手续费年化
-    feesApr() {
-      const feesApr = this.storeFeesApr.find(v => v.symbol === this.thisMarket.symbol1) || {};
-      return parseFloat(feesApr.poolsApr)
-    },
-    aprV3() {
-      const aprV3 = this.perDayRewardV3 * this.dfsPrice / 20000 * 365 * 100;
-      return aprV3.toFixed(2)
-    },
-    dmdApy() {
-      const dmdPool = this.marketLists.find(v => v.mid === 326)
-      let dmdRoi = getDmdMinerHourRoi(this.thisMarket, 'year', dmdPool)
-      if (Number(dmdRoi)) {
-        return dmdRoi;
-      }
-      return '0.000';
-    },
-    timeApy() {
-      const pool = this.marketLists.find(v => v.mid === 530) || {}
-      let apy = timeApy(this.thisMarket, 'year', pool)
-      if (Number(apy)) {
-        return apy;
-      }
-      return '0.000';
-    },
-    tagLpApy() {
-      const has = this.tagLpMids.find(v => v === this.thisMarket.mid)
-      if (has) {
-        return getTagLpApy(this.thisMarket.mid)
-      }
-      return '0.00'
+    aprInfo() {
+      const market = this.thisMarket;
+      const aprInfo = dealApy(market)
+      return aprInfo;
     },
     countApy() {
-      let all = accAdd(parseFloat(this.aprV3), parseFloat(this.feesApr || 0))
-      if (this.dmdApy) {
-        all = accAdd(all, parseFloat(this.dmdApy))
-      }
-      if (this.timeApy) {
-        all = accAdd(all, parseFloat(this.timeApy))
-      }
-      if (this.tagLpApy) {
-        all = accAdd(all, parseFloat(this.tagLpApy))
-      }
-      this.lpMid.forEach(v => {
-        const apy = this.handleDealApy(v.mid, v.symbol);
-        this.lpApy[`${v.symbol.toLowerCase()}Apy`] = apy;
-        if (apy) {
-          all = accAdd(all, Number(apy))
-        }
-      })
-      if (isNaN(all)) {
-        return '0.00'
-      }
-      return all.toFixed(2)
+      return parseFloat(this.aprInfo.countApy || 0).toFixed(2)
     },
   },
   watch: {

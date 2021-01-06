@@ -141,9 +141,8 @@
     <el-dialog
       class="myDialog apy"
       :visible.sync="showApyDetail">
-      <MarketApy :countApy="countApy" :feesApr="feesApr" :isActual="true"
-                 :aprV3="aprV3" :lpApy="lpApy" :dmdApy="dmdApy" :timeApy="timeApy"
-                 :tagLpApy="tagLpApy"/>
+      <MarketApy :countApy="countApy" :isActual="true"
+                 :aprInfo="aprInfo"/>
     </el-dialog>
   </div>
 </template>
@@ -188,6 +187,7 @@ export default {
       dmdApy: '0.00',
       timeApy: '0.00',
       tagLpApy: '0.00',
+      aprInfo: {},
       showApyDetail: false,
 
       isLoading: false,
@@ -259,12 +259,13 @@ export default {
     // 显示年化
     handleShowApy(v) {
       this.countApy = v.countApy;
-      this.feesApr = Number(v.feesApr || 0);
-      this.aprV3 = v.aprV3;
-      this.lpApy = v.lpApy;
-      this.dmdApy = v.dmdApy;
-      this.timeApy = v.timeApy;
-      this.tagLpApy = v.tagLpApy;
+      // this.feesApr = Number(v.feesApr || 0);
+      // this.aprV3 = v.aprV3;
+      // this.lpApy = v.lpApy;
+      // this.dmdApy = v.dmdApy;
+      // this.timeApy = v.timeApy;
+      // this.tagLpApy = v.tagLpApy;
+      this.aprInfo = v;
       this.showApyDetail = true
     },
     // 处理排序

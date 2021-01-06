@@ -11,7 +11,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { mapState } from 'vuex';
 import { GetUrlPara, login, getUrlParams, toLocalTime, accPow, accDiv, toFixed } from '@/utils/public';
-import { getVotePools } from '@/utils/api';
+import { getVotePools, get_balance } from '@/utils/api';
 import { EosModel } from '@/utils/eos';
 import MyKonami from '@/views/konami/Index';
 
@@ -66,6 +66,10 @@ export default {
       this.priceTimer = setInterval(() => {
         this.handleGetPrice()
       }, 300000);
+      this.handleGetSwapBal('dfs')
+      this.handleGetSwapBal('usdc')
+      this.handleGetPoolsBal('dfs')
+      this.handleGetPoolsBal('usdc')
 
     }, 500);
   },
@@ -343,6 +347,60 @@ export default {
     // 获取矿池排行奖励
     handleGetPoolsApr() {
       getVotePools()
+    },
+
+    // 获取USDC矿池余额
+    // 获取矿池余额
+    async handleGetPoolsBal(type) {
+      const params = {
+        code: 'usdxusdxusdx',
+        symbol: 'USDC',
+        decimal: 4,
+        account: 'usdxpoolusds', // bytesmonster / usdxpoolusds
+      }
+      if (type === 'usdc') {
+        params.account = 'usdxpoolusdc'; // usdxpoolusdc
+      }
+      const {status, result} = await get_balance(params);
+      if (!status) {
+        return
+      }
+      if (!result.length) {
+        return
+      }
+      console.log(result)
+      const bal = result.split(' ')[0];
+      if (type === 'usdc') {
+        this.$store.dispatch('setUsdcBalForUsdc', bal)
+        return
+      }
+      this.$store.dispatch('setUsdcBalForDfs', bal)
+    },
+    // 获取swap 底池数量
+    async handleGetSwapBal(type) {
+      const params = {
+        code: 'minedfstoken',
+        symbol: 'DFS',
+        decimal: 4,
+        account: 'defisswapcnt',
+      }
+      if (type === 'usdc') {
+        params.code = 'usdxusdxusdx';
+        params.symbol = 'USDC';
+      }
+      const {status, result} = await get_balance(params);
+      if (!status) {
+        return
+      }
+      if (!result.length) {
+        return
+      }
+      const bal = result.split(' ')[0];
+      if (type === 'usdc') {
+        this.$store.dispatch('setSwapUsdcBal', bal)
+        return
+      }
+      this.$store.dispatch('setSwapDfsBal', bal)
     },
   },
 }

@@ -225,7 +225,7 @@ export default {
     },
     handleDealLists() {
       this.lists.forEach(v => {
-        const newMkt = this.marketLists.find(vv => vv.mid === v.mid)
+        const newMkt = this.marketLists.find(vv => vv.mid === v.mid) || {}
         this.$set(v, 'reserve0', newMkt.reserve0)
         this.$set(v, 'reserve1', newMkt.reserve1)
         this.$set(v, 'liquidity_token', newMkt.liquidity_token)

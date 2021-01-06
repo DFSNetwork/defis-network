@@ -314,6 +314,7 @@ export default {
     pddApy: 'PDD APR',
     timeApy: 'TIME APR',
     tagLpApy: 'TAG APR',
+    usdcLpApy: 'USDC APR',
     exchange24: '24H Volume',
   },
   vote: {
