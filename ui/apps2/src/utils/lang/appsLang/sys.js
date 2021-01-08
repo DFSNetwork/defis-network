@@ -7,6 +7,7 @@ export default {
       vote1: 'EOS 节点',
       vote2: 'TAG 参数',
       searchMarket: '搜索市场',
+      coinSystem: '{coin} 系统',
     }
   },
   'en': {
@@ -16,6 +17,7 @@ export default {
       vote1:'EOS Node',
       vote2:'TAG System',
       searchMarket:'Search',
+      coinSystem: '{coin} System',
     }
   }
 }

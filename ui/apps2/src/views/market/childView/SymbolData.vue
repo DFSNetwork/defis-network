@@ -79,11 +79,11 @@
                 mins: marketTime.minutes,
                 secs: marketTime.seconds
               }) }}</span>
-            <span class="tip">（{{ $t('market.pl') }}: 
+            <!-- <span class="tip">（{{ $t('market.pl') }}: 
               <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
                 {{ percent }}%
               </span>）
-            </span>
+            </span> -->
           </div>
         </div>
         <div :class="`tipDiv ${handleGetClass(thisMarket.mid)}`">

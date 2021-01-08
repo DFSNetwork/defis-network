@@ -88,7 +88,7 @@
         </div>
         <div class="create flexc" @click="handleTo('nodeVote')">{{ $t('sys.vote1') }}</div>
         <div class="create flexc" @click="handleToProject('usdxVote')">
-          <span>{{ $t('sys.coinPool', {coin: 'USDC'}) }}</span>
+          <span>{{ $t('sys.coinSystem', {coin: 'USDX'}) }}</span>
           <span class="newPro">NEW</span>
         </div>
       </div>
