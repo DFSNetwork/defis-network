@@ -42,21 +42,21 @@
           <span :class="{'green': parseFloat(sym0Reward) > 0,
                          'red': parseFloat(sym0Reward) < 0}"
             >{{ sym0Reward }}</span>
-          <span class="tip">(
+          <!-- <span class="tip">(
             <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
               {{ percent }}%
             </span>)
-          </span>
+          </span> -->
         </span>
         <span v-else>
           <span :class="{'green': parseFloat(sym1Reward) > 0,
                          'red': parseFloat(sym1Reward) < 0}"
             >{{ sym1Reward }}</span>
-          <span class="tip">(
+          <!-- <span class="tip">(
             <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
               {{ percent }}%
             </span>)
-          </span>
+          </span> -->
         </span>
         <img  @click="handleChangeRewardType" class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_green_left.svg" alt="">
         <img class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
@@ -69,11 +69,11 @@
             mins: marketTime.minutes,
             secs: marketTime.seconds
           }) }}</span>
-        <span class="tip" v-if="rewardType === 0">({{ $t('market.pl') }}: 
+        <!-- <span class="tip" v-if="rewardType === 0">({{ $t('market.pl') }}: 
           <span :class="{'green': Number(percent) > 0, 'red': Number(percent < 0)}">
             {{ percent }}%
           </span>)
-        </span>
+        </span> -->
         <!-- <span>{{ JSON.stringify(marketTime) }}</span> -->
       </div>
     </div>
@@ -372,7 +372,7 @@ export default {
   margin-top: 40px;
   border-radius: 10px;
   padding: 20px 20px;
-  font-size: 26px;
+  font-size: 25px;
   overflow: hidden;
   .btn{
     font-size: 24px;

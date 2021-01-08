@@ -77,14 +77,18 @@
       :show-close="false"
       :visible.sync="showVote">
       <div @click="showVote = false">
-        <div class="create flexc" @click="handleTo('nodeVote')">{{ $t('sys.vote1') }}</div>
         <div class="create flexc" @click="handleTo('vote')">{{ $t('sys.coinPool', {coin: 'DFS'}) }}</div>
         <div class="create flexc" @click="handleTo('voteForTag')">
           <span>{{ $t('sys.coinPool', {coin: 'TAG'}) }}</span>
-          <span class="newPro">NEW</span>
+          <!-- <span class="newPro">NEW</span> -->
         </div>
         <div class="create flexc" @click="handleTo('sysParams')">
           <span>{{ $t('sys.vote2') }}</span>
+          <!-- <span class="newPro">NEW</span> -->
+        </div>
+        <div class="create flexc" @click="handleTo('nodeVote')">{{ $t('sys.vote1') }}</div>
+        <div class="create flexc" @click="handleToProject('usdxVote')">
+          <span>{{ $t('sys.coinPool', {coin: 'USDC'}) }}</span>
           <span class="newPro">NEW</span>
         </div>
       </div>
@@ -208,6 +212,9 @@ export default {
       }
       if (name === 'usdx') {
         location.href = 'https://usdx.gitee.io/'
+      }
+      if (name === 'usdxVote') {
+        location.href = 'https://usdx.gitee.io/govern/usdc'
       }
     }
   },

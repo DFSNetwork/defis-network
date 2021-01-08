@@ -4,8 +4,8 @@ export default {
     sys: {
       coinPool: '{coin} 矿池',
       coinLpPool: '{coin} LP矿池',
-      vote1: 'EOS节点',
-      vote2: '系统参数',
+      vote1: 'EOS 节点',
+      vote2: 'TAG 参数',
       searchMarket: '搜索市场',
     }
   },
@@ -14,7 +14,7 @@ export default {
       coinPool:'{coin} Pool',
       coinLpPool:'{coin} LP Pool',
       vote1:'EOS Node',
-      vote2:'System',
+      vote2:'TAG System',
       searchMarket:'Search',
     }
   }
