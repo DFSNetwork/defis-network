@@ -97,7 +97,7 @@ export default {
   },
   methods: {
     listenUpdate() {
-      this.timesmap = Date.parse(new Date());
+      this.timesmap = moment().valueOf();
       this.handleArgsTimer();
       this.handleGetList()
       console.log('update')

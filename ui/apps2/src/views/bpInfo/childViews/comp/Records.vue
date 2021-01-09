@@ -39,6 +39,7 @@
 import AddRecord from '../dialog/AddRecord'
 import BpStory from '../dialog/BpStory'
 import { mapState } from 'vuex';
+import moment from 'moment';
 
 import {get_table_rows} from '@/utils/api'
 import {toLocalTime} from '@/utils/public';
@@ -103,7 +104,7 @@ export default {
       rows.forEach(v => {
         const time = toLocalTime(`${v.time}.000+0000`)
         this.$set(v, 'lTime', time)
-        const lt = Date.parse(time.replace(/-/g, '/'))
+        const lt = moment(time.replace(/-/g, '/')).valueOf()
         this.$set(v, 'lt', lt)
       });
       rows.sort((a, b) => {

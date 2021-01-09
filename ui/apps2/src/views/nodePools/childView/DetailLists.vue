@@ -113,6 +113,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
+import moment from 'moment';
 
 import {get_table_rows, get_balance, get_farmers_lists} from '@/utils/api'
 import { getCoin, toLocalTime, toFixed } from '@/utils/public'
@@ -574,9 +575,9 @@ export default {
       const rate = tagNum / allTagNum;
       const lpBal = this.lpPool.bal;
       const weight = this.accLpData.weight || 1;
-      const nowT = Date.parse(new Date())
+      const nowT = moment().valueOf()
       let lastT = toLocalTime(`${this.accLpData.last_drip}.000+0000`).replace(/-/g, '/')
-      lastT = Date.parse(lastT)
+      lastT = moment(lastT).valueOf()
       let t = (nowT - lastT) / 1000 ;
       const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
       this.$set(this.accLpData, 'accLpReward', reward.toFixed(8))

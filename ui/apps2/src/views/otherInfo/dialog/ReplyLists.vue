@@ -185,7 +185,7 @@ export default {
       lists.forEach(v => {
         this.$set(v, 'headImg', getCoin(v.account, v.symbol))
         const t = toLocalTime(v.create_time).replace(/-/g, '/');
-        const times = Date.parse(t) + 3600 * 8 * 1000;
+        const times = moment(t).valueOf() + 3600 * 8 * 1000;
         this.$set(v, 'dealTime', toLocalTime(times))
         const likeNum = v.like_count * 1000;
         this.$set(v, 'likeNum', likeNum.toFixed(0))

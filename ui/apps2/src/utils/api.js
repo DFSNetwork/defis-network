@@ -2,6 +2,7 @@ import { EosModel } from '@/utils/eos';
 import store from '@/store';
 import { getV3Apr } from '@/utils/logic';
 import axios from 'axios';
+import moment from 'moment';
 function getHost() {
   const baseConfig = store.state.sys.baseConfig;
   // console.log(baseConfig)
@@ -380,7 +381,7 @@ export function get_bp_scores(params) {
 // 获取节点信息
 export function get_bp_info(params) {
   return new Promise((resolve, reject) => {
-    const nT = Date.parse(new Date())
+    const nT = moment().valueOf()
     if (!params && store.state.sys.nodeLists && nT - store.state.sys.nodeListsTamp < 600000) {
       const result = {
         voters: store.state.sys.nodeLists
@@ -393,7 +394,7 @@ export function get_bp_info(params) {
     }
     axios.get('https://api.defis.network/bp/bps', {params}).then((res) => {
       let result = Object.assign(res.data, {});
-      store.dispatch('setNodeListsTamp', Date.parse(new Date()))
+      store.dispatch('setNodeListsTamp', moment().valueOf())
       resolve({ status: res.status === 200, result });
     }, err => {
       reject(err)

@@ -61,6 +61,7 @@ import Bus from '@/utils/bus';
 import {getCoin, toLocalTime} from '@/utils/public'
 import { get_bp_scores, get_acc_info } from '@/utils/api'
 import ReplyLists from '@/views/otherInfo/dialog/ReplyLists';
+import moment from 'moment';
 export default {
   components: {
     ReplyLists,
@@ -120,7 +121,7 @@ export default {
         const replyNum = (v.reply_count || 0)
         this.$set(v, 'replyNum', replyNum)
         const t = toLocalTime(v.create_time).replace(/-/g, '/');
-        const times = Date.parse(t) + 3600 * 8 * 1000;
+        const times = moment(t).valueOf() + 3600 * 8 * 1000;
         this.$set(v, 'dealTime', toLocalTime(times))
         const targetDeal = v.target0 / 2;
         this.$set(v, 'targetDeal', targetDeal)

@@ -38,6 +38,7 @@
 <script>
 // 依赖
 import { mapState } from 'vuex';
+import moment from 'moment';
 // 组件
 import Summary from './comp/Summary'
 import FundationLists from './comp/FundationLists'
@@ -232,7 +233,7 @@ export default {
         const replyNum = (v.reply_count || 0)
         this.$set(v, 'replyNum', replyNum)
         const t = toLocalTime(v.create_time).replace(/-/g, '/');
-        const times = Date.parse(t) + 3600 * 8 * 1000;
+        const times = moment(t).valueOf() + 3600 * 8 * 1000;
         this.$set(v, 'dealTime', toLocalTime(times))
         const likeNum = v.like_count * 1000;
         this.$set(v, 'likeNum', likeNum.toFixed(0))

@@ -1,5 +1,6 @@
 // nodePools 逻辑处理
 import store from '@/store';
+import moment from 'moment';
 
 import { toLocalTime } from '@/utils/public'
 import {get_table_rows, get_producers} from '@/utils/api'
@@ -15,7 +16,7 @@ export async function getNodeLists() {
 // 获取全网权重加成
 export function getVoteWeight() {
   let sec_since_lanch = 946684800;
-  let weight_1 = parseInt((Date.parse(new Date()) / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
+  let weight_1 = parseInt((moment().valueOf() / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
   weight_1 = 1 / Math.pow(2, weight_1) / 10000
   // console.log(weight_1)
   return weight_1;
@@ -54,7 +55,7 @@ export async function getAccVote(cb) {
   const percent = kweight * 10000 / uweight * 100;
   // console.log(kweight, uweight)
   accVoteData.percent = percent.toFixed(2)
-  accVoteData.rexBegin = Date.parse(new Date()) / 1000 - 1605096000 >= 0;
+  accVoteData.rexBegin = moment().valueOf() / 1000 - 1605096000 >= 0;
   // cb(accVoteData)
   getAccFarmerData(accVoteData, cb)
 }
@@ -111,10 +112,10 @@ export function getReward(baseData, userData) {
   const aprs = baseData.aprs;
   // 用户数据
   const accNum = userData.accNum;
-  const nowT = Date.parse(new Date())
+  const nowT = moment().valueOf()
   let lastT = toLocalTime(`${userData.last_drip}.000+0000`).replace(/-/g, '/')
   // console.log(lastT)
-  lastT = Date.parse(lastT)
+  lastT = moment(lastT).valueOf()
   let t = (nowT - lastT) / 1000 ; // 默认一天时间
   // console.log(t)
 
@@ -453,9 +454,9 @@ export function getLpReward(baseData, accData) {
   const rate = tagNum / baseData.allTag;
   const lpBal = baseData.bal;
   const weight = accData.weight || 1;
-  const nowT = Date.parse(new Date())
+  const nowT = moment().valueOf()
   let lastT = toLocalTime(`${accData.last_drip}.000+0000`).replace(/-/g, '/')
-  lastT = Date.parse(lastT)
+  lastT = moment(lastT).valueOf()
   let t = (nowT - lastT) / 1000 ;
   const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
   return reward.toFixed(8)

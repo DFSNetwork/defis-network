@@ -46,6 +46,7 @@
 
 <script>
 import { mapState } from 'vuex';
+import moment from 'moment';
 
 import PoolsLists from './comp/PoolsLists';
 import VoteNum from './comp/VoteNum';
@@ -573,9 +574,9 @@ export default {
         const tagNum = v.contract1 === "tagtokenmain" ? parseFloat(accLpData.market1) : parseFloat(accLpData.market0)
         const rate = tagNum / allTagNum;
         const lpBal = this.lpLists[0].lpBal;
-        const nowT = Date.parse(new Date())
+        const nowT = moment().valueOf()
         let lastT = toLocalTime(`${accLpData.last_drip}.000+0000`).replace(/-/g, '/')
-        lastT = Date.parse(lastT)
+        lastT = moment(lastT).valueOf()
         let t = (nowT - lastT) / 1000 ;
         const reward = lpBal - lpBal * Math.pow(0.9999, t * rate * weight);
         const price = parseFloat(this.lpLists[0].reserve0) / parseFloat(this.lpLists[0].reserve1)

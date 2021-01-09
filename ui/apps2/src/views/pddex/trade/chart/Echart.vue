@@ -8,6 +8,7 @@
 import echarts from 'echarts';
 import Io from '@/utils/socket/index';
 import {toLocalTime} from '@/utils/public'
+import moment from 'moment';
 export default {
   name: 'echartKLine',
   data() {
@@ -25,7 +26,7 @@ export default {
   },
   mounted() {
     this.myChart = echarts.init(document.getElementById('echart'));
-    const now = parseInt(Date.parse(new Date()) / 1000)
+    const now = parseInt(moment().valueOf() / 1000)
     const params = {
       type: "kline",
       period: "minute5",

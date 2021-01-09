@@ -39,6 +39,7 @@
 
 <script>
 // import axios from "axios";
+import moment from 'moment';
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accDiv } from '@/utils/public';
@@ -207,7 +208,7 @@ export default {
         this.lists.push(Object.assign(v, {
           token,
           capital: newArr,
-          startTime: `${Date.parse(`${list[0].start}.000+0000`) / 1000 - 8 * 3600}`
+          startTime: `${moment(`${list[0].start}.000+0000`).valueOf() / 1000 - 8 * 3600}`
         }))
       })
     },

@@ -159,6 +159,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accSub, accAdd, accMul, accDiv,
@@ -458,7 +459,7 @@ export default {
           newArr[1] = symbol0[0];
         }
 
-        this.sTime = Date.parse(`${list[0].start}.000+0000`) / 1000 - 8 * 3600
+        this.sTime = moment(`${list[0].start}.000+0000`).valueOf() / 1000 - 8 * 3600
         this.marketData = newArr;
         this.handleGetTime();
       })

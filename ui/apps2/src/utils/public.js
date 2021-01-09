@@ -219,9 +219,9 @@ export function toBrowserEtc(id, type) {
 export function countdown(endtime, istamp, type) {
   let t;
   if (!istamp) {
-    t = Date.parse(endtime.replace(/-/g, '/')) - Date.parse(new Date());
+    t = moment(endtime.replace(/-/g, '/')).valueOf() - moment().valueOf();
   } else {
-    t = endtime * 1000 - Date.parse(new Date());
+    t = endtime * 1000 - moment().valueOf();
   }
   const days = Math.floor(t / (1000 * 60 * 60 * 24));
   let hours = Math.floor((t / (1000 * 60 * 60)) % 24); // 不累加天数的小时
@@ -302,9 +302,9 @@ export function getPoolApr(market) {
 export function getMarketTime(startTime, type) {
   let t;
   if (!type) {
-    t = Date.parse(new Date()) - (Number(startTime) + 8 * 3600) * 1000;
+    t = moment().valueOf() - (Number(startTime) + 8 * 3600) * 1000;
   } else if (type === 'tamp') {
-    t = Date.parse(new Date()) - Date.parse(startTime.replace(/-/g, '/'))
+    t = moment().valueOf() - moment(startTime.replace(/-/g, '/')).valueOf()
   }
   
   const days = Math.floor(t / (1000 * 60 * 60 * 24));
@@ -327,10 +327,10 @@ export function getMarketTime(startTime, type) {
   return { total: t, days, hours, minutes, seconds };
 }
 export function getMarketTimeLp(startTime) {
-  let sDate = startTime.toString().indexOf('-') === -1 ? startTime : Date.parse(startTime.replace(/-/g, '/'))
+  let sDate = startTime.toString().indexOf('-') === -1 ? startTime : moment(startTime.replace(/-/g, '/')).valueOf()
   // console.log(startTime.indexOf('-'))
-  let t = Date.parse(new Date()) - sDate;
-  // let t = Date.parse(new Date()) - (Number(startTime) + 8 * 3600) * 1000;
+  let t = moment().valueOf() - sDate;
+  // let t = moment().valueOf() - (Number(startTime) + 8 * 3600) * 1000;
   const days = Math.floor(t / (1000 * 60 * 60 * 24));
   let hours = Math.floor((t / (1000 * 60 * 60)) % 24); // 不累加天数的小时
   // let hours = Math.floor((t / (1000 * 60 * 60))); // 累加天数的小时
@@ -359,7 +359,7 @@ export function getYfcReward(mid, type, project = 'YFC') {
   if (!list || parseFloat(list.max_supply) <= parseFloat(list.supply)) {
     return '0.00000000';
   }
-  const nowT = Date.parse(new Date()) / 1000;
+  const nowT = moment().valueOf() / 1000;
   if (nowT >= list.endTime || nowT < list.beginTime) {
     return '0.00000000';
   }
@@ -408,7 +408,7 @@ export function getDbcReward(mid, type) {
   if (!list || parseFloat(list.max_supply) <= parseFloat(list.supply)) {
     return '0.00000000';
   }
-  const nowT = Date.parse(new Date()) / 1000;
+  const nowT = moment().valueOf() / 1000;
   if (nowT >= list.endTime || nowT < list.beginTime) {
     return '0.00000000';
   }
@@ -433,7 +433,7 @@ export function getDmdMinerHourRoi(market, type, dmdPools) {
     return '0'
   }
   const endDate = (thisConf.duration + thisConf.epoch) * 1000
-  const nowDate = Date.parse(new Date())
+  const nowDate = moment().valueOf()
   if (endDate < nowDate) {
     return '0'
   }

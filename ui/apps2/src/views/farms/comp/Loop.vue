@@ -23,6 +23,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accAdd } from '@/utils/public';
+import moment from 'moment';
 export default {
   name: 'loop',
   props: {
@@ -189,7 +190,7 @@ export default {
       }
       const formName = this.scatter.identity.accounts[0].name;
       this.weightList.forEach((v, index) => {
-        const nt = Date.parse(new Date()) / 1000;
+        const nt = moment().valueOf() / 1000;
         if (v.start > nt || v.end <= nt) {
           return
         }
@@ -234,7 +235,7 @@ export default {
         clearInterval(v)
       })
       this.accMine.forEach((v, index) => {
-        const time = Date.parse(new Date()) / 1000 - v.last_drip;
+        const time = moment().valueOf() / 1000 - v.last_drip;
         const mineEos = v.liq_bal0.indexOf('EOS') !== -1 ? parseInt(v.liq_bal0) : parseInt(v.liq_bal1)
         const reward = (this.loopBal / 100000) * time * (mineEos/this.poolsBal) * Number(v.weight) * 0.97;
         clearInterval(this.timerArr[index]);

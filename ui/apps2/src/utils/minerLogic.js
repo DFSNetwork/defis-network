@@ -1,4 +1,5 @@
 // import axios from 'axios';
+import moment from 'moment';
 import store from '@/store';
 import { get_balance, get_table_rows } from '@/utils/api'
 /**
@@ -11,7 +12,7 @@ export function timeApy(market, type, pool) {
   const mid = market.mid;
   const timeList = store.state.config.timeList; // TIME LP挖矿列表
   const li = timeList.find(v => v.id == mid) || {};
-  const nowTime = Date.parse(new Date()) / 1000;
+  const nowTime = moment().valueOf() / 1000;
   const sT = nowTime - li.beginTime; // 持续时间
   // console.log(li)
   if (!li.id || sT <= 0 || parseFloat(li.max_supply) <= parseFloat(li.supply)) {
@@ -40,7 +41,7 @@ export function timeNum(market, userLP, rankWeight) {
   const mid = market.mid;
   const timeList = store.state.config.timeList; // TIME LP挖矿列表
   const li = timeList.find(v => v.id == mid) || {};
-  const nowTime = Date.parse(new Date()) / 1000;
+  const nowTime = moment().valueOf() / 1000;
   const sT = nowTime - userLP.beginTime; // 持续时间
   if (!li.id || sT <= 0 || parseFloat(li.max_supply) <= parseFloat(li.supply)) {
     return 0
@@ -60,7 +61,7 @@ export function timeNum(market, userLP, rankWeight) {
 }
 
 export function timeDssNum(li, userLP, rankWeight, allStaked) {
-  const nowTime = Date.parse(new Date()) / 1000;
+  const nowTime = moment().valueOf() / 1000;
   const sT = nowTime - userLP.beginTime; // 持续时间
   if (!li.id || sT <= 0 || parseFloat(li.max_supply) <= parseFloat(li.supply)) {
     return 0

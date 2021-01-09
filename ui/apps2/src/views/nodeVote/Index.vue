@@ -62,6 +62,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
+import moment from 'moment';
 
 import ProxyAcc from './comp/ProxyAcc';
 import AccInfo from './comp/AccInfo';
@@ -304,7 +305,7 @@ export default {
     // 获取全网权重加成
     async handleGetWeight() {
       let sec_since_lanch = 946684800;
-      let weight_1 = parseInt((Date.parse(new Date()) / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
+      let weight_1 = parseInt((moment().valueOf() / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
       weight_1 = 1 / Math.pow(2, weight_1) / 10000
       this.voteWeight = weight_1;
     },

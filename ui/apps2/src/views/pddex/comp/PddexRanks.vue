@@ -151,6 +151,7 @@
 import { mapState } from 'vuex';
 import { dealAreaArr } from '@/views/pddex/comp/appLogic';
 import MarketApy from '@/views/market/popup/MarketApy'
+import moment from 'moment';
 
 export default {
   name: 'pddexTab',
@@ -536,7 +537,7 @@ export default {
         if (!market) {
           return
         }
-        const nowDate = Date.parse(new Date());
+        const nowDate = moment().valueOf();
         const time = nowDate - v.beginTime;
         if (time < 0 || time > v.duration * 1000) {
           return

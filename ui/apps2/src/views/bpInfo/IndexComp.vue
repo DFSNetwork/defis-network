@@ -60,6 +60,7 @@
 <script>
 import {get_bp_info, get_table_rows} from '@/utils/api'
 import { mapState } from 'vuex';
+import moment from 'moment';
 
 export default {
   name: 'bpInfo',
@@ -95,7 +96,7 @@ export default {
     }),
     voteWeight() {
       let sec_since_lanch = 946684800;
-      let weight_1 = parseInt((Date.parse(new Date()) / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
+      let weight_1 = parseInt((moment().valueOf() / 1000 - sec_since_lanch) / (86400 * 7)) / 52;
       weight_1 = 1 / Math.pow(2, weight_1) / 10000
       return weight_1
     }

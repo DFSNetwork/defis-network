@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import moment from 'moment';
 import { mapState } from 'vuex';
 import axios from "axios";
 import MarketList from '@/components/MarketList';
@@ -168,7 +169,7 @@ export default {
       const list = result.data.data || [];
       list.forEach(v => {
         let t = toLocalTime(v.create_time).replace(/-/g, '/');
-        t = Date.parse(t) + 8 * 3600 * 1000;
+        t = moment(t).valueOf() + 8 * 3600 * 1000;
         const time = toLocalTime(t)
         this.$set(v, 'time', time);
         const isBuy = v.namex === 'depositlog';

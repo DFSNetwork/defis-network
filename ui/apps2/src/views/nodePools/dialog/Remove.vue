@@ -53,6 +53,7 @@ import {toLocalTime, toFixed} from '@/utils/public'
 import {get_table_rows} from '@/utils/api'
 import { getRexActions } from '../js/nodePools'
 import RexLock from './RexLock'
+import moment from 'moment';
 
 export default {
   name: 'removeRex',
@@ -132,10 +133,10 @@ export default {
       const lists = rows.rex_maturities || [];
       let ableRex = parseFloat(rows.matured_rex);
       lists.forEach(v => {
-        const nowT = Date.parse(new Date())
+        const nowT = moment().valueOf()
         const dateTime = toLocalTime(`${v.key}.000+0000`)
         this.$set(v, 'dateTime', dateTime)
-        const rexT = Date.parse(dateTime.replace(/-/g, '/'))
+        const rexT = moment(dateTime.replace(/-/g, '/')).valueOf()
         // console.log(nowT, rexT)
         if (nowT >= rexT) {
           ableRex = parseFloat(v.value) + parseFloat(ableRex)
