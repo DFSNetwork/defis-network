@@ -11,7 +11,7 @@ import moment from 'moment';
 import axios from 'axios';
 import { mapState } from 'vuex';
 import { GetUrlPara, login, getUrlParams, toLocalTime, accPow, accDiv, toFixed } from '@/utils/public';
-import { getVotePools, get_balance } from '@/utils/api';
+import { getVotePools, get_balance, get_table_rows } from '@/utils/api';
 import { EosModel } from '@/utils/eos';
 import MyKonami from '@/views/konami/Index';
 
@@ -70,6 +70,8 @@ export default {
       this.handleGetSwapBal('usdc')
       this.handleGetPoolsBal('dfs')
       this.handleGetPoolsBal('usdc')
+      this.handleGetUsdxRank('dfs')
+      this.handleGetUsdxRank('usdt')
 
     }, 500);
   },
@@ -368,7 +370,7 @@ export default {
       if (!result.length) {
         return
       }
-      console.log(result)
+      // console.log(result)
       const bal = result.split(' ')[0];
       if (type === 'usdc') {
         this.$store.dispatch('setUsdcBalForUsdc', bal)
@@ -402,6 +404,33 @@ export default {
       }
       this.$store.dispatch('setSwapDfsBal', bal)
     },
+    // 获取USDC 、DFS 矿池排名 - usdc挖矿
+    async handleGetUsdxRank(type) {
+      const params = {
+        "code":"usdxvotevote",
+        "scope": "usdxvotevote",
+        "table":"pools",
+        "json":true,
+        "limit": 1000,
+      }
+      if (type === 'dfs') {
+        params.table = 'pools2'
+      }
+      const {status, result} = await get_table_rows(params);
+      if (!status) {
+        return
+      }
+      let rows = result.rows || [];
+      rows.sort((a, b) => {
+        return parseFloat(b.total_votes) - parseFloat(a.total_votes)
+      })
+      rows = rows.slice(0, 21)
+      if (type === 'dfs') {
+        this.$store.dispatch('setDfsPools', rows)
+        return
+      }
+      this.$store.dispatch('setUsdcPools', rows)
+    }
   },
 }
 </script>

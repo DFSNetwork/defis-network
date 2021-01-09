@@ -360,31 +360,54 @@ export function dealApy(v) {
   const usdcPoolsBal = store.state.mine.usdcBalForUsdc; // usdc 挖矿池子余额
   const swapDfsBal = store.state.mine.swapDfsBal; // swap 内全部DFS
   const swapUsdcBal = store.state.mine.swapUsdcBal; // swap 内全部USDC
+  const dfsPools = store.state.mine.dfsPools;
+  const usdcPools = store.state.mine.usdcPools;
   let usdcApr = 0;
-  if ((v.contract0 === 'usdxusdxusdx' && v.symbol0 === 'USDC')
-   || (v.contract1 === 'usdxusdxusdx' && v.symbol1 === 'USDC')) {
-    // 计算USDC年化
-    const num = 10;
-    const rate = 10 / swapUsdcBal;
-    const t = 86400 * 365;
-    const weight = v.mid === 722 ? 1.5 : 1;
-    const reward = usdcPoolsBal - usdcPoolsBal * Math.pow(0.9999, t * rate * weight)
-    const apy = reward / num * 100;
-    usdcApr += Number(apy || 0)
+  const hasIndex = usdcPools.findIndex(vv => vv.mid === v.mid)
+  if (hasIndex !== -1) {
+    if ((v.contract0 === 'usdxusdxusdx' && v.symbol0 === 'USDC')
+    || (v.contract1 === 'usdxusdxusdx' && v.symbol1 === 'USDC')) {
+      // 计算USDC年化
+      const num = 10;
+      const rate = 10 / swapUsdcBal;
+      const t = 86400 * 365;
+      let weight = 1;
+      const rank = hasIndex + 1;
+      if (rank === 1) {
+        weight = 1.5;
+      } else if (rank === 2) {
+        weight = 1.4;
+      } else if (rank === 3) {
+        weight = 1.3;
+      } else if (rank === 4) {
+        weight = 1.2;
+      } else if (rank === 5) {
+        weight = 1.1;
+      }
+      if (v.mid === 722) {
+        weight = 1.5;
+      }
+      const reward = usdcPoolsBal - usdcPoolsBal * Math.pow(0.9999, t * rate * weight)
+      const apy = reward / num * 100;
+      usdcApr += Number(apy || 0)
+    }
   }
-  if ((v.contract0 === 'minedfstoken' && v.symbol0 === 'DFS')
-   || (v.contract1 === 'minedfstoken' && v.symbol1 === 'DFS')) {
-    // 计算DFS 交易对 的usdc年化
-    const num = 10;
-    const rate = 10 / swapDfsBal;
-    const t = 86400 * 365;
-    const weight = v.mid === 722 ? 1.5 : 1;
-    const reward = dfsPoolsBal - dfsPoolsBal * Math.pow(0.9999, t * rate * weight)
-    const mineCoin = marketLists.find(vv => vv.mid === 729)
-    const dfsPrice = mineCoinPrice(mineCoin)
-    // console.log(dfsPoolsBal, dfsPrice, swapDfsBal)
-    const apy = reward * dfsPrice * 100 / num;
-    usdcApr += Number(apy || 0)
+  const hasIndexDfs = dfsPools.findIndex(vv => vv.mid === v.mid)
+  if (hasIndexDfs !== -1) {
+    if ((v.contract0 === 'minedfstoken' && v.symbol0 === 'DFS')
+    || (v.contract1 === 'minedfstoken' && v.symbol1 === 'DFS')) {
+      // 计算DFS 交易对 的usdc年化
+      const num = 10;
+      const rate = 10 / swapDfsBal;
+      const t = 86400 * 365;
+      const weight = 1;
+      const reward = dfsPoolsBal - dfsPoolsBal * Math.pow(0.9999, t * rate * weight)
+      const mineCoin = marketLists.find(vv => vv.mid === 729)
+      const dfsPrice = mineCoinPrice(mineCoin)
+      // console.log(dfsPoolsBal, dfsPrice, swapDfsBal)
+      const apy = reward * dfsPrice * 100 / num;
+      usdcApr += Number(apy || 0)
+    }
   }
   // if (usdcApr) {
   //   console.log(v.mid, usdcApr)

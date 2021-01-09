@@ -146,7 +146,8 @@
     <el-dialog
       class="myDialog apy"
       :visible.sync="showApyDetail">
-      <MarketApy :isActual="true"
+      <MarketApy :countApy="countApy"
+                 :isActual="true"
                  :aprInfo="aprInfo"/>
     </el-dialog>
     <!-- <el-dialog
@@ -826,7 +827,7 @@ export default {
     margin-top: 20px;
     border-radius: 20px;
     padding: 20px;
-    font-size: 28px;
+    font-size: 25px;
     overflow: hidden;
     .allApr{
       color: #000;
