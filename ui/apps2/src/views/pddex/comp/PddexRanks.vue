@@ -86,7 +86,7 @@
               <div>{{ v.price || '-' }}</div>
               <div class="tip smallTip">
                 <span>{{ language === 'en' ? '$' : '¥' }}</span>
-                <span>{{ v.aboutPrice }}</span>
+                <span>{{ v.aboutPriceU }}</span>
               </div>
             </div>
             <div class="rateDiv">
@@ -124,7 +124,7 @@
               <div>{{ v.price || '-' }}</div>
               <div class="tip smallTip">
                 <span>{{ language === 'en' ? '$' : '¥' }}</span>
-                <span>{{ v.aboutPrice }}</span>
+                <span>{{ v.aboutPriceU }}</span>
               </div>
             </div>
             <div class="rateDiv">
@@ -170,7 +170,7 @@ export default {
       swapTradeLists: {},
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       allMarket: {},
-      areaLists: ['USDT', 'EOS', 'USDC', 'DFS', 'TAG', 'BTC'],
+      areaLists: ['USDT', 'EOS', 'USDC', 'DFS', 'TAG', 'PBTC'],
       cdAreaLists: [],
 
       // 排序
@@ -395,6 +395,7 @@ export default {
     },
     // 交易页面跳转
     handleToTrade(li) {
+      console.log(li)
       let symbol = 'eosio.token-eos-minedfstoken-dfs';
       if (li) {
         symbol = `${li.contract0}-${li.symbol0}-${li.contract1}-${li.symbol1}`
@@ -417,7 +418,8 @@ export default {
       const keys = Object.keys(result);
       const lists = {}
       keys.forEach(key => {
-        const coin = key.split('_markets')[0].toUpperCase()
+        let coin = key.split('_markets')[0].toUpperCase()
+        coin = coin === 'BTC' ? coin = 'PBTC' : coin;
         const arr = dealAreaArr(result[key] || [], coin)
         lists[coin] = arr;
       })
