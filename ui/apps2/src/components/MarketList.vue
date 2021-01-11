@@ -96,6 +96,7 @@ export default {
   computed: {
     ...mapState({
       filterMkLists: state => state.sys.filterMkLists,
+      accFollow: state => state.app.accFollow,
     }),
   },
   watch: {
@@ -104,6 +105,7 @@ export default {
         if (!newVal.length || (oldVal && oldVal.length === newVal.length)) {
           return;
         }
+        console.log(this.type)
         // 筛选出所有币种
         this.coinList = [];
         this.filterCoinList = [];
@@ -147,11 +149,11 @@ export default {
       }
       if (this.type === 'other') {
         if (!search) {
-          this.searchArr = this.filterMkLists;
+          this.searchArr = this.handleDealFGollow(this.filterMkLists);
           return
         }
         const searchArr = this.marketLists.filter(v => v.symbol0.indexOf(search) !== -1 || v.symbol1.indexOf(search) !== -1)
-        this.searchArr = searchArr;
+        this.searchArr = this.handleDealFGollow(searchArr);
         return
       }
       if (!search) {
@@ -160,6 +162,19 @@ export default {
       }
       const searchArr = this.coinList.filter(v => v.symbol.indexOf(search) !== -1)
       this.searchArr = searchArr;
+    },
+    handleDealFGollow(arr) {
+      const follow = [];
+      const other = [];
+      arr.forEach(v => {
+        const isFollow = this.accFollow.find(vv => vv.mid === v.mid);
+        if (isFollow) {
+          follow.push(v)
+          return
+        }
+        other.push(v)
+      });
+      return [...follow, ...other]
     },
     handleShowBank(item) {
       const type = this.type;

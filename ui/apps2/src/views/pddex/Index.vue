@@ -106,7 +106,8 @@ export default {
       const keys = Object.keys(result);
       const lists = {}
       keys.forEach(key => {
-        const coin = key.split('_markets')[0].toUpperCase()
+        let coin = key.split('_markets')[0].toUpperCase()
+        coin = coin === 'BTC' ? coin = 'PBTC' : coin;
         const arr = dealAreaArr(result[key] || [], coin)
         lists[coin] = arr;
       })
@@ -134,6 +135,7 @@ export default {
         this.$set(v, 'pid', has.pid)
         this.$set(v, 'unikey', has.unikey)
       })
+      console.log(this.allMarket)
       this.$store.dispatch('setPddexMarketLists', allMarket)
     },
 

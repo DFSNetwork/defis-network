@@ -219,14 +219,7 @@ export default {
       if (!this.account.name) {
         return
       }
-      const params = {
-        "code":"dfsusersinfo",
-        "scope": `${this.account.name}`,
-        "table":"likes",
-        "json":true,
-        "limit": 1000,
-      }
-      const {status, result} = await this.$api.get_table_rows(params);
+      const {status, result} = await this.$api.get_acc_follow();
       if (!status) {
         return
       }

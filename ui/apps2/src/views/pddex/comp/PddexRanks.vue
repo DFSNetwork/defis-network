@@ -78,7 +78,7 @@
                     <span>APY {{ v.countApy }}%</span>
                     <span class="green_p" @click.stop="handleShowApy(v)">详情＞</span>
                   </span>
-                  <span v-else>24H额 {{ v.volume24H }}</span>
+                  <span v-else>24H额 {{ parseFloat(v.volume24H) }}</span>
                 </div>
               </div>
             </div>
@@ -116,7 +116,7 @@
                     <span>APY {{ v.countApy }}%</span>
                     <span class="green_p" @click.stop="handleShowApy(v)">详情＞</span>
                   </span>
-                  <span v-else>24H额 {{ v.volume24H }}</span>
+                  <span v-else>24H额 {{ parseFloat(v.volume24H) }}</span>
                 </div>
               </div>
             </div>
@@ -160,7 +160,7 @@ export default {
   },
   data() {
     return {
-      coinName: 'EOS',
+      coinName: 'USDT',
       active: 1,
       followList: [], // 关注展示列表
       tradeRankList: [], // 成交量排行
@@ -170,7 +170,7 @@ export default {
       swapTradeLists: {},
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       allMarket: {},
-      areaLists: ['EOS', 'TAG', 'USDT'],
+      areaLists: ['USDT', 'EOS', 'USDC', 'DFS', 'TAG', 'BTC'],
       cdAreaLists: [],
 
       // 排序
@@ -360,14 +360,7 @@ export default {
       if (!this.account.name) {
         return
       }
-      const params = {
-        "code":"dfsusersinfo",
-        "scope": `${this.account.name}`,
-        "table":"likes",
-        "json":true,
-        "limit": 1000,
-      }
-      const {status, result} = await this.$api.get_table_rows(params);
+      const {status, result} = await this.$api.get_acc_follow();
       if (!status) {
         return
       }

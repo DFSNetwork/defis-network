@@ -86,6 +86,7 @@ export default {
       handler: function sc (newVal) {
         if (newVal.identity) {
           get_acc_info(newVal.identity.accounts[0].name)
+          this.$api.get_acc_follow()
         }
       },
       deep: true,
