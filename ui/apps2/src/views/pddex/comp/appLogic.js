@@ -227,7 +227,12 @@ export function dealAreaArr(arr, coin) {
     v.decimal1 = sym1[0]; // 精度
     v.poolsNum = `${parseFloat(v.reserve0).toFixed(4)} ${v.symbol0}`
     v.price = dealPrice((parseFloat(v.reserve0) / parseFloat(v.reserve1) || 0))
-    v.aboutPrice = (coinPrice * v.price).toFixed(2)
+    
+    v.aboutPriceU = (coinPrice * v.price).toFixed(4)
+    // if (v.mid === 485) {
+    //   console.log(v.price, coinPrice)
+    //   console.log((coinPrice * v.price).toFixed(4))
+    // }
     v.priceRate = parseFloat(v.price_change_rate) > 0 ? `+${v.price_change_rate}` : v.price_change_rate;
     v.sym0Data = {
       mid: v.mid,
@@ -273,18 +278,19 @@ export function dealAreaArr(arr, coin) {
 function getAreaPrice(coin) {
   const marketLists = store.state.sys.marketLists;
   const lang = store.state.app.language;
+  const tCoin = coin === 'BTC' ? coin = 'PBTC' : coin;
   let mid = 17;
-  if (coin === 'EOS') {
+  if (tCoin === 'EOS') {
     mid = 17;
-  } else if (coin === 'TAG') {
+  } else if (tCoin === 'TAG') {
     mid = 665;
-  } else if (coin === 'USDT') {
+  } else if (tCoin === 'USDT') {
     mid = 0;
-  } else if (coin === 'USDC') {
+  } else if (tCoin === 'USDC') {
     mid = 722;
-  } else if (coin === 'DFS') {
+  } else if (tCoin === 'DFS') {
     mid = 451;
-  } else if (coin === 'PBTC') {
+  } else if (tCoin === 'PBTC') {
     mid = 484;
   }
   if (mid === 0) {
@@ -294,29 +300,30 @@ function getAreaPrice(coin) {
     return 0
   }
   const market = marketLists.find(v => v.mid === mid)
-  let price = coin === market.symbol1 ? 
+  let price = tCoin === market.symbol1 ? 
               parseFloat(market.reserve0) / parseFloat(market.reserve1) :
               parseFloat(market.reserve1) / parseFloat(market.reserve0);
   return lang === 'en' ? price : 6.5 * price;
 }
 // 是否交换数据
 function regExchange(coin, v) {
-  if (coin === 'EOS' && v.contract0 === 'eosio.token' && v.sym0 === '4,EOS') {
+  const tCoin = coin === 'BTC' ? coin = 'PBTC' : coin;
+  if (tCoin === 'EOS' && v.contract0 === 'eosio.token' && v.sym0 === '4,EOS') {
     return true
   }
-  if (coin === 'TAG' && v.contract0 === 'tagtokenmain' && v.sym0 === '8,TAG') {
+  if (tCoin === 'TAG' && v.contract0 === 'tagtokenmain' && v.sym0 === '8,TAG') {
     return true
   }
-  if (coin === 'USDT' && v.contract0 === 'tethertether' && v.sym0 === '4,USDT') {
+  if (tCoin === 'USDT' && v.contract0 === 'tethertether' && v.sym0 === '4,USDT') {
     return true
   }
-  if (coin === 'USDC' && v.contract0 === 'usdxusdxusdx' && v.sym0 === '4,USDC') {
+  if (tCoin === 'USDC' && v.contract0 === 'usdxusdxusdx' && v.sym0 === '4,USDC') {
     return true
   }
-  if (coin === 'DFS' && v.contract0 === 'minedfstoken' && v.sym0 === '4,DFS') {
+  if (tCoin === 'DFS' && v.contract0 === 'minedfstoken' && v.sym0 === '4,DFS') {
     return true
   }
-  if (coin === 'PBTC' && v.contract0 === 'btc.ptokens' && v.sym0 === '8,PBTC') {
+  if (tCoin === 'PBTC' && v.contract0 === 'btc.ptokens' && v.sym0 === '8,PBTC') {
     return true
   }
   return false
