@@ -280,6 +280,12 @@ function getAreaPrice(coin) {
     mid = 665;
   } else if (coin === 'USDT') {
     mid = 0;
+  } else if (coin === 'USDC') {
+    mid = 722;
+  } else if (coin === 'DFS') {
+    mid = 451;
+  } else if (coin === 'PBTC') {
+    mid = 484;
   }
   if (mid === 0) {
     return lang === 'en' ? 1 : 6.5;
@@ -302,6 +308,15 @@ function regExchange(coin, v) {
     return true
   }
   if (coin === 'USDT' && v.contract0 === 'tethertether' && v.sym0 === '4,USDT') {
+    return true
+  }
+  if (coin === 'USDC' && v.contract0 === 'usdxusdxusdx' && v.sym0 === '4,USDC') {
+    return true
+  }
+  if (coin === 'DFS' && v.contract0 === 'minedfstoken' && v.sym0 === '4,DFS') {
+    return true
+  }
+  if (coin === 'PBTC' && v.contract0 === 'btc.ptokens' && v.sym0 === '8,PBTC') {
     return true
   }
   return false

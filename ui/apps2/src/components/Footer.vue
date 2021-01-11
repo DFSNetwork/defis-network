@@ -52,7 +52,7 @@ export default {
       closeDFSInfoDataTip: true,
       poolsEos: '0.0000 EOS',
       poolsUsdt: '0.0000',
-      isEx: true,
+      isEx: false,
     }
   },
   computed: {

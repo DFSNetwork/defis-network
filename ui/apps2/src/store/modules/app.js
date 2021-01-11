@@ -34,6 +34,7 @@ const app = {
       sex: 2,
     },
     account: {},
+    accFollow: [],
   },
   mutations: {
     SET_ACCINFO: (state, accInfo) => {
@@ -66,6 +67,9 @@ const app = {
     SET_ACCOUNT: (state, account) => {
       state.account = account;
     },
+    SET_ACCFOLLOW: (state, accFollow) => {
+      state.accFollow = accFollow;
+    },
   },
   actions: {
     setAccInfo({ commit }, accInfo) {
@@ -91,6 +95,9 @@ const app = {
     },
     setAccount({ commit }, account) {
       commit('SET_ACCOUNT', account);
+    },
+    setAccFollow({ commit }, accFollow) {
+      commit('SET_ACCFOLLOW', accFollow);
     },
   }
 };
