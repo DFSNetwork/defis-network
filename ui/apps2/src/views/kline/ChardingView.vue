@@ -1,12 +1,13 @@
 <template>
-  <div>
+  <div class="kline">
     <div id="tv_chart_container"></div>
+    <div class="hide"></div>
+    <div class="hide2"></div>
   </div>
 </template>
 
 <script>
-import Tv from './index';
-import {getPriceLen} from '@/utils/public';
+import Tv from './index'
 export default {
   data () {
     return {
@@ -27,12 +28,14 @@ export default {
     checkedMarket: {
       type: Object,
       default: function mls() {
-        return {}
+        return {
+          mid: 39,
+          symbol0: 'EOS',
+          symbol1: 'DFS',
+          decimal0: 4,
+          decimal1: 4,
+        }
       }
-    },
-    price: {
-      type: String,
-      default: '0.000000', // kline、ram、rex
     }
   },
   computed: {
@@ -42,10 +45,14 @@ export default {
       this.lang = this.handleFormatLang(val);
       this.handleLoadTradingView();
     },
-    checkedMarket(newVal, oldVal) {
-      if (newVal.mid !== oldVal.mid) {
-        this.handleLoadTradingView();
-      }
+    checkedMarket: {
+      handler: function cm(newVal, oldVal) {
+        if (oldVal && newVal.mid !== oldVal.mid) {
+          this.handleLoadTradingView();
+        }
+      },
+      deep: true,
+      immediate: true,
     }
   },
   created() {
@@ -60,16 +67,12 @@ export default {
   },
   methods: {
     handleLoadTradingView() {
-      if (!Number(this.price)) {
-        return
-      }
       let theme_str = 'white';
       let params = {
         interval: this.interval, // 分辨率（时间周期）
         wgconfig: this.handleGetThemeConfig(theme_str),
         self: this,
       };
-      const priceLen = getPriceLen(this.price) || 4;
       const cmt = this.checkedMarket;
       const name = `${cmt.symbol1}/${cmt.symbol0}`
       const inSymbol = `${this.checkedMarket.symbol1}-${this.checkedMarket.mid}`
@@ -78,7 +81,7 @@ export default {
       params = Object.assign(params, {
         name: name, // k线显示的交易对
         ticker: 'contract', // 后台请求币种对
-        pricescale: 10 ** priceLen, // 保留小数位位数
+        pricescale: 10 ** 6, // 保留小数位位数
         market: this.checkedMarket,
         inSymbol,
         diffDecimal,
@@ -154,9 +157,9 @@ export default {
 
     handleChartReady(){
       Tv.widget.onChartReady(() => {
-        Tv.createdDataBtn('1分钟', this.interval === '1', '1');
+        // Tv.createdDataBtn('1分钟', this.interval === '1', '1');
         // Tv.createdDataBtn('5分钟', this.interval === '5', '5');
-        Tv.createdDataBtn('15分钟', this.interval === '15', '15');
+        // Tv.createdDataBtn('15分钟', this.interval === '15', '15');
         // Tv.createdDataBtn('30分钟', this.interval === '30', '30');
         Tv.createdDataBtn('1小时', this.interval === '60', '60');
         Tv.createdDataBtn('4小时', this.interval === '240', '240');
@@ -201,12 +204,29 @@ export default {
     margin: auto;
   }
 }
+.kline{
+  position: relative;
+  .hide{
+    position: absolute;
+    top: 60px;
+    right: 0px;
+    height: calc(100% - 60px);
+    width: 150px;
+  }
+  .hide2{
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    height: 300px;
+    width: 200px;
+  }
+}
 .tradeView{
   width: 100%;
-  // height: 50vh;
+  height: 50vh;
 }
 #tv_chart_container {
-  width: 100%;
+  width: 750px;
   height: 50vh;
 }
 .tv_chart_container_full {

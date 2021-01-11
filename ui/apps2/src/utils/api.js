@@ -340,6 +340,17 @@ export function get_kline_data(params) {
     })
   })
 }
+// 获取K线数据
+export function get_kline_data2(params) {
+  return new Promise((resolve, reject) => {
+    axios.get('https://dfs.defiview.io/api/getBars', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
 
 // 获取今日最新最热最贵3条置顶数据
 export function get_top3_fundation(params) {

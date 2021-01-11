@@ -212,6 +212,12 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "createPool" */ '@/views/nodePools/childView/CreatePool.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
       },
+      {
+        path: '/k-line/:symbol',
+        name: 'kLine',
+        component: () => import(/* webpackChunkName: "kLine" */ '@/views/kline/Index.vue'),
+        meta: { title: 'Order-book', noAcc: true, noTab: true },
+      },
     ]
   },
   {
