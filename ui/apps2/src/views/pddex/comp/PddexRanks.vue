@@ -379,7 +379,7 @@ export default {
       }
       const dealArr = [];
       const allMarket = []
-      keys.forEach(key => {
+      this.areaLists.forEach(key => {
         allMarket.push(...this.allMarket[key])
       })
       // this.$store.dispatch('setPddexMarketLists', allMarket)
@@ -395,7 +395,6 @@ export default {
     },
     // 交易页面跳转
     handleToTrade(li) {
-      console.log(li)
       let symbol = 'eosio.token-eos-minedfstoken-dfs';
       if (li) {
         symbol = `${li.contract0}-${li.symbol0}-${li.contract1}-${li.symbol1}`
