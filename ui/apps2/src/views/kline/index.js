@@ -35,7 +35,7 @@ export default {
         'left_toolbar',
         'keep_left_toolbar_visible_on_small_screens', // 防止左侧工具栏在小屏幕上消失
         // 'hide_last_na_study_output', // 隐藏最后一次指标输出
-        // 'move_logo_to_main_pane', // logo 图标位置
+        'move_logo_to_main_pane', // logo 图标位置
         'dont_show_boolean_study_arguments', // 隐藏指标参数
       ],
       // 关闭功能
@@ -66,7 +66,6 @@ export default {
       },
     };
     const widgetConfig = Object.assign(widgetConfig_defalut, options.wgconfig);
-    console.log(widgetConfig)
     const widget = new TradingView.widget(widgetConfig);
     this.widget = widget;
     this.resetData();
@@ -107,29 +106,38 @@ export default {
       period: 'minute30',
     }, {
       id: '60',
-      period: 'hour',
+      period: '60',
     }, {
       id: '240',
-      period: 'hour4',
+      period: '240',
     }, {
       id: '1D',
-      period: 'day',
+      period: '1D',
     }, {
       id: '1W',
-      period: 'week',
+      period: '1W',
     }, {
       id: '1M',
-      period: 'month',
+      period: '1M',
     }]
     const periodObj = periodArr.find(v => v.id == this.queryData.interval) || {period: 'day'};
     const period = periodObj.period;
+    const mid = this.queryData.market.mid;
     const params = {
-      type: "kline",
-      period,
-      symbol: this.queryData.inSymbol,
-      from: from,
-      to: to,
-      diffDecimal: this.queryData.diffDecimal,
+      // type: "kline",
+      // period,
+      // symbol: this.queryData.inSymbol,
+      // from: from,
+      // to: to,
+      // diffDecimal: this.queryData.diffDecimal,
+
+      exchange: 'DFS',
+      mid,
+      symIn: this.queryData.market.symbol1,
+      symOut: this.queryData.market.symbol0,
+      resolution: period,
+      fromTs: from,
+      toTs: to,
     }
     SocketIo.subscribe(params, (wsRes) => {
       this.noMoreData = true;

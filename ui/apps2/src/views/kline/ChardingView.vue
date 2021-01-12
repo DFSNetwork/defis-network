@@ -17,7 +17,7 @@ export default {
       tradName: '', // 交易对 ABC/ECS
       ticker: '', //  请求标示ABC_ECS
       trad: null,
-      interval: '1D', // 分辨率，时间
+      interval: '240', // 分辨率，时间
     }
   },
   props: {

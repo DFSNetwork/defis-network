@@ -37,7 +37,7 @@ export function orderLists(params) {
 
 export function transferLog(params) {
   return new Promise((resolve, reject) => {
-    axios.get('https://api.defis.network/history/transfer', {params}).then((res) => {
+    axios.get('https://api.defis.network/dfs/history/transfer', {params}).then((res) => {
       let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
     }, err => {

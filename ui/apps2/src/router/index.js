@@ -216,7 +216,7 @@ const constantRouter = [
         path: '/k-line/:symbol',
         name: 'kLine',
         component: () => import(/* webpackChunkName: "kLine" */ '@/views/kline/Index.vue'),
-        meta: { title: 'Order-book', noAcc: true, noTab: true },
+        meta: { title: 'Order-book', noAcc: true, noFooter: true, noTab: true, noHeader: true, noTab: true },
       },
     ]
   },
