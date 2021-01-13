@@ -47,6 +47,9 @@ export default {
     },
     checkedMarket: {
       handler: function cm(newVal, oldVal) {
+        if (!newVal.mid) {
+          return
+        }
         if (oldVal && newVal.mid !== oldVal.mid) {
           this.handleLoadTradingView();
         }
@@ -61,12 +64,14 @@ export default {
     if (!this.loading) {
       this.handleLoadTradingView();
     }
-    // this.handleLoadTradingView();
   },
   beforeDestroy () {
   },
   methods: {
     handleLoadTradingView() {
+      if (!this.checkedMarket.mid) {
+        return
+      }
       let theme_str = 'white';
       let params = {
         interval: this.interval, // 分辨率（时间周期）
@@ -119,6 +124,7 @@ export default {
             "paneProperties.horzGridProperties.color": "RGBA(153, 153, 156, 0.18)",
             "scalesProperties.textColor" : "#333",
           },
+          // .header-chart-panel-sizer
         }
       };
       const overrides = {

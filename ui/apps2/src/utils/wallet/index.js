@@ -142,7 +142,6 @@ class ScatterClass {
         }
       ]
     }
-    console.log(params)
     this.eosJs.transaction(params, {
       blocksBehind: 3,
       expireSeconds: 30,

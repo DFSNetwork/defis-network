@@ -1,13 +1,13 @@
 <template>
   <div class="pointSlider" @click="handleCloseTip">
-    <div class="title">交易设置</div>
+    <div class="title">{{ $t('dex.TradeSet') }}</div>
     <div class="content">
       <div class="subTitle flexa">
-        <span>滑点保护</span>
+        <span>{{ $t('dex.slipPoint') }}</span>
         <img class="tipCoin" @click.stop="handleShowTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/question.svg" alt="">
         <transition name="fade">
           <div class="tipConten" v-if="showTip">
-            如果您提交交易后，价格变化超过滑点保护的范围，交易将被撤销。
+            {{ $t('dex.slipTip') }}
           </div>
         </transition>
       </div>

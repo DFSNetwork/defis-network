@@ -234,6 +234,8 @@ export function dealAreaArr(arr, coin) {
     //   console.log((coinPrice * v.price).toFixed(4))
     // }
     v.priceRate = parseFloat(v.price_change_rate) > 0 ? `+${v.price_change_rate}` : v.price_change_rate;
+    v.imgUrl0 = getCoin(v.contract0, v.symbol0),
+    v.imgUrl1 = getCoin(v.contract1, v.symbol1),
     v.sym0Data = {
       mid: v.mid,
       last_update: v.last_update,

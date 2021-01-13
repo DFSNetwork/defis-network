@@ -2,10 +2,10 @@
   <div class="tradeRight">
     <div class="tools flexb tip">
       <span class="flexa">
-        <span>价格</span>
-        <span class="deepNum" @click="deepMerge = true">深度{{ mergeNum * 100 }}%</span>
+        <span>{{ $t('pddex.price') }}</span>
+        <span class="deepNum" @click="deepMerge = true">{{ $t('pddex.price') }}{{ mergeNum * 100 }}%</span>
       </span>
-      <span>数量</span>
+      <span>{{ $t('more.num') }}</span>
     </div>
     <div class="sellOrder dinReg">
       <template v-if="sellArr.length < 6">
@@ -22,7 +22,7 @@
         <span>{{ v.num }}</span>
       </div>
     </div>
-    <div class="currentPrice flexa dinReg">{{ market.price || '-.----' }}</div>
+    <div class="currentPrice flexa dinBold">{{ market.price || '-.----' }}</div>
     <div class="buyOrder dinReg">
       <div class="flexb list green" v-for="(v, i) in buyArr" :key="`buy-${i}`"
         @click="handleClickPrice(v)">
@@ -155,12 +155,13 @@ export default {
 
 <style lang="scss" scoped>
 .tradeRight{
-  width: 50%;
-  max-width: 50%;
+  width: 40%;
+  max-width: 40%;
   color: #000;
-  margin-top: 20px;
   margin-left: 15px;
+  margin-top: 10px;
   box-sizing: border-box;
+  font-size: 24px;
   // .tools{
   //   padding: 0 15px;
   // }
@@ -174,7 +175,7 @@ export default {
   .buyOrder,
   .sellOrder{
     padding: 0 15px 0 0;
-    height: 310px;
+    height: 270px;
     overflow: auto;
     .list{
       position: relative;
@@ -195,7 +196,7 @@ export default {
   }
   .currentPrice{
     font-weight: 500;
-    font-size: 33px;
+    font-size: 26px;
     height: 60px;
     border-top: 1px solid #eee;
     border-bottom: 1px solid #eee;

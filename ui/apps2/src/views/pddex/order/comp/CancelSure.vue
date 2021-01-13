@@ -1,10 +1,12 @@
 <template>
   <div class="cancelSure">
-    <div class="title">撤单</div>
-    <div class="content">您确定撤销该笔订单吗？</div>
+    <div class="title">{{ $t('pddex.cancelOrder') }}</div>
+    <div class="content">{{ $t('pddex.cancelTip') }}</div>
     <div class="btnDiv flexb">
-      <van-button class="btn tip" plain type="default" @click="handleCancel">取消</van-button>
-      <van-button class="btn" plain type="danger" @click="handleCancelOrder">确定</van-button>
+      <van-button class="btn tip" plain type="default"
+        @click="handleCancel">{{ $t('public.cancel') }}</van-button>
+      <van-button class="btn" plain type="danger"
+        @click="handleCancelOrder">{{ $t('public.confirm') }}</van-button>
     </div>
   </div>
 </template>

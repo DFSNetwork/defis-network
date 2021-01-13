@@ -2,13 +2,13 @@
   <div>
     <!-- 挂单价格 -->
     <div class="price">
-      <div class="marketPrice">以当前最优价格成交</div>
+      <div class="marketPrice">{{ $t('pddex.tradeTip') }}</div>
     </div>
     <!-- 挂单数量 -->
     <div class="num dinBold">
       <van-cell-group>
         <van-field class="numIpt" type="number" v-model="num"
-          placeholder="请输入交易数量"
+          :placeholder="$t('pddex.iptNumTip')" 
           @focus="numIptFocus"
           @blur="numIptBlur"
           @input="handleDealNum">
@@ -20,7 +20,7 @@
     </div>
     <!-- 可用EOS -->
     <div class="flexb bal dinReg">
-      <span class="tip">余额:</span>
+      <span class="tip">{{ $t('public.balance') }}:</span>
       <span v-if="direction !== 'sell'">{{ bal0 }} {{ market.symbol0 }}</span>
       <span v-else>{{ bal1 }} {{ market.symbol1 }}</span>
     </div>
@@ -36,13 +36,13 @@
       <span @click="handleChange(100)">100%</span>
     </div>
     <div class="flexa aboutNum dinReg">
-      <span class="tip">交易额：</span>
+      <span class="tip">{{ $t('pddex.tradeAmt') }}：</span>
       <span>≈ {{ aboutNum }} {{ market.symbol0 }}</span>
     </div>
     <!-- 交易按钮 -->
     <div class="btnDiv" @click="handleTrade()">
-      <van-button class="btn" v-if="direction === 'buy'" type="primary">买入{{ market.symbol1 }}</van-button>
-      <van-button class="btn" v-else type="danger">卖出{{ market.symbol1 }}</van-button>
+      <van-button class="btn" v-if="direction === 'buy'" type="primary">{{ $t('pddex.buyIn') }}{{ market.symbol1 }}</van-button>
+      <van-button class="btn" v-else type="danger">{{ $t('pddex.sellOut') }}{{ market.symbol1 }}</van-button>
     </div>
   </div>
 </template>

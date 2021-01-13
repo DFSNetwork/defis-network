@@ -4,7 +4,7 @@
       <span class="back flexa" @click="$router.back()">
         <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/back.png" alt="">
       </span>
-      <span>我的订单</span>
+      <span>{{ $t('pddex.myOrder') }}</span>
       <span class="back"></span>
     </div>
     <van-sticky>
@@ -24,19 +24,19 @@
           <!-- finished-text="没有更多了" -->
           <div class="noData tip" v-if="!list.length && !loading">
             <img class="noDataPng" src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noOrder.png" alt="">
-            <div>暂无数据</div>
+            <div>{{ $t('public.noData') }}</div>
           </div>
           <div v-for="(item, index) in list" :key="index">
             <div class="list">
               <div class="liTitle flexb">
                 <div class="symbol">
-                  <span v-if="item.isBuy" class="green">买 </span>
-                  <span v-else class="red">卖 </span>
+                  <span v-if="item.isBuy" class="green">{{ $t('pddex.buy') }} </span>
+                  <span v-else class="red">{{ $t('pddex.sell') }} </span>
                   <span>{{ item.symbol1 }}/{{ item.symbol0 }}</span>
                   <span class="tip dateTime"> ({{ item.oDate }})</span>
                 </div>
                 <div>
-                  <van-button v-if="value2 === 'a'" plain type="danger" @click="handleCancel(item, index)">撤单</van-button>
+                  <van-button v-if="value2 === 'a'" plain type="danger" @click="handleCancel(item, index)">{{ $t('pddex.cancleOrder') }}</van-button>
                   <span class="source flexa" v-else>
                     <span>Dex: </span>
                     <img class="dex" v-if="item.dex === 'defisswapcnt'" src="https://ndi.340wan.com/eos/minedfstoken-dfs.png" alt="">
@@ -47,29 +47,15 @@
               <div class="flexb dataInfo">
                 <div>
                   <div class="num">{{ item.orderNum }}</div>
-                  <div class="subTitle tip">委托量({{ item.symbol1 }})</div>
+                  <div class="subTitle tip">{{ $t('pddex.orderVol') }}({{ item.symbol1 }})</div>
                 </div>
                 <div>
                   <div class="num">{{ item.orderPrice }}</div>
-                  <div class="subTitle tip">委托价({{ item.symbol0 }})</div>
+                  <div class="subTitle tip">{{ $t('pddex.orderPrice') }}({{ item.symbol0 }})</div>
                 </div>
                 <div>
                   <div class="num">{{ item.amt }}</div>
-                  <div class="subTitle tip">委托额({{ item.symbol0 }})</div>
-                </div>
-              </div>
-              <div class="flexb" v-if="false">
-                <div>
-                  <div class="num">10.0000</div>
-                  <div class="subTitle tip">成交量({{ item.symbol1 }})</div>
-                </div>
-                <div>
-                  <div class="num">50.0000</div>
-                  <div class="subTitle tip">成交均价({{ item.symbol0 }})</div>
-                </div>
-                <div>
-                  <div class="num">50.0000</div>
-                  <div class="subTitle tip">手续费({{ item.symbol0 }})</div>
+                  <div class="subTitle tip">{{ $t('pddex.orderAmt') }}({{ item.symbol0 }})</div>
                 </div>
               </div>
             </div>
@@ -105,11 +91,11 @@ export default {
       value1: 0,
       value2: 'a',
       option1: [
-        { text: '全部交易对', value: 0 },
+        { text: this.$t('pddex.allMarket'), value: 0 },
       ],
       option2: [
-        { text: '只显示进行中', value: 'a' },
-        { text: '只显示已完成', value: 'b' },
+        { text: this.$t('pddex.showDoing'), value: 'a' },
+        { text: this.$t('pddex.showSuccess'), value: 'b' },
         // { text: '全部订单', value: 'c' },
       ],
       allList: [],
@@ -196,7 +182,7 @@ export default {
       })
       this.pidMarketLists = pidMarketLists;
       opts.unshift({
-        text: '全部交易对', value: 0
+        text: this.$t('pddex.allMarket'), value: 0
       })
       this.option1 = opts;
     },

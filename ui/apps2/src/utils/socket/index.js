@@ -22,7 +22,6 @@ class WsIo {
    * }
    */
   async subscribe(params, cb) {
-    console.log(params)
     const {status, result} = await get_kline_data2(params)
     if (!status) {
       cb([])

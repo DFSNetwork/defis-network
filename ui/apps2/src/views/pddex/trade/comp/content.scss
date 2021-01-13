@@ -3,17 +3,19 @@
   background: #FFF;
   // box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.12);
   border: 1px solid rgba(220,220,220,.3);
-  border-radius: 8px;
+  border-radius: 40px;
+  overflow: hidden;
   .marketPrice{
-    height: 78px;
+    box-sizing: border-box;
+    height: 65px;
     display: flex;
     align-items: center;
-    justify-content: center;
+    padding-left: 30px;
     color: #a6a6a6;
   }
   /deep/ .van-stepper{
-    font-size: 28px;
-    height: 78px;
+    font-size: 20px;
+    height: 70px;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -22,13 +24,13 @@
     font-size: 30px;
     background: #FFF;
     width: calc(100% - 180px);
-    height: 78px;
+    height: 70px;
   }
   /deep/ .van-stepper__minus, /deep/.van-stepper__plus{
     color: #07c160;
     background: #FFF;
-    height: 78px;
-    width: 78px;
+    height: 70px;
+    width: 70px;
     border-right: 2px solid #eee;
   }
   /deep/.van-stepper__plus{
@@ -40,12 +42,16 @@
 .num{
   margin: 24px 0 14px;
   border: 1px solid rgba(220,220,220,.3);
-  border-radius: 8px;
+  border-radius: 40px;
+  overflow: hidden;
   // box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.12);
   .numIpt{
-    padding: 15px;
+    height: 65px;
+    display: flex;
+    align-items: center;
+    padding: 0 15px 0 30px;
     /deep/ .van-field__control{
-      font-size: 33px;
+      font-size: 28px;
     }
   }
   /deep/ .van-hairline--top-bottom::after{
@@ -72,11 +78,15 @@
     border-radius: 20px;
   }
   /deep/ .van-slider__button{
+    width: 40px;
+    height: 40px;
     background: url('https://cdn.jsdelivr.net/gh/defis-net/material/icon/slider-buy.png') no-repeat;
     background-size: cover;
   }
   &.sellSlider{
     /deep/ .van-slider__button{
+      width: 40px;
+      height: 40px;
       background: url('https://cdn.jsdelivr.net/gh/defis-net/material/icon/slider.png') no-repeat;
       background-size: cover;
     }
@@ -94,7 +104,9 @@
 .btnDiv{
   margin-top: 20px;
   .btn{
+    height: 72px;
     width: 100%;
+    border-radius: 50px;
   }
 }
 

@@ -135,7 +135,7 @@ export default {
         this.$set(v, 'pid', has.pid)
         this.$set(v, 'unikey', has.unikey)
       })
-      console.log(this.allMarket)
+      // console.log(this.allMarket)
       this.$store.dispatch('setPddexMarketLists', allMarket)
     },
 

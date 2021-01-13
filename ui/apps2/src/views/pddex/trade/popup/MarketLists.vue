@@ -1,7 +1,7 @@
 <template>
   <div class="marketList">
     <div class="header">
-      <span v-if="$route.name === 'fundation' || $route.name === 'createPool'">选择币种</span>
+      <span v-if="$route.name === 'fundation' || $route.name === 'createPool'">{{ $t('tutorial.ul5_3') }}</span>
       <span v-else>{{ $t('pools.chooseMarket') }}</span>
       <span>
         <img class="closeSvg" @click="handleClose" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">

@@ -1,9 +1,11 @@
 <template>
-  <div class="mainView">
+  <div class="mainView" :class="{'noMg': routeName === 'pddexTrade'}">
     <swap v-if="routeName === 'index'"
           @listenUpdateList="listenUpdateList"
           @listenShowDrawer="handleShowDrawer"/>
     <market v-else-if="routeName === 'market'"
+      @listenShowDrawer="handleShowDrawer"/>
+    <PddexTrade v-else-if="routeName === 'pddexTrade'"
       @listenShowDrawer="handleShowDrawer"/>
     <!-- 弹窗组件 -->
     <el-dialog
@@ -20,12 +22,15 @@ import { mapState } from 'vuex';
 import MarketList from '@/components/MarketList';
 import Swap from '@/views/swappage/Index'
 import Market from '@/views/market/Index'
+import PddexTrade from '@/views/pddex/trade/IndexComp'
+
 export default {
   name: 'mainView',
   components: {
     MarketList,
     Swap,
     Market,
+    PddexTrade,
   },
   data() {
     return {
@@ -65,7 +70,10 @@ export default {
 <style lang="scss" scoped>
 @import url('../../../assets/css/animal.scss');
 .mainView{
-  margin: 0 40px;
+  margin: 0 30px;
+  &.noMg{
+    margin: 0;
+  }
   .tabView{
     // background: #FAFAFA;
     border-radius:30px;
