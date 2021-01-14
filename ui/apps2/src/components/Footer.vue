@@ -40,7 +40,7 @@
 import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { toFixed, accMul, dealSymArr } from '@/utils/public';
+import { toFixed, accMul } from '@/utils/public';
 
 export default {
   data() {
@@ -96,24 +96,35 @@ export default {
     handleSetAllRes() {
       const allResult = [];
       const feesDataKeys = this.dfsInfoData.trading_volume_in || [];
-      const coinArr = dealSymArr(this.marketLists);
+      const feesDataKeysOut = this.dfsInfoData.trading_volume_out || [];
+      // const coinArr = dealSymArr(this.marketLists);
+      const dealArr = [];
       feesDataKeys.forEach((item) => {
-        if (item.sym === 'EOS') {
+        const allHas = dealArr.find(v => v.mid === item.mid)
+        if (allHas) {
           return
         }
-        const isShowToken = coinArr.find(v => v.mid === item.mid && v.symbol !== 'EOS');
-        if (!isShowToken) {
-          return
+        const i = item;
+        const o = feesDataKeysOut.find(v => v.mid === item.mid && v.sym === item.sym) || {}
+        const total = {
+          mid: i.mid,
+          total: parseFloat(i.total || 0) + parseFloat(o.total || 0),
+          sym: i.sym,
         }
-        const value = item.total * 0.002;
-        const sym1Liq = isShowToken.reserve.split(' ')[0];
-        const poolsApr = value / (sym1Liq - value) * 365 * 100;
+        dealArr.push(total)
+      })
+      dealArr.forEach(v => {
+        const value = v.total * 0.002;
+        const market = this.marketLists.find(vv => vv.mid === v.mid);
+        let liq = market.symbol0 === v.sym ? market.reserve0 : market.reserve1;
+        liq = parseFloat(liq || 0) * 2;
+        const poolsApr = value / (liq - value) * 365 * 100;
         allResult.push({
-          mid: item.mid,
-          symbol: isShowToken.symbol,
+          mid: v.mid,
+          symbol: v.sym,
           poolsApr: `${poolsApr.toFixed(3)}%`
         });
-      })
+      });
       this.$store.dispatch('setFeesApr', allResult);
     },
     handleToShowReport(name) {
