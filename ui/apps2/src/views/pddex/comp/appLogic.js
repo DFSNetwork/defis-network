@@ -334,19 +334,29 @@ function regExchange(coin, v) {
 export function dealApy(v) {
   // 基础数据
   const dfsPrice = store.state.sys.dfsPrice;
+  const marketListsPddex = store.state.config.marketLists;
   const marketLists = store.state.sys.marketLists;
+
   const tagLpMids = store.state.config.tagLpMids;
   const lpMid = store.state.config.lpMid;
   // 手续费年化
   let feesApr = 0
-  if (v.volume24H) {
-    const fees = parseFloat(v.volume24H || 0) * 0.002;
-    const sym0Liq = parseFloat(v.reserve0 || 0) * 2;
+  let newItem = v;
+  if (!newItem.volume24H) {
+    const market = marketListsPddex.find(vv => vv.mid === v.mid)
+    market ? newItem = market : ''
+  }
+  if (newItem.volume24H) {
+    const fees = parseFloat(newItem.volume24H || 0) * 0.002;
+    const sym0Liq = parseFloat(newItem.reserve0 || 0) * 2;
     feesApr = fees / (sym0Liq - fees) * 365 * 100;
   } else {
     const storeFeesApr = store.state.sys.feesApr;
     const aprJson = storeFeesApr.find(vv => vv.symbol === v.symbol1) || {};
     feesApr = parseFloat(aprJson.poolsApr || 0)
+    if (newItem.mid === 637) {
+      console.log(aprJson)
+    }
   }
   // DFS 挖矿年化
   const rewardV3 = perDayRewardV3(v.mid)
