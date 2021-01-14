@@ -175,11 +175,11 @@ export default {
   .buyOrder,
   .sellOrder{
     padding: 0 15px 0 0;
-    height: 270px;
+    height: 240px;
     overflow: auto;
     .list{
       position: relative;
-      height: 45px;
+      height: 40px;
       .bgLeng{
         position: absolute;
         width: 60%;

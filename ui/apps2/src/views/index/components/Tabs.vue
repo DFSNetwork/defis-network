@@ -17,12 +17,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
   name: 'tabs',
   data() {
     return {
       act: 1,
     }
+  },
+  computed: {
+    ...mapState({
+      marketLists: state => state.sys.marketLists,
+    }),
   },
   mounted() {
     const routeName = this.$route.name || 'index';
@@ -54,6 +60,16 @@ export default {
       } else if (this.act === 3) {
         // usdxusdxusdx-USDC-tethertether-USDT
         let symbol = 'eosio.token-EOS-tethertether-USDT'
+        const localData = localStorage.getItem('swapMarkets') ? JSON.parse(localStorage.getItem('swapMarkets')) : null;
+        let mid = 17;
+        if (localData) {
+          const MidsLength = localData.thisMidsPath.split('-').length;
+          MidsLength === 1 ? mid = localData.thisMidsPath : null;
+        }
+        const market = this.marketLists.find(v => v.mid == mid)
+        if (market) {
+          symbol = `${market.contract1}-${market.symbol1}-${market.contract0}-${market.symbol0}`
+        }
         const name = 'pddexTrade'
         this.$router.push({
           name,

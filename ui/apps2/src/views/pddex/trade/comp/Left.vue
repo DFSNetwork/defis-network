@@ -7,7 +7,7 @@
       <div class="flexc" :class="{'sell': direction === 'sell'}"
         @click="handleChangeDirection('sell')">{{ $t('pddex.sellOut') }}</div>
     </div>
-    <van-popover v-model="showPop" trigger="click">
+    <!-- <van-popover v-model="showPop" trigger="click">
       <div class="myPopover">
         <div class="item flexc" v-for="(v, i) in option1" :key="i"
           @click="handleCheck(v.value)">{{ v.text }}</div>
@@ -18,7 +18,7 @@
           <van-icon name="arrow-down"/>
         </div>
       </template>
-    </van-popover>
+    </van-popover> -->
     <MarketTrade v-if="type === 1"
       :type="type" :direction="direction" :market="market"
       :bal0="bal0" :bal1="bal1"/>
@@ -53,7 +53,7 @@ export default {
     return {
       showPop: false,
       direction: 'buy',
-      type: 1, // 0 - 限价 ｜ 1 - 市价
+      type: 0, // 0 - 限价 ｜ 1 - 市价
       option1: [
         { text: this.$t('pddex.limit'), value: 0 },
         { text: this.$t('pddex.market'), value: 1 },
@@ -278,10 +278,10 @@ export default {
     // box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.08);
     border: 1px solid rgba(220,220,220,.3);
     border-radius: 40px;
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     &>div{
       flex: 1;
-      height: 70px;
+      height: 80px;
       font-size: 30px;
       border-radius: 40px;
       &.buy{

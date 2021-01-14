@@ -8,18 +8,18 @@
     <PddexTrade v-else-if="routeName === 'pddexTrade'"
       @listenShowDrawer="handleShowDrawer"/>
     <!-- 弹窗组件 -->
-    <el-dialog
-      class="mkListDia pcList"
-      :show-close="false"
-      :visible.sync="showMarketList">
+    <van-popup
+      class="newMarket"
+      v-model="showMarketList"
+      position="left">
       <market-list :marketLists="marketLists" @listenClose="handleClose"/>
-    </el-dialog>
+    </van-popup>
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import MarketList from '@/components/MarketList';
+import MarketList from '@/components/MarketArea';
 import Swap from '@/views/swappage/Index'
 import Market from '@/views/market/Index'
 import PddexTrade from '@/views/pddex/trade/IndexComp'

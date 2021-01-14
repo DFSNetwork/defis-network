@@ -75,14 +75,23 @@
     <order-list ref="orderList"/>
 
     <!-- 弹窗组件 -->
-    <el-dialog
+    <!-- <el-dialog
       class="mkListDia pcList"
       :show-close="false"
       :visible.sync="showMarketList">
       <market-list :marketLists="bankList" :type="type"
         @listenMarketChange="handleMarketChange"
         @listenClose="handleClose"/>
-    </el-dialog>
+    </el-dialog> -->
+    <van-popup
+      class="newMarket"
+      v-model="showMarketList"
+      position="left">
+      <MarketArea v-if="showMarketList"
+        :marketLists="bankList" :type="type"
+        @listenMarketChange="handleMarketChange"
+        @listenClose="handleClose"/>
+    </van-popup>
   </div>
 </template>
 
@@ -90,14 +99,14 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, getPrice, accMul, accDiv } from '@/utils/public';
-import MarketList from '@/components/MarketList';
+import MarketArea from '@/components/MarketArea';
 import Tabs from '../index/components/Tabs';
 import OrderList from './components/OrderList';
 export default {
   components: {
     Tabs,
     OrderList,
-    MarketList
+    MarketArea
   },
   data() {
     return {

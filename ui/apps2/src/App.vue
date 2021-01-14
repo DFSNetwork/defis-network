@@ -8,6 +8,7 @@
 
 <script>
 import moment from 'moment';
+import { DApp } from '@/utils/wallet';
 import axios from 'axios';
 import { mapState } from 'vuex';
 import { GetUrlPara, login, getUrlParams, toLocalTime, accPow, accDiv, toFixed } from '@/utils/public';
@@ -53,6 +54,8 @@ export default {
     this.handleEnvSet();
     EosModel.scatterInit(this, () => {
       this.handleLogin()
+      DApp.scatterInit(this, () => {
+      })
     });
     setTimeout(() => {
       this.handleGetDfsCurrent()

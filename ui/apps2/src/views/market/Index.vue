@@ -84,14 +84,14 @@
     <MyMarketLists :thisMarket="thisMarket"/>
 
     <!-- 弹窗组件 -->
-    <el-dialog
-      class="mkListDia"
-      :show-close="false"
-      :visible.sync="showMarketList">
+    <van-popup
+      class="newMarket"
+      v-model="showMarketList"
+      position="left">
       <market-list :marketLists="marketLists"
         @listenMarketChange="handleMarketChange"
         @listenClose="handleClose"/>
-    </el-dialog>
+    </van-popup>
     <!-- 年化详情 -->
     <el-dialog
       class="myDialog apy"
@@ -130,7 +130,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import MarketList from '@/components/MarketList';
+import MarketList from '@/components/MarketArea';
 import Tabs from '../index/components/Tabs';
 import MarketApy from './popup/MarketApy'
 import AddMarket from './popup/AddMarket'

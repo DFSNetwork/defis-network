@@ -40,14 +40,14 @@
       <!-- <div class="noData tip" v-if="!hisList.length">{{ $t('public.noData') }}</div> -->
     </div>
 
-    <el-dialog
-      class="mkListDia pcList"
-      :show-close="false"
-      :visible.sync="showMarketList">
+    <van-popup
+      class="newMarket"
+      v-model="showMarketList"
+      position="left">
       <market-list :marketLists="marketLists"
         @listenMarketChange="handleMarketChange"
         @listenClose="handleClose"/>
-    </el-dialog>
+    </van-popup>
   </div>
 </template>
 
@@ -55,7 +55,7 @@
 import moment from 'moment';
 import { mapState } from 'vuex';
 import axios from "axios";
-import MarketList from '@/components/MarketList';
+import MarketList from '@/components/MarketArea';
 import {toLocalTime, toBrowser} from '@/utils/public'
 export default {
   name: 'tradeHistory',

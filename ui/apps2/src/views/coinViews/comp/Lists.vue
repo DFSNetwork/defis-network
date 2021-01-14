@@ -51,7 +51,6 @@ import {toLocalTime, toBrowser, dealAccountHide} from '@/utils/public'
 export default {
   name: 'tradeHistory',
   components: {
-    // MarketList,
   },
   props: {
     pageLists: {

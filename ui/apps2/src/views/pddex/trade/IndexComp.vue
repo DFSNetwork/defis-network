@@ -90,7 +90,7 @@
       </van-tabs>
     </div>
 
-    <van-popup class="popup" v-model="showLists">
+    <van-popup class="newMarket" v-model="showLists" position="left">
       <market-lists-comp
         :marketLists="marketLists"
         v-if="showLists"
@@ -118,7 +118,7 @@ import { DApp } from '@/utils/wallet';
 import { toFixed, toLocalTime, dealPrice } from '@/utils/public';
 import Left from './comp/Left';
 import Right from './comp/Right';
-import MarketListsComp from './popup/MarketLists';
+import MarketListsComp from '@/components/MarketArea';
 import PointSlider from './popup/PointSlider'
 import CancelSure from "@/views/pddex/order/comp/CancelSure";
 import Tabs from '@/views/index/components/Tabs';
@@ -206,7 +206,19 @@ export default {
       return !!has;
     }
   },
+  beforeDestroy() {
+    this.handleBeforeDestroy()
+  },
   methods: {
+    handleBeforeDestroy() {
+      const swapMarkets = {
+        thisMarket0: this.market.sym1Data,
+        thisMarket1: this.market.sym0Data,
+        thisCoinsPath: '',
+        thisMidsPath: `${this.market.mid}`,
+      }
+      localStorage.setItem('swapMarkets', JSON.stringify(swapMarkets))
+    },
     async handleGetLikes() {
       if (!this.account.name) {
         return
@@ -223,6 +235,7 @@ export default {
       this.likeArr = rows;
     },
     handleCancelLike() {
+      console.log(this.account)
       if (!this.account.name) {
         return
       }
@@ -381,7 +394,7 @@ export default {
       this.$router.push({
         name: 'pddexTrade',
         params: {
-          symbol: `${item.contract0}-${item.symbol0}-${item.contract1}-${item.symbol1}`
+          symbol: `${item.contract1}-${item.symbol1}-${item.contract0}-${item.symbol0}`
         }
       })
     },

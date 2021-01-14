@@ -27,7 +27,7 @@ class ScatterClass {
       callback();
       return
     }
-    self.isConnect = !!EosModel.scatter;
+    self.isConnect = !!EosModel.scatter && !!EosModel.scatterEosJs;
     // console.log(self.isConnect)
     if (!self.isConnect) {
       // console.log(self.connectCount)
