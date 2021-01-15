@@ -54,7 +54,9 @@ export default {
       dssInfo: {},
       bal: '0.0000',
       token: '0',
+      liqs: [],
       nowMarket: {},
+      marketDfs: 0,
       minerInfo: {},
       args: {},
 
@@ -86,7 +88,7 @@ export default {
     }),
     allDfs() {
       let all = parseFloat(this.bal || 0);
-      all = accAdd(all, parseFloat(this.nowMarket.getNum2 || 0))
+      all = accAdd(all, parseFloat(this.marketDfs || 0))
       all = accAdd(all, parseFloat(this.dssInfo.balance || 0))
       return all
     },
@@ -133,20 +135,32 @@ export default {
       this.handleRunReward()
     },
     handleGetMarketDfs() {
-      if (!this.token || !this.marketLists.length) {
+      if (!this.liqs.length || !this.marketLists.length) {
         return
       }
-      const market = this.marketLists.find(v => v.mid === 39)
-      const inData = {
-        poolSym0: market.reserve0.split(' ')[0],
-        poolSym1: market.reserve1.split(' ')[0],
-        poolToken: market.liquidity_token,
-        sellToken: this.token
-      }
-      const nowMarket = sellToken(inData);
-      nowMarket.getNum1 = toFixed(nowMarket.getNum1, 4)
-      nowMarket.getNum2 = toFixed(nowMarket.getNum2, 4)
-      this.nowMarket = nowMarket;
+      let marketDfs = 0;
+      this.liqs.forEach(v => {
+        const market = this.marketLists.find(vv => vv.mid === v.mid);
+        const isDfs = market.contract0 === 'minedfstoken' || market.contract1 === 'minedfstoken';
+        if (!isDfs) {
+          return
+        }
+        const inData = {
+          poolSym0: market.reserve0.split(' ')[0],
+          poolSym1: market.reserve1.split(' ')[0],
+          poolToken: market.liquidity_token,
+          sellToken: v.token
+        }
+        const nowMarket = sellToken(inData);
+        nowMarket.getNum1 = toFixed(nowMarket.getNum1, 4)
+        nowMarket.getNum2 = toFixed(nowMarket.getNum2, 4)
+        if (market.contract0 === 'minedfstoken') {
+          marketDfs = parseFloat(marketDfs) + parseFloat(nowMarket.getNum1)
+        } else {
+          marketDfs = parseFloat(marketDfs) + parseFloat(nowMarket.getNum2)
+        }
+      })
+      this.marketDfs = marketDfs;
     },
     async handleGetBal() {
       const formName = this.scatter.identity.accounts[0].name;
@@ -242,19 +256,18 @@ export default {
     async handleGetDfsMarket() {
       const formName = this.scatter.identity.accounts[0].name;
       const params = {
-        code: this.baseConfig.toAccountSwap,
-        scope: 39,
-        table: 'liquidity',
-        lower_bound: ` ${formName}`,
-        upper_bound: ` ${formName}`,
+        code: 'defislogsone',
+        scope: formName,
+        table: 'liqs2',
         json: true
       }
       const {status, result} = await get_table_rows(params)
       if (!status) {
         return
       }
-      const list = result.rows || [];
-      !list[0] ? this.token = '0' : this.token = `${list[0].token}`;
+      console.log(result)
+      this.liqs = result.rows || [];
+      this.handleGetMarketDfs()
     },
     // 获取挖矿用户数据
     async handleGetAccMiner() {
