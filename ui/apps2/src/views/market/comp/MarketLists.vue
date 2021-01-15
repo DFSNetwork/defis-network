@@ -162,8 +162,9 @@ export default {
         this.loading = false;
         list.forEach((v) => {
           const item = this.marketLists.find(vv => vv.mid == v.mid)
-          const symbol0 = list[0].bal0.split(' ');
-          const symbol1 = list[0].bal1.split(' ');
+          console.log(list)
+          const symbol0 = v.bal0.split(' ');
+          const symbol1 = v.bal1.split(' ');
           const newArr = [
             symbol0[0],
             symbol1[0]
@@ -178,9 +179,10 @@ export default {
           this.lists.push(Object.assign(item, {
             token: v.token,
             capital: newArr,
-            startTime: `${moment(`${list[0].start}.000+0000`).valueOf() / 1000 - 8 * 3600}`
+            startTime: `${moment(`${v.start}.000+0000`).valueOf() / 1000 - 8 * 3600}`
           }))
         })
+        console.log(this.lists)
       })
     },
     handleGetNowMarket(item) {

@@ -4,21 +4,50 @@
     <div class="tools">
       <div class="title">数据与服务</div>
       <div class="lists flexa">
-        <div class="list" @click="handleTo('myMarketList')">
-          <img class="icon big" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/market.svg" alt="">
-          <div>我的做市</div>
-        </div>
         <div class="list" @click="handleTo('history', {mid: 39})">
-          <img class="icon big" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tradeHistory.png" alt="">
+          <img class="icon big" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/swapHis.png" alt="">
           <div>交易记录</div>
         </div>
         <div class="list" @click="handleTo('MarketHis', {mid: 39})">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/marketHistory.png" alt="">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/marketHis.png" alt="">
           <div>做市记录</div>
         </div>
-        <div class="list" @click="handleTo('coinViews', {mid: 39})">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/coinViews.png" alt="">
-          <div>代币观察</div>
+        <div class="list" @click="handleTo('pddexOrder')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/order.png" alt="">
+          <div>我的订单</div>
+        </div>
+        <div class="list" @click="handleTo('myMarketList')">
+          <img class="icon big" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/myMarket.png" alt="">
+          <div>我的做市</div>
+        </div>
+      </div>
+    </div>
+    <div class="tools">
+      <div class="title">投票与治理</div>
+      <div class="lists flexa">
+        <div class="list" @click="handleTo('vote')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png" alt="">
+          <div>DFS投票</div>
+        </div>
+        <div class="list">
+          <van-popover v-model="showGovern" trigger="click" @click.stop="''">
+            <div class="myPopover">
+              <div class="item flexc" @click="handleTo('voteForTag')">{{ $t('sys.coinPool', {coin: 'TAG'}) }}</div>
+              <div class="item flexc" @click="handleTo('sysParams')">{{ $t('sys.vote2') }}</div>
+            </div>
+            <template #reference>
+              <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png" alt="">
+              <div>TAG投票</div>
+            </template>
+          </van-popover>
+        </div>
+        <div class="list" @click="handleToProject('usdxVote')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/usdx.png" alt="">
+          <div>USDX系统</div>
+        </div>
+        <div class="list" @click="handleTo('nodeVote')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
+          <div>EOS节点</div>
         </div>
       </div>
     </div>
@@ -27,54 +56,68 @@
     <div class="tools">
       <div class="title">应用与游戏</div>
       <div class="lists flexa">
-        <div class="list" @click="handleToProject('pddex')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/pddex.png" alt="">
-          <div>PDDEX</div>
+        <div class="list" @click="handleTo('pools')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png" alt="">
+          <div>DFS</div>
         </div>
         <div class="list" @click="handleTo('nodePools')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png" alt="">
           <div>TAG</div>
         </div>
+        <div class="list" @click="handleToProject('usdx')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/usdx.png" alt="">
+          <div>USDX</div>
+        </div>
         <div class="list" @click="handleTo('ptokens')">
           <img class="icon" src="https://ndi.340wan.com/eos/btc.ptokens-pbtc.png" alt="">
           <div>PBTC充提</div>
         </div>
-        <div class="list" @click="handleTo('fundation')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/fundation.png" alt="">
-          <div>乐捐系统</div>
-        </div>
       </div>
       <div class="lists flexa">
+        <div class="list" @click="handleToProject('eosdefi')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
+          <div>EOS DeFis</div>
+        </div>
         <div class="list" @click="handleTo('farms')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/yfcFarm.png" alt="">
           <div>农活大厅</div>
         </div>
-        <div class="list" @click="handleToProject('time')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/xpettimecore-time.png" alt="">
-          <div>TIME</div>
+
+        <div class="list">
+          <van-popover v-model="showDss" placement="top" trigger="click" @click.stop="''">
+            <div class="myPopover">
+              <div class="item flexc" @click="handleTo('dss')">DFS DSS</div>
+              <div class="item flexc" @click="handleToProject('yfcDss')">YFC DSS</div>
+              <div class="item flexc" @click="handleTo('dssForTag')">TAG DSS</div>
+            </div>
+            <template #reference>
+              <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/dss.png" alt="">
+              <div>DSS</div>
+            </template>
+          </van-popover>
         </div>
-        <div class="list" @click="handleToProject('yfc')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/yfctokenmain-yfc.png" alt="">
-          <div>YFC</div>
-        </div>
-        <div class="list" @click="handleToProject('pdd')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/pddtokenmain-pdd.png" alt="">
-          <div>PDD</div>
+        <div class="list" @click="handleTo('total')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/top21.png" alt="">
+          <div>TOP21</div>
         </div>
       </div>
       <div class="lists flexa">
-        <div class="list" @click="handleToProject('dbc')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/dbctokenmain-dbc.png" alt="">
-          <div>白菜</div>
+        <div class="list" @click="handleToProject('totalData')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/total.png" alt="">
+          <div>数据总览</div>
         </div>
-        <div class="list" @click="handleTo('total')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/fundation.png" alt="">
-          <div>TOP21 {{ $t('info.info') }}</div>
+        <div class="list" @click="handleToProject('kline')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/kline.png" alt="">
+          <div>K线数据</div>
         </div>
-        <!-- <div class="list">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/bird.png" alt="">
-          <div>青鸟</div>
-        </div> -->
+        <div class="list" @click="handleTo('coinViews', {mid: 39})">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/coinView.png" alt="">
+          <div>代币观察</div>
+        </div>
+        <div class="list" @click="handleTo('fundation')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/fundation.png" alt="">
+          <div>乐捐系统</div>
+        </div>
       </div>
     </div>
   </div>
@@ -83,7 +126,16 @@
 <script>
 export default {
   name: 'accCenterTools',
+  data() {
+    return {
+      showGovern: false,
+      showDss: false,
+    }
+  },
   methods: {
+    handleClick() {
+      this.showGovern = false;
+    },
     handleTo(name, params) {
       if (this.$route.name === name)  {
         return;
@@ -94,6 +146,18 @@ export default {
       })
     },
     handleToProject(name) {
+      if (name === 'eosdefi') {
+        location.href = 'http://eos-defi.sgxiang.com/'
+        return
+      }
+      if (name === 'usdxVote') {
+        location.href = 'https://usdx.gitee.io/govern/usdc'
+        return
+      }
+      if (name === 'usdx') {
+        location.href = 'https://usdx.gitee.io/'
+        return
+      }
       if (name === 'pddex') {
         location.href = 'https://pddex.gitee.io/'
         return
@@ -135,6 +199,12 @@ export default {
       if (name === 'loop') {
         location.href = 'https://loop.ech.one/index.html'
       }
+      if (name === 'totalData') {
+        location.href = 'http://dfs-info.sgxiang.com'
+      }
+      if (name === 'kline') {
+        location.href = 'https://dfs.defiview.io/kline'
+      }
     }
   }
 }
@@ -171,13 +241,25 @@ export default {
           width: 42px;
           height: 42px;
           margin: auto;
-          margin-bottom: 8px;
+          margin-bottom: 18px;
           display: block;
           &.big{
             width: 44px;
           }
         }
       }
+    }
+  }
+}
+
+.myPopover{
+  font-size: 28px;
+  padding: 8px 26px;
+  .item{
+    height: 80px;
+    border-bottom: 1px solid rgba(220,220,220, .3);
+    &:last-child{
+      border-bottom: 0;
     }
   }
 }
