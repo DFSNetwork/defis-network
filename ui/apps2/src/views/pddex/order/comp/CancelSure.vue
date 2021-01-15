@@ -40,28 +40,46 @@ export default {
       this.$emit('handleClose', false)
     },
     handleCancelOrder() {
-      // if (!this.item.mid) {
-      //   return
-      // }
-      // console.log(this.item)
       const actor = this.account.name;
       const permission = this.account.permissions;
-      const params = {
-        actions: [
-          {
-            account: this.baseConfig.pddex,
-            name: 'cancel',
-            authorization: [{
-              actor, // 转账者
-              permission,
-            }],
-            data: {
-              pid: this.item.pid,
-              oid: this.item.oid,
-            }
-          },
-        ]
+      let params = {}
+      if (!this.item.pid) {
+        // 没有pid - 执行新的撤单action
+        params = {
+          actions: [
+            {
+              account: this.baseConfig.pddex,
+              name: 'cancel2',
+              authorization: [{
+                actor, // 转账者
+                permission,
+              }],
+              data: {
+                pid: this.item.mid,
+                oid: this.item.oid,
+              }
+            },
+          ]
+        }
+      } else {
+        params = {
+          actions: [
+            {
+              account: this.baseConfig.pddex,
+              name: 'cancel',
+              authorization: [{
+                actor, // 转账者
+                permission,
+              }],
+              data: {
+                pid: this.item.pid,
+                oid: this.item.oid,
+              }
+            },
+          ]
+        }
       }
+      console.log(params)
       DApp.toTransaction(params, (err) => {
         if (err && err.code === 402) {
           return;

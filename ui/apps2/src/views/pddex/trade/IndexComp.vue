@@ -140,7 +140,7 @@ export default {
       showSet: false,
       showCancel: false,
       market: {
-        mid: 17,
+        // mid: 17,
         symbol0: 'EOS',
         contract0: 'eosio.token',
         symbol1: 'USDT',
@@ -400,8 +400,7 @@ export default {
     },
     // 查询交易对订单
     async handleGetOrderList(length) {
-      // console.log(this.market.pid, this.account.name)
-      if (!this.market.pid) {
+      if (!this.market.mid) {
         return;
       }
       if (!this.account.name) {
@@ -410,8 +409,8 @@ export default {
       this.getOrder = true;
       const params = {
         code: this.baseConfig.pddex,
-        scope: this.market.pid,
-        table: 'orders',
+        scope: this.market.mid,
+        table: 'orders2',
         json: true,
         limit: 1000,
         index_position: 3,
@@ -425,6 +424,7 @@ export default {
       }
       const lists = result.rows || [];
       lists.forEach(v => {
+        v.mid = this.market.mid;
         const arr = v.quantity.split(' ');
         if (arr[1] === this.market.symbol0) {
           this.$set(v, 'isBuy', true)

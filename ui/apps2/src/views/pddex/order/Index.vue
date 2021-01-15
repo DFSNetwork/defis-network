@@ -36,7 +36,7 @@
                   <span class="tip dateTime"> ({{ item.oDate }})</span>
                 </div>
                 <div>
-                  <van-button v-if="value2 === 'a'" plain type="danger" @click="handleCancel(item, index)">{{ $t('pddex.cancleOrder') }}</van-button>
+                  <van-button v-if="value2 === 'a'" plain type="danger" @click="handleCancel(item, index)">{{ $t('pddex.cancelOrder') }}</van-button>
                   <span class="source flexa" v-else>
                     <span>Dex: </span>
                     <img class="dex" v-if="item.dex === 'defisswapcnt'" src="https://ndi.340wan.com/eos/minedfstoken-dfs.png" alt="">
@@ -130,7 +130,7 @@ export default {
         if (!newVal.length || (oldVal && newVal.length === oldVal.length)) {
           return
         }
-        this.handlerGetMarketLists()
+        // this.handlerGetMarketLists()
       },
       deep: true,
       immediate: true,
@@ -187,7 +187,7 @@ export default {
       this.option1 = opts;
     },
     // 获取进行中订单
-    handleGetOrders() {
+    async handleGetOrders() {
       if (!this.account.name || !this.marketLists.length) {
         setTimeout(() => {
           this.handleGetOrders()
@@ -198,60 +198,51 @@ export default {
       this.finished = true;
       this.allList = [];
       this.list = [];
-      this.marketLists.forEach(async (market) => {
-        if (!market.pid) {
+
+      const {status, result} = await this.$api.get_all_orders();
+      if (!status) {
+        return
+      }
+      // console.log(result)
+      const newArr = []
+      let lists = result.filter(v => v.owner === this.account.name)
+      // lists = result
+      lists.forEach(v => {
+        const arr = v.quantity.split(' ');
+        if (v.pid === 7) {
           return
         }
-        if (this.value1 !== 0 && market.mid !== this.value1) {
+        const market = this.marketLists.find(vv => vv.mid === v.mid || (vv.pid && vv.pid === v.pid)) 
+        if (!market) {
           return
         }
-        const params = {
-          code: this.baseConfig.pddex,
-          scope: market.pid,
-          table: 'orders',
-          json: true,
-          limit: 1000,
-          index_position: 3,
-          key_type: "i64",
-          lower_bound: ` ${this.account.name}`,
-          upper_bound: ` ${this.account.name}`,
+        if (arr[1] === market.symbol0) {
+          this.$set(v, 'isBuy', true)
+          const amt = arr[0]
+          this.$set(v, 'amt', amt)
+          const oDate = toLocalTime(`${v.time}.000+0000`)
+          this.$set(v, 'oDate', oDate.substr(5, 18))
+          const orderNum = v.min_out / 10 ** market.decimal1;
+          this.$set(v, 'orderNum', toFixed(orderNum, market.decimal1))
+          const orderPrice = dealPrice( v.price / 1000000);
+          this.$set(v, 'orderPrice', orderPrice)
+        } else {
+          this.$set(v, 'isBuy', false)
+          const orderNum = arr[0]
+          this.$set(v, 'orderNum', orderNum)
+          const orderPrice = dealPrice( v.price / 1000000);
+          this.$set(v, 'orderPrice', orderPrice)
+          const oDate = toLocalTime(`${v.time}.000+0000`)
+          this.$set(v, 'oDate', oDate)
+          const amt = v.min_out / 10 ** market.decimal0
+          this.$set(v, 'amt', toFixed(amt, market.decimal0))
         }
-        const {status, result} = await this.$api.get_table_rows(params);
-        if (!status) {
-          return
-        }
-        const lists = result.rows || [];
-        lists.forEach(v => {
-          const arr = v.quantity.split(' ');
-          if (arr[1] === market.symbol0) {
-            this.$set(v, 'isBuy', true)
-            const amt = arr[0]
-            this.$set(v, 'amt', amt)
-            const oDate = toLocalTime(`${v.time}.000+0000`)
-            this.$set(v, 'oDate', oDate.substr(5, 18))
-            const orderNum = v.min_out / 10 ** market.decimal1;
-            this.$set(v, 'orderNum', toFixed(orderNum, market.decimal1))
-            const orderPrice = dealPrice( v.price / 1000000);
-            this.$set(v, 'orderPrice', orderPrice)
-          } else {
-            this.$set(v, 'isBuy', false)
-            const orderNum = arr[0]
-            this.$set(v, 'orderNum', orderNum)
-            const orderPrice = dealPrice( v.price / 1000000);
-            this.$set(v, 'orderPrice', orderPrice)
-            const oDate = toLocalTime(`${v.time}.000+0000`)
-            this.$set(v, 'oDate', oDate)
-            const amt = v.min_out / 10 ** market.decimal0
-            this.$set(v, 'amt', toFixed(amt, market.decimal0))
-          }
-          this.$set(v, 'symbol0', market.symbol0)
-          this.$set(v, 'symbol1', market.symbol1)
-        });
-        // console.log(lists)
-        this.allList.push(...lists)
-        this.list.push(...lists)
+        this.$set(v, 'symbol0', market.symbol0)
+        this.$set(v, 'symbol1', market.symbol1)
+        newArr.push(v)
       });
-      // console.log(this.list)
+      this.allList = newArr;
+      this.list = newArr;
     },
     // 获取已完成订单
     async handleGetSuccessOrders() {
@@ -275,6 +266,7 @@ export default {
         return
       }
       const lists = result.data || [];
+      let newArr = []
       lists.forEach(v => {
         const market = this.marketLists.find(vv => {
           if (v.dex === 'defisswapcnt') {
@@ -314,9 +306,10 @@ export default {
         t += 3600 * 8 * 1000;
         const oDate = toLocalTime(t)
         this.$set(v, 'oDate', oDate)
+        newArr.push(v)
       });
-      this.allList.push(...lists)
-      this.list.push(...lists)
+      this.allList.push(...newArr)
+      this.list.push(...newArr)
 
       // 数据全部加载完成
       if (lists.length < this.pageSize) {

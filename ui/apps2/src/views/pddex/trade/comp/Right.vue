@@ -161,7 +161,7 @@ export default {
   margin-left: 15px;
   margin-top: 10px;
   box-sizing: border-box;
-  font-size: 24px;
+  font-size: 22px;
   // .tools{
   //   padding: 0 15px;
   // }
@@ -175,11 +175,11 @@ export default {
   .buyOrder,
   .sellOrder{
     padding: 0 15px 0 0;
-    height: 240px;
+    height: 270px;
     overflow: auto;
     .list{
       position: relative;
-      height: 40px;
+      height: 45px;
       .bgLeng{
         position: absolute;
         width: 60%;

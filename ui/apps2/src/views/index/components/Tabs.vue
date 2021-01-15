@@ -5,7 +5,7 @@
     'market': act === 2,
   }">
     <span class="" :class="{'tabAct': act === 1}" @click="handleChangeAct(1)">
-      <span class="tabName flexc">{{ $t('tab.dex') }}</span>
+      <span class="tabName flexc">{{ $t('tabbar.swap') }}</span>
     </span>
     <span class="" :class="{'tabAct': act === 3}" @click="handleChangeAct(3)">
       <span class="tabName flexc">{{ $t('pddex.pOrder') }}</span>

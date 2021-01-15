@@ -51,3 +51,23 @@ export function get_acc_follow() {
     })
   })
 }
+
+// 获取全部订单列表
+export function get_all_orders() {
+  return new Promise((resolve, reject) => {
+    // const name = store.state.app.scatter.identity.accounts[0].name;
+    const params = {
+      // "code":"dfsusersinfo",
+      // "scope": ` ${name}`,
+      // "table":"likes",
+      // "json":true,
+      // "limit":1000
+    }
+    axios.get('https://api.defis.network/pddex2/orders', JSON.stringify(params)).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
