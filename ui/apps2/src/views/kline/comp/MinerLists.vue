@@ -34,6 +34,7 @@
 <script>
 import { dealRewardV3 } from '@/utils/logic';
 import { dealMinerData } from '@/utils/public';
+import { sellToken } from '@/utils/logic';
 
 export default {
   props: {
@@ -80,7 +81,7 @@ export default {
       const params = {
         "code": "miningpool11",
         "scope": this.checkedMarket.mid,
-        "table": "miners",
+        "table": "miners2",
         limit: 3000,
         "json": true,
       }
@@ -90,19 +91,19 @@ export default {
       }
       const rows = result.rows || [];
       let newArr = []
+      const item = this.checkedMarket
       rows.forEach(v => {
-        const liq0Arr = v.liq_bal0.split(' ');
-        const liq1Arr = v.liq_bal1.split(' ');
-        let symbol0 = liq0Arr[1];
-        let symbol1 = liq1Arr[1];
-        let liq0 = liq0Arr[0];
-        let liq1 = liq1Arr[0];
-        if (liq0Arr[1] !== this.checkedMarket.symbol0) {
-          symbol0 = liq1Arr[1];
-          symbol1 = liq0Arr[1];
-          liq0 = liq1Arr[0];
-          liq1 = liq0Arr[0];
+        const inData = {
+          poolSym0: item.reserve0.split(' ')[0],
+          poolSym1: item.reserve1.split(' ')[0],
+          poolToken: item.liquidity_token,
+          sellToken: `${v.token}`
         }
+        const nowMarket = sellToken(inData);
+        let liq0 = parseFloat(nowMarket.getNum1).toFixed(item.decimal0);
+        let liq1 = parseFloat(nowMarket.getNum2).toFixed(item.decimal1);
+        let symbol0 = item.symbol0;
+        let symbol1 = item.symbol1;
         v.symbol0 = symbol0;
         v.symbol1 = symbol1;
         v.liq0 = liq0;

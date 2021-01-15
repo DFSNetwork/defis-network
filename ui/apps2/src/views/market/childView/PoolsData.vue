@@ -82,6 +82,7 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
+import { sellToken } from '@/utils/logic';
 // import moment from 'moment';
 import { toFixed, accSub, accAdd, accDiv, dealMinerData } from '@/utils/public';
 import MinReward from '../popup/MinReward'
@@ -222,23 +223,29 @@ export default {
         const params = {
           code: 'miningpool11',
           scope: v.mid,
-          table: 'miners',
+          table: 'miners2',
           lower_bound: ` ${formName}`,
           upper_bound: ` ${formName}`,
           json: true,
         }
         EosModel.getTableRows(params, (res) => {
+          // console.log(res)
           const rows = res.rows || []
           if (!rows.length) {
             this.$set(v, 'minnerData', {})
             return
           }
-          // const minnerData = rows[0];
-          // let lastTime = toLocalTime(`${minnerData.last_drip}.000+0000`);
-          // lastTime = moment(lastTime).valueOf();
-          // minnerData.lastTime = lastTime;
-          // const liq = minnerData.liq_bal0.split(' ')[1] === 'EOS' ? minnerData.liq_bal0.split(' ')[0] : minnerData.liq_bal1.split(' ')[0];
-          // minnerData.liq = liq;
+          const item = this.marketLists.find(vv => vv.mid === v.mid)
+          const inData = {
+            poolSym0: item.reserve0.split(' ')[0],
+            poolSym1: item.reserve1.split(' ')[0],
+            poolToken: item.liquidity_token,
+            sellToken: `${rows[0].token}`
+          }
+          const nowMarket = sellToken(inData);
+          // console.log(nowMarket)
+          rows[0].liq_bal0 = `${parseFloat(nowMarket.getNum1).toFixed(item.decimal0)} ${item.symbol0}`
+          rows[0].liq_bal1 = `${parseFloat(nowMarket.getNum2).toFixed(item.decimal1)} ${item.symbol1}`
 
           const minnerData = dealMinerData(rows[0], v)
 

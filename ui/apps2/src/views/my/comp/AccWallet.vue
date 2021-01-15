@@ -111,6 +111,7 @@ export default {
     marketLists: {
       handler: function acc() {
         this.handleGetMarketDfs();
+        this.handleGetAccMiner()
       },
       deep: true,
       immediate: true
@@ -257,11 +258,14 @@ export default {
     },
     // 获取挖矿用户数据
     async handleGetAccMiner() {
+      if (!this.marketLists.length || !this.scatter || !this.scatter.identity) {
+        return
+      }
       const formName = this.scatter.identity.accounts[0].name;
       const params = {
         code: 'miningpool11',
         scope: 39,
-        table: 'miners',
+        table: 'miners2',
         lower_bound: ` ${formName}`,
         upper_bound: ` ${formName}`,
         json: true,
@@ -274,6 +278,16 @@ export default {
       if (!rows.length) {
         return
       }
+      const item = this.marketLists.find(v => v.mid === 39)
+      const inData = {
+        poolSym0: item.reserve0.split(' ')[0],
+        poolSym1: item.reserve1.split(' ')[0],
+        poolToken: item.liquidity_token,
+        sellToken: `${rows[0].token}`
+      }
+      const nowMarket = sellToken(inData);
+      rows[0].liq_bal0 = `${parseFloat(nowMarket.getNum1).toFixed(item.decimal0)} ${item.symbol0}`
+      rows[0].liq_bal1 = `${parseFloat(nowMarket.getNum2).toFixed(item.decimal1)} ${item.symbol1}`
       const minerInfo = dealMinerData(rows[0])
       rows[0].minerData = JSON.parse(JSON.stringify(minerInfo));
       this.minerInfo = rows[0];

@@ -531,7 +531,7 @@ export default {
         })
         try {
           this.allMinersList = newListSort;
-          console.log(newListSort)
+          // console.log(newListSort)
           this.handleGetPageArr();
         } catch (error) {
           console.log(error)
