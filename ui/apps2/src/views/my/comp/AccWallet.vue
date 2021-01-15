@@ -265,7 +265,7 @@ export default {
       if (!status) {
         return
       }
-      console.log(result)
+      // console.log(result)
       this.liqs = result.rows || [];
       this.handleGetMarketDfs()
     },
