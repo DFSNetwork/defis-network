@@ -474,7 +474,7 @@ export default {
       const params = {
         "code": "miningpool11",
         "scope": this.$route.params.mid,
-        "table": "miners",
+        "table": "miners2",
         // "lower_bound": " dfsdeveloper",
         // "upper_bound": " dfsdeveloper",
         limit: 3000,
@@ -483,6 +483,12 @@ export default {
       if (type === 'user') {
         params.lower_bound = ` ${this.scatter.identity.accounts[0].name}`;
         params.upper_bound = ` ${this.scatter.identity.accounts[0].name}`;
+      }
+      if (!this.thisMarket.mid) {
+        setTimeout(() => {
+          this.handleGetMinersLists(type)
+        }, 500);
+        return
       }
       EosModel.getTableRows(params, (res) => {
         if (type === 'user') {
@@ -498,25 +504,22 @@ export default {
         const newList = [];
         rows.forEach(item => {
           let v = item;
-          // if (this.thisMarket.exchangeSym) {
-          if (v.liq_bal1.split(' ')[1] === 'EOS' || this.thisMarket.exchangeSym) {
-            const tList = {
-              last_drip: v.last_drip,
-              liq_bal0: v.liq_bal1,
-              liq_bal1: v.liq_bal0,
-              miner: v.miner
-            }
-            v = tList;
+          const inData = {
+            poolSym0: parseFloat(this.thisMarket.reserve0),
+            poolSym1: parseFloat(this.thisMarket.reserve1),
+            poolToken: this.thisMarket.liquidity_token,
+            sellToken: v.token
           }
+          const tokenData = sellToken(inData);
+          v = Object.assign({}, v, {
+            liq_bal0: `${Number(tokenData.getNum1).toFixed(this.thisMarket.decimal0)} ${this.thisMarket.symbol0}`,
+            liq_bal1: `${Number(tokenData.getNum2).toFixed(this.thisMarket.decimal1)} ${this.thisMarket.symbol1}`,
+          })
           const minnerData = dealMinerData(v, this.thisMarket)
-          // console.log(minnerData)
           if (type === 'user') {
             this.accMineData = minnerData;
             return;
           }
-          // if (this.scatter.identity && this.scatter.identity.accounts[0].name === v.miner) {
-          //   return
-          // }
           newList.push(minnerData)
         })
         if (type === 'user') {
@@ -528,6 +531,7 @@ export default {
         })
         try {
           this.allMinersList = newListSort;
+          console.log(newListSort)
           this.handleGetPageArr();
         } catch (error) {
           console.log(error)
