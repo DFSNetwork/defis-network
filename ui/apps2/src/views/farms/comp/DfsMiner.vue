@@ -190,7 +190,7 @@ export default {
         const params = {
           code: 'miningpool11',
           scope: v.mid,
-          table: 'miners',
+          table: 'miners2',
           lower_bound: ` ${formName}`,
           upper_bound: ` ${formName}`,
           json: true,

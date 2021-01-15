@@ -15,7 +15,7 @@
 
 <script>
 import { mapState } from 'vuex';
-import { EosModel } from '@/utils/eos';
+// import { EosModel } from '@/utils/eos';
 
 export default {
   name: 'accInfo',
@@ -62,8 +62,6 @@ export default {
     scatter: {
       handler: function listen(newVal) {
         if (newVal.identity) {
-          // this.handleGetDssNum();
-          // this.handleGetSwapData()
           this.handleGetAccVoteNum()
         }
       },
@@ -99,51 +97,6 @@ export default {
         return
       }
       this.vote_power = parseInt((rows[0].vote_power || 0) / 10000);
-    },
-    handleGetDssNum() {
-      const formName = this.scatter.identity.accounts[0].name;
-      const params = {
-        "code": "dfsdsrsystem",
-        "scope": "dfsdsrsystem",
-        "table": "holders",
-        "lower_bound": ` ${formName}`,
-        "upper_bound": ` ${formName}`,
-        "json": true,
-      }
-      EosModel.getTableRows(params, (res) => {
-        this.dssGet = true;
-        if (!res.rows.length) {
-          this.dssData = {}
-          return
-        }
-        const allList = res.rows;
-        allList.forEach((v) => {
-          let buff = v.pool ? (this.config[v.pool - 1].bonus - 1) * 100 : 0;
-          this.$set(v, 'buff', buff.toFixed(2));
-          this.$set(v, 'balance', v.bal.split(' ')[0]);
-        })
-        this.dssData = allList[0];
-      })
-    },
-    handleGetSwapData() {
-      const formName = this.scatter.identity.accounts[0].name;
-      const params = {
-        "code": "miningpool11",
-        "scope": 39,
-        "table": "miners",
-        "lower_bound": ` ${formName}`,
-        "upper_bound": ` ${formName}`,
-        limit: 2000,
-        "json": true,
-      }
-      EosModel.getTableRows(params, (res) => {
-        this.swapGet = true;
-        const rows = res.rows || [];
-        if (!rows.length) {
-          return
-        }
-        this.swapData = rows[0];
-      })
     },
   }
 }

@@ -162,7 +162,6 @@ export default {
         this.loading = false;
         list.forEach((v) => {
           const item = this.marketLists.find(vv => vv.mid == v.mid)
-          console.log(list)
           const symbol0 = v.bal0.split(' ');
           const symbol1 = v.bal1.split(' ');
           const newArr = [
@@ -182,7 +181,6 @@ export default {
             startTime: `${moment(`${v.start}.000+0000`).valueOf() / 1000 - 8 * 3600}`
           }))
         })
-        console.log(this.lists)
       })
     },
     handleGetNowMarket(item) {

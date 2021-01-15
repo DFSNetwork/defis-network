@@ -66,23 +66,12 @@ export default {
       scatter: state => state.app.scatter,
       marketLists: state => state.sys.marketLists,
     }),
-    // vote_power() {
-    //   if (!this.swapGet || !this.dssGet) {
-    //     return 0
-    //   }
-    //   const buff = this.dssData.pool ? Number(this.config[this.dssData.pool - 1].bonus) : 1;
-    //   const dssCount = Number(this.dssData.balance || 0) * buff;
-    //   const swapCount = parseFloat(this.swapData.liq_bal1 || '0') * 0.5;
-    //   return parseInt(dssCount + swapCount)
-    // }
   },
   watch: {
     scatter: {
       handler: function listen(newVal) {
         if (newVal.identity) {
           this.handleGetMyVotes();
-          // this.handleGetDssNum();
-          // this.handleGetSwapData()
         }
       },
       deep: true,
@@ -117,52 +106,6 @@ export default {
         }
         this.myVoteList = rows[0].last_vote;
         this.vote_power = parseInt(rows[0].vote_power / 10000);
-      })
-    },
-    handleGetDssNum() {
-      const formName = this.scatter.identity.accounts[0].name;
-      const params = {
-        "code": "dfsdsrsystem",
-        "scope": "dfsdsrsystem",
-        "table": "holders",
-        "lower_bound": ` ${formName}`,
-        "upper_bound": ` ${formName}`,
-        "json": true,
-      }
-      EosModel.getTableRows(params, (res) => {
-        this.dssGet = true;
-        if (!res.rows.length) {
-          this.dssData = {}
-          return
-        }
-        const allList = res.rows;
-        allList.forEach((v) => {
-          let buff = v.pool ? (this.config[v.pool - 1].bonus - 1) * 100 : 0;
-          this.$set(v, 'buff', buff.toFixed(2));
-          this.$set(v, 'balance', v.bal.split(' ')[0]);
-        })
-        // console.log(allList)
-        this.dssData = allList[0];
-      })
-    },
-    handleGetSwapData() {
-      const params = {
-        "code": "miningpool11",
-        "scope": 39,
-        "table": "miners",
-        "lower_bound": ` ${this.scatter.identity.accounts[0].name}`,
-        "upper_bound": ` ${this.scatter.identity.accounts[0].name}`,
-        limit: 2000,
-        "json": true,
-      }
-      EosModel.getTableRows(params, (res) => {
-        this.swapGet = true;
-        const rows = res.rows || [];
-        if (!rows.length) {
-          return
-        }
-        this.swapData = rows[0];
-        // console.log(rows)
       })
     },
   }
