@@ -329,7 +329,7 @@ export default {
     allVoteNum:'Total votes',
     voter:'voter',
     voterNum:'Total number of people',
-    maxNum:'Select up to 3',
+    maxNum:'Select up to {n}',
     rankTip: 'The mine pool ranks outside the top 21, with no mining revenue.',
     challenge: 'Vote',
   },

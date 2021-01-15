@@ -27,6 +27,7 @@ export default {
   },
   data() {
     return {
+      vote_power: 0,
       isVoted: true,
       swapGet: false,
       dssGet: false,
@@ -56,22 +57,14 @@ export default {
     ...mapState({
       scatter: state => state.app.scatter,
     }),
-    vote_power() {
-      if (!this.swapGet || !this.dssGet) {
-        return 0
-      }
-      const buff = this.dssData.pool ? Number(this.config[this.dssData.pool - 1].bonus) : 1;
-      const dssCount = Number(this.dssData.balance || 0) * buff;
-      const swapCount = parseFloat(this.swapData.liq_bal1 || '0') * 0.5;
-      return parseInt(dssCount + swapCount)
-    }
   },
   watch: {
     scatter: {
       handler: function listen(newVal) {
         if (newVal.identity) {
-          this.handleGetDssNum();
-          this.handleGetSwapData()
+          // this.handleGetDssNum();
+          // this.handleGetSwapData()
+          this.handleGetAccVoteNum()
         }
       },
       deep: true,
@@ -83,6 +76,29 @@ export default {
       this.$router.push({
         name: 'dss'
       })
+    },
+    async handleGetAccVoteNum() {
+      const name = this.scatter.identity.accounts[0].name;
+      const params = {
+        "code":"dfspoolsvote",
+        "scope": "dfspoolsvote",
+        "table":"voters",
+        "lower_bound": ` ${name}`,
+        "upper_bound": ` ${name}`,
+        "json":true,
+        "limit": 1000,
+      }
+      const {status, result} = await this.$api.get_table_rows(params);
+      this.swapGet = true;
+      if (!status) {
+        return
+      }
+      const rows = result.rows || [];
+      if (!rows.length) {
+        // this.showTip = true;
+        return
+      }
+      this.vote_power = parseInt((rows[0].vote_power || 0) / 10000);
     },
     handleGetDssNum() {
       const formName = this.scatter.identity.accounts[0].name;

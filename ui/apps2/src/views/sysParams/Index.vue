@@ -6,7 +6,7 @@
     <div class="mainTitle flexb">
       <span class="act">{{ $t('vote.vote') }}</span>
     </div>
-    <div class="info flexb" v-loading="!swapGet || !dssGet">
+    <div class="info flexb" v-loading="!dssGet">
       <div>
         <div class="votes flexb">
           <span class="flexa">
@@ -34,6 +34,7 @@ export default {
   },
   data() {
     return {
+      vote_power: 0,
       showRules: false,
       // 处理票数
       dssData: {}, // dss数据
@@ -65,23 +66,23 @@ export default {
       scatter: state => state.app.scatter,
       marketLists: state => state.sys.marketLists,
     }),
-    vote_power() {
-      if (!this.swapGet || !this.dssGet) {
-        return 0
-      }
-      const buff = this.dssData.pool ? Number(this.config[this.dssData.pool - 1].bonus) : 1;
-      const dssCount = Number(this.dssData.balance || 0) * buff;
-      const swapCount = parseFloat(this.swapData.liq_bal1 || '0') * 0.5;
-      return parseInt(dssCount + swapCount)
-    }
+    // vote_power() {
+    //   if (!this.swapGet || !this.dssGet) {
+    //     return 0
+    //   }
+    //   const buff = this.dssData.pool ? Number(this.config[this.dssData.pool - 1].bonus) : 1;
+    //   const dssCount = Number(this.dssData.balance || 0) * buff;
+    //   const swapCount = parseFloat(this.swapData.liq_bal1 || '0') * 0.5;
+    //   return parseInt(dssCount + swapCount)
+    // }
   },
   watch: {
     scatter: {
       handler: function listen(newVal) {
         if (newVal.identity) {
           this.handleGetMyVotes();
-          this.handleGetDssNum();
-          this.handleGetSwapData()
+          // this.handleGetDssNum();
+          // this.handleGetSwapData()
         }
       },
       deep: true,
@@ -108,14 +109,14 @@ export default {
         limit: 10000
       }
       EosModel.getTableRows(params, (res) => {
-        this.hisLoading = false;
+        this.dssGet = true;
         // console.log('get')
         const rows = res.rows || [];
         if (!rows.length) {
           return
         }
         this.myVoteList = rows[0].last_vote;
-        // this.vote_power = parseInt(rows[0].vote_power / 10000);
+        this.vote_power = parseInt(rows[0].vote_power / 10000);
       })
     },
     handleGetDssNum() {

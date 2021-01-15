@@ -330,7 +330,7 @@ export default {
     allVoteNum: '总票数',
     voter: '投票人',
     voterNum: '总人数',
-    maxNum: '最多选择3个',
+    maxNum: '最多选择{n}个',
     rankTip: '该矿池排名在TOP21之外，暂无挖矿收益。',
     challenge: '投票挑战',
   },

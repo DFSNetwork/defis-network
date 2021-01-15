@@ -11,12 +11,12 @@
         <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
       </span>
     </div>
-    <div class="info " v-loading="!swapGet || !dssGet">
+    <div class="info " v-loading="!swapGet">
       <div class="subTitle">{{ $t('nodePools.tagVoteRules') }}</div>
       <div class="flexb">
         <div class="votes flexb">
           <span class="flexa">
-            <span>{{ $t('vote.myVote') }}：<span class="dinBold">{{ vote_power }}</span></span>
+            <span>{{ $t('vote.myVote') }}：<span class="dinBold">{{ accNum }}</span></span>
           </span>
         </div>
         <div>
@@ -79,7 +79,7 @@
     <div v-if="act === 1">
       <div class="nullDiv"></div>
       <div class="voteAction flexb">
-        <span>{{ $t('vote.checked') }} {{ checkedLeng }}/3</span>
+        <span>{{ $t('vote.checked') }} {{ checkedLeng }}/{{ maxLen }}</span>
         <span>
           <span v-if="checkedLeng" class="tip" @click="handleCancel">{{ $t('vote.cancelChecked') }}</span>
           <span class="voteBtn" v-loading="voteLoading" @click="handleTovote">{{ $t('vote.toVote') }}</span>
@@ -125,6 +125,8 @@ export default {
       allList: [],
       rankList: [],
       myVoteList: [],
+      maxLen: 7,
+      accNum: 0,
 
       // 处理票数
       dssData: {}, // dss数据
@@ -196,8 +198,6 @@ export default {
       handler: function listen(newVal) {
         if (newVal.identity) {
           this.handleGetMyVotes();
-          this.handleGetDssNum();
-          this.handleGetSwapData()
         }
       },
       deep: true,
@@ -388,59 +388,13 @@ export default {
       }
       EosModel.getTableRows(params, (res) => {
         this.hisLoading = false;
-        // console.log('get', res)
-        const rows = res.rows || [];
-        if (!rows.length) {
-          return
-        }
-        this.myVoteList = rows[0].last_vote;
-        // this.vote_power = parseInt(rows[0].vote_power / 10000);
-      })
-    },
-    handleGetDssNum() {
-      const formName = this.scatter.identity.accounts[0].name;
-      const params = {
-        "code": "dfsdsrsystem",
-        "scope": "dfsdsrsystem",
-        "table": "holders",
-        "lower_bound": ` ${formName}`,
-        "upper_bound": ` ${formName}`,
-        "json": true,
-      }
-      EosModel.getTableRows(params, (res) => {
-        this.dssGet = true;
-        if (!res.rows.length) {
-          this.dssData = {}
-          return
-        }
-        const allList = res.rows;
-        allList.forEach((v) => {
-          let buff = v.pool ? (this.config[v.pool - 1].bonus - 1) * 100 : 0;
-          this.$set(v, 'buff', buff.toFixed(2));
-          this.$set(v, 'balance', v.bal.split(' ')[0]);
-        })
-        // console.log(allList)
-        this.dssData = allList[0];
-      })
-    },
-    handleGetSwapData() {
-      const params = {
-        "code": "miningpool11",
-        "scope": 39,
-        "table": "miners",
-        "lower_bound": ` ${this.scatter.identity.accounts[0].name}`,
-        "upper_bound": ` ${this.scatter.identity.accounts[0].name}`,
-        limit: 2000,
-        "json": true,
-      }
-      EosModel.getTableRows(params, (res) => {
         this.swapGet = true;
         const rows = res.rows || [];
         if (!rows.length) {
           return
         }
-        this.swapData = rows[0];
-        // console.log(rows)
+        this.myVoteList = rows[0].last_vote;
+        this.accNum = parseInt((rows[0].vote_power || 0) / 10000);
       })
     },
     handleDealMyVote() {
@@ -465,8 +419,8 @@ export default {
     },
     handleChecked(item) {
       const checkedArr = this.allList.filter(v => v.isChecked);
-      if (checkedArr.length >= 3 && !item.isChecked) {
-        this.$message.error(this.$t('vote.maxNum'))
+      if (checkedArr.length >= this.maxLen && !item.isChecked) {
+        this.$message.error(this.$t('vote.maxNum', {n: this.maxLen}))
         return
       }
       const mlIndex = this.allList.findIndex(v => v.mid === item.mid)
