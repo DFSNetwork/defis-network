@@ -153,63 +153,34 @@ export default {
       const params = {
         "code":"defislogsone",
         "scope": this.scatter.identity.accounts[0].name,
-        "table":"liqs",
+        "table":"liqs2",
         "json":true,
         limit: 1000,
       }
       EosModel.getTableRows(params, (res) => {
-        // console.log(res)
         const list = res.rows || [];
         this.loading = false;
-        list.forEach((v, index) => {
+        list.forEach((v) => {
           const item = this.marketLists.find(vv => vv.mid == v.mid)
-          const next = parseInt(index / 10)
-          // console.log(item.symbol0,item.symbol1)
-          setTimeout(() => {
-            this.handleGetMarketDataByChain(item, v.token)
-          }, next * 1000);
-        })
-      })
-    },
-    handleGetMarketDataByChain(v, token) {
-      const params = {
-        "code": "defislogsone",
-        "json": true,
-        "scope": v.mid,
-        "table": "records",
-        "lower_bound": ` ${this.scatter.identity.accounts[0].name}`,
-        "upper_bound": ` ${this.scatter.identity.accounts[0].name}`,
-      }
-      EosModel.getTableRows(params, (res) => {
-        // console.log(res)
-        const list = res.rows || [];
-        this.sTime = '0'
-        this.marketData = [];
-        if (!list.length) {
-          this.lists.push(Object.assign(v, {
-            token,
-            capital: [],
+          const symbol0 = list[0].bal0.split(' ');
+          const symbol1 = list[0].bal1.split(' ');
+          const newArr = [
+            symbol0[0],
+            symbol1[0]
+          ]
+          if (symbol0[1] === item.symbol0) {
+            newArr[0] = symbol0[0];
+            newArr[1] = symbol1[0];
+          } else if (symbol1[1] === item.symbol0) {
+            newArr[0] = symbol1[0];
+            newArr[1] = symbol0[0];
+          }
+          this.lists.push(Object.assign(item, {
+            token: v.token,
+            capital: newArr,
+            startTime: `${moment(`${list[0].start}.000+0000`).valueOf() / 1000 - 8 * 3600}`
           }))
-          return
-        }
-        const symbol0 = list[0].bal0.split(' ');
-        const symbol1 = list[0].bal1.split(' ');
-        const newArr = [
-          symbol0[0],
-          symbol1[0]
-        ]
-        if (symbol0[1] === v.symbol0) {
-          newArr[0] = symbol0[0];
-          newArr[1] = symbol1[0];
-        } else if (symbol1[1] === v.symbol0) {
-          newArr[0] = symbol1[0];
-          newArr[1] = symbol0[0];
-        }
-        this.lists.push(Object.assign(v, {
-          token,
-          capital: newArr,
-          startTime: `${moment(`${list[0].start}.000+0000`).valueOf() / 1000 - 8 * 3600}`
-        }))
+        })
       })
     },
     handleGetNowMarket(item) {

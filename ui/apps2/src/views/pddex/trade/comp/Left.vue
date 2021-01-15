@@ -3,16 +3,22 @@
     <!-- 买入/卖出 -->
     <div class="direction flexb">
       <div class="flexc" :class="{'buy': direction === 'buy'}"
-        @click="handleChangeDirection('buy')">买入</div>
+        @click="handleChangeDirection('buy')">{{ $t('pddex.buyIn') }}</div>
       <div class="flexc" :class="{'sell': direction === 'sell'}"
-        @click="handleChangeDirection('sell')">卖出</div>
+        @click="handleChangeDirection('sell')">{{ $t('pddex.sellOut') }}</div>
     </div>
-    <!-- 限价/市价 -->
-    <div class="type">
-      <van-dropdown-menu active-color="#29D4B0">
-        <van-dropdown-item v-model="type" :options="option1" />
-      </van-dropdown-menu>
-    </div>
+    <van-popover v-model="showPop" trigger="click">
+      <div class="myPopover">
+        <div class="item flexc" v-for="(v, i) in option1" :key="i"
+          @click="handleCheck(v.value)">{{ v.text }}</div>
+      </div>
+      <template #reference>
+        <div class="typeDiv flexb">
+          <span>{{ option1[type].text }}</span>
+          <van-icon name="arrow-down"/>
+        </div>
+      </template>
+    </van-popover>
     <MarketTrade v-if="type === 1"
       :type="type" :direction="direction" :market="market"
       :bal0="bal0" :bal1="bal1"/>
@@ -45,11 +51,12 @@ export default {
   },
   data() {
     return {
+      showPop: false,
       direction: 'buy',
-      type: 1, // 0 - 限价 ｜ 1 - 市价
+      type: 0, // 0 - 限价 ｜ 1 - 市价
       option1: [
-        { text: '限价挂单', value: 0 },
-        { text: '市价交易', value: 1 },
+        { text: this.$t('pddex.limit'), value: 0 },
+        { text: this.$t('pddex.market'), value: 1 },
       ],
       price: '',
       getPrice: false,
@@ -115,6 +122,10 @@ export default {
     clearTimeout(this.sliderTimer)
   },
   methods: {
+    handleCheck(type) {
+      this.type = type;
+      this.showPop = false;
+    },
     handleUpdate() {
       this.$emit('listenUpdate', true)
     },
@@ -255,28 +266,24 @@ export default {
 
 <style lang="scss" scoped>
 .tradeLeft{
-  width: 50%;
-  max-width: 50%;
+  width: 60%;
+  max-width: 60%;
   color: #000;
-  margin-top: 20px;
-  padding: 0 15px;
+  padding: 0 10px 0 0;
+  margin-top: 10px;
+  /deep/ .van-popover__wrapper{
+    display: block;
+  }
   .direction{
     // box-shadow: 0px 20px 50px 0px rgba(100,101,102,0.08);
     border: 1px solid rgba(220,220,220,.3);
+    border-radius: 40px;
+    margin-bottom: 20px;
     &>div{
       flex: 1;
-      // border: 1px solid #e3e3e3;
-      height: 80px;
+      height: 70px;
       font-size: 30px;
-      border-radius: 8px;
-      &:first-child{
-        border-top-right-radius: 0px;
-        border-bottom-right-radius: 0px;
-      }
-      &:last-child{
-        border-top-left-radius: 0px;
-        border-bottom-left-radius: 0px;
-      }
+      border-radius: 40px;
       &.buy{
         color: #FFF;
         background: #29D4B0;;
@@ -287,22 +294,29 @@ export default {
       }
     }
   }
-  .type{
+  .typeDiv{
     position: relative;
     z-index: 11;
     margin: 24px 0;
-    /deep/ .van-dropdown-menu__bar{
-      font-size: 28px;
-      height: 70px;
-      box-shadow: none;
-      border-radius: 8px;
-      border: 1px solid rgba(220,220,220,.3);
-      .van-dropdown-menu__item{
-        justify-content: flex-start;
-        .van-dropdown-menu__title{
-          width: 90%;
-        }
-      }
+    font-size: 28px;
+    height: 65px;
+    box-shadow: none;
+    border-radius: 35px;
+    border: 1px solid rgba(220,220,220,.3);
+    padding: 0 30px;
+  }
+}
+
+.myPopover{
+  font-size: 28px;
+  padding: 8px 26px;
+  box-sizing: border-box;
+  width: 360px;
+  .item{
+    height: 70px;
+    border-bottom: 1px solid rgba(220,220,220, .3);
+    &:last-child{
+      border-bottom: 0;
     }
   }
 }

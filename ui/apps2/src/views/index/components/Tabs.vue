@@ -1,7 +1,14 @@
 <template>
-  <div class="tabs tip flexb">
+  <div class="tabs tip flexb" :class="{
+    'swap': act === 1,
+    'pddex': act === 3,
+    'market': act === 2,
+  }">
     <span class="" :class="{'tabAct': act === 1}" @click="handleChangeAct(1)">
-      <span class="tabName flexc">{{ $t('tab.dex') }}</span>
+      <span class="tabName flexc">{{ $t('tabbar.swap') }}</span>
+    </span>
+    <span class="" :class="{'tabAct': act === 3}" @click="handleChangeAct(3)">
+      <span class="tabName flexc">{{ $t('pddex.pOrder') }}</span>
     </span>
     <span class="" :class="{'tabAct': act === 2}" @click="handleChangeAct(2)">
       <span class="tabName flexc">{{ $t('tab.pools') }}</span>
@@ -10,12 +17,18 @@
 </template>
 
 <script>
+import { mapState } from 'vuex';
 export default {
   name: 'tabs',
   data() {
     return {
       act: 1,
     }
+  },
+  computed: {
+    ...mapState({
+      marketLists: state => state.sys.marketLists,
+    }),
   },
   mounted() {
     const routeName = this.$route.name || 'index';
@@ -42,7 +55,28 @@ export default {
           const MidsLength = localData.thisMidsPath.split('-').length;
           MidsLength === 1 ? mid = localData.thisMidsPath : null;
         }
-        this.$router.push({name: 'market', params: {mid}})
+        const name = 'market'
+        this.$router.push({name, params: {mid}})
+      } else if (this.act === 3) {
+        // usdxusdxusdx-USDC-tethertether-USDT
+        let symbol = 'eosio.token-EOS-tethertether-USDT'
+        const localData = localStorage.getItem('swapMarkets') ? JSON.parse(localStorage.getItem('swapMarkets')) : null;
+        let mid = 17;
+        if (localData) {
+          const MidsLength = localData.thisMidsPath.split('-').length;
+          MidsLength === 1 ? mid = localData.thisMidsPath : null;
+        }
+        const market = this.marketLists.find(v => v.mid == mid)
+        if (market) {
+          symbol = `${market.contract1}-${market.symbol1}-${market.contract0}-${market.symbol0}`
+        }
+        const name = 'pddexTrade'
+        this.$router.push({
+          name,
+          params: {
+            symbol,
+          }
+        })
       } else {
         this.$router.push({name: 'bank'})
       }
@@ -54,22 +88,38 @@ export default {
 <style lang="scss" scoped>
 .tabs{
   font-size: 33px;
-  height: 110px;
+  // width: 690px;
+  height: 106px;
+  &.swap{
+    background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material2/icon/swap.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+  }
+  &.pddex{
+    background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material2/icon/pddex.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+  }
+  &.market{
+    background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material2/icon/market.png');
+    background-size: 100%;
+    background-repeat: no-repeat;
+  }
   &>span{
     flex: 1;
     height: 100%;
     text-align: center;
     color: #333333;
-    &:first-child{
-      background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material/svg/swap_tab_un.svg');
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
-    &:last-child{
-      background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material/svg/market_un.svg');
-      background-size: cover;
-      background-repeat: no-repeat;
-    }
+    // &:first-child{
+    //   background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material2/icon/swap.png');
+    //   background-size: cover;
+    //   background-repeat: no-repeat;
+    // }
+    // &:last-child{
+    //   background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material/svg/market_un.svg');
+    //   background-size: cover;
+    //   background-repeat: no-repeat;
+    // }
     .tabName{
       height: 96px;
     }
@@ -83,7 +133,7 @@ export default {
       content: '';
       background-image: url('https://cdn.jsdelivr.net/gh/defis-net/material/svg/checked.svg');
       background-repeat: no-repeat;
-      background-size: cover;
+      background-size: 100%;
       position: absolute;
       width:68px;
       height:12px;

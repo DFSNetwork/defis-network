@@ -1,11 +1,11 @@
 <template>
   <div class="limitTrade">
-    <div class="stop flexc" v-if="!market.pid">
+    <!-- <div class="stop flexc" v-if="!market.pid">
       <div>
-        <div>抱歉！</div>
-        <div>交易对暂未开放限价模式</div>
+        <div>{{ $t('pddex.unOpenTip1') }}</div>
+        <div>{{ $t('pddex.unOpenTip2') }}</div>
       </div>
-    </div>
+    </div> -->
     <!-- 挂单价格 -->
     <div class="price dinReg">
       <van-stepper type="number" v-model="price" min='0' step="0.0001" @blur="priceIptBlur"/>
@@ -14,7 +14,7 @@
     <div class="num dinBold">
       <van-cell-group>
         <van-field class="numIpt" type="number" v-model="num" 
-          placeholder="请输入交易数量" 
+          :placeholder="$t('pddex.iptNumTip')" 
           @blur="numIptBlur"
           @focus="numIptFocus"
           @input="handleDealNum">
@@ -26,7 +26,7 @@
     </div>
     <!-- 可用EOS -->
     <div class="flexb bal dinReg">
-      <span class="tip">余额:</span>
+      <span class="tip">{{ $t('public.balance') }}:</span>
       <span v-if="direction !== 'sell'">{{ bal0 }} {{ market.symbol0 }}</span>
       <span v-else>{{ bal1 }} {{ market.symbol1 }}</span>
     </div>
@@ -42,13 +42,13 @@
       <span @click="handleChange(100)">100%</span>
     </div>
     <div class="flexa aboutNum dinReg">
-      <span class="tip">交易额：</span>
+      <span class="tip">{{ $t('pddex.tradeAmt') }}：</span>
       <span>≈ {{ aboutNum }} EOS</span>
     </div>
     <!-- 交易按钮 -->
     <div class="btnDiv" @click="handleRegPrice">
-      <van-button class="btn" v-if="direction === 'buy'" type="primary">买入{{ market.symbol1 }}</van-button>
-      <van-button class="btn" v-else type="danger">卖出{{ market.symbol1 }}</van-button>
+      <van-button class="btn" v-if="direction === 'buy'" type="primary">{{ $t('pddex.buyIn') }}{{ market.symbol1 }}</van-button>
+      <van-button class="btn" v-else type="danger">{{ $t('pddex.sellOut') }}{{ market.symbol1 }}</van-button>
     </div>
 
     <van-popup v-model="showBig" class="popup">
@@ -70,7 +70,9 @@ import Bus from '@/utils/bus';
 import { mapState } from 'vuex';
 import { DApp } from '@/utils/wallet';
 import { toFixed, dealPrice, accMul } from '@/utils/public';
-import { SwapRouter } from '@/utils/logic';
+// import { SwapRouter } from '@/utils/logic';
+import { SwapRouter } from '@/utils/swap_router';
+
 import BigTrade from "../popup/BigTrade";
 import PriceMore from "../popup/PriceMore";
 
@@ -153,7 +155,7 @@ export default {
   },
   mounted() {
     Bus.$on('clickPrice', (val) => {
-      console.log(val)
+      // console.log(val)
       this.price = val.price;
     });
   },
@@ -312,6 +314,7 @@ export default {
         type: this.direction === 'sell' ? 'pay' : 'get'
       }
       const path = SwapRouter.get_paths(params0, params1, inData.type)
+      // console.log(path, params0, params1, inData.type)
       const params = [
         path,
         inData.type === 'pay' ? params0 : params1,
@@ -376,7 +379,8 @@ export default {
       const memoPrice = parseInt(1000000 * this.price)
       const quantity = isBuy ? `${toFixed(this.aboutNum, decimalPay)} ${coinPay}` : `${toFixed(this.num, decimalPay)} ${coinPay}`;
 
-      let memo = `limit:${this.market.pid}:${minOut}:${memoPrice}`;
+      // "pending:39:1:1" 
+      let memo = `pending:${this.market.mid}:${minOut}:${memoPrice}`;
       const params = {
         code: isBuy ? this.market.contract0 : this.market.contract1,
         toAccount: this.baseConfig.pddex,

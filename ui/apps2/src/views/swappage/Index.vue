@@ -210,7 +210,7 @@
     </div>
 
     <!-- 弹窗组件 -->
-    <el-dialog
+    <!-- <el-dialog
       class="mkListDia pcList"
       :show-close="false"
       :visible.sync="showMarketList">
@@ -218,7 +218,7 @@
         :thisMarket1="thisMarket1" :type="type"
         @listenMarketChange="handleMarketChange"
         @listenClose="handleClose"/>
-    </el-dialog>
+    </el-dialog> -->
     <el-dialog
       class="mkListDia pcList"
       :show-close="true"
@@ -235,6 +235,17 @@
       :visible.sync="showOgxTip">
       <OgxSwapTip />
     </el-dialog>
+    
+
+    <van-popup
+      class="newMarket"
+      v-model="showMarketList"
+      position="left">
+      <MarketArea v-if="showMarketList"
+        :marketLists="marketLists" :type="type"
+        @listenMarketChange="handleMarketChange"
+        @listenClose="handleClose"/>
+    </van-popup>
   </div>
 </template>
 
@@ -244,10 +255,11 @@ import { SwapRouter, SwapRouterFilter } from '@/utils/swap_router';
 import Tabs from '../index/components/Tabs';
 import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara, getCoin } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
-import MarketList from '@/components/MarketList';
+// import MarketList from '@/components/MarketList';
 import UsddTip from '@/components/UsddTip';
 import SlipPointTools from '@/components/SlipPointTools';
 import OgxSwapTip from './dialog/OgxSwapTip';
+import MarketArea from '@/components/MarketArea';
 
 import { ogx_get_num, ogx_get_prices_table } from './js/ogx.js';
 
@@ -255,10 +267,11 @@ export default {
   name: 'swap',
   components: {
     Tabs,
-    MarketList,
+    // MarketList,
     UsddTip,
     SlipPointTools,
     OgxSwapTip,
+    MarketArea,
   },
   data() {
     return {
@@ -314,6 +327,7 @@ export default {
 
       ogxPrices: [],
       showOgxTip: false,
+      showNewMarket: false,
     }
   },
   computed: {
@@ -1271,5 +1285,14 @@ export default {
       border-radius:12px;
     }
   }
+}
+.newMarket{
+  // margin-top: 15vh;
+  width: 70%;
+  top: 0px;
+  bottom: 0px;
+  transform: translate(0, 0);
+  max-width: 550px;
+  border-radius: 0px;
 }
 </style>

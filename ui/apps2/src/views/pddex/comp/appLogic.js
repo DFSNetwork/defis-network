@@ -354,6 +354,9 @@ export function dealApy(v) {
     const storeFeesApr = store.state.sys.feesApr;
     const aprJson = storeFeesApr.find(vv => vv.mid === v.mid) || {};
     feesApr = parseFloat(aprJson.poolsApr || 0)
+    if (newItem.mid === 637) {
+      console.log(aprJson)
+    }
   }
   // DFS 挖矿年化
   const rewardV3 = perDayRewardV3(v.mid)

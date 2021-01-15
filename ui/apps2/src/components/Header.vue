@@ -28,21 +28,21 @@
       :show-close="false"
       :visible.sync="showApps">
       <div @click="showApps = false">
-        <div class="proClass">
+        <!-- <div class="proClass">
           <div class="create flexc" @click="handleTo('fundation')">
             <span>{{ $t('fundation.nav') }}</span>
           </div>
           <div class="create flexc" @click="handleToProject('pddex')">PDDEX</div>
           <div class="create flexc" @click="handleToProject('yfcGuns')">YFC {{ $t('farms.yfcGun') }}</div>
-        </div>
+        </div> -->
         <div class="proClass">
           <div class="create flexc" @click="handleTo('farms')">{{ $t('farms.Lobby') }}</div>
           <div class="create flexc" @click="handleTo('total')">TOP21 {{ $t('info.info') }}</div>
           <div class="create flexc" @click="handleTo('coinViews', {mid: 39})">{{ $t('farms.coinView') }}</div>
         </div>
         <div class="proClass">
-          <div class="create flexc" @click="handleToProject('pdd')">PDD {{ $t('farms.pdd') }}</div>
-          <div class="create flexc" @click="handleToProject('time')">TIME {{ $t('farms.time') }}</div>
+          <!-- <div class="create flexc" @click="handleToProject('pdd')">PDD {{ $t('farms.pdd') }}</div> -->
+          <!-- <div class="create flexc" @click="handleToProject('time')">TIME {{ $t('farms.time') }}</div> -->
           <div class="create flexc" @click="handleToProject('eosdefi')">EOS DeFis</div>
         </div>
       </div>

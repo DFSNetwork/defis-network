@@ -61,15 +61,15 @@
       </div>
     </div>
     <!-- 弹窗组件 -->
-    <el-dialog
-      class="mkListDia pcList"
-      :show-close="false"
-      :visible.sync="showMarketList">
+    <van-popup
+      class="newMarket"
+      v-model="showMarketList"
+      position="left">
       <market-list :marketLists="marketLists" :thisMarket0="symbol0" :thisMarket1="symbol1"
         :type="type"
         @listenMarketChange="handleMarketChange"
         @listenClose="handleClose"/>
-    </el-dialog>
+    </van-popup>
   </div>
 </template>
 
@@ -77,7 +77,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { login } from '@/utils/public';
-import MarketList from '@/components/MarketList';
+import MarketList from '@/components/MarketArea';
 
 export default {
   name: 'createDex',

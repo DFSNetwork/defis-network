@@ -275,18 +275,30 @@ const constantRouter = [
             component: () => import(/* webpackChunkName: "pddexRank" */ '@/views/pddex/comp/PddexRanks'),
             meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
           },
-          {
-            path: 'trade/:symbol',
-            name: 'pddexTrade',
-            component: () => import(/* webpackChunkName: "pddexTrade" */ '@/views/pddex/trade/Index'),
-            meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
-          },
+          // {
+          //   path: 'trade/:symbol',
+          //   name: 'pddexTrade',
+          //   component: () => import(/* webpackChunkName: "pddexTrade" */ '@/views/pddex/trade/Index'),
+          //   meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
+          // },
           {
             path: 'order',
             name: 'pddexOrder',
             component: () => import(/* webpackChunkName: "pddexOrder" */ '@/views/pddex/order/Index'),
             meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
-          }
+          },
+          {
+            path: 'k-line/:symbol',
+            name: 'kLine',
+            component: () => import(/* webpackChunkName: "kLine" */ '@/views/kline/Index.vue'),
+            meta: { title: 'Order-book', noAcc: true, noFooter: true, noTab: true, noHeader: true, noTab: true },
+          },
+          {
+            path: 'trade/:symbol',
+            name: 'pddexTrade',
+            component: () => import(/* webpackChunkName: "market" */ '@/views/index/Index.vue'),
+            meta: { title: 'DeFis-Network' },
+          },
         ]
       },
     ],

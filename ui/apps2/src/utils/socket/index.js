@@ -1,23 +1,14 @@
 
 // import io from 'socket.io-client';
 import {toLocalTime} from '@/utils/public'
-import {get_kline_data} from '@/utils/api'
+import {get_kline_data, get_kline_data2} from '@/utils/api'; // eslint-disable-line
 class WsIo {
   constructor() {
     this.connect = false;
     this.socket = null;
   }
   init(cb) {
-    // console.log(cb)
-    // const self = this;
-    // self.socket = io('https://api.defis.network');
-    // self.socket.on('connect', function () {
-    //   console.log('ws connect')
-    //   self.connect = true;
-    //   cb ? cb() : null;
-    // })
     cb ? cb() : null;
-    // console.log(self.connect)
   }
   /**
    * 获取K线历史数据
@@ -30,29 +21,13 @@ class WsIo {
    *  to: 1602124440, // 结束时间
    * }
    */
-  // DFS
-  // socket.emit("request", {
-  //   type: "kline",
-  //   period: "minute5",
-  //   symbol: "DFS-39",
-  //   from: 1602123180,
-  //   to: 1602124440,
-  // });
-  // YFC
-  // socket.emit("request", {
-  //   type: "kline",
-  //   period: "minute",
-  //   symbol: "YFC-329",
-  //   from: 1602123180,
-  //   to: 1602124440,
-  // });
   async subscribe(params, cb) {
-    const {status, result} = await get_kline_data(params)
+    const {status, result} = await get_kline_data2(params)
     if (!status) {
       cb([])
       return
     }
-    const decimal = params.diffDecimal;
+    const decimal = params.diffDecimal; // eslint-disable-line
     let wsRes = result;
     if (!Array.isArray(wsRes)) {
       const item = {
@@ -71,17 +46,25 @@ class WsIo {
     }
     const dealArr = [];
     wsRes.forEach((v, index) => {
-      // if (v[0] === 1599235200 && v[1] > 20000000) {
-      //   return
+      // const item = {
+      //   open: v[1] * 10 ** decimal / 10000,
+      //   high: v[3] * 10 ** decimal / 10000,
+      //   low: v[4] * 10 ** decimal / 10000,
+      //   close: v[2] * 10 ** decimal / 10000,
+      //   volume: 0,
+      //   time: v[0] * 1000,
+      //   date: toLocalTime(v[0] * 1000),
+      //   isBarClosed: true,
+      //   isLastBar: index === wsRes.length - 1,
       // }
       const item = {
-        open: v[1] * 10 ** decimal / 10000,
-        high: v[3] * 10 ** decimal / 10000,
-        low: v[4] * 10 ** decimal / 10000,
-        close: v[2] * 10 ** decimal / 10000,
-        volume: 0,
-        time: v[0] * 1000,
-        date: toLocalTime(v[0] * 1000),
+        open: v.open,
+        high: v.high,
+        low: v.low,
+        close: v.close,
+        volume: v.base_amount,
+        time: v.time * 1000,
+        date: toLocalTime(v.time * 1000),
         isBarClosed: true,
         isLastBar: index === wsRes.length - 1,
       }

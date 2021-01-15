@@ -1,9 +1,8 @@
 <template>
   <div class="">
     <div class="pddexTab flexb">
-      <span class="flexc" :class="{'act': active === 0}" @click="active = 0">自选</span>
-      <span class="flexc" :class="{'act': active === 1}" @click="active = 1">全部</span>
-      <!-- <span class="flexc" :class="{'act': active === 2}" @click="active = 2">深度榜</span> -->
+      <span class="flexc" :class="{'act': active === 0}" @click="active = 0">{{ $t('pddex.follow') }}</span>
+      <span class="flexc" :class="{'act': active === 1}" @click="active = 1">{{ $t('pddex.all') }}</span>
     </div>
     <div class="rankTabs">
       <van-tabs v-model="coinName"
@@ -18,19 +17,19 @@
       <div class="subTitle flexb">
         <div class="flexa">
           <span class="flexa" @click="handleSortVol">
-            <span>24H额</span>
+            <span>{{ $t('pddex.amt') }}</span>
             <img class="sortCoin" v-if="sortVol === 0" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_default.png" alt="">
             <img class="sortCoin" v-else-if="sortVol === 1" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_down.png" alt="">
             <img class="sortCoin" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_up.png" alt="">
           </span>
           <span class="flexa" @click="handleSortPools">
-            <span>底池</span>
+            <span>{{ $t('pddex.pools') }}</span>
             <img class="sortCoin" v-if="sortPools === 0" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_default.png" alt="">
             <img class="sortCoin" v-else-if="sortPools === 1" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_down.png" alt="">
             <img class="sortCoin" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_up.png" alt="">
           </span>
           <span class="flexa" @click="handleSortApy">
-            <span>APY</span>
+            <span>24H APY</span>
             <img class="sortCoin" v-if="sortApy === 0" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_default.png" alt="">
             <img class="sortCoin" v-else-if="sortApy === 1" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_down.png" alt="">
             <img class="sortCoin" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_up.png" alt="">
@@ -38,7 +37,7 @@
         </div>
         <div class="rateDiv">
           <span class="flexa" @click="handleSortPrice">
-            <span>最新价</span>
+            <span>{{ $t('pddex.newPrice') }}</span>
             <img class="sortCoin noMargin" v-if="sortPrice === 0" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_default.png" alt="">
             <img class="sortCoin noMargin" v-else-if="sortPrice === 1" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_down.png" alt="">
             <img class="sortCoin noMargin" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_up.png" alt="">
@@ -46,7 +45,7 @@
         </div>
         <div class="rateDiv">
           <span class="flexa" @click="handleSortRate">
-            <span>24H涨跌幅</span>
+            <span>{{ $t('pddex.rate') }}</span>
             <img class="sortCoin noMargin" v-if="sortRate === 0" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_default.png" alt="">
             <img class="sortCoin noMargin" v-else-if="sortRate === 1" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_down.png" alt="">
             <img class="sortCoin noMargin" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_up.png" alt="">
@@ -55,14 +54,14 @@
       </div>
       <van-pull-refresh
         v-model="isLoading"
-        success-text="刷新成功"
+        :success-text="$t('pddex.refreshSuccess')"
         @refresh="onRefresh"
       >
         <div class="rankList" v-if="active === 0">
           <div class="noDate tip" v-if="!followList.length">
             <img class="noDataPng" src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noStar.png" alt="">
-            <div>快去添加你感兴趣的交易对吧</div>
-            <div class="toFollow flexc" @click="active = 1">添加</div>
+            <div>{{ $t('pddex.noFollow') }}</div>
+            <div class="toFollow flexc" @click="active = 1">{{ $t('pddex.add') }}</div>
           </div>
           <div class="rankItem flexb dinReg" v-for="(v, index) in followList" :key="`${active}-${index}`" @click="handleToTrade(v)">
             <div class="name flexa">
@@ -73,12 +72,12 @@
                   <span class="small">/{{ v.symbol0 }}</span>
                 </div>
                 <div class="tip smallTip">
-                  <span v-if="sortPools">底池 {{ v.poolsNum }}</span>
+                  <span v-if="sortPools">{{ $t('pddex.pools') }} {{ v.poolsNum }}</span>
                   <span v-else-if="sortApy">
-                    <span>APY {{ v.countApy }}%</span>
+                    <span>24H APY {{ v.countApy }}%</span>
                     <span class="green_p" @click.stop="handleShowApy(v)">详情＞</span>
                   </span>
-                  <span v-else>24H额 {{ parseFloat(v.volume24H) }}</span>
+                  <span v-else>{{ $t('pddex.amt') }} {{ parseFloat(v.volume24H) }}</span>
                 </div>
               </div>
             </div>
@@ -111,12 +110,12 @@
                   <span class="small">/{{ v.symbol0 }}</span>
                 </div>
                 <div class="tip smallTip">
-                  <span v-if="sortPools">底池 {{ v.poolsNum }}</span>
+                  <span v-if="sortPools">{{ $t('pddex.pools') }} {{ v.poolsNum }}</span>
                   <span v-else-if="sortApy">
-                    <span>APY {{ v.countApy }}%</span>
+                    <span>24H APY {{ v.countApy }}%</span>
                     <span class="green_p" @click.stop="handleShowApy(v)">详情＞</span>
                   </span>
-                  <span v-else>24H额 {{ parseFloat(v.volume24H) }}</span>
+                  <span v-else>{{ $t('pddex.amt') }} {{ parseFloat(v.volume24H) }}</span>
                 </div>
               </div>
             </div>
@@ -397,10 +396,10 @@ export default {
     handleToTrade(li) {
       let symbol = 'eosio.token-eos-minedfstoken-dfs';
       if (li) {
-        symbol = `${li.contract0}-${li.symbol0}-${li.contract1}-${li.symbol1}`
+        symbol = `${li.contract1}-${li.symbol1}-${li.contract0}-${li.symbol0}`
       }
       this.$router.push({
-        name: 'pddexTrade',
+        name: 'kLine',
         params: {
           symbol
         }
@@ -673,8 +672,8 @@ export default {
         text-align: left;
       }
       &:nth-child(2){
-        max-width: 200px;
-        min-width: 200px;
+        max-width: 180px;
+        min-width: 180px;
         text-align: right;
       }
       &:last-child{

@@ -27,7 +27,7 @@ class ScatterClass {
       callback();
       return
     }
-    self.isConnect = !!EosModel.scatter;
+    self.isConnect = !!EosModel.scatter && !!EosModel.scatterEosJs;
     // console.log(self.isConnect)
     if (!self.isConnect) {
       // console.log(self.connectCount)
@@ -142,7 +142,6 @@ class ScatterClass {
         }
       ]
     }
-    console.log(params)
     this.eosJs.transaction(params, {
       blocksBehind: 3,
       expireSeconds: 30,

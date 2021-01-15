@@ -63,6 +63,7 @@
         <span class="flexc" @click="handleToV1('v1')">V1</span>
         <span class="flexc" @click="handleToV1('v2')">V2</span>
         <span class="flexc" @click="handleToV1('v3')">V3</span>
+        <span class="flexc" @click="handleToV1('v4')">V4</span>
       </div>
       <!-- 合作 -->
       <div class="flexb par">
@@ -136,6 +137,8 @@ export default {
       } else if (ve === 'v2') {
         location.href = 'https://v2.defis.network/'
       } else if (ve === 'v3') {
+        location.href = 'https://v3.defis.network/'
+      } else if (ve === 'v4') {
         location.href = 'https://dfsswap.gitee.io/'
       }
     },

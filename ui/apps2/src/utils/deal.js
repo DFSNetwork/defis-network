@@ -58,15 +58,15 @@ export function runPrice(market, nowPrice, inPrecent = 0.001) {
   const sellArr = [];
   const buyArr = []
   let maxMul = inPrecent * 1000;
-  for (let i = 1; i < parseInt(maxMul / inPrecent); i++) {
-    const addPrice = nowPrice * (1 + inPrecent * i);
+  for (let i = 0; i < parseInt(maxMul / inPrecent); i++) {
+    const addPrice = (parseFloat(nowPrice) + 0.000001) * (1 + inPrecent * i);
     // console.log(addPrice)
     let t = loop(market, addPrice)
     sellArr.push(t)
 
     // console.log(' ------- ')
 
-    const dicPrice = nowPrice / (1 + inPrecent * i);
+    const dicPrice = (nowPrice - 0.000001) / (1 + inPrecent * i);
     // console.log(dicPrice)
     let b = loop(market, dicPrice)
     buyArr.push(b)

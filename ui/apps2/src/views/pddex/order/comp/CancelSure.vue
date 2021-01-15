@@ -1,10 +1,12 @@
 <template>
   <div class="cancelSure">
-    <div class="title">撤单</div>
-    <div class="content">您确定撤销该笔订单吗？</div>
+    <div class="title">{{ $t('pddex.cancelOrder') }}</div>
+    <div class="content">{{ $t('pddex.cancelTip') }}</div>
     <div class="btnDiv flexb">
-      <van-button class="btn tip" plain type="default" @click="handleCancel">取消</van-button>
-      <van-button class="btn" plain type="danger" @click="handleCancelOrder">确定</van-button>
+      <van-button class="btn tip" plain type="default"
+        @click="handleCancel">{{ $t('public.cancel') }}</van-button>
+      <van-button class="btn" plain type="danger"
+        @click="handleCancelOrder">{{ $t('public.confirm') }}</van-button>
     </div>
   </div>
 </template>
@@ -38,28 +40,46 @@ export default {
       this.$emit('handleClose', false)
     },
     handleCancelOrder() {
-      // if (!this.item.mid) {
-      //   return
-      // }
-      // console.log(this.item)
       const actor = this.account.name;
       const permission = this.account.permissions;
-      const params = {
-        actions: [
-          {
-            account: this.baseConfig.pddex,
-            name: 'cancel',
-            authorization: [{
-              actor, // 转账者
-              permission,
-            }],
-            data: {
-              pid: this.item.pid,
-              oid: this.item.oid,
-            }
-          },
-        ]
+      let params = {}
+      if (!this.item.pid) {
+        // 没有pid - 执行新的撤单action
+        params = {
+          actions: [
+            {
+              account: this.baseConfig.pddex,
+              name: 'cancel2',
+              authorization: [{
+                actor, // 转账者
+                permission,
+              }],
+              data: {
+                pid: this.item.mid,
+                oid: this.item.oid,
+              }
+            },
+          ]
+        }
+      } else {
+        params = {
+          actions: [
+            {
+              account: this.baseConfig.pddex,
+              name: 'cancel',
+              authorization: [{
+                actor, // 转账者
+                permission,
+              }],
+              data: {
+                pid: this.item.pid,
+                oid: this.item.oid,
+              }
+            },
+          ]
+        }
       }
+      console.log(params)
       DApp.toTransaction(params, (err) => {
         if (err && err.code === 402) {
           return;
