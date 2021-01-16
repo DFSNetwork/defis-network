@@ -527,8 +527,9 @@ export default {
           return
         }
         const newListSort = newList.sort((a, b) => {
-          return b.liq - a.liq;
+          return b.token - a.token;
         })
+        console.log(newListSort)
         try {
           this.allMinersList = newListSort;
           // console.log(newListSort)
