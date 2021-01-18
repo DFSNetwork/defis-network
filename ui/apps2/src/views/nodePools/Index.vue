@@ -402,6 +402,9 @@ export default {
       this.lpPoolsMid.forEach((mid, index) => {
         // const market = this.filterMkLists.find(v => v.mid === mid);
         const market = this.marketLists.find(v => v.mid === mid);
+        if (!market) {
+          return
+        }
         if (market.contract1 === 'tagtokenmain' && market.symbol1 === 'TAG') {
           lpLists.push(market)
         } else if (market.contract0 === 'tagtokenmain' && market.symbol0 === 'TAG') {
@@ -597,7 +600,8 @@ export default {
     handleRunLp() {
       clearInterval(this.lpRunTimer)
       this.lpRunTimer = setInterval(() => {
-        const price = this.lpLists.find(vv => vv.mid === 602).price;
+        const priceMarket = this.lpLists.find(vv => vv.mid === 602) || {};
+        const price = priceMarket.price || 0
         const keys = Object.keys(this.accLpData)
         const newJson = {}
         keys.forEach((mid) => {
