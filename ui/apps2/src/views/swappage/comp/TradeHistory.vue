@@ -68,7 +68,7 @@ export default {
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
-      marketLists: state => state.config.marketLists,
+      marketLists: state => state.sys.marketLists,
     }),
     reward() {
       let t = this.totalSell - this.totalBuy;
@@ -114,8 +114,8 @@ export default {
       immediate: true,
     },
     marketLists: {
-      handler: function rt(newVal, oldVal) {
-        if (!newVal.length || (oldVal && oldVal.length > 0)) {
+      handler: function rt(newVal) {
+        if (!newVal.length) {
           return
         }
         this.handlerGetMarket()
@@ -142,6 +142,10 @@ export default {
       this.$set(this.hisList[index], 'exRate', !this.hisList[index].exRate);
     },
     handlerGetMarket() {
+      console.log(this.$route)
+      console.log(this.marketLists.length)
+      console.log(this.loading)
+      console.log(this.scatter)
       if (!this.marketLists.length || !this.scatter || !this.scatter.identity || this.loading) {
         return
       }
@@ -159,6 +163,7 @@ export default {
         page: this.page,
         limit: this.pageSize,
       }
+      console.log(12333333)
       const result = await axios.get('https://api.defis.network/dfs/swap/tradelog', {params});
       this.loading = false;
       if (result.status !== 200) {
