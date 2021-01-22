@@ -114,8 +114,8 @@ export default {
       immediate: true,
     },
     marketLists: {
-      handler: function rt(newVal) {
-        if (!newVal.length) {
+      handler: function rt(newVal, oldVal) {
+        if (!newVal.length || (oldVal && oldVal.length > 0)) {
           return
         }
         this.handlerGetMarket()
@@ -162,7 +162,7 @@ export default {
       if (!status) {
         this.hisList = [];
         this.pageList = [];
-        this.handleCurrentChange();
+        // this.handleCurrentChange();
         return
       }
       const list = result.data || [];

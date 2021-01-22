@@ -163,7 +163,7 @@ export default {
       if (!status) {
         this.hisList = [];
         this.pageList = [];
-        this.handleCurrentChange();
+        // this.handleCurrentChange();
         return;
       }
       const list = result.data || [];
