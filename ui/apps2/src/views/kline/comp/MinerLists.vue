@@ -21,6 +21,7 @@
         v-if="showPage"
         v-model="currentPage"
         :total-items="allListsLen"
+        :items-per-page="20"
         :show-page-size="4"
         :force-ellipses="true"
         :prev-text="''"
