@@ -160,7 +160,7 @@ export default {
   data() {
     return {
       coinName: 'USDT',
-      active: 1,
+      active: 0,
       followList: [], // 关注展示列表
       tradeRankList: [], // 成交量排行
       tradeList: [],
@@ -365,6 +365,9 @@ export default {
       }
       const rows = result.rows;
       if (!rows.length) {
+        if (this.active === 0) {
+          this.active = 1;
+        }
         return
       }
       this.likeArr = rows;

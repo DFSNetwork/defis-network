@@ -116,6 +116,9 @@ export default {
       dealArr.forEach(v => {
         const value = v.total * 0.002;
         const market = this.marketLists.find(vv => vv.mid === v.mid);
+        if (!market) {
+          return
+        }
         let liq = market.symbol0 === v.sym ? market.reserve0 : market.reserve1;
         liq = parseFloat(liq || 0) * 2;
         const poolsApr = value / (liq - value) * 365 * 100;

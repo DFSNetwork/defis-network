@@ -142,10 +142,10 @@ export default {
       this.$set(this.hisList[index], 'exRate', !this.hisList[index].exRate);
     },
     handlerGetMarket() {
-      console.log(this.$route)
-      console.log(this.marketLists.length)
-      console.log(this.loading)
-      console.log(this.scatter)
+      // console.log(this.$route)
+      // console.log(this.marketLists.length)
+      // console.log(this.loading)
+      // console.log(this.scatter)
       if (!this.marketLists.length || !this.scatter || !this.scatter.identity || this.loading) {
         return
       }
@@ -163,7 +163,6 @@ export default {
         page: this.page,
         limit: this.pageSize,
       }
-      console.log(12333333)
       const result = await axios.get('https://api.defis.network/dfs/swap/tradelog', {params});
       this.loading = false;
       if (result.status !== 200) {
