@@ -97,27 +97,6 @@ export default {
         return
       }
     },
-    // 获取交易对信息
-    async handleGetList() {
-      if (!this.checkedMarket.symbol1) {
-        return
-      }
-      const params = {
-        token: this.checkedMarket.symbol1.toLowerCase(),
-        page: this.page,
-        limit: this.size,
-      }
-      const {status, result} = await this.$api.transferLog(params)
-      if (!status) {
-        return
-      }
-      const res = result;
-      this.pageLists = res.data || [];
-      this.holders = res.holders;
-      this.trx_24h = res.trx_24h;
-      this.volume_24h = res.volume_24h;
-      this.supply = res.supply; 
-    },
   }
 }
 </script>

@@ -156,8 +156,12 @@ const sys = {
     nodeListsTamp: Number(localStorage.getItem('nodeListsTamp') || 0),
     // pddex
     tradeInfo: {},
+    usdtPrice: 6.5,
   },
   mutations: {
+    SET_UsdtPrice: (state, usdtPrice) => {
+      state.usdtPrice = usdtPrice;
+    },
     SET_TagLpBal: (state, tagLpBal) => {
       state.tagLpBal = tagLpBal;
     },
@@ -240,6 +244,9 @@ const sys = {
     },
   },
   actions: {
+    setUsdtPrice({ commit }, usdtPrice) {
+      commit('SET_UsdtPrice', usdtPrice);
+    },
     setTagLpBal({ commit }, tagLpBal) {
       commit('SET_TagLpBal', tagLpBal);
     },

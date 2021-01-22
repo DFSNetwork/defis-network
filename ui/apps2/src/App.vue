@@ -1,7 +1,6 @@
 <template>
   <div id="app" class="app">
     <router-view></router-view>
-
     <my-konami />
   </div>
 </template>
@@ -75,6 +74,9 @@ export default {
       this.handleGetPoolsBal('usdc')
       this.handleGetUsdxRank('dfs')
       this.handleGetUsdxRank('usdt')
+      // 获取USDT价格
+      // this.handleGetUsdtPrice();
+      this.$api.getUsdtPrice()
 
     }, 500);
   },

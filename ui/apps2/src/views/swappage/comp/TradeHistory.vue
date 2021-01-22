@@ -135,23 +135,17 @@ export default {
   },
   methods: {
     handleCurrentChange() {
-      console.log(this.page)
       this.handlerGetMarket();
     },
     handleExchange(index) {
       this.$set(this.hisList[index], 'exRate', !this.hisList[index].exRate);
     },
     handlerGetMarket() {
-      // console.log(this.$route)
-      // console.log(this.marketLists.length)
-      // console.log(this.loading)
-      // console.log(this.scatter)
       if (!this.marketLists.length || !this.scatter || !this.scatter.identity || this.loading) {
         return
       }
       const mid = this.$route.params.mid || 39;
       this.thisMarket = this.marketLists.find(v => v.mid == mid) || {};
-      console.log(mid)
       this.handleGetHistory(mid)
     },
     async handleGetHistory(mid) {
@@ -163,15 +157,15 @@ export default {
         page: this.page,
         limit: this.pageSize,
       }
-      const result = await axios.get('https://api.defis.network/dfs/swap/tradelog', {params});
+      const {status, result} = await this.$api.tradelog(params);
       this.loading = false;
-      if (result.status !== 200) {
+      if (!status) {
         this.hisList = [];
         this.pageList = [];
         this.handleCurrentChange();
-        return;
+        return
       }
-      const list = result.data.data || [];
+      const list = result.data || [];
       list.forEach(v => {
         let t = toLocalTime(v.create_time).replace(/-/g, '/');
         t = moment(t).valueOf() + 8 * 3600 * 1000;
@@ -195,7 +189,7 @@ export default {
       this.loadingMore = false;
       this.page += 1;
       // 数据全部加载完成
-      if (this.pageList.length >= result.data.total) {
+      if (list.length < this.pageSize) {
         this.finished = true;
       }
     },

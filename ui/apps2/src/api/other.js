@@ -1,5 +1,6 @@
 
 import axios from 'axios';
+import store from '@/store';
 
 export function getJson() {
   return new Promise((resolve, reject) => {
@@ -45,6 +46,28 @@ export function transferLog(params) {
     })
   })
 }
+// 用户交易对交易记录
+export function tradelog(params) {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/dfs/swap/tradelog', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+// 用户做市记录
+export function depositlog(params) {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/dfs/swap/depositlog', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
 
 // 获取支持Box的交易对 & 当前委托数据
 export function boxMidsAndOrder() {
@@ -75,6 +98,21 @@ export function getPddexMarkets() {
   return new Promise((resolve, reject) => {
     axios.get('https://api.defis.network/market/tops').then((res) => {
       let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+
+// 获取USDT价格 https://api.defis.network/static/market/usdtprice
+export function getUsdtPrice() {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/static/market/usdtprice').then((res) => {
+      let result = Object.assign(res.data, {});
+      console.log(result)
+      const price = result.usdtprice || 6.5;
+      store.dispatch('setUsdtPrice', price);
       resolve({ status: res.status === 200, result });
     }, err => {
       reject(err)

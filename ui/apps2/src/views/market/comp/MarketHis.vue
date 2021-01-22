@@ -158,15 +158,15 @@ export default {
         page: this.page,
         limit: this.pageSize,
       }
-      const result = await axios.get('https://api.defis.network/dfs/swap/depositlog', {params});
+      const {status, result} = await this.$api.depositlog(params);
       this.loading = false;
-      if (result.status !== 200) {
+      if (!status) {
         this.hisList = [];
         this.pageList = [];
         this.handleCurrentChange();
         return;
       }
-      const list = result.data.data || [];
+      const list = result.data || [];
       list.forEach(v => {
         let t = toLocalTime(v.create_time).replace(/-/g, '/');
         t = moment(t).valueOf() + 8 * 3600 * 1000;
@@ -192,7 +192,7 @@ export default {
       this.loadingMore = false;
       this.page += 1;
       // 数据全部加载完成
-      if (this.pageList.length >= result.data.total) {
+      if (list.length < this.pageSize) {
         this.finished = true;
       }
     },

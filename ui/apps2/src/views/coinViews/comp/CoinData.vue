@@ -15,14 +15,12 @@
         </div>
         <div class="data flexc">
           <div class="tip">
-             <div>持有人数：</div>
-             <!-- <div>Volum 24H：</div> -->
              <div>当前发行量：</div>
+             <div>最大发行量：</div>
           </div>
           <div class="num">
-             <div>{{ holders }}</div>
-             <!-- <div>{{ parseInt(volume_24h) }}</div> -->
              <div>{{ parseInt(supply) || '-' }}</div>
+             <div>10000000</div>
           </div>
         </div>
       </div>
@@ -55,18 +53,16 @@
     </div>
 
     <div v-loading="listLoading">
-      <Lists :pageLists="pageLists" :checkedMarket="checkedMarket" />
-
-      <el-pagination
-        class="pagination"
-        layout="prev, pager, next"
-        @current-change="handleCurrentChange"
-        :current-page.sync="page"
-        :page-size="size"
-        :total="total">
-      </el-pagination>
+      <van-list
+        v-model="loadMore"
+        :finished="finished"
+        :loading-text="$t('public.loading')"
+        :finished-text="$t('public.noMore')"
+        @load="handleCurrentChange"
+      >
+        <Lists :pageLists="pageLists" :checkedMarket="checkedMarket" />
+      </van-list>
     </div>
-
 
     <el-dialog
       class="mkListDia pcList"
@@ -107,7 +103,6 @@ export default {
   },
   data() {
     return {
-      holders: 0,
       trx_24h: 0,
       volume_24h: 0,
       supply: '-',
@@ -182,7 +177,9 @@ export default {
           value: '10000',
           label: '10000 DFS'
         }]
-      }
+      },
+      finished: false,
+      loadMore: false,
     }
   },
   beforeDestroy() {
@@ -209,15 +206,17 @@ export default {
           return
         }
         this.listLoading = true;
-        this.handleGetList()
+        this.page = 1
+        this.handleCurrentChange()
       },
       deep: true,
       immediate: true,
     },
     myFilter() {
       // this.pageLists = [];
+      this.page = 1
       this.listLoading = true;
-      this.handleGetList()
+      this.handleCurrentChange()
     },
     '$route': {
       handler: function rt() {
@@ -280,7 +279,7 @@ export default {
     handleCurrentChange() {
       this.handleGetList();
     },
-    handleGetList() {
+    async handleGetList() {
       clearTimeout(this.timer)
       if (!this.checkedMarket.symbol1 || !this.myFilter) {
         return
@@ -294,63 +293,49 @@ export default {
         limit: this.size,
         min: this.myFilter,
       }
-      axios.get('https://api.defis.network/dfs/history/transfer', {
-        params
-      }).then(result => {
-        this.listLoading = false;
-        this.changeLoading = false;
-        const res = result.data;
-        this.total = res.total || 0;
-        this.pageLists = res.data || [];
-        this.holders = res.holders;
-        this.trx_24h = res.trx_24h;
-        this.volume_24h = res.volume_24h;
-        const data = res.data || [];
-        data.forEach(v => {
-          let transType = -1; // 0 - 卖出 ｜ 1 - 买入 ｜ 2 - 做市
-          if (v.tox === 'defisswapcnt' && v.memo === 'deposit') {
-            transType = 2;
-          } else if (v.tox === 'defisswapcnt' && v.memo.indexOf('swap') === 0) {
-            transType = 0;
-          } else if (v.fromx === 'defisswapcnt' && v.memo === 'swap success') {
-            transType = 1
-          } else if (v.fromx === 'defisswapcnt' && v.memo === 'withdraw') {
-            transType = 3;
-          } else if (v.tox === 'dfsdsrsystem') {
-            transType = 4;
-          } else if (v.fromx === 'dfsdsrsystem') {
-            transType = 5;
-          }
-          this.$set(v, 'transType', transType)
-        });
-      })
-      // this.changeLoading = false;
-      // this.listLoading = false;
-      // this.pageLists = [{
-      //   account: "minedfstoken",
-      //   account_action_seq: 16570598,
-      //   amount: 124.2286,
-      //   block_num: 154249872,
-      //   create_time: "2020-11-24T18:44:24.000Z",
-      //   fromx: "pzalendfsdss",
-      //   global_action_seq: 280831996682,
-      //   id: 29408668,
-      //   memo: "",
-      //   namex: "transfer",
-      //   quantity: "124.2286 DFS",
-      //   symbol: "DFS",
-      //   tox: "dfsdsrsystem",
-      //   transType: 1,
-      //   trx_id: "50657d12d3d97b21f831daa51fa8a1d54b5da4f741b4b1ea7253832fe88143c3",
-      // }]
+      const {status, result } = await this.$api.transferLog(params)
+      if (!status) {
+        return
+      }
+      this.listLoading = false;
+      this.changeLoading = false;
+      const res = result;
+      const data = res.data || [];
+      data.forEach(v => {
+        let transType = -1; // 0 - 卖出 ｜ 1 - 买入 ｜ 2 - 做市
+        if (v.tox === 'defisswapcnt' && v.memo === 'deposit') {
+          transType = 2;
+        } else if (v.tox === 'defisswapcnt' && v.memo.indexOf('swap') === 0) {
+          transType = 0;
+        } else if (v.fromx === 'defisswapcnt' && v.memo === 'swap success') {
+          transType = 1
+        } else if (v.fromx === 'defisswapcnt' && (v.memo === 'withdraw token1 liquidity' || v.memo === 'withdraw token0 liquidity') ) {
+          transType = 3;
+        } else if (v.tox === 'dfsdsrsystem') {
+          transType = 4;
+        } else if (v.fromx === 'dfsdsrsystem') {
+          transType = 5;
+        }
+        this.$set(v, 'transType', transType)
+      });
+
+      if (params.page === 1) {
+        this.pageLists = data;
+        this.page = 1
+      } else {
+        this.pageLists.push(...data);
+      }
+      this.loadMore = false;
+      this.page += 1;
+      if (data.length < this.size) {
+        this.finished = true;
+      }
     },
-    // this.supply = res.supply;
     async handleGetSupply() {
       const params = {
         code: this.checkedMarket.contract1,
         symbol: this.checkedMarket.symbol1,
       }
-      // console.log(this.checkedMarket)
       const {status, result} = await get_currency_stats(params)
       if (!status) {
         return;
@@ -520,28 +505,4 @@ export default {
   }
 }
 
-.pagination{
-  text-align: right;
-  margin-top: 20px;
-  font-size: 26px;
-  /deep/ .el-pager{
-    li.active{
-      color: #07D79B;
-    }
-    li:hover{
-      color: #07D79B;
-    }
-    li{
-      font-size: 26px;
-    }
-  }
-  /deep/ .btn-prev, /deep/ .btn-next{
-    &:hover {
-      color: #07D79B;
-    }
-    .el-icon-arrow-left, .el-icon-arrow-right{
-      font-size: 26px;
-    }
-  }
-}
 </style>

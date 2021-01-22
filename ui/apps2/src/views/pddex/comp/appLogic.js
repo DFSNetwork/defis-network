@@ -287,6 +287,7 @@ function getAreaPrice(coin) {
   const marketLists = store.state.sys.marketLists;
   const lang = store.state.app.language;
   const tCoin = coin === 'BTC' ? coin = 'PBTC' : coin;
+  const usdtPrice = store.state.sys.usdtPrice;
   let mid = 17;
   if (tCoin === 'EOS') {
     mid = 17;
@@ -302,7 +303,7 @@ function getAreaPrice(coin) {
     mid = 484;
   }
   if (mid === 0) {
-    return lang === 'en' ? 1 : 6.5;
+    return lang === 'en' ? 1 : usdtPrice;
   }
   if (!marketLists.length) {
     return 0
@@ -311,7 +312,7 @@ function getAreaPrice(coin) {
   let price = tCoin === market.symbol1 ? 
               parseFloat(market.reserve0) / parseFloat(market.reserve1) :
               parseFloat(market.reserve1) / parseFloat(market.reserve0);
-  return lang === 'en' ? price : 6.5 * price;
+  return lang === 'en' ? price : usdtPrice * price;
 }
 // 是否交换数据
 function regExchange(coin, v) {
