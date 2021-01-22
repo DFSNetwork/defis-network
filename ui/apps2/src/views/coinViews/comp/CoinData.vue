@@ -82,7 +82,7 @@ import { mapState } from 'vuex';
 import MarketList from '@/components/MarketList';
 import { toLocalTime } from '@/utils/public';
 import { get_currency_stats } from '@/utils/api';
-import axios from 'axios';
+// import axios from 'axios';
 import KLine from '../kline/KLine';
 import Lists from './Lists';
 
