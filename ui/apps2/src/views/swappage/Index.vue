@@ -209,16 +209,6 @@
       </div>
     </div>
 
-    <!-- 弹窗组件 -->
-    <!-- <el-dialog
-      class="mkListDia pcList"
-      :show-close="false"
-      :visible.sync="showMarketList">
-      <market-list v-if="showMarketList" :marketLists="marketLists" :thisMarket0="thisMarket0"
-        :thisMarket1="thisMarket1" :type="type"
-        @listenMarketChange="handleMarketChange"
-        @listenClose="handleClose"/>
-    </el-dialog> -->
     <el-dialog
       class="mkListDia pcList"
       :show-close="true"
@@ -255,7 +245,6 @@ import { SwapRouter, SwapRouterFilter } from '@/utils/swap_router';
 import Tabs from '../index/components/Tabs';
 import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara, getCoin } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
-// import MarketList from '@/components/MarketList';
 import UsddTip from '@/components/UsddTip';
 import SlipPointTools from '@/components/SlipPointTools';
 import OgxSwapTip from './dialog/OgxSwapTip';
@@ -267,7 +256,6 @@ export default {
   name: 'swap',
   components: {
     Tabs,
-    // MarketList,
     UsddTip,
     SlipPointTools,
     OgxSwapTip,
@@ -451,7 +439,7 @@ export default {
           this.$store.dispatch('setSlipPoint', 80)
           return
         }
-        const sr = Number(newVal) > 80 ? 80 : newVal
+        const sr = Number(newVal) > 80 ? 80 : (newVal || 5)
         this.slipPointUser = sr;
         this.handleInBy(this.tradeInfo.type)
       },
@@ -764,7 +752,7 @@ export default {
         })
         return false;
       }
-      if (Number(this.slipPoint) < Number(this.tradeInfo.priceRate)) {
+      if (Number(this.slipPoint || 5) < Number(this.tradeInfo.priceRate)) {
         this.$message({
           type: 'error',
           message: this.$t('dex.heightSlip')

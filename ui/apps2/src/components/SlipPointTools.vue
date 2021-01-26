@@ -5,6 +5,8 @@
       :show-close="false"
       :visible.sync="showNav">
       <div class="navList">
+        <img class="close" @click="showNav = false"
+          src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
         <div class="title">{{ $t('dex.TradeSet') }}</div>
         <div class="subTitle flex">
           <span>{{ $t('dex.slipSet') }}</span>
@@ -27,7 +29,8 @@
             <template slot="append">%</template>
           </el-input>
         </div>
-        <div class="invitation">
+        <span class="btn flexc" v-loading="loading" @click="handleSureSlip">{{ $t('public.confirm') }}</span>
+        <!-- <div class="invitation">
           <div class="subTitle flex">
             <span>{{ $t('dex.inviter') }}</span>
           </div>
@@ -35,8 +38,7 @@
             <el-input class="elIpt" v-model="inviAcc"></el-input>
             <span class="btn flexc" v-loading="loading" @click="handleSureInviArr">{{ $t('public.confirm') }}</span>
           </div>
-          <!-- <div><span class="btn flexc">确认</span></div> -->
-        </div>
+        </div> -->
       </div>
     </el-dialog>
   </div>
@@ -88,11 +90,17 @@ export default {
       if (Number(newVal) > 80) {
         this.slipRate = 80;
       }
+      this.tipRate = this.slipRate
     }
   },
   mounted() {
   },
   methods: {
+    handleSureSlip() {
+      this.$store.dispatch('setSlipPoint', this.tipRate)
+      this.$message.success('Success')
+      this.showNav = false
+    },
     handleSureInviArr() {
       if (this.loading) {
         return
@@ -134,7 +142,7 @@ export default {
       }
       const sr = Number(this.slipRate) > 80 ? 80 : this.slipRate;
       this.tipRate = sr;
-      this.$store.dispatch('setSlipPoint', sr)
+      // this.$store.dispatch('setSlipPoint', sr)
     }
   }
 }
@@ -173,6 +181,12 @@ export default {
     color: #000;
     padding: 0 24px;
     text-align: left;
+    .close{
+      width: 24px;
+      position: absolute;
+      right: 30px;
+      top: 30px;
+    }
     .title{
       font-weight: 500;
       margin-bottom: 20px;
@@ -277,16 +291,17 @@ export default {
         }
       }
     }
-    .btn{
-      background: #07d79b;
-      border-radius: 30px;
-      color: #fff;
-      height: 60px;
-      min-width: 100px;
-      padding: 0 20px;
-      &:active{
-        background: #02C698;
-      }
+  }
+
+  .btn{
+    background: #07d79b;
+    border-radius: 30px;
+    color: #fff;
+    height: 60px;
+    min-width: 100px;
+    padding: 0 20px;
+    &:active{
+      background: #02C698;
     }
   }
 }
