@@ -1,12 +1,24 @@
 <template>
   <div class="footer">
     <div v-if="isEx" class="" @click="clickOnDFSInfoData">
-      24H{{ $t('footer.swapNum') }}: {{ dfsInfoData.total_volume ? dfsInfoData.total_volume : "0.00" }}
-      {{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('footer.orderNum') }}
+      <span>
+        <span>24H{{ $t('footer.swapNum') }}: </span>
+        <span>{{ dfsInfoData.total_volume ? dfsInfoData.total_volume : "0.00" }}</span>
+      </span>
+      <span class="ml20">
+        <span class="">24H交易人次: </span>
+        <span>{{ tradeUserNum }}人/{{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}次</span>
+      </span>
     </div>
     <div v-else class="" @click="clickOnDFSInfoData">
-      24H{{ $t('footer.swapNum') }}: ${{ dfsInfoData.total_volume_usdt ? dfsInfoData.total_volume_usdt : "0.00" }}
-      {{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('footer.orderNum') }}
+      <span>
+        <span class="">24H{{ $t('footer.swapNum') }}: </span>
+        <span>${{ dfsInfoData.total_volume_usdt ? dfsInfoData.total_volume_usdt : "0.00" }}</span>
+      </span>
+      <span class="ml20">
+        <span class="">24H交易人次: </span>
+        <span>{{ tradeUserNum }}人/{{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}次</span>
+      </span>
     </div>
     <div class="poolsNum flexc" @click="isEx = !isEx">
       <span>{{ $t('footer.tlv') }}: </span>
@@ -53,6 +65,7 @@ export default {
       poolsEos: '0.0000 EOS',
       poolsUsdt: '0.0000',
       isEx: false,
+      tradeUserNum: 0,
     }
   },
   computed: {
@@ -150,11 +163,14 @@ export default {
         return;
       }
       this.dfsInfoData = result.data;
-      this.poolsEos = this.dfsInfoData.tvl_eos;
-      this.poolsUsdt = parseFloat(this.dfsInfoData.tvl_usdt);
+      this.tradeUserNum = this.dfsInfoData.trade_user_num;
+      const totalArr = this.dfsInfoData.tvl_eos.split(' ');
+      this.dfsInfoData.total_volume = `${parseInt(this.dfsInfoData.total_volume)} ${totalArr[1]}`
+      this.poolsEos = `${parseInt(totalArr[0])} ${totalArr[1]}`;
+      this.poolsUsdt = parseInt(this.dfsInfoData.tvl_usdt);
       const price = this.poolsUsdt / parseFloat(this.poolsEos)
       const total_volume_usdt = price * parseFloat(this.dfsInfoData.total_volume)
-      this.$set(this.dfsInfoData, 'total_volume_usdt', total_volume_usdt.toFixed(4))
+      this.$set(this.dfsInfoData, 'total_volume_usdt', total_volume_usdt.toFixed(0))
       this.$store.dispatch('setDfsData', this.dfsInfoData)
       this.handleSetAllRes()
     },
@@ -177,6 +193,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ml20{
+  margin-left: 15px;
+}
 .dialog{
   /deep/ .el-dialog{
     margin-top: 10vh !important;
