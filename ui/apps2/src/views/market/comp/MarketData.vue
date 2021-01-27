@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div :class="`tipDiv marketReward ${handleGetClass(thisMarket.mid)}`" v-if="Number(token)">
+    <div :class="`tipDiv marketReward ${handleGetClass(thisMarket.mid)}`" v-if="Number(token)"
+     @click="handleTo('poolsMarket')">
       <div class="flexb">
         <div class="flexa symbolInfo">
           <img class="imgCoin" :src="thisMarket.sym0Data.imgUrl" :onerror="errorCoinImg"/>
@@ -10,9 +11,8 @@
           <span>{{ thisMarket.symbol1 }}</span>
         </div>
         <div class="flexa">
-          <div class="btn flexc" @click="handleShowAdd">{{ $t('more.add') }}</div>
-          <div class="btn backBtn flexc" @click="handleShowRemove">{{ $t('more.remove') }}</div>
-          <!-- <div class="btn backBtn flexc" @click="handleTo('withdraw')">{{ $t('more.remove') }}</div> -->
+          <div class="btn flexc" @click.stop="handleShowAdd">{{ $t('more.add') }}</div>
+          <div class="btn backBtn flexc" @click.stop="handleShowRemove">{{ $t('more.remove') }}</div>
         </div>
       </div>
       <div class="flex">
@@ -58,8 +58,8 @@
             </span>)
           </span> -->
         </span>
-        <img  @click="handleChangeRewardType" class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_green_left.svg" alt="">
-        <img class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" @click="showMarketTip = !showMarketTip">
+        <img  @click.stop="handleChangeRewardType" class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_green_left.svg" alt="">
+        <img class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" @click.stop="showMarketTip = !showMarketTip">
       </div>
       <div class="flexa">
         <span>{{ $t('market.marketTime') }}: </span>
