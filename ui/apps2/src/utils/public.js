@@ -355,6 +355,11 @@ export function getYfcReward(mid, type, project = 'YFC') {
   const lpMineList = store.state.config.lpMineList;
   const pList = lpMineList[project] || [];
   const list = pList.find(v => mid === v.id);
+  const marketLists = store.state.sys.marketLists;
+  const market = marketLists.find(v => v.mid === mid) || {};
+  if (market.contract0 !== 'eosio.token' && market.contract1 !== 'eosio.token') {
+    return '0.00000000'
+  }
   // console.log(list)
   if (!list || parseFloat(list.max_supply) <= parseFloat(list.supply)) {
     return '0.00000000';
@@ -363,6 +368,7 @@ export function getYfcReward(mid, type, project = 'YFC') {
   if (nowT >= list.endTime || nowT < list.beginTime) {
     return '0.00000000';
   }
+  console.log(list)
   const poolsBal = store.state.sys.poolsBal;
   const yfcBal = store.state.config.lpPoolsBal[project] || '0';
   const dampingYfc = store.state.config.lpDamping[project] || 1;
