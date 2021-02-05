@@ -72,10 +72,10 @@
           </div>
           <div class="btnDiv flexb">
             <div class="btn flexc" v-loading="loading" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
-            <div class="ptokens" v-if="isPtokens" @click="handleTo('ptokens')">
+            <!-- <div class="ptokens" v-if="isPtokens" @click="handleTo('ptokens')">
               <img :src="ptokenData.imgUrl">
               <div>{{ ptokenData.symbol }}</div>
-            </div>
+            </div> -->
           </div>
 
           <div class="linkTo flexb">

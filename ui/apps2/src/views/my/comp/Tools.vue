@@ -56,21 +56,22 @@
     <div class="tools">
       <div class="title">应用与游戏</div>
       <div class="lists flexa">
+        <div class="list" @click="handleToProject('dtoken')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/dcap.png" alt="">
+          <div>跨链充提</div>
+          <img class="beta" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/beta.png" alt="">
+        </div>
         <div class="list" @click="handleTo('pools')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png" alt="">
-          <div>DFS</div>
+          <div>DFS 矿池</div>
         </div>
         <div class="list" @click="handleTo('nodePools')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png" alt="">
-          <div>TAG</div>
+          <div>TAG 矿池</div>
         </div>
         <div class="list" @click="handleToProject('usdx')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/usdx.png" alt="">
-          <div>USDX</div>
-        </div>
-        <div class="list" @click="handleTo('ptokens')">
-          <img class="icon" src="https://ndi.340wan.com/eos/btc.ptokens-pbtc.png" alt="">
-          <div>PBTC充提</div>
+          <div>USDX 矿池</div>
         </div>
       </div>
       <div class="lists flexa">
@@ -205,6 +206,9 @@ export default {
       if (name === 'kline') {
         location.href = 'https://dfs.defiview.io/kline'
       }
+      if (name === 'dtoken') {
+        location.href = 'https://dtoken.gitee.io/'
+      }
     }
   }
 }
@@ -234,8 +238,17 @@ export default {
         margin-right: 18px;
         text-align: center;
         line-height: 34px;
+        position: relative;
         &:last-child{
           margin-right: 0;
+        }
+        .beta{
+          position: absolute;
+          top: -15px;
+          width: 58px;
+          right: 8px;
+          color: #FFF;
+          font-weight: 300;
         }
         .icon{
           width: 42px;
