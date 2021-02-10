@@ -29,7 +29,7 @@
             <img class="sortCoin" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_up.png" alt="">
           </span>
           <span class="flexa" @click="handleSortApy">
-            <span>24H APY</span>
+            <span>{{ $t('pddex.apys') }}</span>
             <img class="sortCoin" v-if="sortApy === 0" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_default.png" alt="">
             <img class="sortCoin" v-else-if="sortApy === 1" src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_down.png" alt="">
             <img class="sortCoin" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/pddex/sort_up.png" alt="">
