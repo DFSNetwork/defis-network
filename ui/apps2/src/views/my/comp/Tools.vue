@@ -120,6 +120,16 @@
           <div>乐捐系统</div>
         </div>
       </div>
+      <div class="lists flexa">
+        <div class="list" @click="handleToProject('help')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/kline.png" alt="">
+          <div>大丰收助手</div>
+        </div>
+        <div class="list" @click="handleToProject('diary')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/coinView.png" alt="">
+          <div>大丰收日记</div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -208,6 +218,12 @@ export default {
       }
       if (name === 'dtoken') {
         location.href = 'https://dtoken.gitee.io/'
+      }
+      if (name === 'help') {
+        location.href = 'https://dfsdefi.com/'
+      }
+      if (name === 'diary') {
+        location.href = 'https://dfsfans.gitee.io'
       }
     }
   }
