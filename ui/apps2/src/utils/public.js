@@ -368,7 +368,6 @@ export function getYfcReward(mid, type, project = 'YFC') {
   if (nowT >= list.endTime || nowT < list.beginTime) {
     return '0.00000000';
   }
-  console.log(list)
   const poolsBal = store.state.sys.poolsBal;
   const yfcBal = store.state.config.lpPoolsBal[project] || '0';
   const dampingYfc = store.state.config.lpDamping[project] || 1;

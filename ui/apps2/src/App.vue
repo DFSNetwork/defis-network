@@ -340,7 +340,7 @@ export default {
         if (result.status !== 200) {
           return;
         }
-        let dampNum = v.contract === 'dbctokenmain' ? 100 : 1000;
+        let dampNum = v.contract === 'yfctokenmain' ? 1000 : 100;
         const res = result.data[v.symbol];
         const supply = res.supply.split(' ')[0];
         const t = parseInt(supply / dampNum)
