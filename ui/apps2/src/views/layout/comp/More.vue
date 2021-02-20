@@ -144,7 +144,7 @@ export default {
     },
     handleToPro(type) {
       if (type === 'docs') {
-        location.href = 'https://dfscommunity.baklib.com/'
+        location.href = 'https://dfscommunity.baklib-free.com/'
       }
     },
     handleTo(name) {
