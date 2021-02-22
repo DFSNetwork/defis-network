@@ -72,6 +72,15 @@ export default {
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
+          name: 'Newdex',
+          area: 'production',
+          protocol: 'https',
+          host: 'eos.newdex.one', // eospush.tokenpocket.pro
+          port: '443',
+          url: 'https://eos.newdex.one', // https://eospush.tokenpocket.pro
+          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        },
+        {
           name: 'Eosflare',
           area: 'production',
           protocol: 'https',
