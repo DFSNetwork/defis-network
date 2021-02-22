@@ -1,25 +1,43 @@
 <template>
   <div class="nodeSet">
+    <img class="close" @click="handleClose" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg">
     <div class="title">{{ $t('node.nodeSet') }}</div>
     <div class="content">
-      <div class="nodeList" v-for="(node, index) in nodeList" :key="index" @click="handleCheck(node, index)">
-        <div class="icon" :class="{'act': radio === index}">
-          <span>{{ $t('node.standbyNode') }}{{index + 1}}：</span>
-          <span>{{ node.url }}</span>
+      <div class="nodeList flexa" v-for="(node, index) in nodeList" :key="index" @click="handleCheck(node, index)">
+        <div class="checkBox" :class="{'checked': radio === index}">
+          <img class="checkBoxImg" v-if="radio === index" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/checked.png">
+        </div>
+        <div class="icon">
+          <div class="">
+            <span class="name">{{ node.name || $t('node.standbyNode') }}</span>
+            <span class="delay" :class="{
+              'green': node.delay < 1000,
+              'yellow': node.delay < 3000 && node.delay >= 1000,
+              'red': node.delay >= 3000 || !node.delay,
+            }">{{ node.delay || '- ' }}ms</span>
+          </div>
+          <span class="tip">{{ node.url }}</span>
         </div>
       </div>
-      <div class="nodeList" @click="handleCheck(node, nodeList.length)">
-        <div class="icon" :class="{'act': radio === nodeList.length}">
-          <span>{{ $t('node.slef') }}：</span>
-          <span><input class="input" type="text" @blur="handleBlur" v-model="nodeUrl" placeholder="eg. https://..."></span>
+      <div class="nodeList flexa" @click="handleCheck(node, nodeList.length)">
+        <div class="checkBox" :class="{'checked': radio === nodeList.length}">
+          <img class="checkBoxImg" v-if="radio === nodeList.length" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/checked.png">
+        </div>
+        <div class="icon flexa">
+          <span class="tip">{{ $t('node.slef') }}：</span>
+          <input class="input" type="text" @blur="handleBlur" v-model="nodeUrl" placeholder="eg. https://...">
         </div>
       </div>
     </div>
-    <div class="btn flexc" @click="handleSetNode">{{ $t('public.confirm') }}</div>
+    <div class="btnDiv flexb">
+      <div class="btn cancel flexc tip" @click="handleClose">{{ $t('public.cancel') }}</div>
+      <div class="btn flexc" @click="handleSetNode">{{ $t('public.confirm') }}</div>
+    </div>
   </div>
 </template>
 
 <script>
+import moment from 'moment';
 import { mapState } from 'vuex'
 export default {
   data() {
@@ -27,6 +45,7 @@ export default {
       nodeUrl: '',
       nodeList: [
         {
+          name: '大丰收',
           area: 'production',
           protocol: 'https',
           host: 'eos.blockeden.cn', // eospush.tokenpocket.pro
@@ -35,6 +54,25 @@ export default {
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
+          name: '大丰收节点2',
+          area: 'production',
+          protocol: 'https',
+          host: 'node.defis.network', // eospush.tokenpocket.pro
+          port: '443',
+          url: 'https://node.defis.network', // https://eospush.tokenpocket.pro
+          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        },
+        {
+          name: '大丰收节点3',
+          area: 'production',
+          protocol: 'http',
+          host: '25.208.8.122:8888', // eospush.tokenpocket.pro
+          port: '8888',
+          url: 'http://125.208.8.122:8888', // https://eospush.tokenpocket.pro
+          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        },
+        {
+          name: 'Eosflare',
           area: 'production',
           protocol: 'https',
           host: 'api.eosflare.io', // eospush.tokenpocket.pro
@@ -43,6 +81,7 @@ export default {
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
+          name: 'TP',
           area: 'production',
           protocol: 'https',
           host: 'eospush.tokenpocket.pro',
@@ -51,6 +90,7 @@ export default {
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
+          name: 'Fwnw',
           area: 'production',
           protocol: 'https',
           host: 'api.fwnw.com',
@@ -59,6 +99,7 @@ export default {
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
+          name: 'Greymass',
           area: 'production',
           protocol: 'https',
           host: 'eos.greymass.com', // eospush.tokenpocket.pro
@@ -67,6 +108,7 @@ export default {
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
+          name: 'Scatter',
           area: 'production',
           protocol: 'https',
           host: 'nodes.get-scatter.com', // eospush.tokenpocket.pro
@@ -75,6 +117,7 @@ export default {
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
+          name: 'MeetOne',
           area: 'production',
           protocol: 'https',
           host: 'mainnet.meet.one',
@@ -83,6 +126,7 @@ export default {
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
+          name: 'Sweden',
           area: 'production',
           protocol: 'https',
           host: 'api.eossweden.se',
@@ -91,6 +135,7 @@ export default {
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
+          name: 'Laomao',
           area: 'production',
           protocol: 'https',
           host: 'api.eoslaomao.com',
@@ -99,6 +144,7 @@ export default {
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
+          name: 'Eosn',
           area: 'production',
           protocol: 'https',
           host: 'api.eosn.io',
@@ -109,6 +155,7 @@ export default {
       ],
       node: null,
       radio: 1,
+      tmp: 200,
     }
   },
   computed: {
@@ -136,7 +183,13 @@ export default {
       this.node.url = this.nodeUrl;
     }
   },
+  mounted() {
+    this.handleDealNodeDalay()
+  },
   methods: {
+    handleClose() {
+      this.$emit('listenClose', false)
+    },
     handleBlur() {
       const inArr = this.nodeUrl.split('://');
 
@@ -174,6 +227,41 @@ export default {
       localStorage.setItem('proConfig', JSON.stringify(newConf))
       this.$store.dispatch('setBaseConfig', newConf);
       location.reload()
+    },
+    // 获取节点延时
+    handleDealNodeDalay() {
+      this.nodeList.forEach(async v => {
+        const url = v.url;
+        let nodeTime = moment().valueOf();
+        const {status} = await this.$api.get_info(url)
+        if (!status) {
+          this.$set(v, 'delay', 9999)
+          return
+        }
+        let t = moment().valueOf() - nodeTime;
+        this.$set(v, 'delay', t)
+      })
+      // const url = nodeApp.url;
+      // let nodeTime = new Date().getTime();
+      // let nodeTip = -1;
+      // axios.get(`${url}/v1/chain/get_info`, {
+      //   timeout: 5500,
+      // }).then(() => {
+      //   nodeTime = new Date().getTime() - nodeTime;
+      //   // tip 0低延迟 1一般延迟 2高延迟 3超时
+      //   if (nodeTime < 1000) {
+      //     nodeTip = 0;
+      //   }
+      //   if (nodeTime >= 1000 && nodeTime <= 5000) {
+      //     nodeTip = 1;
+      //   }
+      //   if (nodeTime > 5000) {
+      //     nodeTip = 2;
+      //   }
+      //   if (nodeTime > 9500) {
+      //     nodeTip = 3;
+      //   }
+      // })
     }
   },
 }
@@ -182,68 +270,99 @@ export default {
 <style lang="scss" scoped>
 .nodeSet{
   font-size: 28px;
-  color: #000;
+  padding: 40px 0 0;
+  color: #333;
+  position: relative;
+  .close{
+    position: absolute;
+    top: 40px;
+    right: 40px;
+    width: 24px;
+  }
   .title{
-    font-size: 32px;
+    font-size: 36px;
     font-weight: 500;
     margin-bottom: 20px;
   }
+  .content{
+    height: 700px;
+    overflow: auto;
+  }
   .nodeList{
     text-align: left;
-    margin-top: 20px;
+    height: 120px;
+    border-bottom: 1px solid $color-border;
+    padding: 0 40px;
+    // &:last-child{
+    //   border-bottom: 0;
+    // }
+    .checkBox{
+      margin-right: 30px;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1px solid $color-border;
+      box-sizing: border-box;
+      &.checked{
+        border: 0px solid $color-border;
+      }
+      .checkBoxImg{
+        width: 100%;
+      }
+    }
+    .name{
+      font-size: 30px;
+    }
+    .delay{
+      font-size: 24px;
+      margin-left: 20px;
+      &.green{
+        color: $color-main;
+      }
+      &.yellow{
+        color: #FFBE00;
+      }
+      &.red{
+        color: #FE3B37;
+      }
+    }
     .input{
       outline: none;
-      border: 1px solid #e3e3e3;
-      height: 40px;
+      border: 1px solid $color-border;
+      height: 45px;
+      flex: 1;
       padding-left: 10px;
       border-radius: 3px;
     }
     .icon{
       position: relative;
-      padding-left: 42px;
-      &::before{
-        content: '';
-        position: absolute;
-        left: 0;
-        top: 50%;
-        width: 32px;
-        height: 31px;
-        border: 1px solid #e3e3e3;
-        transform: translate(0, -50%);
-        box-sizing: border-box;
-        border-radius: 30px;
-      }
-
-      &.act{
-        &::before{
-          background: #07d79b;
-          border: 1px solid transparent;
-        }
-        &::after{
-          content: '';
-          position: absolute;
-          left: 16px;
-          top: 50%;
-          width: 10px;
-          height: 9px;
-          background: #FFF;
-          transform: translate(-50%, -50%);
-          box-sizing: border-box;
-          border-radius: 30px;
-        }
-      }
+      padding-left: 10px;
+      flex: 1;
     }
   }
+  .btnDiv{
+    height: 136px;
+  }
   .btn{
-    margin-top: 30px;
-    background: #07d79b;
+    flex: 1;
+    font-size: 36px;
     border-radius: 10px;
-    color: #fff;
-    height: 60px;
+    color: $color-main;
     min-width: 100px;
     padding: 0 20px;
-    &:active{
-      background: #02C698;
+    height: 120px;
+    &.cancel{
+      color: $color-tip;
+      position: relative;
+      &::after{
+        content: '';
+        position: absolute;
+        top: 50%;
+        right: 0%;
+        transform: translate(-50%, -50%);
+        height: 60px;
+        border-left: 2px solid $color-border;
+      }
     }
   }
 }

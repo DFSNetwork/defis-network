@@ -71,3 +71,16 @@ export function get_all_orders() {
     })
   })
 }
+// 节点延时接口
+export function get_info(host) {
+  return new Promise((resolve, reject) => {
+    axios.get(`${host}/v1/chain/get_info`, {
+      timeout: 5500,
+    }).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}

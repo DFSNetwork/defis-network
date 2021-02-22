@@ -28,8 +28,8 @@
         <span v-if="!isExPrice">1 {{ checkedMarket.symbol1 }} ≈ {{ checkedMarket.price }} {{ checkedMarket.symbol0 }}</span>
         <span v-else>1 {{ checkedMarket.symbol0 }} ≈ {{ exPrice }} {{ checkedMarket.symbol1 }}</span>
         <span @click="isExPrice = !isExPrice" class="flexa">
-          <img v-if="isExPrice" class="exImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_left.svg" alt="">
-          <img v-else class="exImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_right.svg" alt="">
+          <img v-if="isExPrice" class="exImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_left.svg" alt="">
+          <img v-else class="exImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_right.svg" alt="">
         </span>
       </div>
       <span class="tip dinReg">

@@ -19,8 +19,9 @@
     </el-dialog>
     <el-dialog
       class="nodeDialog"
+      :show-close="false"
       :visible.sync="showNode">
-      <NodeSet v-if="showNode" />
+      <NodeSet v-if="showNode" @listenClose="handleClose"/>
     </el-dialog>
 
     <warm-tip :showWarm="showWarm" @listenClose="handleClose" />
@@ -128,6 +129,7 @@ export default {
     },
     handleClose() {
       this.showWarm = false;
+      this.showNode = false;
     },
     handleShowComp(type) {
       if (type === 'invi') {
@@ -212,7 +214,11 @@ export default {
   }
   .nodeDialog{
     /deep/ .el-dialog{
-      width: 620px;
+      width: 680px;
+      .el-dialog__body{
+        font-size: 26px;
+        padding: 0px;
+      }
     }
   }
 }

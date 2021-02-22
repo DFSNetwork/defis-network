@@ -8,6 +8,9 @@ export default {
       vote2: 'TAG 参数',
       searchMarket: '搜索市场',
       coinSystem: '{coin} 系统',
+      tradeNum: '交易人次',
+      users: '人',
+      orders: '次',
     }
   },
   'en': {
@@ -18,6 +21,9 @@ export default {
       vote2:'TAG System',
       searchMarket:'Search',
       coinSystem: '{coin} System',
+      tradeNum: '',
+      users: ' Users',
+      orders: ' Orders',
     }
   }
 }

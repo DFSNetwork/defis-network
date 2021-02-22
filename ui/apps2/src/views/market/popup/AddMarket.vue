@@ -57,8 +57,8 @@
       <div class="flexa num din" @click="exRate =!exRate">
         <span v-if="!exRate">1{{ thisMarket.symbol0 }} = {{ thisMarket.sym0Rate || '-' }}{{ thisMarket.symbol1 }}</span>
         <span v-else>1{{ thisMarket.symbol1 }} = {{ thisMarket.sym1Rate || '-' }}{{ thisMarket.symbol0 }}</span>
-        <img class="iconImg" v-if="!exRate" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_left.svg" alt="">
-        <img class="iconImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_right.svg" alt="">
+        <img class="iconImg" v-if="!exRate" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_left.svg" alt="">
+        <img class="iconImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_right.svg" alt="">
       </div>
       <div class="tip">{{ $t('dex.poolNum') }}</div>
       <div class="num din">{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</div>

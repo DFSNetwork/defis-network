@@ -230,7 +230,7 @@ export default {
     nodeSet: '节点设置',
     defaultNode: '默认节点',
     standbyNode: '备用节点',
-    slef: '自定义节点',
+    slef: '自定义',
   },
   footer: {
     swapNum: '兑换量',

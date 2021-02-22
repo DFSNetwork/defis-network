@@ -6,8 +6,8 @@
         <span>{{ dfsInfoData.total_volume ? dfsInfoData.total_volume : "0.00" }}</span>
       </span>
       <span class="ml20">
-        <span class="">24H交易人次: </span>
-        <span>{{ tradeUserNum }}人/{{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}次</span>
+        <span class="">24H{{ $t('sys.tradeNum') }}: </span>
+        <span>{{ tradeUserNum }}{{ $t('sys.users') }}/{{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('sys.orders') }}</span>
       </span>
     </div>
     <div v-else class="" @click="clickOnDFSInfoData">
@@ -16,16 +16,16 @@
         <span>${{ dfsInfoData.total_volume_usdt ? dfsInfoData.total_volume_usdt : "0.00" }}</span>
       </span>
       <span class="ml20">
-        <span class="">24H交易人次: </span>
-        <span>{{ tradeUserNum }}人/{{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}次</span>
+        <span class="">24H{{ $t('sys.tradeNum') }}: </span>
+        <span>{{ tradeUserNum }}{{ $t('sys.users') }}/{{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('sys.orders') }}</span>
       </span>
     </div>
     <div class="poolsNum flexc" @click="isEx = !isEx">
       <span>{{ $t('footer.tlv') }}: </span>
       <span v-if="isEx">{{ poolsEos }}</span>
       <span v-else>${{ poolsUsdt }}</span>
-      <img v-if="isEx" class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_left.svg" alt="">
-      <img v-else class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_btn_right.svg" alt="">
+      <img v-if="isEx" class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_left.svg" alt="">
+      <img v-else class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_right.svg" alt="">
     </div>
 
     <div class="safe tip">
