@@ -74,10 +74,10 @@
                 <div class="tip smallTip">
                   <span v-if="sortPools">{{ $t('pddex.pools') }} {{ v.poolsNum }}</span>
                   <span v-else-if="sortApy">
-                    <span>24H APY {{ v.countApy }}%</span>
+                    <span>{{ $t('pddex.apys1') }} {{ v.countApy }}%</span>
                     <span class="green_p" @click.stop="handleShowApy(v)">详情＞</span>
                   </span>
-                  <span v-else>{{ $t('pddex.amt') }} {{ parseFloat(v.volume24H) }}</span>
+                  <span v-else>{{ $t('pddex.amt1') }} {{ parseFloat(v.volume24H) }}</span>
                 </div>
               </div>
             </div>
@@ -112,10 +112,10 @@
                 <div class="tip smallTip">
                   <span v-if="sortPools">{{ $t('pddex.pools') }} {{ v.poolsNum }}</span>
                   <span v-else-if="sortApy">
-                    <span>24H APY {{ v.countApy }}%</span>
+                    <span>{{ $t('pddex.apys1') }} {{ v.countApy }}%</span>
                     <span class="green_p" @click.stop="handleShowApy(v)">详情＞</span>
                   </span>
-                  <span v-else>{{ $t('pddex.amt') }} {{ parseFloat(v.volume24H) }}</span>
+                  <span v-else>{{ $t('pddex.amt1') }} {{ parseFloat(v.volume24H) }}</span>
                 </div>
               </div>
             </div>
@@ -169,7 +169,7 @@ export default {
       swapTradeLists: {},
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       allMarket: {},
-      areaLists: ['USDT', 'EOS', 'USDC', 'DFS', 'TAG', 'PBTC'],
+      areaLists: ['USDT', 'USDC', 'EOS', 'DFS', 'TAG'],
       cdAreaLists: [],
 
       // 排序
