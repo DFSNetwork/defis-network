@@ -62,15 +62,15 @@ export default {
           url: 'https://node.defis.network', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
-        // {
-        //   name: '大丰收节点3',
-        //   area: 'production',
-        //   protocol: 'http',
-        //   host: '25.208.8.122:8888', // eospush.tokenpocket.pro
-        //   port: '8888',
-        //   url: 'http://125.208.8.122:8888', // https://eospush.tokenpocket.pro
-        //   chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-        // },
+        {
+          name: 'DFS社区节点',
+          area: 'production',
+          protocol: 'http',
+          host: 'eos.rrdy.com', // eospush.tokenpocket.pro
+          port: '443',
+          url: 'https://eos.rrdy.com', // https://eospush.tokenpocket.pro
+          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
+        },
         {
           name: 'Newdex',
           area: 'production',
