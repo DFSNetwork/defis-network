@@ -296,7 +296,7 @@ export default {
   },
   tabbar: {
     swap: 'Swap',
-    order: 'Quotes',
+    order: 'Markets',
   },
   info: {
     info: 'Info',
