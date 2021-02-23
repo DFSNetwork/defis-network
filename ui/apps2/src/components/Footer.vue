@@ -155,7 +155,6 @@ export default {
       const total_volume_usdt = price * parseFloat(this.dfsInfoData.total_volume)
       this.$set(this.dfsInfoData, 'total_volume_usdt', total_volume_usdt.toFixed(0))
       this.$store.dispatch('setDfsData', this.dfsInfoData)
-      console.log(this.dfsInfoData)
       this.handleSetAllRes()
     },
     async handleGetTotalNum() {
@@ -173,7 +172,6 @@ export default {
       const price = this.poolsUsdt / parseFloat(this.poolsEos)
       const total_volume_usdt = price * parseFloat(res.total_volume)
       this.$set(res, 'total_volume_usdt', total_volume_usdt.toFixed(0))
-      console.log(res)
       this.newDfsSwapData = res;
     },
     // 获取账户余额
