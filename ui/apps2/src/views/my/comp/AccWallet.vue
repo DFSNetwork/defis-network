@@ -259,6 +259,7 @@ export default {
         code: 'defislogsone',
         scope: formName,
         table: 'liqs2',
+        limit: 1000,
         json: true
       }
       const {status, result} = await get_table_rows(params)
