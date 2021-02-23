@@ -752,7 +752,7 @@ export default {
         })
         return false;
       }
-      if (Number(this.slipPoint || 5) < Number(this.tradeInfo.priceRate)) {
+      if (Number(this.slipPoint || 5) < Number(this.tradeInfo.priceRate) || !parseFloat(this.tradeInfo.minOut)) {
         this.$message({
           type: 'error',
           message: this.$t('dex.heightSlip')

@@ -3,21 +3,21 @@
     <div v-if="isEx" class="" @click="clickOnDFSInfoData">
       <span>
         <span>24H{{ $t('footer.swapNum') }}: </span>
-        <span>{{ dfsInfoData.total_volume ? dfsInfoData.total_volume : "0.00" }}</span>
+        <span>{{ newDfsSwapData.total_volume ? newDfsSwapData.total_volume : "0.00" }}</span>
       </span>
       <span class="ml20">
         <span class="">24H{{ $t('sys.tradeNum') }}: </span>
-        <span>{{ tradeUserNum }}{{ $t('sys.users') }}/{{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('sys.orders') }}</span>
+        <span>{{ tradeUserNum }}{{ $t('sys.users') }}/{{ newDfsSwapData.order_number ? newDfsSwapData.order_number : 0 }}{{ $t('sys.orders') }}</span>
       </span>
     </div>
     <div v-else class="" @click="clickOnDFSInfoData">
       <span>
         <span class="">24H{{ $t('footer.swapNum') }}: </span>
-        <span>${{ dfsInfoData.total_volume_usdt ? dfsInfoData.total_volume_usdt : "0.00" }}</span>
+        <span>${{ newDfsSwapData.total_volume_usdt ? newDfsSwapData.total_volume_usdt : "0.00" }}</span>
       </span>
       <span class="ml20">
         <span class="">24H{{ $t('sys.tradeNum') }}: </span>
-        <span>{{ tradeUserNum }}{{ $t('sys.users') }}/{{ dfsInfoData.order_number ? dfsInfoData.order_number : 0 }}{{ $t('sys.orders') }}</span>
+        <span>{{ tradeUserNum }}{{ $t('sys.users') }}/{{ newDfsSwapData.order_number ? newDfsSwapData.order_number : 0 }}{{ $t('sys.orders') }}</span>
       </span>
     </div>
     <div class="poolsNum flexc" @click="isEx = !isEx">
@@ -60,6 +60,7 @@ export default {
       showImg: false,
       showImg2: false,
       dfsInfoData: {},
+      newDfsSwapData: {},
       timer: null,
       closeDFSInfoDataTip: true,
       poolsEos: '0.0000 EOS',
@@ -81,36 +82,18 @@ export default {
     clearInterval(this.timer);
     this.timer = setInterval(() => {
       this.handleGetDfsInfoData();
+      this.handleGetTotalNum()
     }, 1000 * 30);
     this.handleGetDfsInfoData();
+    this.handleGetTotalNum()
   },
   watch: {
-    // poolsBal: {
-    //   handler: function pb(val) {
-    //     // this.poolsEos = accMul(val, 2).toFixed(4);
-    //   },
-    //   immediate: true,
-    //   deep: true,
-    // },
-    // marketLists: {
-    //   handler: function mls(newVal) {
-    //     let count = 0
-    //     let countU = 0
-    //     newVal.forEach(v => {
-    //       count = Number(count) + Number(v.eos_value)
-    //       countU = Number(countU) + Number(v.usdt_value)
-    //     })
-    //     this.poolsEos = count;
-    //     this.poolsUsdt = countU;
-    //   }
-    // }
   },
   methods: {
     handleSetAllRes() {
       const allResult = [];
       const feesDataKeys = this.dfsInfoData.trading_volume_in || [];
       const feesDataKeysOut = this.dfsInfoData.trading_volume_out || [];
-      // const coinArr = dealSymArr(this.marketLists);
       const dealArr = [];
       feesDataKeys.forEach((item) => {
         const allHas = dealArr.find(v => v.mid === item.mid)
@@ -172,7 +155,26 @@ export default {
       const total_volume_usdt = price * parseFloat(this.dfsInfoData.total_volume)
       this.$set(this.dfsInfoData, 'total_volume_usdt', total_volume_usdt.toFixed(0))
       this.$store.dispatch('setDfsData', this.dfsInfoData)
+      console.log(this.dfsInfoData)
       this.handleSetAllRes()
+    },
+    async handleGetTotalNum() {
+      const result = await axios.get("https://api.defis.network/basic/swap/counter");
+      if (result.status !== 200) {
+        return;
+      }
+      const res = result.data;
+      this.tradeUserNum = res.trade_user_num;
+      this.tradeUserNum = res.trade_user_num;
+      const totalArr = res.tvl_eos.split(' ');
+      res.total_volume = `${parseInt(res.total_volume)} ${totalArr[1]}`
+      this.poolsEos = `${parseInt(totalArr[0])} ${totalArr[1]}`;
+      this.poolsUsdt = parseInt(res.tvl_usdt);
+      const price = this.poolsUsdt / parseFloat(this.poolsEos)
+      const total_volume_usdt = price * parseFloat(res.total_volume)
+      this.$set(res, 'total_volume_usdt', total_volume_usdt.toFixed(0))
+      console.log(res)
+      this.newDfsSwapData = res;
     },
     // 获取账户余额
     async handleGetBalance() {
