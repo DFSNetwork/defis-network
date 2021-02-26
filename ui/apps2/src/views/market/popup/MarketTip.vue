@@ -3,8 +3,8 @@
     <!-- <div>{{ $t('market.marketTip') }}</div> -->
     <div>当前做市盈亏支持</div>
     <ul class="ul">
-      <li>TokenA本位：TokenA盈亏 + TokenB盈亏 * TokenB价格</li>
-      <li>TokenB本位：TokenA盈亏 / TokenB价格 + TokenB盈亏</li>
+      <li>TokenA本位：TokenA盈亏 * 2</li>
+      <li>TokenB本位：TokenB盈亏 * 2</li>
       <li>双币本位：TokenA盈亏 & TokenB盈亏</li>
     </ul>
     <div class="tip">* 盈亏 = 当前做市 - 做市本金</div>
