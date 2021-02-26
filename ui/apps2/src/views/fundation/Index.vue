@@ -23,7 +23,9 @@
       @listenFilter="handleFilter"/>
   
     <div class="btnDiv">
-      <div class="btn flexc" @click="showToFundation=!showToFundation">{{ $t('fundation.toFundation') }}</div>
+      <!-- <div class="btn flexc" @click="showToFundation=!showToFundation">{{ $t('fundation.toFundation') }}</div> -->
+      <img class="btn" @click="showToFundation=!showToFundation"
+        src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/toFundation.png" alt="">
     </div>
     <!-- 去捐款 -->
     <el-dialog
@@ -338,13 +340,13 @@ export default {
   background: #fFF;
   box-sizing: border-box;
   font-size: 36px;
-  border-radius: 70px;
+  border-radius: 20px;
   .btn{
-    box-shadow: 0px 2px 16px 0px rgba(41,212,176,0.4);
-    background: #29D4B0;
+    // box-shadow: 0px 2px 16px 0px rgba(41,212,176,0.4);
+    // background: #29D4B0;
     height: 132px;
     width: 132px;
-    border-radius: 70px;
+    // border-radius: 70px;
     color: #fFF;
 
   }
