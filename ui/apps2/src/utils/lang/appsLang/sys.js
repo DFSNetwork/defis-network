@@ -11,6 +11,7 @@ export default {
       tradeNum: '交易人次',
       users: '人',
       orders: '次',
+      dAndW: '充提ETH',
     }
   },
   'en': {
@@ -24,6 +25,7 @@ export default {
       tradeNum: '',
       users: ' Users',
       orders: ' Orders',
+      dAndW: 'Get ETH',
     }
   }
 }

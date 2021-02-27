@@ -72,10 +72,10 @@
           </div>
           <div class="btnDiv flexb">
             <div class="btn flexc" v-loading="loading" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
-            <!-- <div class="ptokens" v-if="isPtokens" @click="handleTo('ptokens')">
+            <div class="ptokens" v-if="isPtokens" @click="handleToProject('dtoken')">
               <img :src="ptokenData.imgUrl">
-              <div>{{ ptokenData.symbol }}</div>
-            </div> -->
+              <div>{{ $t('sys.dAndW') }}</div>
+            </div>
           </div>
 
           <div class="linkTo flexb">
@@ -329,33 +329,33 @@ export default {
       marketLists: state => state.sys.marketLists,
     }),
     isPtokens() {
-      if (this.thisMarket0.contract === 'btc.ptokens' && this.thisMarket0.symbol === 'PBTC') {
-        return true
+      if (this.thisMarket0.contract === 'asset.dtoken' && this.thisMarket0.symbol === 'ETH') {
+        return this.thisMarket0
       }
-      if (this.thisMarket1.contract === 'btc.ptokens' && this.thisMarket1.symbol === 'PBTC') {
-        return true
+      if (this.thisMarket1.contract === 'asset.dtoken' && this.thisMarket1.symbol === 'ETH') {
+        return this.thisMarket1
       }
-      if (this.thisMarket0.contract === 'eth.ptokens' && this.thisMarket0.symbol === 'PETH') {
-        return true
-      }
-      if (this.thisMarket1.contract === 'eth.ptokens' && this.thisMarket1.symbol === 'PETH') {
-        return true
-      }
+      // if (this.thisMarket0.contract === 'eth.ptokens' && this.thisMarket0.symbol === 'PETH') {
+      //   return true
+      // }
+      // if (this.thisMarket1.contract === 'eth.ptokens' && this.thisMarket1.symbol === 'PETH') {
+      //   return true
+      // }
       return false
     },
     ptokenData() {
-      if (this.thisMarket0.contract === 'btc.ptokens' && this.thisMarket0.symbol === 'PBTC') {
+      if (this.thisMarket0.contract === 'asset.dtoken' && this.thisMarket0.symbol === 'ETH') {
         return this.thisMarket0
       }
-      if (this.thisMarket1.contract === 'btc.ptokens' && this.thisMarket1.symbol === 'PBTC') {
+      if (this.thisMarket1.contract === 'asset.dtoken' && this.thisMarket1.symbol === 'ETH') {
         return this.thisMarket1
       }
-      if (this.thisMarket0.contract === 'eth.ptokens' && this.thisMarket0.symbol === 'PETH') {
-        return this.thisMarket0
-      }
-      if (this.thisMarket1.contract === 'eth.ptokens' && this.thisMarket1.symbol === 'PETH') {
-        return this.thisMarket1
-      }
+      // if (this.thisMarket0.contract === 'eth.ptokens' && this.thisMarket0.symbol === 'PETH') {
+      //   return this.thisMarket0
+      // }
+      // if (this.thisMarket1.contract === 'eth.ptokens' && this.thisMarket1.symbol === 'PETH') {
+      //   return this.thisMarket1
+      // }
       return {}
     },
     // showMax0() {
@@ -502,6 +502,11 @@ export default {
     this.handleSetMarkets();
   },
   methods: {
+    handleToProject(type) {
+      if (type === 'dtoken') {
+        location.href = 'https://dtoken.gitee.io/'
+      }
+    },
     handleGetOgxPrices() {
       ogx_get_prices_table((res) => {
         this.ogxPrices = res;
@@ -1166,7 +1171,7 @@ export default {
     text-align: center;
     img{
       width: 44px;
-      margin-bottom: 5px;
+      // margin-bottom: 5px;
     }
   }
 }
