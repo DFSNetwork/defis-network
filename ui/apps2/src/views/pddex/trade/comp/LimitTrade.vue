@@ -43,7 +43,7 @@
     </div>
     <div class="flexa aboutNum dinReg">
       <span class="tip">{{ $t('pddex.tradeAmt') }}：</span>
-      <span>≈ {{ aboutNum }} EOS</span>
+      <span>≈ {{ aboutNum }} {{ market.symbol0 }}</span>
     </div>
     <!-- 交易按钮 -->
     <div class="btnDiv" @click="handleRegPrice">
