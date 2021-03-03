@@ -61,6 +61,11 @@
           <div>跨链充提</div>
           <img class="beta" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/beta.png" alt="">
         </div>
+        <div class="list" @click="handleToProject('diary')">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/notice.png" alt="">
+          <div>大丰收日记</div>
+          <img class="beta hot" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/hot.png" alt="">
+        </div>
         <div class="list" @click="handleTo('pools')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png" alt="">
           <div>DFS 矿池</div>
@@ -69,12 +74,12 @@
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png" alt="">
           <div>TAG 矿池</div>
         </div>
+      </div>
+      <div class="lists flexa">
         <div class="list" @click="handleToProject('usdx')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/usdx.png" alt="">
           <div>USDX 矿池</div>
         </div>
-      </div>
-      <div class="lists flexa">
         <div class="list" @click="handleToProject('eosdefi')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
           <div>EOS DeFis</div>
@@ -97,12 +102,12 @@
             </template>
           </van-popover>
         </div>
+      </div>
+      <div class="lists flexa">
         <div class="list" @click="handleTo('total')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/top21.png" alt="">
           <div>TOP21</div>
         </div>
-      </div>
-      <div class="lists flexa">
         <div class="list" @click="handleToProject('totalData')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/total.png" alt="">
           <div>数据总览</div>
@@ -115,19 +120,15 @@
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/coinView.png" alt="">
           <div>代币观察</div>
         </div>
+      </div>
+      <div class="lists flexa">
         <div class="list" @click="handleTo('fundation')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/fundation.png" alt="">
           <div>乐捐系统</div>
         </div>
-      </div>
-      <div class="lists flexa">
         <div class="list" @click="handleToProject('help')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/kline.png" alt="">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/helper.png" alt="">
           <div>大丰收助手</div>
-        </div>
-        <div class="list" @click="handleToProject('diary')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/coinView.png" alt="">
-          <div>大丰收日记</div>
         </div>
       </div>
     </div>
@@ -265,6 +266,11 @@ export default {
           right: 8px;
           color: #FFF;
           font-weight: 300;
+          &.hot{
+            width: 48px;
+            top: -10px;
+            right: 12px;
+          }
         }
         .icon{
           width: 42px;

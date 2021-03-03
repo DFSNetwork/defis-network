@@ -53,15 +53,6 @@ export default {
           url: 'https://eos.blockeden.cn', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
-        // {
-        //   name: '大丰收节点2',
-        //   area: 'production',
-        //   protocol: 'https',
-        //   host: 'node.defis.network', // eospush.tokenpocket.pro
-        //   port: '443',
-        //   url: 'https://node.defis.network', // https://eospush.tokenpocket.pro
-        //   chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-        // },
         {
           name: 'DFS社区节点',
           area: 'production',
@@ -123,15 +114,6 @@ export default {
           host: 'nodes.get-scatter.com', // eospush.tokenpocket.pro
           port: '443',
           url: 'https://nodes.get-scatter.com', // https://eospush.tokenpocket.pro
-          chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
-        },
-        {
-          name: 'MeetOne',
-          area: 'production',
-          protocol: 'https',
-          host: 'mainnet.meet.one',
-          port: '443',
-          url: 'https://mainnet.meet.one', // https://eospush.tokenpocket.pro
           chainId: "aca376f206b8fc25a6ed44dbdc66547c36c6c33e3a119ffbeaef943642f0e906",
         },
         {
