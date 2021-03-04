@@ -88,16 +88,20 @@ export default {
   .flexw{
     display: flex;
     align-items: center;
-    justify-content: flex-start;
+    justify-content: center;
     flex-wrap: wrap;
     border: 1px solid $color-border;
     margin: 30px 0;
     border-radius: 20px;
-    padding: 25px 36px;
+    padding: 25px 15px;
     .coin{
+      font-size: 24px;
       min-width: 30%;
       margin-right: 10px;
       justify-content: flex-start;
+      &:last-child{
+        margin-right: 0;
+      }
     }
   }
   .coinUrl{
