@@ -129,7 +129,7 @@
                           'red': Number(tradeInfo.priceRate) > 10}">
                 {{ tradeInfo.priceRate }}%
               </span>
-              <img class="tradeSet" @click="handleShowTools" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/swapSet.svg" alt="">
+              <!-- <img class="tradeSet" @click="handleShowTools" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/swapSet.svg" alt=""> -->
             </span>
             <span v-else>无滑点交易</span>
           </div>
@@ -163,9 +163,17 @@
             </span>
             <span class="din">{{ reward }} DFS</span>
           </div>
+          <div class="flexb fee">
+            <div>
+              <span class="flexa" v-if="isMoreRouter" @click="showMoreRouter = true">
+                <span class="tip">多路径转换</span>
+                <img class="moreRouterIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/important.png" alt="">
+              </span>
+            </div>
+            <img class="tradeSet" @click="handleShowTools" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/stepupIcon.png" alt="">
+          </div>
         </div>
       </el-collapse-transition>
-
     </div>
 
     <div class="pool" v-if="isOgxSwap">
@@ -179,7 +187,6 @@
       <div class="flexb">
         <div>
           <span>{{ $t('dex.poolNum') }}</span>
-          <!-- <span class="marketNow" @click="handleTo('market')">{{ $t('dex.marketNow') }} ></span> -->
           <span class="marketNow" @click="handleTo('poolsMarket')">{{ $t('pools.toPool') }} ></span>
         </div>
         <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
@@ -191,23 +198,6 @@
         {{ bestPath.reserve0 }} / {{ bestPath.reserve1 }}
       </div>
     </div>
-    <div v-else-if="routePath" class="routePath">
-      <div class="flexb">
-        <div>{{ $t('dex.moreRoute') }}： </div>
-        <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
-          <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/tip.svg" alt="">
-          <span>{{ $t('public.warmPrompt') }}</span>
-        </div>
-      </div>
-      <div class="flexw">
-        <span v-for="(item, i) in routePath" :key="i" class="flexc coin">
-          <img class="coinUrl" :onerror="errorCoinImg"
-            :src="handleDealRouteImg(item)">
-          <span>{{ item.split(':')[1] }}</span>
-          <span v-if="routePath.length - 1 !== i" class="el-icon-arrow-right"></span>
-        </span>
-      </div>
-    </div>
 
     <el-dialog
       class="mkListDia pcList"
@@ -217,7 +207,6 @@
     </el-dialog>
 
     <SlipPointTools ref="slipPointTools"/>
-
     
     <el-dialog
       class="mkListDia pcList"
@@ -236,6 +225,14 @@
         @listenMarketChange="handleMarketChange"
         @listenClose="handleClose"/>
     </van-popup>
+
+    <van-popup
+      class="popup_p"
+      v-model="showMoreRouter">
+      <MoreRouter v-if="showMoreRouter"
+        :routePath="routePath"
+        @listenClose="handleClose"/>
+    </van-popup>
   </div>
 </template>
 
@@ -249,6 +246,7 @@ import UsddTip from '@/components/UsddTip';
 import SlipPointTools from '@/components/SlipPointTools';
 import OgxSwapTip from './dialog/OgxSwapTip';
 import MarketArea from '@/components/MarketArea';
+import MoreRouter from './dialog/MoreRouter';
 
 import { ogx_get_num, ogx_get_prices_table } from './js/ogx.js';
 
@@ -260,6 +258,7 @@ export default {
     SlipPointTools,
     OgxSwapTip,
     MarketArea,
+    MoreRouter,
   },
   data() {
     return {
@@ -316,6 +315,9 @@ export default {
       ogxPrices: [],
       showOgxTip: false,
       showNewMarket: false,
+      showMoreRouter: false,
+
+      isMoreRouter: 0, // 交易是否是多路径
     }
   },
   computed: {
@@ -327,6 +329,7 @@ export default {
       rankTrade: state => state.sys.rankTrade, // 排名前21的交易对
       filterMkLists: state => state.sys.filterMkLists,
       marketLists: state => state.sys.marketLists,
+      rSwitch: state => state.app.rSwitch,
     }),
     isPtokens() {
       if (this.thisMarket0.contract === 'asset.dtoken' && this.thisMarket0.symbol === 'ETH') {
@@ -335,12 +338,6 @@ export default {
       if (this.thisMarket1.contract === 'asset.dtoken' && this.thisMarket1.symbol === 'ETH') {
         return this.thisMarket1
       }
-      // if (this.thisMarket0.contract === 'eth.ptokens' && this.thisMarket0.symbol === 'PETH') {
-      //   return true
-      // }
-      // if (this.thisMarket1.contract === 'eth.ptokens' && this.thisMarket1.symbol === 'PETH') {
-      //   return true
-      // }
       return false
     },
     ptokenData() {
@@ -350,20 +347,8 @@ export default {
       if (this.thisMarket1.contract === 'asset.dtoken' && this.thisMarket1.symbol === 'ETH') {
         return this.thisMarket1
       }
-      // if (this.thisMarket0.contract === 'eth.ptokens' && this.thisMarket0.symbol === 'PETH') {
-      //   return this.thisMarket0
-      // }
-      // if (this.thisMarket1.contract === 'eth.ptokens' && this.thisMarket1.symbol === 'PETH') {
-      //   return this.thisMarket1
-      // }
       return {}
     },
-    // showMax0() {
-    //   return Number(this.payNum) !== Number(this.balanceSym0)
-    // },
-    // showMax1() {
-    //   return Number(this.getNum) !== Number(this.balanceSym1)
-    // },
     showDetail() {
       return Number(this.payNum) && Number(this.getNum)
     },
@@ -379,19 +364,21 @@ export default {
       return fee
     },
     bestPath() {
-      const path = this.thisMidsPath;
-      const pathArr = path.split('-');
-      const showPool = pathArr.length <= 1;
-      if (!showPool) {
-        return ''
-      }
-      const haspool = this.marketLists.find(v => (v.mid === Number(path)))
+      const haspool = this.marketLists.find(v => {
+        return (
+            (v.contract0 === this.thisMarket0.contract && v.symbol0 === this.thisMarket0.symbol) && 
+            (v.contract1 === this.thisMarket1.contract && v.symbol1 === this.thisMarket1.symbol)
+          ) || (
+            (v.contract0 === this.thisMarket1.contract && v.symbol0 === this.thisMarket1.symbol) &&
+            (v.contract1 === this.thisMarket0.contract && v.symbol1 === this.thisMarket0.symbol)
+          )
+      })
       return haspool;
     },
     routePath() {
       const path = this.thisCoinsPath;
       if(!path) {
-        return false
+        return []
       }
       const pathArr = path.split('-')
       return pathArr
@@ -458,11 +445,9 @@ export default {
         if (!arr.length) {
           return;
         }
-        // this.handleGetUrlInAndOut()
         const market0 = arr.find(v => v.contract === this.thisMarket0.contract && v.symbol === this.thisMarket0.symbol) || arr[0]
         this.thisMarket0 = market0;
         const market1 = arr.find(v => v.contract === this.thisMarket1.contract && v.symbol === this.thisMarket1.symbol) || arr[1]
-        // const market1 = arr[1]
         this.thisMarket1 = market1;
         this.handleInBy(this.tradeInfo.type, 'first')
         this.refreshLoading = false;
@@ -596,6 +581,7 @@ export default {
     },
     handleClose() {
       this.showMarketList = false
+      this.showMoreRouter = false
     },
     listenShowDrawer(type) {
       this.type = type;
@@ -628,7 +614,6 @@ export default {
       }
       
       try {
-        // console.log(inData)
         let outData;
         if (this.isOgxSwap) {
           inData.sym0 = this.thisMarket0.symbol;
@@ -637,7 +622,6 @@ export default {
         } else {
           outData = this.handleDealAmountOut(inData);
         }
-        // console.log(outData)
         // in & out 都是0，非焦点ipt置空
         if (!Number(outData.payNum) && !Number(outData.getNum)) {
           if (type === 'pay') {
@@ -691,6 +675,12 @@ export default {
       if (!path.length) {
         path = SwapRouter.get_paths(params0, params1, inData.type)
       }
+      if (!this.rSwitch) {
+        const fPathArr = path[0].split('-');
+        if (fPathArr.length === 1) {
+          path = [path[0]]
+        }
+      }
       const params = [
         path,
         inData.type === 'pay' ? params0 : params1,
@@ -710,11 +700,12 @@ export default {
       const getNum = inData.type === 'pay' ? res.quantity_out.split(' ')[0] : inData.getNum;
       this.thisCoinsPath = res.bestPath;
       this.thisMidsPath = inData.type === 'pay' ? res.mid : res.mid.split('-').reverse().join('-');
+
+      // 获取单独存在的mid
+      this.isMoreRouter = res.mid.split('-').length > 1;
+      // console.log(this.isMoreRouter)
+
       let minOut = 0;
-      // console.log('quantity_out - ', res.quantity_out)
-      // console.log('price - ', res.price)
-      // console.log('slipPointUser - ', inData.slipPointUser)
-      // console.log('payNum - ', payNum)
       minOut = res.price * (1 - inData.slipPointUser) * payNum * 0.997;
       minOut = toFixed(minOut, this.thisMarket1.decimal)
 
@@ -722,7 +713,6 @@ export default {
           aboutPrice = toFixed(aboutPrice, Number(this.thisMarket0.decimal) + 2)
       let aboutPriceSym0 = res.swapInPrice;
           aboutPriceSym0 = toFixed(aboutPriceSym0, Number(this.thisMarket1.decimal) + 2)
-      // console.log(aboutPriceSym0, res.price)
       let priceRate = accDiv(res.swapInPrice, res.price);
           priceRate = accSub(1, priceRate)
           priceRate = accMul(priceRate, 100)
@@ -742,7 +732,6 @@ export default {
         thisCoinsPath: this.thisCoinsPath,
         thisMidsPath: this.thisMidsPath,
       }
-      // console.log(obj)
       return obj
     },
     handleReg() {
@@ -882,8 +871,6 @@ export default {
       const b = this.balanceSym0;
       this.balanceSym0 = this.balanceSym1;
       this.balanceSym1 = b;
-      // console.log(this.thisMarket0)
-      // console.log(this.thisMarket1)
       this.handleInBy(this.tradeInfo.type, 'first')
       this.handleSetMarkets();
     },
@@ -1110,7 +1097,7 @@ export default {
   }
   .tabB{
     margin: 24px 0;
-    padding: 0 26px 20px;
+    padding: 0 26px 0px;
     font-size: 24px;
     color: $color-black;
     .flexb{
@@ -1138,6 +1125,11 @@ export default {
     .tradeSet{
       width: 30px;
       margin-left: 8px;
+    }
+    .moreRouterIcon{
+      width: 32px;
+      height: 32px;
+      margin-left: 10px;
     }
   }
 }
@@ -1225,38 +1217,6 @@ export default {
     }
   }
 }
-.routePath{
-  font-size: 28px;
-  text-align: left;
-  padding: 20px 40px;
-  background:rgba(255,255,255,1);
-  border-radius: 12px;
-  border:2px solid rgba(224,224,224,1);
-  .bankTip{
-    margin-top: 10px;
-    font-size: 24px;
-  }
-  .flexw{
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    .coin{
-      margin-top: 15px;
-      min-width: 30%;
-      margin-right: 10px;
-      justify-content: flex-start;
-    }
-  }
-  .coinUrl{
-    width: 60px;
-    height: 60px;
-    margin-right: 10px;
-    border-radius: 60px;
-    overflow: hidden;
-  }
-}
-
 .mkListDia{
   // animation: none;
   /deep/ .el-dialog{

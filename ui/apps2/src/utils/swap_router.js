@@ -1,6 +1,4 @@
 import { toFixed, accDiv } from './public';
-// import Worker from './worker'
-// import VueWorker from 'vue-worker'
 class swapRouter {
   constructor() {
     this.markets = [];
@@ -205,8 +203,12 @@ class swapRouter {
   get_amounts_out(mids, token_in, amount_in, type) {
     if (!this.isInit) return;
     let amounts_out_arr = [];
+    let hasMids = 0;
     mids.forEach((m, mIndex) => {
       let mid_arr = m.split("-");
+      if (mid_arr.length === 1) {
+        hasMids = mid_arr[0]
+      }
       let quantity_out;
       let price = 1;
       let swapInPrice = 1;
@@ -235,7 +237,7 @@ class swapRouter {
       }
       amounts_out_arr.push({
         amount_in: new_amount_in, token_in: new_token_in, quantity_out, price, mid: m, mIndex,
-        swapInPrice, swapOutPrice
+        swapInPrice, swapOutPrice,
       })
     })
     if (!type) {
@@ -248,12 +250,13 @@ class swapRouter {
         return parseFloat(a.quantity_out) - parseFloat(b.quantity_out);
       })
     }
-    // console.log(amounts_out_arr)
     if (!amounts_out_arr.length) {
       return {}
     }
     this.bestPath = this._pathsArr[amounts_out_arr[0].mIndex]
     amounts_out_arr[0].bestPath = this.bestPath;
+    amounts_out_arr[0].hasMids = hasMids;
+
     return amounts_out_arr[0]
   }
 

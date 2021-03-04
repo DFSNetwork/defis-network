@@ -25,6 +25,7 @@ const app = {
       timer: '',
     },
     slipPoint: localStorage.getItem('slipPoint') ? parseInt(localStorage.getItem('slipPoint')) : 1,
+    rSwitch: localStorage.getItem('rSwitch') ? JSON.parse(localStorage.getItem('rSwitch')) : true,
     minScreen: false,
     accInfo: {
       avatar: "https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png",
@@ -64,6 +65,10 @@ const app = {
       state.slipPoint = slipPoint;
       localStorage.setItem('slipPoint', JSON.stringify(slipPoint));
     },
+    SET_rSwitch: (state, rSwitch) => {
+      state.rSwitch = rSwitch;
+      localStorage.setItem('rSwitch', JSON.stringify(rSwitch));
+    },
     SET_ACCOUNT: (state, account) => {
       state.account = account;
     },
@@ -92,6 +97,9 @@ const app = {
     },
     setSlipPoint({ commit }, slipPoint) {
       commit('SET_SLIPPOINT', Number(slipPoint));
+    },
+    setRSwitch({ commit }, rSwitch) {
+      commit('SET_rSwitch', rSwitch);
     },
     setAccount({ commit }, account) {
       commit('SET_ACCOUNT', account);

@@ -96,9 +96,9 @@ export default {
         tab: 'TAG',
         contract: 'tagtokenmain',
       }, {
-        tab: 'PBTC',
-        contract: 'btc.ptokens',
-      }, ],
+        tab: '其他',
+        contract: '',
+      }],
       searchArr: [],
     }
   },
@@ -162,12 +162,10 @@ export default {
         let searchArr = [];
         if (!search) {
           searchArr = this.filterMkLists;
-          // searchArr = this.marketLists.filter(v => v.symbol0.indexOf(search) !== -1 || v.symbol1.indexOf(search) !== -1);
         } else {
           searchArr = this.marketLists.filter(v => v.symbol0.indexOf(search) !== -1 || v.symbol1.indexOf(search) !== -1);
         }
         this.searchArr = this.handleDealFGollow(searchArr);
-        // console.log(this.searchArr)
         return
       }
       if (!search) {
@@ -181,6 +179,9 @@ export default {
     handleDealFGollow(arr) {
       if (!this.area) {
         return this.handleDealSelf(arr)
+      }
+      if (this.area === 6) {
+        return this.handleDealOther(arr)
       }
       const area = this.areaLists[this.area];
       const follow = [];
@@ -282,6 +283,35 @@ export default {
         dealArr.push(newList)
       })
       return dealArr
+    },
+    handleDealOther(searchArr) {
+      const arr = [];
+      searchArr.forEach(v => {
+        const reg = this.handleRegOther(v)
+        if (reg) {
+          return
+        }
+        arr.push(v)
+      })
+      return arr
+    },
+    // 验证是否存含有分区币种
+    handleRegOther(item) {
+      try {
+        this.areaLists.forEach(v => {
+          if (!v.contract) {
+            return
+          }
+          const has = (v.contract === item.contract0 && v.tab === item.symbol0)
+                 || (v.contract === item.contract1 && v.tab === item.symbol1)
+          if (has) {
+            throw true 
+          }
+        })
+        return false;
+      } catch (error) {
+        return true
+      }
     },
     handleShowBank(item) {
       const type = this.type;

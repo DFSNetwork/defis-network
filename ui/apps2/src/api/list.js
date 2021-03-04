@@ -1,9 +1,14 @@
 
 import axios from 'axios';
 import store from '@/store';
+const zlib = require('zlib');
 function getHost() {
   const baseConfig = store.state.sys.baseConfig;
   return baseConfig.node.url;
+}
+function unZip(deflated) {
+  const inflated = zlib.inflateSync(new Buffer(deflated, 'base64')).toString();
+  return inflated
 }
 export function get_table_rows(params) {
   return new Promise((resolve, reject) => {
@@ -78,6 +83,23 @@ export function get_info(host) {
       timeout: 5500,
     }).then((res) => {
       let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+// 获取markets压缩数据
+export function get_markets() {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/common/markets', {
+      timeout: 5500,
+    }).then((res) => {
+      var deflated = res.data;
+      var inflated = unZip(deflated)
+      const result = {
+        rows: JSON.parse(inflated)
+      }
       resolve({ status: res.status === 200, result });
     }, err => {
       reject(err)

@@ -30,7 +30,6 @@
 
 <script>
 import { mapState } from 'vuex'
-import { EosModel } from '@/utils/eos';
 import HeaderTools from '@/components/Header';
 import MyFooter from '@/components/Footer';
 // import Nav from '@/components/Nav';
@@ -161,20 +160,15 @@ export default {
       this.handleRowsMarket();
     },
     // 获取做市池子
-    handleRowsMarket() {
-      const params = {
-        code: this.baseConfig.toAccountSwap,
-        scope: this.baseConfig.toAccountSwap,
-        table: 'markets',
-        json: true,
-        limit: 1000
+    async handleRowsMarket() {
+      const {status, result} = await this.$api.get_markets();
+      if (!status) {
+        return
       }
-      EosModel.getTableRows(params, (res) => {
-        const list = res.rows || [];
-        // 列表处理
-        const dealObj = dealMarketLists(list, this.topLists)
-        this.marketLists = dealObj.allLists;
-      })
+      const list = result.rows || [];
+      // 列表处理
+      const dealObj = dealMarketLists(list, this.topLists)
+      this.marketLists = dealObj.allLists;
     }
   }
 }

@@ -1,46 +1,52 @@
 <template>
   <div class="nav">
-    <el-dialog
-      class="dialog"
-      :show-close="false"
-      :visible.sync="showNav">
+    <van-popup
+      class="popup_p"
+      v-model="showNav">
       <div class="navList">
         <img class="close" @click="showNav = false"
           src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/sd_icon_btn.svg" alt="">
         <div class="title">{{ $t('dex.TradeSet') }}</div>
-        <div class="subTitle flex">
-          <span>{{ $t('dex.slipSet') }}</span>
-          <el-popover
-            class="flexc"
-            popper-class="mypopper"
-            placement="top-start"
-            trigger="click">
-            <div class="qusTip">{{ $t('dex.slipTip') }}</div>
-            <span slot="reference" class="flexc ml10"><img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt=""></span>
-          </el-popover>
+        <div class="item">
+          <div class="subTitle flexb">
+            <span>多路径兑换</span>
+            <van-switch class="switch"
+              :value="rSwitch" fon active-color="#29D4B0" @input="handleCheckSwitch" />
+          </div>
+          <div class="tip">
+            *通系统将为您匹配价格最优的兑换路径，确保在扣除手续费后，依然能获得更多代币
+          </div>
         </div>
-        <div class="slips flexb">
-          <div class="flexc" :class="{'act': Number(tipRate) === 1}" @click="handleSetSlipPoint(1)">1%</div>
-          <div class="flexc" :class="{'act': Number(tipRate) === 5}" @click="handleSetSlipPoint(5)">5%</div>
-          <div class="flexc" :class="{'act': Number(tipRate) === 10}" @click="handleSetSlipPoint(10)">10%</div>
-        </div>
-        <div class="iptDiv" :class="{'act': Number(tipRate) !== 1 && Number(tipRate) !== 5 && Number(tipRate) !== 10 }">
-          <el-input class="elIpt" type="number" v-model="slipRate" @blur="handleBlur" :placeholder="tipRate">
-            <template slot="append">%</template>
-          </el-input>
+        <div class="item">
+          <div class="subTitle flexb">
+            <span>滑点设置</span>
+          </div>
+          <div class="tip">
+            *{{ $t('dex.slipTip') }}
+          </div>
+          <div class="rateDiv">
+            <div class="flexb lists">
+              <span class="tab flexc" :class="{'act': Number(tipRate) === 1}" @click="handleSetSlipPoint(1)">1%</span>
+              <span class="tab flexc" :class="{'act': Number(tipRate) === 5}" @click="handleSetSlipPoint(5)">5%</span>
+              <span class="tab flexc" :class="{'act': Number(tipRate) === 10}" @click="handleSetSlipPoint(10)">10%</span>
+            </div>
+            <div class="flexb lists">
+              <span class="tab flexc iptSpan"
+                :class="{'actIpt': Number(tipRate) !== 1 && Number(tipRate) !== 5 && Number(tipRate) !== 10 }">
+                <van-field class="ipt"
+                  input-align="center"
+                  v-model="slipRate"
+                  @blur="handleBlur" :placeholder="tipRate" type="number" />
+                <span class="per">%</span>
+              </span>
+              <span></span>
+              <span></span>
+            </div>
+          </div>
         </div>
         <span class="btn flexc" v-loading="loading" @click="handleSureSlip">{{ $t('public.confirm') }}</span>
-        <!-- <div class="invitation">
-          <div class="subTitle flex">
-            <span>{{ $t('dex.inviter') }}</span>
-          </div>
-          <div class="invitationIpt flex">
-            <el-input class="elIpt" v-model="inviAcc"></el-input>
-            <span class="btn flexc" v-loading="loading" @click="handleSureInviArr">{{ $t('public.confirm') }}</span>
-          </div>
-        </div> -->
       </div>
-    </el-dialog>
+    </van-popup>
   </div>
 </template>
 
@@ -65,6 +71,7 @@ export default {
       language: state => state.app.language,
       scatter: state => state.app.scatter,
       slipPoint: state => state.app.slipPoint,
+      rSwitch: state => state.app.rSwitch,
     })
   },
   watch: {
@@ -88,7 +95,7 @@ export default {
     },
     slipRate(newVal) {
       if (Number(newVal) > 80) {
-        this.slipRate = 80;
+        this.slipRate = '80';
       }
       this.tipRate = this.slipRate
     }
@@ -96,6 +103,9 @@ export default {
   mounted() {
   },
   methods: {
+    handleCheckSwitch() {
+      this.$store.dispatch('setRSwitch', !this.rSwitch)
+    },
     handleSureSlip() {
       this.$store.dispatch('setSlipPoint', this.tipRate)
       this.$message.success('Success')
@@ -142,7 +152,6 @@ export default {
       }
       const sr = Number(this.slipRate) > 80 ? 80 : this.slipRate;
       this.tipRate = sr;
-      // this.$store.dispatch('setSlipPoint', sr)
     }
   }
 }
@@ -162,25 +171,10 @@ export default {
   .ml10{
     margin-left: 10px;
   }
-  /deep/ .el-dialog{
-    position: absolute;
-    border-radius: 10px;
-    right: 150px;
-    top: 120px;
-    width: 480px;
-    margin-top: 0 !important;
-    .el-dialog__header{
-      padding: 0;
-    }
-    .el-dialog__body{
-      font-size: 26px;
-      padding: 30px;
-    }
-  }
   .navList{
-    color: #000;
-    padding: 0 24px;
+    padding: 34px;
     text-align: left;
+    color: #333;
     .close{
       width: 24px;
       position: absolute;
@@ -190,118 +184,83 @@ export default {
     .title{
       font-weight: 500;
       margin-bottom: 20px;
+      font-size: 36px;
+      text-align: center;
     }
+  }
+  .item{
+    margin-bottom: 34px;
     .subTitle{
-      align-items: center;
-      .iconImg{
-        width: 28px;
-        margin-left: 15px;
-      }
+      font-size: 30px;
+      margin-bottom: 20px;
     }
-    .slips{
-      font-size: 24px;
-      &>div{
-        border:1px solid rgba(224,224,224,1);
-        border-radius: 40px;
-        height: 55px;
-        padding: 0 16px;
-        width: 75px;
-        margin: 20px;
-        &:first-child{
-          margin-left: 0px;
-        }
-        &:last-child{
-          margin-right: 0px;
-        }
-        &.act{
-          background:rgba(7,215,155,1);
-          border: 0px solid rgba(224,224,224,1);
-          color: #FFF;
-        }
-      }
+    .switch{
+      font-size: 40px;
     }
-    .iptDiv{
-      width: 200px;
-      height: 55px;
-      border: 1px solid rgba(224,224,224,1);
-      border-radius: 40px;
-      margin-bottom: 35px;
-      overflow: hidden;
-      &.act{
-        border: 1px solid rgba(7,215,155,1);;
-      }
-      /deep/ .el-input{
-        .el-input__inner{
-          color: #000;
-          font-size: 24px;
-          height: 55px;
-          border: 1px solid transparent;
-          padding-right: 0px;
-          text-align: right;
-        }
-        .el-input-group__append{
-          background: $color-bgcolor;
-          border: 0px solid #DCDFE6;
-        }
-      }
+    .tip{
+      font-size: 28px;
     }
-    .minute{
-      margin-top: 25px;
-      align-items: center;
-      /deep/ .el-input{
-        width: 200px;
-        overflow: hidden;
-        border: 1px solid rgba(224,224,224,1);
-        border-radius: 40px;
-        margin-right: 20px;
-        .el-input__inner{
-          height: 55px;
-          border: 0px;
-          text-align: right;
-        }
-        .el-input-group__append{
-          background: $color-bgcolor;
-          border: 0px solid #DCDFE6;
-        }
-      }
-    }
-  }
-
-  .invitation{
-    .invitationIpt{
+    .rateDiv{
       margin-top: 20px;
-      /deep/ .el-input{
-        width: 200px;
-        border: 1px solid rgba(224,224,224,1);
-        border-radius: 40px;
-        overflow: hidden;
-        margin-right: 20px;
-        .el-input__inner{
-          color: #000;
-          font-size: 24px;
-          height: 55px;
-          border: 1px solid transparent;
-          padding-right: 0px;
-          padding-left: 0px;
-          text-align: center;
+      .lists{
+        margin-bottom: 20px;
+        &>span{
+          flex: 1;
+          margin-left: 28px;
+          box-sizing: border-box;
         }
-        .el-input-group__append{
-          background: $color-bgcolor;
-          border: 0px solid #DCDFE6;
+        .tab{
+          border: 1px solid $color-border;
+          margin-left: 28px;
+          box-sizing: border-box;
+          height: 72px;
+          border-radius: 40px;
+          font-size: 32px;
+          &:first-child{
+            margin-left: 0px;
+          }
+          &.act{
+            background: $color-main;
+            border: 1px solid rgba(224,224,224,0);
+            color: #FFF;
+          }
+        }
+        .iptSpan{
+          position: relative;
+          overflow: hidden;
+          &.actIpt{
+            border: 1px solid $color-main;
+          }
+          .ipt{
+            text-align: center;
+            padding: 0;
+            background: rgba(255,255,255, 0);
+            &::after{
+              display: none;
+            }
+          }
+          .per{
+            z-index: -1;
+            position: absolute;
+            right: 20px;
+            color: #999;
+            font-size: 26px;
+          }
         }
       }
     }
   }
-
   .btn{
-    background: #07d79b;
-    border-radius: 30px;
+    background: $color-main;
+    border-radius: 50px;
     color: #fff;
-    height: 60px;
+    height: 90px;
     min-width: 100px;
     padding: 0 20px;
+    font-size: 32px;
+    font-weight: 500;
     &:active{
-      background: #02C698;
+      background: $color-main;
     }
   }
 }
