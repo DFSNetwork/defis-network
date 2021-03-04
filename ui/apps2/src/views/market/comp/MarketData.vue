@@ -39,14 +39,14 @@
           </span>
         </span>
         <span v-else-if="rewardType === 1">
-          <span :class="{'green': parseFloat(sym0Reward) > 0,
-                         'red': parseFloat(sym0Reward) < 0}"
-            >{{ sym0Reward }}</span>
+          <span :class="{'green': parseFloat(sym0Reward1) > 0,
+                         'red': parseFloat(sym0Reward1) < 0}"
+            >{{ sym0Reward1 }}</span>
         </span>
         <span v-else>
-          <span :class="{'green': parseFloat(sym1Reward) > 0,
-                         'red': parseFloat(sym1Reward) < 0}"
-            >{{ sym1Reward }}</span>
+          <span :class="{'green': parseFloat(sym1Reward1) > 0,
+                         'red': parseFloat(sym1Reward1) < 0}"
+            >{{ sym1Reward1 }}</span>
         </span>
         <img  @click.stop="handleChangeRewardType" class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/price_switch_icon_green_left.svg" alt="">
         <img class="qusTip" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" @click.stop="showMarketTip = !showMarketTip">
@@ -193,6 +193,26 @@ export default {
     },
     sym0AndSy1() {
       return parseFloat(this.marketRewardSym0) > parseFloat(this.marketRewardSym1)
+    },
+    sym0Reward1() {
+      const price = accDiv(parseFloat(this.nowMarket.getNum1), parseFloat(this.nowMarket.getNum2));
+      let reward = parseFloat(this.marketRewardSym0) + price * parseFloat(this.marketRewardSym1)
+      const decimal = this.thisMarket.decimal0 > 4 ? 4 : this.thisMarket.decimal0 ;
+      reward = toFixed(reward, decimal)
+      if (Number(reward) > 0) {
+        reward = `+${reward}`
+      }
+      return `${reward} ${this.thisMarket.symbol0}`
+    },
+    sym1Reward1() {
+      const price = accDiv(parseFloat(this.nowMarket.getNum1), parseFloat(this.nowMarket.getNum2));
+      let reward = parseFloat(this.marketRewardSym0) / price + parseFloat(this.marketRewardSym1)
+      const decimal = this.thisMarket.decimal1 > 4 ? 4 : this.thisMarket.decimal1 ;
+      reward = toFixed(reward, decimal)
+      if (Number(reward) > 0) {
+        reward = `+${reward}`
+      }
+      return  `${reward} ${this.thisMarket.symbol1}`
     },
     sym0Reward() {
       // const price = accDiv(parseFloat(this.nowMarket.getNum1), parseFloat(this.nowMarket.getNum2));

@@ -146,8 +146,8 @@ const sys = {
     dampingYfc: 1, // YFC挖矿衰减
     dampingDbc: 1, // DBC挖矿衰减
 
-    marketLists: [], // 做市列表
-    filterMkLists: [], // 过滤后的做市列表
+    marketLists: localStorage.getItem('marketLists') ? JSON.parse(localStorage.getItem('marketLists')) : [], // 做市列表
+    filterMkLists: localStorage.getItem('filterMkLists') ? JSON.parse(localStorage.getItem('filterMkLists')) : [], // 过滤后的做市列表
 
     // TagLp余额
     tagLpBal: 0,
@@ -234,9 +234,11 @@ const sys = {
     },
     SET_MarketLists: (state, marketLists) => {
       state.marketLists = marketLists;
+      localStorage.setItem('marketLists', JSON.stringify(marketLists))
     },
     SET_FilterMkLists: (state, filterMkLists) => {
       state.filterMkLists = filterMkLists;
+      localStorage.setItem('filterMkLists', JSON.stringify(filterMkLists))
     },
     // pddex
     SET_TRADEINFO: (state, tradeInfo) => {

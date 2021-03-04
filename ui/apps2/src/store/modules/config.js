@@ -89,7 +89,7 @@ const config = {
 
     // pddex Data
     boxMids: [], // 设置Box的做市Mid
-    marketLists: [], // pddex使用的做市列表 - 整合DFS 和 BOX
+    marketLists: localStorage.getItem('pddexMarketLists') ? JSON.parse(localStorage.getItem('pddexMarketLists')) : [], // pddex使用的做市列表 - 整合DFS 和 BOX
     hotLists: [],
   },
   mutations: {
@@ -112,6 +112,7 @@ const config = {
     },
     SET_PddexMarketLists: (state, marketLists) => {
       state.marketLists = marketLists;
+      localStorage.setItem('pddexMarketLists', JSON.stringify(marketLists))
     },
     SET_TagLpMids: (state, tagLpMids) => {
       state.tagLpMids = tagLpMids;

@@ -97,7 +97,6 @@
           </div>
           <div class="rewardPerDay tip">
             <span>{{ $t('mine.poolsMine2', {perDayReward: dayRewardNumV3}) }}</span>
-            <!-- <span>(V3: {{dayRewardNumV3}} DFS)</span> -->
           </div>
         </div>
       </div>
@@ -150,11 +149,6 @@
                  :isActual="true"
                  :aprInfo="aprInfo"/>
     </el-dialog>
-    <!-- <el-dialog
-      class="myDialog"
-      :visible.sync="showRank">
-      <RankTip v-if="showRank"/>
-    </el-dialog> -->
   </div>
 </template>
 
@@ -169,7 +163,6 @@ import { sellToken } from '@/utils/logic';
 import MinReward from '../popup/MinReward'
 import MarketTip from '../popup/MarketTip';
 import MarketApy from '../popup/MarketApy'
-// import RankTip from '../popup/RankTip'
 import { perDayRewardV3, getV3PoolsClass, dealRewardV3 } from '@/utils/logic';
 import { dealApy } from '@/views/pddex/comp/appLogic.js'
 
@@ -178,7 +171,6 @@ export default {
     MinReward,
     MarketTip,
     MarketApy,
-    // RankTip
   },
   data() {
     return {
@@ -187,7 +179,6 @@ export default {
       showReWardTip: false,
       claimLoading: false,
       getAccData: false,
-      // showRank: false,
       thisMarket: {
         symbol0: 'EOS',
         symbol1: 'USDD',
@@ -529,10 +520,8 @@ export default {
         const newListSort = newList.sort((a, b) => {
           return b.token - a.token;
         })
-        console.log(newListSort)
         try {
           this.allMinersList = newListSort;
-          // console.log(newListSort)
           this.handleGetPageArr();
         } catch (error) {
           console.log(error)
@@ -543,7 +532,6 @@ export default {
       const start = (this.page - 1) * this.pageSize;
       const end = this.page * this.pageSize;
       this.minersArr = this.allMinersList.slice(start, end);
-      // console.log(this.minersArr)
       this.handleRunReward()
     },
     // 秒级定时器
@@ -595,7 +583,6 @@ export default {
       }, 1000);
     },
     handleAccRun() {
-      // console.log(this.accMineData)
       const reward = dealRewardV3(this.accMineData, this.thisMarket.mid)
       let showReward = this.accMineData.reward || '0.00000000';
       let countReward = showReward;
@@ -617,7 +604,6 @@ export default {
           showReward = toFixed(countReward, 8);
         }
         this.accMineData.showReward = showReward;
-        // console.log(this.accMineData.showReward)
       }, 50);
     },
     handleJoin(item) {
@@ -664,8 +650,6 @@ export default {
           });
           return
         }
-        // this.changeReWard = toFixed(0, 8);
-        // this.reward = 0;
         this.handleGetMinersLists('user')
         this.$message({
           message: this.$t('public.success'),
