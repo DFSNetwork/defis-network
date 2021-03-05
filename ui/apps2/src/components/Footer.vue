@@ -86,6 +86,7 @@ export default {
     }, 1000 * 30);
     this.handleGetDfsInfoData();
     this.handleGetTotalNum()
+    this.handleDealLocal()
   },
   watch: {
   },
@@ -163,6 +164,24 @@ export default {
         return;
       }
       const res = result.data;
+      localStorage.setItem('counter', JSON.stringify(res))
+      this.tradeUserNum = res.trade_user_num;
+      this.tradeUserNum = res.trade_user_num;
+      const totalArr = res.tvl_eos.split(' ');
+      res.total_volume = `${parseInt(res.total_volume)} ${totalArr[1]}`
+      this.poolsEos = `${parseInt(totalArr[0])} ${totalArr[1]}`;
+      this.poolsUsdt = parseInt(res.tvl_usdt);
+      const price = this.poolsUsdt / parseFloat(this.poolsEos)
+      const total_volume_usdt = price * parseFloat(res.total_volume)
+      this.$set(res, 'total_volume_usdt', total_volume_usdt.toFixed(0))
+      this.newDfsSwapData = res;
+    },
+    handleDealLocal() {
+      const counter = localStorage.getItem('counter')
+      if (!counter) {
+        return
+      }
+      const res = JSON.parse(counter);
       this.tradeUserNum = res.trade_user_num;
       this.tradeUserNum = res.trade_user_num;
       const totalArr = res.tvl_eos.split(' ');

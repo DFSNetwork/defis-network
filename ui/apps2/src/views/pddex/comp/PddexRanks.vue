@@ -58,7 +58,8 @@
         @refresh="onRefresh"
       >
         <div class="rankList" v-if="active === 0">
-          <div class="noDate tip" v-if="!followList.length">
+          <div class="loading_p flexc" v-if="!getLike"><van-loading type="spinner" color="#29D4B0"/></div>
+          <div class="noDate tip" v-if="!followList.length && getLike">
             <img class="noDataPng" src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noStar.png" alt="">
             <div>{{ $t('pddex.noFollow') }}</div>
             <div class="toFollow flexc" @click="active = 1">{{ $t('pddex.add') }}</div>
@@ -150,7 +151,7 @@
 import { mapState } from 'vuex';
 import { dealAreaArr } from '@/views/pddex/comp/appLogic';
 import MarketApy from '@/views/market/popup/MarketApy'
-import moment from 'moment';
+// import moment from 'moment';
 
 export default {
   name: 'pddexTab',
@@ -168,7 +169,7 @@ export default {
       likeArr: [], // 存放接口返回的关注数据
       swapTradeLists: {},
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
-      allMarket: {},
+      allMarket: localStorage.getItem('allMarket') ? JSON.parse(localStorage.getItem('allMarket')) :{},
       areaLists: ['USDT', 'USDC', 'EOS', 'DFS', 'TAG'],
       cdAreaLists: [],
 
@@ -192,11 +193,12 @@ export default {
 
       isLoading: false,
       unGetAllMarket: true,
+      getLike: false,
     }
   },
   mounted() {
-    // this.handleGetFees()
-    this.handleGetMarkets()
+    this.handleDealArea()
+    // this.handleGetMarkets()
   },
   computed: {
     ...mapState({
@@ -210,16 +212,6 @@ export default {
     })
   },
   watch: {
-    // marketLists: {
-    //   handler: function ml(newVal) {
-    //     if (!newVal.length) {
-    //       return
-    //     }
-    //     this.isLoading = false;
-    //   },
-    //   immediate: true,
-    //   deep: true,
-    // },
     allMarket: {
       handler: function am() {
         this.handleDealLike()
@@ -259,12 +251,6 @@ export default {
     // 显示年化
     handleShowApy(v) {
       this.countApy = v.countApy;
-      // this.feesApr = Number(v.feesApr || 0);
-      // this.aprV3 = v.aprV3;
-      // this.lpApy = v.lpApy;
-      // this.dmdApy = v.dmdApy;
-      // this.timeApy = v.timeApy;
-      // this.tagLpApy = v.tagLpApy;
       this.aprInfo = v;
       this.showApyDetail = true
     },
@@ -360,6 +346,7 @@ export default {
         return
       }
       const {status, result} = await this.$api.get_acc_follow();
+      this.getLike = true;
       if (!status) {
         return
       }
@@ -385,7 +372,6 @@ export default {
         allMarket.push(...this.allMarket[key])
       })
       // this.$store.dispatch('setPddexMarketLists', allMarket)
-      
       this.likeArr.forEach(v => {
         const item = allMarket.find(vv => vv.mid === v.mid)
         if (!item) {
@@ -424,8 +410,8 @@ export default {
         const arr = dealAreaArr(result[key] || [], coin)
         lists[coin] = arr;
       })
-      // console.log(result)
       this.allMarket = lists;
+      localStorage.setItem('allMarket', JSON.stringify(this.allMarket))
       this.handleDealArea()
     },
     handleDealArea() {
@@ -434,121 +420,7 @@ export default {
         return
       }
       this.cdAreaLists = this.allMarket[coin];
-      // console.log(this.allMarket[coin])
     },
-  
-
-    // 暂时不使用
-    // 排行数据
-    handleRankList() {
-      this.handleDealTradeRank()
-      // 深度排行
-      const tArr = JSON.parse(JSON.stringify(this.marketLists))
-      const newArr = this.handleHotMarket(tArr)
-
-      this.rankList = newArr.slice(0, 20);
-    },
-    async handleGetFees() {
-      const {status, result} = await this.$api.get_swap_summary()
-      if (!status) {
-        return
-      }
-      this.swapTradeLists = result
-      this.handleDealTradeRankLogic()
-    },
-    handleDealTradeRankLogic() {
-      console.log(this.marketLists.length)
-      if (!this.marketLists.length) {
-        return
-      }
-      const tradeList = [];
-      const inLists = this.swapTradeLists.trading_volume_in || []
-      inLists.forEach(v => {
-        const market = this.marketLists.find(vv => vv.mid === v.mid)
-        // 不存在
-        if (!market || v.sym !== 'EOS') {
-          return
-        }
-        // 非EOS交易对
-        if (market.contract0 !== 'eosio.token' && market.contract1 !== 'eosio.token') {
-          return
-        }
-        const li = {
-          mid: v.mid,
-          count: Number(v.total || 0).toFixed(4),
-        }
-        tradeList.push(li)
-      })
-      const outLists = this.swapTradeLists.trading_volume_out || []
-      outLists.forEach(v => {
-        const market = this.marketLists.find(vv => vv.mid === v.mid)
-        // 不存在
-        if (!market || v.sym !== 'EOS') {
-          return
-        }
-        // 非EOS交易对
-        if (market.contract0 !== 'eosio.token' && market.contract1 !== 'eosio.token') {
-          return
-        }
-        const index = tradeList.findIndex(vv => vv.mid === v.mid)
-        if (index === -1) {
-          tradeList.push({
-            mid: v.mid,
-            count: Number(v.total || 0).toFixed(4),
-          })
-          return
-        }
-        let count = Number(tradeList[index].count) + v.total
-        tradeList[index].count = Number(count).toFixed(4)
-      })
-      tradeList.sort((a, b) => {
-        return Number(b.count) - Number(a.count)
-      })
-      this.tradeList = tradeList.slice(0, 20);
-      console.log(this.tradeList)
-      this.handleDealTradeRank()
-    },
-    handleDealTradeRank() {
-      if (!this.tradeList.length || !this.marketLists.length) {
-        return
-      }
-      const tradeRankList = [];
-      this.tradeList.forEach(v => {
-        const market = this.marketLists.find(vv => vv.mid == v.mid) || {};
-        market.count = v.count;
-        tradeRankList.push(market)
-      })
-
-      const newArr = this.handleHotMarket(tradeRankList)
-
-      this.tradeRankList = newArr;
-      // console.log(tradeRankList)
-    },
-    // 处理置顶
-    handleHotMarket(arr) {
-      const newArr = arr || [];
-      const hotArr = []
-      this.hotLists.forEach(v => {
-        const market = this.marketLists.find(vv => vv.mid === v.mid)
-        if (!market) {
-          return
-        }
-        const nowDate = moment().valueOf();
-        const time = nowDate - v.beginTime;
-        if (time < 0 || time > v.duration * 1000) {
-          return
-        }
-        market.isTop = true;
-        hotArr.push(market)
-
-        // 去重
-        const rankIndex = newArr.findIndex(vv => vv.mid === v.mid)
-        if (rankIndex !== -1) {
-          newArr.splice(rankIndex, 1)
-        }
-      })
-      return [...hotArr, ...newArr];
-    }
   }
 }
 </script>

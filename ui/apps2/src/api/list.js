@@ -80,7 +80,7 @@ export function get_all_orders() {
 export function get_info(host) {
   return new Promise((resolve, reject) => {
     axios.get(`${host}/v1/chain/get_info`, {
-      timeout: 5500,
+      timeout: 10000,
     }).then((res) => {
       let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
@@ -92,9 +92,7 @@ export function get_info(host) {
 // 获取markets压缩数据
 export function get_markets() {
   return new Promise((resolve, reject) => {
-    axios.get('https://api.defis.network/common/markets', {
-      timeout: 5500,
-    }).then((res) => {
+    axios.get('https://api.defis.network/common/markets').then((res) => {
       var deflated = res.data;
       var inflated = unZip(deflated)
       const result = {
