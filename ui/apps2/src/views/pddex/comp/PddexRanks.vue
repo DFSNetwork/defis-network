@@ -198,7 +198,7 @@ export default {
   },
   mounted() {
     this.handleDealArea()
-    // this.handleGetMarkets()
+    this.handleGetMarkets()
   },
   computed: {
     ...mapState({
@@ -399,6 +399,7 @@ export default {
       const {status, result} = await this.$api.getPddexMarkets()
       this.isLoading = false;
       this.unGetAllMarket = false;
+      console.log(result)
       if (!status) {
         return
       }
