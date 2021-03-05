@@ -1,8 +1,9 @@
 <template>
   <div class="symbolData">
     <div class="myPools">
-      <div class="title flexb">
-        <span class="act" @click="showMarketList = true">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span>
+      <div class="title title1 flexa" @click="showMarketList = true">
+        <span class="act1">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span>
+        <i class="el-icon-arrow-down"></i>
       </div>
       <div class="rankTip flexb" v-if="!isAbled">
         <span>暂不支持 非EOS 或 非USDT矿池挖矿</span>
@@ -710,8 +711,16 @@ export default {
   font-size: 32px;
   text-align: left;
   margin: 0 0 40px;
+  &.title1{
+    margin: 0 0 20px;
+  }
   &>span{
     margin-right: 60px;;
+  }
+  .act1{
+    color: $color-black;
+    position: relative;
+    margin-right: 10px;
   }
   .act{
     color: $color-black;
