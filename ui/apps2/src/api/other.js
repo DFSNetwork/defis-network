@@ -104,7 +104,6 @@ export function getPddexMarkets() {
     axios.get('https://api.defis.network/market_bak/tops2').then((res) => {
       let result = unZip(res.data)
       result = Object.assign(JSON.parse(result), {});
-      console.log(result)
       resolve({ status: res.status === 200, result });
     }, err => {
       reject(err)
