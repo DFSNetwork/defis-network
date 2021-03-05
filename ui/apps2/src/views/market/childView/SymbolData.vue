@@ -2,7 +2,7 @@
   <div class="symbolData">
     <div class="myPools">
       <div class="title flexb">
-        <span class="act">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span>
+        <span class="act" @click="showMarketList = true">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span>
       </div>
       <div class="rankTip flexb" v-if="!isAbled">
         <span>暂不支持 非EOS 或 非USDT矿池挖矿</span>
@@ -149,6 +149,17 @@
                  :isActual="true"
                  :aprInfo="aprInfo"/>
     </el-dialog>
+
+
+    <!-- 弹窗组件 -->
+    <van-popup
+      class="newMarket"
+      v-model="showMarketList"
+      position="left">
+      <market-list :marketLists="marketLists"
+        @listenMarketChange="handleMarketChange"
+        @listenClose="handleClose"/>
+    </van-popup>
   </div>
 </template>
 
@@ -165,12 +176,14 @@ import MarketTip from '../popup/MarketTip';
 import MarketApy from '../popup/MarketApy'
 import { perDayRewardV3, getV3PoolsClass, dealRewardV3 } from '@/utils/logic';
 import { dealApy } from '@/views/pddex/comp/appLogic.js'
+import MarketList from '@/components/MarketArea';
 
 export default {
   components: {
     MinReward,
     MarketTip,
     MarketApy,
+    MarketList,
   },
   data() {
     return {
@@ -214,6 +227,7 @@ export default {
       },
       showMarketTip: false,
       showApyDetail: false,
+      showMarketList: false,
       lpApy: {},
     }
   },
@@ -239,6 +253,22 @@ export default {
       deep: true,
       immediate: true,
     },
+    '$route.params.mid': {
+      handler: function rm() {
+        this.handleGetMinersLists()
+        if (this.marketLists.length) {
+          this.thisMarket = this.marketLists.find(v => v.mid === Number(this.$route.params.mid))
+          this.handleGetNowMarket()
+        }
+        if (this.scatter.identity) {
+          this.handleGetMinersLists('user')
+          this.handleGetMarketDataByChain()
+          this.handleGetAccToken()
+        }
+      },
+      deep: true,
+      immediate: true,
+    }
   },
   computed: {
     ...mapState({
@@ -338,6 +368,18 @@ export default {
     })
   },
   methods: {
+    handleClose() {
+      this.showMarketList = false;
+    },
+    handleMarketChange(item) {
+      this.handleClose()
+      this.$router.replace({
+        name: 'poolsMarket',
+        params: {
+          mid: item.mid
+        }
+      })
+    },
     handleDealAccountHide(str) {
       return dealAccountHide(str)
     },
@@ -428,7 +470,9 @@ export default {
         "lower_bound": ` ${this.scatter.identity.accounts[0].name}`,
         "upper_bound": ` ${this.scatter.identity.accounts[0].name}`,
       }
+      // console.log(this.thisMarket.mid || this.$route.params.mid)
       EosModel.getTableRows(params, (res) => {
+        // console.log(res)
         const list = res.rows || [];
         this.sTime = '0'
         this.marketData = [];
