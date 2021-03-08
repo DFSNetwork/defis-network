@@ -13,7 +13,7 @@
               <div class="iptDiv flexb">
                 <div class="coinInfo flex" @click="listenShowDrawer('start')">
                   <div class="coinImg"><img width="100%" :src="thisMarket0.imgUrl" :onerror="errorCoinImg" alt=""></div>
-                  <div>
+                  <div class="coinMinW">
                     <div class="coin">{{ thisMarket0.symbol }} <i class="el-icon-arrow-down"></i></div>
                     <div class="contract tip">{{ thisMarket0.contract }}</div>
                   </div>
@@ -1015,6 +1015,10 @@ export default {
           border-radius: 60px;
           overflow: hidden;
           display: flex;
+        }
+        .coinMinW{
+          min-width: 150px;
+          flex: 1;
         }
         .coin{
           font-size: 28px;
