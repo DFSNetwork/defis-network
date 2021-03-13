@@ -2,13 +2,13 @@
   <div class="tabbarComp">
     <div class="nullDiv"></div>
     <div class="tabbar flexb">
-      <div class="bar" :class="{'act': $route.name === 'index' || $route.name === 'market'}"
-        @click="handleTo('index')">
+      <div class="bar" :class="{'act': $route.name === 'home'}"
+        @click="handleTo('home')">
         <span class="myCoin flexc">
-          <img v-if="$route.name !== 'index' && $route.name !== 'market'" src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/swap-un.png">
-          <img v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/swap.png">
+          <img v-if="$route.name !== 'home'" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/home-un1.png?v=1">
+          <img v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/home.png">
         </span>
-        <div>{{ $t('tabbar.swap') }}</div>
+        <div>{{ $t('home.home') }}</div>
       </div>
       <div class="bar" :class="{'act': $route.name === 'pddex'}"
         @click="handleTo('pddex')">
@@ -18,22 +18,30 @@
         </span>
         <div>{{ $t('tabbar.order') }}</div>
       </div>
+      <div class="bar" :class="{'act': $route.name === 'index' || $route.name === 'market'}"
+        @click="handleTo('index')">
+        <span class="myCoin flexc">
+          <img v-if="$route.name !== 'index' && $route.name !== 'market'" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/swap-un.png">
+          <img v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/swap1.png?v=1">
+        </span>
+        <div>{{ $t('tabbar.swap') }}</div>
+      </div>
       <div class="bar" :class="{'act': $route.name === 'fundation'}"
         @click="handleTo('fundation')">
         <span class="myCoin flexc">
           <img class="myCoinImg" v-if="$route.name !== 'fundation'" src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/fundation-un1.png">
           <img class="myCoinImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/fundation1.png">
         </span>
-        <div>{{ $t('fundation.tab') }}</div>
+        <div>{{ $t('home.community') }}</div>
       </div>
-      <div class="bar" :class="{'act': $route.name === 'financial'}"
+      <!-- <div class="bar" :class="{'act': $route.name === 'financial'}"
         @click="handleTo('financial')">
         <span class="myCoin flexc">
           <img class="myCoinImg" v-if="$route.name !== 'financial'" src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/money-un.png">
           <img class="myCoinImg" v-else src="https://cdn.jsdelivr.net/gh/defis-net/material/tabbar/money.png">
         </span>
         <div>{{ $t('financial.tab') }}</div>
-      </div>
+      </div> -->
       <div class="bar" :class="{'act': $route.name === 'myCenter'}"
         @click="handleTo('myCenter')">
         <span class="myCoin flexc">

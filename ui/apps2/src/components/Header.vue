@@ -140,10 +140,10 @@ export default {
       this.aniTimer = setTimeout(() => {
         this.ani = false;
       }, 200);
-      if (this.$route.name === 'index') {
+      if (this.$route.name === 'home') {
         return
       }
-      this.$router.push({name: 'index'})
+      this.$router.push({name: 'home'})
     },
     handleDbClick() {
       this.showEgg = true;

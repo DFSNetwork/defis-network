@@ -14,6 +14,8 @@ import bpInfo from './appsLang/bpInfo'
 import sys from './appsLang/sys'
 import sysParams from './appsLang/sysParams'
 import pddex from './appsLang/pddex'
+import home from './appsLang/home'
+import invite from './appsLang/invite'
 
 Vue.use(VueI18n);
 
@@ -27,6 +29,8 @@ const messages = {
     ...bpInfo['zh-CN'],
     ...sysParams['zh-CN'],
     ...pddex['zh-CN'],
+    ...home['zh-CN'],
+    ...invite['zh-CN'],
     ...sys['zh-CN']
   },
   en: { // 英文包
@@ -38,6 +42,8 @@ const messages = {
     ...financial['en'],
     ...sysParams['en'],
     ...pddex['en'],
+    ...home['en'],
+    ...invite['en'],
     ...sys['en']
   },
 };

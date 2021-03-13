@@ -104,3 +104,15 @@ export function get_markets() {
     })
   })
 }
+
+// 获取常用币种价格
+export function get_price() {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/common/get_price').then((res) => {
+      const result = res.data;
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}

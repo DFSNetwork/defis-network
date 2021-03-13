@@ -234,11 +234,9 @@ export function dealAreaArr(arr, coin) {
     v.poolsNum = `${parseFloat(v.reserve0).toFixed(4)} ${v.symbol0}`
     v.price = dealPrice((parseFloat(v.reserve0) / parseFloat(v.reserve1) || 0))
     
-    v.aboutPriceU = (coinPrice * v.price).toFixed(4)
-    // if (v.mid === 485) {
-    //   console.log(v.price, coinPrice)
-    //   console.log((coinPrice * v.price).toFixed(4))
-    // }
+    v.aboutPriceU = ((coinPrice.price || 0) * v.price).toFixed(4)
+    v.aboutPriceCNY = ((coinPrice.CNY || 0) * v.price).toFixed(4)
+    v.volume24HToUsdt = (parseFloat(v.volume24H || 0) * (coinPrice.price || 0)).toFixed(4)
     v.priceRate = parseFloat(v.price_change_rate) > 0 ? `+${v.price_change_rate}` : v.price_change_rate;
     v.imgUrl0 = getCoin(v.contract0, v.symbol0),
     v.imgUrl1 = getCoin(v.contract1, v.symbol1),
@@ -268,6 +266,7 @@ export function dealAreaArr(arr, coin) {
       symbol: v.symbol1,
       imgUrl: getCoin(v.contract1, v.symbol1),
     }
+    // 年化计算
     const {countApy, lpApy, tagLpApy, timeApy, dmdApy, aprV3, feesApr, usdcApr} = dealApy(v)
     v.countApy = parseFloat(countApy || 0).toFixed(2);
     v.lpApy = lpApy;
@@ -284,35 +283,9 @@ export function dealAreaArr(arr, coin) {
 
 // 获取分区币种的价格
 function getAreaPrice(coin) {
-  const marketLists = store.state.sys.marketLists;
-  const lang = store.state.app.language;
-  const tCoin = coin === 'BTC' ? coin = 'PBTC' : coin;
-  const usdtPrice = store.state.sys.usdtPrice;
-  let mid = 17;
-  if (tCoin === 'EOS') {
-    mid = 17;
-  } else if (tCoin === 'TAG') {
-    mid = 665;
-  } else if (tCoin === 'USDT') {
-    mid = 0;
-  } else if (tCoin === 'USDC') {
-    mid = 722;
-  } else if (tCoin === 'DFS') {
-    mid = 451;
-  } else if (tCoin === 'PBTC') {
-    mid = 484;
-  }
-  if (mid === 0) {
-    return lang === 'en' ? 1 : usdtPrice;
-  }
-  if (!marketLists.length) {
-    return 0
-  }
-  const market = marketLists.find(v => v.mid === mid)
-  let price = tCoin === market.symbol1 ? 
-              parseFloat(market.reserve0) / parseFloat(market.reserve1) :
-              parseFloat(market.reserve1) / parseFloat(market.reserve0);
-  return lang === 'en' ? price : usdtPrice * price;
+  const coinPrices = store.state.sys.coinPrices;
+  const has = coinPrices.find(v => v.coin === coin) || {}
+  return has;
 }
 // 是否交换数据
 function regExchange(coin, v) {

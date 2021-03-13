@@ -456,10 +456,6 @@ export default {
 *{
   padding: 0;
   margin: 0;
-  // /deep/ .el-dialog__wrapper{
-  //   max-width: 750px;
-  //   margin: auto;
-  // }
 }
 
 #app {

@@ -67,6 +67,9 @@ export default {
       showNode: false,
       showWarm: false,
       tagTimer: null,
+
+      // 价格定时器
+      priceTimer: null,
     }
   },
   computed:{
@@ -98,10 +101,12 @@ export default {
     this.handleRowsMarket();
     this.handleStartTimer();
     this.handleGetVotes()
+    this.handleGetPrice()
   },
   beforeDestroy() {
     clearInterval(this.timer);
     clearTimeout(this.tagTimer)
+    clearTimeout(this.priceTimer)
   },
   methods: {
     // 获取TAG LP 矿池列表
@@ -169,6 +174,18 @@ export default {
       // 列表处理
       const dealObj = dealMarketLists(list, this.topLists)
       this.marketLists = dealObj.allLists;
+    },
+    // 获取常用币种价格
+    async handleGetPrice() {
+      clearTimeout(this.priceTimer)
+      this.priceTimer = setTimeout(() => {
+        this.handleGetPrice()
+      }, 1000 * 60 * 5);
+      const {status, result} = await this.$api.get_price();
+      if (!status) {
+        return
+      }
+      this.$store.dispatch('setCoinPrices', result)
     }
   }
 }

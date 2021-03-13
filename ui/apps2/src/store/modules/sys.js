@@ -157,8 +157,13 @@ const sys = {
     // pddex
     tradeInfo: {},
     usdtPrice: 6.5,
+    coinPrices: localStorage.getItem('coinPrices') ? JSON.parse(localStorage.getItem('coinPrices')) : [], // 常用价格
   },
   mutations: {
+    SET_CoinPrices: (state, coinPrices) => {
+      state.coinPrices = coinPrices;
+      localStorage.setItem('coinPrices', JSON.stringify(coinPrices))
+    },
     SET_UsdtPrice: (state, usdtPrice) => {
       state.usdtPrice = usdtPrice;
     },
@@ -246,6 +251,9 @@ const sys = {
     },
   },
   actions: {
+    setCoinPrices({ commit }, coinPrices) {
+      commit('SET_CoinPrices', coinPrices);
+    },
     setUsdtPrice({ commit }, usdtPrice) {
       commit('SET_UsdtPrice', usdtPrice);
     },

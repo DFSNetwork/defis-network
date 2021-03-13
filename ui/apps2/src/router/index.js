@@ -22,6 +22,12 @@ const constantRouter = [
     children: [
       {
         path: '/',
+        name: 'home',
+        component: () => import(/* webpackChunkName: "home" */ '@/views/home/Index.vue'),
+        meta: { title: 'DeFis-Network' },
+      },
+      {
+        path: '/swap',
         name: 'index',
         component: () => import(/* webpackChunkName: "index" */ '@/views/index/Index.vue'),
         meta: { title: 'DeFis-Network' },
@@ -364,6 +370,37 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "ptokens" */ '@/views/pTokens/Index'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
       }
+    ],
+  },
+  {
+    path: '/invite',
+    component: Layout,
+    redirect: '/',
+    children: [
+      {
+        path: '/',
+        name: 'invite',
+        component: () => import(/* webpackChunkName: "invite" */ '@/views/invite/Index'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true },
+      },
+      {
+        path: 'farm/:name',
+        name: 'farmDetail',
+        component: () => import(/* webpackChunkName: "farmDetail" */ '@/views/invite/childViews/Detail'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
+      },
+      {
+        path: 'create',
+        name: 'farmCreate',
+        component: () => import(/* webpackChunkName: "farmCreate" */ '@/views/invite/childViews/Create'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
+      {
+        path: 'edit',
+        name: 'farmEdit',
+        component: () => import(/* webpackChunkName: "farmEdit" */ '@/views/invite/childViews/Edit'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
     ],
   },
 ]

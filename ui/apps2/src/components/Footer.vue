@@ -1,39 +1,44 @@
 <template>
   <div class="footer">
-    <div v-if="isEx" class="" @click="clickOnDFSInfoData">
-      <span>
-        <span>24H{{ $t('footer.swapNum') }}: </span>
-        <span>{{ newDfsSwapData.total_volume ? newDfsSwapData.total_volume : "0.00" }}</span>
-      </span>
-      <span class="ml20">
-        <span class="">24H{{ $t('sys.tradeNum') }}: </span>
-        <span>{{ tradeUserNum }}{{ $t('sys.users') }}/{{ newDfsSwapData.order_number ? newDfsSwapData.order_number : 0 }}{{ $t('sys.orders') }}</span>
-      </span>
-    </div>
-    <div v-else class="" @click="clickOnDFSInfoData">
-      <span>
-        <span class="">24H{{ $t('footer.swapNum') }}: </span>
-        <span>${{ newDfsSwapData.total_volume_usdt ? newDfsSwapData.total_volume_usdt : "0.00" }}</span>
-      </span>
-      <span class="ml20">
-        <span class="">24H{{ $t('sys.tradeNum') }}: </span>
-        <span>{{ tradeUserNum }}{{ $t('sys.users') }}/{{ newDfsSwapData.order_number ? newDfsSwapData.order_number : 0 }}{{ $t('sys.orders') }}</span>
-      </span>
-    </div>
-    <div class="poolsNum flexc" @click="isEx = !isEx">
-      <span>{{ $t('footer.tlv') }}: </span>
-      <span v-if="isEx">{{ poolsEos }}</span>
-      <span v-else>${{ poolsUsdt }}</span>
-      <img v-if="isEx" class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_left.svg" alt="">
-      <img v-else class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_right.svg" alt="">
-    </div>
+    <div v-if="$route.name !== 'home'">
+      <div v-if="isEx" class="" @click="clickOnDFSInfoData">
+        <span>
+          <span>24H{{ $t('footer.swapNum') }}: </span>
+          <span>{{ newDfsSwapData.total_volume ? newDfsSwapData.total_volume : "0.00" }}</span>
+        </span>
+        <span class="ml20">
+          <span class="">24H{{ $t('sys.tradeNum') }}: </span>
+          <span>{{ tradeUserNum }}{{ $t('sys.users') }}/{{ newDfsSwapData.order_number ? newDfsSwapData.order_number : 0 }}{{ $t('sys.orders') }}</span>
+        </span>
+      </div>
+      <div v-else class="" @click="clickOnDFSInfoData">
+        <span>
+          <span class="">24H{{ $t('footer.swapNum') }}: </span>
+          <span>${{ newDfsSwapData.total_volume_usdt ? newDfsSwapData.total_volume_usdt : "0.00" }}</span>
+        </span>
+        <span class="ml20">
+          <span class="">24H{{ $t('sys.tradeNum') }}: </span>
+          <span>{{ tradeUserNum }}{{ $t('sys.users') }}/{{ newDfsSwapData.order_number ? newDfsSwapData.order_number : 0 }}{{ $t('sys.orders') }}</span>
+        </span>
+      </div>
+      <div class="poolsNum flexc" @click="isEx = !isEx">
+        <span>{{ $t('footer.tlv') }}: </span>
+        <span v-if="isEx">{{ poolsEos }}</span>
+        <span v-else>${{ poolsUsdt }}</span>
+        <img v-if="isEx" class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_left.svg" alt="">
+        <img v-else class="exchange" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_right.svg" alt="">
+      </div>
 
-    <div class="safe tip">
-      <span>{{ $t('public.safeRecord1') }}</span>
-      <span class="who" @click="handleToShowReport('slotMist')"> {{ $t('public.safeRecord2') }}</span> &
-      <span class="who" @click="handleToShowReport('peckshield')">{{ $t('public.safeRecord4') }} </span>
-      <span>{{ $t('public.safeRecord3') }}</span>
+      <div class="safe tip">
+        <span>{{ $t('public.safeRecord1') }}</span>
+        <span class="who" @click="handleToShowReport('slotMist')"> {{ $t('public.safeRecord2') }}</span> &
+        <span class="who" @click="handleToShowReport('peckshield')">{{ $t('public.safeRecord4') }} </span>
+        <span>{{ $t('public.safeRecord3') }}</span>
+      </div>
     </div>
+    <DfsInfo v-else :newDfsSwapData="newDfsSwapData"
+      :tradeUserNum="tradeUserNum"
+      :poolsUsdt="poolsUsdt"/>
 
     <el-dialog
       class="dialog"
@@ -53,8 +58,12 @@ import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accMul } from '@/utils/public';
+import DfsInfo from '@/views/home/comp/DfsInfo';
 
 export default {
+  components: {
+    DfsInfo,
+  },
   data() {
     return {
       showImg: false,
@@ -66,7 +75,7 @@ export default {
       poolsEos: '0.0000 EOS',
       poolsUsdt: '0.0000',
       isEx: false,
-      tradeUserNum: 0,
+      tradeUserNum: '0',
     }
   },
   computed: {
@@ -147,11 +156,11 @@ export default {
         return;
       }
       this.dfsInfoData = result.data;
-      this.tradeUserNum = this.dfsInfoData.trade_user_num;
+      this.tradeUserNum = this.dfsInfoData.trade_user_num + '';
       const totalArr = this.dfsInfoData.tvl_eos.split(' ');
       this.dfsInfoData.total_volume = `${parseInt(this.dfsInfoData.total_volume)} ${totalArr[1]}`
       this.poolsEos = `${parseInt(totalArr[0])} ${totalArr[1]}`;
-      this.poolsUsdt = parseInt(this.dfsInfoData.tvl_usdt);
+      this.poolsUsdt = parseInt(this.dfsInfoData.tvl_usdt) + '';
       const price = this.poolsUsdt / parseFloat(this.poolsEos)
       const total_volume_usdt = price * parseFloat(this.dfsInfoData.total_volume)
       this.$set(this.dfsInfoData, 'total_volume_usdt', total_volume_usdt.toFixed(0))
@@ -165,12 +174,11 @@ export default {
       }
       const res = result.data;
       localStorage.setItem('counter', JSON.stringify(res))
-      this.tradeUserNum = res.trade_user_num;
-      this.tradeUserNum = res.trade_user_num;
+      this.tradeUserNum = res.trade_user_num + '';
       const totalArr = res.tvl_eos.split(' ');
       res.total_volume = `${parseInt(res.total_volume)} ${totalArr[1]}`
       this.poolsEos = `${parseInt(totalArr[0])} ${totalArr[1]}`;
-      this.poolsUsdt = parseInt(res.tvl_usdt);
+      this.poolsUsdt = parseInt(res.tvl_usdt) + '';
       const price = this.poolsUsdt / parseFloat(this.poolsEos)
       const total_volume_usdt = price * parseFloat(res.total_volume)
       this.$set(res, 'total_volume_usdt', total_volume_usdt.toFixed(0))
@@ -182,12 +190,11 @@ export default {
         return
       }
       const res = JSON.parse(counter);
-      this.tradeUserNum = res.trade_user_num;
-      this.tradeUserNum = res.trade_user_num;
+      this.tradeUserNum = res.trade_user_num + '';
       const totalArr = res.tvl_eos.split(' ');
       res.total_volume = `${parseInt(res.total_volume)} ${totalArr[1]}`
       this.poolsEos = `${parseInt(totalArr[0])} ${totalArr[1]}`;
-      this.poolsUsdt = parseInt(res.tvl_usdt);
+      this.poolsUsdt = parseInt(res.tvl_usdt) + '';
       const price = this.poolsUsdt / parseFloat(this.poolsEos)
       const total_volume_usdt = price * parseFloat(res.total_volume)
       this.$set(res, 'total_volume_usdt', total_volume_usdt.toFixed(0))

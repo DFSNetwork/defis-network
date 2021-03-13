@@ -84,9 +84,13 @@
             </div>
             <div class="priceDiv">
               <div>{{ v.price || '-' }}</div>
-              <div class="tip smallTip">
-                <span>{{ language === 'en' ? '$' : '¥' }}</span>
+              <div class="tip smallTip" v-if="language === 'en'">
+                <span>$</span>
                 <span>{{ v.aboutPriceU }}</span>
+              </div>
+              <div class="tip smallTip" v-else>
+                <span>¥</span>
+                <span>{{ v.aboutPriceCNY }}</span>
               </div>
             </div>
             <div class="rateDiv">
@@ -122,9 +126,13 @@
             </div>
             <div class="priceDiv">
               <div>{{ v.price || '-' }}</div>
-              <div class="tip smallTip">
-                <span>{{ language === 'en' ? '$' : '¥' }}</span>
+              <div class="tip smallTip" v-if="language === 'en'">
+                <span>$</span>
                 <span>{{ v.aboutPriceU }}</span>
+              </div>
+              <div class="tip smallTip" v-else>
+                <span>¥</span>
+                <span>{{ v.aboutPriceCNY }}</span>
               </div>
             </div>
             <div class="rateDiv">
@@ -406,6 +414,9 @@ export default {
       const lists = {}
       keys.forEach(key => {
         let coin = key.split('_markets')[0].toUpperCase()
+        if (coin === 'BTC') {
+          return
+        }
         coin = coin === 'BTC' ? coin = 'PBTC' : coin;
         const arr = dealAreaArr(result[key] || [], coin)
         lists[coin] = arr;

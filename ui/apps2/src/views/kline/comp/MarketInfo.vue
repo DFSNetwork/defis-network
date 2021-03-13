@@ -32,9 +32,13 @@
           <img v-else class="exImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_right.svg" alt="">
         </span>
       </div>
-      <span class="tip dinReg">
-        <span>{{ language === 'en' ? '$' : '¥' }}</span>
+      <span class="tip dinReg" v-if="language === 'en'">
+        <span>$</span>
         <span>{{ checkedMarket.aboutPriceU }}</span>
+      </span>
+      <span class="tip dinReg" v-else>
+        <span>¥</span>
+        <span>{{ checkedMarket.aboutPriceCNY }}</span>
       </span>
     </div>
     <div class="flexb rate">

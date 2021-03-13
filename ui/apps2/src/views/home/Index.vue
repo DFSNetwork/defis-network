@@ -1,24 +1,38 @@
 <template>
-  <div>
-    <transition name="fade" mode="out-in">
-      <router-view class="content" @listenUpdate="handleUpdate"/>
-    </transition>
-    <!-- <PddexTab /> -->
+  <div class="home">
+    <Banner />
+    <Notice />
+    <Tools />
+    <MyFooter />
+    <!-- <DfsInfo /> -->
+    <Rank />
   </div>
 </template>
 
 <script>
 import { mapState } from 'vuex';
-import { DApp } from '@/utils/wallet';
-import { dealAreaArr } from '@/views/pddex/comp/appLogic';
+// import { DApp } from '@/utils/wallet';
 
+import Banner from '@/views/home/comp/Banner';
+import Notice from '@/views/home/comp/Notice';
+import Tools from '@/views/home/comp/Tools';
+import Rank from '@/views/home/comp/Rank';
+import MyFooter from '@/components/Footer';
+// import DfsInfo from '@/views/home/comp/DfsInfo';
+
+import { dealAreaArr } from '@/views/pddex/comp/appLogic';
 export default {
-  name: 'pddex',
+  name: 'home',
   components: {
+    Banner,
+    Notice,
+    Tools,
+    Rank,
+    MyFooter,
+    // DfsInfo,
   },
   data() {
     return {
-      dfsLists: [],
       allMarket: {},
       pddexList: [],
     }
@@ -26,28 +40,14 @@ export default {
   mounted() {
     this.handleGetMarkets()
     this.handleGetPddexMarketList();
-    DApp.scatterInit(this, () => {
-    })
   },
   computed: {
     ...mapState({
       baseConfig: state => state.sys.baseConfig, // 基础配置 - 默认为{}
-      marketLists: state => state.sys.marketLists, // 生产环境
+      coinPrices: state => state.sys.coinPrices,
     })
   },
-  watch: {
-    marketLists: {
-      handler: function ml(newVal) {
-        this.dfsLists = newVal
-      },
-      deep: true,
-      immediate: true
-    }
-  },
   methods: {
-    handleUpdate() {
-      this.handleGetMarkets()
-    },
     // 获取ppdex支持交易对 配对pid
     async handleGetPddexMarketList() {
       const params = {
@@ -121,5 +121,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
+.home{
+  background: linear-gradient(to bottom, #FFF, #fafafa 80px , #F6F6F6);
+  min-height: 100vh;
+  padding-bottom: 30px;
+}
 </style>
