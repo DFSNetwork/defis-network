@@ -5,7 +5,7 @@
       <img class="bg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/quick_bg.png">
       <div class="info">
         <div class="name">{{ $t('home.oChain') }}</div>
-        <div class="tip">{{ $t('home.oChain') }}</div>
+        <div class="tip">{{ $t('home.oChainTip') }}</div>
       </div>
       <div class="btn flexc" @click="handleToPro('dcap')">
         <span>{{ $t('home.onkey') }}</span>
@@ -15,6 +15,11 @@
     <!-- 应用工具 -->
     <div class="appLists">
       <div class="lists flexb">
+        <div class="list" @click="handleTo('invite')">
+          <img class="hot" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/new.png">
+          <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/invite_icon.png">
+          <div>{{ $t('invite.myFarm') }}</div>
+        </div>
         <div class="list" @click="handleTo('vote')">
           <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/vote_icon.png">
           <div>{{ $t('home.vote') }}</div>
@@ -26,11 +31,6 @@
         <div class="list" @click="handleTo('financial')">
           <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/financial_icon.png">
           <div>{{ $t('home.financial') }}</div>
-        </div>
-        <div class="list" @click="handleTo('invite')">
-          <img class="hot" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/hot.png">
-          <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/invite_icon.png">
-          <div>{{ $t('home.invite') }}</div>
         </div>
       </div>
       <div class="lists flexb">
@@ -47,6 +47,7 @@
           <div>USDX</div>
         </div>
         <div class="list" @click="handleToPro('record')">
+          <img class="hot" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/hot.png">
           <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/note_icon.png">
           <div>{{ $t('home.diary') }}</div>
         </div>

@@ -4,7 +4,7 @@ export default {
     home: {
       home: '首页',
       community: '社区',
-      asset: 'DFS资产价值',
+      asset: '实时数据',
       tvl: '流动池总量',
       vol: '24H兑换量',
       tradeNum: '24H交易人次',
@@ -24,7 +24,7 @@ export default {
       mine: '挖矿奖励',
       financial: '理财策略',
       invite: '邀请好友',
-      fundation: '乐捐系统',
+      fundation: '乐捐一下',
       diary: '大丰收日记',
     }
   },
@@ -32,7 +32,7 @@ export default {
     home: {
       home:'Home',
       community:'Community',
-      asset:'DFS Asset Value',
+      asset:'Real-time data',
       tvl:'TVL',
       vol: '24H Swap',
       tradeNum: '24H Users',

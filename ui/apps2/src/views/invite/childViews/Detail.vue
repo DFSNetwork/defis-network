@@ -100,7 +100,7 @@
             <span class="tip ml">(${{ aboutRewardU }})</span>
           </div>
         </div>
-        <div class="claimBtn flexc" v-if="account.name === dName" @click="handleClaim">领取</div>
+        <div class="claimBtn flexc" v-if="account.name === dName" @click="handleClaim">{{ $t('invite.claim') }}</div>
       </div>
     </div>
 
@@ -234,6 +234,7 @@ export default {
     // 领取收益
     handleClaim() {
       if (!this.ableClaim) {
+        this.$toast.fail('您已领取过了')
         return
       }
       const name = this.account.name;
@@ -241,14 +242,13 @@ export default {
       const params = {
         actions: [{
           account: 'farms.tag',
-          name: 'join',
+          name: 'claim',
           authorization: [{
             actor: name, // 转账者
             permission,
           }],
           data: {
             farmer: name,
-            farm: this.farmInfo.owner,
           }
         }]
       }

@@ -15,7 +15,7 @@
       <div class="flexb">
         <div class="item">
           <div class="subTitle">{{ $t('home.tradeNum') }}</div>
-          <div class="num dinBold">213</div>
+          <div class="num dinBold">{{ tradeUserNum }}</div>
         </div>
         <div class="item">
           <div class="subTitle">{{ $t('home.orderNum') }}</div>

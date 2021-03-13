@@ -9,13 +9,19 @@
           </div>
           <div>
             <div class="farmName">{{ v.farm_name }}</div>
-            <div class="tip num">{{ v.slogon }}</div>
+            <div class="tip num din">{{ v.slogon }}</div>
+            <div class="tip num din">
+              <span>{{ v.farmers }}{{ $t('invite.people') }}</span>
+              <span class="wealth">{{ $t('invite.wealth') }}: ${{ parseInt(v.wealth) }}</span>
+            </div>
           </div>
         </div>
-        <div class="btn flexc" @click.stop="handleAddFarm(v)"
+        <!-- <div class="btn flexc" @click.stop="handleAddFarm(v)"
           v-if="v.owner !== nJoinInfo.owner">{{ $t('invite.join') }}</div>
         <div class="btn flexc joined" @click.stop=""
-          v-else>{{ $t('invite.joined') }}</div>
+          v-else>{{ $t('invite.joined') }}</div> -->
+        <div class="btn flexc"
+          >{{ $t('invite.access') }}</div>
       </div>
     </div>
   </div>
@@ -136,11 +142,17 @@ export default {
       .farmName{
         font-size: 30px;
       }
+      .wealth{
+        margin-left: 30px;
+      }
+      .num{
+        margin-top: 4px;
+      }
       .btn{
         background: $color-main;
         color: #FFF;
         width: 160px;
-        height: 76px;
+        height: 60px;
         border-radius: 4px;
         &.joined{
           color: $color-main;

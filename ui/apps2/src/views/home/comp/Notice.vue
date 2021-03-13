@@ -116,7 +116,7 @@ export default {
     text-align: left;
     .symInfo{
       padding-right: 10px;
-      max-width: 33%;
+      max-width: 35%;
       position: relative;
       flex: 1;
       &:last-child{

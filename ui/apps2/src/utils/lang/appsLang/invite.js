@@ -36,6 +36,9 @@ export default {
       bg: '农场背景图',
       setBg: '选择图片',
       save: '保存',
+      claim: '领取',
+      farmInfo: '农场信息',
+      access: '访问',
 
       rewardRules: '收益规则',
       rewardRules1: '1. 财富值是衡量农场收益的唯一标准',
@@ -57,6 +60,12 @@ export default {
       leaveRules1: '1. 您退出当前农场，退出后可加入其他农场',
       leaveRules2: '2. 每人只能加入一个农场',
       leaveRules3: '3. 离开农场后，该农场财富值也将减少',
+
+      createTip1: '分布式农场的意义',
+      createTip2: '这是为社区贡献者们及其粉丝量身定做的挖矿阵地 一起共建共享生态的红利',
+      createTip3: '农场主的职责',
+      createTip4: '积极布道DeFi的去中心化金融思想，与传统金融的区别',
+      createTip5: '弘扬区块链的基础知识 引领新人亲身参与到DeFi的历史潮流中',
 
       errTip1: '您已加入其他农场',
       errTip2: '邀请金额未达标，无法领取收益',
@@ -88,7 +97,7 @@ export default {
       doing:'One step closer to income~',
       aboutReward:'Estimated income TAG',
       farmUsers:'Farm Members',
-      farmDesc:'Farm Intro',
+      farmDesc:'Farm Information',
       editFarm:'Edit Farm',
       setHead:'Select avatar',
       farmName:'Farm Name',
@@ -98,6 +107,8 @@ export default {
       bg:'Farm background image',
       setBg:'Select picture',
       save:'Save',
+      claim: 'Claim',
+      farmInfo:'Farm Information',
 
       rewardRules:'Reward Rules',
       rewardRules1: '1. Wealth value is the only measure of farm income',

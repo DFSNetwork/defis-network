@@ -1,8 +1,12 @@
 <template>
   <div class="inviteDia">
     <img
-      class="shareBg"
-      src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/inviteBg.png"
+      class="shareBg" v-if="language === 'zh-CN'"
+      src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/inviteBg1.png"
+    />
+    <img
+      class="shareBg" v-else
+      src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/inviteBg1-en.png"
     />
     <img class="close" @click="handleClose"
       src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/close-white.png">
@@ -29,6 +33,7 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: "inviteDia",
   data() {
@@ -38,6 +43,11 @@ export default {
   },
   mounted() {
     this.link = location.href;
+  },
+  computed: {
+    ...mapState({
+      language: (state) => state.app.language,
+    }),
   },
   methods: {
     handleClose() {

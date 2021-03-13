@@ -1,21 +1,31 @@
 <template>
   <div class="createTop">
-    <img class="bg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/farmInfoBg.png">
+    <img class="bg" v-if="language === 'zh-CN'"
+      src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/createTop-en.png">
+    <img class="bg" v-else
+      src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/createTop.png">
     <div class="info">
-      <img class="infoImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/farmInfo.png">
-
+      <div class="infoImg flexc">
+        <img v-if="language === 'zh-CN'"
+          src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/createTitleBg.png">
+        <img v-else
+          src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/createTitleBg-en.png">
+        <span>{{ $t('invite.farmDesc') }}</span>
+      </div>
       <div class="item flexs">
-        <div class="disc1"></div>
+        <!-- <div class="disc1"></div> -->
         <div class="subTip">
-          <div class="title">对农场拥有至高无上的管理权</div>
-          <div class="tip">作为农场创建者，整个农场的管理权都在你的手上</div>
+          <div class="title">{{ $t('invite.farmDesc') }}</div>
+          <div class="tip">{{ $t('invite.createTip1') }}</div>
+          <div class="tip">{{ $t('invite.createTip2') }}</div>
         </div>
       </div>
       <div class="item flexs">
-        <div class="disc1"></div>
+        <!-- <div class="disc1"></div> -->
         <div class="subTip">
-          <div class="title">挖矿丰厚福利支持</div>
-          <div class="tip">定期组织农场挖矿讨论，引导成员彼此分享，提升农场活跃</div>
+          <div class="title">{{ $t('invite.createTip3') }}</div>
+          <div class="tip">{{ $t('invite.createTip4') }}</div>
+          <div class="tip">{{ $t('invite.createTip5') }}</div>
         </div>
       </div>
     </div>
@@ -23,8 +33,14 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
 export default {
   name: 'createTop',
+  computed: {
+    ...mapState({
+      language: (state) => state.app.language,
+    }),
+  },
 }
 </script>
 
@@ -39,14 +55,25 @@ export default {
   padding: 0 32px 48px;
   margin: 0 28px;
   text-align: left;
-  margin-top: -200px;
+  margin-top: -210px;
   z-index: 1;
   position: relative;
   .infoImg{
-    width: 216px;
     margin: auto;
-    display: block;
     margin-bottom: 30px;
+    position: relative;
+    color: #FFF;
+    height: 64px;
+    img{
+      position: absolute;
+      height: 100%;
+      left: 50%;
+      top: 0;
+      transform: translateX(-50%);
+    }
+    span{
+      position: relative;
+    }
   }
   .item{
     margin-bottom: 25px;
@@ -69,7 +96,10 @@ export default {
     .title{
       font-weight: 500;
       font-size: 28px;
-      margin-bottom: 8px;
+      margin-bottom: 10px;
+    }
+    .tip{
+      margin-top: 4px;
     }
   }
 }

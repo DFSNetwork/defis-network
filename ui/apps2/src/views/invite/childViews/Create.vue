@@ -10,7 +10,13 @@
     <CreateTop />
 
     <div class="farm">
-      <img class="infoImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/createFarm.png">
+      <div class="infoImg flexc">
+        <img v-if="language === 'zh-CN'"
+          src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/createTitleBg.png">
+        <img v-else
+          src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/createTitleBg-en.png">
+        <span>{{ $t('invite.farmInfo') }}</span>
+      </div>
 
       <!-- 头像 -->
       <div class="header" @click="handleShowImgCheck('head')">
@@ -89,6 +95,7 @@ export default {
   computed: {
     ...mapState({
       account: (state) => state.app.account,
+      language: (state) => state.app.language,
     }),
   },
   methods: {
@@ -194,10 +201,21 @@ export default {
     text-align: left;
     font-size: 28px;
     .infoImg{
-      width: 216px;
       margin: auto;
-      display: block;
       margin-bottom: 30px;
+      position: relative;
+      color: #FFF;
+      height: 64px;
+      img{
+        position: absolute;
+        height: 100%;
+        left: 50%;
+        top: 0;
+        transform: translateX(-50%);
+      }
+      span{
+        position: relative;
+      }
     }
     .header{
       text-align: center;
