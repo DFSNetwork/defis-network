@@ -27,7 +27,7 @@
             </div>
             <div v-if="coinName === 'deep'" class="symPools tip">{{ $t('pddex.pools') }} {{ (v.poolsNum) }}</div>
             <div v-else-if="coinName === 'apy'" class="symPools tip">{{ $t('pddex.apys1') }} {{ v.countApy }}%</div>
-            <div v-else class="symPools tip">{{ $t('pddex.amt1') }} ${{ parseInt(v.volume24H) }}</div>
+            <div v-else class="symPools tip">{{ $t('pddex.amt1') }} ${{ parseInt(v.volume24HToUsdt) }}</div>
           </div>
         </div>
         <div class="dinReg">
