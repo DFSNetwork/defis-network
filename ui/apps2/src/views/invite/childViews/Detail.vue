@@ -21,7 +21,7 @@
                 :src="v.avatar"
               />
             </div>
-            <div>{{ farmInfo.farmers }}/50{{ $t('invite.people') }}</div>
+            <div>{{ farmInfo.farmers }}/{{ max }}{{ $t('invite.people') }}</div>
           </div>
         </div>
         <div class="flexb">
@@ -159,6 +159,7 @@ export default {
   data() {
     return {
       act: 0,
+      max: 100,
       showShare: false,
       showLeave: false,
       showClaimTip: false,
@@ -408,6 +409,10 @@ export default {
     handleAddFarm(v) {
       if (this.joinName) {
         this.$toast.fail(this.$t('invite.errTip1'))
+        return
+      }
+      if (this.max <= v.farmers) {
+        this.$toast.fail(this.$t('invite.errTip3'))
         return
       }
       const name = this.account.name;

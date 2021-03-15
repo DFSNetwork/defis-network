@@ -38,10 +38,10 @@
           <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/create_set.svg">
           <span>{{ $t('dex.addMarket') }}</span>
         </div>
-        <div class="list flexa" @click="handleShowComp('invi')">
+        <!-- <div class="list flexa" @click="handleShowComp('invi')">
           <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/invi_set.svg">
           <span>{{ $t('invi.invitation') }}</span>
-        </div>
+        </div> -->
         <div class="list flexa" @click="handleToPro('docs')">
           <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/tutorial_set.svg">
           <span>{{ $t('more.faq') }}</span>
