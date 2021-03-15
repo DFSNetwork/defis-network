@@ -6,9 +6,9 @@
       title-inactive-color="#999"
       title-active-color="#29D4B0"
       color="#29D4B0">
-      <van-tab name="up" :title="$t('home.rankUp')"></van-tab>
       <van-tab name="vol" :title="$t('home.rankVol')"></van-tab>
-      <van-tab name="apy" :title="'年化榜'"></van-tab>
+      <van-tab name="deep" :title="$t('home.rankDeep')"></van-tab>
+      <van-tab name="apy" :title="$t('home.rankApy')"></van-tab>
     </van-tabs>
 
     <div class="lists">
@@ -25,7 +25,7 @@
               <span>{{ v.symbol1 }}</span>
               <span class="small tip">/{{ v.symbol0 }}</span>
             </div>
-            <div v-if="coinName === 'up'" class="symPools tip">{{ $t('pddex.pools') }} {{ (v.poolsNum) }}</div>
+            <div v-if="coinName === 'deep'" class="symPools tip">{{ $t('pddex.pools') }} {{ (v.poolsNum) }}</div>
             <div v-else-if="coinName === 'apy'" class="symPools tip">{{ $t('pddex.apys1') }} {{ v.countApy }}%</div>
             <div v-else class="symPools tip">{{ $t('pddex.amt1') }} ${{ parseInt(v.volume24H) }}</div>
           </div>
@@ -61,7 +61,7 @@ export default {
   name: 'homeRank',
   data() {
     return {
-      coinName: 'up',
+      coinName: 'vol',
       rankArr: [],
     }
   },
@@ -89,10 +89,10 @@ export default {
   methods: {
     handleDealRank() {
       let nMarkets = JSON.parse(JSON.stringify(this.marketLists))
-      if (this.coinName === 'up') {
+      if (this.coinName === 'deep') {
         nMarkets = this.dealArr(nMarkets);
         nMarkets.sort((a, b) => {
-          return parseFloat(b.priceRate) - parseFloat(a.priceRate)
+          return parseFloat(b.usdt_value || 0) - parseFloat(a.usdt_value || 0)
         })
       } else if (this.coinName === 'vol') {
         nMarkets = this.dealArr(nMarkets);
