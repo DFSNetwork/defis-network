@@ -209,13 +209,14 @@ export default {
     },
     aboutReward() {
       let u = parseFloat(this.nextObj.unit || 0) * parseFloat(this.farmInfo.wealth || 0)
-      const tagPrice = this.coinPrices.find(v => v.coin === 'TAG').price || 0;
-      let r = parseFloat(u || 0) / parseFloat(tagPrice || 0)
+      let r = parseFloat(u || 0)
       return parseFloat(r || 0).toFixed(8)
     },
     aboutRewardU() {
       let u = parseFloat(this.nextObj.unit || 0) * parseFloat(this.farmInfo.wealth || 0)
-      return parseFloat(u || 0).toFixed(4)
+      const tagPrice = this.coinPrices.find(v => v.coin === 'TAG').price || 0;
+      let r = parseFloat(u || 0) * parseFloat(tagPrice || 0)
+      return parseFloat(r || 0).toFixed(4)
     }
   },
   watch: {
