@@ -17,7 +17,8 @@
         <span>{{ $t('home.newPrice') }}</span>
         <span>{{ $t('home.rate24') }}</span>
       </div>
-      <div class="list flexb" v-for="(v, i) in rankArr" :key="`rank-${i}`">
+      <div class="list flexb" v-for="(v, i) in rankArr" :key="`rank-${i}`"
+        @click="handleToTrade(v)">
         <div class="flexa dinReg">
           <img class="symCoin" :src="v.imgUrl1">
           <div>
@@ -118,7 +119,20 @@ export default {
         tArr.push(v)
       });
       return tArr
-    }
+    },
+    // 交易页面跳转
+    handleToTrade(li) {
+      let symbol = 'eosio.token-eos-minedfstoken-dfs';
+      if (li) {
+        symbol = `${li.contract1}-${li.symbol1}-${li.contract0}-${li.symbol0}`
+      }
+      this.$router.push({
+        name: 'kLine',
+        params: {
+          symbol
+        }
+      })
+    },
   }
 }
 </script>

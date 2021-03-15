@@ -537,10 +537,10 @@ export default {
       height: 50px;
       width: 116px;
       &.green{
-        background: #1FCD12;
+        background: #5AAF90;
       }
       &.red{
-        background: #FE3B37;
+        background: #FF4D4D;
       }
     }
     .rankItem{
