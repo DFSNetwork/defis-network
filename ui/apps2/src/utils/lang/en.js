@@ -297,6 +297,7 @@ export default {
   tabbar: {
     swap: 'Swap',
     order: 'Markets',
+    trade: 'Trade',
   },
   info: {
     info: 'Info',

@@ -46,7 +46,7 @@ export default {
   },
   'en': {
     pddex: {
-      pOrder:'Books',
+      pOrder:'Limit',
       follow:'Favorites',
       all:'All',
       amt: 'Volume',

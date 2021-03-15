@@ -24,7 +24,7 @@
           <img v-if="$route.name !== 'index' && $route.name !== 'market'" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/swap-un.png">
           <img v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/swap1.png?v=1">
         </span>
-        <div>{{ $t('tabbar.swap') }}</div>
+        <div>{{ $t('tabbar.trade') }}</div>
       </div>
       <div class="bar" :class="{'act': $route.name === 'fundation'}"
         @click="handleTo('fundation')">

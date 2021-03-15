@@ -298,6 +298,7 @@ export default {
   tabbar: {
     swap: '闪兑',
     order: '行情',
+    trade: '交易',
   },
   info: {
     info: '概览',
