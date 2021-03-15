@@ -224,7 +224,7 @@ export default {
         location.href = 'https://dfsdefi.com/'
       }
       if (name === 'diary') {
-        location.href = 'https://dfsfans.gitee.io'
+        location.href = 'http://dfsfans.io/'
       }
     }
   }

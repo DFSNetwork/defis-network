@@ -71,7 +71,7 @@ export default {
         return
       }
       if (name === 'record') {
-        location.href = 'https://dfsfans.gitee.io/'
+        location.href = 'http://dfsfans.io/'
         return
       }
       if (name === 'usdx') {
