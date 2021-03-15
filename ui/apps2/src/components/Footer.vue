@@ -38,7 +38,8 @@
     </div>
     <DfsInfo v-else :newDfsSwapData="newDfsSwapData"
       :tradeUserNum="tradeUserNum"
-      :poolsUsdt="poolsUsdt"/>
+      :poolsUsdt="poolsUsdt"
+      :poolsEos="poolsEos"/>
 
     <el-dialog
       class="dialog"

@@ -7,8 +7,8 @@
       <div>
         <div class="name">{{ farmerInfo.nick }}</div>
         <div class="tip small">
-          <span>{{ $t('invite.wealth') }}：</span>
-          <span>{{ farmInfo.wealth }}</span>
+          <!-- <span>{{ $t('invite.wealth') }}：</span> -->
+          <span>{{ farmerInfo.desc }}</span>
         </div>
       </div>
     </div>

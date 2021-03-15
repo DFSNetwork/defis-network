@@ -1,15 +1,23 @@
 <template>
   <div class="dfsInfo">
-    <div class="title">{{ $t('home.asset') }}</div>
+    <div class="title flexa" @click="handleExchange">
+      <span>{{ $t('home.asset') }}</span>
+      <img class="exImg" v-if="exchange"
+        src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_left.svg">
+      <img class="exImg" v-else
+        src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/price_switch_icon_btn_right.svg">
+    </div>
     <div class="main">
       <div class="flexb">
         <div class="item">
-          <div class="subTitle">{{ $t('home.tvl') }} (USDT)</div>
-          <div class="num dinBold">{{ poolsUsdt }}</div>
+          <div class="subTitle">{{ $t('home.tvl') }} ({{ exchange ? 'USDT' : 'EOS' }})</div>
+          <div class="num dinBold" v-if="exchange">{{ poolsUsdt | numeralFormat }}</div>
+          <div class="num dinBold" v-else>{{ poolsEos | numeralFormat }}</div>
         </div>
         <div class="item">
-          <div class="subTitle">{{ $t('home.vol') }} (USDT)</div>
-          <div class="num dinBold">{{ newDfsSwapData.total_volume_usdt ? newDfsSwapData.total_volume_usdt : "0.00" }}</div>
+          <div class="subTitle">{{ $t('home.vol') }} ({{ exchange ? 'USDT' : 'EOS' }})</div>
+          <div class="num dinBold" v-if="exchange">{{ newDfsSwapData.total_volume_usdt ? newDfsSwapData.total_volume_usdt : "0.00" | numeralFormat }}</div>
+          <div class="num dinBold" v-else>{{ newDfsSwapData.total_volume ? newDfsSwapData.total_volume : "0.00" | numeralFormat }}</div>
         </div>
       </div>
       <div class="flexb">
@@ -40,9 +48,24 @@ export default {
       type: String,
       default: '0.0000'
     },
+    poolsEos: {
+      type: String,
+      default: '0.0000'
+    },
     tradeUserNum: {
       type: String,
       default: '0'
+    }
+  },
+  data() {
+    return {
+      exchange: true,
+    }
+  },
+  methods: {
+    handleExchange() {
+      this.exchange = !this.exchange;
+      this.$forceUpdate()
     }
   }
 }
@@ -60,6 +83,10 @@ export default {
     font-size: 32px;
     font-weight: 500;
     margin-bottom: 18px;
+    .exImg{
+      margin-left: 15px;
+      width: 30px;
+    }
   }
   .flexb{
     margin-top: 20px;

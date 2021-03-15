@@ -34,7 +34,7 @@
           <span class="changeVol din"
           :class="{
             'red_p': parseFloat(v.priceRate) < 0,
-          }">{{ v.volume24HToUsdt }}</span>
+          }">${{ parseFloat(v.volume24HToUsdt).toFixed(0) }}</span>
         </div>
       </div>
     </div>
