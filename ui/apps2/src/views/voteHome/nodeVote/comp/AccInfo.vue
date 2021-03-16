@@ -107,8 +107,8 @@ export default {
   font-size: 28px;
   text-align: left;
   color: #333;
-  padding: 30px;
-  border-bottom: 20px solid #f6f6f6;
+  padding: 38px 30px;
+  border-top: 1px solid $color-border;
   .btn{
     padding: 10px 32px;
     background: #29D4B0;
@@ -122,7 +122,7 @@ export default {
   .refresh{
     margin-left: 8px;
     width: 30px;
-    height: 30px;
+    // height: 30px;
     display: inline-block;
     border-radius: 30px;
   }

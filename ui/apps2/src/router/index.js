@@ -93,18 +93,6 @@ const constantRouter = [
         meta: { title: 'DeFis-Network', noAcc: true },
       },
       {
-        path: '/vote',
-        name: 'vote',
-        component: () => import(/* webpackChunkName: "vote" */ '@/views/vote/Index.vue'),
-        meta: { title: 'DeFis-Network', noAcc: true, noFooter: true, noTab: true },
-      },
-      {
-        path: '/vote/:mid',
-        name: 'voteDetail',
-        component: () => import(/* webpackChunkName: "voteDetail" */ '@/views/vote/comp/Detail.vue'),
-        meta: { title: 'DeFis-Network', noAcc: true, noFooter: true },
-      },
-      {
         path: '/total',
         name: 'total',
         component: () => import(/* webpackChunkName: "total" */ '@/views/total/Index.vue'),
@@ -127,18 +115,6 @@ const constantRouter = [
         name: 'coinViews',
         component: () => import(/* webpackChunkName: "largeTrade" */ '@/views/coinViews/Index.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true},
-      },
-      { // 节点投票
-        path: '/node-vote',
-        name: 'nodeVote',
-        component: () => import(/* webpackChunkName: "nodeVote" */ '@/views/nodeVote/Index.vue'),
-        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
-      },
-      { // 节点DFS投票详情
-        path: '/node-detail/:owner',
-        name: 'nodeDetail',
-        component: () => import(/* webpackChunkName: "nodeDetail" */ '@/views/nodeVote/comp/NodeDetail.vue'),
-        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
       },
       { // 乐捐系统
         path: '/fundation',
@@ -309,27 +285,6 @@ const constantRouter = [
       },
     ],
   },
-  // vote for tag lp
-  // voteForTag
-  {
-    path: '/vote-tag',
-    component: Layout,
-    redirect: '/',
-    children: [
-      {
-        path: '/',
-        name: 'voteForTag',
-        component: () => import(/* webpackChunkName: "voteForTag" */ '@/views/voteForTag/Index'),
-        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
-      },
-      {
-        path: 'detail-tag/:mid',
-        name: 'tagVoteDetail',
-        component: () => import(/* webpackChunkName: "tagVoteDetail" */ '@/views/voteForTag/comp/Detail'),
-        meta: { title: 'DeFis-Network',  noAcc: true, noFooter: true },
-      },
-    ],
-  },
   // dss for tag
   {
     path: '/dss-tag',
@@ -340,20 +295,6 @@ const constantRouter = [
         path: '/',
         name: 'dssForTag',
         component: () => import(/* webpackChunkName: "dssForTag" */ '@/views/dssForTag/Index'),
-        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
-      },
-    ],
-  },
-  // vote for tag params
-  {
-    path: '/vote-params',
-    component: Layout,
-    redirect: '/',
-    children: [
-      {
-        path: '/',
-        name: 'sysParams',
-        component: () => import(/* webpackChunkName: "sysParams" */ '@/views/sysParams/Index'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
       },
     ],
@@ -400,6 +341,63 @@ const constantRouter = [
         name: 'farmEdit',
         component: () => import(/* webpackChunkName: "farmEdit" */ '@/views/invite/childViews/Edit'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
+    ],
+  },
+  // voteHome
+  {
+    path: '/votes',
+    component: Layout,
+    redirect: '/',
+    children: [
+      {
+        path: '/',
+        component: () => import(/* webpackChunkName: "voteHome" */ '@/views/voteHome/Index'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
+        children: [
+          {
+            path: '/vote',
+            name: 'vote',
+            component: () => import(/* webpackChunkName: "vote" */ '@/views/voteHome/vote/Index.vue'),
+            meta: { title: 'DeFis-Network', noAcc: true, noFooter: true, noTab: true, noHeader: true },
+          },
+          { // 节点投票
+            path: '/node-vote',
+            name: 'nodeVote',
+            component: () => import(/* webpackChunkName: "nodeVote" */ '@/views/voteHome/nodeVote/Index.vue'),
+            meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true, noHeader: true },
+          },
+          {
+            path: '/vote-tag',
+            name: 'voteForTag',
+            component: () => import(/* webpackChunkName: "voteForTag" */ '@/views/voteHome/voteForTag/Index'),
+            meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true, noHeader: true },
+          },
+          {
+            path: '/vote-params',
+            name: 'sysParams',
+            component: () => import(/* webpackChunkName: "sysParams" */ '@/views/voteHome/sysParams/Index'),
+            meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true, noHeader: true },
+          },
+        ]
+      },
+      {
+        path: '/vote/:mid',
+        name: 'voteDetail',
+        component: () => import(/* webpackChunkName: "voteDetail" */ '@/views/voteHome/vote/comp/Detail.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noFooter: true },
+      },
+      { // 节点DFS投票详情
+        path: '/node-detail/:owner',
+        name: 'nodeDetail',
+        component: () => import(/* webpackChunkName: "nodeDetail" */ '@/views/voteHome/nodeVote/comp/NodeDetail.vue'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noTab: true },
+      },
+      {
+        path: 'vote-tag/detail-tag/:mid',
+        name: 'tagVoteDetail',
+        component: () => import(/* webpackChunkName: "tagVoteDetail" */ '@/views/voteHome/voteForTag/comp/Detail'),
+        meta: { title: 'DeFis-Network',  noAcc: true, noFooter: true },
       },
     ],
   },

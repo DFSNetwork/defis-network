@@ -81,6 +81,7 @@ export default {
     poolVote: 'Pool Vote',
     nodeVote: 'BP Vote',
     my: 'Me',
+    otherVote:'Other Vote',
   },
   bank: {
     stake: 'Stake',

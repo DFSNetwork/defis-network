@@ -82,6 +82,7 @@ export default {
     poolVote: '矿池投票',
     nodeVote: '节点投票',
     my: '我的',
+    otherVote: '其他投票',
   },
   bank: {
     stake: '抵押',

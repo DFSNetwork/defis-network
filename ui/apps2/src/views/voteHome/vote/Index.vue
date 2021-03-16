@@ -1,25 +1,27 @@
 <template>
   <div class="voteMain">
-    <div class="banner">
+    <!-- <div class="banner">
       <img class="bgImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/banner/bpVote.png" alt="">
-    </div>
-    <div class="mainTitle flexb">
-      <span class="act">{{ $t('vote.vote') }}</span>
-      <span class="flexa rulesTip tip" @click="showRules = !showRules">
-        <span>{{ $t('vote.voteRules') }}</span>
-        <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
-      </span>
-    </div>
-    <div class="info flexb" v-loading="!dssGet">
-      <div>
-        <div class="votes flexb">
-          <span class="flexa">
-            <span>{{ $t('vote.myVote') }}：<span class="dinBold">{{ accNum }}</span></span>
-          </span>
-        </div>
+    </div> -->
+    <div class="accVoteNum_p">
+      <div class="mainTitle flexb">
+        <span class="act">{{ $t('vote.vote') }}</span>
+        <span class="flexa rulesTip tip" @click="showRules = !showRules">
+          <span>{{ $t('vote.voteRules') }}</span>
+          <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt="">
+        </span>
       </div>
-      <div>
-        <span class="btn" @click="handleToDss">{{ $t('market.manage') }}</span>
+      <div class="info flexb" v-loading="!dssGet">
+        <div>
+          <div class="votes flexb">
+            <span class="flexa">
+              <span>{{ $t('vote.myVote') }}：<span class="dinBold">{{ accNum }}</span></span>
+            </span>
+          </div>
+        </div>
+        <div>
+          <span class="btn" @click="handleToDss">{{ $t('market.manage') }}</span>
+        </div>
       </div>
     </div>
     <div class="selectList">
@@ -447,8 +449,8 @@ export default {
 .mainTitle{
   font-size: 32px;
   text-align: left;
-  margin: 30px 0;
-  padding: 0 0 0 40px;
+  margin: 0 0 30px 0;
+  padding: 0 0 0 28px;
   &>span{
     margin-right: 60px;;
   }
@@ -470,7 +472,7 @@ export default {
       position: absolute;
       width: 8px;
       height: 32px;
-      background:#02C698;
+      background:$color-main;
       border-radius:4px;
       left: 0%;
       top: 50%;
@@ -516,7 +518,7 @@ export default {
   color: #333;
   padding: 40px 30px;
   border-top: 1px solid rgba(220,220,220, .3);
-  border-bottom: 20px solid #f6f6f6;
+  // border-bottom: 20px solid #f6f6f6;
   .btn{
     font-size: 28px;
     padding: 10px 38px;

@@ -12,6 +12,9 @@ export default {
       users: '人',
       orders: '次',
       dAndW: '充提ETH',
+      nodePool: '节点矿池',
+      paramsVote: '参数投票',
+      traderVote: '承兑商投票',
     }
   },
   'en': {
@@ -26,6 +29,9 @@ export default {
       users: ' Users',
       orders: ' Orders',
       dAndW: 'Get ETH',
+      nodePool:'Bp Pool',
+      paramsVote:'System Vote',
+      traderVote:'Acceptors Vote',
     }
   }
 }

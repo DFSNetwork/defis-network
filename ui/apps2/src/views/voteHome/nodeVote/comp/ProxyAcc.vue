@@ -9,12 +9,12 @@
     <div class="content flexb" v-loading="getLoading" @click="handleToBro">
       <div class="item">
         <div class="subTitle">{{ $t('bpInfo.proxyAcc') }}</div>
-        <div class="DinReg">dfsbpsproxy1</div>
+        <div class="dinReg">dfsbpsproxy1</div>
       </div>
       <div class="item flexb">
         <div>
           <div class="subTitle">{{ $t('bpInfo.proxyNum') }}</div>
-          <div class="DinReg">{{ proxyData.eosNum || '-' }} EOS</div>
+          <div class="dinReg">{{ proxyData.eosNum || '-' }} EOS</div>
         </div>
         <i class="el-icon-arrow-right"></i>
       </div>
@@ -170,6 +170,7 @@ export default {
     .subTitle{
       color: #000;
       margin-bottom: 8px;
+      font-weight: 500;
     }
   }
 }
