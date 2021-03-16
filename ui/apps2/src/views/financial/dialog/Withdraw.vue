@@ -41,7 +41,6 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { get_table_rows } from '@/utils/api'
 import { toFixed, toLocalTime, countdown } from '@/utils/public';
 
 export default {
@@ -121,7 +120,7 @@ export default {
         "lower_bound": ` ${formName}`,
         "upper_bound": ` ${formName}`,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }

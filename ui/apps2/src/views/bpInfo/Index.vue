@@ -45,7 +45,7 @@
 </template>
 
 <script>
-import {get_bp_info, get_table_rows} from '@/utils/api'
+import {get_bp_info} from '@/utils/api'
 import { mapState } from 'vuex';
 import moment from 'moment';
 
@@ -143,7 +143,7 @@ export default {
           "upper_bound": ` ${v.owner}`,
           "json":true,
         }
-        const {status, result} = await get_table_rows(params)
+        const {status, result} = await this.$api.get_table_rows(params)
         if (!status) {
           return
         }

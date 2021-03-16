@@ -50,7 +50,6 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import {toLocalTime, toFixed} from '@/utils/public'
-import {get_table_rows} from '@/utils/api'
 import { getRexActions } from '../js/nodePools'
 import RexLock from './RexLock'
 import moment from 'moment';
@@ -119,7 +118,7 @@ export default {
         table_key: "",
         upper_bound: ` ${formName}`,
       }
-      const {status, result} = await get_table_rows(params);
+      const {status, result} = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }

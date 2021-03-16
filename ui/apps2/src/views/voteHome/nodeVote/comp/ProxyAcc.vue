@@ -25,7 +25,6 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { get_table_rows } from '@/utils/api';
 
 export default {
   name: 'proxyAcc',
@@ -119,7 +118,7 @@ export default {
         "lower_bound": "dfsbpsproxy1",
         "upper_bound": "dfsbpsproxy1",
       }
-      const { status, result } = await get_table_rows(params);
+      const { status, result } = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }

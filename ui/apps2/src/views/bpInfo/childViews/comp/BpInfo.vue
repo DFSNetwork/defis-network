@@ -149,7 +149,7 @@
 import Bus from '@/utils/bus';
 import { mapState } from 'vuex';
 import ScoreDetail from './ScoreDetail';
-import {get_table_rows, get_bp_info} from '@/utils/api'
+import {get_bp_info} from '@/utils/api'
 import {toLocalTime} from '@/utils/public';
 import ShowContent from '../dialog/ShowContent';
 import ShowEdts from '../dialog/ShowEdts';
@@ -350,7 +350,7 @@ export default {
         "upper_bound": ` ${this.bpname}`,
         "json":true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -374,7 +374,7 @@ export default {
         "lower_bound": this.bpname,
         "upper_bound": this.bpname,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -395,7 +395,7 @@ export default {
         "table":"questions",
         "json":true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -409,7 +409,7 @@ export default {
         "table":"answers",
         "json":true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }

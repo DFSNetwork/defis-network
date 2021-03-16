@@ -1,6 +1,7 @@
 import moment from 'moment';
 import store from '@/store';
-import { get_balance, get_table_rows } from '@/utils/api'
+import { get_balance } from '@/utils/api'
+import { get_table_rows } from '@/api/list'
 
 export function timeDssNum(li, userLP, rankWeight, allStaked) {
   const nowTime = moment().valueOf() / 1000;

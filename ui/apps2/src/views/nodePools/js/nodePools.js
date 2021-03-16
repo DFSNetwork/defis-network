@@ -3,7 +3,7 @@ import store from '@/store';
 import moment from 'moment';
 
 import { toLocalTime } from '@/utils/public'
-import {get_table_rows, get_producers} from '@/utils/api'
+import {get_producers} from '@/utils/api'
 
 export async function getNodeLists() {
   const {status, result} = await get_producers()
@@ -32,7 +32,7 @@ export async function getAccVote(cb) {
     "lower_bound": ` ${formName}`,
     "upper_bound": ` ${formName}`,
   }
-  const {status, result} = await get_table_rows(params)
+  const {status, result} = await this.$api.get_table_rows(params)
   if (!status) {
     cb({eosNum: '0.0000'})
     return
@@ -71,7 +71,7 @@ export async function getAccFarmerData(accVoteData, cb) {
     "lower_bound": ` ${formName}`,
     "upper_bound": ` ${formName}`,
   }
-  const {status, result} = await get_table_rows(params)
+  const {status, result} = await this.$api.get_table_rows(params)
   if (!status) {
     return
   }

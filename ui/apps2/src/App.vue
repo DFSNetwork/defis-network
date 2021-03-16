@@ -10,7 +10,7 @@ import moment from 'moment';
 import { DApp } from '@/utils/wallet';
 import { mapState } from 'vuex';
 import { GetUrlPara, login, getUrlParams, toLocalTime, accPow, accDiv, toFixed } from '@/utils/public';
-import { getVotePools, get_balance, get_table_rows } from '@/utils/api';
+import { getVotePools, get_balance } from '@/utils/api';
 import { EosModel } from '@/utils/eos';
 import MyKonami from '@/views/konami/Index';
 
@@ -379,7 +379,7 @@ export default {
       if (type === 'dfs') {
         params.table = 'pools2'
       }
-      const {status, result} = await get_table_rows(params);
+      const {status, result} = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }

@@ -43,7 +43,7 @@
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import Withdraw from '../dialog/Withdraw';
-import { get_table_rows, get_balance } from '@/utils/api'
+import { get_balance } from '@/utils/api'
 import { toLocalTime, getMarketTime, toFixed } from '@/utils/public';
 
 export default {
@@ -143,7 +143,7 @@ export default {
         "lower_bound": ` ${formName}`,
         "upper_bound": ` ${formName}`,
       }
-      const { status, result } = await get_table_rows(params);
+      const { status, result } = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }

@@ -30,7 +30,6 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import {get_table_rows} from '@/utils/api'
 
 export default {
   name: 'setQusAns',
@@ -104,7 +103,7 @@ export default {
         "table": "answers",
         "json": true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -119,7 +118,7 @@ export default {
         "table":"questions",
         "json":true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }

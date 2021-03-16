@@ -73,7 +73,7 @@ import NodeList from './comp/NodeList';
 import Rules from './dialog/Rules';
 import IndexComp from '@/views/bpInfo/IndexComp'
 
-import { get_bp_info, get_table_rows } from '@/utils/api';
+import { get_bp_info } from '@/utils/api';
 export default {
   name: 'nodeVote',
   components: {
@@ -231,7 +231,7 @@ export default {
         "key_type": "float64",
         "limit": 1000
       }
-      const { status, result } = await get_table_rows(params);
+      const { status, result } = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }
@@ -271,7 +271,7 @@ export default {
         "lower_bound": ` ${formName}`,
         "upper_bound": ` ${formName}`,
       }
-      const { status, result } = await get_table_rows(params);
+      const { status, result } = await this.$api.get_table_rows(params);
       this.myVoteLoading = false;
       if (!status) {
         return

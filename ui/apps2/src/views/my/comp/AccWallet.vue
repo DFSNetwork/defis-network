@@ -37,7 +37,7 @@
 <script>
 import moment from 'moment';
 import { mapState } from 'vuex';
-import {get_table_rows, get_balance} from '@/utils/api'
+import { get_balance} from '@/utils/api'
 import { sellToken } from '@/utils/logic';
 import { toFixed, accAdd, accDiv, accSub, toLocalTime, dealMinerData } from '@/utils/public';
 import { dealRewardV3 } from '@/utils/logic';
@@ -127,7 +127,7 @@ export default {
         "table": "args",
         "json": true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -187,7 +187,7 @@ export default {
         "upper_bound": ` ${formName}`,
         "json": true,
       }
-      const {status, result} = await  get_table_rows(params)
+      const {status, result} = await  this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -262,7 +262,7 @@ export default {
         limit: 1000,
         json: true
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -284,7 +284,7 @@ export default {
         upper_bound: ` ${formName}`,
         json: true,
       }
-      const {status, result} = await get_table_rows(params);
+      const {status, result} = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }
