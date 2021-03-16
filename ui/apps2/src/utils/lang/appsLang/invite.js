@@ -39,6 +39,7 @@ export default {
       claim: '领取',
       farmInfo: '农场信息',
       access: '访问',
+      ableClaim: '待领取',
 
       rewardRules: '收益规则',
       rewardRules1: '1. 财富值是衡量农场收益的唯一标准',
@@ -110,6 +111,7 @@ export default {
       save:'Save',
       claim: 'Claim',
       farmInfo:'Farm Information',
+      ableClaim:'To be claimed',
 
       rewardRules:'Reward Rules',
       rewardRules1: '1. Wealth value is the only measure of farm income',

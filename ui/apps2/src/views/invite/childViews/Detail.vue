@@ -87,7 +87,7 @@
         </div>
         <div class="small green_p">{{ $t('invite.doing') }}</div>
       </div>
-      <div class="about flexb">
+      <div class="about flexb" v-if="accSnapshoots.is_claim">
         <div>
           <div class="tip flexa">
             <span>{{ $t('invite.aboutReward') }}</span>
@@ -98,6 +98,21 @@
           <div class="num dinBold">
             <span>{{ aboutReward }}</span> 
             <span class="tip ml">(${{ aboutRewardU }})</span>
+          </div>
+        </div>
+        <div class="claimBtn flexc" v-if="account.name === dName" @click="handleClaim">{{ $t('invite.claim') }}</div>
+      </div>
+      <div class="albeClaim about flexb" v-else>
+        <div>
+          <div class="tip flexa">
+            <span>{{ $t('invite.ableClaim') }}</span>
+            <img class="tipIcon" @click="showClaimTip = true"
+              src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/tipIcon.png"
+            />
+          </div>
+          <div class="num dinBold">
+            <span>{{ abledReward }}</span> 
+            <span class="tip ml">(${{ abledRewardU }})</span>
           </div>
         </div>
         <div class="claimBtn flexc" v-if="account.name === dName" @click="handleClaim">{{ $t('invite.claim') }}</div>
@@ -145,7 +160,9 @@ import Leave from "../dialog/Leave";
 import ClaimTip from "../dialog/ClaimTip";
 
 import { get_acc_info } from "@/utils/api";
-import { countdown } from '@/utils/public';
+import { countdown, toFixed } from '@/utils/public';
+import { sellToken } from '@/utils/logic';
+
 
 export default {
   name: "farmDetail",
@@ -180,6 +197,9 @@ export default {
         seconds: '00',
         total: 0
       },
+      // 用户快照情况
+      accSnapshoots: {},
+      nowMarket: {},
     };
   },
   mounted() {
@@ -188,11 +208,15 @@ export default {
     this.handleGetFarmerInfo();
     this.handleGetSubFarms();
     this.handleGetNext()
+    this.handleGetAccSnapshoots()
+    this.handleGetMidsTotalPrice()
   },
   computed: {
     ...mapState({
       account: (state) => state.app.account,
       coinPrices: (state) => state.sys.coinPrices,
+      marketLists: state => state.sys.marketLists,
+      dfsData: state => state.sys.dfsData,
     }),
     standard() {
       if (parseFloat(this.farmInfo.wealth) > 10000) {
@@ -208,13 +232,33 @@ export default {
       const sysStartTime = this.nextObj.startTimes || 0;
       return accClaimTime < sysStartTime
     },
+    dealUnit() { // 预估每W USDT 获得多少 TAG
+      const tagNum = this.nowMarket.getNum0 * 2 * 0.2;
+      const tvl = parseFloat(this.dfsData.tvl_usdt || 0);
+      if (!tvl) {
+        return 0
+      }
+      const unit = tagNum / tvl;
+      return parseFloat(unit || 0)
+    },
     aboutReward() {
-      let u = parseFloat(this.nextObj.unit || 0) * parseFloat(this.farmInfo.wealth || 0)
+      let u = parseFloat(this.dealUnit || 0) * parseFloat(this.farmInfo.wealth || 0)
       let r = parseFloat(u || 0)
       return parseFloat(r || 0).toFixed(8)
     },
     aboutRewardU() {
-      let u = parseFloat(this.nextObj.unit || 0) * parseFloat(this.farmInfo.wealth || 0)
+      let u = parseFloat(this.dealUnit || 0) * parseFloat(this.farmInfo.wealth || 0)
+      const tagPrice = this.coinPrices.find(v => v.coin === 'TAG').price || 0;
+      let r = parseFloat(u || 0) * parseFloat(tagPrice || 0)
+      return parseFloat(r || 0).toFixed(4)
+    },
+    abledReward() {
+      let u = parseFloat(this.nextObj.unit || 0) * parseFloat(this.accSnapshoots.wealth || 0)
+      let r = parseFloat(u || 0)
+      return parseFloat(r || 0).toFixed(8)
+    },
+    abledRewardU() {
+      let u = parseFloat(this.nextObj.unit || 0) * parseFloat(this.accSnapshoots.wealth || 0)
       const tagPrice = this.coinPrices.find(v => v.coin === 'TAG').price || 0;
       let r = parseFloat(u || 0) * parseFloat(tagPrice || 0)
       return parseFloat(r || 0).toFixed(4)
@@ -472,6 +516,72 @@ export default {
         name,
         params,
       });
+    },
+    // 获取用户收益快照数据
+    async handleGetAccSnapshoots() {
+      const params = {
+        json: true,
+        limit: 100,
+        code: "farms.tag",
+        scope: "farms.tag",
+        table: "snapshoots",
+        lower_bound: ` ${this.dName}`,
+        upper_bound: ` ${this.dName}`,
+      }
+      const {status, result} = await this.$api.get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const rows = result.rows || []
+      if (!rows.length) {
+        return
+      }
+      this.accSnapshoots = rows[0];
+    },
+    // 获取 fund.tag 账户下 737 交易对总估值（USDT价值）
+    async handleGetMidsTotalPrice() {
+      const params = {
+        code: "defisswapcnt",
+        json: true,
+        lower_bound: " fund.tag",
+        scope: 737,
+        table: "liquidity",
+        upper_bound: " fund.tag",
+      }
+      const {status, result} = await this.$api.get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const rows = result.rows || []
+      if (!rows.length) {
+        return
+      }
+      this.handleGetNowMarket(rows[0])
+    },
+    // 计算实时的双边数量
+    handleGetNowMarket(data) {
+      try {
+        const market = this.marketLists.find(v => v.mid === 737)
+        const inData = {
+          poolSym0: market.reserve0.split(' ')[0],
+          poolSym1: market.reserve1.split(' ')[0],
+          poolToken: market.liquidity_token,
+          sellToken: data.token
+        }
+        const nowMarket = sellToken(inData);
+        this.nowMarket = {
+          getNum0: toFixed(nowMarket.getNum1, 4),
+          getNum1: toFixed(nowMarket.getNum2, 4),
+          sym0: market.symbol0,
+          sym1: market.symbol1,
+          contract0: market.contract0,
+          contract1: market.contract1,
+        };
+      } catch(error) {
+        setTimeout(() => {
+          this.handleGetNowMarket(data)
+        }, 200);
+      }
     },
   },
 };
