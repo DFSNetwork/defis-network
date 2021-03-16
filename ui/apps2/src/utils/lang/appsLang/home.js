@@ -7,7 +7,7 @@ export default {
       asset: '实时数据',
       tvl: '流动池总量',
       vol: '24H兑换量',
-      tradeNum: '24H交易人次',
+      tradeNum: '24H交易人数',
       orderNum: '24H订单数量',
       homeUi: '大丰收首页全新升级！',
       rankUp: '涨幅榜',
