@@ -9,7 +9,6 @@ export function ptoken_get_address(params) {
     }
     const token = params.token.toLowerCase();
     const oneos = `${params.token1.toLowerCase()}oneos`
-    // https://pethoneos-node-1a.ngrok.io/v1/
     axios.post(`https://${oneos}-node-1a.ngrok.io/v1/${token}-on-eos`, params).then((res) => {
       let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });

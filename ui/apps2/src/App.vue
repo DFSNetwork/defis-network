@@ -8,7 +8,6 @@
 <script>
 import moment from 'moment';
 import { DApp } from '@/utils/wallet';
-import axios from 'axios';
 import { mapState } from 'vuex';
 import { GetUrlPara, login, getUrlParams, toLocalTime, accPow, accDiv, toFixed } from '@/utils/public';
 import { getVotePools, get_balance, get_table_rows } from '@/utils/api';
@@ -191,16 +190,15 @@ export default {
     },
     // 获取DFS流通量 - 全局区一次
     async handleGetDfsCurrent() {
-      const https = this.baseConfig.node.url;
       const params = {
         code: 'minedfstoken',
         symbol: 'DFS'
       }
-      const result = await axios.post(`${https}/v1/chain/get_currency_stats`, JSON.stringify(params))
-      if (result.status !== 200) {
+      const {status, result} = await this.$api.get_currency_stats(params);
+      if (!status) {
         return;
       }
-      const res = result.data['DFS'];
+      const res = result['DFS'];
       const supply = res.supply.split(' ')[0];
       
       const damping = accPow(0.75, parseInt(accDiv(supply, 1000000)));
@@ -293,18 +291,17 @@ export default {
     },
     // 获取当前发行量 和 计算衰减
     handleGetYfcCurrent() {
-      const https = this.baseConfig.node.url;
       this.lpMid.forEach(async v => {
         const params = {
           code: v.contract,
           symbol: v.symbol
         }
-        const result = await axios.post(`${https}/v1/chain/get_currency_stats`, JSON.stringify(params))
-        if (result.status !== 200) {
+        const {status, result} = await this.$api.get_currency_stats(params);
+        if (!status) {
           return;
         }
         let dampNum = v.contract === 'yfctokenmain' ? 1000 : 100;
-        const res = result.data[v.symbol];
+        const res = result[v.symbol];
         const supply = res.supply.split(' ')[0];
         const t = parseInt(supply / dampNum)
         const dampingYfc = 1 * Math.pow(0.75, t)
@@ -313,7 +310,6 @@ export default {
         this.$store.dispatch('setLpDamping', lpDamping)
       })
     },
-
     // 获取矿池排行奖励
     handleGetPoolsApr() {
       getVotePools()
@@ -338,7 +334,6 @@ export default {
       if (!result.length) {
         return
       }
-      // console.log(result)
       const bal = result.split(' ')[0];
       if (type === 'usdc') {
         this.$store.dispatch('setUsdcBalForUsdc', bal)

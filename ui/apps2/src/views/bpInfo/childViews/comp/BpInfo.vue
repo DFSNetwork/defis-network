@@ -145,7 +145,6 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 import Bus from '@/utils/bus';
 import { mapState } from 'vuex';
@@ -310,15 +309,15 @@ export default {
       if (!this.bpDetailInfo.nodes) {
         return
       }
-      this.bpDetailInfo.nodes.forEach(v => {
+      this.bpDetailInfo.nodes.forEach(async v => {
         let time = new Date().getTime();
-        axios.get(`${v.url}/v1/chain/get_info`, {
-          timeout: 5500,
-        }).then(() => {
-          time = new Date().getTime() - time;
-          this.$set(v, 'ms', time)
-          this.$set(v, 'isGet', true)
-        })
+        const {status} = await this.$api.get_info(v.url);
+        if (!status) {
+          return
+        }
+        time = new Date().getTime() - time;
+        this.$set(v, 'ms', time)
+        this.$set(v, 'isGet', true)
       })
     },
     handleDealCountNum(n) {

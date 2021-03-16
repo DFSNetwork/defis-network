@@ -1,4 +1,3 @@
-// import axios from 'axios';
 import moment from 'moment';
 import store from '@/store';
 import { get_balance, get_table_rows } from '@/utils/api'

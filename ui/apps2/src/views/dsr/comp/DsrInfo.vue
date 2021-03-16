@@ -36,7 +36,6 @@
 </template>
 
 <script>
-// import axios from 'axios';
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
 import { toFixed, accMul, accDiv, countdown } from '@/utils/public';

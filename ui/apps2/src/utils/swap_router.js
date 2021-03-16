@@ -9,14 +9,16 @@ class swapRouter {
     this.isInit = false;
     this._pathsArr = [];
     this.bestPath = '';
+    this.doing = false; // 正在初始化中
   }
   init(data, vThis) {
     this.markets = data || [];
     this._pathsArr = [];
     this.bestPath = '';
-    if (this.paths.length) {
+    if (this.paths.length || this.doing) {
       return
     }
+    this.doing = true;
     if (window.Worker) {
       this.workerToInitPath(vThis)
     } else {

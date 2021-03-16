@@ -1,5 +1,4 @@
 /* eslint-disable */
-import axios from 'axios';
 import Eos from 'eosjs-without-sort'; // 代签不排序
 import store from '@/store';
 import scatterJS from 'scatterjs-core';

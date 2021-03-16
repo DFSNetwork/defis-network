@@ -231,27 +231,6 @@ export default {
         let t = moment().valueOf() - nodeTime;
         this.$set(v, 'delay', t)
       })
-      // const url = nodeApp.url;
-      // let nodeTime = new Date().getTime();
-      // let nodeTip = -1;
-      // axios.get(`${url}/v1/chain/get_info`, {
-      //   timeout: 5500,
-      // }).then(() => {
-      //   nodeTime = new Date().getTime() - nodeTime;
-      //   // tip 0低延迟 1一般延迟 2高延迟 3超时
-      //   if (nodeTime < 1000) {
-      //     nodeTip = 0;
-      //   }
-      //   if (nodeTime >= 1000 && nodeTime <= 5000) {
-      //     nodeTip = 1;
-      //   }
-      //   if (nodeTime > 5000) {
-      //     nodeTip = 2;
-      //   }
-      //   if (nodeTime > 9500) {
-      //     nodeTip = 3;
-      //   }
-      // })
     }
   },
 }

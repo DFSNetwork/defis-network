@@ -55,7 +55,6 @@
 </template>
 
 <script>
-import axios from "axios";
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import { toFixed, accMul } from '@/utils/public';
@@ -145,18 +144,17 @@ export default {
       this.showImg = true;
     },
     clickOnDFSInfoData() {
-      // this.closeDFSInfoDataTip = false;
       this.$router.push({
         name: 'total',
       })
     },
     // 获取总发行量
     async handleGetDfsInfoData() {
-      const result = await axios.get("https://api.defis.network/basic/swap/summary");
-      if (result.status !== 200) {
+      const {status, result} = await this.$api.get_swap_summary();
+      if (!status) {
         return;
       }
-      this.dfsInfoData = result.data;
+      this.dfsInfoData = result;
       this.tradeUserNum = this.dfsInfoData.trade_user_num + '';
       const totalArr = this.dfsInfoData.tvl_eos.split(' ');
       this.dfsInfoData.total_volume = `${parseInt(this.dfsInfoData.total_volume)} ${totalArr[1]}`
@@ -169,11 +167,11 @@ export default {
       this.handleSetAllRes()
     },
     async handleGetTotalNum() {
-      const result = await axios.get("https://api.defis.network/basic/swap/counter");
-      if (result.status !== 200) {
+      const {status, result} = await this.$api.get_swap_counter();
+      if (!status) {
         return;
       }
-      const res = result.data;
+      const res = result;
       localStorage.setItem('counter', JSON.stringify(res))
       this.tradeUserNum = res.trade_user_num + '';
       const totalArr = res.tvl_eos.split(' ');

@@ -54,7 +54,6 @@
 <script>
 import moment from 'moment';
 import { mapState } from 'vuex';
-// import axios from "axios";
 import MarketList from '@/components/MarketArea';
 import {toLocalTime, toBrowser} from '@/utils/public'
 export default {

@@ -316,8 +316,12 @@ export default {
       this.voteList.forEach(v => {
         allVote = parseInt(Number(v.total_votes) / 10000) + Number(allVote);
       })
+      // console.log(this.voteList)
       this.voteList.forEach(v => {
         const marketIndex = this.allList.findIndex(vv => vv.mid === v.mid);
+        if (marketIndex === -1) {
+          return
+        }
         const total_votes = parseInt(Number(v.total_votes) / 10000)
         this.$set(this.allList[marketIndex], 'total_votes', total_votes)
         const rate =  total_votes / allVote * 100

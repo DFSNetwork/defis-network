@@ -6,9 +6,14 @@ function getHost() {
   const baseConfig = store.state.sys.baseConfig;
   return baseConfig.node.url;
 }
-function unZip(deflated) {
+export function unZip(deflated) {
   const inflated = zlib.inflateSync(new Buffer(deflated, 'base64')).toString();
   return inflated
+}
+export function dealZip(data) {
+  var input = JSON.stringify(data);
+  const deflated = zlib.deflateSync(input).toString('base64');
+  return deflated
 }
 export function get_table_rows(params) {
   return new Promise((resolve, reject) => {
@@ -21,7 +26,7 @@ export function get_table_rows(params) {
     })
   })
 }
-
+// 获取24H数据 - 多数据
 export function get_swap_summary() {
   return new Promise((resolve, reject) => {
     axios.get('https://api.defis.network/basic/swap/summary').then((res) => {
@@ -32,7 +37,17 @@ export function get_swap_summary() {
     })
   })
 }
-
+// 获取24H数据 - 基础数据
+export function get_swap_counter() {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/basic/swap/counter').then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
 
 // 获取账户关注列表
 export function get_acc_follow() {
@@ -110,6 +125,19 @@ export function get_price() {
   return new Promise((resolve, reject) => {
     axios.get('https://api.defis.network/common/get_price').then((res) => {
       const result = res.data;
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+
+// 查询当前发行量
+export function get_currency_stats(params) {
+  return new Promise((resolve, reject) => {
+    const host = getHost()
+    axios.post(`${host}/v1/chain/get_currency_stats`, JSON.stringify(params)).then((res) => {
+      let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
     }, err => {
       reject(err)

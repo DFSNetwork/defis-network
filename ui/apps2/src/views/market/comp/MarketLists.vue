@@ -38,7 +38,6 @@
 </template>
 
 <script>
-// import axios from "axios";
 import moment from 'moment';
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';

@@ -70,19 +70,6 @@ export function getVoteRankConfV3(lists) {
   })
 }
 
-// 查询当前发行量
-export function get_currency_stats(params) {
-  return new Promise((resolve, reject) => {
-    const host = getHost()
-    axios.post(`${host}/v1/chain/get_currency_stats`, JSON.stringify(params)).then((res) => {
-      let result = Object.assign(res.data, {});
-      resolve({ status: res.status === 200, result });
-    }, err => {
-      reject(err)
-    })
-  })
-}
-
 // 链上查表
 export function get_table_rows(params) {
   return new Promise((resolve, reject) => {
