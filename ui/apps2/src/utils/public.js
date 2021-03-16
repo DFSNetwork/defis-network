@@ -431,45 +431,6 @@ export function getDbcReward(mid, type) {
   return toFixed(reward, 8)
 }
 
-export function getDmdMinerHourRoi(market, type, dmdPools) {
-  const config = store.state.config.dmdMineConfig;
-  const thisConf = config.find(v => v.mid === market.mid) || {};
-  if (!thisConf.mid || !dmdPools) {
-    return '0'
-  }
-  const endDate = (thisConf.duration + thisConf.epoch) * 1000
-  const nowDate = moment().valueOf()
-  if (endDate < nowDate) {
-    return '0'
-  }
-  const maxSupply = thisConf.maxSupply || 0;
-  const hour = thisConf.duration / 3600;
-  let reserve = parseFloat(market.reserve1) * 2;
-  if (market.symbol1 !== 'DMD') {
-    const dmdPrice = parseFloat(dmdPools.reserve0) / parseFloat(dmdPools.reserve1);
-    const sym1Price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
-    reserve = parseFloat(market.reserve1) * 2 * sym1Price.toFixed(4) / dmdPrice.toFixed(4);
-  }
-  const hourRoi = (maxSupply / hour) / reserve * 100;
-  // console.log('-----------------')
-  // console.log(maxSupply, hour, reserve)
-  // console.log(hourRoi, market)
-  // console.log(hourRoi * 24, 'day')
-  // console.log(hourRoi * 24 * 7, 'week')
-  // console.log(hourRoi * 24 * 365, 'year')
-  // console.log('-----------------')
-  if (type === 'hour') {
-    return toFixed(hourRoi, 3);
-  }
-  if (type === 'day') {
-    return toFixed(hourRoi * 24, 3);
-  }
-  if (type === 'week') {
-    return toFixed(hourRoi * 24 * 7, 3);
-  }
-  return toFixed(hourRoi * 24 * 365, 3);
-}
-
 export function getPriceLen(price) {
   let len = 6;
   if (Number(price) > 1000) {

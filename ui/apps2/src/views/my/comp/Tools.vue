@@ -196,10 +196,6 @@ export default {
         location.href = 'https://dbc.yfc.one'
         return
       }
-      if (name === 'time') {
-        location.href = 'https://timemine.xloot.io/'
-        return
-      }
       if (name === 'eosdefi') {
         location.href = 'http://eos-defi.sgxiang.com/'
         return
@@ -207,9 +203,6 @@ export default {
       if (name === 'pbtc') {
         location.href = 'https://dapp.ptokens.io/pbtc-on-eos/issue-redeem'
         return
-      }
-      if (name === 'loop') {
-        location.href = 'https://loop.ech.one/index.html'
       }
       if (name === 'totalData') {
         location.href = 'http://dfs-info.sgxiang.com'

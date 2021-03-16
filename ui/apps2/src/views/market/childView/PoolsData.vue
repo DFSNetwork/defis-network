@@ -120,7 +120,6 @@ export default {
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
-      sortClass: state => state.sys.sortClass,
       rankInfoV3: state => state.sys.rankInfoV3,
       marketLists: state => state.sys.marketLists,
     }),

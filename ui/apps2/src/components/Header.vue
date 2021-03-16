@@ -199,16 +199,9 @@ export default {
         location.href = 'https://dbc.yfc.one'
         return
       }
-      if (name === 'time') {
-        location.href = 'https://timemine.xloot.io/'
-        return
-      }
       if (name === 'eosdefi') {
         location.href = 'http://eos-defi.sgxiang.com/'
         return
-      }
-      if (name === 'loop') {
-        location.href = 'https://loop.ech.one/index.html'
       }
       if (name === 'usdx') {
         location.href = 'https://usdx.gitee.io/'

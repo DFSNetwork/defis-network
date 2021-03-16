@@ -67,7 +67,6 @@ export default {
   computed: {
     ...mapState({
       scatter: state => state.app.scatter,
-      timeList: state => state.config.timeList,
       baseConfig: state => state.sys.baseConfig,
     }),
   },

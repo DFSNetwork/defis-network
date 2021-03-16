@@ -69,6 +69,7 @@ export default {
 
       errTip1: '您已加入其他农场',
       errTip2: '邀请金额未达标，无法领取收益',
+      errTip3: '该农场人数已达上限',
     }
   },
   'en': {
@@ -133,6 +134,7 @@ export default {
 
       errTip1:'You have joined another farm',
       errTip2:'The invitation amount is not up to the standard, unable to receive the income',
+      errTip3:'The number of people on this farm has reached the upper limit',
     }
   }
 }

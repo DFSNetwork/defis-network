@@ -55,7 +55,6 @@ export default {
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
-      sortClass: state => state.sys.sortClass,
       marketLists: state => state.sys.marketLists,
     }),
     allReward() {

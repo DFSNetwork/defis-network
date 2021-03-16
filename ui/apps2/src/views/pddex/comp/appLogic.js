@@ -1,7 +1,6 @@
 // App.vue 比较复杂的逻辑处理部分
-import { getCoin, dealPrice, getDmdMinerHourRoi, getYfcReward, getTagLpApy, accAdd} from '@/utils/public';
+import { getCoin, dealPrice, getYfcReward, getTagLpApy, accAdd} from '@/utils/public';
 import { perDayRewardV3 } from '@/utils/logic';
-import { timeApy } from '@/utils/minerLogic';
 import store from '@/store';
 
 // 做市列表数据处理
@@ -267,12 +266,10 @@ export function dealAreaArr(arr, coin) {
       imgUrl: getCoin(v.contract1, v.symbol1),
     }
     // 年化计算
-    const {countApy, lpApy, tagLpApy, timeApy, dmdApy, aprV3, feesApr, usdcApr} = dealApy(v)
+    const {countApy, lpApy, tagLpApy, aprV3, feesApr, usdcApr} = dealApy(v)
     v.countApy = parseFloat(countApy || 0).toFixed(2);
     v.lpApy = lpApy;
     v.tagLpApy = parseFloat(tagLpApy || 0).toFixed(2);
-    v.timeApy = parseFloat(timeApy || 0).toFixed(2);
-    v.dmdApy = parseFloat(dmdApy || 0).toFixed(2);
     v.aprV3 = parseFloat(aprV3 || 0).toFixed(2);
     v.feesApr = parseFloat(feesApr || 0).toFixed(2);
     v.usdcApr = parseFloat(usdcApr || 0).toFixed(2);
@@ -341,25 +338,14 @@ export function dealApy(v) {
   // DFS 挖矿年化
   const rewardV3 = perDayRewardV3(v.mid)
   const aprV3 = rewardV3 * dfsPrice / 20000 * 365 * 100;
-  // DMD 挖矿年化
-  const dmdPool = marketLists.find(vv => vv.mid === 326)
-  let dmdRoi = getDmdMinerHourRoi(v, 'year', dmdPool)
-  const dmdApy = dmdRoi;
-  // TIME 挖矿年化
-  let tApy = 0
-  const pool = marketLists.find(vv => vv.mid === 530) || {}
-  let apy = timeApy(v, 'year', pool)
-  if (Number(apy)) {
-    tApy = apy;
-  }
   // TAG 挖矿年化
   let tagLpApy = 0
   const has = tagLpMids.find(vv => vv === v.mid)
   if (has) {
     tagLpApy = getTagLpApy(v.mid)
   }
-  let countApy = parseFloat(feesApr) + parseFloat(aprV3) + parseFloat(dmdApy)
-                 + parseFloat(tApy) + parseFloat(tagLpApy)
+  let countApy = parseFloat(feesApr) + parseFloat(aprV3)
+                 + parseFloat(tagLpApy)
   // LP 挖矿
   let lpApy = {}
   lpMid.forEach(vv => {
@@ -428,7 +414,7 @@ export function dealApy(v) {
   // }
   countApy += Number(usdcApr || 0)
 
-  return {countApy, lpApy, tagLpApy, timeApy: tApy, dmdApy, aprV3, feesApr, usdcApr}
+  return {countApy, lpApy, tagLpApy, aprV3, feesApr, usdcApr}
 }
 function mineCoinPrice(mineCoin = {}) {
   if (mineCoin.symbol0 === 'DFS') {

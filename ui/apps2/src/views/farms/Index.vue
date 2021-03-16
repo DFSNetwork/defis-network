@@ -15,9 +15,6 @@
       <span class="right green" v-loading="allClaiming" @click="handleRegLength()">一键领取</span>
     </div>
     <div class="proLists">
-      <div @click="handleTo('lootTime')">
-        <MyTime  ref="lootTime"  :allClaiming="allClaiming"/>
-      </div>
       <div @click="handleTo('pools')">
         <DfsMiner ref="dfsMiner"  :allClaiming="allClaiming"/>
       </div>
@@ -33,23 +30,15 @@
       <div @click="handleTo('pdd')">
         <Pdd ref="pdd"  :allClaiming="allClaiming"/>
       </div>
-      <div @click="handleTo('loop')">
-        <Loop ref="loop"  :allClaiming="allClaiming"/>
-      </div>
-      <div @click="handleTo('dmd')">
-        <Dmd  ref="dmd"  :allClaiming="allClaiming"/>
-      </div>
     </div>
 
-    <div class="farmsTitle flexb">
+    <!-- <div class="farmsTitle flexb">
       <span>
         <span class="act">快捷工具</span>
       </span>
     </div>
     <div class="proLists">
-      <TimeRank />
-      <LootRank />
-    </div>
+    </div> -->
 
     <el-dialog
       class="myDialog"
@@ -65,15 +54,10 @@
 import MoreActionTip from './dialog/MoreActionTip';
 import Dss from './comp/Dss';
 import DfsMiner from './comp/DfsMiner';
-import Dmd from './comp/Dmd';
 import Guns from './comp/Guns';
-import Loop from './comp/Loop';
 import Pdd from './comp/Pdd';
 import YfcDss from './comp/YfcDss';
-import MyTime from './comp/MyTime';
 // tools
-import TimeRank from './toolsComp/TimeRank';
-import LootRank from './toolsComp/LootRank';
 
 import { EosModel } from '@/utils/eos';
 
@@ -83,16 +67,11 @@ export default {
     MoreActionTip,
     Dss,
     DfsMiner,
-    Dmd,
     Guns,
-    Loop,
     Pdd,
     YfcDss,
-    MyTime,
 
     // tools
-    TimeRank,
-    LootRank,
   },
   data() {
     return {
@@ -116,13 +95,11 @@ export default {
       let n = 0
       const dss = this.$refs.dss ? Number(this.$refs.dss.aboutEos || 0) : 0;
       const dfsMiner = this.$refs.dfsMiner ? Number(this.$refs.dfsMiner.aboutEos || 0) : 0;
-      const dmd = this.$refs.dmd ? Number(this.$refs.dmd.aboutEos || 0) : 0;
       const guns = this.$refs.guns ? Number(this.$refs.guns.aboutEos || 0) : 0;
-      const loop = this.$refs.loop ? Number(this.$refs.loop.aboutEos || 0) : 0;
       const pdd = this.$refs.pdd ? Number(this.$refs.pdd.aboutEos || 0) : 0;
       const yfcDss = this.$refs.yfcDss ? Number(this.$refs.yfcDss.aboutEos || 0) : 0;
       const lootTime = this.$refs.lootTime ? Number(this.$refs.lootTime.aboutEos || 0) : 0;
-      n = dss + dfsMiner + dmd + guns + loop + pdd + yfcDss + lootTime + n;
+      n = dss + dfsMiner + guns + pdd + yfcDss + lootTime + n;
       this.allReward = n.toFixed(4);
       this.allRewardTimer = setTimeout(() => {
         this.handleGetAll()
@@ -138,16 +115,8 @@ export default {
       if (this.$route.name === name)  {
         return;
       }
-      if (name === 'dmd') {
-        location.href = 'https://dmd.finance/';
-        return
-      }
       if (name === 'guns') {
         location.href = 'https://yfc.one/guns';
-        return
-      }
-      if (name === 'loop') {
-        location.href = 'https://loop.ech.one/index.html';
         return
       }
       if (name === 'pdd') {
@@ -168,22 +137,12 @@ export default {
     handleRegLength() {
       const dss = this.$refs.dss.handleGetActions()
       const dfsMiner = this.$refs.dfsMiner.handleGetActions()
-      const dmd = this.$refs.dmd.handleGetActions()
       const guns = this.$refs.guns.handleGetActions()
-      const loop = this.$refs.loop.handleGetActions()
       const pdd = this.$refs.pdd.handleGetActions()
       const yfcDss = this.$refs.yfcDss.handleGetActions()
       const lootTime = this.$refs.lootTime.handleGetActions()
-      const tArr = [...dss, ...dfsMiner, ...dmd, ...guns, ...loop, ...pdd, ...yfcDss, ...lootTime];
+      const tArr = [...dss, ...dfsMiner, ...guns, ...pdd, ...yfcDss, ...lootTime];
       this.allActions = tArr;
-      console.log('dss', dss)
-      console.log('dfsMiner', dfsMiner)
-      console.log('dmd', dmd)
-      console.log('guns', guns)
-      console.log('loop', loop)
-      console.log('yfcDss', yfcDss)
-      console.log('lootTime', lootTime)
-      console.log('pdd', pdd)
       if (this.allActions.length <= 10) { // 10条以内
         // console.log(this.allActions.length)
         // 直接执行

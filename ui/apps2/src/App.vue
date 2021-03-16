@@ -46,7 +46,6 @@ export default {
   created() {
     this.handleSetLang();
     this.handleResize();
-    // alert(window.screen.availHeight + ' --- ' +  window.screen.availWidth)
   },
   mounted(){
     this.handleEnvReLoad();
@@ -258,42 +257,6 @@ export default {
           lpMineList[v.symbol] = list;
           this.$store.dispatch('setLpMineList', lpMineList)
         })
-      })
-      this.handleGetTimeLists()
-    },
-    // 获取TIME矿池列表
-    handleGetTimeLists() {
-      const params = {
-        "code":"loottimemine",
-        "scope":"loottimemine",
-        "table":"ponds",
-        "json":true,
-        "limit":100
-      }
-      EosModel.getTableRows(params, (res) => {
-        const rows = res.rows || []
-        if (!rows.length) {
-          return
-        }
-        const list = rows;
-        const dealList = [];
-        list.forEach(v => {
-          if (!v.running || v.id < 16) {
-            return
-          }
-          if (v.start) {
-            let beginTime = toLocalTime(`${v.start}.000+0000`);
-            beginTime = moment(beginTime).valueOf();
-            this.$set(v, 'beginTime', beginTime / 1000);
-          }
-          if (v.end) {
-            let endTime = toLocalTime(`${v.end}.000+0000`);
-            endTime = moment(endTime).valueOf();
-            this.$set(v, 'endTime', endTime / 1000);
-          }
-          dealList.push(v)
-        });
-        this.$store.dispatch('setTimeList', dealList)
       })
     },
     // 获取swap, yfc池子账户余额 - 10秒轮询

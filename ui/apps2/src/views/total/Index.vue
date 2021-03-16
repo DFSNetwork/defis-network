@@ -41,17 +41,9 @@
               <div class="num">{{ `${item.aprV3}%` }}</div>
               <div class="tip">{{ $t('info.dfsMineApr') }}</div>
             </div>
-            <div v-if="parseFloat(item.dmdApy)">
-              <div class="num">{{ `${item.dmdApy}%` }}</div>
-              <div class="tip">{{ $t('apy.dmdApy') }}</div>
-            </div>
             <div v-if="parseFloat(item.pddApr)">
               <div class="num">{{ `${item.pddApr}%` }}</div>
               <div class="tip">{{ $t('apy.pddApy') }}</div>
-            </div>
-            <div v-if="parseFloat(item.timeApy)">
-              <div class="num">{{ `${item.timeApy}%` }}</div>
-              <div class="tip">{{ $t('apy.timeApy') }}</div>
             </div>
             <div v-if="parseFloat(item.tagLpApy)">
               <div class="num">{{ `${item.tagLpApy}%` }}</div>
@@ -136,12 +128,11 @@ export default {
       dfsPrice: state => state.sys.dfsPrice,
       dfsData: state => state.sys.dfsData,
       lpMid: state => state.config.lpMid,
-      timeList: state => state.config.timeList,
       marketLists: state => state.sys.marketLists,
       baseConfig: state => state.sys.baseConfig,
     }),
     showArr() {
-      if (!this.marketLists.length || !this.feesApr || !this.timeList.length) {
+      if (!this.marketLists.length || !this.feesApr) {
         return []
       }
       let arr = this.handleGetCheckRank()
@@ -223,9 +214,7 @@ export default {
           const aprInfo = dealApy(market)
           topItem.feesApr = parseFloat(aprInfo.feesApr || 0).toFixed(2);
           topItem.aprV3 = parseFloat(aprInfo.aprV3 || 0).toFixed(2);
-          topItem.dmdApy = parseFloat(aprInfo.dmdApy || 0).toFixed(2);
           topItem.tagLpApy = parseFloat(aprInfo.tagLpApy || 0).toFixed(2);
-          topItem.timeApy = parseFloat(aprInfo.timeApy || 0).toFixed(2);
           topItem.usdcApr = parseFloat(aprInfo.usdcApr || 0).toFixed(2);
           topItem.countApy = parseFloat(aprInfo.countApy || 0).toFixed(2);
           const keys = Object.keys(topItem.lpApy || {});

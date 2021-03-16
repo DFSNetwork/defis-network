@@ -193,8 +193,6 @@ export default {
       feesApr: '0.00',
       aprV3: '0.00',
       lpApy: {},
-      dmdApy: '0.00',
-      timeApy: '0.00',
       tagLpApy: '0.00',
       aprInfo: {},
       showApyDetail: false,
