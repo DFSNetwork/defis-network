@@ -1,5 +1,6 @@
 <template>
   <div class="invite">
+    <DfsFarmsInfo :lists="lists"/>
     <AccInfo :accInfo="accInfo" :joinInfo="joinInfo"/>
     <Farms :lists="lists" :joinInfo="joinInfo"/>
   </div>
@@ -7,11 +8,13 @@
 
 <script>
 import { mapState } from "vuex";
+import DfsFarmsInfo from "./comp/DfsFarmsInfo";
 import AccInfo from "./comp/AccInfo";
 import Farms from "./comp/Farms";
 export default {
   name: "invite",
   components: {
+    DfsFarmsInfo,
     AccInfo,
     Farms,
   },

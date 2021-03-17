@@ -28,15 +28,20 @@
           <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/mining_icon.png">
           <div>{{ $t('home.mine') }}</div>
         </div>
-        <div class="list" @click="handleTo('financial')">
-          <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/financial_icon.png">
-          <div>{{ $t('home.financial') }}</div>
+        <!-- https://usdtcross.starteos.io/  兑换USDT -->
+        <div class="list" @click="handleToPro('starteos')">
+          <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/exchange.png">
+          <div>{{ $t('home.exchange') }}</div>
         </div>
       </div>
       <div class="lists flexb">
-        <div class="list" @click="handleTo('fundation')">
+        <!-- <div class="list" @click="handleTo('fundation')">
           <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/fundation_icon.png">
           <div>{{ $t('home.fundation') }}</div>
+        </div> -->
+        <div class="list" @click="handleTo('financial')">
+          <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/financial_icon.png">
+          <div>{{ $t('home.financial') }}</div>
         </div>
         <div class="list" @click="handleTo('dss')">
           <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/dss_icon.png">
@@ -77,6 +82,9 @@ export default {
       if (name === 'usdx') {
         location.href = 'https://usdx.gitee.io/'
         return
+      }
+      if (name === 'starteos') {
+        location.href = 'https://usdtcross.starteos.io/'
       }
     }
   }

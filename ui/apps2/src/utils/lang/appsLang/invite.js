@@ -40,6 +40,10 @@ export default {
       farmInfo: '农场信息',
       access: '访问',
       ableClaim: '待领取',
+      farmsData: '农场数据',
+      fund: '农场基金',
+      farmsNum: '农场数量',
+      farmersNum: '农场人数',
 
       rewardRules: '收益规则',
       rewardRules1: '1. 财富值是衡量农场收益的唯一标准',
@@ -67,10 +71,15 @@ export default {
       createTip3: '农场主的职责',
       createTip4: '积极布道DeFi的去中心化金融思想，与传统金融的区别',
       createTip5: '弘扬区块链的基础知识 引领新人亲身参与到DeFi的历史潮流中',
+      farmDataTip1: '农场财富值：所有农场财富值的累加；',
+      farmDataTip2: '农场基金：农场基金账户的总资产',
+      farmDataTip3: '农场数量：所有农场的数量',
+      farmDataTip4: '农场人数：所有农场下成员的总数',
 
       errTip1: '您已加入其他农场',
       errTip2: '邀请金额未达标，无法领取收益',
       errTip3: '该农场人数已达上限',
+      noData: '您暂未加入/创建农场',
     }
   },
   'en': {
@@ -112,6 +121,10 @@ export default {
       claim: 'Claim',
       farmInfo:'Farm Information',
       ableClaim:'To be claimed',
+      farmsData:'Farm Data',
+      fund:'Farm Fund',
+      farmsNum:'number of farms',
+      farmersNum:'number of farmers',
 
       rewardRules:'Reward Rules',
       rewardRules1: '1. Wealth value is the only measure of farm income',
@@ -133,10 +146,16 @@ export default {
       leaveRules1: '1. You leave the current farm, you can join other farms after you leave',
       leaveRules2: '2. Each person can only join one farm',
       leaveRules3: '3. After leaving the farm, the wealth of the farm will also decrease',
+      
+      farmDataTip1:'Farm wealth: the accumulation of all farm wealth;',
+      farmDataTip2:'Farm Fund: Total assets of the farm fund account',
+      farmDataTip3:'Number of farms: the number of all farms',
+      farmDataTip4:'Number of farms: the total number of members under all farms',
 
       errTip1:'You have joined another farm',
       errTip2:'The invitation amount is not up to the standard, unable to receive the income',
       errTip3:'The number of people on this farm has reached the upper limit',
+      noData:'You have not joined/created a farm',
     }
   }
 }

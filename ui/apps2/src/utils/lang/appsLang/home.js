@@ -28,6 +28,7 @@ export default {
       invite: '邀请好友',
       fundation: '乐捐一下',
       diary: '大丰收日记',
+      exchange: '兑换USDT',
     }
   },
   'en': {
@@ -58,6 +59,7 @@ export default {
       invite:'Invite',
       fundation:'Fundation',
       diary:'DFS Diary',
+      exchange: 'Convert USDT',
     }
   }
 }

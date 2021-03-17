@@ -1,40 +1,50 @@
 <template>
   <div class="accInfo">
-    <div class="title">{{ $t('invite.myFarm') }}</div>
-    <div class="flexa">
-      <!-- 我加入的农场 -->
-      <div class="myAddFarm flexc" v-if="joinInfo.owner" @click="handleTo('farmDetail', {name: joinInfo.owner})">
-        <img class="bg" :src="joinInfo.bg">
-        <div class="template flexc">
-          <div>
-            <div>{{ joinInfo.farm_name }}</div>
-            <div class="num tip">{{ joinInfo.slogon }}</div>
+    <div class="flexb headTitle">
+      <div class="title">{{ $t('invite.myFarm') }}</div>
+      <div class="createBtn flexc" v-if="!accInfo.owner && joinInfo.owner" @click="handleTo('farmCreate')">
+        <img class="addGreen" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/add-green.png">
+        <span>{{ $t('invite.create') }}</span>
+      </div>
+    </div>
+    <div class="swipe">
+      <div class="noData tip" v-if="!joinInfo.owner && !accInfo.owner">
+        <div class="subTip">{{ $t('invite.noData') }}</div>
+        <div class="createBtn flexc" v-if="!accInfo.owner" @click="handleTo('farmCreate')">
+          <img class="addGreen" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/add-green.png">
+          <span>{{ $t('invite.create') }}</span>
+        </div>
+      </div>
+      <van-swipe :loop="false" :width="300" :show-indicators="false">
+        <van-swipe-item class="setWidth" v-if="joinInfo.owner">
+          <div class="myAddFarm flexa" @click="handleTo('farmDetail', {name: joinInfo.owner})">
+            <div class="farmHeadImg flexc">
+              <img width="100%" :src="joinInfo.avatar">
+            </div>
+            <div>
+              <div class="farmName">{{ joinInfo.farm_name }}</div>
+              <div class="slogon">{{ joinInfo.slogon }}</div>
+              <div class="tip num">{{ joinInfo.farmers }} 人</div>
+            </div>
           </div>
-        </div>
-      </div>
-      <!--自己没有创建农场时展示 -->
-      <div class="createFarm flexc tip" @click="handleTo('farmCreate')" v-if="!accInfo.owner">
-        <img class="tipIcon" @click.stop="showTip = true"
-          src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/tipIcon.png">
-        <div>
-          <img class="createImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/create.png">
-          <div>{{ $t('invite.create') }}</div>
-        </div>
-      </div>
-      <!-- 我创建的农场 -->
-      <div class="myCreFarm flexc" v-else  @click="handleTo('farmDetail', {name: accInfo.owner})">
-        <div class="myFarmTab flexa">
-          <img src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/myFarm.png">
-          <span>{{ $t('invite.myFarm') }}</span>
-        </div>
-        <img class="bg" :src="accInfo.bg">
-        <div class="template flexc">
-          <div>
-            <div>{{ accInfo.farm_name }}</div>
-            <div class="num tip">{{ accInfo.slogon }}</div>
+        </van-swipe-item>
+        <van-swipe-item  class="setWidth" v-if="accInfo.owner">
+          <div class="myCreFarm flexa" @click="handleTo('farmDetail', {name: accInfo.owner})">
+            <div class="farmHeadImg flexc model">
+              <img width="100%" :src="accInfo.avatar">
+              <div class="myFarmTab flexa">
+                <img src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/myFarm.png">
+                <span>{{ $t('invite.myFarm') }}</span>
+              </div>
+            </div>
+            <div>
+              <div class="farmName">{{ accInfo.farm_name }}</div>
+              <div class="slogon">{{ accInfo.slogon }}</div>
+              <div class="tip num">{{ accInfo.farmers }} 人</div>
+            </div>
           </div>
-        </div>
-      </div>
+        </van-swipe-item>
+      </van-swipe>
     </div>
 
     <van-popup class="popup_p" v-model="showTip">
@@ -86,36 +96,88 @@ export default {
 .accInfo{
   color: #333;
   margin: 0 28px 28px;
+  .headTitle{
+    margin-bottom: 20px;
+  }
   .title{
     text-align: left;
-    font-weight: 400;
+    font-weight: 500;
     font-size: 36px;
-    margin-bottom: 26px;
+  }
+  .createBtn{
+    font-size: 28px;
+    color: $color-main;
+    border: 1px solid $color-main;
+    border-radius: 50px;
+    padding: 6px 30px 6px 14px;
+    .addGreen{
+      width: 46px;
+      margin-right: 4px;
+    }
+  }
+  .swipe{
+    margin-bottom: 30px;
+    .noData{
+      font-size: 28px;
+      margin: 20px 0 10px;
+      text-align: center;
+      .subTip{
+        margin-bottom: 20px;
+      }
+      .createBtn{
+        margin: auto;
+        width: 180px;
+      }
+    }
   }
   .myCreFarm,
   .createFarm,
   .myAddFarm{
-    width: 280px;
-    height: 320px;
+    // width: 280px;
+    // height: 320px;
     position: relative;
     border-radius: 8px;
     overflow: hidden;
     margin-right: 40px;
+    text-align: left;
     .bg{
       max-width: 100%;
     }
-    .template{
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      position: absolute;
-      background: rgba(#272727, .6);
-      color: #FFF;
-      font-size: 28px;
-      .num{
-        font-size: 26px;
+    .farmHeadImg{
+      width: 160px;
+      height: 160px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-right: 20px;
+      min-width: 160px;
+      position: relative;
+      &.model{
+        &::after{
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, .3);
+        }
       }
+    }
+    .farmName{
+      font-size: 32px;
+      font-weight: 500;
+    }
+    .slogon{
+      color: #666;
+      font-size: 28px;
+      margin: 8px 0;
+      width: 400px;
+      overflow: hidden;
+      text-overflow: ellipsis; //溢出用省略号显示
+      white-space: nowrap; //溢出不换行
+    }
+    .num{
+      font-size: 24px;
     }
   }
   .createFarm{
@@ -141,10 +203,9 @@ export default {
       top: 0px;
       left: 0px;
       background: linear-gradient(140deg, #4ADBC9 0%, #37C7A7 100%);
-      // width: 124px;
       color: #FFF;
-      height: 48px;
-      font-size: 18px;
+      height: 38px;
+      font-size: 15px;
       border-radius: 8px 2px 8px 2px;
       padding: 4px 14px;
       img{
