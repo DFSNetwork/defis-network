@@ -485,6 +485,9 @@ export function dealRewardV3(minnerData, mid) {
   // console.log(minnerData)
   let t = moment().valueOf() - minnerData.lastTime;
   t = t / 1000;
+  if (t > 15552000){
+    t = 15552000;
+  }
   // console.log(t)
   // 用户实际数据计算
   let minNum = minnerData.liq * Math.pow(aprs.cur_apy || 1, t)
