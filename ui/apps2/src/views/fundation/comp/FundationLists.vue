@@ -129,7 +129,7 @@
                 <div class="price flexs" v-if="item.audio  && item.audio.length">
                   <FunAudio :src="item.audio"/>
                 </div>
-                <div class="price flexs" v-if="item.video  && item.video.lengtho">
+                <div class="price flexs" v-if="item.video  && item.video.length">
                   <FunVideo :src="item.video"/>
                 </div>
                 <div class="price flexs">
