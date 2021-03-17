@@ -85,7 +85,7 @@ export default {
   'en': {
     invite: {
       myFarm:'My Farm',
-      create:'Create a farm',
+      create:'Create',
       farmer:'Farmer',
       wealth:'Wealth value',
       user:'Member',
