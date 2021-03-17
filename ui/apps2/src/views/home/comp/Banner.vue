@@ -1,9 +1,17 @@
 <template>
   <div class="banner">
-    <img class="bannerImg" v-if="language === 'zh-CN'"
-      src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/banner1.png">
-    <img class="bannerImg" v-else
-      src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/banner1-en.png">
+    <van-swipe class="my-swipe" :autoplay="6000" indicator-color="white">
+      <van-swipe-item>
+        <img class="bannerImg" v-if="language === 'zh-CN'"
+          src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/banner1.png">
+        <img class="bannerImg" v-else
+          src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/banner1-en.png">
+      </van-swipe-item>
+      <van-swipe-item>
+         <img class="bannerImg"
+          src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/spring1.png">
+      </van-swipe-item>
+    </van-swipe>
   </div>
 </template>
 

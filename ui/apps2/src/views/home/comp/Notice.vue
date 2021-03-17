@@ -19,33 +19,37 @@
     </van-notice-bar>
 
     <div class="flexb lists">
-      <div class="symInfo" v-for="(v, i) in top3" :key="`sym-${i}`">
-        <div class="coin din">
-          <span>{{ v.symbol1 }}/{{ v.symbol0 }}</span>
-          <span class="smallChange dinReg"
-            :class="{
-              'green_p': parseFloat(v.priceRate) >= 0,
-              'red_p': parseFloat(v.priceRate) < 0,
-            }">
-            <span>{{ v.priceRate }}</span>
-          </span>
-        </div>
-        <div class="num dinBold"
-          :class="{
-            'green_p': parseFloat(v.priceRate) >= 0,
-            'red_p': parseFloat(v.priceRate) < 0,
-          }">
-          <span>{{ parseFloat(v.price).toFixed(4) }}</span>
-        </div>
-        <div class="aboutPrice tip" v-if="language === 'en'">
-          <span>$</span>
-          <span>{{ v.aboutPriceU }}</span>
-        </div>
-        <div class="aboutPrice tip" v-else>
-          <span>¥</span>
-          <span>{{ v.aboutPriceCNY }}</span>
-        </div>
-      </div>
+      <van-swipe class="my-swipe" :autoplay="6000" indicator-color="#29d4b0">
+        <van-swipe-item class="flexb" v-for="(top, index) in top3" :key="`top${index}`">
+          <div class="symInfo" v-for="(v, i) in top" :key="`sym-${i}`">
+            <div class="coin din">
+              <span>{{ v.symbol1 }}/{{ v.symbol0 }}</span>
+              <span class="smallChange dinReg"
+                :class="{
+                  'green_p': parseFloat(v.priceRate) >= 0,
+                  'red_p': parseFloat(v.priceRate) < 0,
+                }">
+                <span>{{ v.priceRate }}</span>
+              </span>
+            </div>
+            <div class="num dinBold"
+              :class="{
+                'green_p': parseFloat(v.priceRate) >= 0,
+                'red_p': parseFloat(v.priceRate) < 0,
+              }">
+              <span>{{ parseFloat(v.price || 0).toFixed(4) }}</span>
+            </div>
+            <div class="aboutPrice tip" v-if="language === 'en'">
+              <span>$</span>
+              <span>{{ v.aboutPriceU }}</span>
+            </div>
+            <div class="aboutPrice tip" v-else>
+              <span>¥</span>
+              <span>{{ v.aboutPriceCNY }}</span>
+            </div>
+          </div>
+        </van-swipe-item>
+      </van-swipe>
     </div>
   </div>
 </template>
@@ -60,8 +64,8 @@ export default {
       voices: [{
         title: this.$t('home.homeUi'),
       }],
-      top3: [{}, {}, {}],
-      hotArr: [451, 722, 17]
+      top3: [[{}, {}, {}], [{}, {}, {}]],
+      hotArr: [451, 722, 17, 894, 665, 332]
     }
   },
   computed: {
@@ -78,9 +82,13 @@ export default {
           return
         }
         const hot = [];
-        this.hotArr.forEach(mid => {
+        this.hotArr.forEach((mid, i) => {
           const has = newVal.filter(v => v.mid == mid && v.symbol0 === 'USDT');
-          hot.push(...has)
+          const i1 = parseInt(i / 3);
+          if (!hot[i1]) {
+            hot[i1] = []
+          }
+          hot[i1].push(...has)
         });
         this.top3 = hot;
       },
@@ -112,21 +120,25 @@ export default {
   }
   .lists{
     font-size: 24px;
-    padding: 20px;
+    padding: 20px 20px 10px;
     text-align: left;
+    .my-swipe{
+      width: 100%;
+      padding-bottom: 20px;
+      /deep/ .van-swipe__indicators{
+        bottom: 0px;
+      }
+    }
     .symInfo{
       padding-right: 10px;
       max-width: 35%;
       position: relative;
-      // flex: 1;
       &:last-child{
         padding-right: 0;
       }
       .smallChange{
-        // position: absolute;
         font-size: 20px;
         margin-left: 8px;
-        // right: 10px;
       }
       .num{
         font-size: 40px;
