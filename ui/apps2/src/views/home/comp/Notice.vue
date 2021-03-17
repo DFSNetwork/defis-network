@@ -118,7 +118,7 @@ export default {
       padding-right: 10px;
       max-width: 35%;
       position: relative;
-      flex: 1;
+      // flex: 1;
       &:last-child{
         padding-right: 0;
       }
