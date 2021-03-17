@@ -59,7 +59,7 @@ export default {
       invite:'Invite',
       fundation:'Fundation',
       diary:'DFS Diary',
-      exchange: 'Convert USDT',
+      exchange: 'Get USDT',
     }
   }
 }
