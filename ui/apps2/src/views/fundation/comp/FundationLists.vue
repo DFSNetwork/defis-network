@@ -81,7 +81,7 @@
                 <div class="price flexs" v-if="item.video && item.video.length">
                   <FunVideo :src="item.video"/>
                 </div>
-                <div v-html="item.codeData" v-if="item.codeData"></div>
+                <div class="price flexs" v-html="item.codeData" v-if="item.codeData"></div>
                 <div class="price flexs" v-else>
                   <span class="hideText">{{ item.memo }}</span>
                 </div>
@@ -133,7 +133,7 @@
                 <div class="price flexs" v-if="item.video  && item.video.length">
                   <FunVideo :src="item.video"/>
                 </div>
-                <div v-html="item.codeData" v-if="item.codeData"></div>
+                <div class="price flexs" v-html="item.codeData" v-if="item.codeData"></div>
                 <div class="price flexs" v-else>
                   <span class="hideText">{{ item.memo }}</span>
                 </div>
@@ -373,6 +373,10 @@ export default {
           this.$set(v, 'audio', mediaData.audio)
           this.$set(v, 'video', mediaData.video)
           this.$set(v, 'imgArr', mediaData.imgArr || [])
+        }
+        const codeData = dealHtmlCode(v)
+        if (codeData) {
+          this.$set(v, 'codeData', codeData.memo)
         }
         this.$set(v, 'isGetInfo', true)
         // console.log(v)
