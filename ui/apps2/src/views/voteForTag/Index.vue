@@ -180,7 +180,7 @@ export default {
           return
         }
         this.allList = this.handleDealTagMarket(newVal);
-        // console.log(this.allList)
+        console.log(this.allList)
         this.listLoading = false;
         this.handlerDealMlVote();
         this.handleSearch();
@@ -316,6 +316,9 @@ export default {
       })
       this.voteList.forEach(v => {
         const marketIndex = this.allList.findIndex(vv => vv.mid === v.mid);
+        if (marketIndex === -1) {
+          return
+        }
         const total_votes = parseInt(Number(v.total_votes) / 10000)
         this.$set(this.allList[marketIndex], 'total_votes', total_votes)
         const rate =  total_votes / allVote * 100
