@@ -21,7 +21,8 @@
             <div class="content" v-if="item.imgArr && item.imgArr.length">
               <FunImg :imgArr="item.imgArr"/>
             </div>
-            <div class="content">{{ item.memo }}</div>
+            <div class="content" v-html="item.codeData" v-if="item.codeData"></div>
+            <div class="content" v-else>{{ item.memo }}</div>
             <div class="time tip">{{handleToLocalTime(item.dealTime)}}</div>
             <div class="flexa replyDiv tip">
               <span class="flexa">
@@ -50,7 +51,7 @@
 import Bus from '@/utils/bus';
 import moment from 'moment';
 
-import {getDateDiff, getCoin, toLocalTime, dealMedia} from '@/utils/public'
+import {getDateDiff, getCoin, toLocalTime, dealMedia, dealHtmlCode} from '@/utils/public'
 import {get_acc_fund_lists} from '@/utils/api'
 import ReplyLists from '../dialog/ReplyLists'
 import FunAudio from '@/views/fundation/comp/FunAudio';
@@ -148,6 +149,10 @@ export default {
           this.$set(v, 'audio', mediaData.audio)
           this.$set(v, 'video', mediaData.video)
           this.$set(v, 'imgArr', mediaData.imgArr || [])
+        }
+        const codeData = dealHtmlCode(v)
+        if (codeData) {
+          this.$set(v, 'codeData', codeData.memo)
         }
       })
       if (this.page === 1) {
