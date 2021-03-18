@@ -27,7 +27,8 @@
             <span class="reply">{{ $t('fundation.reply') }}</span>
             <span class="green">{{ item.replyto }}</span>
           </span>
-          <span>{{ item.memo }}</span>
+          <div v-html="item.codeData" v-if="item.codeData"></div>
+          <span v-else>{{ item.memo }}</span>
           <div class="price flexs" v-if="item.audio && item.audio.length">
             <FunAudio :src="item.audio"/>
           </div>
@@ -73,7 +74,7 @@
 <script>
 import { mapState } from 'vuex';
 import moment from 'moment';
-import {getDateDiff, toLocalTime, getCoin, dealMedia} from '@/utils/public'
+import {getDateDiff, toLocalTime, getCoin, dealMedia, dealHtmlCode} from '@/utils/public'
 
 import {get_reply_fundation, get_acc_info} from '@/utils/api'
 import Like from '../dialog/Like';
@@ -184,6 +185,10 @@ export default {
           this.$set(v, 'audio', mediaData.audio)
           this.$set(v, 'video', mediaData.video)
           this.$set(v, 'imgArr', mediaData.imgArr || [])
+        }
+        const codeData = dealHtmlCode(v)
+        if (codeData) {
+          this.$set(v, 'codeData', codeData.memo)
         }
       });
       this.lists = lists;

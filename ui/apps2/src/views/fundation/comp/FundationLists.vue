@@ -81,7 +81,8 @@
                 <div class="price flexs" v-if="item.video && item.video.length">
                   <FunVideo :src="item.video"/>
                 </div>
-                <div class="price flexs">
+                <div class="price flexs" v-html="item.codeData" v-if="item.codeData"></div>
+                <div class="price flexs" v-else>
                   <span class="hideText">{{ item.memo }}</span>
                 </div>
                 <div class="price flexs" v-if="item.imgArr && item.imgArr.length">
@@ -132,7 +133,8 @@
                 <div class="price flexs" v-if="item.video  && item.video.length">
                   <FunVideo :src="item.video"/>
                 </div>
-                <div class="price flexs">
+                <div class="price flexs" v-html="item.codeData" v-if="item.codeData"></div>
+                <div class="price flexs" v-else>
                   <span class="hideText">{{ item.memo }}</span>
                 </div>
                 <div class="price flexs" v-if="item.imgArr && item.imgArr.length">
@@ -179,7 +181,7 @@
 import { mapState } from 'vuex';
 
 import moment from 'moment';
-import {toBrowser, getDateDiff, getCoin, toLocalTime, dealMedia} from '@/utils/public'
+import {toBrowser, getDateDiff, getCoin, toLocalTime, dealMedia, dealHtmlCode} from '@/utils/public'
 
 import {get_acc_info, get_top3_fundation} from '@/utils/api';
 import ReplyLists from './ReplyLists';
@@ -344,6 +346,10 @@ export default {
           this.$set(v, 'video', mediaData.video)
           this.$set(v, 'imgArr', mediaData.imgArr || [])
         }
+        const codeData = dealHtmlCode(v)
+        if (codeData) {
+          this.$set(v, 'codeData', codeData.memo)
+        }
         this.$set(v, 'isGetInfo', true)
         // console.log(v)
         setTimeout(async () => {
@@ -367,6 +373,10 @@ export default {
           this.$set(v, 'audio', mediaData.audio)
           this.$set(v, 'video', mediaData.video)
           this.$set(v, 'imgArr', mediaData.imgArr || [])
+        }
+        const codeData = dealHtmlCode(v)
+        if (codeData) {
+          this.$set(v, 'codeData', codeData.memo)
         }
         this.$set(v, 'isGetInfo', true)
         // console.log(v)

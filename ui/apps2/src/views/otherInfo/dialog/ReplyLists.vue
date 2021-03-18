@@ -14,7 +14,8 @@
           <div class="content" v-if="item.imgArr && item.imgArr.length">
             <FunImg :imgArr="item.imgArr"/>
           </div>
-          <div class="content">{{ item.memo }}</div>
+          <div class="content" v-html="item.codeData" v-if="item.codeData"></div>
+          <div class="content" v-else>{{ item.memo }}</div>
           <div class="time tip">{{handleToLocalTime(item.dealTime)}}</div>
           <div class="flexa replyDiv tip">
             <span class="flexa" @click="handleMainLike">
@@ -93,7 +94,7 @@
 
 <script>
 import moment from 'moment';
-import {getDateDiff, getCoin, toLocalTime, dealMedia} from '@/utils/public'
+import {getDateDiff, getCoin, toLocalTime, dealMedia, dealHtmlCode} from '@/utils/public'
 import {get_reply_fundation, get_acc_info} from '@/utils/api'
 import Like from '@/views/fundation/dialog/Like';
 import ToFundation from '@/views/fundation/dialog/ToFundation';
@@ -195,6 +196,10 @@ export default {
           this.$set(v, 'audio', mediaData.audio)
           this.$set(v, 'video', mediaData.video)
           this.$set(v, 'imgArr', mediaData.imgArr || [])
+        }
+        const codeData = dealHtmlCode(v)
+        if (codeData) {
+          this.$set(v, 'codeData', codeData.memo)
         }
       });
       // 调用API获取前10条

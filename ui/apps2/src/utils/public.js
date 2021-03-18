@@ -646,85 +646,14 @@ export function dealMedia(v) {
     imgArr: imgUrlArr,
     memo: memo
   }
+}
 
-
-  // 处理audio
-  // const reg = /<audio:(http|https):\/\/.+\.(mp3|ogg|asf|wma|wav|rm|ape|real|MP3|OGG|ASF|WMA|WAV|RM|APE|REAL)>/;
-  // const hasAudio = reg.exec(memo)
-  // let audioUrl = [];
-  // if (hasAudio) {
-  //   console.log(hasAudio)
-  //   memo = memo.split(hasAudio[0]).join('')
-  //   // audioUrl = hasAudio[0].split('audio:')[1];
-  //   // audioUrl = audioUrl.substr(0, audioUrl.length - 1)
-
-  //   let tArr = hasAudio[0].split('<')
-  //   let regt = /^audio:(http|https):\/\/.+>/;
-  //   tArr.forEach(vv => {
-  //     let tHas = regt.exec(vv)
-  //     if (!tHas) {
-  //       return
-  //     }
-  //     let url = vv.split('>')[0]
-  //     url = url.replace('audio:', '')
-  //     audioUrl.push(url);
-  //   })
-  // }
-
-  // // 处理视频
-  // let videoUrl = [];
-  // const regVideo = /<video:(http|https):\/\/.+\.(avi|mp4|mov|asf|wmv|rmvb|fly|AVI|MP4|MOV|ASF|WMV|RMVB|FLY)>/;
-  // const hasVideo = regVideo.exec(memo)
-  // if (hasVideo) {
-  //   console.log(hasVideo)
-  //   memo = memo.split(hasVideo[0]).join('')
-  //   // videoUrl = hasVideo[0].split('video:')[1];
-  //   // videoUrl = videoUrl.substr(0, videoUrl.length - 1)
-
-  //   let tArr = hasVideo[0].split('<')
-  //   let regt = /^video:(http|https):\/\/.+>/;
-  //   tArr.forEach(vv => {
-  //     let tHas = regt.exec(vv)
-  //     if (!tHas) {
-  //       return
-  //     }
-  //     let url = vv.split('>')[0]
-  //     url = url.replace('video:', '')
-  //     videoUrl.push(url);
-  //   })
-  // }
-  // // 处理图片
-  // const imgArr = [];
-  // const regImg = /<img:(http|https):\/\/.+\.(jpeg|png|svg|jpg|gif|JPEG|PNG|SVG|JPG|GIF)>/;
-  // const hasImg = regImg.exec(memo)
-  // if (hasImg) {
-  //   console.log(hasImg)
-  //   memo = memo.split(hasImg[0]).join('')
-  //   let tArr = hasImg[0].split('<')
-  //   let regt = /^img:(http|https):\/\/.+>/;
-  //   tArr.forEach(vv => {
-  //     let tHas = regt.exec(vv)
-  //     if (!tHas) {
-  //       return
-  //     }
-  //     let url = vv.split('>')[0]
-  //     url = url.replace('img:', '')
-  //     imgArr.push(url);
-  //   })
-  // }
-  // if (!audioUrl && !videoUrl && !imgArr.length) {
-  //   return false;
-  // }
-  // console.log({
-  //   audio: audioUrl,
-  //   video: videoUrl,
-  //   imgArr,
-  //   memo: memo
-  // })
-  // return {
-  //   audio: audioUrl,
-  //   video: videoUrl,
-  //   imgArr,
-  //   memo: memo
-  // }
+export function dealHtmlCode(v) {
+  if (v.account !== 'tagtokenmain' || v.symbol !== 'TAG' || parseFloat(v.quantity) < 0.1) {
+    return false
+  }
+  let memo = v.memo;
+  return {
+    memo
+  }
 }
