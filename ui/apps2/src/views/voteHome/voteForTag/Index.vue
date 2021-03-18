@@ -182,7 +182,7 @@ export default {
           return
         }
         this.allList = this.handleDealTagMarket(newVal);
-        // console.log(this.allList)
+        console.log(this.allList)
         this.listLoading = false;
         this.handlerDealMlVote();
         this.handleSearch();
