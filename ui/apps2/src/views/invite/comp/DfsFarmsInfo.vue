@@ -84,7 +84,7 @@ export default {
     },
     fundNum() {
       const tagPrice = this.coinPrices.find(v => v.coin === 'TAG').price || 0;
-      let r = parseFloat(this.nowMarket.getNum1 || 0) * parseFloat(tagPrice || 0)
+      let r = parseFloat(this.nowMarket.getNum0 || 0) * parseFloat(tagPrice || 0) * 2
       return parseFloat(r || 0).toFixed(4)
     },
   },

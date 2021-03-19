@@ -32,6 +32,36 @@
       />
       <img class="rightIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/toRight-999.png">
     </div>
+    <div class="item flexb">
+      <van-field
+        class="ipt flexa"
+        v-model="qq"
+        label="QQ"
+        :placeholder="$t('invite.qqIpt')"
+        input-align="right"
+      />
+      <img class="rightIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/toRight-999.png">
+    </div>
+    <div class="item flexb">
+      <van-field
+        class="ipt flexa"
+        v-model="wx"
+        :label="$t('invite.wx')"
+        :placeholder="$t('invite.wxIpt')"
+        input-align="right"
+      />
+      <img class="rightIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/toRight-999.png">
+    </div>
+    <div class="item flexb">
+      <van-field
+        class="ipt flexa"
+        v-model="tg"
+        label="Telegram"
+        :placeholder="$t('invite.tgIpt')"
+        input-align="right"
+      />
+      <img class="rightIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/toRight-999.png">
+    </div>
     <div class="item flexb" @click="handleShowImgCheck('bg')">
       <span class="subTitle">{{ $t('invite.bg') }}</span>
       <div class="flexa">

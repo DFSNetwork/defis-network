@@ -32,6 +32,18 @@
         <div class="name">Slogon</div>
         <van-field class="ipt" v-model="slogon" :placeholder="$t('invite.slogonIpt')" />
       </div>
+      <div class="item">
+        <div class="name">QQ</div>
+        <van-field class="ipt" v-model="qq" :placeholder="$t('invite.qqIpt')" />
+      </div>
+      <div class="item">
+        <div class="name">{{ $t('invite.wx') }}</div>
+        <van-field class="ipt" v-model="wx" :placeholder="$t('invite.wxIpt')" />
+      </div>
+      <div class="item">
+        <div class="name">Telegram</div>
+        <van-field class="ipt" v-model="tg" :placeholder="$t('invite.tgIpt')" />
+      </div>
       <div class="item noBorder">
         <div class="name">{{ $t('invite.bg') }}</div>
         <div class="addImg flexc" @click="handleShowImgCheck('bg')" v-if="!cover">
@@ -112,6 +124,10 @@ export default {
       this.avatar = src;
     },
     handleReg() {
+      if (!this.qq.length || !this.wx.length || !this.tg.length) {
+        this.$toast.fail(this.$t('invite.errTip4'))
+        return false
+      }
       if (!this.nick.trim()) {
         this.$toast.fail(this.$t('invite.farmNameIpt'))
         return false;

@@ -23,6 +23,20 @@
             </div>
             <div>{{ farmInfo.farmers }}/{{ max }}{{ $t('invite.people') }}</div>
           </div>
+          <div class="linkDiv">
+            <img v-if="farmInfo.wx" class="linkImg"
+              v-clipboard:copy="farmInfo.wx"
+              v-clipboard:success="onCopy"
+              v-clipboard:error="onError" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/wechat.png">
+            <img v-if="farmInfo.tg" class="linkImg"
+              v-clipboard:copy="farmInfo.tg"
+              v-clipboard:success="onCopy"
+              v-clipboard:error="onError" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/telegram.png">
+            <img v-if="farmInfo.qq" class="linkImg"
+              v-clipboard:copy="farmInfo.qq"
+              v-clipboard:success="onCopy"
+              v-clipboard:error="onError" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/QQ.png">
+          </div>
         </div>
         <div class="flexb">
           <div class="total">
@@ -277,10 +291,16 @@ export default {
     },
   },
   methods: {
+    onCopy() {
+      this.$toast.success(this.$t('public.copySuccess'));
+    },
+    onError() {
+      this.$toast.fail(this.$t('public.copyFail'));
+    },
     // 领取收益
     handleClaim() {
       if (!this.ableClaim) {
-        this.$toast.fail('您已领取过了')
+        this.$toast.fail(this.$t('invite.errTip5'))
         return
       }
       const name = this.account.name;
@@ -662,6 +682,12 @@ export default {
       text-align: left;
       margin: 28px 0;
       min-height: 70px;
+      .linkDiv{
+        img{
+          margin-left: 20px;
+          width: 32px;
+        }
+      }
       .accHeadImg {
         width: 80px;
         height: 80px;

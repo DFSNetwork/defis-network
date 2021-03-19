@@ -2,13 +2,20 @@
   <div class="farms">
     <div class="title">{{ $t('invite.dfsFarms') }}</div>
     <div class="lists">
-      <div class="li flexb" v-for="(v, i) in lists" :key="i" @click="handleTo('farmDetail', {name: v.owner || 'test'})">
+      <div class="li" v-for="(v, i) in lists" :key="i" @click="handleTo('farmDetail', {name: v.owner || 'test'})">
         <div class="flexa">
           <div class="flexc bgImgDiv">
             <img class="bgImg" width="100%" :src="v.avatar">
           </div>
-          <div>
-            <div class="farmName">{{ v.farm_name }}</div>
+          <div class="right">
+            <div class="farmName flexb">
+              <div>{{ v.farm_name }}</div>
+              <div>
+                <img v-if="v.wx" class="linkImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/wechat.png">
+                <img v-if="v.tg" class="linkImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/telegram.png">
+                <img v-if="v.qq" class="linkImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/QQ.png">
+              </div>
+            </div>
             <div class="tip num din">{{ v.slogon }}</div>
             <div class="tip num din">
               <span>{{ v.farmers }}{{ $t('invite.people') }}</span>
@@ -20,8 +27,8 @@
           v-if="v.owner !== nJoinInfo.owner">{{ $t('invite.join') }}</div>
         <div class="btn flexc joined" @click.stop=""
           v-else>{{ $t('invite.joined') }}</div> -->
-        <div class="btn flexc"
-          >{{ $t('invite.access') }}</div>
+        <!-- <div class="btn flexc"
+          >{{ $t('invite.access') }}</div> -->
       </div>
     </div>
   </div>
@@ -139,8 +146,16 @@ export default {
         margin-right: 20px;
         border-radius: 4px;
       }
+      .right{
+        flex: 1;
+      }
       .farmName{
         font-size: 30px;
+        width: 100%;
+        img{
+          margin-left: 20px;
+          width: 32px;
+        }
       }
       .wealth{
         margin-left: 30px;
