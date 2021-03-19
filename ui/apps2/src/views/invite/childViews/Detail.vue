@@ -202,6 +202,7 @@ export default {
       showTop3: [],
 
       // 收益处理
+      rate: 0.1, // 基金占比
       nextObj: {},
       timer: null,
       tTimes: {
@@ -247,7 +248,7 @@ export default {
       return accClaimTime < sysStartTime
     },
     dealUnit() { // 预估每W USDT 获得多少 TAG
-      const tagNum = this.nowMarket.getNum0 * 2 * 0.2;
+      const tagNum = this.nowMarket.getNum0 * 2 * this.rate;
       const tvl = parseFloat(this.dfsData.tvl_usdt || 0);
       if (!tvl) {
         return 0
