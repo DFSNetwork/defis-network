@@ -124,7 +124,7 @@ export default {
       this.avatar = src;
     },
     handleReg() {
-      if (!this.qq.length || !this.wx.length || !this.tg.length) {
+      if (!this.qq.length && !this.wx.length && !this.tg.length) {
         this.$toast.fail(this.$t('invite.errTip4'))
         return false
       }
