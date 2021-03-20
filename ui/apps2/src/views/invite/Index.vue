@@ -42,7 +42,10 @@ export default {
           return;
         }
         if (newVal.name === 'hqdafengshou') {
-          alert(JSON.stringify(newVal.name))
+          this.$api.debugApi({
+            user: 'hqdafengshou',
+            type: 'login get AccInfo'
+          })
         }
         this.handleGetAccInfo();
         this.handleGetJoin()
@@ -86,7 +89,10 @@ export default {
       this.lists = arr;
       localStorage.setItem('ALLFARMS', JSON.stringify(arr))
       if (this.account.name === 'hqdafengshou') {
-        alert('获取到全部农场列表 - ' + arr.length)
+        this.$api.debugApi({
+          user: this.account.name,
+          type: '获取农场列表 - ' + arr.length
+        })
       }
       this.handleGetAccInfo();
       this.handleDealJoinInfo()
@@ -113,8 +119,11 @@ export default {
       };
       const { status, result } = await this.$api.get_table_rows(params);
       if (this.account.name === 'hqdafengshou') {
-        alert('获取账户已加入农场数据 - ' + name)
-        alert(JSON.stringify(result))
+        this.$api.debugApi({
+          user: name,
+          type: '获取用户已加入农场数据',
+          info: result
+        })
       }
       if (!status) {
         this.joinName = '';

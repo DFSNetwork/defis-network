@@ -125,3 +125,14 @@ export function getUsdtPrice() {
     })
   })
 }
+
+export function debugApi(params) {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/common/set_bug', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
