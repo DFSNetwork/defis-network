@@ -28,7 +28,7 @@ const app = {
     rSwitch: localStorage.getItem('rSwitch') ? JSON.parse(localStorage.getItem('rSwitch')) : true,
     minScreen: false,
     accInfo: {
-      avatar: "https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png",
+      avatar: "https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png",
       cover: "https://cdn.jsdelivr.net/gh/defis-net/material/accBanner/banner0.png",
       desc: "",
       nick: "",

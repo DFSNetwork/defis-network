@@ -51,14 +51,14 @@ export default {
     return {
       checked: -1,
       head: [[{
-        img: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png',
-        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png',
+        img: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png',
+        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png',
         bgClass: '',
         name: '秋禾',
         id: 1,
       }, {
-        img: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/dbctokenmain-dbc.png',
-        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/dbctokenmain-dbc.png',
+        img: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/dbctokenmain-dbc.png',
+        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/dbctokenmain-dbc.png',
         bgClass: 'imgDivBg2',
         name: '白菜',
         id: 2,
@@ -69,8 +69,8 @@ export default {
         name: '青鸟',
         id: 3,
       }], [{
-        img: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/yfctokenmain-yfc.png',
-        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/yfctokenmain-yfc.png',
+        img: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/yfctokenmain-yfc.png',
+        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/yfctokenmain-yfc.png',
         bgClass: 'imgDivBg4',
         name: '锦鲤',
         id: 4,
@@ -81,8 +81,8 @@ export default {
         name: '鲲',
         id: 5,
       }, {
-        img: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/pddtokenmain-pdd.png',
-        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/pddtokenmain-pdd.png',
+        img: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/pddtokenmain-pdd.png',
+        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/pddtokenmain-pdd.png',
         bgClass: 'imgDivBg6',
         name: '金猪',
         id: 6,

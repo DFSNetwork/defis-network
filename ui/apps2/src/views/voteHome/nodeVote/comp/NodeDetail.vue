@@ -71,7 +71,7 @@ export default {
   name: 'voteDetail',
   data() {
     return {
-      voteDefaultImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png',
+      voteDefaultImg: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png',
       errorCoinImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
       owner: '',
       allVotes: '0',

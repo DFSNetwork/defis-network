@@ -10,7 +10,7 @@ function getHost() {
 
 export function getJson() {
   return new Promise((resolve, reject) => {
-    axios.get('https://cdn.jsdelivr.net/gh/defis-net/material/coin/coinJson.json').then((res) => {
+    axios.get('https://cdn.jsdelivr.net/gh/defis-net/material2/coin/coinJson.json').then((res) => {
       // let result = Object.assign(res.data, {});
       let result = res.data;
       resolve({ status: res.status === 200, result });

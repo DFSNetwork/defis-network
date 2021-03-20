@@ -35,7 +35,7 @@ export default {
         // mid: 17,
         symbol0: 'EOS',
         symbol1: 'USDT',
-        imgUrl0: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg',
+        imgUrl0: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg',
         imgUrl1: 'https://ndi.340wan.com/eos/tethertether-usdt.png',
       }
     }

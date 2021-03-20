@@ -154,7 +154,7 @@ export default {
         symbol1: 'USDT',
         contract1: 'tethertether',
         sym0Data:{
-          imgUrl: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg'
+          imgUrl: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg'
         },
         sym1Data:{
           imgUrl: 'https://ndi.340wan.com/eos/tethertether-usdt.png'

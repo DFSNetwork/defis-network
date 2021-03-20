@@ -90,7 +90,7 @@ export default {
       id: '',
       accFansInfo: {},
       accInfo: {
-        avatar: "https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png",
+        avatar: "https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png",
         cover: "https://cdn.jsdelivr.net/gh/defis-net/material/accBanner/banner0.png",
         desc: "",
         nick: "",
@@ -134,7 +134,7 @@ export default {
     handleMounted() {
       this.id = this.$route.params.id;
       this.accInfo = {
-        avatar: "https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png",
+        avatar: "https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png",
         cover: "https://cdn.jsdelivr.net/gh/defis-net/material/accBanner/banner0.png",
         desc: "",
         nick: "",

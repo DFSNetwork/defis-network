@@ -9,7 +9,7 @@
     </div>
     <!-- 币种 -->
     <div class="coinData flexa">
-      <img class="coinImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
+      <img class="coinImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg" alt="">
       <div class="coinInfo">
         <div class="coinName">EOS</div>
         <div class="contract tip">eosio.token</div>

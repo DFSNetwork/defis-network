@@ -11,7 +11,7 @@
     </div>
     <div class="flexb infoDiv">
       <div class="coinDiv flexb">
-        <img src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png">
         <div class="coin">
           <div class="coinName">TAG</div>
           <div class="contract tip">tagtokenmain</div>

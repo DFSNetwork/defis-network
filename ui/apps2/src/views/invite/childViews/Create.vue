@@ -95,7 +95,7 @@ export default {
 
       // 表单参数
       cover: '', // 背景
-      avatar: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg', // 头像 
+      avatar: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg', // 头像 
       nick: '', // 昵称
       slogon: '', // 口号
       desc: '', // 简介

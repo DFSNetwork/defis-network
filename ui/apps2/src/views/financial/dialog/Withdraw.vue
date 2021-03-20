@@ -8,7 +8,7 @@
         <div class="bal dinReg" @click="handlePercent(1)">{{ $t('public.balance') }}：{{ depositBal }} EOS</div>
         <div class="flexb">
           <div class="flexa coinInfo">
-            <img class="coinImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
+            <img class="coinImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg" alt="">
             <div>
               <div class="coinName">EOS</div>
               <div class="contract tip">eosio.token</div>

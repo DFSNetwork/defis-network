@@ -9,7 +9,7 @@
     </div>
 
     <div class="headDiv" @click="handleShowImgCheck('head')">
-      <img class="headImg" :src="avatar || 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg'">
+      <img class="headImg" :src="avatar || 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg'">
       <div class="setHead flexc">{{ $t('invite.setHead') }}</div>
     </div>
     <div class="item flexb">
@@ -106,7 +106,7 @@ export default {
       type: '',
       // 表单参数
       cover: '', // 背景
-      avatar: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg', // 头像 
+      avatar: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg', // 头像 
       nick: '', // 昵称
       slogon: '', // 口号
       desc: '', // 简介

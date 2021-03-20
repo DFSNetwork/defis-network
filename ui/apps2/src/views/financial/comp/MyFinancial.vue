@@ -8,7 +8,7 @@
       <div class="list">
         <div class="flexb coinInfo">
           <div class="flexa">
-            <img src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
+            <img src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg" alt="">
             <span class="coinName">EOS</span>
           </div>
           <div class="btnDiv flexb">

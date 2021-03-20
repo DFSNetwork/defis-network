@@ -21,7 +21,7 @@ export function getPng(index) {
 }
 export function getRandomImg() {
   const random = parseInt(Math.random() * 1000 % getPngLen());
-  return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${getPng(random)}.png`
+  return `https://cdn.jsdelivr.net/gh/defis-net/material2/coin/${getPng(random)}.png`
 }
 /*
  ** 加法函数，用来得到精确的加法结果
@@ -456,12 +456,12 @@ export function getCoin(contract, coin) {
     const localCoinPng = cdnImgJson.png;
     const has = localeCoin.find(v => v === inData)
     if (has) {
-      return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${has}.svg`;
+      return `https://cdn.jsdelivr.net/gh/defis-net/material2/coin/${has}.svg`;
     }
     const hasPng = localCoinPng.find(v => v === inData);
     if (!has && hasPng) {
       // return `/static/coin/${hasPng}.png`;
-      return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${hasPng}.png`;
+      return `https://cdn.jsdelivr.net/gh/defis-net/material2/coin/${hasPng}.png`;
     }
     return `https://ndi.340wan.com/eos/${inData}.png`
   } catch (error) {

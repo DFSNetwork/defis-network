@@ -26,7 +26,7 @@
       <div class="title">投票与治理</div>
       <div class="lists flexa">
         <div class="list" @click="handleTo('vote')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png" alt="">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/minedfstoken-dfs.png" alt="">
           <div>DFS投票</div>
         </div>
         <div class="list">
@@ -36,7 +36,7 @@
               <div class="item flexc" @click="handleTo('sysParams')">{{ $t('sys.vote2') }}</div>
             </div>
             <template #reference>
-              <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png" alt="">
+              <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png" alt="">
               <div>TAG投票</div>
             </template>
           </van-popover>
@@ -46,7 +46,7 @@
           <div>USDX系统</div>
         </div>
         <div class="list" @click="handleTo('nodeVote')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg" alt="">
           <div>EOS节点</div>
         </div>
       </div>
@@ -67,11 +67,11 @@
           <img class="beta hot" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/hot.png" alt="">
         </div>
         <div class="list" @click="handleTo('pools')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png" alt="">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/minedfstoken-dfs.png" alt="">
           <div>DFS 矿池</div>
         </div>
         <div class="list" @click="handleTo('nodePools')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png" alt="">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png" alt="">
           <div>TAG 矿池</div>
         </div>
       </div>
@@ -81,7 +81,7 @@
           <div>USDX 矿池</div>
         </div>
         <div class="list" @click="handleToProject('eosdefi')">
-          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
+          <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg" alt="">
           <div>EOS DeFis</div>
         </div>
         <div class="list" @click="handleTo('farms')">

@@ -11,7 +11,7 @@
     <!-- 主要编辑内容 -->
     <div class="mainView">
       <div class="headImgItem" @click="handleShowImgCheck('head')">
-        <img class="headImg" :src="avatar || 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg'">
+        <img class="headImg" :src="avatar || 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg'">
         <div class="checkBtn">
           <span class="checkHead">选择头像</span>
         </div>
