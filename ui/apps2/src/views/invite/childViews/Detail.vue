@@ -18,7 +18,7 @@
                 class="subAccHeadImg"
                 v-for="(v, i) in showTop3"
                 :key="`subImg${i}`"
-                :src="v.avatar"
+                :src="v.avatar || defaultImg"
               />
             </div>
             <div>{{ farmInfo.farmers }}/{{ max }}{{ $t('invite.people') }}</div>
@@ -101,7 +101,7 @@
         </div>
         <div class="small green_p">{{ $t('invite.doing') }}</div>
       </div>
-      <div class="about flexb" v-if="accSnapshoots.is_claim">
+      <div class="about flexb" v-if="!accSnapshoots.owner || accSnapshoots.is_claim">
         <div>
           <div class="tip flexa">
             <span>{{ $t('invite.aboutReward') }}</span>
@@ -215,6 +215,8 @@ export default {
       // 用户快照情况
       accSnapshoots: {},
       nowMarket: {},
+      defaultImg: 'https://ndi.340wan.com/eos/eosio.token-eos.png',
+      errorImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
     };
   },
   mounted() {

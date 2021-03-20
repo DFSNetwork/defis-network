@@ -3,7 +3,7 @@
     <div class="subTip flexa">{{ $t('invite.farmer') }}</div>
     <div class="mainFarmer flexa">
       <!-- <div class="headImg"></div> -->
-      <img class="headImg" :src="farmerInfo.avatar">
+      <img class="headImg" :src="farmerInfo.avatar || defaultImg" :onerror="errorImg">
       <div>
         <div class="name">{{ farmerInfo.nick }}</div>
         <div class="tip small">
@@ -16,7 +16,7 @@
     <div class="lists">
       <div class="farmer flexa" v-for="(v, i) in subFarmers" :key="i">
         <!-- <div class="headImg"></div> -->
-        <img class="headImg" :src="v.avatar">
+        <img class="headImg" :src="v.avatar || defaultImg" :onerror="errorImg">
         <div>
           <div class="name">{{ v.nick || v.owner}}</div>
           <div class="tip small">
@@ -52,7 +52,13 @@ export default {
         return {}
       }
     },
-  }
+  },
+  data() {
+    return {
+      defaultImg: 'https://ndi.340wan.com/eos/eosio.token-eos.png',
+      errorImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
+    }
+  },
 }
 </script>
 
