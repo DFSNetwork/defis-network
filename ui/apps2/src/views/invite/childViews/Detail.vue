@@ -415,6 +415,9 @@ export default {
       rows.sort((a, b) => {
         return parseFloat(b.wealth || 0) - parseFloat(a.wealth || 0);
       });
+      rows.forEach(v => {
+        console.log(v)
+      });
       this.subFarmers = rows;
       this.handleGetSubFarmersInfo();
     },

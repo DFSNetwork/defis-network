@@ -5,10 +5,10 @@
       <!-- <div class="headImg"></div> -->
       <img class="headImg" :src="farmerInfo.avatar || defaultImg" :onerror="errorImg">
       <div>
-        <div class="name">{{ farmerInfo.nick }}</div>
+        <div class="name">{{ farmerInfo.nick || farmInfo.owner }}</div>
         <div class="tip small">
           <!-- <span>{{ $t('invite.wealth') }}：</span> -->
-          <span>{{ farmerInfo.desc }}</span>
+          <span>{{ farmerInfo.desc || '-' }}</span>
         </div>
       </div>
     </div>
@@ -21,7 +21,7 @@
           <div class="name">{{ v.nick || v.owner}}</div>
           <div class="tip small">
             <span>{{ $t('invite.wealth') }}：</span>
-            <span>{{ v.wealth }}</span>
+            <span>${{ parseFloat(v.wealth) }}（{{ handleGetRate(v.wealth) }}%）</span>
           </div>
         </div>
         
@@ -59,6 +59,17 @@ export default {
       errorImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
     }
   },
+  methods: {
+    // 获取占比
+    handleGetRate(wealth) {
+      const w = parseFloat(wealth || 0);
+      const all = parseFloat(this.farmInfo.wealth || 0);
+      if (!all) {
+        return 0
+      }
+      return (w/all * 100).toFixed(2)
+    },
+  }
 }
 </script>
 
