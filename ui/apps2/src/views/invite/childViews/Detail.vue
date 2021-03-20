@@ -21,7 +21,8 @@
                 :src="v.avatar || defaultImg"
               />
             </div>
-            <div>{{ farmInfo.farmers }}/{{ max }}{{ $t('invite.people') }}</div>
+            <!-- <div>{{ farmInfo.farmers }}/{{ max }}{{ $t('invite.people') }}</div> -->
+            <div>{{ farmInfo.farmers }}{{ $t('invite.people') }}</div>
           </div>
           <div class="linkDiv">
             <img v-if="farmInfo.wx" class="linkImg"
@@ -479,10 +480,10 @@ export default {
         this.$toast.fail(this.$t('invite.errTip1'))
         return
       }
-      if (this.max <= v.farmers) {
-        this.$toast.fail(this.$t('invite.errTip3'))
-        return
-      }
+      // if (this.max <= v.farmers) {
+      //   this.$toast.fail(this.$t('invite.errTip3'))
+      //   return
+      // }
       const name = this.account.name;
       const permission = this.account.permissions;
       const params = {
