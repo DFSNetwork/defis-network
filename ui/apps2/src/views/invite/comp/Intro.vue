@@ -21,5 +21,8 @@ export default {
   font-size: 28px;
   text-align: left;
   margin: 0 28px;
+
+  word-break: break-all;
+  white-space: pre-wrap;
 }
 </style>

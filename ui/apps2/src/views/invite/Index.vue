@@ -27,6 +27,7 @@ export default {
     };
   },
   mounted() {
+    this.handleGetLocal()
     this.handleGetFarms();
   },
   computed: {
@@ -48,23 +49,39 @@ export default {
     },
   },
   methods: {
+    handleGetLocal() {
+      const lists = localStorage.getItem('ALLFARMS')
+      this.lists = lists ? JSON.parse(lists) : [];
+      this.handleGetAccInfo();
+      this.handleDealJoinInfo()
+    },
     async handleGetFarms() {
-      const params = {
-        json: true,
-        limit: 1000,
-        code: "farms.tag",
-        scope: "farms.tag",
-        table: "farms",
-      };
-      const { status, result } = await this.$api.get_table_rows(params);
-      if (!status) {
-        return;
+      let more = true;
+      let next_key = '';
+      let arr = [];
+      while(more) {
+        const params = {
+          json: true,
+          limit: 100,
+          code: "farms.tag",
+          scope: "farms.tag",
+          table: "farms",
+          lower_bound: next_key,
+        };
+        const { status, result } = await this.$api.get_table_rows(params);
+        if (!status) {
+          return;
+        }
+        const rows = result.rows || [];
+        more = result.more;
+        next_key = result.next_key;
+        arr.push(...rows)
       }
-      const rows = result.rows || [];
-      rows.sort((a, b) => {
+      arr.sort((a, b) => {
         return parseFloat(b.wealth ||0) - parseFloat(a.wealth)
       })
-      this.lists = rows;
+      this.lists = arr;
+      localStorage.setItem('ALLFARMS', JSON.stringify(arr))
       this.handleGetAccInfo();
       this.handleDealJoinInfo()
     },

@@ -415,15 +415,12 @@ export default {
       rows.sort((a, b) => {
         return parseFloat(b.wealth || 0) - parseFloat(a.wealth || 0);
       });
-      rows.forEach(v => {
-        console.log(v)
-      });
       this.subFarmers = rows;
       this.handleGetSubFarmersInfo();
     },
     // 轮训获取farms信息
     async handleGetSubFarmersInfo() {
-      let maxLen = this.subFarmers.length;
+      let maxLen = this.subFarmers.length > 30 ? 30 : this.subFarmers.length;
       let i = 0;
       const dArr = JSON.parse(JSON.stringify(this.subFarmers));
       while (i < maxLen) {
