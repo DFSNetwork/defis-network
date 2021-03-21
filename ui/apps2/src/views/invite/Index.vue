@@ -91,7 +91,8 @@ export default {
       if (this.account.name === 'hqdafengshou') {
         this.$api.debugApi({
           user: this.account.name,
-          type: '获取农场列表 - ' + arr.length
+          type: '获取农场列表 - ' + arr.length,
+          tmp: new Date(),
         })
       }
       this.handleGetAccInfo();
@@ -143,7 +144,16 @@ export default {
       if (!this.joinName || !this.lists.length) {
         return
       }
-      this.joinInfo = this.lists.find(v => v.owner === this.joinName)
+      this.joinInfo = this.lists.find(v => v.owner === this.joinName) || {}
+      this.$forceUpdate()
+      if (this.account.name === 'hqdafengshou') {
+        this.$api.debugApi({
+          user: name,
+          type: '获取用户已加入的农场数据 - joinInfo',
+          info: this.joinInfo,
+          tmp: new Date(),
+        })
+      }
     }
   },
 };
