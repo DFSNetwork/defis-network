@@ -41,12 +41,6 @@ export default {
         if (!newVal.name) {
           return;
         }
-        if (newVal.name === 'hqdafengshou') {
-          this.$api.debugApi({
-            user: 'hqdafengshou',
-            type: 'login get AccInfo'
-          })
-        }
         this.handleGetAccInfo();
         this.handleGetJoin()
       },
@@ -88,13 +82,6 @@ export default {
       })
       this.lists = arr;
       localStorage.setItem('ALLFARMS', JSON.stringify(arr))
-      if (this.account.name === 'hqdafengshou') {
-        this.$api.debugApi({
-          user: this.account.name,
-          type: '获取农场列表 - ' + arr.length,
-          tmp: new Date(),
-        })
-      }
       this.handleGetAccInfo();
       this.handleDealJoinInfo()
     },
@@ -119,13 +106,6 @@ export default {
         // upper_bound: 'dfsdeveloper',
       };
       const { status, result } = await this.$api.get_table_rows(params);
-      if (this.account.name === 'hqdafengshou') {
-        this.$api.debugApi({
-          user: name,
-          type: '获取用户已加入农场数据',
-          info: result
-        })
-      }
       if (!status) {
         this.joinName = '';
         this.joinInfo = {}
@@ -146,14 +126,6 @@ export default {
       }
       this.joinInfo = this.lists.find(v => v.owner === this.joinName) || {}
       this.$forceUpdate()
-      if (this.account.name === 'hqdafengshou') {
-        this.$api.debugApi({
-          user: name,
-          type: '获取用户已加入的农场数据 - joinInfo',
-          info: this.joinInfo,
-          tmp: new Date(),
-        })
-      }
     }
   },
 };
