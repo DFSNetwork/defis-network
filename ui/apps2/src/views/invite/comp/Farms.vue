@@ -2,34 +2,36 @@
   <div class="farms">
     <div class="title">{{ $t('invite.dfsFarms') }}</div>
     <div class="lists">
-      <div class="li" v-for="(v, i) in lists" :key="i" @click="handleTo('farmDetail', {name: v.owner || 'test'})">
-        <div class="flexa">
-          <div class="flexc bgImgDiv">
-            <img class="bgImg" width="100%" :src="v.avatar">
-          </div>
-          <div class="right">
-            <div class="farmName flexb">
-              <div>{{ v.farm_name }}</div>
-              <div>
-                <img v-if="v.wx" class="linkImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/wechat.png">
-                <img v-if="v.tg" class="linkImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/telegram.png">
-                <img v-if="v.qq" class="linkImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/QQ.png">
-              </div>
+      <van-list
+        v-model="loadingMore"
+        :finished="finished"
+        :loading-text="$t('public.loading')"
+        :finished-text="$t('public.noMore')"
+        @load="handleDealPage"
+      >
+        <div class="li" v-for="(v, i) in showLists" :key="i" @click="handleTo('farmDetail', {name: v.owner || 'test'})">
+          <div class="flexa">
+            <div class="flexc bgImgDiv">
+              <img class="bgImg" width="100%" :src="v.avatar">
             </div>
-            <div class="tip num din">{{ v.slogon }}</div>
-            <div class="tip num din">
-              <span>{{ v.farmers }}{{ $t('invite.people') }}</span>
-              <span class="wealth">{{ $t('invite.wealth') }}: ${{ parseInt(v.wealth) }}</span>
+            <div class="right">
+              <div class="farmName flexb">
+                <div>{{ v.farm_name }}</div>
+                <div>
+                  <img v-if="v.wx" class="linkImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/wechat.png">
+                  <img v-if="v.tg" class="linkImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/telegram.png">
+                  <img v-if="v.qq" class="linkImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/QQ.png">
+                </div>
+              </div>
+              <div class="tip num din">{{ v.slogon }}</div>
+              <div class="tip num din">
+                <span>{{ v.farmers }}{{ $t('invite.people') }}</span>
+                <span class="wealth">{{ $t('invite.wealth') }}: ${{ parseInt(v.wealth) }}</span>
+              </div>
             </div>
           </div>
         </div>
-        <!-- <div class="btn flexc" @click.stop="handleAddFarm(v)"
-          v-if="v.owner !== nJoinInfo.owner">{{ $t('invite.join') }}</div>
-        <div class="btn flexc joined" @click.stop=""
-          v-else>{{ $t('invite.joined') }}</div> -->
-        <!-- <div class="btn flexc"
-          >{{ $t('invite.access') }}</div> -->
-      </div>
+      </van-list>
     </div>
   </div>
 </template>
@@ -56,6 +58,11 @@ export default {
   data() {
     return {
       nJoinInfo: {},
+      loadingMore: false,
+      finished: false,
+      page: 1,
+      pageSize: 20,
+      showLists: [],
     }
   },
   watch: {
@@ -73,6 +80,32 @@ export default {
     }),
   },
   methods: {
+    // 处理分页
+    handleDealPage() {
+      // 没有数据时 - 延时处理
+      if (!this.lists.length) {
+        setTimeout(() => {
+          this.handleDealPage()
+        }, 500);
+        return
+      }
+      // 正常时
+      setTimeout(() => {
+        const end = this.page * this.pageSize;
+        const start = end - this.pageSize;
+        const tArr = this.lists.slice(start, end);
+        if (this.page === 1) {
+          this.showLists = tArr;
+        } else {
+          this.showLists.push(...tArr)
+        }
+        this.loadingMore = false;
+        this.page += 1;
+        if (this.showLists.length >= this.lists.length) {
+          this.finished = true;
+        }
+      }, 200);
+    },
     handleTo(name, params) {
       this.$router.push({
         name, params
