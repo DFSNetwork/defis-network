@@ -6,7 +6,7 @@
       <img class="headImg" :src="farmerInfo.avatar || defaultImg" :onerror="errorImg">
       <div>
         <div class="name">{{ farmerInfo.nick || farmInfo.owner }}</div>
-        <div class="tip small">
+        <div class="tip small intro">
           <!-- <span>{{ $t('invite.wealth') }}：</span> -->
           <span>{{ farmerInfo.desc || '-' }}</span>
         </div>
@@ -102,6 +102,11 @@ export default {
       overflow: hidden;
       text-overflow: ellipsis; //溢出用省略号显示
       white-space: nowrap; //溢出不换行
+    }
+    .intro{
+      width: 100%;
+      word-break: break-all;
+      white-space: pre-wrap;
     }
   }
 }

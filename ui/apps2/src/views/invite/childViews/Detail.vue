@@ -3,7 +3,7 @@
     <div class="farmInfo">
       <img class="bgImg" :src="farmInfo.bg || 'https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/farmDefaultBg.png'" />
       <div class="template">
-        <div class="flexa">
+        <div class="flexa topDiv">
           <img class="headImg" :src="farmInfo.avatar" />
           <div>
             <div class="name">{{ farmInfo.farm_name || dName }}</div>
@@ -614,6 +614,9 @@ export default {
 
 <style lang="scss" scoped>
 .farmDetail {
+  .topDiv{
+    height: 100px;
+  }
   .farmInfo {
     position: relative;
     height: 500px;
@@ -648,10 +651,11 @@ export default {
         font-weight: 500;
       }
       .intro {
-        width: 300px;
         overflow: hidden;
-        text-overflow: ellipsis; //溢出用省略号显示
-        white-space: nowrap; //溢出不换行
+        word-break: break-all;
+        white-space: pre-wrap;
+        // text-overflow: ellipsis; //溢出用省略号显示
+        // white-space: nowrap; //溢出不换行
       }
       .total{
         font-size: 24px;
