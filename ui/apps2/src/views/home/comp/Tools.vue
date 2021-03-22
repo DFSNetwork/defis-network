@@ -76,7 +76,7 @@ export default {
         return
       }
       if (name === 'record') {
-        location.href = 'http://dfsfans.io/'
+        location.href = 'https://dfsfans.io/'
         return
       }
       if (name === 'usdx') {

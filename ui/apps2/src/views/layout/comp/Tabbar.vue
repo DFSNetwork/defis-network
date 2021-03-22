@@ -13,8 +13,8 @@
       <div class="bar" :class="{'act': $route.name === 'pddex'}"
         @click="handleTo('pddex')">
         <span class="myCoin flexc">
-          <img v-if="$route.name !== 'pddex'" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/market2-un.png">
-          <img v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/market2.png">
+          <img v-if="$route.name !== 'pddex'" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/market3-un.png">
+          <img v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/market3.png">
         </span>
         <div>{{ $t('tabbar.order') }}</div>
       </div>
