@@ -402,7 +402,7 @@ export default {
     async handleGetSubFarms() {
       const params = {
         json: true,
-        limit: 1000,
+        limit: 2000,
         code: "farms.tag",
         scope: ` ${this.dName}`,
         table: "members",
