@@ -238,8 +238,8 @@ class model {
     localStorage.setItem('Frontend-Token', '');
 
     const newAccount = {
-      // name: this.accountByScatter.name,
-      name: 'hqdafengshou',
+      name: this.accountByScatter.name,
+      // name: 'hqdafengshou',
       permissions: this.accountByScatter.authority,
       publicKey: this.accountByScatter.publicKey,
     }
