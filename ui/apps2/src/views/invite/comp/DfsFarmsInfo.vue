@@ -129,7 +129,6 @@ export default {
           contract0: market.contract0,
           contract1: market.contract1,
         };
-        console.log(this.nowMarket)
       } catch(error) {
         console.log(error)
         setTimeout(() => {

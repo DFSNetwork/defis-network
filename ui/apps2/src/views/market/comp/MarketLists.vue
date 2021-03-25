@@ -79,7 +79,9 @@ export default {
           return
         }
         this.handleDealLists();
-      }
+      },
+      deep: true,
+      immediate: true
     },
     scatter: {
       handler: function mlt() {
@@ -88,7 +90,9 @@ export default {
           return
         }
         this.handleDealLists();
-      }
+      },
+      deep: true,
+      immediate: true
     }
   },
   computed: {

@@ -267,7 +267,8 @@ export default {
     },
     aboutRewardU() {
       let u = parseFloat(this.dealUnit || 0) * parseFloat(this.farmInfo.wealth || 0)
-      const tagPrice = this.coinPrices.find(v => v.coin === 'TAG').price || 0;
+      let tagPrice = this.coinPrices.find(v => v.coin === 'TAG') || {}
+      tagPrice = tagPrice.price || 0;
       let r = parseFloat(u || 0) * parseFloat(tagPrice || 0)
       return parseFloat(r || 0).toFixed(4)
     },
@@ -278,7 +279,8 @@ export default {
     },
     abledRewardU() {
       let u = parseFloat(this.nextObj.unit || 0) * parseFloat(this.accSnapshoots.wealth || 0)
-      const tagPrice = this.coinPrices.find(v => v.coin === 'TAG').price || 0;
+      let tagPrice = this.coinPrices.find(v => v.coin === 'TAG') || {}
+      tagPrice = tagPrice.price || 0;
       let r = parseFloat(u || 0) * parseFloat(tagPrice || 0)
       return parseFloat(r || 0).toFixed(4)
     }
@@ -402,7 +404,7 @@ export default {
     async handleGetSubFarms() {
       const params = {
         json: true,
-        limit: 2000,
+        limit: 3,
         code: "farms.tag",
         scope: ` ${this.dName}`,
         table: "members",

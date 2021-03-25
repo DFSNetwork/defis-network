@@ -14,32 +14,34 @@
     </div>
     <div class="subTip flexa">{{ $t('invite.user') }}</div>
     <div class="lists">
-      <div class="farmer flexa" v-for="(v, i) in subFarmers" :key="i">
-        <!-- <div class="headImg"></div> -->
-        <img class="headImg" :src="v.avatar || defaultImg" :onerror="errorImg">
-        <div>
-          <div class="name">{{ v.nick || v.owner}}</div>
-          <div class="tip small">
-            <span>{{ $t('invite.wealth') }}：</span>
-            <span>${{ parseFloat(v.wealth) }}（{{ handleGetRate(v.wealth) }}%）</span>
+      <van-list
+        v-model="loadingMore"
+        :finished="finished"
+        :loading-text="$t('public.loading')"
+        :finished-text="$t('public.noMore')"
+        @load="handleDealPage"
+      >
+        <div class="farmer flexa" v-for="(v, i) in subFarmers" :key="i">
+          <!-- <div class="headImg"></div> -->
+          <img class="headImg" :src="v.avatar || defaultImg" :onerror="errorImg">
+          <div>
+            <div class="name">{{ v.nick || v.owner}}</div>
+            <div class="tip small">
+              <span>{{ $t('invite.wealth') }}：</span>
+              <span>${{ parseFloat(v.wealth) }}（{{ handleGetRate(v.wealth) }}%）</span>
+            </div>
           </div>
         </div>
-        
-      </div>
+      </van-list>
     </div>
   </div>
 </template>
 
 <script>
+import { get_acc_info } from "@/utils/api";
 export default {
   name: 'farmLists',
   props: {
-    subFarmers: {
-      type: Array,
-      default: function sf() {
-        return []
-      }
-    },
     farmerInfo: {
       type: Object,
       default: function fi() {
@@ -57,7 +59,16 @@ export default {
     return {
       defaultImg: 'https://ndi.340wan.com/eos/eosio.token-eos.png',
       errorImg: 'this.src="https://ndi.340wan.com/eos/eosio.token-eos.png"',
+      subFarmers: [], // 总列表
+      lists: [], // 展示的列表
+      page: 1,
+      pageSize: 20,
+      finished: false,
+      loadingMore: false,
     }
+  },
+  mounted() {
+    this.handleGetSubFarms();
   },
   methods: {
     // 获取占比
@@ -69,6 +80,77 @@ export default {
       }
       return (w/all * 100).toFixed(2)
     },
+    // 获取农场下成员列表
+    async handleGetSubFarms() {
+      let more = true;
+      let lower_bound = '';
+      let arr = [];
+      const dName = this.$route.params.name;
+      while(more) {
+        const params = {
+          json: true,
+          limit: 200,
+          code: "farms.tag",
+          scope: ` ${dName}`,
+          table: "members",
+          lower_bound,
+        };
+        const { status, result } = await this.$api.get_table_rows(params);
+        if (!status) {
+          more = false;
+          continue;
+        }
+        more = result.more;
+        lower_bound = result.next_key;
+        const rows = result.rows || [];
+        arr.push(...rows)
+      }
+      arr.sort((a, b) => {
+        return parseFloat(b.wealth || 0) - parseFloat(a.wealth || 0);
+      });
+      this.lists = arr;
+    },
+    // 分页处理
+    handleDealPage() {
+      // 没有数据时 - 延时处理
+      if (!this.lists.length) {
+        setTimeout(() => {
+          this.handleDealPage()
+        }, 500);
+        return
+      }
+      setTimeout(() => {
+        const end = this.page * this.pageSize;
+        const start = end - this.pageSize;
+        const tArr = this.lists.slice(start, end);
+        if (this.page === 1) {
+          this.subFarmers = tArr;
+        } else {
+          this.subFarmers.push(...tArr)
+        }
+        this.loadingMore = false;
+        this.page += 1;
+        if (this.subFarmers.length >= this.lists.length) {
+          this.finished = true;
+        }
+        this.handleGetFarmersInfo()
+      }, 200);
+    },
+    handleGetFarmersInfo() {
+      this.subFarmers.forEach(async v => {
+        if (v.getInfo) {
+          return
+        }
+        this.$set(v, 'getInfo', true);
+        const { status, result } = await get_acc_info(v.owner);
+        if (!status) {
+          return
+        }
+        this.$set(v, 'avatar', result.avatar);
+        this.$set(v, 'desc', result.desc);
+        this.$set(v, 'nick', result.nick);
+      })
+    }
   }
 }
 </script>
