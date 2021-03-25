@@ -621,13 +621,13 @@ export default {
   }
   .farmInfo {
     position: relative;
-    height: 500px;
+    height: 480px;
     width: 100%;
     overflow: hidden;
     .bgImg {
       position: relative;
-      margin-left: -5%;
-      width: 110%;
+      // margin-left: -5%;
+      width: 100%;
     }
     .template {
       position: absolute;
@@ -636,7 +636,7 @@ export default {
       left: 0;
       right: 0;
       bottom: 0;
-      background: rgba(0, 0, 0, 0.3);
+      background: rgba(0, 0, 0, 0);
       color: #fff;
       padding: 35px 28px 28px;
       font-size: 24px;
