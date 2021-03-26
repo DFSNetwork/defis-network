@@ -30,8 +30,7 @@
 <script>
 import { mapState } from 'vuex';
 import { SwapRouter, SwapRouterFilter } from '@/utils/swap_router';
-// import { SwapRouter } from '@/utils/logic';
-import { toFixed, accMul } from '@/utils/public';
+import { toFixed, accMul, dealRouterArr } from '@/utils/public';
 import { DApp } from '@/utils/wallet';
 import LimitTrade from './LimitTrade';
 import MarketTrade from './MarketTrade';
@@ -91,8 +90,7 @@ export default {
         if (!newArr.length) {
           return
         }
-        SwapRouter.init(newArr, this)
-        SwapRouterFilter.init(this.filterMkLists, this)
+        // SwapRouter.init(newArr, this)
       },
       deep: true,
       immediate: true,
@@ -100,6 +98,17 @@ export default {
     account: {
       handler: function acc() {
         this.handleStartBalTimer()
+      },
+      deep: true,
+      immediate: true,
+    },
+    market: {
+      handler: function mt(newVal) {
+        const tArr = dealRouterArr(this.marketLists, newVal.sym1Data, newVal.sym0Data)
+        SwapRouter.init(tArr, this)
+
+        const tArr2 = dealRouterArr(this.filterMkLists, newVal.sym1Data, newVal.sym0Data)
+        SwapRouterFilter.init(tArr2, this)
       },
       deep: true,
       immediate: true,

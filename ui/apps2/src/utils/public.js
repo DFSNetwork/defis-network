@@ -614,3 +614,52 @@ export function dealHtmlCode(v) {
     memo
   }
 }
+
+export function dealRouterArr(marketLists, thisMarket0, thisMarket1) {
+  const newArr = marketLists.filter(v => v.contract1 !== 'autopuptoken' && v.contract0 !== 'autopuptoken')
+  const a0 = newArr.filter(v => 
+    (v.contract0 === thisMarket0.contract && v.symbol0 === thisMarket0.symbol) ||
+    (v.contract1 === thisMarket0.contract && v.symbol1 === thisMarket0.symbol)
+  )
+  const a1 = marketLists.filter(v => 
+    (v.contract0 === thisMarket1.contract && v.symbol0 === thisMarket1.symbol) ||
+    (v.contract1 === thisMarket1.contract && v.symbol1 === thisMarket1.symbol)
+  )
+  const arr = handleDealSame(a0, a1)
+  const tArr = handleDealArr(arr)
+  return tArr;
+}
+// 获取a0 和 a1 中含有相同币种的交易对
+function handleDealSame(a0, a1) {
+  let arr = []
+  a0.forEach(v => {
+    const has = a1.find(vv => {
+      return (
+        (vv.contract0 === v.contract0 && vv.symbol0 === v.symbol0) ||
+        (vv.contract1 === v.contract0 && vv.symbol1 === v.symbol0) ||
+        (vv.contract1 === v.contract1 && vv.symbol1 === v.symbol1) ||
+        (vv.contract0 === v.contract1 && vv.symbol0 === v.symbol1)
+      )
+    })
+    if (has) {
+      arr.push(v, has)
+    }
+  })
+  return arr
+}
+function handleDealArr(resArr) {
+  // 删除重复项
+  const uniques = [];
+  const stringify = {};
+  resArr.forEach(v => {
+    if (!v.liquidity_token) {
+      return
+    }
+    const str = `${v.mid}`;
+    if (!stringify[str]) {
+      uniques.push(v);
+      stringify[str] = true;
+    }
+  })
+  return uniques;
+}

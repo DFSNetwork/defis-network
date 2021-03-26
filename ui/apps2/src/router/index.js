@@ -29,7 +29,7 @@ const constantRouter = [
       {
         path: '/swap',
         name: 'index',
-        component: () => import(/* webpackChunkName: "index" */ '@/views/index/Index.vue'),
+        component: () => import(/* webpackChunkName: "home" */ '@/views/index/Index.vue'),
         meta: { title: 'DeFis-Network' },
       },
       {
@@ -137,7 +137,7 @@ const constantRouter = [
       { // 我的页面
         path: '/my-center',
         name: 'myCenter',
-        component: () => import(/* webpackChunkName: "myCenter" */ '@/views/my/Index.vue'),
+        component: () => import(/* webpackChunkName: "home" */ '@/views/my/Index.vue'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
       },
       { // 编辑资料
@@ -248,13 +248,13 @@ const constantRouter = [
     children: [
       {
         path: '/',
-        component: () => import(/* webpackChunkName: "pddex" */ '@/views/pddex/Index'),
+        component: () => import(/* webpackChunkName: "home" */ '@/views/pddex/Index'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
         children: [
           {
             path: 'ranks',
             name: 'pddex',
-            component: () => import(/* webpackChunkName: "pddexRank" */ '@/views/pddex/comp/PddexRanks'),
+            component: () => import(/* webpackChunkName: "home" */ '@/views/pddex/comp/PddexRanks'),
             meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true },
           },
           // {

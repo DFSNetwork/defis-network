@@ -15,10 +15,10 @@ class swapRouter {
     this.markets = data || [];
     this._pathsArr = [];
     this.bestPath = '';
-    if (this.paths.length || this.doing) {
-      return
-    }
-    this.doing = true;
+    // if (this.paths.length || this.doing) {
+    //   return
+    // }
+    // this.doing = true;
     if (window.Worker) {
       this.workerToInitPath(vThis)
     } else {
@@ -87,7 +87,7 @@ class swapRouter {
         paths, pair_market_map, mid_market_map, tokens
       }
     }
-    console.log('开始执行循环 - ', Date.parse(new Date()))
+    // console.log('开始执行循环 - ', Date.parse(new Date()))
     vThis.$worker.run(dealPath, [this.markets]).then(res => {
       this.paths = res.paths;
       this.pair_market_map = res.pair_market_map;
@@ -96,7 +96,7 @@ class swapRouter {
       this.isInit = true;
       // console.log('生成路径长度 - ', this.paths)
       console.log('生成路径长度 - ', this.paths.length)
-      console.log('循环执行结束 - ', Date.parse(new Date()))
+      // console.log('循环执行结束 - ', Date.parse(new Date()))
     }).catch(e => console.log(e))
   }
 
@@ -196,7 +196,7 @@ class swapRouter {
       }
       _pathsMids.push(mids + '') // 返回所有Mid路径
     })
-    // console.log(_pathsMids)
+    console.log(_pathsMids)
     // return [_pathsMids[0]];
     return _pathsMids;
   }

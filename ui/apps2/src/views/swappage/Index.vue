@@ -240,7 +240,7 @@
 import { mapState } from 'vuex';
 import { SwapRouter, SwapRouterFilter } from '@/utils/swap_router';
 import Tabs from '../index/components/Tabs';
-import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara, getCoin } from '@/utils/public';
+import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara, getCoin, dealRouterArr } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
 import UsddTip from '@/components/UsddTip';
 import SlipPointTools from '@/components/SlipPointTools';
@@ -437,9 +437,9 @@ export default {
         if (!newVal.length) {
           return
         }
-        const newArr = newVal.filter(v => v.contract1 !== 'autopuptoken' && v.contract0 !== 'autopuptoken')
-        SwapRouter.init(newArr, this)
-        SwapRouterFilter.init(this.filterMkLists, this)
+        // const newArr = newVal.filter(v => v.contract1 !== 'autopuptoken' && v.contract0 !== 'autopuptoken')
+        // SwapRouter.init(newArr, this)
+        // SwapRouterFilter.init(this.filterMkLists, this)
         const arr = this.handleDealSymArr(newVal)
         this.coinList = arr;
         if (!arr.length) {
@@ -451,6 +451,26 @@ export default {
         this.thisMarket1 = market1;
         this.handleInBy(this.tradeInfo.type, 'first')
         this.refreshLoading = false;
+      },
+      immediate: true,
+      deep: true
+    },
+    thisMarket0: {
+      handler: function t0() {
+        // if (oldVal && oldVal.contract === newVal.contract && oldVal.symbol === newVal.symbol) {
+        //   return
+        // }
+        this.handleDealMarkets()
+      },
+      immediate: true,
+      deep: true
+    },
+    thisMarket1: {
+      handler: function t1() {
+        // if (oldVal && oldVal.contract === newVal.contract && oldVal.symbol === newVal.symbol) {
+        //   return
+        // }
+        this.handleDealMarkets()
       },
       immediate: true,
       deep: true
@@ -487,6 +507,13 @@ export default {
     this.handleSetMarkets();
   },
   methods: {
+    handleDealMarkets() {
+      const tArr = dealRouterArr(this.marketLists, this.thisMarket0, this.thisMarket1)
+      SwapRouter.init(tArr, this)
+
+      const tArr2 = dealRouterArr(this.filterMkLists, this.thisMarket0, this.thisMarket1)
+      SwapRouterFilter.init(tArr2, this)
+    },
     handleToProject(type) {
       if (type === 'dtoken') {
         location.href = 'https://dtoken.gitee.io/'
