@@ -95,7 +95,7 @@ class swapRouter {
       this.tokens = res.tokens;
       this.isInit = true;
       // console.log('生成路径长度 - ', this.paths)
-      console.log('生成路径长度 - ', this.paths.length)
+      // console.log('生成路径长度 - ', this.paths.length)
       // console.log('循环执行结束 - ', Date.parse(new Date()))
     }).catch(e => console.log(e))
   }
@@ -196,7 +196,7 @@ class swapRouter {
       }
       _pathsMids.push(mids + '') // 返回所有Mid路径
     })
-    console.log(_pathsMids)
+    // console.log(_pathsMids)
     // return [_pathsMids[0]];
     return _pathsMids;
   }
