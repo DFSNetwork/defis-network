@@ -105,10 +105,10 @@ export default {
     market: {
       handler: function mt(newVal) {
         const tArr = dealRouterArr(this.marketLists, newVal.sym1Data, newVal.sym0Data)
-        SwapRouter.init(tArr, this)
+        SwapRouter.init(tArr, this, newVal.sym1Data, newVal.sym0Data)
 
         const tArr2 = dealRouterArr(this.filterMkLists, newVal.sym1Data, newVal.sym0Data)
-        SwapRouterFilter.init(tArr2, this)
+        SwapRouterFilter.init(tArr2, this, newVal.sym1Data, newVal.sym0Data)
       },
       deep: true,
       immediate: true,

@@ -509,10 +509,10 @@ export default {
   methods: {
     handleDealMarkets() {
       const tArr = dealRouterArr(this.marketLists, this.thisMarket0, this.thisMarket1)
-      SwapRouter.init(tArr, this)
+      SwapRouter.init(tArr, this, this.thisMarket0, this.thisMarket1)
 
       const tArr2 = dealRouterArr(this.filterMkLists, this.thisMarket0, this.thisMarket1)
-      SwapRouterFilter.init(tArr2, this)
+      SwapRouterFilter.init(tArr2, this, this.thisMarket0, this.thisMarket1)
     },
     handleToProject(type) {
       if (type === 'dtoken') {
