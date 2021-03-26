@@ -115,7 +115,8 @@
             <span class="tip ml">(${{ aboutRewardU }})</span>
           </div>
         </div>
-        <div class="claimBtn flexc" v-if="account.name === dName" @click="handleClaim">{{ $t('invite.claim') }}</div>
+        <div class="claimBtn flexc" :class="{'disable': !accSnapshoots.owner || accSnapshoots.is_claim}"
+          v-if="account.name === dName" @click="handleClaim">{{ $t('invite.claim') }}</div>
       </div>
       <div class="albeClaim about flexb" v-else>
         <div>
@@ -228,6 +229,7 @@ export default {
     this.handleGetNext()
     this.handleGetAccSnapshoots()
     this.handleGetMidsTotalPrice()
+    this.handleGetRewardRate()
   },
   computed: {
     ...mapState({
@@ -306,6 +308,9 @@ export default {
     },
     // 领取收益
     handleClaim() {
+      if (!this.accSnapshoots.owner || this.accSnapshoots.is_claim) {
+        return
+      }
       if (!this.ableClaim) {
         this.$toast.fail(this.$t('invite.errTip5'))
         return
@@ -610,6 +615,23 @@ export default {
         }, 200);
       }
     },
+    // 获取奖励份额
+    async handleGetRewardRate() {
+      const params = {
+        json: true,
+        limit: 10,
+        code: "fund.tag",
+        scope: "fund.tag",
+        table: "configs",
+      }
+      const {status, result} = await this.$api.get_table_rows(params);
+      if (!status) {
+        return
+      }
+      const conf = result.rows.find(v => v.id === 1);
+      const rate = parseFloat(conf.reward_ratio || 0.1).toFixed(4)
+      this.rate = rate;
+    }
   },
 };
 </script>
@@ -811,6 +833,9 @@ export default {
         border-radius: 8px;
         width: 140px;
         height: 64px;
+        &.disable{
+          background: #999;
+        }
       }
     }
   }
