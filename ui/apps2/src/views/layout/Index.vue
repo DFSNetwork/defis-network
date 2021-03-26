@@ -58,7 +58,6 @@ export default {
   },
   data() {
     return {
-      marketLists: [],
       timer: null,
       topLists: [
         39
@@ -70,6 +69,8 @@ export default {
 
       // 价格定时器
       priceTimer: null,
+
+      chainGet: false,
     }
   },
   computed:{
@@ -166,14 +167,44 @@ export default {
     },
     // 获取做市池子
     async handleRowsMarket() {
+      // this.handleRowsMarketByChain()
       const {status, result} = await this.$api.get_markets();
       if (!status) {
         return
       }
       const list = result.rows || [];
       // 列表处理
+      if (this.chainGet) {
+        return
+      }
       const dealObj = dealMarketLists(list, this.topLists)
-      this.marketLists = dealObj.allLists;
+    },
+     // 获取做市池子 - 链上查询
+    async handleRowsMarketByChain() {
+      let more = true;
+      let next_key = '';
+      let lists = [];
+      this.chainGet = false;
+      while(more) {
+        const params = {
+          code: "defisswapcnt",
+          scope: "defisswapcnt",
+          table: "markets",
+          json: true,
+          limit: 100,
+          lower_bound: next_key,
+        }
+        const {status, result} = await this.$api.get_table_rows(params);
+        if (!status) {
+          return
+        }
+        const rows = result.rows || [];
+        lists.push(...rows)
+        more = result.more;
+        next_key= result.next_key;
+      }
+      this.chainGet = true;
+      const dealObj = dealMarketLists(lists, this.topLists)
     },
     // 获取常用币种价格
     async handleGetPrice() {
