@@ -633,7 +633,7 @@ export function dealRouterArr(marketLists, thisMarket0, thisMarket1) {
 function handleDealSame(a0, a1) {
   let arr = []
   a0.forEach(v => {
-    const has = a1.find(vv => {
+    const has = a1.filter(vv => {
       return (
         (vv.contract0 === v.contract0 && vv.symbol0 === v.symbol0) ||
         (vv.contract1 === v.contract0 && vv.symbol1 === v.symbol0) ||
@@ -641,8 +641,8 @@ function handleDealSame(a0, a1) {
         (vv.contract0 === v.contract1 && vv.symbol0 === v.symbol1)
       )
     })
-    if (has) {
-      arr.push(v, has)
+    if (has.length) {
+      arr.push(v, ...has)
     }
   })
   return arr

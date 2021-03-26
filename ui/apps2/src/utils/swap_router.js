@@ -169,9 +169,9 @@ class swapRouter {
     const _pathsArr = [];
 
     for (let i = 0; i < this.paths.length; i++) {
-      if (_pathsArr.length === 10) {
-        break
-      }
+      // if (_pathsArr.length === 10) {
+      //   break
+      // }
       let path = this.paths[i];
       let tks = path.split("-");
       if ((tks[0] === newTokenA && tks[tks.length - 1] === newTokenB)) {
