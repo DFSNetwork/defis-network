@@ -6,6 +6,10 @@
     <MyFooter />
     <!-- <DfsInfo /> -->
     <Rank />
+    <div class="fullBtn" v-if="canFull" @click="handleFullScreen">
+      <img v-if="fullScreen" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/min.png">
+      <img v-else src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/full.png">
+    </div>
   </div>
 </template>
 
@@ -21,6 +25,7 @@ import MyFooter from '@/components/Footer';
 // import DfsInfo from '@/views/home/comp/DfsInfo';
 
 import { dealAreaArr } from '@/views/pddex/comp/appLogic';
+import { walletConnected, fullScreen } from '@/utils/wallet/fullScreen';
 export default {
   name: 'home',
   components: {
@@ -35,12 +40,15 @@ export default {
     return {
       allMarket: {},
       pddexList: [],
-      iArr: ['USDT', 'USDC', 'EOS', 'DFS', 'TAG']
+      iArr: ['USDT', 'USDC', 'EOS', 'DFS', 'TAG'],
+      canFull: false,
+      fullScreen: 0,
     }
   },
   mounted() {
     this.handleGetMarkets()
     this.handleGetPddexMarketList();
+    this.canFull = walletConnected()
   },
   computed: {
     ...mapState({
@@ -49,6 +57,10 @@ export default {
     })
   },
   methods: {
+    handleFullScreen() {
+      this.fullScreen = (this.fullScreen + 1) % 2;
+      fullScreen(this.fullScreen)
+    },
     // 获取ppdex支持交易对 配对pid
     async handleGetPddexMarketList() {
       const params = {
@@ -129,5 +141,24 @@ export default {
   background: linear-gradient(to bottom, #FFF, #fafafa 80px , #F6F6F6);
   min-height: 100vh;
   padding-bottom: 30px;
+  .fullBtn{
+    position: fixed;
+    top: 49%;
+    left: 0px;
+    padding: 18px;
+    background: rgba(#FFF, .8);
+    border-radius: 4px;
+    font-size: 20px;
+    color: $color-tip;
+    box-shadow: 3px 0 5px 2px rgba(#eee, .8);
+    z-index: 2;
+    img{
+      opacity: .5;
+      display: block;
+      width: 40px;
+      margin: auto;
+      margin-bottom: 8px;
+    }
+  }
 }
 </style>

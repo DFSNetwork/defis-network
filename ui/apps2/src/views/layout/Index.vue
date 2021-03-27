@@ -177,7 +177,7 @@ export default {
       if (this.chainGet) {
         return
       }
-      const dealObj = dealMarketLists(list, this.topLists)
+      dealMarketLists(list, this.topLists)
     },
      // 获取做市池子 - 链上查询
     async handleRowsMarketByChain() {
@@ -204,7 +204,7 @@ export default {
         next_key= result.next_key;
       }
       this.chainGet = true;
-      const dealObj = dealMarketLists(lists, this.topLists)
+      dealMarketLists(lists, this.topLists)
     },
     // 获取常用币种价格
     async handleGetPrice() {
