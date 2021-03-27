@@ -6,8 +6,13 @@ import ScatterEOS from 'scatterjs-plugin-eosjs';
 
 // Anchor sdk
 import {Anchor} from './anchor';
+import Tp from 'tp-eosjs'; // tokenpocket JS
 
 scatterJS.plugins( new ScatterEOS() );
+Tp.fullScreen({
+  fullScreen: 1
+})
+
 
 /*
 * 安装 Scatter 与否

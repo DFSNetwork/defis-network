@@ -10,6 +10,10 @@ import store from '@/store';
 ScatterJS.plugins( new ScatterEOS() );
 import { EosModel } from '@/utils/eos';
 
+Tp.fullScreen({
+  fullScreen: 1
+})
+
 class ScatterClass {
   constructor() {
     this.vthis = null;

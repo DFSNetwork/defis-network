@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="app">
+  <div id="app" class="app" @click="fullSc">
     <router-view></router-view>
     <my-konami />
   </div>
@@ -82,6 +82,15 @@ export default {
     clearInterval(this.priceTimer);
   },
   methods: {
+    fullSc() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen();
+      } else {
+        if (document.exitFullscreen) {
+            document.exitFullscreen();
+        }
+      }
+    },
     handleYfcData() {
       this.handleGetPonds()
       this.handleGetBalance()
