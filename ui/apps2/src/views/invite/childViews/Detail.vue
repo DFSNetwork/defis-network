@@ -115,7 +115,7 @@
             <span class="tip ml">(${{ aboutRewardU }})</span>
           </div>
         </div>
-        <div class="claimBtn flexc" :class="{'disable': !accSnapshoots.owner || accSnapshoots.is_claim}"
+        <div class="claimBtn flexc"
           v-if="account.name === dName" @click="handleClaim">{{ $t('invite.claim') }}</div>
       </div>
       <div class="albeClaim about flexb" v-else>
@@ -308,9 +308,9 @@ export default {
     },
     // 领取收益
     handleClaim() {
-      if (!this.accSnapshoots.owner || this.accSnapshoots.is_claim) {
-        return
-      }
+      // if (!this.accSnapshoots.owner || this.accSnapshoots.is_claim) {
+      //   return
+      // }
       if (!this.ableClaim) {
         this.$toast.fail(this.$t('invite.errTip5'))
         return
