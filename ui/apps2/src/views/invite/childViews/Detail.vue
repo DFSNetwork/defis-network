@@ -413,6 +413,9 @@ export default {
         code: "farms.tag",
         scope: ` ${this.dName}`,
         table: "members",
+        index_position: 2,
+        key_type: "i64",
+        reverse: true
       };
       const { status, result } = await this.$api.get_table_rows(params);
       if (!status) {

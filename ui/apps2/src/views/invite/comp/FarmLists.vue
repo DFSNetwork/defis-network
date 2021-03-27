@@ -65,10 +65,11 @@ export default {
       pageSize: 20,
       finished: false,
       loadingMore: false,
+      next_key: '',
     }
   },
   mounted() {
-    this.handleGetSubFarms();
+    // this.handleGetSubFarms();
   },
   methods: {
     // 获取占比
@@ -82,59 +83,48 @@ export default {
     },
     // 获取农场下成员列表
     async handleGetSubFarms() {
-      let more = true;
-      let lower_bound = '';
       let arr = [];
       const dName = this.$route.params.name;
-      while(more) {
-        const params = {
-          json: true,
-          limit: 200,
-          code: "farms.tag",
-          scope: ` ${dName}`,
-          table: "members",
-          lower_bound,
-        };
-        const { status, result } = await this.$api.get_table_rows(params);
-        if (!status) {
-          more = false;
-          continue;
-        }
-        more = result.more;
-        lower_bound = result.next_key;
-        const rows = result.rows || [];
-        arr.push(...rows)
+      const params = {
+        json: true,
+        limit: 20,
+        code: "farms.tag",
+        scope: ` ${dName}`,
+        table: "members",
+        upper_bound: this.next_key,
+        index_position: 2,
+        key_type: "i64",
+        reverse: true
+      };
+      const { status, result } = await this.$api.get_table_rows(params);
+      if (!status) {
+        return;
       }
-      arr.sort((a, b) => {
-        return parseFloat(b.wealth || 0) - parseFloat(a.wealth || 0);
-      });
-      this.lists = arr;
+      this.next_key = result.next_key;
+      const rows = result.rows || [];
+      arr.push(...rows)
+      if (this.page === 1) {
+        this.subFarmers = arr;
+      } else {
+        this.subFarmers.push(...arr)
+      }
+      this.loadingMore = false;
+      this.page += 1;
+      if (!this.next_key) {
+        this.finished = true;
+      }
+      this.handleGetFarmersInfo()
     },
     // 分页处理
     handleDealPage() {
       // 没有数据时 - 延时处理
-      if (!this.lists.length) {
-        setTimeout(() => {
-          this.handleDealPage()
-        }, 500);
-        return
-      }
-      setTimeout(() => {
-        const end = this.page * this.pageSize;
-        const start = end - this.pageSize;
-        const tArr = this.lists.slice(start, end);
-        if (this.page === 1) {
-          this.subFarmers = tArr;
-        } else {
-          this.subFarmers.push(...tArr)
-        }
-        this.loadingMore = false;
-        this.page += 1;
-        if (this.subFarmers.length >= this.lists.length) {
-          this.finished = true;
-        }
-        this.handleGetFarmersInfo()
-      }, 200);
+      // if (!this.lists.length) {
+      //   setTimeout(() => {
+      //     this.handleDealPage()
+      //   }, 500);
+      //   return
+      // }
+      this.handleGetSubFarms()
     },
     handleGetFarmersInfo() {
       this.subFarmers.forEach(async v => {

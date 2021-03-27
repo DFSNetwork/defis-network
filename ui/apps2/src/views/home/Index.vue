@@ -42,7 +42,7 @@ export default {
       pddexList: [],
       iArr: ['USDT', 'USDC', 'EOS', 'DFS', 'TAG'],
       canFull: false,
-      fullScreen: 0,
+      fullScreen: parseInt(localStorage.getItem('setFullScreen') || 0),
     }
   },
   mounted() {
@@ -60,6 +60,7 @@ export default {
     handleFullScreen() {
       this.fullScreen = (this.fullScreen + 1) % 2;
       fullScreen(this.fullScreen)
+      localStorage.setItem('setFullScreen', this.fullScreen)
     },
     // 获取ppdex支持交易对 配对pid
     async handleGetPddexMarketList() {
@@ -157,7 +158,6 @@ export default {
       display: block;
       width: 40px;
       margin: auto;
-      margin-bottom: 8px;
     }
   }
 }

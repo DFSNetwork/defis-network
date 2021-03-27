@@ -43,6 +43,7 @@ import Tabbar from './comp/Tabbar';
 import { get_acc_info, get_balance } from '@/utils/api';
 import { dealMarketLists } from '@/utils/logic';
 import { get_tag_lp_mids } from '@/utils/minerLogic';
+import { fullScreen } from '@/utils/wallet/fullScreen';
 
 export default {
   name: 'layout',
@@ -103,6 +104,11 @@ export default {
     this.handleStartTimer();
     this.handleGetVotes()
     this.handleGetPrice()
+
+    const fullType = parseInt(localStorage.getItem('setFullScreen') || 0)
+    if (fullType === 1) {
+      fullScreen(fullType)
+    }
   },
   beforeDestroy() {
     clearInterval(this.timer);
