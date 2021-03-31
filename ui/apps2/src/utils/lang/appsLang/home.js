@@ -19,7 +19,7 @@ export default {
       rate24: '24H涨跌幅',
       vol24: '24H成交量',
       oChain: '跨链充提',
-      oChainTip: '支持ETH、BTC(即将支持)',
+      oChainTip: '支持ETH、BTC',
       onkey: '一键充提',
 
       vote: '投票治理',
@@ -50,7 +50,7 @@ export default {
       rate24: 'Change',
       vol24: '24H Volume',
       oChain:'Cross deposit and withdrawal',
-      oChainTip:'Support ETH, BTC (coming soon)',
+      oChainTip:'Support ETH, BTC',
       onkey:'Dep & With',
 
       vote:'Votes',

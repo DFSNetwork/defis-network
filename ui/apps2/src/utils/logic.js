@@ -256,7 +256,7 @@ function get_token_eos_value(a, eos_price, tag_price) {
 // 列表处理 - 非vue数据处理迁移
 export function dealMarketLists(list, topLists) {
   const newList = []
-  const mainList = []; // 存放EOS - token 和 usdt - token 的交易对
+  let mainList = []; // 存放EOS - token 和 usdt - token 的交易对
   let dfsData = {}
   const mkFlt = store.state.config.mkFilterConf;
   const priceObj = getFilterPrice(list)
@@ -403,6 +403,9 @@ export function dealMarketLists(list, topLists) {
 
   // 过滤列表处理
   const newMainList = dealMarketSort(mainList);
+  mainList.sort((a, b) => {
+    return parseFloat(b.usdt_value || 0) - parseFloat(a.usdt_value || 0)
+  })
   newMainList.splice(1, 0, dfsData)
   store.dispatch('setFilterMkLists', newMainList)
   // console.log(newListSort)
