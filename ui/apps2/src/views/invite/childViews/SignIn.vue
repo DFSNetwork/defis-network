@@ -147,15 +147,24 @@ export default {
           continue;
         }
         more = result.more;
+        if (result.next_key === '0') {
+          more = false;
+        }
         next_key = result.next_key;
         const rows = result.rows || [];
         rows.forEach((v) => {
           const time = toLocalTime(`${v.update_time}.000+0000`)
           const times = getMarketTimeLp(time)
+          // 刚加入
+          if (v.update_time === v.join_time) {
+            this.$set(v, 'joinNow', true)
+          }
           // 已签到
           if (times.total < 3600 * 23 * 1000) {
             this.$set(v, 'isSigned', true)
-            this.isSignNum += 1;
+            if (v.update_time !== v.join_time) {
+              this.isSignNum += 1;
+            }
           }
           // 可签到
           if (times.total > 3600 * 23 * 1000) {
@@ -164,11 +173,6 @@ export default {
           // 可代签
           if (times.total > 3600 * 27 * 1000) {
             this.$set(v, 'abledSignForOther', true)
-          }
-          // 刚加入
-          if (v.update_time === v.join_time) {
-            this.$set(v, 'joinNow', true)
-            this.isSignNum -= 1;
           }
         })
         this.allLists.push(...rows)

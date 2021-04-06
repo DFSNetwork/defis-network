@@ -5,7 +5,7 @@
       <div class="template">
         <div class="flexb">
           <div class="flexa topDiv">
-            <img class="headImg" :src="farmInfo.avatar || $defaultAccImg" :onerror="defaultAccImg" />
+            <img class="headImg" :src="farmInfo.avatar || $defaultAccImg" :onerror="$defaultAccImg" />
             <div>
               <div class="name">{{ farmInfo.farm_name || dName }}</div>
               <div class="intro">{{ farmInfo.slogon || '-' }}</div>
@@ -65,7 +65,7 @@
         </div>
       </div>
       <div class="flexc">
-        <img src="https://cdn.jsdelivr.net/gh/defis-net/material2/farm/wealth.png">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material2/farm/farmsNum.png">
         <div>
           <div class="num din">{{ farmInfo.farmers }}</div>
           <div class="tip">{{ $t('invite.farmersNum') }}</div>
