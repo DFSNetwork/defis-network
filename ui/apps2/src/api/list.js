@@ -144,3 +144,19 @@ export function get_currency_stats(params) {
     })
   })
 }
+// 链上查表
+export function get_currency_balance(params) {
+  return new Promise((resolve, reject) => {
+    const host = getHost()
+    axios.post(`${host}/v1/chain/get_currency_balance`, JSON.stringify(params)).then((res) => {
+      // let result = Object.assign(res.data, {});
+      let result = res.data;
+      if (!result.length) {
+        result = [`${Number(0).toFixed(params.decimal || 4)} ${params.symbol}`]
+      }
+      resolve({ status: res.status === 200, result: result[0] });
+    }, err => {
+      reject(err)
+    })
+  })
+}

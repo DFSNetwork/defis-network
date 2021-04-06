@@ -3,71 +3,76 @@
     <div class="farmInfo">
       <img class="bgImg" :src="farmInfo.bg || 'https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/farmDefaultBg.png'" />
       <div class="template">
-        <div class="flexa topDiv">
-          <img class="headImg" :src="farmInfo.avatar" />
-          <div>
-            <div class="name">{{ farmInfo.farm_name || dName }}</div>
-            <div class="intro">{{ farmInfo.slogon || '-' }}</div>
+        <div class="flexb">
+          <div class="flexa topDiv">
+            <img class="headImg" :src="farmInfo.avatar || $defaultAccImg" :onerror="defaultAccImg" />
+            <div>
+              <div class="name">{{ farmInfo.farm_name || dName }}</div>
+              <div class="intro">{{ farmInfo.slogon || '-' }}</div>
+            </div>
+          </div>
+          <div class="flexa tools">
+            <img @click="showShare = true" src="https://cdn.jsdelivr.net/gh/defis-net/material2/farm/invite.png" alt="">
+            <van-popover v-model="showPopover"
+              v-if="joinName === dName || account.name === dName"
+              placement="bottom-end"
+              trigger="click">
+              <div class="setPopover">
+                <div class="nav flexc" v-if="account.name === dName"
+                  @click="handleTo('farmEdit')">{{ $t('invite.farmInfoSet') }}</div>
+                <div class="nav flexc" v-if="account.name === dName"
+                  @click="handleTo('setSign')">{{ $t('invite.signSet') }}</div>
+                <div class="nav flexc red" v-if="joinName === dName"
+                  @click="showLeave = true">{{ $t('invite.leave') }}</div>
+              </div>
+              <template #reference>
+                <img class="settingImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/farm/setting1.png" alt="">
+              </template>
+            </van-popover>
           </div>
         </div>
-        <!-- 农场主信息 -->
-        <div class="accInfo flexb">
-          <div class="flexa">
-            <div class="subAccHead flexa">
-              <img
-                class="subAccHeadImg"
-                v-for="(v, i) in showTop3"
-                :key="`subImg${i}`"
-                :src="v.avatar || defaultImg"
-              />
-            </div>
-            <!-- <div>{{ farmInfo.farmers }}/{{ max }}{{ $t('invite.people') }}</div> -->
-            <div>{{ farmInfo.farmers }}{{ $t('invite.people') }}</div>
-          </div>
+        <!-- 联系 & 签到 -->
+        <div class="flexb signDiv">
           <div class="linkDiv">
             <img v-if="farmInfo.wx" class="linkImg"
               v-clipboard:copy="farmInfo.wx"
               v-clipboard:success="onCopy"
-              v-clipboard:error="onError" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/wechat.png">
+              v-clipboard:error="onError" src="https://cdn.jsdelivr.net/gh/defis-net/material2/farm/wx.png">
             <img v-if="farmInfo.tg" class="linkImg"
               v-clipboard:copy="farmInfo.tg"
               v-clipboard:success="onCopy"
-              v-clipboard:error="onError" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/telegram.png">
+              v-clipboard:error="onError" src="https://cdn.jsdelivr.net/gh/defis-net/material2/farm/tg.png">
             <img v-if="farmInfo.qq" class="linkImg"
               v-clipboard:copy="farmInfo.qq"
               v-clipboard:success="onCopy"
-              v-clipboard:error="onError" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/QQ.png">
+              v-clipboard:error="onError" src="https://cdn.jsdelivr.net/gh/defis-net/material2/farm/qq.png">
           </div>
-        </div>
-        <div class="flexb">
-          <div class="total">
-            <div class="num din">${{ parseFloat(farmInfo.wealth).toFixed(4) }} </div>
-            <div>{{ $t('invite.farmWealth') }}</div>
-          </div>
-          <!-- 操作按钮 -->
-          <div class="btnDiv flexa">
-            <div class="btn flexc"
-              @click="handleTo('farmEdit')"
-              v-if="account.name === dName">
-              <img class="icon"
-                src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/edit.png" />
-              <span>{{ $t('invite.edit') }}</span>
-            </div>
-            <div class="btn flexc" @click="showShare = true">
-              <img class="icon"
-                src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/edit.png" />
-              <span>{{ $t('invite.share') }}</span>
-            </div>
-            <div class="btn flexc" v-if="joinName !== dName && account.name !== dName" @click="handleAddFarm(farmInfo)">
-              <span>{{ $t('invite.join') }}</span>
-            </div>
-            <div class="btn red flexc" v-if="joinName === dName" @click="showLeave = true">
-              <span>{{ $t('invite.leave') }}</span>
-            </div>
+          <div class="signBtn flexa" @click="handleTo('signIn')">
+            <img src="https://cdn.jsdelivr.net/gh/defis-net/material2/farm/rewardIcon.png">
+            <span>{{ $t('invite.signReward') }}</span>
           </div>
         </div>
       </div>
     </div>
+
+    <!-- 农场数据 -->
+    <div class="totalData flexb">
+      <div class="flexc">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material2/farm/wealth.png">
+        <div>
+          <div class="num din">${{ parseFloat(farmInfo.wealth).toFixed(4) }}</div>
+          <div class="tip">{{ $t('invite.farmWealth') }}</div>
+        </div>
+      </div>
+      <div class="flexc">
+        <img src="https://cdn.jsdelivr.net/gh/defis-net/material2/farm/wealth.png">
+        <div>
+          <div class="num din">{{ farmInfo.farmers }}</div>
+          <div class="tip">{{ $t('invite.farmersNum') }}</div>
+        </div>
+      </div>
+    </div>
+
     <!-- 倒计时 & 收益 -->
     <div class="rewardDiv">
       <div class="unClaim flexc" v-if="!standard" @click="showClaimTip = true">
@@ -152,6 +157,9 @@
     />
     <Intro v-else :intro="farmInfo.desc" />
 
+    <div class="btn flexc" v-if="joinName !== dName"
+      @click="handleAddFarm(farmerInfo)">{{ $t('invite.join') }}</div>
+
     <van-popup v-model="showShare" class="popup_p">
       <InviteDia @listenClose="handleClose" />
     </van-popup>
@@ -191,6 +199,7 @@ export default {
   },
   data() {
     return {
+      showPopover: false,
       act: 0,
       max: 100,
       showShare: false,
@@ -646,7 +655,7 @@ export default {
   }
   .farmInfo {
     position: relative;
-    height: 480px;
+    // height: 480px;
     width: 100%;
     overflow: hidden;
     .bgImg {
@@ -666,6 +675,22 @@ export default {
       padding: 35px 28px 28px;
       font-size: 24px;
       text-align: left;
+      box-sizing: border-box;
+      .tools{
+        /deep/ .van-popover__wrapper{
+          .settingImg{
+            width: 52px;
+            margin-left: 50px;
+          }
+        }
+        img{
+          width: 52px;
+          margin-left: 50px;
+          &:first-child{
+            margin-left: 0;
+          }
+        }
+      }
       .headImg {
         width: 100px;
         height: 100px;
@@ -681,8 +706,6 @@ export default {
         overflow: hidden;
         word-break: break-all;
         white-space: pre-wrap;
-        // text-overflow: ellipsis; //溢出用省略号显示
-        // white-space: nowrap; //溢出不换行
       }
       .total{
         font-size: 24px;
@@ -691,76 +714,59 @@ export default {
           font-size: 32px;
         }
       }
-      .btnDiv {
-        // margin: 36px 0;
-        .icon {
-          width: 32px;
-          margin-right: 16px;
+    }
+    .signDiv{
+      margin-top: 35px;
+      .linkDiv{
+        img{
+          margin-right: 40px;
+          width: 60px;
         }
-        .btn {
-          margin-right: 20px;
-          background: $color-main;
-          color: #fff;
-          font-size: 28px;
-          width: 152px;
-          height: 60px;
-          border-radius: 8px;
-          &.red {
-            background: $color-red;
-          }
-          &:last-child{
-            margin-right: 0;
-          }
+      }
+      .signBtn{
+        background: #FFF;
+        border-radius: 40px;
+        height: 76px;
+        border: 1px solid #FFBA29;
+        padding: 0 18px;
+        box-sizing: border-box;
+        color: #FFBA29;
+        font-weight: 300;
+        font-size: 28px;
+        img{
+          margin-right: 15px;
+          width: 60px;
         }
       }
     }
-    .accInfo {
-      text-align: left;
-      margin: 28px 0;
-      min-height: 70px;
-      .linkDiv{
-        img{
-          margin-left: 20px;
-          width: 32px;
-        }
-      }
-      .accHeadImg {
-        width: 80px;
-        height: 80px;
-        border-radius: 50%;
-        overflow: hidden;
-        margin-right: 20px;
-        background: #fff;
-      }
-      .nick {
-        font-size: 28px;
-        margin-bottom: 8px;
-      }
-      .farmerImg {
-        width: 68px;
-      }
-      .subAccHead {
-        margin-right: 25px;
-        .subAccHeadImg {
-          width: 52px;
-          height: 52px;
-          border-radius: 30px;
-          overflow: hidden;
-          position: relative;
-          margin-left: -5px;
-          background: #fff;
-          border: 1px solid $color-border;
-          &:first-child {
-            margin-left: 0px;
-          }
-        }
-      }
+  }
+  .totalData{
+    margin: -120px auto 36px;
+    z-index: 2;
+    position: relative;
+    background: #FFF;
+    border-radius: 16px;
+    box-shadow: 0px 4px 8px 4px rgba(234,234,234,0.54);
+    width: 690px;
+    font-size: 28px;
+    padding: 34px 0;
+    text-align: left;
+    &>div{
+      flex: 1;
+    }
+    img{
+      width: 60px;
+      margin-right: 15px;
+    }
+    .num{
+      font-size: 32px;
+      margin-bottom: 4px;
     }
   }
   .rewardDiv {
     position: relative;
     z-index: 2;
-    margin: -120px auto 20px;
+    margin: 20px auto 20px;
     height: 300px;
     width: 690px;
     background-image: url("https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/rewardBg.png");
@@ -871,5 +877,32 @@ export default {
   max-width: 692px;
   width: 692px;
   border-radius: 20px;
+}
+.setPopover{
+  font-size: 28px;
+  padding: 8px 26px;
+  .nav{
+    height: 80px;
+    border-bottom: 1px solid rgba(220,220,220, .3);
+    &:last-child{
+      border-bottom: 0;
+    }
+    &.red{
+      color: #ff6871;
+    }
+  }
+}
+.btn{
+  position: fixed;
+  bottom: 50px;
+  width: 95%;
+  max-width: 690px;
+  background: $color-main;
+  color: #FFF;
+  font-size: 32px;
+  height: 96px;
+  border-radius: 8px;
+  margin: 0 30px;
+  font-weight: 500;
 }
 </style>

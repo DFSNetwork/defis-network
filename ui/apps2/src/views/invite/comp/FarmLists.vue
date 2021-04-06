@@ -3,7 +3,7 @@
     <div class="subTip flexa">{{ $t('invite.farmer') }}</div>
     <div class="mainFarmer flexa">
       <!-- <div class="headImg"></div> -->
-      <img class="headImg" :src="farmerInfo.avatar || defaultImg" :onerror="errorImg">
+      <img class="headImg" :src="farmerInfo.avatar || $defaultAccImg" :onerror="$defaultAccImg">
       <div>
         <div class="name">{{ farmerInfo.nick || farmInfo.owner }}</div>
         <div class="tip small intro">
@@ -23,7 +23,7 @@
       >
         <div class="farmer flexa" v-for="(v, i) in subFarmers" :key="i">
           <!-- <div class="headImg"></div> -->
-          <img class="headImg" :src="v.avatar || defaultImg" :onerror="errorImg">
+          <img class="headImg" :src="v.avatar || $defaultAccImg" :onerror="$defaultAccImg">
           <div>
             <div class="name">{{ v.nick || v.owner}}</div>
             <div class="tip small">

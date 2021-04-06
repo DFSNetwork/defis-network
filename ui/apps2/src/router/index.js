@@ -342,6 +342,30 @@ const constantRouter = [
         component: () => import(/* webpackChunkName: "farmEdit" */ '@/views/invite/childViews/Edit'),
         meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
       },
+      {
+        path: 'farm/:name/sign-in',
+        name: 'signIn',
+        component: () => import(/* webpackChunkName: "SignIn" */ '@/views/invite/childViews/SignIn'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
+      {
+        path: 'set-sign',
+        name: 'setSign',
+        component: () => import(/* webpackChunkName: "setSign" */ '@/views/invite/setting/SetCoin'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
+      {
+        path: 'add-sign-coin',
+        name: 'addSignCoin',
+        component: () => import(/* webpackChunkName: "addSignCoin" */ '@/views/invite/setting/AddCoin'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
+      {
+        path: 'set-sign-coin/:coin',
+        name: 'setSignCoin',
+        component: () => import(/* webpackChunkName: "addSignCoin" */ '@/views/invite/setting/AddCoin'),
+        meta: { title: 'DeFis-Network', noAcc: true, noNav: true, noFooter: true, noHeader: true, noTab: true },
+      },
     ],
   },
   // voteHome

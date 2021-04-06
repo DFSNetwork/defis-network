@@ -55,7 +55,7 @@
         <van-tab title="当前订单">
           <div class="noData tip" v-if="!orderList.length">
             <img class="noDataPng" src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noOrder.png" alt="">
-            <div>暂无数据</div>
+            <div>{{ $t('public.noData') }}</div>
           </div>
           <div class="list" v-for="(v, i) in orderList" :key="`order-${i}`">
             <div class="liTitle flexb">
