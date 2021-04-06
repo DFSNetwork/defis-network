@@ -177,7 +177,7 @@ export default {
           }],
           data: {
             farmer: name,
-            helper: '',
+            helper: name,
           }
         }]
       }
