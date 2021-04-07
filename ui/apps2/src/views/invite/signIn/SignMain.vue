@@ -4,7 +4,7 @@
       <span>{{ $t('invite.subTip2') }}</span>
       <img @click="showRules = true" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg">
     </div>
-    <div class="signTip">{{ $t('invite.subTip3') }}</div>
+    <div class="signTip">{{ $t('invite.signLimitNum') }}：${{ parseFloat(rewardInfo.limit || 0).toFixed(2) }}</div>
     <div class="coinTotal flexc">{{ $t('invite.lessBal') }}</div>
     <div class="percentDiv flexc">
       <span class="dinBold num">{{ rewardInfo.bal || '-' }}</span>

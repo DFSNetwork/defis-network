@@ -80,6 +80,7 @@ export default {
       helpSignSuccess: '帮助签到成功',
       hasGetReward: '收取他人奖励已到账',
       look: '去查看',
+      signLimitNum: '当前农场签到奖励门槛',
 
       helpSignRules1: '单账户每23小时可签到一次。可帮签多次。',
       helpSignRules2: '帮助奖励值为签到奖励的随机1%～10%。',
@@ -219,6 +220,7 @@ export default {
       helpSignSuccess:'Help sign in success',
       hasGetReward:'Reward has arrived',
       look:'Go to check',
+      signLimitNum: 'Current farm sign-in reward threshold',
 
       helpSignRules1:'Account can sign in once every 23 hours. Can help sign multiple times. ',
       helpSignRules2:'Reward value is a random 1%～10%. ',
