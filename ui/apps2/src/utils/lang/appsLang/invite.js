@@ -98,7 +98,8 @@ export default {
       farmRules4: '4. 农场设有代签到服务，代签者将会随机获取本次签到1～10%的奖励',
       farmRules5: '5. 签到保护为27小时，超过27小时没有执行签到操作，其他用户可帮您执行签到操作，但会损失一部分签到收益',
       farmRules6: '6. 不同农场之间代签到也可获得相应奖励，赶紧行动起来吧',
-      farmRules7: '7. 更多玩法敬请期待',
+      farmRules6_1: '7. 做市变动将自动签到',
+      farmRules7: '8. 更多玩法敬请期待',
 
       rewardRules: '收益规则',
       rewardRules1: '1. 财富值是衡量农场收益的唯一标准',
@@ -238,7 +239,8 @@ export default {
       farmRules4: '4. The farm has a sign-in service, and the sign-in person will randomly get a reward of 1-10% of this sign-in',
       farmRules5: '5. The sign-in protection is 27 hours. If no sign-in operation is performed for more than 27 hours, other users can help you perform the sign-in operation, but a part of the sign-in income will be lost',
       farmRules6: '6. Sign-in between different farms can also get corresponding rewards, hurry up and act.',
-      farmRules7: '7. Stay tuned for more ways to play',
+      farmRules6_1: '7. Market making changes will be automatically signed in',
+      farmRules7: '8. Stay tuned for more ways to play',
 
       rewardRules:'Reward Rules',
       rewardRules1: '1. Wealth value is the only measure of farm income',

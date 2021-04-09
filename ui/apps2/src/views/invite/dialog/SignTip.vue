@@ -10,6 +10,7 @@
       <div>{{ $t('invite.farmRules4') }}</div>
       <div>{{ $t('invite.farmRules5') }}</div>
       <div>{{ $t('invite.farmRules6') }}</div>
+      <div>{{ $t('invite.farmRules6_1') }}</div>
       <div>{{ $t('invite.farmRules7') }}</div>
     </div>
   </div>
