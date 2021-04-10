@@ -503,6 +503,7 @@ export default {
       //   this.$toast.fail(this.$t('invite.errTip3'))
       //   return
       // }
+      console.log(v)
       const name = this.account.name;
       const permission = this.account.permissions;
       const params = {
@@ -515,7 +516,7 @@ export default {
           }],
           data: {
             farmer: name,
-            farm: v.owner,
+            farm: this.dName,
           }
         }]
       }
