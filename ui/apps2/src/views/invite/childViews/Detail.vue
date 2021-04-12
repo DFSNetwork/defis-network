@@ -494,7 +494,7 @@ export default {
       }
     },
     // 加入农场
-    handleAddFarm(v) {
+    handleAddFarm() {
       if (this.joinName) {
         this.$toast.fail(this.$t('invite.errTip1'))
         return
@@ -503,7 +503,7 @@ export default {
       //   this.$toast.fail(this.$t('invite.errTip3'))
       //   return
       // }
-      console.log(v)
+      // console.log(v)
       const name = this.account.name;
       const permission = this.account.permissions;
       const params = {

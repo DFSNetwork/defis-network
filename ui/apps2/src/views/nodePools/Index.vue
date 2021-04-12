@@ -313,7 +313,7 @@ export default {
           if (tReward > accReward) {
             tReward = accReward
           }
-          // console.log(tReward)
+          // console.log(tReward, this.poolsData[v].price)
           const aboutEos = tReward * this.poolsData[v].price;
           this.$set(this.poolsData[v], 'aboutEos', Number(aboutEos || 0).toFixed(4))
           this.$set(this.poolsData[v], 'showReward', Number(tReward).toFixed(8))
@@ -601,7 +601,9 @@ export default {
       clearInterval(this.lpRunTimer)
       this.lpRunTimer = setInterval(() => {
         const priceMarket = this.lpLists.find(vv => vv.mid === 602) || {};
-        const price = priceMarket.price || 0
+        let price = parseFloat(priceMarket.reserve0) / parseFloat(priceMarket.reserve1)
+        // console.log(priceMarket)
+        price = price || 0
         const keys = Object.keys(this.accLpData)
         const newJson = {}
         keys.forEach((mid) => {
@@ -614,6 +616,7 @@ export default {
           if (tReward > accLpReward) {
             tReward = accLpReward
           }
+          console.log(showReward, price)
           const aboutEos = showReward * price;
           // console.log(tReward, accLpReward, t)
           this.$set(accLpData, 'aboutEos', Number(aboutEos).toFixed(4))
