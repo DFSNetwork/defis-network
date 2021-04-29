@@ -84,7 +84,7 @@ export default {
       const lists = {}
       keys.forEach(key => {
         let coin = key.split('_markets')[0].toUpperCase()
-        if (coin === 'BTC') {
+        if (coin === 'BTC' || coin.toLowerCase() === 'display_limit') {
           return
         }
         coin = coin === 'BTC' ? coin = 'PBTC' : coin;

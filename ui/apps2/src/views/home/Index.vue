@@ -95,12 +95,14 @@ export default {
       }
       const keys = Object.keys(result);
       const lists = {}
+        console.log(result)
       keys.forEach(key => {
         let coin = key.split('_markets')[0].toUpperCase()
-        if (coin === 'BTC') {
+        if (coin === 'BTC' || coin.toLowerCase() === 'display_limit') {
           return
         }
         coin = coin === 'BTC' ? coin = 'PBTC' : coin;
+        console.log(result[key], coin)
         const arr = dealAreaArr(result[key] || [], coin)
         lists[coin] = arr;
       })
