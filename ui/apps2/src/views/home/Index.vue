@@ -95,7 +95,6 @@ export default {
       }
       const keys = Object.keys(result);
       const lists = {}
-        console.log(result)
       keys.forEach(key => {
         let coin = key.split('_markets')[0].toUpperCase()
         if (coin === 'BTC' || coin.toLowerCase() === 'display_limit') {
