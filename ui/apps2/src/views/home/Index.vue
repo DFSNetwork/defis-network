@@ -102,7 +102,6 @@ export default {
           return
         }
         coin = coin === 'BTC' ? coin = 'PBTC' : coin;
-        console.log(result[key], coin)
         const arr = dealAreaArr(result[key] || [], coin)
         lists[coin] = arr;
       })
