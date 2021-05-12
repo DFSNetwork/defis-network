@@ -264,7 +264,7 @@ export default {
         code: 'minedfstoken',
         coin: 'DFS',
         decimal: 4,
-        account: 'dfsdsrbuffer'
+        account: 'dfspool44444'
       };
       EosModel.getCurrencyBalance(params, res => {
         let balance = toFixed('0.0000000000001', params.decimal);

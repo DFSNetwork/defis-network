@@ -1,17 +1,13 @@
 <template>
   <div class="accWallet">
     <div class="flexb title">
-      <span>我的钱包</span>
-      <!-- <span class="flexa green_p">
-        <span>立即做市</span>
-        <img class="rightIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/right.png" alt="">
-      </span> -->
+      <span>{{ $t('my.wallet') }}</span>
     </div>
     <div class="wallet flexb">
       <div class="has">
         <div class="subTitle flexa" @click="showTip = true">
-          <span>DFS资产</span>
-          <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg">
+          <span>{{ $t('my.dfsAssets') }}</span>
+          <!-- <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg"> -->
         </div>
         <div>
           <span class="num dinBold">{{ allDfs | numberTofixed}}</span>
@@ -19,7 +15,7 @@
         </div>
       </div>
       <div class="has unClaim">
-        <div class="subTitle">待领取(DFS)</div>
+        <div class="subTitle">{{ $t('my.unClaim') }}(DFS)</div>
         <div>
           <span class="num dinBold">{{ rewardRun || '0.00000000' }}</span>
           <span class="small">DFS</span>

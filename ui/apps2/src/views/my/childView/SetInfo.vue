@@ -4,7 +4,7 @@
       <span class="back flexa" @click="$router.back()">
         <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/back.png" alt="">
       </span>
-      <span>修改资料</span>
+      <span>{{ $t('my.editInfo') }}</span>
       <span class="back"></span>
     </div>
 
@@ -13,16 +13,16 @@
       <div class="headImgItem" @click="handleShowImgCheck('head')">
         <img class="headImg" :src="avatar || 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg'">
         <div class="checkBtn">
-          <span class="checkHead">选择头像</span>
+          <span class="checkHead">{{ $t('my.headImg') }}</span>
         </div>
       </div>
       <van-form>
         <div class="flexb item">
           <van-field
             v-model="nick"
-            name="用户名"
-            label="用户名"
-            placeholder="用户名"
+            :name="$t('my.accName')"
+            :label="$t('my.accName')"
+            :placeholder="$t('my.accName')"
           />
           <img class="rightIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
         </div>
@@ -30,8 +30,8 @@
           <van-field
             v-model="acc"
             disabled
-            name="EOS账号"
-            label="EOS账号"
+            :name="$t('my.accAccount')"
+            :label="$t('my.accAccount')"
           />
         </div>
         <div class="flexb item">
@@ -40,8 +40,8 @@
             clickable
             :value="sex"
             name="picker"
-            label="性别"
-            placeholder="性别"
+            :label="$t('my.sex')"
+            :placeholder="$t('my.sex')"
             @click="showPicker = true"
           />
           <img class="rightIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
@@ -49,22 +49,22 @@
         <div class="flexb item">
           <van-field
             v-model="desc"
-            name="简介"
-            label="简介"
-            placeholder="简介"
+            :name="$t('my.desc')"
+            :label="$t('my.desc')"
+            :placeholder="$t('my.desc')"
           />
           <img class="rightIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
         </div>
         <div class="flexb item bgItem" @click="handleShowImgCheck('bg')">
           <div class="flexb">
-            <span>背景图</span>
+            <span>{{ $t('my.bgImg') }}</span>
             <img class="bgImg" :src="cover || 'https://cdn.jsdelivr.net/gh/defis-net/material/accBanner/banner0.png'" alt="">
           </div>
           <img class="rightIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/itemRight.png" alt="">
         </div>
 
         <div class="btnDiv">
-          <div class="btn flexc" @click="handleSave">保存</div>
+          <div class="btn flexc" @click="handleSave">{{ $t('my.save') }}</div>
         </div>
       </van-form>
     </div>
@@ -103,11 +103,11 @@ export default {
       avatar: '', // 头像
       nick: '', // 昵称
       acc: '', // 账号
-      sex: '保密', // 性别
+      sex: this.$t('my.mi'), // 性别
       desc: '', // 简介
       cover: '', // 背景
 
-      columns: ['保密', '男', '女'],
+      columns: [this.$t('my.mi'), this.$t('my.man'), this.$t('my.woman')],
       showPicker: false,
       showCheckImg: false,
       type: '',
@@ -138,11 +138,11 @@ export default {
         this.desc = newVal.desc;
         this.nick = newVal.nick;
         if (newVal.sex === 1) {
-          this.sex = '男'
+          this.sex = this.$t('my.man')
         } else if (newVal.sex === 0) {
-          this.sex = '女'
+          this.sex = this.$t('my.woman')
         } else {
-          this.sex = '保密'
+          this.sex = this.$t('my.mi')
         }
       },
       deep: true,

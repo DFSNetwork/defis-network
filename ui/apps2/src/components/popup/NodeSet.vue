@@ -45,7 +45,7 @@ export default {
       nodeUrl: '',
       nodeList: [
         {
-          name: '大丰收',
+          name: 'BlockEden',
           area: 'production',
           protocol: 'https',
           host: 'eos.blockeden.cn', // eospush.tokenpocket.pro

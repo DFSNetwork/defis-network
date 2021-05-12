@@ -46,7 +46,7 @@
           <div class="item">
             <div class="subTitle tip">
               <span>{{ $t('dex.poolNum') }}</span>
-              <span class="green_p" @click="handleTo('poolsMarket')">{{ $t('pools.toPool') }}></span>
+              <span class="green_p" @click="handleTo('dfsMinePool')">{{ $t('pools.toPool') }}></span>
             </div>
             <div class="num din">
               <span>{{ thisMarket.reserve0 }} / {{ thisMarket.reserve1 }}</span>
@@ -143,7 +143,7 @@ import Withdraw from './comp/Withdraw'
 import { getYfcReward,
   toFixed, accDiv } from '@/utils/public';
 import { perDayRewardV3 } from '@/utils/logic';
-import { dealApy } from '@/views/pddex/comp/appLogic.js'
+// import { dealApy } from '@/views/pddex/comp/appLogic.js'
 
 export default {
   name: 'market',
@@ -182,6 +182,8 @@ export default {
       },
       lpApy: {},
       token: '0',
+      countApy: '0.00',
+      aprInfo: {},
     }
   },
   computed: {
@@ -195,14 +197,14 @@ export default {
       const rewardV3 = perDayRewardV3(this.thisMarket.mid)
       return rewardV3
     },
-    aprInfo() {
-      const market = this.thisMarket;
-      const aprInfo = dealApy(market)
-      return aprInfo;
-    },
-    countApy() {
-      return parseFloat(this.aprInfo.countApy || 0).toFixed(2)
-    },
+    // aprInfo() {
+    //   const market = this.thisMarket;
+    //   const aprInfo = dealApy(market)
+    //   return aprInfo;
+    // },
+    // countApy() {
+    //   return parseFloat(this.aprInfo.countApy || 0).toFixed(2)
+    // },
   },
   watch: {
     marketLists: {
@@ -226,6 +228,16 @@ export default {
       deep: true,
       immediate: true
     },
+    thisMarket: {
+      handler: function tm(newVal, oldVal) {
+        if (!newVal || (oldVal && oldVal.mid === newVal.mid)) {
+          return
+        }
+        this.handleGetApy()
+      },
+      deep: true,
+      immediate: true
+    },
     scatter: {
       handler: function listen(newVal) {
         if (newVal.identity) {
@@ -237,6 +249,17 @@ export default {
     },
   },
   methods: {
+    async handleGetApy() {
+      const params = {
+        mid: this.thisMarket.mid
+      };
+      const {status, result} = await this.$api.get_market_info(params)
+      if (!status) {
+        return
+      }
+      this.countApy = parseFloat(result.apy || 0).toFixed(2);
+      this.aprInfo = result.apy_detail
+    },
     handleClose() {
       this.showMarketList = false;
       this.showAdd = false;

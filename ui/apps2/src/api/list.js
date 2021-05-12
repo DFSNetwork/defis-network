@@ -160,3 +160,16 @@ export function get_currency_balance(params) {
     })
   })
 }
+
+// 获取交易对数据
+export function get_market_info(params) {
+  return new Promise((resolve, reject) => {
+    // axios.get('http://localhost:8101/apy/apy-by-mid', {params}).then((res) => {
+    axios.get('https://api.defis.network/apy/apy-by-mid', {params}).then((res) => {
+      const result = res.data;
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}

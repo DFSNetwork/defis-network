@@ -15,7 +15,7 @@
       <span class="right green" v-loading="allClaiming" @click="handleRegLength()">一键领取</span>
     </div>
     <div class="proLists">
-      <div @click="handleTo('pools')">
+      <div @click="handleTo('dfsMine')">
         <DfsMiner ref="dfsMiner"  :allClaiming="allClaiming"/>
       </div>
       <div @click="handleTo('dss')">

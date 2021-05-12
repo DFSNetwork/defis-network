@@ -2,32 +2,32 @@
   <div class="accCenterTools">
     <!-- 应用功能 -->
     <div class="tools">
-      <div class="title">数据与服务</div>
+      <div class="title">{{ $t('sys.dataAndServer') }}</div>
       <div class="lists flexa">
         <div class="list" @click="handleTo('history', {mid: 39})">
           <img class="icon big" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/swapHis.png" alt="">
-          <div>交易记录</div>
+          <div>{{ $t('sys.tradeHis') }}</div>
         </div>
         <div class="list" @click="handleTo('MarketHis', {mid: 39})">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/marketHis.png" alt="">
-          <div>做市记录</div>
+          <div>{{ $t('sys.marketHis') }}</div>
         </div>
         <div class="list" @click="handleTo('pddexOrder')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/order.png" alt="">
-          <div>我的订单</div>
+          <div>{{ $t('sys.myOrders') }}</div>
         </div>
         <div class="list" @click="handleTo('myMarketList')">
           <img class="icon big" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/myMarket.png" alt="">
-          <div>我的做市</div>
+          <div>{{ $t('sys.myMarkets') }}</div>
         </div>
       </div>
     </div>
     <div class="tools">
-      <div class="title">投票与治理</div>
+      <div class="title">{{ $t('sys.voteAndGen') }}</div>
       <div class="lists flexa">
         <div class="list" @click="handleTo('vote')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/minedfstoken-dfs.png" alt="">
-          <div>DFS投票</div>
+          <div>{{ $t('sys.coinVote', {coin: 'DFS'}) }}</div>
         </div>
         <div class="list">
           <van-popover v-model="showGovern" trigger="click" @click.stop="''">
@@ -37,48 +37,48 @@
             </div>
             <template #reference>
               <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png" alt="">
-              <div>TAG投票</div>
+              <div>{{ $t('sys.coinVote', {coin: 'DFS'}) }}</div>
             </template>
           </van-popover>
         </div>
         <div class="list" @click="handleToProject('usdxVote')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/usdx.png" alt="">
-          <div>USDX系统</div>
+          <div>{{ $t('sys.usdxSys') }}</div>
         </div>
         <div class="list" @click="handleTo('nodeVote')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg" alt="">
-          <div>EOS节点</div>
+          <div>{{ $t('sys.eosNode') }}</div>
         </div>
       </div>
     </div>
 
     <!-- 游戏中心 -->
     <div class="tools">
-      <div class="title">应用与游戏</div>
+      <div class="title">{{ $t('sys.apps') }}</div>
       <div class="lists flexa">
         <div class="list" @click="handleToProject('dtoken')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/dcap.png" alt="">
-          <div>跨链充提</div>
+          <div>{{ $t('sys.dcap') }}</div>
           <img class="beta" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/beta.png" alt="">
         </div>
         <div class="list" @click="handleToProject('diary')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/notice.png" alt="">
-          <div>大丰收日记</div>
+          <div>{{ $t('sys.diary') }}</div>
           <img class="beta hot" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/hot.png" alt="">
         </div>
-        <div class="list" @click="handleTo('pools')">
+        <div class="list" @click="handleTo('dfsMine')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/minedfstoken-dfs.png" alt="">
-          <div>DFS 矿池</div>
+          <div>{{ $t('sys.coinPool', {coin: 'DFS'}) }}</div>
         </div>
         <div class="list" @click="handleTo('nodePools')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png" alt="">
-          <div>TAG 矿池</div>
+          <div>{{ $t('sys.coinPool', {coin: 'TAG'}) }}</div>
         </div>
       </div>
       <div class="lists flexa">
         <div class="list" @click="handleToProject('usdx')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/usdx.png" alt="">
-          <div>USDX 矿池</div>
+          <div>{{ $t('sys.coinPool', {coin: 'USDX'}) }}</div>
         </div>
         <div class="list" @click="handleToProject('eosdefi')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg" alt="">
@@ -86,7 +86,7 @@
         </div>
         <div class="list" @click="handleTo('farms')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/yfcFarm.png" alt="">
-          <div>农活大厅</div>
+          <div>{{ $t('sys.farm') }}</div>
         </div>
 
         <div class="list">
@@ -110,25 +110,25 @@
         </div>
         <div class="list" @click="handleToProject('totalData')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/total.png" alt="">
-          <div>数据总览</div>
+          <div>{{ $t('sys.dataTotal') }}</div>
         </div>
         <div class="list" @click="handleToProject('kline')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/kline.png" alt="">
-          <div>K线数据</div>
+          <div>{{ $t('sys.kline') }}</div>
         </div>
         <div class="list" @click="handleTo('coinViews', {mid: 39})">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/coinView.png" alt="">
-          <div>代币观察</div>
+          <div>{{ $t('sys.coinViews') }}</div>
         </div>
       </div>
       <div class="lists flexa">
         <div class="list" @click="handleTo('fundation')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/fundation.png" alt="">
-          <div>乐捐系统</div>
+          <div>{{ $t('sys.fundation') }}</div>
         </div>
         <div class="list" @click="handleToProject('help')">
           <img class="icon" src="https://cdn.jsdelivr.net/gh/defis-net/material2/icon/helper.png" alt="">
-          <div>大丰收助手</div>
+          <div>{{ $t('sys.helper') }}</div>
         </div>
       </div>
     </div>
@@ -198,10 +198,6 @@ export default {
       }
       if (name === 'eosdefi') {
         location.href = 'http://eos-defi.sgxiang.com/'
-        return
-      }
-      if (name === 'pbtc') {
-        location.href = 'https://dapp.ptokens.io/pbtc-on-eos/issue-redeem'
         return
       }
       if (name === 'totalData') {

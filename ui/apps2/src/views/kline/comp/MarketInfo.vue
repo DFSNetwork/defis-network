@@ -55,14 +55,14 @@
       <div class="item">
         <div class="subTitle">做市年化收益</div>
         <div class="num flexa">
-          <span>实时收益：{{ checkedMarket.countApy }}%</span>
+          <span>实时收益：{{ checkedMarket.apy }}%</span>
           <span class="detail" @click="showApyDetail = true">详情></span>
         </div>
       </div>
       <div class="item">
         <div class="subTitle flexa">
           <span>流动池数量</span>
-          <span class="detail" @click="handleTo('poolsMarket')">前往矿池></span>
+          <span class="detail" @click="handleTo('dfsMinePool')">前往矿池></span>
         </div>
         <div class="num flexa dinReg">
           {{ checkedMarket.reserve1 }} / {{ checkedMarket.reserve0 }}
@@ -78,8 +78,8 @@
     <el-dialog
       class="myDialog apy"
       :visible.sync="showApyDetail">
-      <MarketApy :countApy="checkedMarket.countApy" :isActual="true"
-                 :aprInfo="checkedMarket"/>
+      <MarketApy :countApy="checkedMarket.apy" :isActual="true"
+                 :aprInfo="checkedMarket.apy_detail"/>
     </el-dialog>
 
     <!-- 关于做市 -->

@@ -1,10 +1,10 @@
 <template>
   <div class="sureTip">
-    <div class="title">取消关注</div>
-    <div class="content">您确定取消对 {{ checkItem.owner }} 的关注么？</div>
+    <div class="title">{{ $t('my.cancelFollow') }}</div>
+    <div class="content">{{ $t('my.cancelFlTip', {owner:checkItem.owner}) }}</div>
     <div class="btnDiv flexb">
-      <div class="btn flexc cancel" @click="handleClose">取消</div>
-      <div class="btn flexc" @click="handleSure">确定</div>
+      <div class="btn flexc cancel" @click="handleClose">{{ $t('public.cancel') }}</div>
+      <div class="btn flexc" @click="handleSure">{{ $t('public.confirm') }}</div>
     </div>
   </div>
 </template>

@@ -2,7 +2,16 @@
   <div class="marketApy">
     <div class="title">{{ $t('apy.title') }}</div>
     <div class="table">
-      <div class="flexa">
+      <div class="flexa" v-if="parseFloat(aprInfo.feesApy || 0)">
+        <span>{{ $t('info.markerFeesApr') }}：</span>
+        <span>{{ `${parseFloat(aprInfo.feesApy || 0).toFixed(2)}%` }}</span>
+      </div>
+      <div class="flexa" v-if="parseFloat(aprInfo.dfsApy || 0)">
+        <span>{{ $t('info.dfsMineApr') }}：</span>
+        <span>{{ `${parseFloat(aprInfo.dfsApy || 0).toFixed(2)}%` }}</span>
+      </div>
+      
+      <div class="flexa" v-if="parseFloat(aprInfo.feesApr || 0)">
         <span>{{ $t('info.markerFeesApr') }}：</span>
         <span>{{ `${parseFloat(aprInfo.feesApr || 0).toFixed(2)}%` }}</span>
       </div>
@@ -18,9 +27,9 @@
         <span>{{ $t('apy.tagLpApy') }}：</span>
         <span>{{ `${parseFloat(aprInfo.tagLpApy).toFixed(2)}%` }}</span>
       </div>
-      <div class="flexa" v-if="parseFloat(aprInfo.usdcApr)">
+      <div class="flexa" v-if="parseFloat(aprInfo.usdcApy)">
         <span>{{ $t('apy.usdcLpApy') }}：</span>
-        <span>{{ `${parseFloat(aprInfo.usdcApr).toFixed(2)}%` }}</span>
+        <span>{{ `${parseFloat(aprInfo.usdcApy).toFixed(2)}%` }}</span>
       </div>
       <div class="flexa total">
         <span>{{ $t('info.totalApr') }}：</span>

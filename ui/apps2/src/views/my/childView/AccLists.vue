@@ -4,14 +4,14 @@
       <span class="back flexa" @click="$router.back()">
         <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/back.png" alt="">
       </span>
-      <span v-if="type === 'follow' || type === 'otherFollow'">关注</span>
-      <span v-else-if="type === 'fans' || type === 'otherFans'">粉丝</span>
-      <span v-else>访客</span>
+      <span v-if="type === 'follow' || type === 'otherFollow'">{{ $t('my.follows') }}</span>
+      <span v-else-if="type === 'fans' || type === 'otherFans'">{{ $t('my.fans') }}</span>
+      <span v-else>{{ $t('my.visitors') }}</span>
       <span class="back"></span>
     </div>
     <div class="searchDiv flexa">
       <img src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/search.png">
-      <van-field class="searchIpt" v-model="search" @input="handleSearch" placeholder="请输入用户ID" />
+      <van-field class="searchIpt" v-model="search" @input="handleSearch" :placeholder="$t('my.searchId')" />
     </div>
 
     <div class="lists">
@@ -24,25 +24,25 @@
         > -->
         <div class="noData tip" v-if="!lists.length">
           <img src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noData.png" alt="">
-          <div v-if="type === 'follow' || type === 'otherFollow'">还没有任何关注的人</div>
-          <div v-else-if="type === 'fans' || type === 'otherFans'">暂时没有粉丝哦</div>
-          <div v-else>暂时没有历史访问哦</div>
+          <div v-if="type === 'follow' || type === 'otherFollow'">{{ $t('my.noFollow') }}</div>
+          <div v-else-if="type === 'fans' || type === 'otherFans'">{{ $t('my.noFans') }}</div>
+          <div v-else>{{ $t('my.noVist') }}</div>
         </div>
         <div class="list flexb" v-for="(item, index) in lists" :key="index">
           <img class="headImg" :src="item.avatar" @click="handleTo(item)">
           <div class="mainData" @click="handleTo(item)">
             <div class="name">{{ item.nick || item.owner }}</div>
-            <div class="desc tip">{{ item.desc || '暂时没有简介' }}</div>
+            <div class="desc tip">{{ item.desc || $t('my.noDesc') }}</div>
           </div>
           <div class="type">
             <div class="atted flexc"
               v-if="type === 'follow' || type === 'otherFollow'"
-              @click="handleShowCancel(item)">已关注</div>
+              @click="handleShowCancel(item)">{{ $t('my.followed') }}</div>
             <div v-else-if="type === 'fans' || type === 'otherFans'">
-              <span class="atted flexc" v-if="item.isFollow" @click="handleShowCancel(item)">互相关注</span>
-              <span class="fans flexc" @click="handleFollow(item)" v-else>回粉</span>
+              <span class="atted flexc" v-if="item.isFollow" @click="handleShowCancel(item)">{{ $t('my.followed2') }}</span>
+              <span class="fans flexc" @click="handleFollow(item)" v-else>{{ $t('my.followed3') }}</span>
             </div>
-            <div class="fans flexc" v-else>访问</div>
+            <div class="fans flexc" v-else>{{ $t('my.toVist') }}</div>
           </div>
         </div>
       <!-- </van-list> -->

@@ -190,6 +190,7 @@ export function logicToDealBoxMids(obj) {
 export function dealAreaArr(arr, coin) {
   const newArr = []
   const coinPrice = getAreaPrice(coin);
+  // console.log(arr)
   arr.forEach(list => {
     let v = list;
     if (v.contract0 === 'bgbgbgbgbgbg' || v.contract0 === 'betdicetoken' || v.contract0 === 'sportbetsbet'
@@ -221,6 +222,8 @@ export function dealAreaArr(arr, coin) {
         volume24H: v.volume24H,
         price_change_rate: v.price_change_rate,
         price_change_24h: v.price_change_24h,
+        apy: v.apy,
+        apy_detail: v.apy_detail,
       }
       v = tLi;
     }
@@ -265,14 +268,15 @@ export function dealAreaArr(arr, coin) {
       symbol: v.symbol1,
       imgUrl: getCoin(v.contract1, v.symbol1),
     }
+    v.apy = parseFloat(v.apy).toFixed(2),
     // 年化计算
-    const {countApy, lpApy, tagLpApy, aprV3, feesApr, usdcApr} = dealApy(v)
-    v.countApy = parseFloat(countApy || 0).toFixed(2);
-    v.lpApy = lpApy;
-    v.tagLpApy = parseFloat(tagLpApy || 0).toFixed(2);
-    v.aprV3 = parseFloat(aprV3 || 0).toFixed(2);
-    v.feesApr = parseFloat(feesApr || 0).toFixed(2);
-    v.usdcApr = parseFloat(usdcApr || 0).toFixed(2);
+    // const {countApy, lpApy, tagLpApy, aprV3, feesApy, usdcApr} = dealApy(v)
+    // v.countApy = parseFloat(countApy || 0).toFixed(2);
+    // v.lpApy = lpApy;
+    // v.tagLpApy = parseFloat(tagLpApy || 0).toFixed(2);
+    // v.aprV3 = parseFloat(aprV3 || 0).toFixed(2);
+    // v.feesApy = parseFloat(feesApy || 0).toFixed(2);
+    // v.usdcApy = parseFloat(usdcApr || 0).toFixed(2);
     newArr.push(v)
   })
   return newArr
@@ -302,9 +306,6 @@ function regExchange(coin, v) {
   if (tCoin === 'DFS' && v.contract0 === 'minedfstoken' && v.sym0 === '4,DFS') {
     return true
   }
-  if (tCoin === 'PBTC' && v.contract0 === 'btc.ptokens' && v.sym0 === '8,PBTC') {
-    return true
-  }
   return false
 }
 // 处理币种APY
@@ -317,7 +318,7 @@ export function dealApy(v) {
   const tagLpMids = store.state.config.tagLpMids;
   const lpMid = store.state.config.lpMid;
   // 手续费年化
-  let feesApr = 0
+  let feesApy = 0
   let newItem = v;
   if (!newItem.volume24H) {
     const market = marketListsPddex.find(vv => vv.mid === v.mid)
@@ -326,14 +327,11 @@ export function dealApy(v) {
   if (newItem.volume24H) {
     const fees = parseFloat(newItem.volume24H || 0) * 0.002;
     const sym0Liq = parseFloat(newItem.reserve0 || 0) * 2;
-    feesApr = fees / (sym0Liq - fees) * 365 * 100;
+    feesApy = fees / (sym0Liq - fees) * 365 * 100;
   } else {
     const storeFeesApr = store.state.sys.feesApr;
     const aprJson = storeFeesApr.find(vv => vv.mid === v.mid) || {};
-    feesApr = parseFloat(aprJson.poolsApr || 0)
-    if (newItem.mid === 637) {
-      console.log(aprJson)
-    }
+    feesApy = parseFloat(aprJson.poolsApr || 0)
   }
   // DFS 挖矿年化
   const rewardV3 = perDayRewardV3(v.mid)
@@ -344,7 +342,7 @@ export function dealApy(v) {
   if (has) {
     tagLpApy = getTagLpApy(v.mid)
   }
-  let countApy = parseFloat(feesApr) + parseFloat(aprV3)
+  let countApy = parseFloat(feesApy) + parseFloat(aprV3)
                  + parseFloat(tagLpApy)
   // LP 挖矿
   let lpApy = {}
@@ -414,7 +412,7 @@ export function dealApy(v) {
   // }
   countApy += Number(usdcApr || 0)
 
-  return {countApy, lpApy, tagLpApy, aprV3, feesApr, usdcApr}
+  return {countApy, lpApy, tagLpApy, aprV3, feesApy, usdcApr}
 }
 function mineCoinPrice(mineCoin = {}) {
   if (mineCoin.symbol0 === 'DFS') {

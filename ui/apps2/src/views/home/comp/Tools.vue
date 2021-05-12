@@ -24,7 +24,7 @@
           <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/vote_icon.png">
           <div>{{ $t('home.vote') }}</div>
         </div>
-        <div class="list" @click="handleTo('pools')">
+        <div class="list" @click="handleTo('dfsMine')">
           <img class="iconImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/dfs/mining_icon.png">
           <div>{{ $t('home.mine') }}</div>
         </div>

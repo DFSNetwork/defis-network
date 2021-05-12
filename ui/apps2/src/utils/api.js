@@ -10,7 +10,7 @@ function getHost() {
 
 export function getJson() {
   return new Promise((resolve, reject) => {
-    axios.get('https://cdn.jsdelivr.net/gh/defis-net/material2/coin/coinJson.json').then((res) => {
+    axios.get('https://www.defis.network/coin/coinJson.json').then((res) => {
       // let result = Object.assign(res.data, {});
       let result = res.data;
       resolve({ status: res.status === 200, result });
@@ -29,7 +29,7 @@ export function getVotePools() {
     "json":true,
     "index_position": 2,
     "key_type": "float64",
-    "limit": 21
+    "limit": 100
   }
   EosModel.getTableRows(params, (res) => {
     const rows = res.rows || [];
@@ -37,8 +37,8 @@ export function getVotePools() {
       return
     }
     store.dispatch('setRankTrade', rows)
-    // console.log(rows)
-    const lists = rows.slice(0, 21);
+    // console.log('setRankTrade', rows)
+    const lists = rows.slice(0, 30);
     getVoteRankConfV3(lists);
   })
 }
@@ -50,7 +50,7 @@ export function getVoteRankConfV3(lists) {
     "scope": "miningpool11",
     "json": true,
     "table": "poolslots2",
-    limit: 21,
+    limit: 30,
   }
   EosModel.getTableRows(params, (res) => {
     const rows = res.rows || [];
@@ -64,7 +64,7 @@ export function getVoteRankConfV3(lists) {
       const t = Object.assign({}, v, rows[index], deal)
       rankInfoV3.push(t)
     })
-    // console.log(rankInfoV3)
+    // console.log('rankInfoV3', rankInfoV3)
     store.dispatch('setRankInfoV3', rankInfoV3)
   })
 }

@@ -26,7 +26,7 @@
             v-clipboard:error="onError"
             src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/copy.png" alt="">
         </div>
-        <div class="intro" @click="showInfo = true">{{ accInfo.desc || '暂时没有简介' }}</div>
+        <div class="intro" @click="showInfo = true">{{ accInfo.desc || $t('my.noDesc') }}</div>
       </div>
     </div>
     <!-- 粉丝 & 资料编辑 -->
@@ -34,15 +34,15 @@
       <div class="flexb numDiv">
         <div @click="$router.push({name: 'fans'})">
           <div class="num dinBold">{{ accFansInfo.fans || 0 }}</div>
-          <div>粉丝</div>
+          <div>{{ $t('my.fans') }}</div>
         </div>
         <div @click="$router.push({name: 'follow'})">
           <div class="num dinBold">{{ accFansInfo.follow || 0 }}</div>
-          <div>关注</div>
+          <div>{{ $t('my.follows') }}</div>
         </div>
         <div>
           <div class="num dinBold">{{ visitor_count }}</div>
-          <div>访客</div>
+          <div>{{ $t('my.visitors') }}</div>
         </div>
       </div>
       <!-- 编辑资料 -->
@@ -53,7 +53,7 @@
         :show-close="false"
         :append-to-body="true"
         :visible.sync="showInfo">
-        <DetailInfo :info="accInfo.desc || '暂时没有简介'"/>
+        <DetailInfo :info="accInfo.desc || $t('my.noDesc')"/>
       </el-dialog>
     </div>
   </div>

@@ -4,7 +4,7 @@
     <div class="voteLists">
       <div class="noData tip" v-if="!rankLists.length">{{ $t('public.noData') }}</div>
       <template  v-for="(item, index) in rankLists">
-        <div v-if="index < 21" class="list flexa" :key="index">
+        <div v-if="index < 30" class="list flexa" :key="index">
           <div class="rankDiv dinBold">
             <img v-if="index < 3" :src="`https://cdn.jsdelivr.net/gh/defis-net/material/rank/voteRank${index+1}.png`" alt="">
             <span v-else>{{index + 1}}</span>

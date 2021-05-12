@@ -66,7 +66,7 @@
       :show-close="false"
       :visible.sync="showPools">
       <div @click="showPools = false">
-        <div class="create flexc" @click="handleTo('pools')">{{ $t('sys.coinPool', {coin: 'DFS'}) }}</div>
+        <div class="create flexc" @click="handleTo('dfsMine')">{{ $t('sys.coinPool', {coin: 'DFS'}) }}</div>
         <div class="create flexc" @click="handleTo('nodePools')">{{ $t('sys.coinPool', {coin: 'TAG'}) }}</div>
         <div class="create flexc" @click="handleToProject('usdx')">{{ $t('sys.coinPool', {coin: 'USDX'}) }}</div>
       </div>

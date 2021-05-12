@@ -72,7 +72,7 @@
           </div>
           <div class="btnDiv flexb">
             <div class="btn flexc" v-loading="loading" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
-            <div class="ptokens" v-if="isPtokens" @click="handleToProject('dtoken')">
+            <div class="dtokens" v-if="isDtokens" @click="handleToProject('dtoken')">
               <img :src="ptokenData.imgUrl">
               <div>{{ $t('sys.dAndW') }}</div>
             </div>
@@ -148,7 +148,7 @@
             </span>
             <span class="din">{{fees}} {{ thisMarket0.symbol }}</span>
           </div>
-          <div class="flexb" v-if="Number(reward)">
+          <!-- <div class="flexb" v-if="Number(reward)">
             <span class="flex">
               <span class="tip">{{ $t('mine.mineBonus') }}</span>
               <el-popover 
@@ -156,13 +156,12 @@
                 popper-class="mypopper"
                 placement="top-start"
                 trigger="click">
-                <!-- 每笔交易的（0.30%）会给到流动性提供者 -->
                 <div class="qusTip">{{ $t('dex.qusTip4') }}</div>
                 <span slot="reference" class="flexc ml10"><img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
             <span class="din">{{ reward }} DFS</span>
-          </div>
+          </div> -->
           <div class="flexb fee">
             <div>
               <span class="flexa" v-if="isMoreRouter" @click="showMoreRouter = true">
@@ -187,7 +186,7 @@
       <div class="flexb">
         <div>
           <span>{{ $t('dex.poolNum') }}</span>
-          <span class="marketNow" @click="handleTo('poolsMarket')">{{ $t('pools.toPool') }} ></span>
+          <span class="marketNow" @click="handleTo('dfsMinePool')">{{ $t('pools.toPool') }} ></span>
         </div>
         <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
           <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/tip.svg" alt="">
@@ -331,7 +330,7 @@ export default {
       marketLists: state => state.sys.marketLists,
       rSwitch: state => state.app.rSwitch,
     }),
-    isPtokens() {
+    isDtokens() {
       if (this.thisMarket0.contract === 'asset.dtoken' && this.thisMarket0.symbol === 'ETH') {
         return this.thisMarket0
       }
@@ -1188,7 +1187,7 @@ export default {
       background:rgba(2,198,152,1);
     }
   }
-  .ptokens{
+  .dtokens{
     margin-left: 30px;
     font-size: 24px;
     text-align: center;

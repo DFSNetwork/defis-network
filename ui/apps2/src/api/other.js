@@ -9,7 +9,7 @@ function unZip(deflated) {
 
 export function getJson() {
   return new Promise((resolve, reject) => {
-    axios.get('https://cdn.jsdelivr.net/gh/defis-net/material2/coin/coinJson.json').then((res) => {
+    axios.get('https://www.defis.network/coin/coinJson.json').then((res) => {
       // let result = Object.assign(res.data, {});
       let result = res.data;
       resolve({ status: res.status === 200, result });
@@ -101,7 +101,8 @@ export function getBpTags() {
 // 获取PDDEX行情列表
 export function getPddexMarkets() {
   return new Promise((resolve, reject) => {
-    axios.get('https://api.defis.network/market_bak/tops2').then((res) => {
+    axios.get('https://api.defis.network/apy/tops2').then((res) => {
+    // axios.get('http://localhost:8101/apy/tops2').then((res) => {
       let result = unZip(res.data)
       result = Object.assign(JSON.parse(result), {});
       resolve({ status: res.status === 200, result });

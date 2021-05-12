@@ -125,7 +125,7 @@ export default {
       allList: [],
       rankList: [],
       myVoteList: [],
-      maxLen: 7,
+      maxLen: 20,
       accNum: 0,
 
       // 处理票数
@@ -203,8 +203,10 @@ export default {
     handleDealMarket(marketLists) {
       const dealTagLists = [];
       marketLists.forEach(v => {
-        if ((v.contract0 === 'eosio.token' && v.symbol0 === 'EOS') ||
-            (v.contract0 === 'tethertether' && v.symbol0 === 'USDT')) {
+        if ((v.contract0 === 'eosio.token' || v.contract1 === 'eosio.token') ||
+            (v.contract0 === 'tethertether' || v.contract1 === 'tethertether') ||
+            (v.contract0 === 'minedfstoken' || v.contract1 === 'minedfstoken')
+          ) {
           dealTagLists.push(v)
           return
         }
@@ -337,7 +339,7 @@ export default {
       const newArr = allList.sort((a, b) => {
         return parseInt(b.total_votes || 0) - parseInt(a.total_votes || 0)
       });
-      this.rankList = newArr.slice(0, 21);
+      this.rankList = newArr.slice(0, 30);
       this.$forceUpdate()
     },
     // 查询我的投票

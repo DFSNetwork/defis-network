@@ -16,3 +16,9 @@ export function fullScreen(type) {
     fullScreen: type
   })
 }
+export function isTpWallet() {
+  if (Tp.isConnected()) {
+    return true
+  }
+  return false;
+}
