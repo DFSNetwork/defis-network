@@ -3,6 +3,7 @@ import ScatterJS from 'scatterjs-core';
 // import ScatterEOS from 'scatterjs-plugin-eosjs2';
 import ScatterEOS from 'scatterjs-plugin-eosjs';
 // import Eos from 'eosjs';
+// import { isTpWallet } from '@/utils/wallet/fullScreen'; // tokenpocket JS
 
 import axios from 'axios';
 import store from '@/store';
@@ -121,7 +122,6 @@ class ScatterClass {
   /* -------- 获取余额 end -------- */
 
   transfer(obj, callback) {
-    console.log(obj)
     const formName = store.state.app.account.name;
     const permission = store.state.app.account.permissions;
     const params = {
@@ -142,6 +142,10 @@ class ScatterClass {
         }
       ]
     }
+    // if (isTpWallet()) {
+    //   this.handleUseFreeCpu(params, callback)
+    //   return
+    // }
     this.eosJs.transaction(params, {
       blocksBehind: 3,
       expireSeconds: 30,
@@ -160,6 +164,10 @@ class ScatterClass {
       self.toTransaction(obj, callback)
       return
     }
+    // if (isTpWallet()) {
+    //   this.handleUseFreeCpu(params, callback)
+    //   return
+    // }
     self.eosJs.transaction(params, {
       blocksBehind: 3,
       expireSeconds: 30,
@@ -168,6 +176,56 @@ class ScatterClass {
     }).catch((e) => {
       self.dealError(e, callback);
     });
+  }
+
+  handleUseFreeCpu(params, callback) {
+    console.log(params)
+    let actor = '11111cpufree';
+    params.actions.forEach(v => {
+      v.authorization.unshift({ actor, permission: 'active' })
+    })
+    
+    this.eosJs.transaction(params, {
+      broadcast: !1,
+      sign: !0,
+    }).then(res => {
+      if (res.processed || res.transaction_id) {
+        const p = res;
+        const l = p.transaction.transaction;
+        l.signatures = p.transaction.signatures;
+        l.context_free_data = [];
+        // const signed = JSON.stringify(l);
+        const signed = l;
+        this.pushFreeCpu(signed, (error, resFree) => {
+          if (resFree) {
+            callback(null, resFree);
+            return;
+          }
+          this.errorCall(error, callback);
+        })
+      }
+    }).catch((e) => {
+      this.errorCall(e, callback);
+    });
+  }
+
+  pushFreeCpu(signedTx, cb) {
+    let url = 'http://47.243.71.86:7001/api/common/freeCpu';
+    // let url = 'http://192.168.31.101:7001/api/common/freeCpu';
+    axios.post(url, signedTx, {
+      headers: {
+        accept: 'application/json, text/plain, */*',
+      },
+    }).then((res) => {
+      if (res.data.code !== 0) {
+        const msg = res.data.message;
+        cb(msg, null);
+        return
+      }
+      cb(null, res.data)
+    }).catch((error) => {
+      console.log(error); // eslint-disable-line
+    })
   }
 
   dealError(e, callback) {

@@ -2,7 +2,7 @@
   <div class="header flexb">
     <div class="tools flexb">
       <div class="logoDiv" :class="{'ani': ani}" @click="handleToIndex" @dblclick="handleDbClick">
-        <img class="logo" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png">
+        <img class="logo" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/minedfstoken-dfs.png">
       </div>
       <span class="create flexc" @click="showVote = true">
         <span>{{ $t('vote.vote') }}</span>
@@ -66,7 +66,7 @@
       :show-close="false"
       :visible.sync="showPools">
       <div @click="showPools = false">
-        <div class="create flexc" @click="handleTo('pools')">{{ $t('sys.coinPool', {coin: 'DFS'}) }}</div>
+        <div class="create flexc" @click="handleTo('dfsMine')">{{ $t('sys.coinPool', {coin: 'DFS'}) }}</div>
         <div class="create flexc" @click="handleTo('nodePools')">{{ $t('sys.coinPool', {coin: 'TAG'}) }}</div>
         <div class="create flexc" @click="handleToProject('usdx')">{{ $t('sys.coinPool', {coin: 'USDX'}) }}</div>
       </div>
@@ -140,10 +140,10 @@ export default {
       this.aniTimer = setTimeout(() => {
         this.ani = false;
       }, 200);
-      if (this.$route.name === 'index') {
+      if (this.$route.name === 'home') {
         return
       }
-      this.$router.push({name: 'index'})
+      this.$router.push({name: 'home'})
     },
     handleDbClick() {
       this.showEgg = true;
@@ -199,16 +199,9 @@ export default {
         location.href = 'https://dbc.yfc.one'
         return
       }
-      if (name === 'time') {
-        location.href = 'https://timemine.xloot.io/'
-        return
-      }
       if (name === 'eosdefi') {
         location.href = 'http://eos-defi.sgxiang.com/'
         return
-      }
-      if (name === 'loop') {
-        location.href = 'https://loop.ech.one/index.html'
       }
       if (name === 'usdx') {
         location.href = 'https://usdx.gitee.io/'

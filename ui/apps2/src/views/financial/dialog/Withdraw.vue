@@ -8,7 +8,7 @@
         <div class="bal dinReg" @click="handlePercent(1)">{{ $t('public.balance') }}：{{ depositBal }} EOS</div>
         <div class="flexb">
           <div class="flexa coinInfo">
-            <img class="coinImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
+            <img class="coinImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg" alt="">
             <div>
               <div class="coinName">EOS</div>
               <div class="contract tip">eosio.token</div>
@@ -41,7 +41,6 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import { get_table_rows } from '@/utils/api'
 import { toFixed, toLocalTime, countdown } from '@/utils/public';
 
 export default {
@@ -121,7 +120,7 @@ export default {
         "lower_bound": ` ${formName}`,
         "upper_bound": ` ${formName}`,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }

@@ -5,13 +5,12 @@ import axios from 'axios';
 import moment from 'moment';
 function getHost() {
   const baseConfig = store.state.sys.baseConfig;
-  // console.log(baseConfig)
   return baseConfig.node.url;
 }
 
 export function getJson() {
   return new Promise((resolve, reject) => {
-    axios.get('https://cdn.jsdelivr.net/gh/defis-net/material/coin/coinJson.json').then((res) => {
+    axios.get('https://www.defis.network/coin/coinJson.json').then((res) => {
       // let result = Object.assign(res.data, {});
       let result = res.data;
       resolve({ status: res.status === 200, result });
@@ -30,7 +29,7 @@ export function getVotePools() {
     "json":true,
     "index_position": 2,
     "key_type": "float64",
-    "limit": 21
+    "limit": 100
   }
   EosModel.getTableRows(params, (res) => {
     const rows = res.rows || [];
@@ -38,8 +37,8 @@ export function getVotePools() {
       return
     }
     store.dispatch('setRankTrade', rows)
-    // console.log(rows)
-    const lists = rows.slice(0, 21);
+    // console.log('setRankTrade', rows)
+    const lists = rows.slice(0, 30);
     getVoteRankConfV3(lists);
   })
 }
@@ -51,7 +50,7 @@ export function getVoteRankConfV3(lists) {
     "scope": "miningpool11",
     "json": true,
     "table": "poolslots2",
-    limit: 21,
+    limit: 30,
   }
   EosModel.getTableRows(params, (res) => {
     const rows = res.rows || [];
@@ -65,34 +64,8 @@ export function getVoteRankConfV3(lists) {
       const t = Object.assign({}, v, rows[index], deal)
       rankInfoV3.push(t)
     })
-    // console.log(rankInfoV3)
+    // console.log('rankInfoV3', rankInfoV3)
     store.dispatch('setRankInfoV3', rankInfoV3)
-  })
-}
-
-// 查询当前发行量
-export function get_currency_stats(params) {
-  return new Promise((resolve, reject) => {
-    const host = getHost()
-    axios.post(`${host}/v1/chain/get_currency_stats`, JSON.stringify(params)).then((res) => {
-      let result = Object.assign(res.data, {});
-      resolve({ status: res.status === 200, result });
-    }, err => {
-      reject(err)
-    })
-  })
-}
-
-// 链上查表
-export function get_table_rows(params) {
-  return new Promise((resolve, reject) => {
-    const host = getHost()
-    axios.post(`${host}/v1/chain/get_table_rows`, JSON.stringify(params)).then((res) => {
-      let result = Object.assign(res.data, {});
-      resolve({ status: res.status === 200, result });
-    }, err => {
-      reject(err)
-    })
   })
 }
 

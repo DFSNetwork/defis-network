@@ -1,4 +1,4 @@
-import {get_table_rows} from '@/utils/api';
+import {get_table_rows} from '@/api/list';
 import {toFixed, toLocalTime} from '@/utils/public'
 // 获取可获得多少
 export function ogx_get_num(tab, data) {

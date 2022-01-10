@@ -115,7 +115,7 @@ import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
 import moment from 'moment';
 
-import {get_table_rows, get_balance, get_farmers_lists} from '@/utils/api'
+import { get_balance, get_farmers_lists} from '@/utils/api'
 import { getCoin, toLocalTime, toFixed } from '@/utils/public'
 import { getAccVote, getReward, getLpReward } from '../js/nodePools'
 import { sellToken } from '@/utils/logic';
@@ -279,7 +279,7 @@ export default {
         "json":true,
         "limit": 1000,
       }
-      const {status, result} = await get_table_rows(params);
+      const {status, result} = await this.$api.get_table_rows(params);
       // console.log(result)
       if (!status) {
         return
@@ -388,7 +388,7 @@ export default {
         "limit": 3000,
         "reverse": true
       }
-      const { status, result } = await get_table_rows(params);
+      const { status, result } = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }
@@ -481,7 +481,7 @@ export default {
         "lower_bound": ` ${formName}`,
         "upper_bound": ` ${formName}`,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -515,7 +515,7 @@ export default {
         "limit": 2000,
         "reverse": false
       }
-      const { status, result } = await get_table_rows(params);
+      const { status, result } = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }

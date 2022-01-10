@@ -57,7 +57,6 @@
 <script>
 import { mapState } from 'vuex';
 import moment from 'moment';
-// import axios from "axios";
 import MarketList from '@/components/MarketArea';
 import {toLocalTime, dealPrice} from '@/utils/public'
 export default {

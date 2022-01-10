@@ -53,7 +53,7 @@ import VoteNum from './comp/VoteNum';
 import MyClaim from './comp/Claim';
 
 import { getCoin, toLocalTime } from '@/utils/public';
-import {get_table_rows, get_balance} from '@/utils/api'
+import { get_balance} from '@/utils/api'
 import { getVoteWeight, getAccVote, getReward } from './js/nodePools'
 import { sellToken } from '@/utils/logic';
 
@@ -173,7 +173,7 @@ export default {
         "json": true,
         limit: 10000
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -220,7 +220,7 @@ export default {
         "lower_bound": "dfsbpsproxy1",
         "upper_bound": "dfsbpsproxy1",
       }
-      const { status, result } = await get_table_rows(params);
+      const { status, result } = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }
@@ -313,7 +313,7 @@ export default {
           if (tReward > accReward) {
             tReward = accReward
           }
-          // console.log(tReward)
+          // console.log(tReward, this.poolsData[v].price)
           const aboutEos = tReward * this.poolsData[v].price;
           this.$set(this.poolsData[v], 'aboutEos', Number(aboutEos || 0).toFixed(4))
           this.$set(this.poolsData[v], 'showReward', Number(tReward).toFixed(8))
@@ -338,7 +338,7 @@ export default {
         "json":true,
         "limit": 1000,
       }
-      const {status, result} = await get_table_rows(params);
+      const {status, result} = await this.$api.get_table_rows(params);
       // console.log(JSON.parse(JSON.stringify(result)))
       if (!status) {
         return
@@ -462,7 +462,7 @@ export default {
         "limit": 100,
         "reverse": false
       }
-      const { status, result } = await get_table_rows(params);
+      const { status, result } = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }
@@ -523,7 +523,7 @@ export default {
             "lower_bound": ` ${formName}`,
             "upper_bound": ` ${formName}`,
           }
-          const {status, result} = await get_table_rows(params)
+          const {status, result} = await this.$api.get_table_rows(params)
           if (!status) {
             return
           }
@@ -601,7 +601,9 @@ export default {
       clearInterval(this.lpRunTimer)
       this.lpRunTimer = setInterval(() => {
         const priceMarket = this.lpLists.find(vv => vv.mid === 602) || {};
-        const price = priceMarket.price || 0
+        let price = parseFloat(priceMarket.reserve0) / parseFloat(priceMarket.reserve1)
+        // console.log(priceMarket)
+        price = price || 0
         const keys = Object.keys(this.accLpData)
         const newJson = {}
         keys.forEach((mid) => {
@@ -614,6 +616,7 @@ export default {
           if (tReward > accLpReward) {
             tReward = accLpReward
           }
+          console.log(showReward, price)
           const aboutEos = showReward * price;
           // console.log(tReward, accLpReward, t)
           this.$set(accLpData, 'aboutEos', Number(aboutEos).toFixed(4))

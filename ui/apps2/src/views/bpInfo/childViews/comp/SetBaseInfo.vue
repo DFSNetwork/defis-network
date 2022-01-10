@@ -88,7 +88,6 @@
 <script>
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
-import {get_table_rows} from '@/utils/api'
 import {toLocalTime} from '@/utils/public';
 
 export default {
@@ -127,7 +126,7 @@ export default {
         "upper_bound": ` ${this.account}`,
         "json":true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }

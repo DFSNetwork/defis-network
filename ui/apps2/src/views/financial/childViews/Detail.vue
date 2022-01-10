@@ -9,7 +9,7 @@
     </div>
     <!-- 币种 -->
     <div class="coinData flexa">
-      <img class="coinImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg" alt="">
+      <img class="coinImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg" alt="">
       <div class="coinInfo">
         <div class="coinName">EOS</div>
         <div class="contract tip">eosio.token</div>
@@ -78,7 +78,6 @@ import MyFinancial from '../comp/MyFinancial';
 import Deposit from '../dialog/Deposit';
 import Rules from '../dialog/Rules';
 
-import { get_table_rows } from '@/utils/api'
 import { gat_apys } from '../js/financial';
 
 export default {
@@ -174,7 +173,7 @@ export default {
         "json": true,
         limit: 2000
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }

@@ -1,41 +1,6 @@
 // 系统性状态存储
 const config = {
   state: {
-    dmdMineConfig: [ // 钻石参与LP挖矿配置
-      {
-        mid: 39,
-        duration: 31104000,
-        epoch: 1600855200,
-        maxSupply: 500,
-        poolContract: "eosdmdpool1d",
-        poolid: 9,
-        sTokenContract: "",
-        sTokenPrecision: 4,
-        sTokenSymbol: "",
-      },
-      { // hub
-        mif: 344,
-        duration: 1209600,
-        epoch: 1599796800,
-        maxSupply: 2000,
-        poolContract: "eosdmdpool1b",
-        poolid: 7,
-        sTokenContract: "",
-        sTokenPrecision: 4,
-        sTokenSymbol: "",
-      },
-      {
-        mid: 329,
-        duration: 1209600,
-        epoch: 1599796800,
-        maxSupply: 2000,
-        poolContract: "eosdmdpool1a",
-        poolid: 6,
-        sTokenContract: "",
-        sTokenPrecision: 4,
-        sTokenSymbol: "",
-      },
-    ],
     // YFC类型LP挖矿配置
     lpMid: [{
       mid: 459,
@@ -49,8 +14,6 @@ const config = {
     lpPoolsBal: {}, // 存放格式为 {YFC: '1.00...'}
     lpDamping: {},  // 存放格式为 {YFC: 0.75, ...}
     tampList: 0,
-    // Time 挖矿列表
-    timeList: [],
     // TAG LP Mids
     tagLpMids: localStorage.getItem('tagLpMids') ? JSON.parse(localStorage.getItem('tagLpMids')) : [],
 
@@ -103,9 +66,6 @@ const config = {
     SET_LpDamping: (state, lpDamping) => {
       state.lpDamping = lpDamping;
     },
-    SET_TimeList: (state, timeList) => {
-      state.timeList = timeList;
-    },
     // pddex Data
     SET_BOXMIDS: (state, boxMids) => {
       state.boxMids = boxMids;
@@ -128,9 +88,6 @@ const config = {
     },
     setLpDamping({ commit }, lpDamping) {
       commit('SET_LpDamping', lpDamping);
-    },
-    setTimeList({ commit }, timeList) {
-      commit('SET_TimeList', timeList);
     },
     // pddex Data
     setBoxMids({ commit }, boxMids) {

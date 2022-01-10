@@ -1,8 +1,8 @@
 <template>
   <div class="imgcheck">
     <div class="title">
-      <span v-if="showType === 'bg'">选择背景</span>
-      <span v-else>选择头像</span>
+      <span v-if="showType === 'bg'">{{ $t('my.checkBg') }}</span>
+      <span v-else>{{ $t('my.headImg') }}</span>
     </div>
     <div v-if="showType === 'bg'">
       <div class="flexb" v-for="(page, i) in bg" :key="`page${i}`">
@@ -30,11 +30,11 @@
       <span class="flexc checkDiv">
         <img class="checkedImg" v-if="checked === 999" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/checked.png" alt="">
       </span>
-      <span>自定义：</span>
+      <span>{{ $t('my.self') }}：</span>
       <input class="ipt" v-model="url" @blur="handleReg" placeholder="https://..." />
     </div>
-    <div class="error" v-if="error && checked === 999">请输入正确图片地址</div>
-    <div class="btn flexc" @click="handleSure">确定</div>
+    <div class="error" v-if="error && checked === 999">{{ $t('my.errTip1') }}</div>
+    <div class="btn flexc" @click="handleSure">{{ $t('public.confirm') }}</div>
   </div>
 </template>
 
@@ -51,14 +51,14 @@ export default {
     return {
       checked: -1,
       head: [[{
-        img: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png',
-        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png',
+        img: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png',
+        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png',
         bgClass: '',
         name: '秋禾',
         id: 1,
       }, {
-        img: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/dbctokenmain-dbc.png',
-        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/dbctokenmain-dbc.png',
+        img: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/dbctokenmain-dbc.png',
+        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/dbctokenmain-dbc.png',
         bgClass: 'imgDivBg2',
         name: '白菜',
         id: 2,
@@ -69,8 +69,8 @@ export default {
         name: '青鸟',
         id: 3,
       }], [{
-        img: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/yfctokenmain-yfc.png',
-        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/yfctokenmain-yfc.png',
+        img: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/yfctokenmain-yfc.png',
+        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/yfctokenmain-yfc.png',
         bgClass: 'imgDivBg4',
         name: '锦鲤',
         id: 4,
@@ -81,8 +81,8 @@ export default {
         name: '鲲',
         id: 5,
       }, {
-        img: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/pddtokenmain-pdd.png',
-        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/pddtokenmain-pdd.png',
+        img: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/pddtokenmain-pdd.png',
+        setImg: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/pddtokenmain-pdd.png',
         bgClass: 'imgDivBg6',
         name: '金猪',
         id: 6,

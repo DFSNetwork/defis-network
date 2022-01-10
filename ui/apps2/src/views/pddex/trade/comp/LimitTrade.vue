@@ -70,7 +70,6 @@ import Bus from '@/utils/bus';
 import { mapState } from 'vuex';
 import { DApp } from '@/utils/wallet';
 import { toFixed, dealPrice, accMul } from '@/utils/public';
-// import { SwapRouter } from '@/utils/logic';
 import { SwapRouter } from '@/utils/swap_router';
 
 import BigTrade from "../popup/BigTrade";

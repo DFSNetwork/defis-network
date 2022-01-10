@@ -25,7 +25,6 @@ import BpInfo from './comp/BpInfo';
 import Records from './comp/Records';
 import ScoreLists from './comp/ScoreLists';
 import Score from './dialog/Score';
-import {get_table_rows} from '@/utils/api'
 
 export default {
   name: 'detailInfo',
@@ -87,7 +86,7 @@ export default {
         "table":"questions",
         "json":true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -100,7 +99,7 @@ export default {
         "table":"editors",
         "json":true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }

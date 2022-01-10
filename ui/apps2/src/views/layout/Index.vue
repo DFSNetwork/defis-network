@@ -43,6 +43,7 @@ import Tabbar from './comp/Tabbar';
 import { get_acc_info, get_balance } from '@/utils/api';
 import { dealMarketLists } from '@/utils/logic';
 import { get_tag_lp_mids } from '@/utils/minerLogic';
+import { fullScreen } from '@/utils/wallet/fullScreen';
 
 export default {
   name: 'layout',
@@ -58,7 +59,6 @@ export default {
   },
   data() {
     return {
-      marketLists: [],
       timer: null,
       topLists: [
         39
@@ -67,6 +67,11 @@ export default {
       showNode: false,
       showWarm: false,
       tagTimer: null,
+
+      // 价格定时器
+      priceTimer: null,
+
+      chainGet: false,
     }
   },
   computed:{
@@ -98,10 +103,17 @@ export default {
     this.handleRowsMarket();
     this.handleStartTimer();
     this.handleGetVotes()
+    this.handleGetPrice()
+
+    const fullType = parseInt(localStorage.getItem('setFullScreen') || 0)
+    if (fullType === 1) {
+      fullScreen(fullType)
+    }
   },
   beforeDestroy() {
     clearInterval(this.timer);
     clearTimeout(this.tagTimer)
+    clearTimeout(this.priceTimer)
   },
   methods: {
     // 获取TAG LP 矿池列表
@@ -161,14 +173,56 @@ export default {
     },
     // 获取做市池子
     async handleRowsMarket() {
+      // this.handleRowsMarketByChain()
       const {status, result} = await this.$api.get_markets();
       if (!status) {
         return
       }
       const list = result.rows || [];
       // 列表处理
-      const dealObj = dealMarketLists(list, this.topLists)
-      this.marketLists = dealObj.allLists;
+      if (this.chainGet) {
+        return
+      }
+      dealMarketLists(list, this.topLists)
+    },
+     // 获取做市池子 - 链上查询
+    async handleRowsMarketByChain() {
+      let more = true;
+      let next_key = '';
+      let lists = [];
+      this.chainGet = false;
+      while(more) {
+        const params = {
+          code: "defisswapcnt",
+          scope: "defisswapcnt",
+          table: "markets",
+          json: true,
+          limit: 100,
+          lower_bound: next_key,
+        }
+        const {status, result} = await this.$api.get_table_rows(params);
+        if (!status) {
+          return
+        }
+        const rows = result.rows || [];
+        lists.push(...rows)
+        more = result.more;
+        next_key= result.next_key;
+      }
+      this.chainGet = true;
+      dealMarketLists(lists, this.topLists)
+    },
+    // 获取常用币种价格
+    async handleGetPrice() {
+      clearTimeout(this.priceTimer)
+      this.priceTimer = setTimeout(() => {
+        this.handleGetPrice()
+      }, 1000 * 60 * 5);
+      const {status, result} = await this.$api.get_price();
+      if (!status) {
+        return
+      }
+      this.$store.dispatch('setCoinPrices', result)
     }
   }
 }

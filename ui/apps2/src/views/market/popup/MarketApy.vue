@@ -2,7 +2,16 @@
   <div class="marketApy">
     <div class="title">{{ $t('apy.title') }}</div>
     <div class="table">
-      <div class="flexa">
+      <div class="flexa" v-if="parseFloat(aprInfo.feesApy || 0)">
+        <span>{{ $t('info.markerFeesApr') }}：</span>
+        <span>{{ `${parseFloat(aprInfo.feesApy || 0).toFixed(2)}%` }}</span>
+      </div>
+      <div class="flexa" v-if="parseFloat(aprInfo.dfsApy || 0)">
+        <span>{{ $t('info.dfsMineApr') }}：</span>
+        <span>{{ `${parseFloat(aprInfo.dfsApy || 0).toFixed(2)}%` }}</span>
+      </div>
+      
+      <div class="flexa" v-if="parseFloat(aprInfo.feesApr || 0)">
         <span>{{ $t('info.markerFeesApr') }}：</span>
         <span>{{ `${parseFloat(aprInfo.feesApr || 0).toFixed(2)}%` }}</span>
       </div>
@@ -10,25 +19,17 @@
         <span>{{ $t('info.dfsMineApr') }}：</span>
         <span>{{ `${parseFloat(aprInfo.aprV3 || 0).toFixed(2)}%` }}</span>
       </div>
-      <div class="flexa" v-if="parseFloat(aprInfo.dmdApy)">
-        <span>{{ $t('apy.dmdApy') }}：</span>
-        <span>{{ `${parseFloat(aprInfo.dmdApy || 0).toFixed(2)}%` }}</span>
-      </div>
       <div class="flexa" v-if="aprInfo.lpApy && parseFloat(aprInfo.lpApy.pddApy)">
         <span>{{ $t('apy.pddApy') }}：</span>
         <span>{{ `${parseFloat(aprInfo.lpApy.pddApy || 0).toFixed(2)}%` }}</span>
-      </div>
-      <div class="flexa" v-if="parseFloat(aprInfo.timeApy)">
-        <span>{{ $t('apy.timeApy') }}：</span>
-        <span>{{ `${parseFloat(aprInfo.timeApy).toFixed(2)}%` }}</span>
       </div>
       <div class="flexa" v-if="parseFloat(aprInfo.tagLpApy)">
         <span>{{ $t('apy.tagLpApy') }}：</span>
         <span>{{ `${parseFloat(aprInfo.tagLpApy).toFixed(2)}%` }}</span>
       </div>
-      <div class="flexa" v-if="parseFloat(aprInfo.usdcApr)">
+      <div class="flexa" v-if="parseFloat(aprInfo.usdcApy)">
         <span>{{ $t('apy.usdcLpApy') }}：</span>
-        <span>{{ `${parseFloat(aprInfo.usdcApr).toFixed(2)}%` }}</span>
+        <span>{{ `${parseFloat(aprInfo.usdcApy).toFixed(2)}%` }}</span>
       </div>
       <div class="flexa total">
         <span>{{ $t('info.totalApr') }}：</span>
@@ -54,14 +55,6 @@ export default {
       default: false
     },
     aprV3: {
-      type: String,
-      default: '0.00'
-    },
-    dmdApy: {
-      type: String,
-      default: '0.00'
-    },
-    timeApy: {
       type: String,
       default: '0.00'
     },

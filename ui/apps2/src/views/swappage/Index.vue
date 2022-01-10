@@ -13,7 +13,7 @@
               <div class="iptDiv flexb">
                 <div class="coinInfo flex" @click="listenShowDrawer('start')">
                   <div class="coinImg"><img width="100%" :src="thisMarket0.imgUrl" :onerror="errorCoinImg" alt=""></div>
-                  <div>
+                  <div class="coinMinW">
                     <div class="coin">{{ thisMarket0.symbol }} <i class="el-icon-arrow-down"></i></div>
                     <div class="contract tip">{{ thisMarket0.contract }}</div>
                   </div>
@@ -72,7 +72,7 @@
           </div>
           <div class="btnDiv flexb">
             <div class="btn flexc" v-loading="loading" @click="handleSwapTrade">{{ $t('tab.dex') }}</div>
-            <div class="ptokens" v-if="isPtokens" @click="handleToProject('dtoken')">
+            <div class="dtokens" v-if="isDtokens" @click="handleToProject('dtoken')">
               <img :src="ptokenData.imgUrl">
               <div>{{ $t('sys.dAndW') }}</div>
             </div>
@@ -148,7 +148,7 @@
             </span>
             <span class="din">{{fees}} {{ thisMarket0.symbol }}</span>
           </div>
-          <div class="flexb" v-if="Number(reward)">
+          <!-- <div class="flexb" v-if="Number(reward)">
             <span class="flex">
               <span class="tip">{{ $t('mine.mineBonus') }}</span>
               <el-popover 
@@ -156,13 +156,12 @@
                 popper-class="mypopper"
                 placement="top-start"
                 trigger="click">
-                <!-- 每笔交易的（0.30%）会给到流动性提供者 -->
                 <div class="qusTip">{{ $t('dex.qusTip4') }}</div>
                 <span slot="reference" class="flexc ml10"><img width="100%" src="https://cdn.jsdelivr.net/gh/defis-net/material/icon/tips_icon_btn.svg" alt=""></span>
               </el-popover>
             </span>
             <span class="din">{{ reward }} DFS</span>
-          </div>
+          </div> -->
           <div class="flexb fee">
             <div>
               <span class="flexa" v-if="isMoreRouter" @click="showMoreRouter = true">
@@ -187,7 +186,7 @@
       <div class="flexb">
         <div>
           <span>{{ $t('dex.poolNum') }}</span>
-          <span class="marketNow" @click="handleTo('poolsMarket')">{{ $t('pools.toPool') }} ></span>
+          <span class="marketNow" @click="handleTo('dfsMinePool')">{{ $t('pools.toPool') }} ></span>
         </div>
         <div class="flexa usddTip" v-if="showTip" @click="showUsddTip = true">
           <img class="tipIcon" src="https://cdn.jsdelivr.net/gh/defis-net/material/dex/tip.svg" alt="">
@@ -240,7 +239,7 @@
 import { mapState } from 'vuex';
 import { SwapRouter, SwapRouterFilter } from '@/utils/swap_router';
 import Tabs from '../index/components/Tabs';
-import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara, getCoin } from '@/utils/public';
+import { toFixed, accMul, accDiv, accSub, getPrice, GetUrlPara, getCoin, dealRouterArr } from '@/utils/public';
 import { EosModel } from '@/utils/eos';
 import UsddTip from '@/components/UsddTip';
 import SlipPointTools from '@/components/SlipPointTools';
@@ -331,7 +330,7 @@ export default {
       marketLists: state => state.sys.marketLists,
       rSwitch: state => state.app.rSwitch,
     }),
-    isPtokens() {
+    isDtokens() {
       if (this.thisMarket0.contract === 'asset.dtoken' && this.thisMarket0.symbol === 'ETH') {
         return this.thisMarket0
       }
@@ -437,9 +436,9 @@ export default {
         if (!newVal.length) {
           return
         }
-        const newArr = newVal.filter(v => v.contract1 !== 'autopuptoken' && v.contract0 !== 'autopuptoken')
-        SwapRouter.init(newArr, this)
-        SwapRouterFilter.init(this.filterMkLists, this)
+        // const newArr = newVal.filter(v => v.contract1 !== 'autopuptoken' && v.contract0 !== 'autopuptoken')
+        // SwapRouter.init(newArr, this)
+        // SwapRouterFilter.init(this.filterMkLists, this)
         const arr = this.handleDealSymArr(newVal)
         this.coinList = arr;
         if (!arr.length) {
@@ -451,6 +450,26 @@ export default {
         this.thisMarket1 = market1;
         this.handleInBy(this.tradeInfo.type, 'first')
         this.refreshLoading = false;
+      },
+      immediate: true,
+      deep: true
+    },
+    thisMarket0: {
+      handler: function t0() {
+        // if (oldVal && oldVal.contract === newVal.contract && oldVal.symbol === newVal.symbol) {
+        //   return
+        // }
+        this.handleDealMarkets()
+      },
+      immediate: true,
+      deep: true
+    },
+    thisMarket1: {
+      handler: function t1() {
+        // if (oldVal && oldVal.contract === newVal.contract && oldVal.symbol === newVal.symbol) {
+        //   return
+        // }
+        this.handleDealMarkets()
       },
       immediate: true,
       deep: true
@@ -487,6 +506,13 @@ export default {
     this.handleSetMarkets();
   },
   methods: {
+    handleDealMarkets() {
+      const tArr = dealRouterArr(this.marketLists, this.thisMarket0, this.thisMarket1)
+      SwapRouter.init(tArr, this, this.thisMarket0, this.thisMarket1)
+
+      const tArr2 = dealRouterArr(this.filterMkLists, this.thisMarket0, this.thisMarket1)
+      SwapRouterFilter.init(tArr2, this, this.thisMarket0, this.thisMarket1)
+    },
     handleToProject(type) {
       if (type === 'dtoken') {
         location.href = 'https://dtoken.gitee.io/'
@@ -1016,6 +1042,10 @@ export default {
           overflow: hidden;
           display: flex;
         }
+        .coinMinW{
+          min-width: 150px;
+          flex: 1;
+        }
         .coin{
           font-size: 28px;
           font-weight: 500;;
@@ -1157,7 +1187,7 @@ export default {
       background:rgba(2,198,152,1);
     }
   }
-  .ptokens{
+  .dtokens{
     margin-left: 30px;
     font-size: 24px;
     text-align: center;

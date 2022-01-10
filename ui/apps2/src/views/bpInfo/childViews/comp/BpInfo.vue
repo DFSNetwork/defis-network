@@ -145,12 +145,11 @@
 </template>
 
 <script>
-import axios from 'axios';
 
 import Bus from '@/utils/bus';
 import { mapState } from 'vuex';
 import ScoreDetail from './ScoreDetail';
-import {get_table_rows, get_bp_info} from '@/utils/api'
+import {get_bp_info} from '@/utils/api'
 import {toLocalTime} from '@/utils/public';
 import ShowContent from '../dialog/ShowContent';
 import ShowEdts from '../dialog/ShowEdts';
@@ -310,15 +309,15 @@ export default {
       if (!this.bpDetailInfo.nodes) {
         return
       }
-      this.bpDetailInfo.nodes.forEach(v => {
+      this.bpDetailInfo.nodes.forEach(async v => {
         let time = new Date().getTime();
-        axios.get(`${v.url}/v1/chain/get_info`, {
-          timeout: 5500,
-        }).then(() => {
-          time = new Date().getTime() - time;
-          this.$set(v, 'ms', time)
-          this.$set(v, 'isGet', true)
-        })
+        const {status} = await this.$api.get_info(v.url);
+        if (!status) {
+          return
+        }
+        time = new Date().getTime() - time;
+        this.$set(v, 'ms', time)
+        this.$set(v, 'isGet', true)
       })
     },
     handleDealCountNum(n) {
@@ -351,7 +350,7 @@ export default {
         "upper_bound": ` ${this.bpname}`,
         "json":true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -375,7 +374,7 @@ export default {
         "lower_bound": this.bpname,
         "upper_bound": this.bpname,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -396,7 +395,7 @@ export default {
         "table":"questions",
         "json":true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }
@@ -410,7 +409,7 @@ export default {
         "table":"answers",
         "json":true,
       }
-      const {status, result} = await get_table_rows(params)
+      const {status, result} = await this.$api.get_table_rows(params)
       if (!status) {
         return
       }

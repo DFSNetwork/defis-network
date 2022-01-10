@@ -81,8 +81,6 @@
 import { mapState } from 'vuex';
 import MarketList from '@/components/MarketList';
 import { toLocalTime } from '@/utils/public';
-import { get_currency_stats } from '@/utils/api';
-// import axios from 'axios';
 import KLine from '../kline/KLine';
 import Lists from './Lists';
 
@@ -336,7 +334,7 @@ export default {
         code: this.checkedMarket.contract1,
         symbol: this.checkedMarket.symbol1,
       }
-      const {status, result} = await get_currency_stats(params)
+      const {status, result} = await this.$api.get_currency_stats(params)
       if (!status) {
         return;
       }

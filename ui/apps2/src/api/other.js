@@ -1,10 +1,15 @@
 
 import axios from 'axios';
 import store from '@/store';
+const zlib = require('zlib');
+function unZip(deflated) {
+  const inflated = zlib.inflateSync(new Buffer(deflated, 'base64')).toString();
+  return inflated
+}
 
 export function getJson() {
   return new Promise((resolve, reject) => {
-    axios.get('https://cdn.jsdelivr.net/gh/defis-net/material/coin/coinJson.json').then((res) => {
+    axios.get('https://www.defis.network/coin/coinJson.json').then((res) => {
       // let result = Object.assign(res.data, {});
       let result = res.data;
       resolve({ status: res.status === 200, result });
@@ -96,8 +101,10 @@ export function getBpTags() {
 // 获取PDDEX行情列表
 export function getPddexMarkets() {
   return new Promise((resolve, reject) => {
-    axios.get('https://api.defis.network/market/tops').then((res) => {
-      let result = Object.assign(res.data, {});
+    axios.get('https://api.defis.network/apy/tops2').then((res) => {
+    // axios.get('http://localhost:8101/apy/tops2').then((res) => {
+      let result = unZip(res.data)
+      result = Object.assign(JSON.parse(result), {});
       resolve({ status: res.status === 200, result });
     }, err => {
       reject(err)
@@ -113,6 +120,17 @@ export function getUsdtPrice() {
       console.log(result)
       const price = result.usdtprice || 6.5;
       store.dispatch('setUsdtPrice', price);
+      resolve({ status: res.status === 200, result });
+    }, err => {
+      reject(err)
+    })
+  })
+}
+
+export function debugApi(params) {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.defis.network/common/set_bug', {params}).then((res) => {
+      let result = Object.assign(res.data, {});
       resolve({ status: res.status === 200, result });
     }, err => {
       reject(err)

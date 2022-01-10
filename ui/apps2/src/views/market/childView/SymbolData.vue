@@ -1,8 +1,9 @@
 <template>
   <div class="symbolData">
     <div class="myPools">
-      <div class="title flexb">
-        <span class="act">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span>
+      <div class="title title1 flexa" @click="showMarketList = true">
+        <span class="act1">{{ $t('mine.symbolPool', {symbol: `${thisMarket.symbol0}-${thisMarket.symbol1}`}) }}</span>
+        <i class="el-icon-arrow-down"></i>
       </div>
       <div class="rankTip flexb" v-if="!isAbled">
         <span>暂不支持 非EOS 或 非USDT矿池挖矿</span>
@@ -149,6 +150,17 @@
                  :isActual="true"
                  :aprInfo="aprInfo"/>
     </el-dialog>
+
+
+    <!-- 弹窗组件 -->
+    <van-popup
+      class="newMarket"
+      v-model="showMarketList"
+      position="left">
+      <market-list :marketLists="marketLists"
+        @listenMarketChange="handleMarketChange"
+        @listenClose="handleClose"/>
+    </van-popup>
   </div>
 </template>
 
@@ -165,12 +177,14 @@ import MarketTip from '../popup/MarketTip';
 import MarketApy from '../popup/MarketApy'
 import { perDayRewardV3, getV3PoolsClass, dealRewardV3 } from '@/utils/logic';
 import { dealApy } from '@/views/pddex/comp/appLogic.js'
+import MarketList from '@/components/MarketArea';
 
 export default {
   components: {
     MinReward,
     MarketTip,
     MarketApy,
+    MarketList,
   },
   data() {
     return {
@@ -214,7 +228,11 @@ export default {
       },
       showMarketTip: false,
       showApyDetail: false,
+      showMarketList: false,
       lpApy: {},
+      
+      // 本地缓存
+      dfsPoolsJson: localStorage.getItem('dfsPoolsJson') ? JSON.parse(localStorage.getItem('dfsPoolsJson')) : {},
     }
   },
   watch: {
@@ -239,6 +257,22 @@ export default {
       deep: true,
       immediate: true,
     },
+    '$route.params.mid': {
+      handler: function rm() {
+        this.handleGetMinersLists()
+        if (this.marketLists.length) {
+          this.thisMarket = this.marketLists.find(v => v.mid === Number(this.$route.params.mid))
+          this.handleGetNowMarket()
+        }
+        if (this.scatter.identity) {
+          this.handleGetMinersLists('user')
+          this.handleGetMarketDataByChain()
+          this.handleGetAccToken()
+        }
+      },
+      deep: true,
+      immediate: true,
+    }
   },
   computed: {
     ...mapState({
@@ -327,6 +361,7 @@ export default {
   },
   mounted() {
     this.handleGetMinersLists()
+    this.handleDealLocal()
   },
   beforeDestroy() {
     clearTimeout(this.timer)
@@ -338,6 +373,27 @@ export default {
     })
   },
   methods: {
+    handleDealLocal() {
+      const mid = this.$route.params.mid;
+      const lists = this.dfsPoolsJson[mid] || [];
+      if (!lists.length) {
+        return;
+      }
+      this.allMinersList = lists;
+      this.handleGetPageArr();
+    },
+    handleClose() {
+      this.showMarketList = false;
+    },
+    handleMarketChange(item) {
+      this.handleClose()
+      this.$router.replace({
+        name: 'poolsMarket',
+        params: {
+          mid: item.mid
+        }
+      })
+    },
     handleDealAccountHide(str) {
       return dealAccountHide(str)
     },
@@ -428,7 +484,9 @@ export default {
         "lower_bound": ` ${this.scatter.identity.accounts[0].name}`,
         "upper_bound": ` ${this.scatter.identity.accounts[0].name}`,
       }
+      // console.log(this.thisMarket.mid || this.$route.params.mid)
       EosModel.getTableRows(params, (res) => {
+        // console.log(res)
         const list = res.rows || [];
         this.sTime = '0'
         this.marketData = [];
@@ -461,72 +519,84 @@ export default {
     handleCurrentChange() {
       this.handleGetPageArr();
     },
-    handleGetMinersLists(type) {
-      const params = {
-        "code": "miningpool11",
-        "scope": this.$route.params.mid,
-        "table": "miners2",
-        // "lower_bound": " dfsdeveloper",
-        // "upper_bound": " dfsdeveloper",
-        limit: 3000,
-        "json": true,
-      }
-      if (type === 'user') {
-        params.lower_bound = ` ${this.scatter.identity.accounts[0].name}`;
-        params.upper_bound = ` ${this.scatter.identity.accounts[0].name}`;
-      }
+    async handleGetMinersLists(type) {
+      let lists = [];
+      let more = true;
+      let key = "";
       if (!this.thisMarket.mid) {
         setTimeout(() => {
           this.handleGetMinersLists(type)
         }, 500);
         return
       }
-      EosModel.getTableRows(params, (res) => {
-        if (type === 'user') {
-          this.getAccData = true;
-        } else {
-          this.getMinersList = true;
+      while(more) {
+        const params = {
+          "code": "miningpool11",
+          "scope": this.$route.params.mid,
+          "table": "miners2",
+          limit: 200,
+          "json": true,
+          lower_bound: key,
         }
-        const rows = res.rows || []
-        if (!rows.length) {
-          this.accMineData = {};
+        if (type === 'user') {
+          params.lower_bound = ` ${this.scatter.identity.accounts[0].name}`;
+          params.upper_bound = ` ${this.scatter.identity.accounts[0].name}`;
+        }
+        const {status, result} = await this.$api.get_table_rows(params)
+        if (!status) {
           return
         }
-        const newList = [];
-        rows.forEach(item => {
-          let v = item;
-          const inData = {
-            poolSym0: parseFloat(this.thisMarket.reserve0),
-            poolSym1: parseFloat(this.thisMarket.reserve1),
-            poolToken: this.thisMarket.liquidity_token,
-            sellToken: v.token
-          }
-          const tokenData = sellToken(inData);
-          v = Object.assign({}, v, {
-            liq_bal0: `${Number(tokenData.getNum1).toFixed(this.thisMarket.decimal0)} ${this.thisMarket.symbol0}`,
-            liq_bal1: `${Number(tokenData.getNum2).toFixed(this.thisMarket.decimal1)} ${this.thisMarket.symbol1}`,
-          })
-          const minnerData = dealMinerData(v, this.thisMarket)
-          if (type === 'user') {
-            this.accMineData = minnerData;
-            return;
-          }
-          newList.push(minnerData)
+        more = result.more;
+        key = result.next_key;
+        lists.push(...result.rows)
+      }
+
+      if (type === 'user') {
+        this.getAccData = true;
+      } else {
+        this.getMinersList = true;
+      }
+      const rows = lists || []
+      if (!rows.length) {
+        this.accMineData = {};
+        return
+      }
+      const newList = [];
+      rows.forEach(item => {
+        let v = item;
+        const inData = {
+          poolSym0: parseFloat(this.thisMarket.reserve0),
+          poolSym1: parseFloat(this.thisMarket.reserve1),
+          poolToken: this.thisMarket.liquidity_token,
+          sellToken: v.token
+        }
+        const tokenData = sellToken(inData);
+        v = Object.assign({}, v, {
+          liq_bal0: `${Number(tokenData.getNum1).toFixed(this.thisMarket.decimal0)} ${this.thisMarket.symbol0}`,
+          liq_bal1: `${Number(tokenData.getNum2).toFixed(this.thisMarket.decimal1)} ${this.thisMarket.symbol1}`,
         })
+        const minnerData = dealMinerData(v, this.thisMarket)
         if (type === 'user') {
-          this.handleRunAccReward()
-          return
+          this.accMineData = minnerData;
+          return;
         }
-        const newListSort = newList.sort((a, b) => {
-          return b.token - a.token;
-        })
-        try {
-          this.allMinersList = newListSort;
-          this.handleGetPageArr();
-        } catch (error) {
-          console.log(error)
-        }
+        newList.push(minnerData)
       })
+      if (type === 'user') {
+        this.handleRunAccReward()
+        return
+      }
+      const newListSort = newList.sort((a, b) => {
+        return b.token - a.token;
+      })
+      this.dfsPoolsJson[`${this.$route.params.mid}`] = newListSort
+      localStorage.setItem('dfsPoolsJson', JSON.stringify(this.dfsPoolsJson))
+      try {
+        this.allMinersList = newListSort;
+        this.handleGetPageArr();
+      } catch (error) {
+        console.log(error)
+      }
     },
     handleGetPageArr() {
       const start = (this.page - 1) * this.pageSize;
@@ -666,8 +736,16 @@ export default {
   font-size: 32px;
   text-align: left;
   margin: 0 0 40px;
+  &.title1{
+    margin: 0 0 20px;
+  }
   &>span{
     margin-right: 60px;;
+  }
+  .act1{
+    color: $color-black;
+    position: relative;
+    margin-right: 10px;
   }
   .act{
     color: $color-black;

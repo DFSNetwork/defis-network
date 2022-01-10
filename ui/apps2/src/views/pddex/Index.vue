@@ -18,9 +18,10 @@ export default {
   },
   data() {
     return {
-      boxMarketList: [],
       dfsLists: [],
       allMarket: {},
+      pddexList: [],
+      iArr: ['USDT', 'USDC', 'EOS', 'DFS', 'TAG']
     }
   },
   mounted() {
@@ -83,6 +84,9 @@ export default {
       const lists = {}
       keys.forEach(key => {
         let coin = key.split('_markets')[0].toUpperCase()
+        if (coin === 'BTC' || coin.toLowerCase() === 'display_limit') {
+          return
+        }
         coin = coin === 'BTC' ? coin = 'PBTC' : coin;
         const arr = dealAreaArr(result[key] || [], coin)
         lists[coin] = arr;
@@ -97,9 +101,12 @@ export default {
         return
       }
       let allMarket = []
-      keys.forEach(key => {
+      this.iArr.forEach(key => {
         allMarket.push(...this.allMarket[key])
       })
+      // keys.forEach(key => {
+      //   allMarket.push(...this.allMarket[key])
+      // })
       allMarket.forEach(v => {
         const has = this.pddexList.find(vv => {
           return (vv.contract0 === v.contract0 && vv.symbol0 === v.symbol0 && vv.contract1 === v.contract1 && vv.symbol1 === v.symbol1)

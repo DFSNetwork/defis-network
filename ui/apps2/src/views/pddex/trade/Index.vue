@@ -55,7 +55,7 @@
         <van-tab title="当前订单">
           <div class="noData tip" v-if="!orderList.length">
             <img class="noDataPng" src="https://cdn.jsdelivr.net/gh/defis-net/material/noData/noOrder.png" alt="">
-            <div>暂无数据</div>
+            <div>{{ $t('public.noData') }}</div>
           </div>
           <div class="list" v-for="(v, i) in orderList" :key="`order-${i}`">
             <div class="liTitle flexb">
@@ -154,7 +154,7 @@ export default {
         symbol1: 'USDT',
         contract1: 'tethertether',
         sym0Data:{
-          imgUrl: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg'
+          imgUrl: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg'
         },
         sym1Data:{
           imgUrl: 'https://ndi.340wan.com/eos/tethertether-usdt.png'

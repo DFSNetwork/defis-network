@@ -10,7 +10,7 @@
 
     <div class="nullDiv"></div>
     <div class="btnDiv flexb">
-      <div class="btn flexc" @click="handleToTrade('pddexTrade')">{{ $t('tab.dex') }}</div>
+      <div class="btn flexc" @click="handleTo('index')">{{ $t('tab.dex') }}</div>
       <div class="btn market flexc" @click="handleTo('market')">{{ $t('tab.pools') }}</div>
     </div>
   </div>
@@ -35,7 +35,7 @@ export default {
         // mid: 17,
         symbol0: 'EOS',
         symbol1: 'USDT',
-        imgUrl0: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/eosio.token-eos.svg',
+        imgUrl0: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/eosio.token-eos.svg',
         imgUrl1: 'https://ndi.340wan.com/eos/tethertether-usdt.png',
       }
     }
@@ -61,13 +61,20 @@ export default {
   },
   methods: {
     handleTo(name) {
-      this.$router.push({
+      const params = {
         name,
         params: {
           mid: this.checkedMarket.mid,
         }
-      })
-      // in=usdxusdxusdx-USDC&out=tethertether-USDT
+      }
+      if (name === 'index') {
+        const query = {
+          in: 'tethertether-USDT',
+          out: 'usdxusdxusdx-USDC'
+        }
+        params.query = query;
+      }
+      this.$router.push(params)
     },
     handleToTrade() {
       let symbol = 'eosio.token-eos-minedfstoken-dfs';

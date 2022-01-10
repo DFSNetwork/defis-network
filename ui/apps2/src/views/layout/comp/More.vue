@@ -21,7 +21,7 @@
       <div class="lists">
         <div class="title flexb" @click="handleToBP">
           <div class="flexa">
-            <img class="titleImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png">
+            <img class="titleImg" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/minedfstoken-dfs.png">
             <span>{{ $t('more.aboutDfs') }}</span>
           </div>
           <img class="right" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/about_right.svg" alt="">
@@ -38,10 +38,10 @@
           <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/create_set.svg">
           <span>{{ $t('dex.addMarket') }}</span>
         </div>
-        <div class="list flexa" @click="handleShowComp('invi')">
+        <!-- <div class="list flexa" @click="handleShowComp('invi')">
           <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/invi_set.svg">
           <span>{{ $t('invi.invitation') }}</span>
-        </div>
+        </div> -->
         <div class="list flexa" @click="handleToPro('docs')">
           <img class="listImg" src="https://cdn.jsdelivr.net/gh/defis-net/material/svg/tutorial_set.svg">
           <span>{{ $t('more.faq') }}</span>
@@ -64,6 +64,7 @@
         <span class="flexc" @click="handleToV1('v2')">V2</span>
         <span class="flexc" @click="handleToV1('v3')">V3</span>
         <span class="flexc" @click="handleToV1('v4')">V4</span>
+        <span class="flexc" @click="handleToV1('v5')">V5</span>
       </div>
       <!-- 合作 -->
       <div class="flexb par">
@@ -138,6 +139,8 @@ export default {
         location.href = 'https://v2.defis.network/'
       } else if (ve === 'v3') {
         location.href = 'https://v3.defis.network/'
+      } else if (ve === 'v4') {
+        location.href = 'https://v4.defis.network/'
       } else if (ve === 'v4') {
         location.href = 'https://dfsswap.gitee.io/'
       }

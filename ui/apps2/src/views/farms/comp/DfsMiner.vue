@@ -1,7 +1,7 @@
 <template>
   <div class="lists flexa" v-loading="loading">
     <div class="coinDiv flexc">
-      <img class="coin" src="https://cdn.jsdelivr.net/gh/defis-net/material/coin/minedfstoken-dfs.png" alt="">
+      <img class="coin" src="https://cdn.jsdelivr.net/gh/defis-net/material2/coin/minedfstoken-dfs.png" alt="">
     </div>
     <div class="f1">
       <div class="projectName flexb">
@@ -55,7 +55,6 @@ export default {
       damping: state => state.sys.damping,
       scatter: state => state.app.scatter,
       dfsPrice: state => state.sys.dfsPrice,
-      sortClass: state => state.sys.sortClass,
       marketLists: state => state.sys.marketLists,
     }),
     allReward() {

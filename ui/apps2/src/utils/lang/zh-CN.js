@@ -82,6 +82,7 @@ export default {
     poolVote: '矿池投票',
     nodeVote: '节点投票',
     my: '我的',
+    otherVote: '其他投票',
   },
   bank: {
     stake: '抵押',
@@ -298,6 +299,7 @@ export default {
   tabbar: {
     swap: '闪兑',
     order: '行情',
+    trade: '交易',
   },
   info: {
     info: '概览',
@@ -346,7 +348,7 @@ export default {
     rules1: '1. 做市DFS或存入DSS即可获得投票票数',
     rules2: '2. 更改做市、存取DSS会自动重新投票',
     rules3: '3. 投票结果实时反馈最新排行',
-    rules4: '4. 每个账号最多选择3个投票选项',
+    rules4: '4. 每个账号最多选择20个投票选项',
     rules5: '5. 随时可以修改重新投票',
     rules6: '做市: 1DFS = 0.5 票',
     rules7: '随存随取： 1 DFS = 1票',

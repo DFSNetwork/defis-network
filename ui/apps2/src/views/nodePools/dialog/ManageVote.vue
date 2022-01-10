@@ -16,7 +16,6 @@
 import AddVote from './Add'
 import Remove from './Remove'
 
-import {get_table_rows} from '@/utils/api'
 
 export default {
   name: 'manageVote',
@@ -53,7 +52,7 @@ export default {
         "scope":"eosio",
         "table":"rexpool"
       }
-      const {status, result} = await get_table_rows(params);
+      const {status, result} = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }

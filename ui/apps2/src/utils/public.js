@@ -21,7 +21,7 @@ export function getPng(index) {
 }
 export function getRandomImg() {
   const random = parseInt(Math.random() * 1000 % getPngLen());
-  return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${getPng(random)}.png`
+  return `https://cdn.jsdelivr.net/gh/defis-net/material2/coin/${getPng(random)}.png`
 }
 /*
  ** 加法函数，用来得到精确的加法结果
@@ -431,45 +431,6 @@ export function getDbcReward(mid, type) {
   return toFixed(reward, 8)
 }
 
-export function getDmdMinerHourRoi(market, type, dmdPools) {
-  const config = store.state.config.dmdMineConfig;
-  const thisConf = config.find(v => v.mid === market.mid) || {};
-  if (!thisConf.mid || !dmdPools) {
-    return '0'
-  }
-  const endDate = (thisConf.duration + thisConf.epoch) * 1000
-  const nowDate = moment().valueOf()
-  if (endDate < nowDate) {
-    return '0'
-  }
-  const maxSupply = thisConf.maxSupply || 0;
-  const hour = thisConf.duration / 3600;
-  let reserve = parseFloat(market.reserve1) * 2;
-  if (market.symbol1 !== 'DMD') {
-    const dmdPrice = parseFloat(dmdPools.reserve0) / parseFloat(dmdPools.reserve1);
-    const sym1Price = parseFloat(market.reserve0) / parseFloat(market.reserve1);
-    reserve = parseFloat(market.reserve1) * 2 * sym1Price.toFixed(4) / dmdPrice.toFixed(4);
-  }
-  const hourRoi = (maxSupply / hour) / reserve * 100;
-  // console.log('-----------------')
-  // console.log(maxSupply, hour, reserve)
-  // console.log(hourRoi, market)
-  // console.log(hourRoi * 24, 'day')
-  // console.log(hourRoi * 24 * 7, 'week')
-  // console.log(hourRoi * 24 * 365, 'year')
-  // console.log('-----------------')
-  if (type === 'hour') {
-    return toFixed(hourRoi, 3);
-  }
-  if (type === 'day') {
-    return toFixed(hourRoi * 24, 3);
-  }
-  if (type === 'week') {
-    return toFixed(hourRoi * 24 * 7, 3);
-  }
-  return toFixed(hourRoi * 24 * 365, 3);
-}
-
 export function getPriceLen(price) {
   let len = 6;
   if (Number(price) > 1000) {
@@ -495,12 +456,12 @@ export function getCoin(contract, coin) {
     const localCoinPng = cdnImgJson.png;
     const has = localeCoin.find(v => v === inData)
     if (has) {
-      return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${has}.svg`;
+      return `https://cdn.jsdelivr.net/gh/defis-net/material2/coin/${has}.svg`;
     }
     const hasPng = localCoinPng.find(v => v === inData);
     if (!has && hasPng) {
       // return `/static/coin/${hasPng}.png`;
-      return `https://cdn.jsdelivr.net/gh/defis-net/material/coin/${hasPng}.png`;
+      return `https://cdn.jsdelivr.net/gh/defis-net/material2/coin/${hasPng}.png`;
     }
     return `https://ndi.340wan.com/eos/${inData}.png`
   } catch (error) {
@@ -631,10 +592,6 @@ export function dealMedia(v) {
       arr[index] = a[0]
     }
   })
-  // console.log(audioUrlArr)
-  // console.log(videoUrlArr)
-  // console.log(imgUrlArr)
-  // console.log(arr)
   memo = arr.join('')
 
   if (!audioUrlArr.length && !videoUrlArr.length && !imgUrlArr.length) {
@@ -646,85 +603,63 @@ export function dealMedia(v) {
     imgArr: imgUrlArr,
     memo: memo
   }
+}
 
+export function dealHtmlCode(v) {
+  if (v.account !== 'tagtokenmain' || v.symbol !== 'TAG' || parseFloat(v.quantity) < 0.1) {
+    return false
+  }
+  let memo = v.memo;
+  return {
+    memo
+  }
+}
 
-  // 处理audio
-  // const reg = /<audio:(http|https):\/\/.+\.(mp3|ogg|asf|wma|wav|rm|ape|real|MP3|OGG|ASF|WMA|WAV|RM|APE|REAL)>/;
-  // const hasAudio = reg.exec(memo)
-  // let audioUrl = [];
-  // if (hasAudio) {
-  //   console.log(hasAudio)
-  //   memo = memo.split(hasAudio[0]).join('')
-  //   // audioUrl = hasAudio[0].split('audio:')[1];
-  //   // audioUrl = audioUrl.substr(0, audioUrl.length - 1)
-
-  //   let tArr = hasAudio[0].split('<')
-  //   let regt = /^audio:(http|https):\/\/.+>/;
-  //   tArr.forEach(vv => {
-  //     let tHas = regt.exec(vv)
-  //     if (!tHas) {
-  //       return
-  //     }
-  //     let url = vv.split('>')[0]
-  //     url = url.replace('audio:', '')
-  //     audioUrl.push(url);
-  //   })
-  // }
-
-  // // 处理视频
-  // let videoUrl = [];
-  // const regVideo = /<video:(http|https):\/\/.+\.(avi|mp4|mov|asf|wmv|rmvb|fly|AVI|MP4|MOV|ASF|WMV|RMVB|FLY)>/;
-  // const hasVideo = regVideo.exec(memo)
-  // if (hasVideo) {
-  //   console.log(hasVideo)
-  //   memo = memo.split(hasVideo[0]).join('')
-  //   // videoUrl = hasVideo[0].split('video:')[1];
-  //   // videoUrl = videoUrl.substr(0, videoUrl.length - 1)
-
-  //   let tArr = hasVideo[0].split('<')
-  //   let regt = /^video:(http|https):\/\/.+>/;
-  //   tArr.forEach(vv => {
-  //     let tHas = regt.exec(vv)
-  //     if (!tHas) {
-  //       return
-  //     }
-  //     let url = vv.split('>')[0]
-  //     url = url.replace('video:', '')
-  //     videoUrl.push(url);
-  //   })
-  // }
-  // // 处理图片
-  // const imgArr = [];
-  // const regImg = /<img:(http|https):\/\/.+\.(jpeg|png|svg|jpg|gif|JPEG|PNG|SVG|JPG|GIF)>/;
-  // const hasImg = regImg.exec(memo)
-  // if (hasImg) {
-  //   console.log(hasImg)
-  //   memo = memo.split(hasImg[0]).join('')
-  //   let tArr = hasImg[0].split('<')
-  //   let regt = /^img:(http|https):\/\/.+>/;
-  //   tArr.forEach(vv => {
-  //     let tHas = regt.exec(vv)
-  //     if (!tHas) {
-  //       return
-  //     }
-  //     let url = vv.split('>')[0]
-  //     url = url.replace('img:', '')
-  //     imgArr.push(url);
-  //   })
-  // }
-  // if (!audioUrl && !videoUrl && !imgArr.length) {
-  //   return false;
-  // }
-  // console.log({
-  //   audio: audioUrl,
-  //   video: videoUrl,
-  //   imgArr,
-  //   memo: memo
-  // })
-  // return {
-  //   audio: audioUrl,
-  //   video: videoUrl,
-  //   imgArr,
-  //   memo: memo
-  // }
+export function dealRouterArr(marketLists, thisMarket0, thisMarket1) {
+  const newArr = marketLists.filter(v => v.contract1 !== 'autopuptoken' && v.contract0 !== 'autopuptoken')
+  const a0 = newArr.filter(v => 
+    (v.contract0 === thisMarket0.contract && v.symbol0 === thisMarket0.symbol) ||
+    (v.contract1 === thisMarket0.contract && v.symbol1 === thisMarket0.symbol)
+  )
+  const a1 = marketLists.filter(v => 
+    (v.contract0 === thisMarket1.contract && v.symbol0 === thisMarket1.symbol) ||
+    (v.contract1 === thisMarket1.contract && v.symbol1 === thisMarket1.symbol)
+  )
+  const arr = handleDealSame(a0, a1)
+  const tArr = handleDealArr(arr)
+  return tArr;
+}
+// 获取a0 和 a1 中含有相同币种的交易对
+function handleDealSame(a0, a1) {
+  let arr = []
+  a0.forEach(v => {
+    const has = a1.filter(vv => {
+      return (
+        (vv.contract0 === v.contract0 && vv.symbol0 === v.symbol0) ||
+        (vv.contract1 === v.contract0 && vv.symbol1 === v.symbol0) ||
+        (vv.contract1 === v.contract1 && vv.symbol1 === v.symbol1) ||
+        (vv.contract0 === v.contract1 && vv.symbol0 === v.symbol1)
+      )
+    })
+    if (has.length) {
+      arr.push(v, ...has)
+    }
+  })
+  return arr
+}
+function handleDealArr(resArr) {
+  // 删除重复项
+  const uniques = [];
+  const stringify = {};
+  resArr.forEach(v => {
+    if (!v.liquidity_token) {
+      return
+    }
+    const str = `${v.mid}`;
+    if (!stringify[str]) {
+      uniques.push(v);
+      stringify[str] = true;
+    }
+  })
+  return uniques;
 }

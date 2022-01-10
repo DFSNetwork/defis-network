@@ -1,7 +1,7 @@
 <template>
   <div>
     <div :class="`tipDiv marketReward ${handleGetClass(thisMarket.mid)}`" v-if="Number(token)"
-     @click="handleTo('poolsMarket')">
+     @click="handleTo('dfsMinePool')">
       <div class="flexb">
         <div class="flexa symbolInfo">
           <img class="imgCoin" :src="thisMarket.sym0Data.imgUrl" :onerror="errorCoinImg"/>

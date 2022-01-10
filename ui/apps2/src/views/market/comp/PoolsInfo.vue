@@ -34,7 +34,6 @@
 
 <script>
 import { EosModel } from '@/utils/eos';
-import axios from 'axios';
 import { mapState } from 'vuex';
 import { toFixed, accSub, accAdd, accMul } from '@/utils/public';
 import { perDayRewardV3 } from '@/utils/logic'
@@ -115,17 +114,16 @@ export default {
     },
     // 获取DFS流通量 - 全局区一次
     async handleGetDfsCurrent() {
-      const https = this.baseConfig.node.url;
       const params = {
         code: 'minedfstoken',
         symbol: 'DFS'
       }
-      const result = await axios.post(`${https}/v1/chain/get_currency_stats`, JSON.stringify(params))
+      const {status, result} = await this.$api.get_currency_stats(params);
       this.loading = false;
-      if (result.status !== 200) {
+      if (!status) {
         return;
       }
-      const res = result.data['DFS'];
+      const res = result['DFS'];
       const supply = res.supply.split(' ')[0];
 
       this.current = supply;

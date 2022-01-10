@@ -91,7 +91,7 @@ export default {
         symbol: 'TAG',
         contract: 'tagtokenmain',
         decimal: 8,
-        imgUrl: 'https://cdn.jsdelivr.net/gh/defis-net/material/coin/tagtokenmain-tag.png'
+        imgUrl: 'https://cdn.jsdelivr.net/gh/defis-net/material2/coin/tagtokenmain-tag.png'
       },
       options: [{
         value: '0',

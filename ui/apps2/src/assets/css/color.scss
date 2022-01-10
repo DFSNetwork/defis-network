@@ -7,6 +7,7 @@ $color-bgcolor: #fff;
 $color-border: #f3f3f3;
 $color-shadow: #e0e0e0;
 $color-tip: #a6a6a6;
+$color-red: #ff6871;
 
 .fontFamily{
   font-family: 'Monospace' 'Sarasa', Helvetica, Arial, sans-serif !important;
@@ -209,4 +210,21 @@ input::-webkit-input-placeholder {
   transform: translate(-50%, 0);
   max-width: 700px;
   border-radius: 15px;
+}
+
+.loading_p{
+  margin: 70px auto;
+}
+.accVoteNum_p{
+  background: #FFF;
+  margin: 0 28px 18px;
+  box-shadow: 0px 4px 8px 4px rgba(231,231,231,0.41);
+  border-radius: 8px 8px 0px 0px;
+  padding: 28px 0 0 0;
+  position: relative;
+}
+.noData_p{
+  padding: 50px 0;
+  font-size: 24px;
+  color: #999;
 }

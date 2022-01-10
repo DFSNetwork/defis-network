@@ -1,64 +1,7 @@
-// import axios from 'axios';
 import moment from 'moment';
 import store from '@/store';
-import { get_balance, get_table_rows } from '@/utils/api'
-/**
- * 
- * @param {*} mid 映射LP 做市ID
- * @param {*} type 'year' - 年化 
- * @param {*} pool time池子数据
- */
-export function timeApy(market, type, pool) {
-  const mid = market.mid;
-  const timeList = store.state.config.timeList; // TIME LP挖矿列表
-  const li = timeList.find(v => v.id == mid) || {};
-  const nowTime = moment().valueOf() / 1000;
-  const sT = nowTime - li.beginTime; // 持续时间
-  // console.log(li)
-  if (!li.id || sT <= 0 || parseFloat(li.max_supply) <= parseFloat(li.supply)) {
-    return 0
-  } // || sT <= 0
-  const price = parseFloat(pool.reserve0) / (parseFloat(pool.reserve1) || 1) // TIME 当前价格
-  const eos = parseFloat(market.reserve0) || 1;
-  try {
-    if (type === 'year') {
-      const times = Math.ceil(sT / li.halftime);
-      const lamp = Math.pow(2,times); // 衰减系数
-      const tNum = parseFloat(li.max_supply) - parseFloat(li.supply); // 池子剩余数量
-      const secGet = tNum / lamp / li.halftime;
-      const dayGet = secGet * 60 * 60 * 24;
-      const apy = dayGet * price / eos * 365 * 100 ;
-      // console.log(li.max_supply, lamp, price, eos)
-      return apy.toFixed(3)
-    }
-  } catch (error) {
-    console.log(error)
-  }
-  return 0
-}
-
-export function timeNum(market, userLP, rankWeight) {
-  const mid = market.mid;
-  const timeList = store.state.config.timeList; // TIME LP挖矿列表
-  const li = timeList.find(v => v.id == mid) || {};
-  const nowTime = moment().valueOf() / 1000;
-  const sT = nowTime - userLP.beginTime; // 持续时间
-  if (!li.id || sT <= 0 || parseFloat(li.max_supply) <= parseFloat(li.supply)) {
-    return 0
-  } // || sT <= 0
-  try {
-    const times = Math.ceil(sT / li.halftime);
-    const lamp = Math.pow(2, times); // 衰减系数
-    const tNum = parseFloat(li.max_supply) - parseFloat(li.supply); // 池子剩余数量
-    const secGet = tNum / lamp / 2 / li.halftime;
-    const num = secGet * sT * (parseInt(userLP.liq_bal0) / market.liquidity_token / 2) * rankWeight.constant;
-    // console.log(num)
-    return num
-  } catch (error) {
-    console.log(error)
-  }
-  return 0
-}
+import { get_balance } from '@/utils/api'
+import { get_table_rows } from '@/api/list'
 
 export function timeDssNum(li, userLP, rankWeight, allStaked) {
   const nowTime = moment().valueOf() / 1000;

@@ -104,13 +104,6 @@ const sys = {
     dfsPrice: localStorage.getItem('dfsPrice') || '0', // DFS 5分钟均价
     eggargs: localStorage.getItem('eggargs') ? JSON.parse(localStorage.getItem('eggargs')) : [], // 全局aprs
     feesApr: localStorage.getItem('feesApr') ? JSON.parse(localStorage.getItem('feesApr')) : [], // 全局aprs
-    sortClass: {
-      gold: [39, 329],
-      // silver: [],
-      // bronze: []
-      silver: [5, 17, 309],
-      bronze: [4, 305]
-    },
     dsrPools: [{
       "id": 1,
       "bonus": "1.05000000000000000",
@@ -131,7 +124,6 @@ const sys = {
       "bonus": "1.50000000000000000",
       "refund_delay_sec": 31104000
     }],
-    rankInfo: localStorage.getItem('rankInfo') ? JSON.parse(localStorage.getItem('rankInfo')) : [], // 挖矿权重列表,
     rankInfoV3: localStorage.getItem('rankInfoV3') ? JSON.parse(localStorage.getItem('rankInfoV3')) : [], // 挖矿权重列表,
     rankTrade: localStorage.getItem('rankTrade') ? JSON.parse(localStorage.getItem('rankTrade')) : [], // 挖矿权重列表,
     dfsData: {},
@@ -157,8 +149,13 @@ const sys = {
     // pddex
     tradeInfo: {},
     usdtPrice: 6.5,
+    coinPrices: localStorage.getItem('coinPrices') ? JSON.parse(localStorage.getItem('coinPrices')) : [], // 常用价格
   },
   mutations: {
+    SET_CoinPrices: (state, coinPrices) => {
+      state.coinPrices = coinPrices;
+      localStorage.setItem('coinPrices', JSON.stringify(coinPrices))
+    },
     SET_UsdtPrice: (state, usdtPrice) => {
       state.usdtPrice = usdtPrice;
     },
@@ -170,9 +167,6 @@ const sys = {
     },
     SET_NodeListsTamp: (state, nodeListsTamp) => {
       state.nodeListsTamp = nodeListsTamp;
-    },
-    SET_RANKINFO: (state, rankInfo) => {
-      state.rankInfo = rankInfo;
     },
     SET_RANKINFOV3: (state, rankInfoV3) => {
       state.rankInfoV3 = rankInfoV3;
@@ -246,6 +240,9 @@ const sys = {
     },
   },
   actions: {
+    setCoinPrices({ commit }, coinPrices) {
+      commit('SET_CoinPrices', coinPrices);
+    },
     setUsdtPrice({ commit }, usdtPrice) {
       commit('SET_UsdtPrice', usdtPrice);
     },
@@ -257,9 +254,6 @@ const sys = {
     },
     setNodeListsTamp({ commit }, nodeListsTamp) {
       commit('SET_NodeListsTamp', nodeListsTamp);
-    },
-    setRankInfo({ commit }, rankInfo) {
-      commit('SET_RANKINFO', rankInfo);
     },
     setRankInfoV3({ commit }, rankInfoV3) {
       commit('SET_RANKINFOV3', rankInfoV3);

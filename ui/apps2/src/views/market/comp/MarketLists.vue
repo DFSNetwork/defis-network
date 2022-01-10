@@ -38,7 +38,6 @@
 </template>
 
 <script>
-// import axios from "axios";
 import moment from 'moment';
 import { mapState } from 'vuex';
 import { EosModel } from '@/utils/eos';
@@ -80,7 +79,9 @@ export default {
           return
         }
         this.handleDealLists();
-      }
+      },
+      deep: true,
+      immediate: true
     },
     scatter: {
       handler: function mlt() {
@@ -89,7 +90,9 @@ export default {
           return
         }
         this.handleDealLists();
-      }
+      },
+      deep: true,
+      immediate: true
     }
   },
   computed: {

@@ -49,7 +49,6 @@
 
 <script>
 import { mapState } from 'vuex';
-// import { SwapRouter } from '@/utils/logic';
 import { SwapRouter, SwapRouterFilter } from '@/utils/swap_router';
 import { toFixed, accMul } from '@/utils/public';
 import { DApp } from '@/utils/wallet';
@@ -195,11 +194,10 @@ export default {
         if (!res.mid) {
           res = SwapRouter.get_amounts_out(...params)
         }
-        // const res = SwapRouter.get_amounts_out(...params)
         let aboutNum = res.amount_in / 10 ** this.market.decimal0;
         this.aboutNum = toFixed(aboutNum, this.market.decimal0);
         this.direction === 'buy' ? res.payNum = this.aboutNum : res.payNum = num
-        this.tradeMids = res.mid;
+        this.tradeMids = inData.type === 'pay' ? res.mid : res.mid.split('-').reverse().join('-');
         this.handleSetTradeInfo(res)
       } catch (error) {
         this.aboutNum = 0
@@ -249,8 +247,6 @@ export default {
       if (!path.length) {
         path = SwapRouter.get_paths(params0, params1, inData.type)
       }
-      // const path = SwapRouter.get_paths(params0, params1, inData.type)
-      // console.log(1, path)
       const params = [
         path,
         inData.type === 'pay' ? params0 : params1,
@@ -261,12 +257,11 @@ export default {
         if (!res.mid) {
           res = SwapRouter.get_amounts_out(...params)
         }
-        // const res = SwapRouter.get_amounts_out(...params)
         isBuy ? this.num = toFixed(parseFloat(res.quantity_out), getDecimal)
               : this.aboutNum = toFixed(parseFloat(res.quantity_out), getDecimal)
         res.payNum = pay;
         res.direction = this.direction;
-        this.tradeMids = res.mid;
+        this.tradeMids = inData.type === 'pay' ? res.mid : res.mid.split('-').reverse().join('-');
         this.handleSetTradeInfo(res)
       } catch (error) {
         console.log(error)

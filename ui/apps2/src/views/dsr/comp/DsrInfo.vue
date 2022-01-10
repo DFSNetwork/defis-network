@@ -27,7 +27,7 @@
           <div class="num dinBold">{{ ableClaimNum }} DFS</div>
           <div class="tip">
             <span>{{ $t('dsr.poolBal') }}</span>
-            <span>({{ `${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}` }})</span>
+            <!-- <span>({{ `${timeObj.hours}:${timeObj.minutes}:${timeObj.seconds}` }})</span> -->
           </div>
         </div>
       </div>
@@ -36,7 +36,6 @@
 </template>
 
 <script>
-// import axios from 'axios';
 import { EosModel } from '@/utils/eos';
 import { mapState } from 'vuex';
 import { toFixed, accMul, accDiv, countdown } from '@/utils/public';
@@ -46,7 +45,6 @@ export default {
     return {
       lockDfs: '0.0000',
       ableUse: '0.0000',
-      // ableClaimNum: '0.0000',
       nextTime: 0,
       timer: null,
       lockLoading: true,
@@ -102,12 +100,12 @@ export default {
   },
   watch: {
     timesmap() {
-      this.handleNextUpdataTime()
+      // this.handleNextUpdataTime()
       this.handleTimer()
     }
   },
   mounted() {
-    this.handleNextUpdataTime()
+    // this.handleNextUpdataTime()
     this.handleTimer()
   },
   beforeDestroy() {

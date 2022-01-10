@@ -256,7 +256,7 @@ function get_token_eos_value(a, eos_price, tag_price) {
 // 列表处理 - 非vue数据处理迁移
 export function dealMarketLists(list, topLists) {
   const newList = []
-  const mainList = []; // 存放EOS - token 和 usdt - token 的交易对
+  let mainList = []; // 存放EOS - token 和 usdt - token 的交易对
   let dfsData = {}
   const mkFlt = store.state.config.mkFilterConf;
   const priceObj = getFilterPrice(list)
@@ -403,6 +403,9 @@ export function dealMarketLists(list, topLists) {
 
   // 过滤列表处理
   const newMainList = dealMarketSort(mainList);
+  mainList.sort((a, b) => {
+    return parseFloat(b.usdt_value || 0) - parseFloat(a.usdt_value || 0)
+  })
   newMainList.splice(1, 0, dfsData)
   store.dispatch('setFilterMkLists', newMainList)
   // console.log(newListSort)
@@ -485,6 +488,9 @@ export function dealRewardV3(minnerData, mid) {
   // console.log(minnerData)
   let t = moment().valueOf() - minnerData.lastTime;
   t = t / 1000;
+  if (t > 15552000){
+    t = 15552000;
+  }
   // console.log(t)
   // 用户实际数据计算
   let minNum = minnerData.liq * Math.pow(aprs.cur_apy || 1, t)

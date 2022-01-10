@@ -41,7 +41,6 @@ import BpStory from '../dialog/BpStory'
 import { mapState } from 'vuex';
 import moment from 'moment';
 
-import {get_table_rows} from '@/utils/api'
 import {toLocalTime} from '@/utils/public';
 export default {
   name: 'records',
@@ -96,7 +95,7 @@ export default {
         "json":true,
         limit: 1000,
       }
-      const {status, result} = await get_table_rows(params);
+      const {status, result} = await this.$api.get_table_rows(params);
       if (!status) {
         return
       }

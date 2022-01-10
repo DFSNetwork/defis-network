@@ -1,4 +1,4 @@
-import {get_table_rows} from '@/utils/api'
+import {get_table_rows} from '@/api/list'
 
 export async function gat_apys(cb) {
   const params = {

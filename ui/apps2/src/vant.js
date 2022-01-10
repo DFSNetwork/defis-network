@@ -7,7 +7,7 @@ import Vue from 'vue'
 import { List, Icon, Field, Form, Picker, Popup, Rate, Swipe, SwipeItem,
   NoticeBar, Popover, Calendar, Lazyload, ImagePreview, Tab, Tabs, DropdownMenu,
   Slider, CellGroup, Button, Stepper, DropdownItem, PullRefresh, Sticky, Progress,
-  Pagination, Switch } from 'vant';
+  Pagination, Switch, Loading } from 'vant';
 Vue.use(Button)
 // Vue.use(Toast);
 // Vue.use(Tabbar);
@@ -42,3 +42,4 @@ Vue.use(ImagePreview);
 Vue.use(Rate);
 Vue.use(Progress);
 Vue.use(Pagination);
+Vue.use(Loading);

@@ -81,6 +81,7 @@ export default {
     poolVote: 'Pool Vote',
     nodeVote: 'BP Vote',
     my: 'Me',
+    otherVote:'Other Vote',
   },
   bank: {
     stake: 'Stake',
@@ -297,6 +298,7 @@ export default {
   tabbar: {
     swap: 'Swap',
     order: 'Markets',
+    trade: 'Trade',
   },
   info: {
     info: 'Info',

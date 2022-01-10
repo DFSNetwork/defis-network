@@ -9,22 +9,35 @@ class swapRouter {
     this.isInit = false;
     this._pathsArr = [];
     this.bestPath = '';
+    this.doing = false; // 正在初始化中
+
+    // 保存上一次生成路径的两个币种信息
+    this.token0 = '';
+    this.token1 = '';
   }
-  init(data, vThis) {
+  init(data, vThis, market0, market1) {
     this.markets = data || [];
     this._pathsArr = [];
     this.bestPath = '';
-    if (this.paths.length) {
+    const token0 = `${market0.contract}:${market0.symbol}`;
+    const token1 = `${market1.contract}:${market1.symbol}`;
+    if ((this.token0 === token0 && this.token1 === token1)) {
       return
     }
+    this.token0 = token0;
+    this.token1 = token1;
+    // if (this.paths.length || this.doing) {
+    //   return
+    // }
+    // this.doing = true;
     if (window.Worker) {
-      this.workerToInitPath(vThis)
+      this.workerToInitPath(vThis, token0, token1)
     } else {
       this.initPath()
     }
   }
 
-  workerToInitPath(vThis) {
+  workerToInitPath(vThis, token0, token1) {
     const dealPath = (markets) => {
       let paths = [];
       let pair_market_map = {};
@@ -85,16 +98,19 @@ class swapRouter {
         paths, pair_market_map, mid_market_map, tokens
       }
     }
-    console.log('开始执行循环 - ', Date.parse(new Date()))
+    // console.log('开始执行循环 - ', Date.parse(new Date()))
     vThis.$worker.run(dealPath, [this.markets]).then(res => {
+      if (token0 !== this.token0 || token1 !== this.token1) {
+        return
+      }
       this.paths = res.paths;
       this.pair_market_map = res.pair_market_map;
       this.mid_market_map = res.mid_market_map;
       this.tokens = res.tokens;
       this.isInit = true;
       // console.log('生成路径长度 - ', this.paths)
-      console.log('生成路径长度 - ', this.paths.length)
-      console.log('循环执行结束 - ', Date.parse(new Date()))
+      // console.log('生成路径长度 - ', this.paths.length)
+      // console.log('循环执行结束 - ', Date.parse(new Date()))
     }).catch(e => console.log(e))
   }
 
@@ -167,9 +183,9 @@ class swapRouter {
     const _pathsArr = [];
 
     for (let i = 0; i < this.paths.length; i++) {
-      if (_pathsArr.length === 10) {
-        break
-      }
+      // if (_pathsArr.length === 10) {
+      //   break
+      // }
       let path = this.paths[i];
       let tks = path.split("-");
       if ((tks[0] === newTokenA && tks[tks.length - 1] === newTokenB)) {

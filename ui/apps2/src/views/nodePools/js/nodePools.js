@@ -3,7 +3,8 @@ import store from '@/store';
 import moment from 'moment';
 
 import { toLocalTime } from '@/utils/public'
-import {get_table_rows, get_producers} from '@/utils/api'
+import {get_producers} from '@/utils/api'
+import { get_table_rows } from '@/api/list'
 
 export async function getNodeLists() {
   const {status, result} = await get_producers()
